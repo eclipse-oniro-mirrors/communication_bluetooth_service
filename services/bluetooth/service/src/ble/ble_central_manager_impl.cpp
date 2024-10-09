@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2021-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -382,6 +382,9 @@ void BleCentralManagerImpl::ExAdvertisingReportTask(uint8_t advType, const BtAdd
     const std::vector<uint8_t> &data, int8_t rssi, const BtAddr &peerCurrentAddr) const
 {
     HILOGI("Data = %{public}s", BleUtils::ConvertIntToHexString(data).c_str());
+    if (data.size() == 0) {
+        return;
+    }
 
     std::lock_guard<std::recursive_mutex> lk(pimpl->mutex_);
     RawAddress advAddress(RawAddress::ConvertToString(peerAddr.addr));
