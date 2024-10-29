@@ -44,8 +44,6 @@ private:
     int32_t GetLocalAddressInner(MessageParcel &data, MessageParcel &reply);
     int32_t DisableBleInner(MessageParcel &data, MessageParcel &reply);
     int32_t EnableBleInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode IsBrEnabledInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode IsBleEnabledInner(MessageParcel &data, MessageParcel &reply);
     ErrCode GetProfileListInner(MessageParcel &data, MessageParcel &reply);
     ErrCode GetMaxNumConnectedAudioDevicesInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetBtConnectionStateInner(MessageParcel &data, MessageParcel &reply);

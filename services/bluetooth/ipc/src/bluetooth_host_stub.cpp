@@ -58,12 +58,6 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
         {BluetoothHostInterfaceCode::BT_ENABLE_BLE,
             std::bind(&BluetoothHostStub::EnableBleInner, std::placeholders::_1, std::placeholders::_2,
                 std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_IS_BR_ENABLED,
-            std::bind(&BluetoothHostStub::IsBrEnabledInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_IS_BLE_ENABLED,
-            std::bind(&BluetoothHostStub::IsBleEnabledInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
         {BluetoothHostInterfaceCode::BT_GET_PROFILE_LIST,
             std::bind(&BluetoothHostStub::GetProfileListInner, std::placeholders::_1, std::placeholders::_2,
                 std::placeholders::_3)},
@@ -360,13 +354,7 @@ ErrCode BluetoothHostStub::GetBtStateInner(MessageParcel &data, MessageParcel &r
 {
     HILOGI("BluetoothHostStub::GetBtStateInner starts");
     int32_t state = 0;
-    int32_t result = 0;
-    if (bluetooth::PermissionUtils::VerifyUseBluetoothPermission() == bluetooth::PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        result = BT_ERR_PERMISSION_FAILED;
-    } else {
-        result = GetBtState(state);
-    }
+    int32_t result = GetBtState(state);
     (void)reply.WriteInt32(result);
     (void)reply.WriteInt32(state);
     return NO_ERROR;
@@ -401,28 +389,6 @@ int32_t BluetoothHostStub::EnableBleInner(MessageParcel &data, MessageParcel &re
     if (!ret) {
         HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
         return BT_ERR_IPC_TRANS_FAILED;
-    }
-    return NO_ERROR;
-}
-
-ErrCode BluetoothHostStub::IsBrEnabledInner(MessageParcel &data, MessageParcel &reply)
-{
-    bool result = IsBrEnabled();
-    bool ret = reply.WriteBool(result);
-    if (!ret) {
-        HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
-        return TRANSACTION_ERR;
-    }
-    return NO_ERROR;
-}
-
-ErrCode BluetoothHostStub::IsBleEnabledInner(MessageParcel &data, MessageParcel &reply)
-{
-    bool result = IsBleEnabled();
-    bool ret = reply.WriteBool(result);
-    if (!ret) {
-        HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
-        return TRANSACTION_ERR;
     }
     return NO_ERROR;
 }
