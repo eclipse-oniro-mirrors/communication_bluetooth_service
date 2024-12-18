@@ -210,6 +210,10 @@ void BluetoothA2dpSourceServer::DeregisterObserver(const sptr<IBluetoothA2dpSour
 int32_t BluetoothA2dpSourceServer::Connect(const RawAddress &device)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
+    if (!PermissionUtils::CheckSystemHapApp()) {
+        HILOGE("check system api failed.");
+        return BT_ERR_SYSTEM_PERMISSION_FAILED;
+    }
     if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
         HILOGE("Connect error, check permission failed");
         return BT_ERR_SYSTEM_PERMISSION_FAILED;
@@ -223,6 +227,10 @@ int32_t BluetoothA2dpSourceServer::Connect(const RawAddress &device)
 int32_t BluetoothA2dpSourceServer::Disconnect(const RawAddress &device)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
+    if (!PermissionUtils::CheckSystemHapApp()) {
+        HILOGE("check system api failed.");
+        return BT_ERR_SYSTEM_PERMISSION_FAILED;
+    }
     if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
         HILOGE("Disconnect error, check permission failed");
         return BT_ERR_SYSTEM_PERMISSION_FAILED;
