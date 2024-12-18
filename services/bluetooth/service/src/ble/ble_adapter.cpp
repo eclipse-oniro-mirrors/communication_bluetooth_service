@@ -498,9 +498,7 @@ std::string BleAdapter::GetDeviceName(const RawAddress &device) const
     std::string remoteName = "";
 
     if (!Compat::CompatCheck(CompatType::COMPAT_REJECT_NAME_REQUEST, device.GetAddress())) {
-        int appID = RegisterGattClientApplication(device);
         remoteName = ReadRemoteDeviceNameByGatt(device, appID);
-        DeregisterGattClientApplication(appID);
     }
 
     if (!remoteName.empty()) {
@@ -551,12 +549,16 @@ std::string BleAdapter::ReadRemoteDeviceNameByGatt(const RawAddress &addr, int a
     if (pimpl->gattClientService_ == nullptr) {
         return name;
     }
-
+    if (!pimpl->gattClientService_->IsOtherAppConnected(addr)) {
+        return name;
+    }
     std::lock_guard<std::recursive_mutex> lk(pimpl->syncMutex_);
     auto it = pimpl->peerConnDeviceList_.find(addr.GetAddress());
     if (it != pimpl->peerConnDeviceList_.end()) {
         LOG_DEBUG("[BleAdapter] isAclConnect %{public}d ", it->second.IsAclConnected());
         if (it->second.IsAclConnected()) {
+            int appID = pimpl->gattClientService_->RegisterSharedApplication(
+                *pimpl->gattClientcallback_, addr, BTTransport::ADAPTER_BLE);
             std::unique_lock<std::mutex> lock(pimpl->mutexRemoteName_);
             // Device name
             LOG_DEBUG("Get device name from gatt. %{public}d", appID);
@@ -572,6 +574,7 @@ std::string BleAdapter::ReadRemoteDeviceNameByGatt(const RawAddress &addr, int a
             if (pimpl->readCharacteristicFlag_) {
                 pimpl->gattClientService_->Disconnect(appID);
             }
+            pimpl->gattClientService_->DeregisterApplication(appID);
             return pimpl->remoteDeviceName_;
         }
     }

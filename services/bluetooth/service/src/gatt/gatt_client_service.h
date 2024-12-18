@@ -47,6 +47,7 @@ public:
     std::vector<GattDevice> GetAllDevice() override;
     int RequestConnectionPriority(int appId, int connPriority) override;
     std::vector<Service> GetServices(int appId) override;
+    bool IsOtherAppConnected(const RawAddress &device) override;
 
     GattClientService();
     ~GattClientService();
