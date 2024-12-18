@@ -498,7 +498,7 @@ std::string BleAdapter::GetDeviceName(const RawAddress &device) const
     std::string remoteName = "";
 
     if (!Compat::CompatCheck(CompatType::COMPAT_REJECT_NAME_REQUEST, device.GetAddress())) {
-        remoteName = ReadRemoteDeviceNameByGatt(device, appID);
+        remoteName = ReadRemoteDeviceNameByGatt(device);
     }
 
     if (!remoteName.empty()) {
@@ -541,7 +541,7 @@ void BleAdapter::DeregisterGattClientApplication(int appID) const
     pimpl->gattClientService_->DeregisterApplication(appID);
 }
 
-std::string BleAdapter::ReadRemoteDeviceNameByGatt(const RawAddress &addr, int appID) const
+std::string BleAdapter::ReadRemoteDeviceNameByGatt(const RawAddress &addr) const
 {
     std::string name = "";
     pimpl->gattClientService_ =
