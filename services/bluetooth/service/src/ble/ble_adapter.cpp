@@ -569,13 +569,13 @@ std::string BleAdapter::ReadRemoteDeviceNameByGatt(const RawAddress &addr, int a
                 std::cv_status::timeout) {
                 LOG_ERROR("[BleAdapter] %{public}s:ReadRemoteDeviceNameByGatt timeout!", __func__);
                 pimpl->gattClientService_->Disconnect(appID);
-                return name;
+            } else {
+                if (pimpl->readCharacteristicFlag_) {
+                    pimpl->gattClientService_->Disconnect(appID);
+                }
+                pimpl->gattClientService_->DeregisterApplication(appID);
+                name = pimpl->remoteDeviceName_;
             }
-            if (pimpl->readCharacteristicFlag_) {
-                pimpl->gattClientService_->Disconnect(appID);
-            }
-            pimpl->gattClientService_->DeregisterApplication(appID);
-            return pimpl->remoteDeviceName_;
         }
     }
     return name;
