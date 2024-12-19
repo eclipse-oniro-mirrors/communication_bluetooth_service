@@ -54,7 +54,9 @@ void Dispatcher::Uninitialize()
 void Dispatcher::PostTask(const std::function<void()> &task)
 {
     if (start_) {
-        taskQueue_.Push(std::move(task));
+        if (!taskQueue_.TryPush(std::move(task))) {
+            LOG_ERROR("%{public}s Dispatcher::PostTask failed!", name_.c_str());
+        }
     }
 }
 
