@@ -868,7 +868,7 @@ int GetObjectTypeCodeAac(const uint8_t *codecInfo)
     A2dpAACCapability cfgCap = {};
 
     // Check whether the codec info contains valid data
-    if (A2DP_SUCCESS != ParseInfoAac(&cfgCap, codecInfo)) {
+    if (ParseInfoAac(&cfgCap, codecInfo) != A2DP_SUCCESS) {
         LOG_ERROR("%{public}s: cannot decode codec information", __func__);
         return -1;
     }

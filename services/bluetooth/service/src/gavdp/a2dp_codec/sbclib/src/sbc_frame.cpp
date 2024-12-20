@@ -438,7 +438,7 @@ int Frame::UnpackFrameStream(Frame& frame, const uint8_t* bufStream, size_t len)
                 }
 
                 frame.samples_[blk][channel][subband] = static_cast<int32_t>
-                    ((((static_cast<uint64_t> (audioSample) << 1) | 1) << shift) /
+                    ((((static_cast<uint64_t>(audioSample) << 1) | 1) << shift) /
                         levels[channel][subband]) - (1 << shift);
             }
         }
@@ -561,10 +561,10 @@ void Frame::SbcCaculateLevelsAndSampleDelta(const Frame& frame, int (*bits)[VALU
 {
     for (int channel = 0; channel < frame.channels_; channel++) {
         for (int subband = 0; subband < frame.subbands_; subband++) {
-            levels[channel][subband] = ((1 << bits[channel][subband]) - 1)
-                << (MOVE_BIT32 - (frame.scaleFactor_[channel][subband] + SCALE_OUT_BITS + MOVE_BIT2));
-            sampleDelta[channel][subband] = static_cast<uint32_t> (1
-                << (frame.scaleFactor_[channel][subband] + SCALE_OUT_BITS + 1));
+            levels[channel][subband] = ((1 << bits[channel][subband]) - 1) <<
+                (MOVE_BIT32 - (frame.scaleFactor_[channel][subband] + SCALE_OUT_BITS + MOVE_BIT2));
+            sampleDelta[channel][subband] = static_cast<uint32_t>(1 <<
+                (frame.scaleFactor_[channel][subband] + SCALE_OUT_BITS + 1));
         }
     }
 }
@@ -636,13 +636,13 @@ ssize_t Frame::Pack(uint8_t* bufStream, const Frame& frame, int joint)
         subbands = SUBBAND_EIGHT;
     }
 
-    if (((frame.channelMode_ == SBC_CHANNEL_MODE_MONO) || (frame.channelMode_ == SBC_CHANNEL_MODE_DUAL_CHANNEL))
-        && (bitpool_ > (subbands << MOVE_BIT4))) {
+    if (((frame.channelMode_ == SBC_CHANNEL_MODE_MONO) || (frame.channelMode_ == SBC_CHANNEL_MODE_DUAL_CHANNEL)) &&
+        (bitpool_ > (subbands << MOVE_BIT4))) {
         return -1;
     }
 
-    if (((frame.channelMode_ == SBC_CHANNEL_MODE_STEREO) || (frame.channelMode_ == SBC_CHANNEL_MODE_JOINT_STEREO))
-        && (bitpool_ > (subbands << MOVE_BIT5))) {
+    if (((frame.channelMode_ == SBC_CHANNEL_MODE_STEREO) || (frame.channelMode_ == SBC_CHANNEL_MODE_JOINT_STEREO)) &&
+        (bitpool_ > (subbands << MOVE_BIT5))) {
         return -1;
     }
 
