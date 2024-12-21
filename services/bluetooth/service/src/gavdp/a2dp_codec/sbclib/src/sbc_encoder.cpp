@@ -94,7 +94,7 @@ void Encoder::Init(const Frame &frame)
 
 size_t Encoder::CalculateFrameLength(const CodecParam &codecParam)
 {
-    uint8_t subbands = codecParam.subbands ? SUBBAND_8: SUBBAND_4;
+    uint8_t subbands = codecParam.subbands ? SUBBAND_8 : SUBBAND_4;
     uint8_t blocks = (codecParam.blocks * VALUE_4) + VALUE_4;
     uint8_t joint = (codecParam.channelMode == SBC_CHANNEL_MODE_STEREO) ? JOINT_STEREO : NOT_JOINT_STEREO;
     uint8_t channels = (codecParam.channelMode == SBC_CHANNEL_MODE_MONO) ? CHANNEL_1 : CHANNEL_2;

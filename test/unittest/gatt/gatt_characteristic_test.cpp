@@ -223,7 +223,7 @@ HWTEST_F(GattCharacteristicTest, GattCharacteristic_UnitTest_GetValue, TestSize.
         GTEST_LOG_(INFO) << "GattCharacteristic_GetValue returns correctly";
     }
 
-    if ('a' == resultValuesPointer) {
+    if (resultValuesPointer == 'a') {
         EXPECT_TRUE(true);
         GTEST_LOG_(INFO) << "GattCharacteristic_GetValue returns correctly";
     }

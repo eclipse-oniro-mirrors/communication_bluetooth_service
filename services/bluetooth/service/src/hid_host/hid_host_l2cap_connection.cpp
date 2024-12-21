@@ -920,7 +920,7 @@ uint8_t HidHostL2capConnection::HidHostGetType(uint8_t type)
 uint8_t HidHostL2capConnection::HidHostGetParam(uint8_t type)
 {
     uint8_t result = 0;
-    result = (type)&0x0f;
+    result = (type) & 0x0f;
     return result;
 }
 
