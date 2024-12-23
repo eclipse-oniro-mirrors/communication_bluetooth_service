@@ -50,6 +50,8 @@ public:
     static BleProperties &GetInstance();
 
     bool SetLocalAddress(const std::string &addr) const;
+    int GetUTF8StringLength(const char firstByte) const;
+    int GetValidUTF8StringLength(const std::string& name) const;
     bool SetLocalName(const std::string &name) const;
     int SetBondableMode(const int mode) const;
     bool SetIoCapability(const int ioCapability) const;
@@ -79,6 +81,14 @@ public:
     void DeregisterBleAdapterObserver(IAdapterBleObserver &observer) const;
 
 private:
+    enum {
+        UTF8_INVALID_BYTE_LENGTH,
+        UTF8_SINGLE_BYTE_LENGTH,
+        UTF8_DOUBLE_BYTE_LENGTH,
+        UTF8_TRIPLE_BYTE_LENGTH,
+        UTF8_QUADRUPLE_BYTE_LENGTH
+    };
+
     BleProperties();
     ~BleProperties();
 
