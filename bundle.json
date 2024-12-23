@@ -84,8 +84,7 @@
         "common_event_service",
         "state_registry",
         "c_utils",
-        "jsoncpp",
-        "image_framework"	
+        "jsoncpp"
       ],
       "third_party": [
         "googletest",
