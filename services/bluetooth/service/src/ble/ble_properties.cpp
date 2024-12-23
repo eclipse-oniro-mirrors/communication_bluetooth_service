@@ -54,6 +54,38 @@ std::string BleProperties::GetLocalName() const
     return pimpl->deviceName_;
 }
 
+int BleProperties::GetUTF8StringLength(const char firstByte) const
+{
+    int length = UTF8_SINGLE_BYTE_LENGTH;
+    if ((firstByte & 0x80) == 0) {
+        length = UTF8_SINGLE_BYTE_LENGTH;
+    } else if ((firstByte & 0xE0) == 0xC0) {
+        length = UTF8_DOUBLE_BYTE_LENGTH;
+    } else if ((firstByte & 0xF0) == 0xE0) {
+        length = UTF8_TRIPLE_BYTE_LENGTH;
+    } else if ((firstByte & 0xF8) == 0xF0) {
+        length = UTF8_QUADRUPLE_BYTE_LENGTH;
+    }
+    return length;
+}
+
+int BleProperties::GetValidUTF8StringLength(const std::string &name) const
+{
+    int byteCount = 0;
+    for (int i = 0; i < name.size();) {
+        int utf8Length = GetUTF8StringLength(name[i]);
+        if (byteCount + utf8Length > DEVICE_NAME_MAX_LEN) {
+            break;
+        }
+        byteCount += utf8Length;
+        if (byteCount == DEVICE_NAME_MAX_LEN) {
+            return byteCount;
+        }
+        i += utf8Length;
+    }
+    return byteCount;
+}
+
 bool BleProperties::SetLocalName(const std::string &name) const
 {
     LOG_DEBUG("[BleProperties] %{public}s", __func__);
@@ -65,8 +97,8 @@ bool BleProperties::SetLocalName(const std::string &name) const
         return false;
     }
 
-    if (length >= DEVICE_NAME_MAX_LEN) {
-        length = DEVICE_NAME_MAX_LEN;
+    if (length > DEVICE_NAME_MAX_LEN) {
+        length = GetValidUTF8StringLength(name);
         newName = name.substr(0, length);
     }
 
