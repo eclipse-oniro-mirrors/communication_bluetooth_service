@@ -115,6 +115,7 @@ static constexpr uint32_t HFP_AG_FEATURES_DEFAULT = HFP_AG_FEATURES_THREE_WAY |
                                                     HFP_AG_FEATURES_REJECT_CALL |
                                                     HFP_AG_FEATURES_ENHANCED_CALL_STATUS |
                                                     HFP_AG_FEATURES_EXTEND_ERROR_CODE |
+                                                    HFP_AG_FEATURES_CODEC_NEGOTIATION |
                                                     HFP_AG_FEATURES_HF_INDICATORS |
                                                     HFP_AG_FEATURES_PASS_UNKNOWN_AT;
 
@@ -134,6 +135,9 @@ typedef struct {
 
 // Ag
 enum HfpAgCodecsType { HFP_AG_CODEC_NONE = 0x00, HFP_AG_CODEC_CVSD = 0x01, HFP_AG_CODEC_MSBC = 0x02 };
+
+// Default AG Codec
+constexpr int HFP_AG_CODEC_DEFAULT = HFP_AG_CODEC_MSBC | HFP_AG_CODEC_CVSD;
 
 enum HfpAgEsco { HFP_AG_ESCO_S4, HFP_AG_ESCO_S1 };
 
