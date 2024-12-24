@@ -130,14 +130,14 @@ int HfpAgAudioConnection::ConnectByMsbc(AudioDevice &dev, BtAddr btAddr) const
 
     dev.linkType = LINK_TYPE_ESCO;
 
-    if (BTM_IsSecureConnection(&btAddr)) {
+    if (dev.lastParam != MSBC_ESCO_T2) {
         HILOGI("Try connect by MSBC T2.");
         BtmCreateEscoConnectionParam param = MSBC_T2_PARAM;
         param.addr = btAddr;
         ret = BTM_CreateEscoConnection(&param);
         HFP_AG_RETURN_IF_FAIL(ret);
         dev.lastParam = MSBC_ESCO_T2;
-    } else {
+    } else if (!BTM_IsSecureConnection(&btAddr)) {
         HILOGI("Try connect by MSBC T1.");
         BtmCreateEscoConnectionParam param = MSBC_T1_PARAM;
         param.addr = btAddr;
@@ -156,25 +156,23 @@ int HfpAgAudioConnection::ConnectByCvsd(AudioDevice &dev, BtAddr btAddr, bool cv
     int ret = BTM_WriteVoiceSetting(BTM_VOICE_SETTING_CVSD);
     HFP_AG_RETURN_IF_FAIL(ret);
 
-    if (escoSupport_ && !cvsdEscoFailed) {
-        dev.linkType = LINK_TYPE_ESCO;
-        if (escoS4Support_) {
+    if (escoSupport_ && !cvsdEscoFailed && escoS4Support_) {
             HILOGI("Try connect by CVSD ESCO S4.");
+            dev.linkType = LINK_TYPE_ESCO;
             dev.lastParam = CVSD_ESCO_S4;
             BtmCreateEscoConnectionParam param = CVSD_ESCO_S4_PARAM;
             param.addr = btAddr;
             ret = BTM_CreateEscoConnection(&param);
             HFP_AG_RETURN_IF_FAIL(ret);
-        } else {
+    } else if ((dev.lastParam == CVSD_ESCO_S4) && !BTM_IsSecureConnection(&btAddr)) {
             HILOGI("Try connect by CVSD ESCO S1.");
+            dev.linkType = LINK_TYPE_ESCO;
             dev.lastParam = CVSD_ESCO_S1;
             BtmCreateEscoConnectionParam param = CVSD_ESCO_S1_PARAM;
             param.addr = btAddr;
             ret = BTM_CreateEscoConnection(&param);
             HFP_AG_RETURN_IF_FAIL(ret);
-        }
-    } else {
-        if (!BTM_IsSecureConnection(&btAddr)) {
+    } else if (!BTM_IsSecureConnection(&btAddr)) {
             dev.linkType = LINK_TYPE_SCO;
             HILOGI("Try connect by CVSD SCO.");
             dev.lastParam = CVSD_SCO;
@@ -182,10 +180,9 @@ int HfpAgAudioConnection::ConnectByCvsd(AudioDevice &dev, BtAddr btAddr, bool cv
             param.addr = btAddr;
             ret = BTM_CreateScoConnection(&param);
             HFP_AG_RETURN_IF_FAIL(ret);
-        } else {
+    } else {
             HfpAgProfileEventSender::GetInstance().UpdateScoConnectState(remoteAddr_, HFP_AG_AUDIO_CONNECT_FAILED_EVT);
             return ret;
-        }
     }
 
     HfpAgProfileEventSender::GetInstance().UpdateScoConnectState(remoteAddr_, HFP_AG_AUDIO_CONNECTING_EVT);
@@ -230,7 +227,7 @@ int HfpAgAudioConnection::ConnectAudio() const
 
     BtAddr btAddr = ConvertToBtAddr(remoteAddr_);
     if (inUseCodec_ == HFP_AG_CODEC_MSBC) {
-        if (!msbcEscoFailed && escoSupport_) {
+        if ((!msbcEscoFailed || (dev->lastParam == MSBC_ESCO_T2)) && escoSupport_) {
             return ConnectByMsbc(*dev, btAddr);
         } else {
             HILOGW("Need re-negotiate codec.");
@@ -425,19 +422,35 @@ void HfpAgAudioConnection::ProcessOnConnectCompletedFail(
 {
     dev->lastConnectResult = CONNECT_FAIL;
     if (dev->role == ROLE_INITIATOR) {
-        if (dev->lastParam == MSBC_ESCO_T2 || dev->lastParam == MSBC_ESCO_T1) {
-            HILOGI("MSBC ESCO failed, try CVSD ESCO.");
-            HfpAgProfileEventSender::GetInstance().UpdateScoConnectState(dev->addr, HFP_AG_SETUP_CODEC_CVSD);
-        } else if (dev->lastParam == CVSD_ESCO_S4 || dev->lastParam == CVSD_ESCO_S1) {
-            HILOGI("CVSD ESCO failed, try CVSD SCO");
-            HfpAgProfileEventSender::GetInstance().UpdateScoConnectState(dev->addr, HFP_AG_RETRY_CONNECT_AUDIO_EVT);
-        } else if (dev->lastParam == CVSD_SCO) {
-            HILOGI("CVSD SCO failed, report fail event to service");
-            HfpAgProfileEventSender::GetInstance().UpdateScoConnectState(dev->addr, HFP_AG_AUDIO_CONNECT_FAILED_EVT);
-        } else {
-            HILOGI("Invalidaddress: %{public}s, lastParam: %{public}d",
-                GetEncryptAddr(address).c_str(), dev->lastParam);
-        }
+        switch (dev->lastParam) {
+            case MSBC_ESCO_T2:
+                HILOGI("MSBC ESCO T2 failed, Retry MSBC ESCO.");
+                HfpAgProfileEventSender::GetInstance().UpdateScoConnectState(dev->addr,
+                    HFP_AG_RETRY_CONNECT_AUDIO_EVT);
+                break;
+            case MSBC_ESCO_T1:
+                HILOGI("MSBC ESCO T1 failed, try CVSD ESCO.");
+                HfpAgProfileEventSender::GetInstance().UpdateScoConnectState(dev->addr, HFP_AG_SETUP_CODEC_CVSD);
+                break;
+            case CVSD_ESCO_S4:
+                HILOGI("CVSD ESCO S4 failed, Retry CVSD ESCO");
+                HfpAgProfileEventSender::GetInstance().UpdateScoConnectState(dev->addr,
+                    HFP_AG_RETRY_CONNECT_AUDIO_EVT);
+                break;
+            case CVSD_ESCO_S1:
+                HILOGI("CVSD ESCO S1 failed, try CVSD SCO");
+                HfpAgProfileEventSender::GetInstance().UpdateScoConnectState(dev->addr,
+                    HFP_AG_RETRY_CONNECT_AUDIO_EVT);
+                break;
+            case CVSD_SCO:
+                HILOGI("CVSD SCO failed, report fail event to service");
+                HfpAgProfileEventSender::GetInstance().UpdateScoConnectState(dev->addr,
+                    HFP_AG_AUDIO_CONNECT_FAILED_EVT);
+                break;
+            default:
+                HILOGI("Invalidaddress: %{public}s, lastParam: %{public}d",
+                    GetEncryptAddr(address).c_str(), dev->lastParam);
+            }
     } else {
         // As acceptor, report connect failed event to service directly.
         HfpAgProfileEventSender::GetInstance().UpdateScoConnectState(dev->addr, HFP_AG_AUDIO_CONNECT_FAILED_EVT);
