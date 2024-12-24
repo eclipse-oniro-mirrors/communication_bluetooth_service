@@ -200,7 +200,7 @@ static const A2dpSBCCapability A2DP_SBC_SINK_CAPS = {
 /* Default SBC codec configuration */
 const A2dpSBCCapability A2DP_SBC_DEFAULT_CONFIG = {
     A2DP_SBC_SAMPLE_RATE_44100,   /* sampleFreq */
-    A2DP_SBC_CHANNEL_MODE_MONO, /* channelMode */
+    A2DP_SBC_CHANNEL_MODE_STEREO, /* channelMode */
     A2DP_SBC_BLOCKS_16,           /* blockLen */
     A2DP_SBC_SUBBAND_8,           /* numSubbands */
     A2DP_SBC_ALLOC_MODE_L,        /* allocatedMethod */
