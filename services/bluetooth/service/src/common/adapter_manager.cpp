@@ -35,6 +35,7 @@
 #include "foundation/communication/bluetooth_service/services/bluetooth/service/src/dialog/dialog_switch.h"
 #include "interface_adapter_classic.h"
 #include "permission_utils.h"
+#include "permission_manager.h"
 #include "power_manager.h"
 #include "profile_config.h"
 #include "profile_service_manager.h"
@@ -374,7 +375,8 @@ bool AdapterManager::Enable(const BTTransport transport) const
         
         AdapterDeviceConfig::GetInstance()->SetValue(SECTION_HOST, propertynames[transport], (int)true);
         AdapterDeviceConfig::GetInstance()->Save();
-        if(!PermissionManager::IsSystemHap() && transport == ADAPTER_BLE && DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH)){
+        if (!PermissionManager::IsSystemHap() && transport == ADAPTER_BLE &&
+            DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH)) {
             return true;
         }
         return true;

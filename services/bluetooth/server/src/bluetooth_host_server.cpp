@@ -33,7 +33,7 @@
 #include "bluetooth_socket_server.h"
 #include "bluetooth_utils_server.h"
 #include "file_ex.h"
-#include "foundation/communication/bluetooth_service/services/bluetooth/service/src/dialog/dialog_switch.h"
+#include "dialog_switch.h"
 #include "hisysevent.h"
 #include "interface_adapter_manager.h"
 #include "permission_utils.h"
