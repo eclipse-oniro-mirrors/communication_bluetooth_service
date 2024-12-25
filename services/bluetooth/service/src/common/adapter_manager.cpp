@@ -35,6 +35,7 @@
 #include "foundation/communication/bluetooth_service/services/bluetooth/service/src/dialog/dialog_switch.h"
 #include "interface_adapter_classic.h"
 #include "permission_utils.h"
+#include "permission_manager.h"
 #include "power_manager.h"
 #include "profile_config.h"
 #include "profile_service_manager.h"
@@ -353,10 +354,6 @@ bool AdapterManager::Enable(const BTTransport transport) const
     std::string propertynames[] = {PROPERTY_BREDR_TURNON, PROPERTY_BLE_TURNON};
 
     if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        if (GetState(transport) == BTStateID::STATE_TURN_OFF) {
-            LOG_INFO("RequestBluetoothSwitchDialog for permission confirm");
-            DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH);
-        }
         LOG_ERROR("Enable() false, check permission failed");
         return false;
     }
@@ -378,7 +375,10 @@ bool AdapterManager::Enable(const BTTransport transport) const
         
         AdapterDeviceConfig::GetInstance()->SetValue(SECTION_HOST, propertynames[transport], (int)true);
         AdapterDeviceConfig::GetInstance()->Save();
-
+        if (!PermissionManager::IsSystemHap() && transport == ADAPTER_BLE &&
+            DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH)) {
+            return true;
+        }
         return true;
     } else if (GetState(transport) == BTStateID::STATE_TURN_ON) {
         LOG_INFO("%{public}s is turn on", __PRETTY_FUNCTION__);
