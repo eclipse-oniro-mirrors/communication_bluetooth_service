@@ -905,7 +905,7 @@ int32_t BluetoothHostServer::EnableBle()
         DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH)) {
         return NO_ERROR;
     }
-    if (IAdapterManager::GetInstance()->Enable(BTTransport::ADAPTER_BLE)) {
+    if (!BluetoothHostServer::IsBleEnabled() && IAdapterManager::GetInstance()->Enable(BTTransport::ADAPTER_BLE)) {
         return NO_ERROR;
     }
     return BT_ERR_INTERNAL_ERROR;
