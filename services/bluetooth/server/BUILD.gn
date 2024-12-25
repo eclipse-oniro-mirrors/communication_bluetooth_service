@@ -33,6 +33,7 @@ ohos_shared_library("bluetooth_server") {
     "//foundation/communication/bluetooth_service/services/bluetooth/service/src/permission",
     "//foundation/communication/bluetooth_service/services/bluetooth/stack/include",
     "$BT_ROOT/common",
+    "$BT_ROOT/service/src/dialog",
   ]
 
   sources = [
