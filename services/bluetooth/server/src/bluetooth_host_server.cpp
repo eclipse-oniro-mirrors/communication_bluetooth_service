@@ -799,11 +799,32 @@ int32_t BluetoothHostServer::DisableBt()
     return BT_ERR_INTERNAL_ERROR;
 }
 
+static int32_t ConvertBTStateIDToBluetoothState(int32_t brState, int32_t bleState)
+{
+    BluetoothState state = BluetoothState::STATE_OFF;
+    switch (brState) {
+        case BTStateID::STATE_TURN_ON: state = BluetoothState::STATE_ON; break;
+        case BTStateID::STATE_TURNING_ON: state = BluetoothState::STATE_TURNING_ON; break;
+        case BTStateID::STATE_TURNING_OFF: state = BluetoothState::STATE_TURNING_OFF; break;
+        case BTStateID::STATE_TURN_OFF: {
+            switch (bleState) {
+                case BTStateID::STATE_TURN_ON: state = BluetoothState::STATE_BLE_ON; break;
+                case BTStateID::STATE_TURNING_ON: state = BluetoothState::STATE_BLE_TURNING_ON; break;
+                case BTStateID::STATE_TURNING_OFF: state = BluetoothState::STATE_BLE_TURNING_OFF; break;
+                default: break;
+            }
+        }
+        default: HILOGE("Invalid bt state"); break;
+    }
+    return static_cast<int32_t>(state);
+}
+
 int32_t BluetoothHostServer::GetBtState(int32_t &state)
 {
-    state = IAdapterManager::GetInstance()->GetState(bluetooth::BTTransport::ADAPTER_BREDR);
-    HILOGI("state: %{public}d", state);
-    return NO_ERROR;
+    int32_t brState = IAdapterManager::GetInstance()->GetState(bluetooth::BTTransport::ADAPTER_BREDR);
+    int32_t bleState = IAdapterManager::GetInstance()->GetState(bluetooth::BTTransport::ADAPTER_BLE);
+    state = ConvertBTStateIDToBluetoothState(brState, bleState);
+    return BT_NO_ERROR;
 }
 
 sptr<IRemoteObject> BluetoothHostServer::GetProfile(const std::string &name)
@@ -1686,9 +1707,9 @@ void BluetoothHostServer::DeregisterRemoteDeviceObserver(const sptr<IBluetoothRe
 
 bool BluetoothHostServer::IsBtEnabled()
 {
-    int32_t state = bluetooth::BTStateID::STATE_TURN_OFF;
+    int32_t state = static_cast<int32_t>(BluetoothState::STATE_OFF);
     GetBtState(state);
-    bool isEnabled = (state == static_cast<int32_t>(bluetooth::BTStateID::STATE_TURN_ON)) ? true : false;
+    bool isEnabled = (state == static_cast<int32_t>(BluetoothState::STATE_ON)) ? true : false;
     HILOGI("%{public}s", isEnabled ? "true" : "false");
     return isEnabled;
 }
