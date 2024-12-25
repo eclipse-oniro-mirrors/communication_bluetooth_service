@@ -33,9 +33,11 @@
 #include "bluetooth_socket_server.h"
 #include "bluetooth_utils_server.h"
 #include "file_ex.h"
+#include "foundation/communication/bluetooth_service/services/bluetooth/service/src/dialog/dialog_switch.h"
 #include "hisysevent.h"
 #include "interface_adapter_manager.h"
 #include "permission_utils.h"
+#include "permission_manager.h"
 #include "bluetooth_host_server.h"
 
 
@@ -898,6 +900,11 @@ int32_t BluetoothHostServer::GetLocalAddress(std::string &addr)
 int32_t BluetoothHostServer::EnableBle()
 {
     HILOGI("Enter!");
+    if (!PermissionManager::IsSystemHap() &&
+        !BluetoothHostServer::IsBleEnabled() &&
+        DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH)) {
+        return NO_ERROR;
+    }
     if (IAdapterManager::GetInstance()->Enable(BTTransport::ADAPTER_BLE)) {
         return NO_ERROR;
     }
