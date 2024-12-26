@@ -48,7 +48,7 @@ class ClassCreator {
 public:
     static T *NewInstance(const std::string &name)
     {
-        return (T *)ClassFactory::NewInstance(name);
+        return static_cast<T *>(ClassFactory::NewInstance(name));
     };
 };
 
