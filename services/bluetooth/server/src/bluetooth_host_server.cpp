@@ -900,11 +900,6 @@ int32_t BluetoothHostServer::GetLocalAddress(std::string &addr)
 int32_t BluetoothHostServer::EnableBle()
 {
     HILOGI("Enter!");
-    if (!PermissionManager::IsSystemHap() &&
-        !BluetoothHostServer::IsBleEnabled() &&
-        DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH)) {
-        return NO_ERROR;
-    }
     if (!BluetoothHostServer::IsBleEnabled() && IAdapterManager::GetInstance()->Enable(BTTransport::ADAPTER_BLE)) {
         return NO_ERROR;
     }

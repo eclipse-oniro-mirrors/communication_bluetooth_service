@@ -354,6 +354,10 @@ bool AdapterManager::Enable(const BTTransport transport) const
     std::string propertynames[] = {PROPERTY_BREDR_TURNON, PROPERTY_BLE_TURNON};
 
     if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
+        if (GetState(transport) == BTStateID::STATE_TURN_OFF) {
+            LOG_INFO("RequestBluetoothSwitchDialog for permission confirm");
+            DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH);
+        }
         LOG_ERROR("Enable() false, check permission failed");
         return false;
     }
@@ -370,15 +374,16 @@ bool AdapterManager::Enable(const BTTransport transport) const
     }
 
     if (GetState(transport) == BTStateID::STATE_TURN_OFF) {
-        utility::Message msg(AdapterStateMachine::MSG_USER_ENABLE_REQ);
-        pimpl->dispatcher_->PostTask(std::bind(&AdapterManager::impl::ProcessMessage, pimpl.get(), transport, msg));
-        
-        AdapterDeviceConfig::GetInstance()->SetValue(SECTION_HOST, propertynames[transport], (int)true);
-        AdapterDeviceConfig::GetInstance()->Save();
         if (!PermissionManager::IsSystemHap() && transport == ADAPTER_BLE &&
             DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH)) {
-            return true;
+            return false;
         }
+        utility::Message msg(AdapterStateMachine::MSG_USER_ENABLE_REQ);
+        pimpl->dispatcher_->PostTask(std::bind(&AdapterManager::impl::ProcessMessage, pimpl.get(), transport, msg));
+
+        AdapterDeviceConfig::GetInstance()->SetValue(SECTION_HOST, propertynames[transport], (int)true);
+        AdapterDeviceConfig::GetInstance()->Save();
+
         return true;
     } else if (GetState(transport) == BTStateID::STATE_TURN_ON) {
         LOG_INFO("%{public}s is turn on", __PRETTY_FUNCTION__);
