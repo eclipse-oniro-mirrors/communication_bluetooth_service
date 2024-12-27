@@ -354,10 +354,6 @@ bool AdapterManager::Enable(const BTTransport transport) const
     std::string propertynames[] = {PROPERTY_BREDR_TURNON, PROPERTY_BLE_TURNON};
 
     if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        if (GetState(transport) == BTStateID::STATE_TURN_OFF) {
-            LOG_INFO("RequestBluetoothSwitchDialog for permission confirm");
-            DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH);
-        }
         LOG_ERROR("Enable() false, check permission failed");
         return false;
     }
