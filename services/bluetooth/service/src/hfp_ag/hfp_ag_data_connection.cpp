@@ -79,7 +79,7 @@ int HfpAgDataConnection::Init()
     int ret = BTM_GetLocalSupportedCodecs(&pCodecs);
     HFP_AG_RETURN_IF_FAIL(ret);
 
-    if (pCodecs != nullptr) {
+    if ((pCodecs != nullptr) && (pCodecs->numberOfSupportedCodecs != 0)) {
         for (size_t i = 0; i < pCodecs->numberOfSupportedCodecs; i++) {
             if (pCodecs->supportedCodecs[i] == ANUM_MSBC) {
                 g_localFeatures |= HFP_AG_FEATURES_CODEC_NEGOTIATION;
@@ -95,6 +95,7 @@ int HfpAgDataConnection::Init()
         }
     } else {
         LOG_INFO("[HFP AG]%{public}s(): Get local support codecs failed!", __FUNCTION__);
+        g_localSupportCodecs = HFP_AG_CODEC_DEFAULT;
     }
 
     if (BTM_IsControllerSupportEsco()) {
