@@ -198,7 +198,7 @@ private:
     int InitBtmAndGap();
     int SetBleRoles() const;
     void ExAdvClearHandle() const;
-    std::string ReadRemoteDeviceNameByGatt(const RawAddress &addr, int appID) const;
+    std::string ReadRemoteDeviceNameByGatt(const RawAddress &addr) const;
     int RegisterGattClientApplication(const RawAddress &addr) const;
     void DeregisterGattClientApplication(int appID) const;
 

@@ -139,6 +139,7 @@ struct GattClientService::impl : public GattServiceBase {
 
     std::optional<AppIterator> GetValidApplication(int appId);
     std::optional<AppIterator> GetValidApplication(const GattDevice &device);
+    std::optional<AppIterator> GetValidApplication(const RawAddress &device);
 
     void Enable();
     void Disable();
@@ -416,6 +417,12 @@ std::vector<Service> GattClientService::GetServices(int appId)
     future.wait();
 
     return services;
+}
+
+bool GattClientService::IsOtherAppConnected(const RawAddress &device)
+{
+    auto client = pimpl->GetValidApplication(device);
+    return client.has_value()?true:false;
 }
 
 class GattClientService::impl::GattConnectionObserverImplement : public GattConnectionObserver {
@@ -1200,6 +1207,16 @@ std::optional<AppIterator> GattClientService::impl::GetValidApplication(const Ga
 {
     for (auto it = clients_.begin(); it != clients_.end(); it++) {
         if (it->second.connection_.GetDevice() == device) {
+            return it;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<AppIterator> GattClientService::impl::GetValidApplication(const RawAddress &device)
+{
+    for (auto it = clients_.begin(); it != clients_.end(); it++) {
+        if (it->second.connection_.GetDevice().addr_.GetAddress() == device.GetAddress()) {
             return it;
         }
     }

@@ -270,6 +270,7 @@ public:
 
     virtual std::vector<Service> GetServices(int appId) = 0;
 
+    virtual bool IsOtherAppConnected(const RawAddress &device) = 0;
 private:
     using IProfile::Connect;
     using IProfile::Disconnect;
