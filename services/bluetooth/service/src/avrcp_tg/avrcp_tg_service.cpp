@@ -371,6 +371,39 @@ IProfileAvrcpTg *AvrcpTgService::AVSessionObserverImpl::GetService(void)
     return static_cast<IProfileAvrcpTg *>(svManager->GetProfileService(PROFILE_NAME_AVRCP_TG));
 }
 
+void AvrcpTgService::AVControllerObserverImpl::OnAVCallMetaDataChange(
+    const OHOS::AVSession::AVCallMetaData& avCallMetaData)
+{
+    HILOGI("enter");
+}
+
+void AvrcpTgService::AVControllerObserverImpl::OnAVCallStateChange(const OHOS::AVSession::AVCallState& avCallState)
+{
+    HILOGI("enter");
+}
+
+void AvrcpTgService::AVControllerObserverImpl::OnSessionEventChange(const std::string& event,
+    const AAFwk::WantParams& args)
+{
+    HILOGI("enter");
+}
+
+void AvrcpTgService::AVControllerObserverImpl::OnQueueItemsChange(
+    const std::vector<OHOS::AVSession::AVQueueItem>& items)
+{
+    HILOGI("enter");
+}
+
+void AvrcpTgService::AVControllerObserverImpl::OnQueueTitleChange(const std::string& title)
+{
+    HILOGI("enter");
+}
+
+void AvrcpTgService::AVControllerObserverImpl::OnExtrasChange(const AAFwk::WantParams& extras)
+{
+    HILOGI("enter");
+}
+
 void AvrcpTgService::AVControllerObserverImpl::OnSessionDestroy()
 {
     HILOGI("enter");
@@ -397,6 +430,12 @@ void AvrcpTgService::AVControllerObserverImpl::OnActiveStateChange(bool isActive
 }
 
 void AvrcpTgService::AVControllerObserverImpl::OnValidCommandChange(const std::vector<int32_t> &cmds)
+{
+    HILOGI("enter");
+}
+
+void AvrcpTgService::AVControllerObserverImpl::OnOutputDeviceChange(const int32_t connectionState,
+    const OHOS::AVSession::OutputDeviceInfo &outputDeviceInfo)
 {
     HILOGI("enter");
 }
@@ -2661,6 +2700,9 @@ void AvrcpTgService::ChannelMessageCallback(
 {
     HILOGI("connectId:%{public}d, label:%{public}d, crType:%{public}d, chType:%{public}d",
         connectId, label, crType, chType);
+    if (crType) {
+        return;
+    }
     auto servManager = IProfileManager::GetInstance();
     auto service = static_cast<AvrcpTgService *>(servManager->GetProfileService(PROFILE_NAME_AVRCP_TG));
     auto myPkt = PacketRefMalloc(pkt);
@@ -2687,13 +2729,13 @@ uint8_t AvrcpTgService::ConvertPlayState(const int32_t state) const
 #ifdef AVRCP_AVSESSION
     switch (state) {
         case OHOS::AVSession::AVPlaybackState::PLAYBACK_STATE_INITIAL:
-        case OHOS::AVSession::AVPlaybackState::PLAYBACK_STATE_PREPARING:
+        case OHOS::AVSession::AVPlaybackState::PLAYBACK_STATE_PREPARE:
         case OHOS::AVSession::AVPlaybackState::PLAYBACK_STATE_MAX:
             break;
-        case OHOS::AVSession::AVPlaybackState::PLAYBACK_STATE_PLAYING:
+        case OHOS::AVSession::AVPlaybackState::PLAYBACK_STATE_PLAY:
             ret = AVRC_PLAY_STATUS_PLAYING;
             break;
-        case OHOS::AVSession::AVPlaybackState::PLAYBACK_STATE_PAUSED:
+        case OHOS::AVSession::AVPlaybackState::PLAYBACK_STATE_PAUSE:
             ret = AVRC_PLAY_STATUS_PAUSED;
             break;
         case OHOS::AVSession::AVPlaybackState::PLAYBACK_STATE_FAST_FORWARD:

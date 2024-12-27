@@ -376,13 +376,19 @@ public:
          * @brief A destructor used to delete the <b>AVControllerObserverImpl</b> instance.
          */
         ~AVControllerObserverImpl() = default;
-
+        void OnAVCallMetaDataChange(const OHOS::AVSession::AVCallMetaData& avCallMetaData) override;
+        void OnAVCallStateChange(const OHOS::AVSession::AVCallState& avCallState) override;
+        void OnSessionEventChange(const std::string& event, const AAFwk::WantParams& args) override;
+        void OnQueueItemsChange(const std::vector<OHOS::AVSession::AVQueueItem>& items) override;
+        void OnQueueTitleChange(const std::string& title) override;
+        void OnExtrasChange(const AAFwk::WantParams& extras) override;
         void OnSessionDestroy() override;
         void OnPlaybackStateChange(const OHOS::AVSession::AVPlaybackState &state) override;
         void OnMetaDataChange(const OHOS::AVSession::AVMetaData &data) override;
         void OnActiveStateChange(bool isActive) override;
         void OnValidCommandChange(const std::vector<int32_t> &cmds) override;
-        void OnOutputDeviceChange(const OHOS::AVSession::OutputDeviceInfo &outputDeviceInfo) override {};
+        void OnOutputDeviceChange(const int32_t connectionState,
+            const OHOS::AVSession::OutputDeviceInfo &outputDeviceInfo) override;
     private:
         IProfileAvrcpTg *GetService(void);
     };
