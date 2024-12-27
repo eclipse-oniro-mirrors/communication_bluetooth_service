@@ -17,12 +17,14 @@
 
 #include "hid_host_service.h"
 #include "hid_host_sdp_client.h"
+#include "interface_adapter_manager.h"
 
 namespace OHOS {
 namespace bluetooth {
 HidHostSdpClient::HidHostSdpClient(std::string address)
 {
     currentAddr_ = address;
+    GetConfigHidSdpInfo();
 }
 
 HidHostSdpClient::~HidHostSdpClient()
@@ -79,6 +81,7 @@ void HidHostSdpClient::SdpCallback_(const BtAddr *addr, const SdpService *servic
         result = HID_HOST_SDP_SUCCESS;
         isSdpDone_ = true;
         printHidSdpInfo();
+        SaveHidSdpInfo();
     }
     SendSdpComplete(result);
 }
@@ -170,6 +173,57 @@ void HidHostSdpClient::printHidSdpInfo()
         hidInf_.relNum, hidInf_.ctryCode, hidInf_.subClass, hidInf_.descLength);
     LOG_DEBUG("[HIDH SDP]serviceName:%{public}s,serviceDescription:%{public}s,providerName:%{public}s",
         hidInf_.serviceName.c_str(), hidInf_.serviceDescription.c_str(), hidInf_.providerName.c_str());
+}
+
+void HidHostSdpClient::SaveHidSdpInfo()
+{
+    LOG_DEBUG("[HIDH SDP]%{public}s() enter!", __FUNCTION__);
+    auto classicAdapter = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
+    if (classicAdapter) {
+        bool ret = classicAdapter->SetHidPnpInfo(currentAddr_, pnpInf_.vendorId, pnpInf_.productId, pnpInf_.version);
+        if (!ret) {
+            LOG_ERROR("[HIDH SDP]%{public}s() SetHidPnpInfo is error!", __FUNCTION__);
+        }
+
+        std::vector<uint8_t> descData = std::vector<uint8_t>(
+            hidInf_.descInfo.get(), hidInf_.descInfo.get() + hidInf_.descLength);
+        ret = classicAdapter->SetHidDescInfo(
+            currentAddr_, hidInf_.ctryCode, descData, hidInf_.descLength);
+        if (!ret) {
+            LOG_ERROR("[HIDH SDP]%{public}s() SetHidDescInfo is error!", __FUNCTION__);
+        }
+    }
+}
+
+void HidHostSdpClient::GetConfigHidSdpInfo()
+{
+    auto classicAdapter = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
+    int vendorId = 0;
+    int productId = 0;
+    int version = 0;
+    int ctryCode = 0;
+    int descLength = 0;
+    std::vector<uint8_t> descData;
+    if (classicAdapter) {
+        classicAdapter->GetHidPnpInfo(currentAddr_, vendorId, productId, version);
+
+        classicAdapter->GetHidDescInfo(currentAddr_, ctryCode, descData, descLength);
+        if (!descData.empty() && descLength > 0) {
+            hidInf_.descInfo = std::make_unique<uint8_t[]>(descLength);
+            if (memcpy_s(hidInf_.descInfo.get(), descLength, &descData[0], descLength) != EOK) {
+                LOG_ERROR("[HIDH SDP]%{public}s() memcpy error", __FUNCTION__);
+                return;
+            }
+
+            pnpInf_.vendorId = vendorId;
+            pnpInf_.productId = productId;
+            pnpInf_.version = version;
+            hidInf_.ctryCode = ctryCode;
+            hidInf_.descLength = descLength;
+            isSdpDone_ = true;
+        }
+    }
+    LOG_DEBUG("[HIDH SDP]%{public}s() isSdpDone_:%{public}d end !", __FUNCTION__, isSdpDone_);
 }
 
 void HidHostSdpClient::SdpPnpCallback(const BtAddr *addr, const SdpService *serviceAry,

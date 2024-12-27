@@ -374,5 +374,105 @@ std::string ClassicConfig::GetRemoteUuids(const std::string &subSection) const
 
     return uuids;
 }
+
+bool ClassicConfig::SetRemoteHidVendorId(const std::string &subSection, int vendorId) const
+{
+    if (!config_->SetValue(SECTION_BREDR_PAIRED_LIST, subSection, PROPERTY_HID_VENDOR_ID, vendorId)) {
+        LOG_WARN("[ClassicConfig]::%{public}s failed!", __func__);
+        return false;
+    }
+
+    return true;
+}
+
+int ClassicConfig::GetRemoteHidVendorId(const std::string &subSection) const
+{
+    int vendorId = 0;
+    if (!config_->GetValue(SECTION_BREDR_PAIRED_LIST, subSection, PROPERTY_HID_VENDOR_ID, vendorId)) {
+        LOG_INFO("[ClassicConfig]::%{public}s failed!", __func__);
+    }
+
+    return vendorId;
+}
+
+bool ClassicConfig::SetRemoteHidProductId(const std::string &subSection, int productId) const
+{
+    if (!config_->SetValue(SECTION_BREDR_PAIRED_LIST, subSection, PROPERTY_HID_PRODUCT_ID, productId)) {
+        LOG_WARN("[ClassicConfig]::%{public}s failed!", __func__);
+        return false;
+    }
+
+    return true;
+}
+
+int ClassicConfig::GetRemoteHidProductId(const std::string &subSection) const
+{
+    int productId = 0;
+    if (!config_->GetValue(SECTION_BREDR_PAIRED_LIST, subSection, PROPERTY_HID_PRODUCT_ID, productId)) {
+        LOG_INFO("[ClassicConfig]::%{public}s failed!", __func__);
+    }
+
+    return productId;
+}
+
+bool ClassicConfig::SetRemoteHidVersion(const std::string &subSection, int version) const
+{
+    if (!config_->SetValue(SECTION_BREDR_PAIRED_LIST, subSection, PROPERTY_HID_VERSION, version)) {
+        LOG_WARN("[ClassicConfig]::%{public}s failed!", __func__);
+        return false;
+    }
+
+    return true;
+}
+
+int ClassicConfig::GetRemoteHidVersion(const std::string &subSection) const
+{
+    int version = 0;
+    if (!config_->GetValue(SECTION_BREDR_PAIRED_LIST, subSection, PROPERTY_HID_VERSION, version)) {
+        LOG_INFO("[ClassicConfig]::%{public}s failed!", __func__);
+    }
+
+    return version;
+}
+
+bool ClassicConfig::SetRemoteHidCtryCode(const std::string &subSection, int ctryCode) const
+{
+    if (!config_->SetValue(SECTION_BREDR_PAIRED_LIST, subSection, PROPERTY_HID_CTRY_CODE, ctryCode)) {
+        LOG_WARN("[ClassicConfig]::%{public}s failed!", __func__);
+        return false;
+    }
+
+    return true;
+}
+
+int ClassicConfig::GetRemoteHidCtryCode(const std::string &subSection) const
+{
+    int ctryCode = 0;
+    if (!config_->GetValue(SECTION_BREDR_PAIRED_LIST, subSection, PROPERTY_HID_CTRY_CODE, ctryCode)) {
+        LOG_INFO("[ClassicConfig]::%{public}s failed!", __func__);
+    }
+
+    return ctryCode;
+}
+
+bool ClassicConfig::SetRemoteHidDescInfo(const std::string &subSection, const std::string &descInfo) const
+{
+    if (!config_->SetValue(SECTION_BREDR_PAIRED_LIST, subSection, PROPERTY_HID_DESC_INFO, descInfo)) {
+        LOG_WARN("[ClassicConfig]::%{public}s failed!", __func__);
+        return false;
+    }
+
+    return true;
+}
+
+std::string ClassicConfig::GetRemoteHidDescInfo(const std::string &subSection) const
+{
+    std::string descInfo = "";
+    if (!config_->GetValue(SECTION_BREDR_PAIRED_LIST, subSection, PROPERTY_HID_DESC_INFO, descInfo)) {
+        LOG_INFO("[ClassicConfig]::%{public}s failed!", __func__);
+    }
+
+    return descInfo;
+}
 }  // namespace bluetooth
 }  // namespace OHOS

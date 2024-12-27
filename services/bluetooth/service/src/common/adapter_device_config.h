@@ -88,6 +88,12 @@ const std::string PROPERTY_GATT_TRANSPORT = "GattTransport";
 const std::string PROPERTY_GATTS_START_HANDLE = "GattsStartHandle";
 const std::string PROPERTY_GATTS_END_HANDLE = "GattsEndHandle";
 
+const std::string PROPERTY_HID_VENDOR_ID = "HidVendorId";
+const std::string PROPERTY_HID_PRODUCT_ID = "HidProductId";
+const std::string PROPERTY_HID_VERSION = "HidVersion";
+const std::string PROPERTY_HID_CTRY_CODE = "HidCtryCode";
+const std::string PROPERTY_HID_DESC_INFO = "HidDescInfo";
+
 /**
  * @brief BREDR/BLE config.
  */

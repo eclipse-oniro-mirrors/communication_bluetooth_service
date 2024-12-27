@@ -2422,6 +2422,35 @@ bool ClassicAdapter::IsHfpCodSupported(const RawAddress &device)
     }
     return false;
 }
+
+bool ClassicAdapter::SetHidPnpInfo(const std::string &remoteAddr, int vendorId, int productId, int version)
+{
+    return adapterProperties_.SetHidPnpInfo(remoteAddr, vendorId, productId, version);
+}
+
+bool ClassicAdapter::SetHidDescInfo(
+    const std::string &remoteAddr, int ctryCode, const std::vector<uint8_t> &descData, int descLength)
+{
+    bool ret = adapterProperties_.SetHidDescInfo(remoteAddr, ctryCode, ClassicUtils::ConvertIntToHexString(descData));
+    if (ret) {
+        adapterProperties_.SaveConfigFile();
+    }
+    return ret;
+}
+
+void ClassicAdapter::GetHidPnpInfo(const std::string &remoteAddr, int &vendorId, int &productId, int &version)
+{
+    adapterProperties_.GetHidPnpInfo(remoteAddr, vendorId, productId, version);
+}
+
+void ClassicAdapter::GetHidDescInfo(
+    const std::string &remoteAddr, int &ctryCode, std::vector<uint8_t> &descData, int &descLength)
+{
+    std::string descInfo = "";
+    adapterProperties_.GetHidDescInfo(remoteAddr, ctryCode, descInfo);
+    ClassicUtils::ConvertHexStringToInt(descInfo, descData);
+    descLength = descData.size();
+}
 REGISTER_CLASS_CREATOR(ClassicAdapter);
 }  // namespace bluetooth
 }  // namespace OHOS

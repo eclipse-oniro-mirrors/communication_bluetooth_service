@@ -262,6 +262,11 @@ public:
      */
     bool SaveSupportUuids(const std::vector<Uuid> &uuids);
 
+    bool SetHidPnpInfo(const std::string &addr, int vendorId, int productId, int version);
+    bool SetHidDescInfo(const std::string &addr, int ctryCode, const std::string &descInfo);
+    void GetHidPnpInfo(const std::string &addr, int &vendorId, int &productId, int &version);
+    void GetHidDescInfo(const std::string &addr, int &ctryCode, std::string &descInfo);
+
 private:
     /**
      * @brief A constructor used to create a <b>ClassicAdapterProperties</b> instance.

@@ -358,6 +358,13 @@ public:
      * @since 6
      */
     virtual bool IsHfpCodSupported(const RawAddress &device) = 0;
+
+    virtual bool SetHidPnpInfo(const std::string &remoteAddr, int vendorId, int productId, int version) = 0;
+    virtual bool SetHidDescInfo(
+        const std::string &remoteAddr, int ctryCode, const std::vector<uint8_t> &descData, int descLength) = 0;
+    virtual void GetHidPnpInfo(const std::string &remoteAddr, int &vendorId, int &productId, int &version) = 0;
+    virtual void GetHidDescInfo(
+        const std::string &remoteAddr, int &ctryCode, std::vector<uint8_t> &descData, int &descLength) = 0;
 };
 }  // namespace bluetooth
 }  // namespace OHOS

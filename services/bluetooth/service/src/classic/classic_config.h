@@ -341,6 +341,17 @@ public:
      */
     std::string GetRemoteUuids(const std::string &subSection) const;
 
+    bool SetRemoteHidVendorId(const std::string &subSection, int vendorId) const;
+    int GetRemoteHidVendorId(const std::string &subSection) const;
+    bool SetRemoteHidProductId(const std::string &subSection, int productId) const;
+    int GetRemoteHidProductId(const std::string &subSection) const;
+    bool SetRemoteHidVersion(const std::string &subSection, int version) const;
+    int GetRemoteHidVersion(const std::string &subSection) const;
+    bool SetRemoteHidCtryCode(const std::string &subSection, int ctryCode) const;
+    int GetRemoteHidCtryCode(const std::string &subSection) const;
+    bool SetRemoteHidDescInfo(const std::string &subSection, const std::string &descInfo) const;
+    std::string GetRemoteHidDescInfo(const std::string &subSection) const;
+
 private:
     /**
      * @brief A constructor used to create a <b>ClassicConfig</b> instance.

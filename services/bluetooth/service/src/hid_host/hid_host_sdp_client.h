@@ -91,6 +91,8 @@ private:
     bool ParseHidDescInfo(const SdpService *serviceAry);
     uint8_t CheckAttributeValueLengthAvalid(SdpSequenceAttribute attribute);
     void printHidSdpInfo();
+    void SaveHidSdpInfo();
+    void GetConfigHidSdpInfo();
     // Current remote device address
     std::string currentAddr_ {""};
 

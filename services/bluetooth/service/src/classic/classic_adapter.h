@@ -403,6 +403,13 @@ public:
     void SetDeviceBatteryLevel(const RawAddress &device, int batteryLevel) const override;
     bool IsHfpCodSupported(const RawAddress &device) override;
 
+    bool SetHidPnpInfo(const std::string &remoteAddr, int vendorId, int productId, int version) override;
+    bool SetHidDescInfo(
+        const std::string &remoteAddr, int ctryCode, const std::vector<uint8_t> &descData, int descLength) override;
+    void GetHidPnpInfo(const std::string &remoteAddr, int &vendorId, int &productId, int &version) override;
+    void GetHidDescInfo(
+        const std::string &remoteAddr, int &ctryCode, std::vector<uint8_t> &descData, int &descLength) override;
+
 private:
     /**
      * @brief Inquiry result callback.
