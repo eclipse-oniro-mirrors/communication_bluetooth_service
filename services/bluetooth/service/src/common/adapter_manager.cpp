@@ -370,15 +370,16 @@ bool AdapterManager::Enable(const BTTransport transport) const
     }
 
     if (GetState(transport) == BTStateID::STATE_TURN_OFF) {
-        utility::Message msg(AdapterStateMachine::MSG_USER_ENABLE_REQ);
-        pimpl->dispatcher_->PostTask(std::bind(&AdapterManager::impl::ProcessMessage, pimpl.get(), transport, msg));
-        
-        AdapterDeviceConfig::GetInstance()->SetValue(SECTION_HOST, propertynames[transport], (int)true);
-        AdapterDeviceConfig::GetInstance()->Save();
         if (!PermissionManager::IsSystemHap() && transport == ADAPTER_BLE &&
             DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH)) {
             return true;
         }
+        utility::Message msg(AdapterStateMachine::MSG_USER_ENABLE_REQ);
+        pimpl->dispatcher_->PostTask(std::bind(&AdapterManager::impl::ProcessMessage, pimpl.get(), transport, msg));
+
+        AdapterDeviceConfig::GetInstance()->SetValue(SECTION_HOST, propertynames[transport], (int)true);
+        AdapterDeviceConfig::GetInstance()->Save();
+
         return true;
     } else if (GetState(transport) == BTStateID::STATE_TURN_ON) {
         LOG_INFO("%{public}s is turn on", __PRETTY_FUNCTION__);
