@@ -372,7 +372,7 @@ bool AdapterManager::Enable(const BTTransport transport) const
     if (GetState(transport) == BTStateID::STATE_TURN_OFF) {
         if (!PermissionManager::IsSystemHap() && transport == ADAPTER_BLE &&
             DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH)) {
-            return false;
+            return true;
         }
         utility::Message msg(AdapterStateMachine::MSG_USER_ENABLE_REQ);
         pimpl->dispatcher_->PostTask(std::bind(&AdapterManager::impl::ProcessMessage, pimpl.get(), transport, msg));
