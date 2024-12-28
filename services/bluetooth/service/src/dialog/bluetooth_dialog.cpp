@@ -60,7 +60,6 @@ bool BluetoothDialog::RequestAuthDialog(DialogInfo& dialog)
         DisplayDialog(dialog);
     }
     g_dialogQueue.push(dialog);
-    HILOGI("dialog queue size:%{public}d", g_dialogQueue.size());
     return true;
 }
 
