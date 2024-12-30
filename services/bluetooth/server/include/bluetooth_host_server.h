@@ -63,6 +63,7 @@ public:
     void Stop();
     int32_t DisableBle() override;
     int32_t EnableBle() override;
+    int32_t EnableBleNoAutoConnect() override;
     int32_t SatelliteControl(int type, int state) override;
     bool IsBrEnabled();
     bool IsBleEnabled();
