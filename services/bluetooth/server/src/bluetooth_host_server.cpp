@@ -1856,6 +1856,11 @@ int32_t BluetoothHostServer::GetRemoteDeviceInfo(const std::string &address,
     return BT_ERR_API_NOT_SUPPORT;
 }
 
+int32_t BluetoothHostServer::EnableBleNoAutoConnect()
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
 void BluetoothHostServer::RegisterBtResourceManagerObserver(const sptr<IBluetoothResourceManagerObserver> &observer)
 {}
 
