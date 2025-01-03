@@ -897,7 +897,7 @@ int32_t BluetoothHostServer::GetLocalAddress(std::string &addr)
     }
 }
 
-int32_t BluetoothHostServer::EnableBle()
+int32_t BluetoothHostServer::EnableBle(bool noAutoConnect)
 {
     HILOGI("Enter!");
     if (!BluetoothHostServer::IsBleEnabled() && IAdapterManager::GetInstance()->Enable(BTTransport::ADAPTER_BLE)) {
@@ -1852,11 +1852,6 @@ int32_t BluetoothHostServer::SetDeviceCustomType(const std::string &address, int
 
 int32_t BluetoothHostServer::GetRemoteDeviceInfo(const std::string &address,
     std::shared_ptr<BluetoothRemoteDeviceInfo> &deviceInfo, int type)
-{
-    return BT_ERR_API_NOT_SUPPORT;
-}
-
-int32_t BluetoothHostServer::EnableBleNoAutoConnect()
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
