@@ -1002,7 +1002,7 @@ void GattClientService::impl::OnWriteDescriptorValueEvent(
 
         Descriptor gattDescriptor;
         gattDescriptor.handle_ = valueHandle;
-        it.value()->second.callback_.OnDescriptorRead(ret, gattDescriptor);
+        it.value()->second.callback_.OnDescriptorWrite(ret, gattDescriptor);
     }
 }
 
