@@ -1000,7 +1000,9 @@ void GattClientService::impl::OnWriteDescriptorValueEvent(
             GattUpdatePowerStatus(it.value()->second.connection_.GetDevice().addr_);
         }
 
-        it.value()->second.callback_.OnDescriptorWrite(ret, Descriptor());
+        Descriptor gattDescriptor;
+        gattDescriptor.handle_ = valueHandle;
+        it.value()->second.callback_.OnDescriptorWrite(ret, gattDescriptor);
     }
 }
 
