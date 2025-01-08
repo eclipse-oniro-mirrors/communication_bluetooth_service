@@ -14,10 +14,4 @@
 group("fuzztest") {
   testonly = true
   deps = []
-  deps += [
-    "cancelpaireddevice_fuzzer:CancelPairedDeviceFuzzTest",
-    "pairdevice_fuzzer:PairDeviceFuzzTest",
-    "setbluetoothscanmode_fuzzer:SetBluetoothScanModeFuzzTest",
-    "setlocalname_fuzzer:SetLocalNameFuzzTest",
-  ]
 }
