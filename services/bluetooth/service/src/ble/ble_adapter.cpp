@@ -1613,7 +1613,8 @@ void BleAdapter::SendDiscoveryResult(
     if (pimpl->observer_ != nullptr) {
         pimpl->observer_->ForEach(
             [device, rssi, deviceName, deviceClass](IAdapterBleObserver &observer) {
-                observer.OnDiscoveryResult(device, rssi, deviceName, deviceClass); });
+                observer.OnDiscoveryResult(device, rssi, deviceName, deviceClass);
+            });
     }
 }
 

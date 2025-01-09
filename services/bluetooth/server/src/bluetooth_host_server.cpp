@@ -1104,12 +1104,11 @@ int32_t BluetoothHostServer::StartBtDiscovery()
     }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     if (IsBtEnabled()) {
-        if (classicService && classicService->StartBtDiscovery()) {
-            if (pimpl->bleCentralManger_ != nullptr && (scannerId_ != 0)) {
-                BluetoothBleScanSettings settings;
-                std::vector<BluetoothBleScanFilter> filters {};
-                pimpl->bleCentralManger_->StartScan(scannerId_, settings, filters);
-            }
+        if (classicService && classicService->StartBtDiscovery()
+            && (pimpl->bleCentralManger_ != nullptr) && (scannerId_ != 0)) {
+            BluetoothBleScanSettings settings;
+            std::vector<BluetoothBleScanFilter> filters {};
+            pimpl->bleCentralManger_->StartScan(scannerId_, settings, filters);
         }
     } else {
         HILOGW("BT current state is not enabled!");
