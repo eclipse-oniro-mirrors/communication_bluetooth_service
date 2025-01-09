@@ -1887,6 +1887,11 @@ void BleCentralManagerImpl::GapExScanResultEvt() const
     if ((centralManagerCallbacks_ != nullptr) && (pimpl->callBackType_ == CALLBACK_TYPE_FIRST_MATCH)) {
         std::lock_guard<std::recursive_mutex> lk(pimpl->mutex_);
         centralManagerCallbacks_->OnScanCallback(pimpl->bleScanResult_.back());
+        ((BleAdapter *)bleAdapter_)->SendDiscoveryResult(
+            pimpl->bleScanResult_.back().GetPeripheralDevice().GetRawAddress(),
+            pimpl->bleScanResult_.back().GetRssi(),
+            pimpl->bleScanResult_.back().GetPeripheralDevice().GetName(),
+            0);
     }
 }
 

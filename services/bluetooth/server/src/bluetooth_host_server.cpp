@@ -112,6 +112,7 @@ struct BluetoothHostServer::impl {
     std::vector<sptr<IBluetoothBlePeripheralObserver>> blePeripheralObservers_;
     std::mutex blePeripheralObserversMutex;
 
+    sptr<BluetoothBleCentralManagerServer> bleCentralManger_;
 private:
     void createServers();
 };
@@ -636,6 +637,7 @@ void BluetoothHostServer::impl::createServers()
     bleServers_.EnsureInsert(BLE_ADVERTISER_SERVER, bleAdvertiser->AsObject());
 
     sptr<BluetoothBleCentralManagerServer> bleCentralManger = new BluetoothBleCentralManagerServer();
+    bleCentralManger_ = bleCentralManger;
     bleServers_.EnsureInsert(BLE_CENTRAL_MANAGER_SERVER, bleCentralManger->AsObject());
 
 #ifdef BLUETOOTH_MAP_SERVER_FEATURE
@@ -721,6 +723,9 @@ bool BluetoothHostServer::Init()
             return false;
         }
         registeredToService_ = true;
+    }
+    if (pimpl->bleCentralManger_ != nullptr && (scannerId_ == 0)) {
+        pimpl->bleCentralManger_->RegisterBleCentralManagerCallback(scannerId_, false, nullptr);
     }
     HILOGI("init success");
     return true;
@@ -1098,9 +1103,13 @@ int32_t BluetoothHostServer::StartBtDiscovery()
         return BT_ERR_PERMISSION_FAILED;
     }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
-    if (IsBtEnabled() && classicService) {
-        if (classicService->StartBtDiscovery()) {
-            return NO_ERROR;
+    if (IsBtEnabled()) {
+        if (classicService && classicService->StartBtDiscovery()) {
+            if (pimpl->bleCentralManger_ != nullptr && (scannerId_ != 0)) {
+                BluetoothBleScanSettings settings;
+                std::vector<BluetoothBleScanFilter> filters {};
+                pimpl->bleCentralManger_->StartScan(scannerId_, settings, filters);
+            }
         }
     } else {
         HILOGW("BT current state is not enabled!");
@@ -1119,6 +1128,9 @@ int32_t BluetoothHostServer::CancelBtDiscovery()
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     if (IsBtEnabled() && classicService) {
         if (classicService->CancelBtDiscovery()) {
+            if (pimpl->bleCentralManger_ != nullptr && (scannerId_ != 0)) {
+                pimpl->bleCentralManger_->StopScan(scannerId_);
+            }
             return NO_ERROR;
         }
     } else {
