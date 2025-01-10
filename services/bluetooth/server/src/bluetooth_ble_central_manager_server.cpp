@@ -565,7 +565,7 @@ void BluetoothBleCentralManagerServer::DeregisterBleCentralManagerCallback(int32
             return;
         }
         for (auto iter = pimpl->scanCallbackInfo_.begin(); iter != pimpl->scanCallbackInfo_.end(); ++iter) {
-            if (iter->callback->AsObject() == callback->AsObject()) {
+            if ((iter->callback != nullptr) && (iter->callback->AsObject() == callback->AsObject())) {
                 pimpl->observers_.Deregister(iter->callback);
                 pimpl->scanCallbackInfo_.erase(iter);
                 break;
