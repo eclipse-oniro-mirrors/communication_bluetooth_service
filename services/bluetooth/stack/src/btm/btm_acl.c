@@ -1539,7 +1539,7 @@ static void BtmOnReadRemoteSupportedFeaturesComplete(const HciReadRemoteSupporte
 
     HciReadRemoteExtendedFeaturesParam cmdParam = {
         .connectionHandle = eventParam->connectionHandle,
-        .pageNumber = 0,
+        .pageNumber = 1,
     };
     HCI_ReadRemoteExtendedFeatures(&cmdParam);
 
