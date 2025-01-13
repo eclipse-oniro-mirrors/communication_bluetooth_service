@@ -1109,6 +1109,7 @@ int32_t BluetoothHostServer::StartBtDiscovery()
             BluetoothBleScanSettings settings;
             std::vector<BluetoothBleScanFilter> filters {};
             pimpl->bleCentralManger_->StartScan(scannerId_, settings, filters);
+            return NO_ERROR;
         }
     } else {
         HILOGW("BT current state is not enabled!");
