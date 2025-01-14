@@ -518,10 +518,6 @@ void BluetoothBleCentralManagerServer::RegisterBleCentralManagerCallback(int32_t
     int32_t uid = IPCSkeleton::GetCallingUid();
     HILOGI("pid: %{public}d, uid: %{public}d", pid, uid);
 
-    if (callback == nullptr) {
-        HILOGE("callback is null");
-        return;
-    }
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     if (bleService == nullptr) {
         HILOGE("bleService is null");
@@ -535,12 +531,14 @@ void BluetoothBleCentralManagerServer::RegisterBleCentralManagerCallback(int32_t
 
     pimpl->eventHandler_->PostSyncTask([&]() {
         if (pimpl != nullptr) {
-            pimpl->observersToken_.EnsureInsert(callback->AsObject(), IPCSkeleton::GetCallingTokenID());
-            pimpl->observersPid_[callback->AsObject()] = pid;
-            pimpl->observersScannerId_[callback->AsObject()] = scannerId;
-            auto func = std::bind(&BluetoothBleCentralManagerServer::DeregisterBleCentralManagerCallbackInner,
-                this, std::placeholders::_1, std::placeholders::_2);
-            pimpl->observers_.Register(callback, func, scannerId);
+            if (callback != nullptr) {
+                pimpl->observersToken_.EnsureInsert(callback->AsObject(), IPCSkeleton::GetCallingTokenID());
+                pimpl->observersPid_[callback->AsObject()] = pid;
+                pimpl->observersScannerId_[callback->AsObject()] = scannerId;
+                auto func = std::bind(&BluetoothBleCentralManagerServer::DeregisterBleCentralManagerCallbackInner,
+                    this, std::placeholders::_1, std::placeholders::_2);
+                pimpl->observers_.Register(callback, func, scannerId);
+            }
             impl::ScanCallbackInfo info;
             info.pid = pid;
             info.uid = uid;
@@ -567,7 +565,7 @@ void BluetoothBleCentralManagerServer::DeregisterBleCentralManagerCallback(int32
             return;
         }
         for (auto iter = pimpl->scanCallbackInfo_.begin(); iter != pimpl->scanCallbackInfo_.end(); ++iter) {
-            if (iter->callback->AsObject() == callback->AsObject()) {
+            if ((iter->callback != nullptr) && (iter->callback->AsObject() == callback->AsObject())) {
                 pimpl->observers_.Deregister(iter->callback);
                 pimpl->scanCallbackInfo_.erase(iter);
                 break;

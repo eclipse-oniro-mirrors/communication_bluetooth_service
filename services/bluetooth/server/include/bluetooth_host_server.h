@@ -25,6 +25,7 @@
 #include "iservice_registry.h"
 #include "system_ability.h"
 #include "bluetooth_remote_device_info.h"
+#include "bluetooth_ble_central_manager_server.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -137,7 +138,8 @@ private:
 
     bool registeredToService_ = false;
     ServiceRunningState state_ = ServiceRunningState::STATE_IDLE;
-
+    int32_t scannerId_ = 0; //invalid value
+    
     int GetTransportByDeviceType(int32_t transport, const std::string &address);
 
     BLUETOOTH_DISALLOW_COPY_AND_ASSIGN(BluetoothHostServer);
