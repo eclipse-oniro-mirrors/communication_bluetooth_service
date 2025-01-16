@@ -152,7 +152,8 @@ int HfpAgService::Connect(const RawAddress &device)
     LOG_INFO("[HFP AG]%{public}s():==========<start>==========", __FUNCTION__);
     std::lock_guard<std::recursive_mutex> lk(mutex_);
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
-    if (!classicService || !(classicService->IsHfpCodSupported(device))) {
+    if (!classicService || classicService->GetDeviceType(device) != BT_TRANSPORT_BREDR
+        || !(classicService->IsHfpCodSupported(device))) {
         LOG_ERROR("[HFP AG]%{public}s():Not Support HFP!", __FUNCTION__);
         return Bluetooth::BT_ERR_INTERNAL_ERROR;
     }
