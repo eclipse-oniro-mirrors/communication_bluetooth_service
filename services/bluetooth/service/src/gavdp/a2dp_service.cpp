@@ -24,6 +24,7 @@
 #include "profile_service_manager.h"
 #include "securec.h"
 #include "idevmgr_hdi.h"
+#include "interface_adapter_manager.h"
 
 constexpr const char *AUDIO_BLUETOOTH_SERVICE_NAME = "audio_bluetooth_hdi_service";
 
@@ -311,7 +312,11 @@ int A2dpService::Connect(const RawAddress &device)
     int ret = BT_SUCCESS;
     std::lock_guard<std::recursive_mutex> lock(g_a2dpServiceMutex);
 
-    if (connectManager_.JudgeConnectExit(device, role_)) {
+    auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
+    if (!classicService || classicService->GetDeviceType(device) != BT_TRANSPORT_BREDR) {
+        LOG_INFO("[A2dpService]The device is not bredr");
+        ret = RET_BAD_STATUS;
+    } else if (connectManager_.JudgeConnectExit(device, role_)) {
         LOG_INFO("[A2dpService]The device is connected as another role");
         ret = RET_BAD_STATUS;
     } else if (!connectManager_.JudgeConnectedNum()) {
