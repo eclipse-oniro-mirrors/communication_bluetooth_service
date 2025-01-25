@@ -309,5 +309,12 @@ void BluetoothBleAdvertiserServer::SetAdvertisingData(const BluetoothBleAdvertis
     HILOGI("NOT SUPPORT NOW");
     return;
 }
+
+void BluetoothBleAdvertiserServer::ChangeAdvertisingParams(uint8_t advHandle,
+    const BluetoothBleAdvertiserSettings &settings)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return BT_ERR_API_NOT_SUPPORT;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS

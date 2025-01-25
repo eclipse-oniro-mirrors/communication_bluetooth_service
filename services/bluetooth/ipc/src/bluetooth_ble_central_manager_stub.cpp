@@ -72,6 +72,9 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothBleCentralManagerStub *,
         {BluetoothBleCentralManagerInterfaceCode::BLE_REMOVE_LPDEVICE_PARAM,
             std::bind(&BluetoothBleCentralManagerStub::RemoveLpDeviceParamInner, std::placeholders::_1,
             std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothBleCentralManagerInterfaceCode::BLE_CHANGE_SCAN_PARAM,
+            std::bind(&BluetoothBleCentralManagerStub::ChangeScanParamsInner, std::placeholders::_1,
+            std::placeholders::_2, std::placeholders::_3)},
 };
 
 BluetoothBleCentralManagerStub::BluetoothBleCentralManagerStub()
@@ -248,6 +251,41 @@ ErrCode BluetoothBleCentralManagerStub::SetLpDeviceParamInner(MessageParcel &dat
 
 ErrCode BluetoothBleCentralManagerStub::RemoveLpDeviceParamInner(MessageParcel &data, MessageParcel &reply)
 {
+    return NO_ERROR;
+}
+
+ErrCode BluetoothBleCentralManagerStub::ChangeScanParamsInner(MessageParcel &data, MessageParcel &reply)
+{
+    int32_t scannerId = data.ReadInt32();
+    std::shared_ptr<BluetoothBleScanSettings> settings(data.ReadParcelable<BluetoothBleScanSettings>());
+    CHECK_AND_RETURN_LOG_RET(settings != nullptr, BT_ERR_IPC_TRANS_FAILED, "settings nullptr");
+
+    std::vector<BluetoothBleScanFilter> filters{};
+    int32_t filterSize = 0;
+    if (!data.ReadInt32(filterSize) || filterSize > BLE_CENTRAL_MANAGER_STUB_READ_DATA_SIZE_MAX_LEN) {
+        HILOGE("read Parcelable size failed.")
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
+
+    for (int32_t i = 0; i < filterSize; i++) {
+        std::shared_ptr<BluetoothBleScanFilter> filter(data.ReadParcelable<BluetoothBleScanFilter>());
+        if (filter == nullptr) {
+            HILOGE("filter nullptr");
+            return BT_ERR_IPC_TRANS_FAILED;
+        }
+        BluetoothBleScanFilter item = *filter;
+        filters.push_back(item);
+    }
+    uint32_t filterAction = 0;
+    if (!data.ReadUint32(filterAction)) {
+        HILOGE("read Parcelable filterAction failed.");
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
+    int32_t ret = ChangeScanParams(scanerId, *settings, filters, filterAction);
+    if (!reply.WriteInt32(ret)) {
+        HILOGE("reply writing failed.");
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
     return NO_ERROR;
 }
 }  // namespace Bluetooth

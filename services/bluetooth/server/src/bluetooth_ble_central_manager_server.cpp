@@ -557,6 +557,12 @@ void BluetoothBleCentralManagerServer::DeregisterBleCentralManagerCallbackInner(
     return DeregisterBleCentralManagerCallback(scannerId, callback);
 }
 
+int BluetoothBleCentralManagerServer::ChangeScanParams(int32_t scannerId, const BluetoothBleScanSettings &settings,
+    const std::vector<BluetoothBleScanFilter> &filters, uint32_t filterAction)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
 void BluetoothBleCentralManagerServer::DeregisterBleCentralManagerCallback(int32_t scannerId,
     const sptr<IBluetoothBleCentralManagerCallback> &callback)
 {
