@@ -258,20 +258,20 @@ ErrCode BluetoothBleCentralManagerStub::ChangeScanParamsInner(MessageParcel &dat
 {
     int32_t scannerId = data.ReadInt32();
     std::shared_ptr<BluetoothBleScanSettings> settings(data.ReadParcelable<BluetoothBleScanSettings>());
-    CHECK_AND_RETURN_LOG_RET(settings != nullptr, BT_ERR_IPC_TRANS_FAILED, "settings nullptr");
+    CHECK_AND_RETURN_LOG_RET(settings != nullptr, ERR_INVALID_VALUE, "settings nullptr");
 
     std::vector<BluetoothBleScanFilter> filters{};
     int32_t filterSize = 0;
     if (!data.ReadInt32(filterSize) || filterSize > BLE_CENTRAL_MANAGER_STUB_READ_DATA_SIZE_MAX_LEN) {
-        HILOGE("read Parcelable size failed.")
-        return BT_ERR_IPC_TRANS_FAILED;
+        HILOGE("read Parcelable size failed.");
+        return ERR_INVALID_VALUE;
     }
 
     for (int32_t i = 0; i < filterSize; i++) {
         std::shared_ptr<BluetoothBleScanFilter> filter(data.ReadParcelable<BluetoothBleScanFilter>());
         if (filter == nullptr) {
             HILOGE("filter nullptr");
-            return BT_ERR_IPC_TRANS_FAILED;
+            return ERR_INVALID_VALUE;
         }
         BluetoothBleScanFilter item = *filter;
         filters.push_back(item);
@@ -279,12 +279,12 @@ ErrCode BluetoothBleCentralManagerStub::ChangeScanParamsInner(MessageParcel &dat
     uint32_t filterAction = 0;
     if (!data.ReadUint32(filterAction)) {
         HILOGE("read Parcelable filterAction failed.");
-        return BT_ERR_IPC_TRANS_FAILED;
+        return ERR_INVALID_VALUE;
     }
-    int32_t ret = ChangeScanParams(scanerId, *settings, filters, filterAction);
+    int32_t ret = ChangeScanParams(scannerId, *settings, filters, filterAction);
     if (!reply.WriteInt32(ret)) {
         HILOGE("reply writing failed.");
-        return BT_ERR_IPC_TRANS_FAILED;
+        return ERR_INVALID_VALUE;
     }
     return NO_ERROR;
 }

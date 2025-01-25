@@ -195,10 +195,11 @@ ErrCode BluetoothBleAdvertiserStub::ChangeAdvertisingParamsInner(MessageParcel &
     int advHandle = data.ReadUint8();
     std::shared_ptr<BluetoothBleAdvertiserSettings> settings(data.ReadParcelable<BluetoothBleAdvertiserSettings>());
     if (settings == nullptr) {
-        HILOGE("Read settings failed.")
+        HILOGE("Read settings failed.");
         return TRANSACTION_ERR;
     }
     ChangeAdvertisingParams(advHandle, *settings);
-    return NO_ERROR;}
+    return NO_ERROR;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS
