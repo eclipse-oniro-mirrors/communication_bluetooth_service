@@ -310,7 +310,7 @@ void BluetoothBleAdvertiserServer::SetAdvertisingData(const BluetoothBleAdvertis
     return;
 }
 
-void BluetoothBleAdvertiserServer::ChangeAdvertisingParams(uint8_t advHandle,
+int BluetoothBleAdvertiserServer::ChangeAdvertisingParams(uint8_t advHandle,
     const BluetoothBleAdvertiserSettings &settings)
 {
     HILOGI("NOT SUPPORT NOW");
