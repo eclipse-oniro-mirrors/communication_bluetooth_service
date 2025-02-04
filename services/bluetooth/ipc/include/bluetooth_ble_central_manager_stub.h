@@ -52,6 +52,7 @@ private:
     ErrCode IsLpDeviceAvailableInner(MessageParcel &data, MessageParcel &reply);
     ErrCode SetLpDeviceParamInner(MessageParcel &data, MessageParcel &reply);
     ErrCode RemoveLpDeviceParamInner(MessageParcel &data, MessageParcel &reply);
+    ErrCode ChangeScanParamsInner(MessageParcel &data, MessageParcel &reply);
 };
 }  // namespace Bluetooth
 }  // namespace OHOS

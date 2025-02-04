@@ -46,6 +46,8 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothBleAdvertiserStub *, Mes
             std::bind(&BluetoothBleAdvertiserStub::GetAdvertiserHandleInner, _1, _2, _3)},
         {BluetoothBleAdvertiserInterfaceCode::BLE_SET_ADVERTISING_DATA,
             std::bind(&BluetoothBleAdvertiserStub::SetAdvertisingDataInner, _1, _2, _3)},
+        {BluetoothBleAdvertiserInterfaceCode::BLE_CHANGE_ADVERTISING_PARAMS,
+            std::bind(&BluetoothBleAdvertiserStub::ChangeAdvertisingParamsInner, _1, _2, _3)},
 };
 
 BluetoothBleAdvertiserStub::BluetoothBleAdvertiserStub()
@@ -185,6 +187,18 @@ ErrCode BluetoothBleAdvertiserStub::GetAdvertiserHandleInner(MessageParcel &data
 
 ErrCode BluetoothBleAdvertiserStub::SetAdvertisingDataInner(MessageParcel &data, MessageParcel &reply)
 {
+    return NO_ERROR;
+}
+
+ErrCode BluetoothBleAdvertiserStub::ChangeAdvertisingParamsInner(MessageParcel &data, MessageParcel &reply)
+{
+    int advHandle = data.ReadUint8();
+    std::shared_ptr<BluetoothBleAdvertiserSettings> settings(data.ReadParcelable<BluetoothBleAdvertiserSettings>());
+    if (settings == nullptr) {
+        HILOGE("Read settings failed.");
+        return TRANSACTION_ERR;
+    }
+    ChangeAdvertisingParams(advHandle, *settings);
     return NO_ERROR;
 }
 }  // namespace Bluetooth

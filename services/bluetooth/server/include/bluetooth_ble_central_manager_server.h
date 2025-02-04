@@ -54,6 +54,8 @@ public:
     int RemoveLpDeviceParam(const bluetooth::Uuid &uuid) override;
     void DeregisterBleCentralManagerCallbackInner(const sptr<IBluetoothBleCentralManagerCallback> &callback,
         int32_t scannerId);
+    int ChangeScanParams(int32_t scannerId, const BluetoothBleScanSettings &settings,
+        const std::vector<BluetoothBleScanFilter> &filters, uint32_t filterAction) override;
 private:
     BLUETOOTH_DECLARE_IMPL();
     BLUETOOTH_DISALLOW_COPY_AND_ASSIGN(BluetoothBleCentralManagerServer);

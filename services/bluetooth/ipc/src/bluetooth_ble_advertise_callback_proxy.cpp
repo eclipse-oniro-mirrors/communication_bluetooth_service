@@ -173,6 +173,34 @@ void BluetoothBleAdvertiseCallbackProxy::OnSetAdvDataEvent(int32_t result, int32
     return;
 }
 
+void BluetoothBleAdvertiseCallbackProxy::OnChangeAdvResultEvent(int32_t result, int32_t advHandle)
+{
+    MessageParcel data;
+    if (!data.WriteInterfaceToken(BluetoothBleAdvertiseCallbackProxy::GetDescriptor())) {
+        HILOGE("[OnChangeAdvResultEvent] fail: write interface token failed.");
+        return;
+    }
+
+    if (!data.WriteInt32(result)) {
+        HILOGE("[OnChangeAdvResultEvent] fail: write result failed");
+        return;
+    }
+
+    if (!data.WriteInt32(advHandle)) {
+        HILOGE("[OnChangeAdvResultEvent] fail: write advHandle failed");
+        return;
+    }
+
+    MessageParcel reply;
+    MessageOption option = {MessageOption::TF_ASYNC};
+    int error = InnerTransact(
+        BluetoothBleAdvertiseCallbackInterfaceCode::BT_BLE_ADVERTISE_CALLBACK_CHANGE_ADV_RESULT, option, data, reply);
+    if (error != NO_ERROR) {
+        HILOGE("BleCentralManagerCallBackProxy::OnChangeAdvResultEvent done fail, error: %{public}d", error);
+        return;
+    }
+}
+
 ErrCode BluetoothBleAdvertiseCallbackProxy::InnerTransact(
     uint32_t code, MessageOption &flags, MessageParcel &data, MessageParcel &reply)
 {
