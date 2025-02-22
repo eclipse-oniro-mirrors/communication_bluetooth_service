@@ -998,7 +998,13 @@ void ClassicAdapter::HandleInquiryResult(
     HILOGI("enter");
 
     std::lock_guard<std::recursive_mutex> lk(pimpl->syncMutex_);
-    discoveryState_ = DISCOVERYING;
+    if (discoveryState_ == DISCOVERY_STOPED) {
+        HILOGE("Faild, discoveryState_ == DISCOVERY_STOPED");
+        return;
+    } else if (discoveryState_ == DISCOVERY_STARTED) {
+        discoveryState_ = DISCOVERYING;
+        HILOGI("Start, change discoveryState_ from DISCOVERY_STARTED to DISCOVERYING");
+    }
 
     RawAddress device = RawAddress::ConvertToString(addr.addr);
     std::shared_ptr<ClassicRemoteDevice> remoteDevice = FindRemoteDevice(device);
