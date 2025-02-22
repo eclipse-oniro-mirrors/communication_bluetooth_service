@@ -48,10 +48,30 @@ public:
     }
 
     void OnEnableResultEvent(int result, uint8_t advHandle) override
-    {}
+    {
+        HILOGI("result: %{public}d, advHandle: %{public}d", result, advHandle);
+        observers_->ForEach([this, result, advHandle](IBluetoothBleAdvertiseCallback *observer) {
+            int32_t pid = observersPid_.ReadVal(observer->AsObject());
+            if (BluetoothBleCentralManagerServer::IsResourceScheduleControlApp(pid)) {
+                HILOGD("pid:%{public}d is proxy pid, not callback.", pid);
+                return;
+            }
+            observer->OnEnableResultEvent(result, advHandle);
+        });
+    }
 
     void OnDisableResultEvent(int result, uint8_t advHandle) override
-    {}
+    {
+        HILOGI("result: %{public}d, advHandle: %{public}d", result, advHandle);
+        observers_->ForEach([this, result, advHandle](IBluetoothBleAdvertiseCallback *observer) {
+            int32_t pid = observersPid_.ReadVal(observer->AsObject());
+            if (BluetoothBleCentralManagerServer::IsResourceScheduleControlApp(pid)) {
+                HILOGD("pid:%{public}d is proxy pid, not callback.", pid);
+                return;
+            }
+            observer->OnDisableResultEvent(result, advHandle);
+        });
+    }
 
     void OnStopResultEvent(int result, uint8_t advHandle) override
     {
@@ -208,13 +228,15 @@ int BluetoothBleAdvertiserServer::StartAdvertising(const BluetoothBleAdvertiserS
 
 int BluetoothBleAdvertiserServer::EnableAdvertising(uint8_t advHandle, uint16_t duration)
 {
-    HILOGI("NOT SUPPORT NOW");
+    HILOGI("enter, advHandle: %{public}d", advHandle);
+    pimpl->observerImp_->OnEnableResultEvent(NO_ERROR, advHandle);
     return NO_ERROR;
 }
 
 int BluetoothBleAdvertiserServer::DisableAdvertising(uint8_t advHandle)
 {
-    HILOGI("NOT SUPPORT NOW");
+    HILOGI("enter, advHandle: %{public}d", advHandle);
+    pimpl->observerImp_->OnDisableResultEvent(NO_ERROR, advHandle);
     return NO_ERROR;
 }
 
