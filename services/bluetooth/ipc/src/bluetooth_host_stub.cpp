@@ -261,6 +261,9 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
         {BluetoothHostInterfaceCode::GET_CLOUD_BOND_STATE,
             std::bind(&BluetoothHostStub::GetCloudBondStateInner,
                 std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::BT_UPDATE_REFUSE_POLICY,
+            std::bind(&BluetoothHostStub::UpdateRefusePolicyInner,
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
 };
 
 BluetoothHostStub::BluetoothHostStub(){};
@@ -1385,6 +1388,11 @@ int32_t BluetoothHostStub::UpdateCloudBluetoothDevInner(MessageParcel &data, Mes
 }
 
 int32_t BluetoothHostStub::GetCloudBondStateInner(MessageParcel &data, MessageParcel &reply)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t BluetoothHostStub::UpdateRefusePolicyInner(MessageParcel &data, MessageParcel &reply)
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
