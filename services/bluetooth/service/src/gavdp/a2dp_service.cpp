@@ -498,7 +498,8 @@ void A2dpService::DisableService()
         }
     }
 
-    if ((GetConnectState() == PROFILE_STATE_DISCONNECTED)||(GetConnectState() == (PROFILE_STATE_CONNECTING|PROFILE_STATE_DISCONNECTED))) {
+    if ((GetConnectState() == PROFILE_STATE_DISCONNECTED)||
+        (GetConnectState() == (PROFILE_STATE_CONNECTING|PROFILE_STATE_DISCONNECTED))) {
         for (auto it = a2dpDevices_.begin(); it != a2dpDevices_.end(); it++) {
             if (it->second != nullptr) {
                 delete it->second;
