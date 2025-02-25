@@ -2419,7 +2419,7 @@ bool ClassicAdapter::IsHfpCodSupported(const RawAddress &device)
         HILOGE("remoteDevice is nullptr");
         return false;
     }
-    uint32_t cod = (uint32_t)remoteDevice->GetDeviceClass();
+    uint32_t cod = static_cast<uint32_t>remoteDevice->GetDeviceClass();
     /// Referenced from Assigned NUmbers,Class of Device format :
     /// 23-13 bit  Major Service Classes
     /// 12-8 bit Major Device Class
