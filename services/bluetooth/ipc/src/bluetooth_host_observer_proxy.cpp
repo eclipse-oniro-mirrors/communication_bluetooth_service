@@ -271,6 +271,10 @@ void BluetoothHostObserverProxy::OnBluetoothStateChanged(int32_t state)
     }
 }
 
+void BluetoothHostObserverProxy::OnRefusePolicyChanged(const int32_t pid, const int64_t prohibitedSecondsTime)
+{
+}
+
 ErrCode BluetoothHostObserverProxy::InnerTransact(
     uint32_t code, MessageOption &flags, MessageParcel &data, MessageParcel &reply)
 {
