@@ -249,6 +249,15 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
         {BluetoothHostInterfaceCode::BT_DEREGISTER_RESOURCE_MANAGER_OBSERVER,
             std::bind(&BluetoothHostStub::DeregisterBtResourceManagerObserverInner,
                 std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::GET_CONNECTION_TIME,
+            std::bind(&BluetoothHostStub::GetLastConnectionTimeInner,
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::BT_UPDATE_CLOUD_DEVICE,
+            std::bind(&BluetoothHostStub::UpdateCloudBluetoothDevInner,
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::GET_CLOUD_BOND_STATE,
+            std::bind(&BluetoothHostStub::GetCloudBondStateInner,
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
 };
 
 BluetoothHostStub::BluetoothHostStub(){};
@@ -1355,6 +1364,21 @@ int32_t BluetoothHostStub::DeregisterBtResourceManagerObserverInner(MessageParce
     CHECK_AND_RETURN_LOG_RET(observer != nullptr, ERR_INVALID_VALUE, "observer is nullptr");
     DeregisterBtResourceManagerObserver(observer);
     return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::GetLastConnectionTimeInner(MessageParcel &data, MessageParcel &reply)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t BluetoothHostStub::UpdateCloudBluetoothDevInner(MessageParcel &data, MessageParcel &reply)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t BluetoothHostStub::GetCloudBondStateInner(MessageParcel &data, MessageParcel &reply)
+{
+    return BT_ERR_API_NOT_SUPPORT;
 }
 }  // namespace Bluetooth
 }  // namespace OHOS
