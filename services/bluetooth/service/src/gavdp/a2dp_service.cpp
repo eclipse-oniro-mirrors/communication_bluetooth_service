@@ -498,22 +498,21 @@ void A2dpService::DisableService()
         }
     }
 
-    if (GetConnectState() != PROFILE_STATE_DISCONNECTED) {
-        return;
-    }
-
-    for (auto it = a2dpDevices_.begin(); it != a2dpDevices_.end(); it++) {
-        if (it->second != nullptr) {
-            delete it->second;
-            it->second = nullptr;
+    if ((GetConnectState() == PROFILE_STATE_DISCONNECTED)||
+        (GetConnectState() == (PROFILE_STATE_CONNECTING|PROFILE_STATE_DISCONNECTED))) {
+        for (auto it = a2dpDevices_.begin(); it != a2dpDevices_.end(); it++) {
+            if (it->second != nullptr) {
+                delete it->second;
+                it->second = nullptr;
+            }
         }
+    
+        a2dpDevices_.clear();
+        instance->DeregisterObserver(&profileObserver_);
+        GetContext()->OnDisable(name_, ret);
+        isDoDisable = false;
+        instance->SetDisalbeTag(false);
     }
-
-    a2dpDevices_.clear();
-    instance->DeregisterObserver(&profileObserver_);
-    GetContext()->OnDisable(name_, ret);
-    isDoDisable = false;
-    instance->SetDisalbeTag(false);
 }
 
 std::vector<RawAddress> A2dpService::GetDevicesByStates(std::vector<int>& states) const

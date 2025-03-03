@@ -113,7 +113,7 @@ void HidHostService::ShutDown()
     isShuttingDown_ = true;
     bool isDisconnected = false;
     for (auto it = stateMachines_.begin(); it != stateMachines_.end(); ++it) {
-        if ((it->second != nullptr) && (it->second->GetDeviceStateInt() > HID_HOST_STATE_DISCONNECTED)) {
+        if ((it->second != nullptr) && (it->second->GetDeviceStateInt() > HID_HOST_STATE_CONNECTING)) {
             Disconnect(RawAddress(it->first));
             isDisconnected = true;
         }
@@ -129,7 +129,7 @@ void HidHostService::ShutDownDone(bool isAllDisconnected)
     LOG_DEBUG("[HIDH Service]%{public}s():==========<start>==========", __FUNCTION__);
     if (!isAllDisconnected) {
         for (auto it = stateMachines_.begin(); it != stateMachines_.end(); ++it) {
-            if ((it->second != nullptr) && (it->second->GetDeviceStateInt() > HID_HOST_STATE_DISCONNECTED)) {
+            if ((it->second != nullptr) && (it->second->GetDeviceStateInt() > HID_HOST_STATE_CONNECTING)) {
                 return;
             }
         }
