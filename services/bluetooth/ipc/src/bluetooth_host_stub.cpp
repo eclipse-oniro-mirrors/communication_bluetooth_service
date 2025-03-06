@@ -1368,17 +1368,17 @@ int32_t BluetoothHostStub::DeregisterBtResourceManagerObserverInner(MessageParce
 
 int32_t BluetoothHostStub::GetLastConnectionTimeInner(MessageParcel &data, MessageParcel &reply)
 {
-    return BT_ERR_API_NOT_SUPPORT;
+    return NO_ERROR;
 }
 
 int32_t BluetoothHostStub::UpdateCloudBluetoothDevInner(MessageParcel &data, MessageParcel &reply)
 {
-    return BT_ERR_API_NOT_SUPPORT;
+    return NO_ERROR;
 }
 
 int32_t BluetoothHostStub::GetCloudBondStateInner(MessageParcel &data, MessageParcel &reply)
 {
-    return BT_ERR_API_NOT_SUPPORT;
+    return NO_ERROR;
 }
 }  // namespace Bluetooth
 }  // namespace OHOS
