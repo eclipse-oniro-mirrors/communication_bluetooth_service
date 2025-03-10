@@ -1347,7 +1347,7 @@ int32_t BluetoothHostServer::GetPowerMode(const std::string &address)
     return IAdapterManager::GetInstance()->GetPowerMode(address);
 }
 
-int32_t BluetoothHostServer::GetDeviceName(int32_t transport, const std::string &address, std::string &name)
+int32_t BluetoothHostServer::GetDeviceName(int32_t transport, const std::string &address, std::string &name, bool alias)
 {
     if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
         HILOGE("false, check permission failed");
