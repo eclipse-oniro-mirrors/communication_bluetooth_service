@@ -1911,5 +1911,11 @@ int32_t BluetoothHostServer::UpdateRefusePolicy(const int32_t pid, const int64_t
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
+
+int32_t BluetoothHostServer::ProcessRandomDeviceIdCommand(
+    int32_t command, std::vector<std::string> &deviceIdVec, bool &isValid)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS
