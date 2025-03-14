@@ -1593,9 +1593,7 @@ static void BtmOnReadRemoteExtendedFeaturesComplete(const HciReadRemoteExtendedF
 
             if (eventParam->pageNumber < eventParam->maximumPageNumber) {
                 nextPageNumber = eventParam->pageNumber + 1;
-            }
-
-            if (eventParam->pageNumber == eventParam->maximumPageNumber) {
+            } else {
                 connection->remoteFeatures.bredr.extendedFeatureStatus = eventParam->status;
                 status = eventParam->status;
             }
