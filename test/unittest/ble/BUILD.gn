@@ -13,7 +13,7 @@
 
 import("//build/test.gni")
 
-module_output_path = "bluetooth/framework_test/ble"
+module_output_path = "bluetooth_service/bluetooth_service"
 
 ###############################################################################
 #1. intent(c++) get/set test without transport
