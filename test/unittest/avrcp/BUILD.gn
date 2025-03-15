@@ -14,7 +14,7 @@
 import("//build/test.gni")
 import("//foundation/communication/bluetooth_service/bluetooth.gni")
 
-module_output_path = "bluetooth/framework_test/avrcp/"
+module_output_path = "bluetooth_service/bluetooth_service"
 
 ###############################################################################
 #1. intent(c++) get/set test without transport
