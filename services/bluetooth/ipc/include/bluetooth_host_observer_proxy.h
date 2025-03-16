@@ -39,6 +39,7 @@ public:
     virtual void OnScanModeChanged(int32_t mode) override;
     virtual void OnDeviceNameChanged(const std::string &deviceName) override;
     virtual void OnDeviceAddrChanged(const std::string &address) override;
+    void OnRefusePolicyChanged(const int32_t pid, const int64_t prohibitedSecondsTime) override;
 
 private:
     ErrCode InnerTransact(uint32_t code, MessageOption &flags, MessageParcel &data, MessageParcel &reply);
