@@ -133,6 +133,7 @@ public:
     void RegisterBtResourceManagerObserver(const sptr<IBluetoothResourceManagerObserver> &observer) override;
     void DeregisterBtResourceManagerObserver(const sptr<IBluetoothResourceManagerObserver> &observer) override;
     int32_t EnableBluetoothToRestrictMode(void) override;
+    int32_t UpdateRefusePolicy(const int32_t pid, const int64_t prohibitedSecondsTime) override;
 
 private:
     static sptr<BluetoothHostServer> instance;
