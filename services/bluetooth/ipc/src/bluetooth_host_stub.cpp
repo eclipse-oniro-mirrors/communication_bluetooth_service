@@ -721,8 +721,13 @@ int32_t BluetoothHostStub::GetDeviceNameInner(MessageParcel &data, MessageParcel
         HILOGE("BluetoothHostStub::GetDeviceName address failed");
         return BT_ERR_IPC_TRANS_FAILED;
     }
+    bool alias = true;
+    if (!data.ReadBool(alias)) {
+        HILOGE("BluetoothHostStub::GetDeviceName alias failed");
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
     std::string name = "";
-    int32_t result = GetDeviceName(transport, address, name);
+    int32_t result = GetDeviceName(transport, address, name, alias);
     bool ret = reply.WriteInt32(result);
     if (!ret) {
         HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
