@@ -143,6 +143,9 @@ Thread *ThreadCreate(const char *name)
     }
 
     StartPromise *promise = (StartPromise *)calloc(1, sizeof(StartPromise));
+    if (promise == NULL) {
+        goto ERROR;
+    }
     promise->thread = thread;
     promise->sync = SemaphoreCreate(0);
     if (promise->sync == NULL) {
