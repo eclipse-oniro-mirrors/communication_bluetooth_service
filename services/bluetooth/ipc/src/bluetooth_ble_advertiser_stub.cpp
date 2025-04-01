@@ -172,8 +172,10 @@ ErrCode BluetoothBleAdvertiserStub::CloseInner(MessageParcel &data, MessageParce
 
 ErrCode BluetoothBleAdvertiserStub::GetAdvertiserHandleInner(MessageParcel &data, MessageParcel &reply)
 {
+    sptr<IRemoteObject> remote = data.ReadRemoteObject();
+    const sptr<IBluetoothBleAdvertiseCallback> callBack = OHOS::iface_cast<IBluetoothBleAdvertiseCallback>(remote);
     int advHandle = bluetooth::BLE_INVALID_ADVERTISING_HANDLE;
-    int result = GetAdvertiserHandle(advHandle);
+    int result = GetAdvertiserHandle(advHandle, callBack);
     bool resultRet = reply.WriteInt32(result);
     bool advHandleRet = reply.WriteInt32(advHandle);
     if (!(resultRet && advHandleRet)) {
