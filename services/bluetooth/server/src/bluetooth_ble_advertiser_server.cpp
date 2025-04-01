@@ -306,7 +306,8 @@ void BluetoothBleAdvertiserServer::DeregisterBleAdvertiserCallback(const sptr<IB
     pimpl->observerImp_->observersPid_.Erase(callback->AsObject());
 }
 
-int32_t BluetoothBleAdvertiserServer::GetAdvertiserHandle(int32_t &advHandle)
+int32_t BluetoothBleAdvertiserServer::GetAdvertiserHandle(int32_t &advHandle,
+    const sptr<IBluetoothBleAdvertiseCallback> &callback)
 {
     HILOGI("enter");
     if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
