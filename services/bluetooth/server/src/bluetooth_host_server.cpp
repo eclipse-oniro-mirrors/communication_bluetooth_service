@@ -795,6 +795,10 @@ int32_t BluetoothHostServer::EnableBt()
 
 int32_t BluetoothHostServer::DisableBt()
 {
+    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
+        HILOGE("false, check Access permission failed");
+        return BT_ERR_PERMISSION_FAILED;
+    }
     if (IAdapterManager::GetInstance()->Disable(bluetooth::BTTransport::ADAPTER_BREDR)) {
         return NO_ERROR;
     }
@@ -900,6 +904,10 @@ int32_t BluetoothHostServer::GetLocalAddress(std::string &addr)
 int32_t BluetoothHostServer::EnableBle(bool noAutoConnect)
 {
     HILOGI("Enter!");
+    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
+        HILOGE("false, check Access permission failed");
+        return BT_ERR_PERMISSION_FAILED;
+    }
     if (!BluetoothHostServer::IsBleEnabled() && IAdapterManager::GetInstance()->Enable(BTTransport::ADAPTER_BLE)) {
         return NO_ERROR;
     }
@@ -1198,6 +1206,10 @@ long BluetoothHostServer::GetBtDiscoveryEndMillis()
 int32_t BluetoothHostServer::GetPairedDevices(std::vector<BluetoothRawAddress> &pairedAddr)
 {
     HILOGI("GetPairedDevices");
+    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
+        HILOGE("false, check Access permission failed");
+        return BT_ERR_PERMISSION_FAILED;
+    }
     if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
         HILOGE("false, check permission failed");
         return BT_ERR_SYSTEM_PERMISSION_FAILED;
@@ -1408,12 +1420,20 @@ int32_t BluetoothHostServer::SetDeviceAlias(const std::string &address, const st
 int32_t BluetoothHostServer::GetRemoteDeviceBatteryInfo(const std::string &address,
     BluetoothBatteryInfo &batteryInfo)
 {
+    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
+        HILOGE("false, check Access permission failed");
+        return BT_ERR_PERMISSION_FAILED;
+    }
     return BT_ERR_INTERNAL_ERROR;
 }
 
 int32_t BluetoothHostServer::GetPairState(int32_t transport, const std::string &address, int32_t &pairState)
 {
     HILOGI("transport: %{public}d, address: %{public}s", transport, GetEncryptAddr(address).c_str());
+    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
+        HILOGE("false, check Access permission failed");
+        return BT_ERR_PERMISSION_FAILED;
+    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     RawAddress addr(address);
@@ -1837,11 +1857,19 @@ int32_t BluetoothHostServer::SatelliteControl(int type, int state)
 
 int32_t BluetoothHostServer::ConnectAllowedProfiles(const std::string &address)
 {
+    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
+        HILOGE("false, check Access permission failed");
+        return BT_ERR_PERMISSION_FAILED;
+    }
     return BT_ERR_API_NOT_SUPPORT;
 }
 
 int32_t BluetoothHostServer::DisconnectAllowedProfiles(const std::string &address)
 {
+    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
+        HILOGE("false, check Access permission failed");
+        return BT_ERR_PERMISSION_FAILED;
+    }
     return BT_ERR_API_NOT_SUPPORT;
 }
 

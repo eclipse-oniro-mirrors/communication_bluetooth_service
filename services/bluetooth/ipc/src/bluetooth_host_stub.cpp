@@ -1307,12 +1307,34 @@ ErrCode BluetoothHostStub::SatelliteControlInner(MessageParcel &data, MessagePar
 
 int32_t BluetoothHostStub::ConnectAllowedProfilesInner(MessageParcel &data, MessageParcel &reply)
 {
-    return BT_ERR_API_NOT_SUPPORT;
+    std::string address;
+    if (!data.ReadString(address)) {
+        HILOGE("BluetoothHostStub::SetDeviceCustomType address failed");
+        return TRANSACTION_ERR;
+    }
+    int32_t result = ConnectAllowedProfiles(address);
+    bool ret = reply.WriteInt32(result);
+    if (!ret) {
+        HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
+        return TRANSACTION_ERR;
+    }
+    return NO_ERROR;
 }
 
 int32_t BluetoothHostStub::DisconnectAllowedProfilesInner(MessageParcel &data, MessageParcel &reply)
 {
-    return BT_ERR_API_NOT_SUPPORT;
+    std::string address;
+    if (!data.ReadString(address)) {
+        HILOGE("BluetoothHostStub::SetDeviceCustomType address failed");
+        return TRANSACTION_ERR;
+    }
+    int32_t result = DisconnectAllowedProfiles(address);
+    bool ret = reply.WriteInt32(result);
+    if (!ret) {
+        HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
+        return TRANSACTION_ERR;
+    }
+    return NO_ERROR;
 }
 
 int32_t BluetoothHostStub::SetDeviceCustomTypeInner(MessageParcel &data, MessageParcel &reply)
