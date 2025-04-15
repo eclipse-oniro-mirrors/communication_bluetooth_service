@@ -1005,6 +1005,20 @@ public:
     void ProcessChannelMessage(
         uint8_t connectId, uint8_t label, uint8_t crType, uint8_t chType, Packet *pkt, void *context);
 
+    /**
+     * @brief set the features for connected device.
+     */
+    void SetFeatures(const RawAddress &rawAddr, uint32_t features);
+
+    /**
+     * @brief Checks  the AVRCP Device is Connected or not.
+     *
+     * @return The result of the method execution.
+     * @retval true  The Device is Connected.
+     * @retval false The Device is Disconnected.
+     */
+    bool IsDeviceConnected(const RawAddress &rawAddr) const;
+
 private:
     /// The flag is used to indicate that the AVRCP CT profile is enabled or not.
     static bool g_isEnabled;

@@ -19,7 +19,7 @@ PART_DIR = "$SUBSYSTEM_DIR/bluetooth_service/services/bluetooth"
 BT_SERVICE_DIR = "$PART_DIR/service"
 
 declare_args() {
-  bluetooth_service_avrcp_avsession = false
+  bluetooth_service_avrcp_avsession = true
 }
 
 ServiceBleScanFilter = [ "src/ble/ble_scan_filter/src/ble_scan_filter_lsf.cpp" ]
@@ -376,7 +376,7 @@ ohos_shared_library("btservice") {
       "ability_runtime:wantagent_innerkits",
       "av_session:avsession_client",
       "input:libmmi-client",
-      "multimedia_image_framework:image_native",
+      "image_framework:image_native",
     ]
   }
 
