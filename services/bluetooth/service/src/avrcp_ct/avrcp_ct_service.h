@@ -18,7 +18,6 @@
 
 #include <atomic>
 
-#include "timer.h"
 #include "bt_def.h"
 #include "context.h"
 #include "interface_profile_avrcp_ct.h"
@@ -40,9 +39,6 @@ enum AvrcCtServiceState : uint8_t {
     AVRC_CT_SERVICE_STATE_DISABLING,
     AVRC_CT_SERVICE_STATE_DISABLED,
 };
-
-/* the delay time in milliseconds to start service discovery on AVRCP */
-#define AVRCP_SDP_DISCOVERY_TIME_VAL 3500
 
 /**
  * @brief This class provides a set of methods related to the role of the controller described in the Audio/Video Remote
@@ -632,8 +628,6 @@ private:
     /// The unique pointer to an object of the AvrcCtProfile class.
     /// @see AvrcCtProfile
     std::unique_ptr<AvrcCtProfile> profile_ {nullptr};
-    /// The Timer for AVRC Connection
-    std::unique_ptr<utility::Timer> connectionTimer_ {nullptr};
     /******************************************************************
      * ENABLE / DISABLE                                               *
      ******************************************************************/

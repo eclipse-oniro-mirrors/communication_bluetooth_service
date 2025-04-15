@@ -76,9 +76,6 @@ AvrcpCtService::~AvrcpCtService()
     SetServiceState(AVRC_CT_SERVICE_STATE_DISABLED);
 
     myObserver_ = nullptr;
-    if (connectionTimer_ != nullptr) {
-        connectionTimer_->Stop();
-    }
 }
 
 utility::Context *AvrcpCtService::GetContext()
@@ -205,9 +202,6 @@ void AvrcpCtService::DisableNative(void)
 {
     HILOGI("enter");
 
-    if (connectionTimer_ != nullptr) {
-        connectionTimer_->Stop();
-    }
     if (DisableProfile() != BT_SUCCESS) {
         OnProfileDisabled(RET_BAD_STATUS);
     }
