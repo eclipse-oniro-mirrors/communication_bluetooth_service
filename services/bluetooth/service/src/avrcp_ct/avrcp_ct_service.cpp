@@ -535,7 +535,7 @@ void AvrcpCtService::ParseSDPInformation(
         }
     }
 
-    HILOGI("peer_avrcp_version(%{public}x) peer_features(%{public}x)\n",peerAvrcpVersion, peerFeatures);
+    HILOGI("peer_avrcp_version(%{public}x) peer_features(%{public}x)", peerAvrcpVersion, peerFeatures);
     auto servManager = IProfileManager::GetInstance();
     auto service = static_cast<AvrcpCtService *>(servManager->GetProfileService(PROFILE_NAME_AVRCP_CT));
     RawAddress rawAddr(RawAddress::ConvertToString(btAddr->addr));
@@ -1993,7 +1993,7 @@ void AvrcpCtService::SetAbsoluteVolumeNative(RawAddress rawAddr, uint8_t volume)
             break;
         }
 
-        profile_->SendSetAbsoluteVolumeCmd(rawAddr, systemToAvrcpVolume(volume));
+        profile_->SendSetAbsoluteVolumeCmd(rawAddr, SystemToAvrcpVolume(volume));
     } while (false);
 }
 
@@ -2224,7 +2224,7 @@ void AvrcpCtService::OnVolumeChanged(const RawAddress &rawAddr, uint8_t volume, 
         GET_ENCRYPT_AVRCP_ADDR(rawAddr), volume, result);
 
     AudioStandard::AudioSystemManager::GetInstance()->
-        SetVolume(AudioStandard::AudioStreamType::STREAM_MUSIC, avrcpToSystemVolume(volume));
+        SetVolume(AudioStandard::AudioStreamType::STREAM_MUSIC, AvrcpToSystemVolume(volume));
 
     if (myObserver_ != nullptr) {
         myObserver_->OnVolumeChanged(rawAddr, volume, result);
@@ -2314,17 +2314,18 @@ void AvrcpCtService::ChannelMessageCallback(
     }
 }
 
-uint8_t AvrcpCtService::avrcpToSystemVolume(uint8_t avrcpVolume) const
+uint8_t AvrcpCtService::AvrcpToSystemVolume(uint8_t avrcpVolume) const
 {
-    return static_cast<uint8_t>(floor((double) avrcpVolume * SYSTEM_MAX_VOL / AVRCP_MAX_VOL));
+    return static_cast<uint8_t>(floor(static_cast<double>(avrcpVolume) * SYSTEM_MAX_VOL / AVRCP_MAX_VOL));
 }
 
-uint8_t AvrcpCtService::systemToAvrcpVolume(uint8_t systemVolume) const
+uint8_t AvrcpCtService::SystemToAvrcpVolume(uint8_t systemVolume) const
 {
     int avrcpVolume = static_cast<uint8_t>(ceil(static_cast<double>(systemVolume) *
         AVRCP_MAX_VOL / SYSTEM_MAX_VOL));
-    if (avrcpVolume > AVRCP_MAX_VOL)
+    if (avrcpVolume > AVRCP_MAX_VOL) {
         avrcpVolume = AVRCP_MAX_VOL;
+    }
 
     return avrcpVolume;
 }

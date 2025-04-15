@@ -987,7 +987,8 @@ bool AvrcCtConnectManager::IsDisableAbsoluteVolume(const RawAddress &rawAddr)
             info->absVolume_,
             info->features_,
             (info->features_ & AVRC_CT_FEATURE_CATEGORY_2) != AVRC_CT_FEATURE_CATEGORY_2);
-        result = (info->absVolume_ || ((info->features_ & AVRC_CT_FEATURE_CATEGORY_2) != AVRC_CT_FEATURE_CATEGORY_2 ? true : false));
+        result = (info->absVolume_ || ((info->features_ & AVRC_CT_FEATURE_CATEGORY_2)
+            != AVRC_CT_FEATURE_CATEGORY_2 ? true : false));
     } else {
         HILOGI("The connection information does not exist!");
     }

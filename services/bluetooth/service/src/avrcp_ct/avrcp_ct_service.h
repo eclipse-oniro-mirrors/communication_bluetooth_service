@@ -1608,8 +1608,8 @@ private:
     static void ChannelMessageCallback(
         uint8_t connectId, uint8_t label, uint8_t crType, uint8_t chType, Packet *pkt, void *context);
 
-    uint8_t avrcpToSystemVolume(uint8_t avrcpVolume) const;
-    uint8_t systemToAvrcpVolume(uint8_t systemVolume) const;
+    uint8_t AvrcpToSystemVolume(uint8_t avrcpVolume) const;
+    uint8_t SystemToAvrcpVolume(uint8_t systemVolume) const;
 
     bool CheckConnectionNum();
 
