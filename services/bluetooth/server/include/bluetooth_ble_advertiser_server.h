@@ -38,7 +38,8 @@ public:
     virtual int DisableAdvertising(uint8_t advHandle) override;
     virtual int StopAdvertising(int32_t advHandle) override;
     virtual void Close(int32_t advHandle) override;
-    virtual int32_t GetAdvertiserHandle(int32_t &advHandle) override;
+    virtual int32_t GetAdvertiserHandle(int32_t &advHandle,
+        const sptr<IBluetoothBleAdvertiseCallback> &callback) override;
     void SetAdvertisingData(const BluetoothBleAdvertiserData &advData,
         const BluetoothBleAdvertiserData &scanResponse, int32_t advHandle) override;
 
