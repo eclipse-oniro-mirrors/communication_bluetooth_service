@@ -375,8 +375,8 @@ ohos_shared_library("btservice") {
     external_deps += [
       "ability_runtime:wantagent_innerkits",
       "av_session:avsession_client",
-      "input:libmmi-client",
       "image_framework:image_native",
+      "input:libmmi-client",
     ]
   }
 
