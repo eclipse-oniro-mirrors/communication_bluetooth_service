@@ -1894,17 +1894,17 @@ int32_t BluetoothHostServer::ControlDeviceAction(const std::string &deviceId, ui
 
 int32_t BluetoothHostServer::GetLastConnectionTime(const std::string &address, int64_t &connectionTime)
 {
-    return NO_ERROR;
+    return BT_ERR_API_NOT_SUPPORT;
 }
 
 int32_t BluetoothHostServer::UpdateCloudBluetoothDevice(std::vector<BluetoothTrustPairDevice> &cloudDevices)
 {
-    return NO_ERROR;
+    return BT_ERR_API_NOT_SUPPORT;
 }
 
 int32_t BluetoothHostServer::GetCloudBondState(const std::string &address, int32_t &cloudBondState)
 {
-    return NO_ERROR;
+    return BT_ERR_API_NOT_SUPPORT;
 }
 
 int32_t BluetoothHostServer::UpdateRefusePolicy(const int32_t pid, const int64_t prohibitedSecondsTime)
