@@ -2245,9 +2245,6 @@ void AvrcpCtService::ProcessChannelEvent(
                     HILOGW("address: %{public}s is already connected", GET_ENCRYPT_AVRCP_ADDR(rawAddr));
                     return;
                 }
-                if (connectionTimer_ != nullptr) {
-                    connectionTimer_->Stop();
-                }
                 sdpManager_->FindTgService(rawAddr, FindTgServiceIndCallback);
                 break;
             default:
