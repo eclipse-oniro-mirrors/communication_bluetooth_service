@@ -717,6 +717,14 @@ private:
 
     void InitFeatures();
 
+    /**
+     * @brief Set the features.
+     *
+     * @param[in] rawAddr The address of the bluetooth device.
+     * @param[in] features The features of the bluetooth device.
+     */
+    void SetFeatures(const RawAddress &rawAddr, uint16_t features);
+
     /******************************************************************
      * CONNECTION                                                     *
      ******************************************************************/
@@ -741,7 +749,7 @@ private:
      * @param[in] rawAddr The address of the bluetooth device.
      * @param[in] state   The connection state. Refer to <b>BTConnectState</b>.
      */
-    void OnConnectionStateChanged(const RawAddress &rawAddr, int state) const;
+    void OnConnectionStateChanged(const RawAddress &rawAddr, int state);
 
     /**
      * @brief Accepts the active connection.
@@ -756,6 +764,13 @@ private:
      * @param[in] rawAddr The address of the peer bluetooth device.
      */
     void RejectActiveConnect(const RawAddress &rawAddr) const;
+
+    /**
+     * @brief Rejects the active connection.
+     *
+     * @param[in] rawAddr The address of the peer bluetooth device.
+     */
+    void EnableVolumeChangedNotification(const RawAddress &rawAddr);
 
     /**
      * @brief Finds the service record from the SDP.
@@ -776,6 +791,17 @@ private:
      * @param[in] context      The context is used to send the event in the callback.
      */
     static void FindTgServiceCallback(
+        const BtAddr *btAddr, const SdpService *serviceArray, uint16_t serviceNum, void *context);
+
+    /**
+     * @brief The callback function that receives the search result return from the SDP.
+     *
+     * @param[in] btAddr       The address of the peer Bluetooth device.
+     * @param[in] serviceArray The list of serviceArray to a qualifying service.
+     * @param[in] serviceNum   The number of serviceArray to a qualifying service.
+     * @param[in] context      The context is used to send the event in the callback.
+     */
+    static void FindTgServiceIndCallback(
         const BtAddr *btAddr, const SdpService *serviceArray, uint16_t serviceNum, void *context);
 
     // parse SDP_SERVICE_SEARCH_ATTR_RSP
@@ -1581,6 +1607,9 @@ private:
      */
     static void ChannelMessageCallback(
         uint8_t connectId, uint8_t label, uint8_t crType, uint8_t chType, Packet *pkt, void *context);
+
+    uint8_t AvrcpToSystemVolume(uint8_t avrcpVolume) const;
+    uint8_t SystemToAvrcpVolume(uint8_t systemVolume) const;
 
     bool CheckConnectionNum();
 

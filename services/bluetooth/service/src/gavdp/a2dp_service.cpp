@@ -25,6 +25,8 @@
 #include "securec.h"
 #include "idevmgr_hdi.h"
 #include "interface_adapter_manager.h"
+#include "avrcp_ct/avrcp_ct_service.h"
+#include "avrcp_tg/avrcp_tg_service.h"
 
 constexpr const char *AUDIO_BLUETOOTH_SERVICE_NAME = "audio_bluetooth_hdi_service";
 
@@ -358,6 +360,17 @@ int A2dpService::Disconnect(const RawAddress &device)
             utility::Message event(A2DP_DISCONNECT_EVT);
             PostEvent(event, const_cast<RawAddress &>(device));
         }
+    }
+
+    auto ct_servManager = IProfileManager::GetInstance();
+    auto ct_service = static_cast<AvrcpCtService *>(ct_servManager->GetProfileService(PROFILE_NAME_AVRCP_CT));
+    if (ct_service != nullptr) {
+        ct_service->Disconnect(device);
+    }
+    auto tg_servManager = IProfileManager::GetInstance();
+    auto tg_service = static_cast<AvrcpTgService *>(tg_servManager->GetProfileService(PROFILE_NAME_AVRCP_TG));
+    if (tg_service != nullptr) {
+        tg_service->Disconnect(device);
     }
 
     return ret;

@@ -15,7 +15,7 @@ declare_args() {
   bluetooth_service_a2dp_sink_feature = false
   bluetooth_service_a2dp_source_feature = true
   bluetooth_service_avrcp_ct_feature = true
-  bluetooth_service_avrcp_tg_feature = false
+  bluetooth_service_avrcp_tg_feature = true
 
   if ((defined(global_parts_info) &&
        !defined(global_parts_info.telephony_call_manager)) ||

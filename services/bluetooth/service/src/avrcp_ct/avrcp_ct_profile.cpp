@@ -1305,7 +1305,7 @@ void AvrcCtProfile::ReceiveRegisterNotificationRsp(const RawAddress &rawAddr, Pa
         notifyPkt->GetPacketType() == AVRC_CT_VENDOR_PACKET_TYPE_END)) {
         SendNextVendorCmd(rawAddr);
     }
-    if (supported) {
+    if (supported && (crCode == AVRC_CT_RSP_CODE_INTERIM)) {
         InformNotificationChanged(rawAddr, notifyPkt, result);
     }
 
@@ -2050,11 +2050,11 @@ void AvrcCtProfile::ProcessChannelEventConnectCfmEvt(
         msg.what_ = AVRC_CT_SM_EVENT_TO_CONNECTED_STATE;
         smManager->SendMessageToControlStateMachine(rawAddr, msg);
 
-        if (IsSupportedBrowsing()) {
+        if (IsSupportedBrowsing() && cnManager->IsBrowsingSupported(rawAddr)) {
             ConnectBr(rawAddr);
         }
         cnManager->DeleteDisconnectedDevice(rawAddr.GetAddress());
-        if (!IsSupportedBrowsing()) {
+        if (!(IsSupportedBrowsing() && cnManager->IsBrowsingSupported(rawAddr))) {
             myObserver_->onConnectionStateChanged(rawAddr, static_cast<int>(BTConnectState::CONNECTED));
             IPowerManager::GetInstance().StatusUpdate(RequestStatus::CONNECT_ON, PROFILE_NAME_AVRCP_CT, rawAddr);
         }
@@ -2126,7 +2126,7 @@ void AvrcCtProfile::ProcessChannelEventBrConnectIndEvt(
             cnManager->SetBrowsingState(rawAddr, true);
         }
     }
-    if (IsSupportedBrowsing()) {
+    if (IsSupportedBrowsing() && cnManager->IsBrowsingSupported(rawAddr)) {
         myObserver_->onConnectionStateChanged(rawAddr, static_cast<int>(BTConnectState::CONNECTED));
     }
 }
@@ -2148,7 +2148,7 @@ void AvrcCtProfile::ProcessChannelEventBrConnectCfmEvt(
     } else {
         DeleteBrowseStateMachine(rawAddr);
     }
-    if (IsSupportedBrowsing()) {
+    if (IsSupportedBrowsing() && cnManager->IsBrowsingSupported(rawAddr)) {
         myObserver_->onConnectionStateChanged(rawAddr, static_cast<int>(BTConnectState::CONNECTED));
     }
 }
@@ -2190,6 +2190,17 @@ void AvrcCtProfile::ProcessChannelMessage(
 
     PacketFree(pkt);
     IPowerManager::GetInstance().StatusUpdate(RequestStatus::IDLE, PROFILE_NAME_AVRCP_CT, rawAddr);
+}
+
+void AvrcCtProfile::SetFeatures(const RawAddress &rawAddr, uint32_t features)
+{
+    AvrcCtConnectManager::GetInstance()->SetFeatures(rawAddr, features);
+}
+
+bool AvrcCtProfile::IsDeviceConnected(const RawAddress &rawAddr) const
+{
+    HILOGI("rawAddr:%{public}s", GET_ENCRYPT_AVRCP_ADDR(rawAddr));
+    return AvrcCtConnectManager::GetInstance()->GetConnectInfo(rawAddr) == nullptr ? false : true;
 }
 
 void AvrcCtProfile::DeleteResource(const RawAddress &rawAddr)

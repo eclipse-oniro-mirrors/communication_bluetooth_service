@@ -982,7 +982,29 @@ bool AvrcCtConnectManager::IsDisableAbsoluteVolume(const RawAddress &rawAddr)
 
     AvrcCtConnectInfo *info = GetConnectInfo(rawAddr.GetAddress());
     if (info != nullptr) {
-        result = info->absVolume_;
+        HILOGI("address: %{public}s absVolume_:%{public}d, feature:%{public}d, result%{public}d",
+            GET_ENCRYPT_AVRCP_ADDR(rawAddr),
+            info->absVolume_,
+            info->features_,
+            (info->features_ & AVRC_CT_FEATURE_CATEGORY_2) != AVRC_CT_FEATURE_CATEGORY_2);
+        result = (info->absVolume_ || ((info->features_ & AVRC_CT_FEATURE_CATEGORY_2) !=
+                                        AVRC_CT_FEATURE_CATEGORY_2 ? true : false));
+    } else {
+        HILOGI("The connection information does not exist!");
+    }
+
+    return result;
+}
+
+bool AvrcCtConnectManager::IsBrowsingSupported(const RawAddress &rawAddr)
+{
+    HILOGI("address: %{public}s", GET_ENCRYPT_AVRCP_ADDR(rawAddr));
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
+    bool result = false;
+
+    AvrcCtConnectInfo *info = GetConnectInfo(rawAddr.GetAddress());
+    if (info != nullptr) {
+        result = ((info->features_ & AVRC_CT_FEATURE_BROWSING) == AVRC_CT_FEATURE_BROWSING);
     } else {
         HILOGI("The connection information does not exist!");
     }
@@ -1014,6 +1036,19 @@ void AvrcCtConnectManager::SetBrowsingState(const RawAddress &rawAddr, bool stat
     AvrcCtConnectInfo *info = GetConnectInfo(rawAddr.GetAddress());
     if (info != nullptr) {
         info->brConnected_ = state;
+    } else {
+        HILOGI("The connection information does not exist!");
+    }
+}
+
+void AvrcCtConnectManager::SetFeatures(const RawAddress &rawAddr, uint32_t features)
+{
+    HILOGI("address: %{public}s, features: %{public}d", GET_ENCRYPT_AVRCP_ADDR(rawAddr), features);
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
+
+    AvrcCtConnectInfo *info = GetConnectInfo(rawAddr.GetAddress());
+    if (info != nullptr) {
+        info->features_ = features;
     } else {
         HILOGI("The connection information does not exist!");
     }

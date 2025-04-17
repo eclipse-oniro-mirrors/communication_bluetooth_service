@@ -68,6 +68,7 @@ public:
     bool brConnected_ = false;         // The state of browsing channel.
     std::string btAddr_;               // The address of the bluetooth device.
     std::map<uint8_t, bool> notes_ {};  // The notifications are enabled or not.
+    uint32_t features_ {AVRC_CT_FEATURE_INVALID_FEATURE}; // The features supported by the bluetooth device.
 
     /**
      * @brief This struct provides a set of attributes for saving the data of the <b>PASS THROUGH</b> command.
@@ -636,6 +637,14 @@ public:
     bool IsDisableAbsoluteVolume(const RawAddress &rawAddr);
 
     /**
+     * @brief Whether the browse channel supported.
+     *
+     * @param[in] rawAddr The address of the bluetooth device.
+     * @return The result.
+     */
+    bool IsBrowsingSupported(const RawAddress &rawAddr);
+
+    /**
      * @brief Whether the browse channel connected.
      *
      * @param[in] rawAddr The address of the bluetooth device.
@@ -650,6 +659,15 @@ public:
      * @return The result.
      */
     void SetBrowsingState(const RawAddress &rawAddr, bool state);
+
+    /**
+     * @brief Set the bluetooth device avrcp features.
+     *
+     * @param[in] rawAddr The address of the bluetooth device.
+     * @param[in] features The features of the bluetooth device.
+     * @return null.
+     */
+    void SetFeatures(const RawAddress &rawAddr, uint32_t features);
 
 private:
     // Locks the local variable in a multi-threaded environment.
