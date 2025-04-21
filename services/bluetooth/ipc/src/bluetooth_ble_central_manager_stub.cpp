@@ -164,7 +164,8 @@ ErrCode BluetoothBleCentralManagerStub::StartScanInner(MessageParcel &data, Mess
         filters.push_back(item);
     }
 
-    int ret = StartScan(scannerId, *settings, filters);
+    bool isNewApi = data.ReadBool();
+    int ret = StartScan(scannerId, *settings, filters, isNewApi);
     if (!reply.WriteInt32(ret)) {
         HILOGE("reply writing failed");
         return ERR_INVALID_VALUE;
