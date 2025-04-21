@@ -1282,7 +1282,7 @@ ErrCode BluetoothHostStub::GetRandomAddressInner(MessageParcel &data, MessagePar
 {
     std::string realAddress = data.ReadString();
     std::string randomAddress;
-    int result = GetRandomAddress(realAddress, &randomAddress);
+    int result = GetRandomAddress(realAddress, randomAddress);
     bool ret = reply.WriteInt32(result);
     if (!ret) {
         HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
