@@ -67,8 +67,12 @@ int PermissionUtils::VerifyApproximatelyPermission()
 
 int PermissionUtils::VerifyAccessBluetoothPermission()
 {
-    return AuthCenter::GetInstance().VerifyAccessBluetoothPermission(
-        IPCSkeleton::GetCallingPid(), IPCSkeleton::GetCallingUid());
+    if (GetApiVersion() >= 10) { // 10:api version
+        return AuthCenter::GetInstance().VerifyAccessBluetoothPermission(
+            IPCSkeleton::GetCallingPid(), IPCSkeleton::GetCallingUid());
+    } else {
+        return PERMISSION_GRANTED;
+    }
 }
 
 int PermissionUtils::VerifyGetBluetoothLocalMacPermission()
