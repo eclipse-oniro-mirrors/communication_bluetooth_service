@@ -1280,6 +1280,20 @@ int32_t BluetoothHostStub::SetFastScanInner(MessageParcel &data, MessageParcel &
 
 ErrCode BluetoothHostStub::GetRandomAddressInner(MessageParcel &data, MessageParcel &reply)
 {
+    std::string realAddress = data.ReadString();
+    std::string randomAddress;
+    int result = GetRandomAddress(realAddress, randomAddress);
+    bool ret = reply.WriteInt32(result);
+    if (!ret) {
+        HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
+        return TRANSACTION_ERR;
+    }
+    if (result == NO_ERROR) {
+        if (!reply.WriteString(randomAddress)) {
+            HILOGE("BluetoothHostStub:GetRandomAddressInner write randomAddress error");
+            return TRANSACTION_ERR;
+        }
+    }
     return NO_ERROR;
 }
 
