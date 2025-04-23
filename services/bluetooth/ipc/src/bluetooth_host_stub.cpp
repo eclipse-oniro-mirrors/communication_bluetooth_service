@@ -1321,12 +1321,14 @@ ErrCode BluetoothHostStub::SatelliteControlInner(MessageParcel &data, MessagePar
 
 int32_t BluetoothHostStub::ConnectAllowedProfilesInner(MessageParcel &data, MessageParcel &reply)
 {
-    return BT_ERR_API_NOT_SUPPORT;
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
 }
 
 int32_t BluetoothHostStub::DisconnectAllowedProfilesInner(MessageParcel &data, MessageParcel &reply)
 {
-    return BT_ERR_API_NOT_SUPPORT;
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
 }
 
 int32_t BluetoothHostStub::SetDeviceCustomTypeInner(MessageParcel &data, MessageParcel &reply)
