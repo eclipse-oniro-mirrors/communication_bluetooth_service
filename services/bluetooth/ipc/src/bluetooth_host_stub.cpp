@@ -1423,7 +1423,8 @@ int32_t BluetoothHostStub::UpdateRefusePolicyInner(MessageParcel &data, MessageP
 
 int32_t BluetoothHostStub::ProcessRandomDeviceIdCommandInner(MessageParcel &data, MessageParcel &reply)
 {
-    return BT_ERR_API_NOT_SUPPORT;
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
 }
 }  // namespace Bluetooth
 }  // namespace OHOS
