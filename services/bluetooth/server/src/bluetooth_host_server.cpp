@@ -1836,7 +1836,7 @@ int32_t BluetoothHostServer::SetFastScan(bool isEnable)
 
 int32_t BluetoothHostServer::GetRandomAddress(const std::string &realAddr, std::string &randomAddr)
 {
-    return NO_ERROR;
+    return BT_ERR_API_NOT_SUPPORT;
 }
 
 int32_t BluetoothHostServer::SyncRandomAddress(const std::string &realAddr, const std::string &randomAddr)
