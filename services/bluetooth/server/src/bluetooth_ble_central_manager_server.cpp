@@ -369,13 +369,18 @@ bool CheckBleScanPermission()
 }
 
 int BluetoothBleCentralManagerServer::StartScan(int32_t scannerId, const BluetoothBleScanSettings &settings,
-    const std::vector<BluetoothBleScanFilter> &filters)
+    const std::vector<BluetoothBleScanFilter> &filters, bool isNewApi)
 {
     int32_t pid = IPCSkeleton::GetCallingPid();
     int32_t uid = IPCSkeleton::GetCallingUid();
     if (!CheckBleScanPermission()) {
         HILOGE("check permission failed.");
         return BT_ERR_PERMISSION_FAILED;
+    }
+
+    if (isNewApi) {
+        HILOGE("This api is not supported.");
+        return BT_ERR_API_NOT_SUPPORT;
     }
 
     ConfigScanFilterInner(scannerId, filters);
