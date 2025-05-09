@@ -118,7 +118,7 @@ public:
     int32_t GetLocalProfileUuids(std::vector<std::string> &uuids) override;
     int32_t Dump(int32_t fd, const std::vector<std::u16string>& args) override;
     int32_t SetFastScan(bool isEnable) override;
-    int32_t GetRandomAddress(const std::string &realAddr, std::string &randomAddr, int64_t tokenId = -1) override;
+    int32_t GetRandomAddress(const std::string &realAddr, std::string &randomAddr, uint64_t tokenId = 0) override;
     int32_t SyncRandomAddress(const std::string &realAddr, const std::string &randomAddr) override;
     int32_t StartCrediblePair(int32_t transport, const std::string &address) override;
     int32_t ConnectAllowedProfiles(const std::string &address) override;
