@@ -1811,7 +1811,7 @@ int32_t BluetoothHostServer::SetFastScan(bool isEnable)
     return NO_ERROR;
 }
 
-int32_t BluetoothHostServer::GetRandomAddress(const std::string &realAddr, std::string &randomAddr)
+int32_t BluetoothHostServer::GetRandomAddress(const std::string &realAddr, std::string &randomAddr, uint64_t tokenId)
 {
     return NO_ERROR;
 }
