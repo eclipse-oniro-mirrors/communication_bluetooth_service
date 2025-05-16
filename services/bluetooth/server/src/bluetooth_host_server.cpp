@@ -1940,5 +1940,15 @@ int32_t BluetoothHostServer::ProcessRandomDeviceIdCommand(
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
+
+int32_t BluetoothHostServer::GetCarKeyDfxData(std::string &dfxData)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t BluetoothHostServer::SetCarKeyCardData(const std::string &address, int32_t action)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS
