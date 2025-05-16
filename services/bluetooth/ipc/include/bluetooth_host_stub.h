@@ -115,7 +115,8 @@ private:
     int32_t GetCloudBondStateInner(MessageParcel &data, MessageParcel &reply);
     int32_t UpdateRefusePolicyInner(MessageParcel &data, MessageParcel &reply);
     int32_t ProcessRandomDeviceIdCommandInner(MessageParcel &data, MessageParcel &reply);
-
+    int32_t GetCarKeyDfxDataInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetCarKeyCardDataInner(MessageParcel &data, MessageParcel &reply);
     static const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParcel &, MessageParcel &)>>
         memberFuncMap_;
 

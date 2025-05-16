@@ -267,6 +267,12 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
         {BluetoothHostInterfaceCode::PROCESS_RANDOM_DEVICE_ID_COMMAND,
             std::bind(&BluetoothHostStub::ProcessRandomDeviceIdCommandInner,
                 std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::BT_GET_CAR_KEY_DFX_DATA,
+            std::bind(&BluetoothHostStub::GetCarKeyDfxDataInner,
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::BT_SET_CAR_KEY_CARD_DATA,
+            std::bind(&BluetoothHostStub::SetCarKeyCardDataInner,
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},        
 };
 
 BluetoothHostStub::BluetoothHostStub(){};
@@ -1425,6 +1431,16 @@ int32_t BluetoothHostStub::ProcessRandomDeviceIdCommandInner(MessageParcel &data
 {
     reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
     return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::GetCarKeyDfxDataInner(MessageParcel &data, MessageParcel &reply)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t BluetoothHostStub::SetCarKeyCardDataInner(MessageParcel &data, MessageParcel &reply)
+{
+    return BT_ERR_API_NOT_SUPPORT;
 }
 }  // namespace Bluetooth
 }  // namespace OHOS
