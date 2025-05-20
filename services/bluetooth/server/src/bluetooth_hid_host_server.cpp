@@ -160,7 +160,7 @@ ErrCode BluetoothHidHostServer::DeregisterObserver(const sptr<IBluetoothHidHostO
         return ERR_NO_INIT;
     }
     for (auto iter = pimpl->advCallBack_.begin(); iter != pimpl->advCallBack_.end(); ++iter) {
-        if ((*iter)->AsObject() == observer->AsObject()) {
+        if ((*iter) && ((*iter)->AsObject() == observer->AsObject())) {
             if (pimpl != nullptr) {
                 pimpl->observers_.Deregister(*iter);
                 pimpl->advCallBack_.erase(iter);
@@ -173,6 +173,12 @@ ErrCode BluetoothHidHostServer::DeregisterObserver(const sptr<IBluetoothHidHostO
         return ERR_NO_INIT;
     }
     pimpl->hidHostService_->DeregisterObserver(*pimpl->observerImp_.get());
+    if (pimpl->hidHostService_ == nullptr) {
+        HILOGE("pimpl->hidHostService_ is null");
+        return ERR_NO_INIT;
+    } else {
+        pimpl->hidHostService_->DeregisterObserver(*pimpl->observerImp_.get());
+    }
     return ERR_OK;
 }
 
