@@ -165,7 +165,9 @@ void RemoteObserverList<T, Args...>::ObserverDeathRecipient::OnRemoteDied(const 
     HILOGD("Enter OnRemoteDied");
     for (auto it = owner_->btServers_.begin(); it != owner_->btServers_.end();) {
         if (it->first != nullptr && it->first->AsObject() == object) {
-            std::apply(it->second.callbackFunc, std::tuple_cat(std::make_tuple(it->first), it->second.args));
+            if (it->second.callbackFunc) {
+                std::apply(it->second.callbackFunc, std::tuple_cat(std::make_tuple(it->first), it->second.args));
+            }
             it = owner_->btServers_.erase(it);
         } else {
             it++;

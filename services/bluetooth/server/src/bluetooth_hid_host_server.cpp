@@ -168,6 +168,10 @@ ErrCode BluetoothHidHostServer::DeregisterObserver(const sptr<IBluetoothHidHostO
             }
         }
     }
+    if (pimpl->observerImp_ == nullptr) {
+        HILOGE("pimpl->observerImp_ is null");
+        return ERR_NO_INIT;
+    }
     if (pimpl->hidHostService_ == nullptr) {
         HILOGE("pimpl->hidHostService_ is null");
         return ERR_NO_INIT;

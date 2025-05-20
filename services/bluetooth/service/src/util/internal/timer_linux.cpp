@@ -145,6 +145,9 @@ void TimerManager::OnTimer(std::promise<int> startPromise)
                 return;
             }
             Timer *timer = (Timer *)events[i].data.ptr;
+            if (timer == nullptr) {
+                return;
+            }
 
             std::unique_lock<std::mutex> lock(mutex_);
             auto it = std::find(unregisteredList_.begin(), unregisteredList_.end(), timer);
