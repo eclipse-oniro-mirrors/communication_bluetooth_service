@@ -1279,7 +1279,7 @@ ErrCode BluetoothHostStub::GetRandomAddressInner(MessageParcel &data, MessagePar
         HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
         return TRANSACTION_ERR;
     }
-    if (result != NO_ERROR) {
+    if (result == NO_ERROR) {
         if (!reply.WriteString(randomAddress)) {
             HILOGE("BluetoothHostStub:GetRandomAddressInner write randomAddress error");
             return TRANSACTION_ERR;
