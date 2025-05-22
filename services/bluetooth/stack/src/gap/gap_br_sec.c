@@ -174,13 +174,22 @@ static void GapDoSecurityAction(RequestSecInfo *reqInfo, DeviceInfo *devInfo)
         if (devInfo->authenticationStatus == GAP_AUTH_STATUS_IDLE) {
             devInfo->authenticationStatus = GAP_AUTH_STATUS_ACTION;
         }
-        ret = GapAuthenticationRequested(devInfo->handle);
-        if (ret != BT_SUCCESS) {
-            reqInfo->status = GAP_SEC_REQ_STATUS_FAILED;
+        if (!devInfo->isEncryption) {
+            ret = GapAuthenticationRequested(devInfo->handle);
+            if (ret != BT_SUCCESS) {
+                reqInfo->status = GAP_SEC_REQ_STATUS_FAILED;
+                devInfo->status = GAP_DEV_SEC_STATUS_IDLE;
+                devInfo->authenticationStatus = GAP_AUTH_STATUS_IDLE;
+                GapDoAuthenticationCallback(reqInfo);
+                GapTrySecurityCallback(reqInfo);
+            }
+        } else {
+            reqInfo->status = GAP_SEC_REQ_STATUS_SUCCESS;
             devInfo->status = GAP_DEV_SEC_STATUS_IDLE;
             devInfo->authenticationStatus = GAP_AUTH_STATUS_IDLE;
             GapDoAuthenticationCallback(reqInfo);
             GapTrySecurityCallback(reqInfo);
+            devInfo->actionReq = NULL;
         }
     } else if (reqInfo->needEncryption) {
         if (devInfo->encryptionStatus == GAP_ENC_STATUS_IDLE) {
