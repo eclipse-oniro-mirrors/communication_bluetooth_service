@@ -52,7 +52,7 @@ public:
     int GetConnectStrategy(const BluetoothRawAddress &device, int &strategy) override;
     int IsInbandRingingEnabled(bool &isEnabled) override;
     void CallDetailsChanged(int callId, int callState) override;
-    int32_t IsVgsSupported(const BluetoothRawAddress &device, bool &isSupported) override;
+    int32_t IsHfpFeatureSupported(const BluetoothRawAddress &device, bool &isSupported, int type) override;
     int32_t ConnectSco(uint8_t callType) override;
     int32_t DisconnectSco(uint8_t callType) override;
     void EnableBtCallLog(bool state) override;
