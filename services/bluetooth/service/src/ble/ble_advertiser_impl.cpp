@@ -1170,7 +1170,7 @@ void BleAdvertiserImpl::SetChannelMap(const BLE_ADV_CHANNEL &channelMap) const
     pimpl->advParams_.channelMap = channelMap;
 }
 
-uint8_t BleAdvertiserImpl::CreateAdvertiserSetHandle() const
+uint8_t BleAdvertiserImpl::CreateAdvertiserSetHandle(int32_t &status) const
 {
     LOG_DEBUG("[BleAdvertiserImpl] %{public}s,%{public}zu", __func__, pimpl->advHandleQue_.size());
 
@@ -1195,6 +1195,10 @@ uint8_t BleAdvertiserImpl::CreateAdvertiserSetHandle() const
             LOG_DEBUG("[BleAdvertiserImpl] %{public}s,%{public}d", __func__, newHandle);
             return newHandle;
         }
+    }
+    // reach max num of advertiser
+    if (newHandle == end) {
+        status = ADVERTISE_FAILED_TOO_MANY_ADVERTISERS;
     }
     return handle;
 }
