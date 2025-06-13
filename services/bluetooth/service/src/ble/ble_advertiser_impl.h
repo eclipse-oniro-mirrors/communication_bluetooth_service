@@ -124,7 +124,7 @@ public:
      *
      * @return @c  Advertising handle.
      */
-    uint8_t CreateAdvertiserSetHandle() const;
+    uint8_t CreateAdvertiserSetHandle(int32_t &status) const;
 
     /**
      * @brief Add characteristic value.
