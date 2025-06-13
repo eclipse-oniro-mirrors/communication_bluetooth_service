@@ -167,7 +167,7 @@ public:
      * @return @c true sucessfull otherwise false.
      */
     bool ReadRemoteRssiValue(const RawAddress &device) const override;
-    uint8_t GetAdvertiserHandle() const override;
+    uint8_t GetAdvertiserHandle(int32_t &status) const override;
     bool RemovePairWithDisConnect(const RawAddress &device, bool isDisconnect = true) const;
 
     int32_t AllocScannerId() override;

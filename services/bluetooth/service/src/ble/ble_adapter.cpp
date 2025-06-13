@@ -1514,13 +1514,13 @@ int BleAdapter::GetDeviceType(const RawAddress &device) const
     return BLE_BT_DEVICE_TYPE_UNKNOWN;
 }
 
-uint8_t BleAdapter::GetAdvertiserHandle() const
+uint8_t BleAdapter::GetAdvertiserHandle(int32_t &status) const
 {
     LOG_DEBUG("[BleAdapter] %{public}s", __func__);
 
     std::lock_guard<std::recursive_mutex> lk(pimpl->bleAdvMutex_);
     if (pimpl->bleAdvertiser_ != nullptr) {
-        return pimpl->bleAdvertiser_->CreateAdvertiserSetHandle();
+        return pimpl->bleAdvertiser_->CreateAdvertiserSetHandle(status);
     }
     return BLE_INVALID_ADVERTISING_HANDLE;
 }

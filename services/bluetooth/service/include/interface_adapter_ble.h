@@ -362,7 +362,7 @@ public:
      * @return Returns advertiser handle.
      * @since 6
      */
-    virtual uint8_t GetAdvertiserHandle() const = 0;
+    virtual uint8_t GetAdvertiserHandle(int32_t &status) const = 0;
 
     /**
      * @brief Get advertiser status.

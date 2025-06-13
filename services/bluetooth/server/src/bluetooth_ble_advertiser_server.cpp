@@ -25,6 +25,8 @@
 #include "permission_utils.h"
 #include "safe_map.h"
 
+#define ADVERTISE_FAILED_TOO_MANY_ADVERTISERS 0x02
+
 namespace OHOS {
 namespace Bluetooth {
 using namespace OHOS::bluetooth;
@@ -318,8 +320,12 @@ int32_t BluetoothBleAdvertiserServer::GetAdvertiserHandle(int32_t &advHandle,
     if (bleService == nullptr) {
         return BT_ERR_INTERNAL_ERROR;
     }
-    advHandle = bleService->GetAdvertiserHandle();
+    int32_t status = BT_NO_ERROR;
+    advHandle = bleService->GetAdvertiserHandle(status);
     if (advHandle == BLE_INVALID_ADVERTISING_HANDLE) {
+        if (status == ADVERTISE_FAILED_TOO_MANY_ADVERTISERS) {
+            return BT_ERR_MAX_RESOURCES;
+        }
         return BT_ERR_INTERNAL_ERROR;
     }
 
