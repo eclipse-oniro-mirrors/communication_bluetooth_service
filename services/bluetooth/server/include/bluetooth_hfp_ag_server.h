@@ -58,6 +58,7 @@ public:
     void EnableBtCallLog(bool state) override;
     void GetVirtualDeviceList(std::vector<std::string> &devices) override;
     void UpdateVirtualDevice(int32_t action, const std::string &address) override;
+    int GetCurrentCallType(int &callType) override;
 
 private:
     BLUETOOTH_DECLARE_IMPL();

@@ -78,6 +78,8 @@ BluetoothHfpAgStub::BluetoothHfpAgStub() {
         &BluetoothHfpAgStub::GetVirtualDeviceListInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_UPDATE_VIRTUALDEVICE)] =
         &BluetoothHfpAgStub::UpdateVirtualDeviceInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_CALLTYPE)] =
+        &BluetoothHfpAgStub::GetCurrentCallTypeInner;
     HILOGI("%{public}s ends.", __func__);
 }
 
@@ -427,6 +429,11 @@ int32_t BluetoothHfpAgStub::UpdateVirtualDeviceInner(MessageParcel &data, Messag
 }
 
 int32_t BluetoothHfpAgStub::GetVirtualDeviceListInner(MessageParcel &data, MessageParcel &reply)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t BluetoothHfpAgStub::GetCurrentCallTypeInner(MessageParcel &data, MessageParcel &reply)
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
