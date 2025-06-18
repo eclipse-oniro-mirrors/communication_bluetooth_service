@@ -448,5 +448,10 @@ void BluetoothHfpAgServer::UpdateVirtualDevice(int32_t action, const std::string
 {
     return;
 }
+
+int BluetoothHfpAgServer::GetCurrentCallType(int &callType)
+{
+    return NO_ERROR;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS

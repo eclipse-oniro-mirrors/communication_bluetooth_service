@@ -58,6 +58,7 @@ private:
     ErrCode EnableBtCallLogInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetVirtualDeviceListInner(MessageParcel &data, MessageParcel &reply);
     int32_t UpdateVirtualDeviceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetCurrentCallTypeInner(MessageParcel &data, MessageParcel &reply);
 
     using BluetoothHfpAgFunc = ErrCode (BluetoothHfpAgStub::*)(MessageParcel &data, MessageParcel &reply);
     std::map<uint32_t, BluetoothHfpAgFunc> memberFuncMap_;
