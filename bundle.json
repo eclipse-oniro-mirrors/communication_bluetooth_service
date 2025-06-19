@@ -85,6 +85,7 @@
         "state_registry",
         "c_utils",
         "jsoncpp",
+        "json",
         "image_framework"
       ],
       "third_party": [

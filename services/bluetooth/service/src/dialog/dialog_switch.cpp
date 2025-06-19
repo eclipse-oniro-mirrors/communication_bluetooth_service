@@ -29,6 +29,7 @@
 #include "json/json.h"
 #include "json/writer.h"
 #include "log.h"
+#include "nlohmann/json.hpp"
 #include "permission_manager.h"
 #include "raw_address.h"
 #include "refbase.h"
