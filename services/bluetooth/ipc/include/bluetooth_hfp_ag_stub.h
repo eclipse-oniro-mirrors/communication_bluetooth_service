@@ -54,7 +54,7 @@ private:
     ErrCode ConnectScoInnerEx(MessageParcel &data, MessageParcel &reply);
     ErrCode DisconnectScoInnerEx(MessageParcel &data, MessageParcel &reply);
     int32_t CallDetailsChangedInner(MessageParcel &data, MessageParcel &reply);
-    int32_t IsVgsSupportedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t IsHfpFeatureSupportedInner(MessageParcel &data, MessageParcel &reply);
     ErrCode EnableBtCallLogInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetVirtualDeviceListInner(MessageParcel &data, MessageParcel &reply);
     int32_t UpdateVirtualDeviceInner(MessageParcel &data, MessageParcel &reply);

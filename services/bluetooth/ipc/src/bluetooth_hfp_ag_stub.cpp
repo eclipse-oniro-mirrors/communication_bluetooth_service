@@ -70,8 +70,8 @@ BluetoothHfpAgStub::BluetoothHfpAgStub() {
         &BluetoothHfpAgStub::DisconnectScoInnerEx;
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_CALL_DETAILS_CHANGED)] =
         &BluetoothHfpAgStub::CallDetailsChangedInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_IS_VGS_SUPPORTED)] =
-        &BluetoothHfpAgStub::IsVgsSupportedInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_IS_HFP_FEATURE_SUPPORTED)] =
+        &BluetoothHfpAgStub::IsHfpFeatureSupportedInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_CALL_LOG)] =
         &BluetoothHfpAgStub::EnableBtCallLogInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_VIRTUALDEVICE_LIST)] =
@@ -412,12 +412,13 @@ ErrCode BluetoothHfpAgStub::EnableBtCallLogInner(MessageParcel &data, MessagePar
     return NO_ERROR;
 }
 
-int32_t BluetoothHfpAgStub::IsVgsSupportedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHfpAgStub::IsHfpFeatureSupportedInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     CHECK_AND_RETURN_LOG_RET(device, BT_ERR_IPC_TRANS_FAILED, "Read device address failed.");
+    int type = data.ReadInt32();
     bool isSupported = false;
-    int32_t result = IsVgsSupported(*device, isSupported);
+    int32_t result = IsHfpFeatureSupported(*device, isSupported, type);
     CHECK_AND_RETURN_LOG_RET(reply.WriteInt32(result), BT_ERR_INTERNAL_ERROR, "reply WriteInt32 failed");
     CHECK_AND_RETURN_LOG_RET(reply.WriteBool(isSupported), BT_ERR_INTERNAL_ERROR, "reply WriteBool failed");
     return NO_ERROR;
