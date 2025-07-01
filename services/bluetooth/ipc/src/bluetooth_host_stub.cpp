@@ -272,7 +272,10 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
                 std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
         {BluetoothHostInterfaceCode::BT_SET_CAR_KEY_CARD_DATA,
             std::bind(&BluetoothHostStub::SetCarKeyCardDataInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},        
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::BT_NOTIFY_DIALOG_RESULT,
+            std::bind(&BluetoothHostStub::NotifyDialogResultInner,
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},   
 };
 
 BluetoothHostStub::BluetoothHostStub(){};
@@ -328,7 +331,12 @@ int32_t BluetoothHostStub::EnableBtInner(MessageParcel &data, MessageParcel &rep
 
 int32_t BluetoothHostStub::DisableBtInner(MessageParcel &data, MessageParcel &reply)
 {
-    int32_t result = DisableBt();
+    bool isAsync = false;
+    if (!data.ReadBool(isAsync)) {
+        HILOGE("BluetoothHostStub::DisableBt isAsync failed");
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
+    int32_t result = DisableBt(isAsync);
     bool ret = reply.WriteInt32(result);
     if (!ret) {
         HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
@@ -408,7 +416,17 @@ int32_t BluetoothHostStub::DisableBleInner(MessageParcel &data, MessageParcel &r
 
 int32_t BluetoothHostStub::EnableBleInner(MessageParcel &data, MessageParcel &reply)
 {
-    int32_t result = EnableBle();
+    bool noAutoConnect = false;
+    if (!data.ReadBool(noAutoConnect)) {
+        HILOGE("BluetoothHostStub::EnableBle noAutoConnect failed");
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
+    bool isAsync = false;
+    if (!data.ReadBool(isAsync)) {
+        HILOGE("BluetoothHostStub::EnableBle isAsync failed");
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
+    int32_t result = EnableBle(noAutoConnect, isAsync);
     bool ret = reply.WriteInt32(result);
     if (!ret) {
         HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
@@ -1439,6 +1457,11 @@ int32_t BluetoothHostStub::GetCarKeyDfxDataInner(MessageParcel &data, MessagePar
 }
 
 int32_t BluetoothHostStub::SetCarKeyCardDataInner(MessageParcel &data, MessageParcel &reply)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t BluetoothHostStub::NotifyDialogResultInner(MessageParcel &data, MessageParcel &reply)
 {
     return BT_ERR_API_NOT_SUPPORT;
 }

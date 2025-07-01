@@ -45,7 +45,7 @@ public:
     void RegisterObserver(const sptr<IBluetoothHostObserver> &observer) override;
     void DeregisterObserver(const sptr<IBluetoothHostObserver> &observer) override;
     int32_t EnableBt() override;
-    int32_t DisableBt() override;
+    int32_t DisableBt(bool isAsync) override;
     int32_t GetBtState(int32_t &state) override;
     int32_t BluetoothFactoryReset() override;
     int32_t GetDeviceType(int32_t transport, const std::string &address) override;
@@ -62,7 +62,7 @@ public:
     bool Start();
     void Stop();
     int32_t DisableBle() override;
-    int32_t EnableBle(bool noAutoConnect = false) override;
+    int32_t EnableBle(bool noAutoConnect = false, bool isAsync = false) override;
     int32_t SatelliteControl(int type, int state) override;
     bool IsBrEnabled();
     bool IsBleEnabled();
@@ -144,6 +144,7 @@ public:
         int32_t command, std::vector<std::string> &deviceIdVec, bool &isValid) override;
     int32_t GetCarKeyDfxData(std::string &dfxData) override;
     int32_t SetCarKeyCardData(const std::string &address, int32_t action) override;
+    int32_t NotifyDialogResult(uint32_t dialogType, bool dialogResult) override;
 private:
     static sptr<BluetoothHostServer> instance;
     static std::mutex instanceLock;
