@@ -793,7 +793,7 @@ int32_t BluetoothHostServer::EnableBt()
     return BT_ERR_INTERNAL_ERROR;
 }
 
-int32_t BluetoothHostServer::DisableBt()
+int32_t BluetoothHostServer::DisableBt(bool isAsync)
 {
     if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
         HILOGE("false, check Access permission failed");
@@ -901,7 +901,7 @@ int32_t BluetoothHostServer::GetLocalAddress(std::string &addr)
     }
 }
 
-int32_t BluetoothHostServer::EnableBle(bool noAutoConnect)
+int32_t BluetoothHostServer::EnableBle(bool noAutoConnect, bool isAsync)
 {
     HILOGI("Enter!");
     if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
@@ -1948,6 +1948,11 @@ int32_t BluetoothHostServer::GetCarKeyDfxData(std::string &dfxData)
 }
 
 int32_t BluetoothHostServer::SetCarKeyCardData(const std::string &address, int32_t action)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t BluetoothHostServer::NotifyDialogResult(uint32_t dialogType, bool dialogResult)
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
