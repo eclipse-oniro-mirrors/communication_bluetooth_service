@@ -14,7 +14,7 @@
  */
 
 #ifdef DARWIN_PLATFORM
-#include "../darwin/alarm_darwin.c"
+#include "darwin/alarm_darwin.c"
 #else
-#include "../linux/alarm_linux.c"
+#include "linux/alarm_linux.c"
 #endif

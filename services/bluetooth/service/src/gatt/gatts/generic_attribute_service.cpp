@@ -14,10 +14,10 @@
  */
 
 #include "generic_attribute_service.h"
-#include "../common/compat.h"
-#include "../gatt_connection_manager.h"
-#include "../gatt_connection_observer.h"
-#include "../gatt_defines.h"
+#include "common/compat.h"
+#include "gatt_connection_manager.h"
+#include "gatt_connection_observer.h"
+#include "gatt_defines.h"
 #include "adapter_device_config.h"
 #include "class_creator.h"
 #include "log.h"

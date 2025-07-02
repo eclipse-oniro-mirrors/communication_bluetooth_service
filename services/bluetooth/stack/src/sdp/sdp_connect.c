@@ -27,7 +27,7 @@
 #include "list.h"
 #include "packet.h"
 
-#include "../btm/btm_thread.h"
+#include "btm/btm_thread.h"
 
 #include "allocator.h"
 #include "log.h"

@@ -14,7 +14,7 @@
  */
 
 #ifdef DARWIN_PLATFORM
-#include "../darwin/thread_darwin.c"
+#include "darwin/thread_darwin.c"
 #else
-#include "../linux/thread_linux.c"
+#include "linux/thread_linux.c"
 #endif

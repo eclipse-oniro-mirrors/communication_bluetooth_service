@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "../include/a2dp_decoder_sbc.h"
+#include "include/a2dp_decoder_sbc.h"
 #include "log.h"
 #include "memory.h"
 #include "securec.h"

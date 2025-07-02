@@ -14,7 +14,7 @@
  */
 
 #ifdef DARWIN_PLATFORM
-#include "../darwin/reactor_darwin.c"
+#include "darwin/reactor_darwin.c"
 #else
-#include "../linux/reactor_linux.c"
+#include "linux/reactor_linux.c"
 #endif

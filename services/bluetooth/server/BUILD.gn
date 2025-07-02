@@ -26,8 +26,6 @@ ohos_shared_library("bluetooth_server") {
   stack_protector_ret = true
   include_dirs = [
     "include",
-    "//foundation/communication/bluetooth/frameworks/inner/include",
-    "//foundation/communication/bluetooth/interfaces/inner_api/include",
     "//foundation/communication/bluetooth_service/services/bluetooth/service/include",
     "//foundation/communication/bluetooth_service/services/bluetooth/service/src/ble",
     "//foundation/communication/bluetooth_service/services/bluetooth/service/src/permission",
@@ -117,6 +115,7 @@ ohos_shared_library("bluetooth_server") {
     "ipc:ipc_core",
     "safwk:system_ability_fwk",
     "samgr:samgr_proxy",
+    "bluetooth:btframework",
   ]
 
   part_name = "bluetooth_service"

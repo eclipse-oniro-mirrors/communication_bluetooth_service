@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../btm/btm_thread.h"
+#include "btm/btm_thread.h"
 #include "l2cap_cmn.h"
 #include "l2cap_le.h"
 

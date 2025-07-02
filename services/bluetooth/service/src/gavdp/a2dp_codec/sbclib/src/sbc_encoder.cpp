@@ -12,12 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "../include/sbc_encoder.h"
+#include "include/sbc_encoder.h"
 #include <memory>
-#include "../include/sbc_constant.h"
-#include "../include/sbc_math.h"
-#include "../include/sbc_tables.h"
-#include "../include/sbc_frame.h"
+#include "include/sbc_constant.h"
+#include "include/sbc_math.h"
+#include "include/sbc_tables.h"
+#include "include/sbc_frame.h"
 #include "new"
 #include "securec.h"
 #include "sys/types.h"

@@ -17,14 +17,7 @@ module_output_path = "bluetooth_service/bluetooth_service"
 
 config("module_private_config") {
   visibility = [ ":*" ]
-  include_dirs = [
-    "//third_party/json/include",
-    "//commonlibrary/c_utils/base/include",
-    "//utils/system/safwk/native/include",
-    "//foundation/communication/bluetooth/interfaces/inner_api/include",
-    "//foundation/communication/bluetooth/interfaces/inner_api/include/c_header",
-    "//foundation/communication/bluetooth/frameworks/inner/include",
-  ]
+  include_dirs = []
   defines = [
     "BTFW_LOG_TAG = \"bluetooth_test\"",
     "BTFW_LOG_DOMAIN = 0xD000103",
@@ -38,13 +31,14 @@ ohos_unittest("btfw_gatt_client_c_unit_test") {
 
   configs = [ ":module_private_config" ]
 
-  deps = [ "//third_party/googletest:gtest_main" ]
+  deps = []
 
   external_deps = [
     "bluetooth:btframework",
     "c_utils:utils",
     "hilog:libhilog",
     "resource_management:global_resmgr",
+    "googletest:gtest_main",
   ]
 }
 

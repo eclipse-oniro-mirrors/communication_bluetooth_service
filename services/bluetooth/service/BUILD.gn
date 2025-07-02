@@ -159,8 +159,6 @@ ServicePermissionSrc = [
 config("btservice_public_config") {
   include_dirs = [
     "include",
-    "$SUBSYSTEM_DIR/bluetooth/interfaces/inner_api/include",
-    "$SUBSYSTEM_DIR/bluetooth/frameworks/inner/include",
   ]
 }
 
@@ -174,7 +172,12 @@ config("btservice_config") {
     "$BT_SERVICE_DIR/src/ble/ble_scan_filter",
     "$BT_SERVICE_DIR/src/gavdp/a2dp_codec/aaccodecctrl_l2/include",
     "$BT_SERVICE_DIR/src/gavdp/a2dp_codec/sbccodecctrl/include",
+    "$BT_SERVICE_DIR/src/gavdp/a2dp_codec/sbccodecctrl",
+    "$BT_SERVICE_DIR/src/gavdp/a2dp_codec",
+    "$BT_SERVICE_DIR/src/gavdp",
+    "$BT_SERVICE_DIR/src/gatt",
     "$PART_DIR/common",
+    "$PART_DIR",
   ]
 
   cflags_cc = [
@@ -340,9 +343,6 @@ ohos_shared_library("btservice") {
   deps = [
     "$PART_DIR/external:btdummy",
     "$PART_DIR/stack:btstack",
-    "//third_party/bounds_checking_function:libsec_shared",
-    "//third_party/libxml2:xml2",
-    "//third_party/openssl:libcrypto_shared",
   ]
 
   external_deps = [
@@ -359,9 +359,14 @@ ohos_shared_library("btservice") {
     "hilog:libhilog",
     "hisysevent:libhisysevent",
     "ipc:ipc_core",
-    "json:nlohmann_json_static",
     "jsoncpp:jsoncpp",
     "samgr:samgr_proxy",
+    "bounds_checking_function:libsec_shared",
+    "libxml2:libxml2",
+    "openssl:libcrypto_shared",
+    "bluetooth:btframework",
+    "bluetooth:btcommon",
+    "bundle_framework:appexecfwk_core",
   ]
 
   if (bluetooth_service_hfp_ag_feature) {
@@ -391,7 +396,10 @@ ohos_shared_library("btsbc") {
   #   cfi = true
   # }
   stack_protector_ret = true
-  include_dirs = [ "$PART_DIR/common" ]
+  include_dirs = [ 
+    "$PART_DIR/common",
+    "$SBC_CODEC_DIR",
+    ]
   sources = [
     "$SBC_CODEC_DIR/src/sbc_decoder.cpp",
     "$SBC_CODEC_DIR/src/sbc_encoder.cpp",
@@ -400,10 +408,12 @@ ohos_shared_library("btsbc") {
 
   deps = [
     "$PART_DIR/external:btdummy",
-    "//third_party/bounds_checking_function:libsec_shared",
   ]
 
-  external_deps = [ "hilog:libhilog" ]
+  external_deps = [
+    "hilog:libhilog",
+    "bounds_checking_function:libsec_shared",
+    ]
 
   cflags = [ "-Wno-array-bounds" ]
   subsystem_name = "communication"

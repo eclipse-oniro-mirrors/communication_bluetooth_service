@@ -20,7 +20,7 @@
 
 #include "access_token.h"
 #include "accesstoken_kit.h"
-#include "foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/bundle_mgr_proxy.h"
+#include "bundlemgr/bundle_mgr_proxy.h"
 #include "foundation/communication/bluetooth_service/services/bluetooth/common/log.h"
 #include "hap_token_info.h"
 #include "ipc_skeleton.h"

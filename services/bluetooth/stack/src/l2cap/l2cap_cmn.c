@@ -27,7 +27,7 @@
 #include "btm.h"
 #include "hci/hci.h"
 
-#include "../btm/btm_thread.h"
+#include "btm/btm_thread.h"
 
 typedef struct {
     uint16_t handle;

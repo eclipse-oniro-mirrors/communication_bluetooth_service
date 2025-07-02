@@ -12,10 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "../include/sbc_decoder.h"
+#include "include/sbc_decoder.h"
 #include <memory>
-#include "../include/sbc_constant.h"
-#include "../include/sbc_tables.h"
+#include "include/sbc_constant.h"
+#include "include/sbc_tables.h"
 #include "foundation/communication/bluetooth_service/services/bluetooth/service/src/gavdp/a2dp_codec/sbclib/include/sbc_frame.h"
 #include "foundation/communication/bluetooth_service/services/bluetooth/service/src/gavdp/a2dp_codec/sbclib/include/sbc_math.h"
 #include "new"

@@ -33,7 +33,7 @@
 
 #include "log.h"
 
-#include "../btm/btm_thread.h"
+#include "btm/btm_thread.h"
 
 static void AttInstructListInit();
 static void AttListDataFree(const void *data);

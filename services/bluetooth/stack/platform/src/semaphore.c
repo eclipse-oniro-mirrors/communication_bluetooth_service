@@ -14,7 +14,7 @@
  */
 
 #ifdef DARWIN_PLATFORM
-#include "../darwin/semaphore_darwin.c"
+#include "darwin/semaphore_darwin.c"
 #else
-#include "../linux/semaphore_linux.c"
+#include "linux/semaphore_linux.c"
 #endif

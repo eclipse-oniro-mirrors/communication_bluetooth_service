@@ -14,7 +14,7 @@
  */
 
 #ifdef DARWIN_PLATFORM
-#include "./internal/timer_darwin.cpp"
+#include "internal/timer_darwin.cpp"
 #else
-#include "./internal/timer_linux.cpp"
+#include "internal/timer_linux.cpp"
 #endif

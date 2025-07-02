@@ -14,7 +14,7 @@
  */
 
 #include "di_service_over_bredr.h"
-#include "../gatt_defines.h"
+#include "gatt_defines.h"
 #include "bt_def.h"
 #include "class_creator.h"
 #include "log.h"

@@ -23,7 +23,7 @@
 
 #include "semaphore.h"
 
-#include "../btm/btm_thread.h"
+#include "btm/btm_thread.h"
 #include "l2cap.h"
 #include "l2cap_cmn.h"
 
