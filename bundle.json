@@ -105,13 +105,6 @@
         ]
       },
       "inner_api": [
-        {
-          "header": {
-            "header_base": [],
-            "header_files": []
-          },
-          "name": "//foundation/communication/bluetooth_service/services/bluetooth/ipc:btipc_service"
-        }
       ],
       "test": [
         "//foundation/communication/bluetooth_service/test/unittest/spp:unittest",
