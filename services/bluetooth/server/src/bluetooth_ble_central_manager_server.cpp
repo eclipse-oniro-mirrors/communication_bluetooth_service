@@ -568,6 +568,12 @@ int BluetoothBleCentralManagerServer::ChangeScanParams(int32_t scannerId, const 
     return BT_ERR_API_NOT_SUPPORT;
 }
 
+int BluetoothBleCentralManagerServer::IsValidScannerId(int32_t scannerId, bool &isValid)
+{
+    isValid = true;
+    return NO_ERROR;
+}
+
 void BluetoothBleCentralManagerServer::DeregisterBleCentralManagerCallback(int32_t scannerId,
     const sptr<IBluetoothBleCentralManagerCallback> &callback)
 {

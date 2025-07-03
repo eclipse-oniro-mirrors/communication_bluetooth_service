@@ -75,6 +75,9 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothBleCentralManagerStub *,
         {BluetoothBleCentralManagerInterfaceCode::BLE_CHANGE_SCAN_PARAM,
             std::bind(&BluetoothBleCentralManagerStub::ChangeScanParamsInner, std::placeholders::_1,
             std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothBleCentralManagerInterfaceCode::BLE_IS_VALID_SCANNERID,
+            std::bind(&BluetoothBleCentralManagerStub::IsValidScannerIdInner, std::placeholders::_1,
+            std::placeholders::_2, std::placeholders::_3)},
 };
 
 BluetoothBleCentralManagerStub::BluetoothBleCentralManagerStub()
@@ -285,6 +288,18 @@ ErrCode BluetoothBleCentralManagerStub::ChangeScanParamsInner(MessageParcel &dat
     int32_t ret = ChangeScanParams(scannerId, *settings, filters, filterAction);
     if (!reply.WriteInt32(ret)) {
         HILOGE("reply writing failed.");
+        return ERR_INVALID_VALUE;
+    }
+    return NO_ERROR;
+}
+
+ErrCode BluetoothBleCentralManagerStub::IsValidScannerIdInner(MessageParcel &data, MessageParcel &reply)
+{
+    int32_t scannerId = data.ReadInt32();
+    bool isValid = true;
+    IsValidScannerId(scannerId, isValid);
+    if (!reply.WriteBool(isValid)) {
+        HILOGE("reply writing failed");
         return ERR_INVALID_VALUE;
     }
     return NO_ERROR;
