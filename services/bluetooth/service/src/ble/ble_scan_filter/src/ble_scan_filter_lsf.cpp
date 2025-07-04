@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "../include/ble_scan_filter_lsf.h"
+#include "include/ble_scan_filter_lsf.h"
 
 namespace OHOS {
 namespace bluetooth {

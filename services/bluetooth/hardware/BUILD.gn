@@ -33,7 +33,7 @@ ohos_shared_library("bluetooth_hdi_adapter") {
     "src/bluetooth_hdi.cpp",
   ]
 
-  deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
+  deps = []
 
   if (is_standard_system) {
     external_deps = [
@@ -42,6 +42,7 @@ ohos_shared_library("bluetooth_hdi_adapter") {
       "hdf_core:libhdi",
       "hilog:libhilog",
       "ipc:ipc_core",
+      "bounds_checking_function:libsec_shared",
     ]
   } else {
     external_deps = [
@@ -50,6 +51,7 @@ ohos_shared_library("bluetooth_hdi_adapter") {
       "hdf_core:libhdi",
       "hilog:libhilog",
       "ipc:ipc_core",
+      "bounds_checking_function:libsec_shared",
     ]
   }
 

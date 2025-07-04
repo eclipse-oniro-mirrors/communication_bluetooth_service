@@ -30,7 +30,7 @@
 
 #include "platform/include/allocator.h"
 
-#include "../btm/btm_thread.h"
+#include "btm/btm_thread.h"
 
 static AttConnectInfo g_connectInfo[MAXCONNECT] = {0};
 static AttConnectingInfo g_connecting[MAXCONNECT] = {0};

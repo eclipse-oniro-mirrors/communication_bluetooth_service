@@ -29,7 +29,7 @@
 #include "allocator.h"
 #include "log.h"
 
-#include "../btm/btm_thread.h"
+#include "btm/btm_thread.h"
 
 #define WAIT_TIME (-1)
 

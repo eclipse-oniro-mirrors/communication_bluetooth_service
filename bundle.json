@@ -63,12 +63,10 @@
         "ability_runtime",
         "audio_framework",
         "av_session",
-        "base",
         "hilog",
         "hisysevent",
         "hitrace",
         "ipc",
-        "samgr_proxy",
         "samgr",
         "access_token",
         "bluetooth",
@@ -85,15 +83,15 @@
         "state_registry",
         "c_utils",
         "jsoncpp",
-        "json",
-        "image_framework"
-      ],
-      "third_party": [
+        "image_framework",
         "googletest",
         "libuv",
         "libxml2",
         "openssl",
-        "bounds_checking_function"
+        "bounds_checking_function",
+        "bundle_framework"
+      ],
+      "third_party": [
       ]
     },
     "build": {

@@ -19,7 +19,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
-#include "../gatt_server_service.h"
+#include "gatt_server_service.h"
 #include "di_service_over_bredr.h"
 #include "gatt_data.h"
 

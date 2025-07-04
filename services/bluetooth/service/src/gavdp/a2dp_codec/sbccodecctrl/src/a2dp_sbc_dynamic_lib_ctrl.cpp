@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "../include/a2dp_sbc_dynamic_lib_ctrl.h"
+#include "include/a2dp_sbc_dynamic_lib_ctrl.h"
 
 #include <dlfcn.h>
 

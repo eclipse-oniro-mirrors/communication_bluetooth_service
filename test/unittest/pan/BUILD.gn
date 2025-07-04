@@ -27,10 +27,6 @@ config("module_private_config") {
   }
   include_dirs = [
     "mock/include",
-    "//third_party/json/include",
-    "//commonlibrary/c_utils/base/include",
-    "//utils/system/safwk/native/include",
-    "//third_party/bounds_checking_function/include",
   ]
   defines = [
     "BTFW_LOG_TAG = \"bluetooth_test\"",
@@ -44,12 +40,7 @@ ohos_unittest("btfw_pan_unit_test") {
 
   configs = [ ":module_private_config" ]
 
-  deps = [
-    "//third_party/bounds_checking_function:libsec_shared",
-    "//third_party/googletest:gmock_main",
-    "//third_party/googletest:gtest_main",
-    "//third_party/libxml2:xml2",
-  ]
+  deps = []
 
   external_deps = [
     "bluetooth:btframework",
@@ -57,6 +48,10 @@ ohos_unittest("btfw_pan_unit_test") {
     "hilog:libhilog",
     "ipc:ipc_core",
     "resource_management:global_resmgr",
+    "bounds_checking_function:libsec_shared",
+    "googletest:gmock_main",
+    "googletest:gtest_main",
+    "libxml2:libxml2",
   ]
 }
 

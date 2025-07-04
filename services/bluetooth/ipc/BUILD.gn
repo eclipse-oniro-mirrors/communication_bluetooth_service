@@ -30,7 +30,6 @@ ohos_static_library("btipc_service") {
   public_configs = [ ":btipc_public_config" ]
   include_dirs = [
     "$SUBSYSTEM_DIR/bluetooth_service/services/bluetooth/service/src/permission",
-    "$SUBSYSTEM_DIR/bluetooth/frameworks/inner/include",
   ]
   sources = [
     "src/bluetooth_ble_advertise_callback_proxy.cpp",
@@ -115,6 +114,7 @@ ohos_static_library("btipc_service") {
     "c_utils:utils",
     "hilog:libhilog",
     "ipc:ipc_core",
+    "bluetooth:btframework",
   ]
 
   subsystem_name = "communication"
@@ -126,40 +126,7 @@ ohos_static_library("btipc_service") {
 config("btipc_static_public_config") {
   visibility = [ "*" ]
   include_dirs = [
-    "$SUBSYSTEM_DIR/bluetooth/interfaces/inner_api/include",
-    "$SUBSYSTEM_DIR/bluetooth/frameworks/inner/include",
-    "$SUBSYSTEM_DIR/bluetooth/frameworks/inner/ipc/common",
-    "$SUBSYSTEM_DIR/bluetooth/frameworks/inner/ipc/include",
-    "$SUBSYSTEM_DIR/bluetooth/frameworks/inner/ipc/interface",
-    "$SUBSYSTEM_DIR/bluetooth/frameworks/inner/ipc/parcel",
     "//foundation/communication/bluetooth_service/services/bluetooth/ipc/include",
     "//foundation/communication/bluetooth_service/services/bluetooth/common",
   ]
-}
-
-ohos_static_library("btipc_static") {
-  stack_protector_ret = true
-  public_configs = [ ":btipc_static_public_config" ]
-
-  include_dirs = [ "$SUBSYSTEM_DIR/bluetooth/frameworks/inner/include" ]
-
-  sources = [ "$SUBSYSTEM_DIR/bluetooth/frameworks/inner/ipc/src/bluetooth_host_proxy.cpp" ]
-
-  if (bluetooth_service_a2dp_source_feature) {
-    sources += [ "$SUBSYSTEM_DIR/bluetooth/frameworks/inner/ipc/src/bluetooth_a2dp_src_proxy.cpp" ]
-  }
-
-  deps = []
-
-  external_deps = [
-    "bluetooth:btcommon",
-    "c_utils:utils",
-    "hilog:libhilog",
-    "hisysevent:libhisysevent",
-    "ipc:ipc_core",
-    "samgr:samgr_proxy",
-  ]
-
-  subsystem_name = "communication"
-  part_name = "bluetooth_service"
 }

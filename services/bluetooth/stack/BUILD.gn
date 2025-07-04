@@ -191,6 +191,7 @@ config("btstack_config") {
   include_dirs = [
     "./",
     "src",
+    "platform",
     "platform/include",
     "$PART_DIR/common",
     "$PART_DIR/hardware/include",
@@ -224,13 +225,13 @@ ohos_shared_library("btstack") {
   deps = [
     "$PART_DIR/external:btdummy",
     "$PART_DIR/hardware:bluetooth_hdi_adapter",
-    "//third_party/bounds_checking_function:libsec_shared",
-    "//third_party/openssl:libcrypto_shared",
   ]
 
   external_deps = [
     "bluetooth:btcommon",
     "hilog:libhilog",
+    "bounds_checking_function:libsec_shared",
+    "openssl:libcrypto_shared",
   ]
 
   subsystem_name = "communication"
