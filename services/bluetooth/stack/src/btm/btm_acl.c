@@ -341,7 +341,7 @@ static BtmAclConnection *BtmAclFindConnectionByAddr(const BtAddr *addr)
     ListNode *node = ListGetFirstNode(g_aclList);
     while (node != NULL) {
         connection = ListGetNodeData(node);
-        if (connection->transport == TRANSPORT_BREDR) {
+        if (connection->transport == TRANSPORT_BREDR_STACK) {
             if (IsEqualAddr(connection->addr.addr, addr->addr)) {
                 break;
             }
@@ -360,7 +360,7 @@ static BtmAclConnection *BtmAclFindLeConnectionByAddr(const BtAddr *addr)
     ListNode *node = ListGetFirstNode(g_aclList);
     while (node != NULL) {
         connection = ListGetNodeData(node);
-        if (connection->transport == TRANSPORT_LE) {
+        if (connection->transport == TRANSPORT_LE_STACK) {
             if (IsEqualAddr(connection->addr.addr, addr->addr)) {
                 break;
             }
@@ -447,7 +447,7 @@ int BTM_AclConnect(const BtAddr *addr)
             connection = AllocAclConnection();
             if (connection != NULL) {
                 connection->addr = *addr;
-                connection->transport = TRANSPORT_BREDR;
+                connection->transport = TRANSPORT_BREDR_STACK;
                 connection->isInitiator = true;
                 connection->state = CONNECTING;
 
@@ -589,7 +589,7 @@ static void BtmOnConnectionrequest(const HciConnectionRequestEventParam *eventPa
     }
 
     connection->addr = addr;
-    connection->transport = TRANSPORT_BREDR;
+    connection->transport = TRANSPORT_BREDR_STACK;
     connection->state = CONNECTING;
     connection->isInitiator = false;
 
@@ -829,7 +829,7 @@ int BTM_LeConnect(const BtAddr *addr)
         connection = AllocAclConnection();
         if (connection != NULL) {
             connection->addr = *addr;
-            connection->transport = TRANSPORT_LE;
+            connection->transport = TRANSPORT_LE_STACK;
             connection->isInitiator = true;
             connection->state = CONNECTING;
 
@@ -870,7 +870,7 @@ static void BtmRemoveAllConnectingLeConnection()
     while (node != NULL) {
         connection = ListGetNodeData(node);
         node = ListGetNextNode(node);
-        if (connection->transport == TRANSPORT_LE && connection->state == CONNECTING) {
+        if (connection->transport == TRANSPORT_LE_STACK && connection->state == CONNECTING) {
             ListRemoveNode(g_aclList, connection);
         }
     }
@@ -898,7 +898,7 @@ static void BtmUpdateLeConnectionOnConnectComplete(
 
             connection->addr = *addr;
             connection->connectionHandle = eventParam->connectionHandle;
-            connection->transport = TRANSPORT_LE;
+            connection->transport = TRANSPORT_LE_STACK;
             connection->state = CONNECTED;
             connection->isInitiator = false;
 
@@ -999,7 +999,7 @@ static void BtmGetLeConnectingAddr(BtAddr **addrList, uint8_t *addrCount)
     ListNode *node = ListGetFirstNode(g_aclList);
     while (node != NULL) {
         connection = ListGetNodeData(node);
-        if ((connection->transport == TRANSPORT_LE) && (connection->state == CONNECTING)) {
+        if ((connection->transport == TRANSPORT_LE_STACK) && (connection->state == CONNECTING)) {
             count++;
         }
         connection = NULL;
@@ -1016,7 +1016,7 @@ static void BtmGetLeConnectingAddr(BtAddr **addrList, uint8_t *addrCount)
         node = ListGetFirstNode(g_aclList);
         while (node != NULL) {
             connection = ListGetNodeData(node);
-            if (connection->transport == TRANSPORT_LE && connection->state == CONNECTING) {
+            if (connection->transport == TRANSPORT_LE_STACK && connection->state == CONNECTING) {
                 (*addrList)[index] = connection->addr;
                 index++;
             }
@@ -1164,7 +1164,7 @@ static void BtmAllocLeConnectionOnEnhancedConnectComplete(
 
     connection->addr = *addr;
     connection->connectionHandle = eventParam->connectionHandle;
-    connection->transport = TRANSPORT_LE;
+    connection->transport = TRANSPORT_LE_STACK;
     connection->state = CONNECTED;
     connection->isInitiator = false;
 
@@ -1377,12 +1377,12 @@ NO_SANITIZE("cfi") static void BtmOnDisconnectComplete(const HciDisconnectComple
     BtmAclCallbacksBlock *block = NULL;
     while (node != NULL) {
         block = (BtmAclCallbacksBlock *)ListGetNodeData(node);
-        if (transport == TRANSPORT_BREDR) {
+        if (transport == TRANSPORT_BREDR_STACK) {
             if (block->callbacks->disconnectionComplete != NULL) {
                 block->callbacks->disconnectionComplete(
                     eventParam->status, eventParam->connectionHandle, eventParam->reason, block->context);
             }
-        } else if (transport == TRANSPORT_LE) {
+        } else if (transport == TRANSPORT_LE_STACK) {
             if (block->callbacks->leDisconnectionComplete != NULL) {
                 block->callbacks->leDisconnectionComplete(
                     eventParam->status, eventParam->connectionHandle, eventParam->reason, block->context);
@@ -1487,7 +1487,7 @@ static void BtmOnReadRemoteVersionInformationComplete(
     }
     MutexUnlock(g_aclListLock);
 
-    if (transport == TRANSPORT_BREDR) {
+    if (transport == TRANSPORT_BREDR_STACK) {
         HciReadRemoteSupportedFeaturesParam cmdParam = {
             .connectionHandle = eventParam->connectionHandle,
         };
@@ -1785,9 +1785,9 @@ void BtmReleaseConnection(BtmAclConnection *connection)
         };
         HCI_Disconnect(&param);
     } else {
-        if (connection->transport == TRANSPORT_BREDR) {
+        if (connection->transport == TRANSPORT_BREDR_STACK) {
             AlarmSet(connection->timeoutTimer, ACL_PASSIVE_TIMEOUT, BtmAclTimeout, connection);
-        } else if (connection->transport == TRANSPORT_LE) {
+        } else if (connection->transport == TRANSPORT_LE_STACK) {
             connection->state = DISCONNECTING;
 
             HciDisconnectParam param = {

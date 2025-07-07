@@ -187,7 +187,7 @@ static void HciEventOnConnectionCompleteEvent(Packet *packet)
     }
 
     if (param->status == HCI_SUCCESS) {
-        HciAclOnConnectionComplete(param->connectionHandle, TRANSPORT_BREDR);
+        HciAclOnConnectionComplete(param->connectionHandle, TRANSPORT_BREDR_STACK);
     }
 
     HciEventCallbacks *callbacks = NULL;

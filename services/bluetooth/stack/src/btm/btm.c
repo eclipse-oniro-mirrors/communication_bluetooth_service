@@ -339,7 +339,7 @@ static int BtmEnableLeModules()
 
 static void BtmDisableBrEdrAndSharedModules()
 {
-    BtmCloseAclConnectionByTransport(TRANSPORT_BREDR);
+    BtmCloseAclConnectionByTransport(TRANSPORT_BREDR_STACK);
 
     LOG_DEBUG("ModuleShutdown start");
     for (int i = G_COUNTOF_BREDR_AND_SHARED_MODULES - 1; i >= 0; i--) {
@@ -362,7 +362,7 @@ static void BtmDisableBrEdrAndSharedModules()
 
 static void BtmDisableBrEdrModules()
 {
-    BtmCloseAclConnectionByTransport(TRANSPORT_BREDR);
+    BtmCloseAclConnectionByTransport(TRANSPORT_BREDR_STACK);
 
     LOG_DEBUG("ModuleShutdown start");
     for (int i = G_COUNT_OF_BREDR_MODULES - 1; i >= 0; i--) {
@@ -378,7 +378,7 @@ static void BtmDisableBrEdrModules()
 
 static void BtmDisableLeAndSharedModules()
 {
-    BtmCloseAclConnectionByTransport(TRANSPORT_LE);
+    BtmCloseAclConnectionByTransport(TRANSPORT_LE_STACK);
 
     LOG_DEBUG("ModuleShutdown start");
     for (int i = G_COUNT_OF_LE_AND_SHARED_MODULES - 1; i >= 0; i--) {
@@ -400,7 +400,7 @@ static void BtmDisableLeAndSharedModules()
 
 static void BtmDisableLeModules()
 {
-    BtmCloseAclConnectionByTransport(TRANSPORT_LE);
+    BtmCloseAclConnectionByTransport(TRANSPORT_LE_STACK);
 
     LOG_DEBUG("ModuleShutdown start");
     for (int i = G_COUNT_OF_LE_MODULES - 1; i >= 0; i--) {

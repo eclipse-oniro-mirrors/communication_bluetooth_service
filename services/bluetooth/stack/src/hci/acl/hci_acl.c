@@ -567,10 +567,10 @@ int HCI_SendAclData(uint16_t handle, uint8_t flushable, Packet *packet)
     int result;
 
     switch (transport) {
-        case TRANSPORT_BREDR:
+        case TRANSPORT_BREDR_STACK:
             result = HciFargmentAndSendData(handle, flushable, packet);
             break;
-        case TRANSPORT_LE:
+        case TRANSPORT_LE_STACK:
             if (g_sharedDataBuffers) {
                 result = HciFargmentAndSendData(handle, flushable, packet);
             } else {
@@ -700,10 +700,10 @@ void HciAclOnNumberOfCompletedPacket(uint8_t numberOfHandles, const HciNumberOfC
     for (int i = 0; i < numberOfHandles; i++) {
         uint8_t transport = HciAclGetTransport(list[i].connectionHandle);
         switch (transport) {
-            case TRANSPORT_BREDR:
+            case TRANSPORT_BREDR_STACK:
                 HciAclOnPacketCompleted(&list[i]);
                 break;
-            case TRANSPORT_LE:
+            case TRANSPORT_LE_STACK:
                 HciAclOnLePacketCompleted(&list[i]);
                 break;
             default:
@@ -776,9 +776,9 @@ static void HciCleanupLeCacheByAclHandle(uint16_t connectionHandle)
 
 static void HciAclCleanCacheOnDisconnect(uint16_t connectionHandle, uint16_t transport)
 {
-    if (transport == TRANSPORT_BREDR) {
+    if (transport == TRANSPORT_BREDR_STACK) {
         HciCleanupCacheByAclHandle(connectionHandle);
-    } else if (transport == TRANSPORT_LE) {
+    } else if (transport == TRANSPORT_LE_STACK) {
         if (g_sharedDataBuffers) {
             HciCleanupCacheByAclHandle(connectionHandle);
         } else {
@@ -831,9 +831,9 @@ static void HciAclOnDisconnect(uint16_t connectionHandle)
 
     HciAclCleanCacheOnDisconnect(connectionHandle, transport);
 
-    if (transport == TRANSPORT_BREDR) {
+    if (transport == TRANSPORT_BREDR_STACK) {
         HciRecoveryNumOfAclDataPackets(connectionHandle);
-    } else if (transport == TRANSPORT_LE) {
+    } else if (transport == TRANSPORT_LE_STACK) {
         if (g_sharedDataBuffers) {
             HciRecoveryNumOfAclDataPackets(connectionHandle);
         } else {

@@ -108,8 +108,8 @@ typedef struct {
 #define MODULE_NAME_SMP "smp"
 
 // Transport
-#define TRANSPORT_BREDR 1
-#define TRANSPORT_LE 2
+#define TRANSPORT_BREDR_STACK 1
+#define TRANSPORT_LE_STACK 2
 
 #ifdef BLUETOOTH_EXPORT
 #define BTSTACK_API __attribute__((visibility("default")))
