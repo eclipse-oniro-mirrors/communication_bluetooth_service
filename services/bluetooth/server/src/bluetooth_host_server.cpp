@@ -1930,6 +1930,11 @@ int32_t BluetoothHostServer::GetCloudBondState(const std::string &address, int32
     return BT_ERR_API_NOT_SUPPORT;
 }
 
+int32_t BluetoothHostServer::GetDeviceTransport(const std::string &address, int32_t &transport)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
 int32_t BluetoothHostServer::UpdateRefusePolicy(const int32_t protocolType,
     const int32_t pid, const int64_t prohibitedSecondsTime)
 {

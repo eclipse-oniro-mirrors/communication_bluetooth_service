@@ -41,7 +41,7 @@ static void HciEventOnLeConnectionCompleteEvent(const uint8_t *param, size_t len
     HciLeConnectionCompleteEventParam *eventParam = (HciLeConnectionCompleteEventParam *)param;
 
     if (eventParam->status == HCI_SUCCESS) {
-        HciAclOnConnectionComplete(eventParam->connectionHandle, TRANSPORT_LE);
+        HciAclOnConnectionComplete(eventParam->connectionHandle, TRANSPORT_LE_STACK);
     }
 
     HciEventCallbacks *callbacks = NULL;
@@ -214,7 +214,7 @@ static void HciEventOnLeEnhancedConnectionCompleteEvent(const uint8_t *param, si
     HciLeEnhancedConnectionCompleteEventParam *eventParam = (HciLeEnhancedConnectionCompleteEventParam *)param;
 
     if (eventParam->status == HCI_SUCCESS) {
-        HciAclOnConnectionComplete(eventParam->connectionHandle, TRANSPORT_LE);
+        HciAclOnConnectionComplete(eventParam->connectionHandle, TRANSPORT_LE_STACK);
     }
 
     HciEventCallbacks *callbacks = NULL;

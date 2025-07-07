@@ -113,6 +113,7 @@ private:
     int32_t GetLastConnectionTimeInner(MessageParcel &data, MessageParcel &reply);
     int32_t UpdateCloudBluetoothDevInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetCloudBondStateInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetDeviceTransportInner(MessageParcel &data, MessageParcel &reply);
     int32_t UpdateRefusePolicyInner(MessageParcel &data, MessageParcel &reply);
     int32_t ProcessRandomDeviceIdCommandInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetCarKeyDfxDataInner(MessageParcel &data, MessageParcel &reply);
