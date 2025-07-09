@@ -799,6 +799,9 @@ int32_t BluetoothHostServer::DisableBt(bool isAsync)
         HILOGE("false, check Access permission failed");
         return BT_ERR_PERMISSION_FAILED;
     }
+    if (isAsync) {
+        return BT_ERR_API_NOT_SUPPORT;
+    }
     if (IAdapterManager::GetInstance()->Disable(bluetooth::BTTransport::ADAPTER_BREDR)) {
         return NO_ERROR;
     }
@@ -907,6 +910,9 @@ int32_t BluetoothHostServer::EnableBle(bool noAutoConnect, bool isAsync)
     if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
         HILOGE("false, check Access permission failed");
         return BT_ERR_PERMISSION_FAILED;
+    }
+    if (isAsync) {
+        return BT_ERR_API_NOT_SUPPORT;
     }
     if (!BluetoothHostServer::IsBleEnabled() && IAdapterManager::GetInstance()->Enable(BTTransport::ADAPTER_BLE)) {
         return NO_ERROR;
