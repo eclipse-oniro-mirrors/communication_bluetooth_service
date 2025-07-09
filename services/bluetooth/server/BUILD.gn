@@ -106,6 +106,7 @@ ohos_shared_library("bluetooth_server") {
   external_deps = [
     "ability_base:base",
     "access_token:libaccesstoken_sdk",
+    "bluetooth:btframework",
     "bluetooth:btcommon",
     "c_utils:utils",
     "eventhandler:libeventhandler",
@@ -115,7 +116,6 @@ ohos_shared_library("bluetooth_server") {
     "ipc:ipc_core",
     "safwk:system_ability_fwk",
     "samgr:samgr_proxy",
-    "bluetooth:btframework",
   ]
 
   part_name = "bluetooth_service"

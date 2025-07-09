@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <string>
 
-#include "foundation/multimedia/image_framework/mock/native/include/log/hitrace_meter.h"
+#include "hitrace_meter.h"
 #include "log.h"
 
 constexpr int32_t PARAM_NUM = 3;

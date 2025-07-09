@@ -19,8 +19,8 @@
 #include <cstdint>
 #include <string>
 
-#include "foundation/ability/ability_base/interfaces/inner_api/base/include/base_types.h"
-#include "foundation/ability/ability_runtime/interfaces/kits/native/ability/ability_runtime/ability_connection.h"
+#include "base_types.h"
+#include "ability_connection.h"
 
 namespace OHOS {
 namespace bluetooth {

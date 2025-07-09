@@ -110,11 +110,11 @@ ohos_static_library("btipc_service") {
 
   external_deps = [
     "access_token:libaccesstoken_sdk",
+    "bluetooth:btframework",
     "bluetooth:btcommon",
     "c_utils:utils",
     "hilog:libhilog",
     "ipc:ipc_core",
-    "bluetooth:btframework",
   ]
 
   subsystem_name = "communication"
