@@ -21,7 +21,7 @@
 #include "access_token.h"
 #include "accesstoken_kit.h"
 #include "bundlemgr/bundle_mgr_proxy.h"
-#include "foundation/communication/bluetooth_service/services/bluetooth/common/log.h"
+#include "common/log.h"
 #include "hap_token_info.h"
 #include "ipc_skeleton.h"
 #include "iservice_registry.h"
@@ -29,7 +29,7 @@
 #include "system_ability_definition.h"
 #include "tokenid_kit.h"
 
-#include "base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/hitrace_meter.h"
+#include "hitrace_meter.h"
 
 namespace OHOS {
 namespace bluetooth {

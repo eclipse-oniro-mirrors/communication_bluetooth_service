@@ -11,8 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//test/xts/tools/build/suite.gni")
-
 action("bluetoothtest") {
   testonly = true
   script = "cpbt.sh"

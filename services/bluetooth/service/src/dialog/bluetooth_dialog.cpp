@@ -21,8 +21,8 @@
 #include "bluetooth_ability_connection.h"
 #include "bool_wrapper.h"
 #include "double_wrapper.h"
-#include "foundation/ability/ability_runtime/interfaces/inner_api/extension_manager/include/extension_manager_client.h"
-#include "foundation/ability/ability_runtime/interfaces/kits/native/ability/ability_runtime/ability_connect_callback.h"
+#include "extension_manager_client.h"
+#include "ability_connect_callback.h"
 #include "int_wrapper.h"
 #include "ipc_skeleton.h"
 #include "log.h"
@@ -30,7 +30,7 @@
 #include "string_wrapper.h"
 #include "want_params_wrapper.h"
 
-#include "base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/hitrace_meter.h"
+#include "hitrace_meter.h"
 
 namespace OHOS {
 namespace bluetooth {

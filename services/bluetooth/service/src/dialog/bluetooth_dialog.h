@@ -22,8 +22,8 @@
 #include <mutex>
 #include <queue>
 
-#include "foundation/ability/ability_runtime/interfaces/kits/native/ability/ability_runtime/ability_connection.h"
-#include "foundation/communication/bluetooth_service/services/bluetooth/service/src/util/timer.h"
+#include "ability_connection.h"
+#include "timer.h"
 #include "json/json.h"
 #include "json/writer.h"
 #include "raw_address.h"
