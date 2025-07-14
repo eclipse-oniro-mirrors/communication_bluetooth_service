@@ -14,7 +14,6 @@
  */
 
 #include "bluetooth_common_event_helper.h"
-#include "common_event.h"
 #include "common_event_data.h"
 #include "common_event_manager.h"
 #include "common_event_subscriber.h"
