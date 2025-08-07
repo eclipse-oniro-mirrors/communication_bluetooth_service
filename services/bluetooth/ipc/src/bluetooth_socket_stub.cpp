@@ -117,6 +117,7 @@ ErrCode BluetoothSocketStub::ListenInner(MessageParcel &data, MessageParcel &rep
         .uuid = *uuid,
         .securityFlag = data.ReadInt32(),
         .type = data.ReadInt32(),
+        .psm = data.ReadInt32(),
         .observer = OHOS::iface_cast<IBluetoothServerSocketObserver>(data.ReadRemoteObject())
     };
 
