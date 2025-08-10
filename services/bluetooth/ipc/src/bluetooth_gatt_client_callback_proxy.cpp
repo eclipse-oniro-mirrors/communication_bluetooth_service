@@ -18,7 +18,8 @@
 
 namespace OHOS {
 namespace Bluetooth {
-void BluetoothGattClientCallbackProxy::OnConnectionStateChanged(int32_t state, int32_t newState)
+void BluetoothGattClientCallbackProxy::OnConnectionStateChanged(
+    int32_t state, int32_t newState, int32_t disconnectReason)
 {
     HILOGI("BluetoothGattClientCallbackProxy::OnConnectionStateChanged Triggered!");
     MessageParcel data;
@@ -31,6 +32,10 @@ void BluetoothGattClientCallbackProxy::OnConnectionStateChanged(int32_t state, i
         return;
     }
     if (!data.WriteInt32(newState)) {
+        HILOGE("BluetoothGattClientCallbackProxy::OnConnectionStateChanged transport error");
+        return;
+    }
+    if (!data.WriteInt32(disconnectReason)) {
         HILOGE("BluetoothGattClientCallbackProxy::OnConnectionStateChanged transport error");
         return;
     }
