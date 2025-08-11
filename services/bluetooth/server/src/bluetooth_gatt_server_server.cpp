@@ -36,6 +36,7 @@ constexpr uint8_t PermissionReadable = 0x01;
 constexpr uint8_t PermissionWriteable = 0x10;
 int32_t  GetPermissionReadable = 0x01;
 int32_t  GetPermissionWriteable = 0x02;
+constexpr int32_t CONN_UNKNOWN = 4;
 struct BluetoothGattServerServer::impl {
     class GattServerCallbackImpl;
     class SystemStateObserver;
@@ -152,7 +153,7 @@ public:
             HILOGE("callback is nullptr.");
             return;
         }
-        callback_->OnConnectionStateChanged((BluetoothGattDevice)device, ret, state);
+        callback_->OnConnectionStateChanged((BluetoothGattDevice)device, ret, state, CONN_UNKNOWN);
     }
     void OnMtuChanged(const bluetooth::GattDevice &device, int mtu) override
     {

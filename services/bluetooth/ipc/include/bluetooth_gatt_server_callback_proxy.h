@@ -29,7 +29,8 @@ public:
 
     void OnCharacteristicReadRequest(
         const BluetoothGattDevice &device, const BluetoothGattCharacteristic &characteristic) override;
-    void OnConnectionStateChanged(const BluetoothGattDevice &device, int32_t ret, int32_t state) override;
+    void OnConnectionStateChanged(
+        const BluetoothGattDevice &device, int32_t ret, int32_t state, int32_t disconnectReason) override;
     void OnAddService(int32_t ret, const BluetoothGattService &service) override;
     void OnCharacteristicWriteRequest(const BluetoothGattDevice &device,
         const BluetoothGattCharacteristic &characteristic, bool needRespones) override;
