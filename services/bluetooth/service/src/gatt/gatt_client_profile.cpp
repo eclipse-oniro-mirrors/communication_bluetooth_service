@@ -598,7 +598,9 @@ void GattClientProfile::WriteWithoutResponse(
     if (buffer != nullptr) {
         ATT_WriteCommand(connectHandle, handle, buffer);
         BufferFree(buffer);
-    }
+        pimpl->pClientCallBack_->OnWriteCharacteristicValueEvent(reqId, connectHandle, handle, GATT_SUCCESS);
+    } else {
+        pimpl->pClientCallBack_->OnWriteCharacteristicValueEvent(reqId, connectHandle, handle, GATT_FAILURE);
 }
 /**
  * @brief This sub-procedure is used to write a Characteristic Value to a server when the client knows the
