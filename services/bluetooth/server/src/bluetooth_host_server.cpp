@@ -793,8 +793,9 @@ int32_t BluetoothHostServer::EnableBt()
     return BT_ERR_INTERNAL_ERROR;
 }
 
-int32_t BluetoothHostServer::DisableBt(bool isAsync)
+int32_t BluetoothHostServer::DisableBt(bool isAsync, const std::string &callingName)
 {
+    (void)(callingName);
     if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
         HILOGE("false, check Access permission failed");
         return BT_ERR_PERMISSION_FAILED;
@@ -904,9 +905,10 @@ int32_t BluetoothHostServer::GetLocalAddress(std::string &addr)
     }
 }
 
-int32_t BluetoothHostServer::EnableBle(bool noAutoConnect, bool isAsync)
+int32_t BluetoothHostServer::EnableBle(bool noAutoConnect, bool isAsync, const std::string &callingName)
 {
     HILOGI("Enter!");
+    (void)(callingName);
     if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
         HILOGE("false, check Access permission failed");
         return BT_ERR_PERMISSION_FAILED;
@@ -1910,8 +1912,9 @@ int32_t BluetoothHostServer::SetFastScanLevel(int level)
     return BT_ERR_API_NOT_SUPPORT;
 }
 
-int32_t BluetoothHostServer::EnableBluetoothToRestrictMode(void)
+int32_t BluetoothHostServer::EnableBluetoothToRestrictMode(const std::string &callingName)
 {
+    (void)(callingName);
     return BT_ERR_API_NOT_SUPPORT;
 }
 

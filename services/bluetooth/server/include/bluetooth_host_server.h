@@ -45,7 +45,7 @@ public:
     void RegisterObserver(const sptr<IBluetoothHostObserver> &observer) override;
     void DeregisterObserver(const sptr<IBluetoothHostObserver> &observer) override;
     int32_t EnableBt() override;
-    int32_t DisableBt(bool isAsync) override;
+    int32_t DisableBt(bool isAsync, const std::string &callingName = "") override;
     int32_t GetBtState(int32_t &state) override;
     int32_t BluetoothFactoryReset() override;
     int32_t GetDeviceType(int32_t transport, const std::string &address) override;
@@ -62,7 +62,7 @@ public:
     bool Start();
     void Stop();
     int32_t DisableBle() override;
-    int32_t EnableBle(bool noAutoConnect = false, bool isAsync = false) override;
+    int32_t EnableBle(bool noAutoConnect = false, bool isAsync = false, const std::string &callingName = "") override;
     int32_t SatelliteControl(int type, int state) override;
     bool IsBrEnabled();
     bool IsBleEnabled();
@@ -132,7 +132,7 @@ public:
     int32_t IsSupportVirtualAutoConnect(const std::string &address, bool &outSupport) override;
     int32_t SetVirtualAutoConnectType(const std::string &address, int connType, int businessType) override;
     int32_t SetFastScanLevel(int level) override;
-    int32_t EnableBluetoothToRestrictMode(void) override;
+    int32_t EnableBluetoothToRestrictMode(const std::string &callingName) override;
     int32_t ControlDeviceAction(const std::string &deviceId, uint32_t controlType,
         uint32_t controlTypeVal, uint32_t controlObject) override;
     int32_t GetLastConnectionTime(const std::string &address, int64_t &connectionTime) override;

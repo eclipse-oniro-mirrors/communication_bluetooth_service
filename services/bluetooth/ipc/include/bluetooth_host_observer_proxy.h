@@ -36,6 +36,7 @@ public:
     void OnPairRequested(const int32_t transport, const BluetoothRawAddress &device) override;
     void OnPairConfirmed(const int32_t transport, const BluetoothRawAddress &device, int reqType, int number) override;
     void OnBluetoothStateChanged(int32_t state) override;
+    void OnBluetoothSwitchAction(int32_t action, const std::string &callingName) override;
     virtual void OnScanModeChanged(int32_t mode) override;
     virtual void OnDeviceNameChanged(const std::string &deviceName) override;
     virtual void OnDeviceAddrChanged(const std::string &address) override;
