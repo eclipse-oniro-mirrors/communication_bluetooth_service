@@ -271,6 +271,24 @@ void BluetoothHostObserverProxy::OnBluetoothStateChanged(int32_t state)
     }
 }
 
+void BluetoothHostObserverProxy::OnBluetoothSwitchAction(int32_t action, const std::string &callingName)
+{
+    MessageParcel data;
+    if (!data.WriteInterfaceToken(BluetoothHostObserverProxy::GetDescriptor())) {
+        HILOGE("BluetoothHostObserverProxy::OnBluetoothSwitchAction WriteInterfaceToken error");
+        return;
+    }
+    if (!data.WriteInt32(action)) {
+        return;
+    }
+    if (!data.WriteString(callingName)) {
+        return;
+    }
+    MessageParcel reply;
+    MessageOption option = {MessageOption::TF_ASYNC};
+    InnerTransact(BT_HOST_OBSERVER_SWITCH_ACTION_TRANSFER, option, data, reply);
+}
+
 void BluetoothHostObserverProxy::OnRefusePolicyChanged(const int32_t pid, const int64_t prohibitedSecondsTime)
 {
 }

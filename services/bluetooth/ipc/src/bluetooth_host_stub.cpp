@@ -278,7 +278,7 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
                 std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
         {BluetoothHostInterfaceCode::BT_NOTIFY_DIALOG_RESULT,
             std::bind(&BluetoothHostStub::NotifyDialogResultInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},   
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
 };
 
 BluetoothHostStub::BluetoothHostStub(){};
@@ -339,7 +339,8 @@ int32_t BluetoothHostStub::DisableBtInner(MessageParcel &data, MessageParcel &re
         HILOGE("BluetoothHostStub::DisableBt isAsync failed");
         return BT_ERR_IPC_TRANS_FAILED;
     }
-    int32_t result = DisableBt(isAsync);
+    std::string callingName = data.ReadString();
+    int32_t result = DisableBt(isAsync, callingName);
     bool ret = reply.WriteInt32(result);
     if (!ret) {
         HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
@@ -429,7 +430,8 @@ int32_t BluetoothHostStub::EnableBleInner(MessageParcel &data, MessageParcel &re
         HILOGE("BluetoothHostStub::EnableBle isAsync failed");
         return BT_ERR_IPC_TRANS_FAILED;
     }
-    int32_t result = EnableBle(noAutoConnect, isAsync);
+    std::string callingName = data.ReadString();
+    int32_t result = EnableBle(noAutoConnect, isAsync, callingName);
     bool ret = reply.WriteInt32(result);
     if (!ret) {
         HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
