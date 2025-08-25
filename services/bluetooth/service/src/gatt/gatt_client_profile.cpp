@@ -598,6 +598,9 @@ void GattClientProfile::WriteWithoutResponse(
     if (buffer != nullptr) {
         ATT_WriteCommand(connectHandle, handle, buffer);
         BufferFree(buffer);
+        pimpl->pClientCallBack_->OnWriteCharacteristicValueEvent(reqId, connectHandle, handle, GATT_SUCCESS);
+    } else {
+        pimpl->pClientCallBack_->OnWriteCharacteristicValueEvent(reqId, connectHandle, handle, GATT_FAILURE);
     }
 }
 /**
