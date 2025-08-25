@@ -1970,5 +1970,8 @@ int32_t BluetoothHostServer::NotifyDialogResult(uint32_t dialogType, bool dialog
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
+
+void BluetoothHostServer::SetCallingPackageName(const std::string &address, const std::string &packageName)
+{}
 }  // namespace Bluetooth
 }  // namespace OHOS
