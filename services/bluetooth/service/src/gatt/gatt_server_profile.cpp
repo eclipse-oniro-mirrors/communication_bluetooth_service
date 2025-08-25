@@ -2029,9 +2029,11 @@ void GattServerProfile::SendNotification(
         if (buffer != nullptr) {
             ATT_HandleValueNotification(connectHandle, handle, buffer);
             BufferFree(buffer);
+            pimpl->pServerCallBack_->OnIndicationEvent(connectHandle, handle, GATT_SUCCESS);
         }
     } else {
         LOG_ERROR("%{public}s: GATT_NOTIFICATION_VALUE is invalid", __FUNCTION__);
+        pimpl->pServerCallBack_->OnIndicationEvent(connectHandle, handle, GATT_FAILURE);
     }
 }
 /**
