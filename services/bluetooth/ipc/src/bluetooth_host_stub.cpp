@@ -124,6 +124,9 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
         {BluetoothHostInterfaceCode::BT_GET_BLE_MAX_ADVERTISING_DATALENGTH,
             std::bind(&BluetoothHostStub::GetBleMaxAdvertisingDataLengthInner, std::placeholders::_1,
                 std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::BT_GET_CONNECTED_BLE_DEVICES,
+            std::bind(&BluetoothHostStub::GetConnectedBLEDevicesInner, std::placeholders::_1,
+                std::placeholders::_2, std::placeholders::_3)},
         {BluetoothHostInterfaceCode::GET_DEVICE_TYPE,
             std::bind(&BluetoothHostStub::GetDeviceTypeInner, std::placeholders::_1, std::placeholders::_2,
                 std::placeholders::_3)},
@@ -1069,6 +1072,12 @@ ErrCode BluetoothHostStub::GetBleMaxAdvertisingDataLengthInner(MessageParcel &da
         HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
         return TRANSACTION_ERR;
     }
+    return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::GetConnectedBLEDevicesInner(MessageParcel &data, MessageParcel &reply)
+{
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
     return NO_ERROR;
 }
 

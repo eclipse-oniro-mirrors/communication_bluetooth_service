@@ -1594,6 +1594,11 @@ int32_t BluetoothHostServer::GetDeviceUuids(const std::string &address, std::vec
     return NO_ERROR;
 }
 
+int32_t BluetoothHostServer::GetConnectedBLEDevices(int32_t bleProfile, std::vector<std::string> &ConnectedDevices)
+{
+    return NO_ERROR;
+}
+
 int32_t BluetoothHostServer::GetLocalProfileUuids(std::vector<std::string> &uuids)
 {
     return NO_ERROR;
