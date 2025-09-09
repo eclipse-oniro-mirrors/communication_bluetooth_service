@@ -66,6 +66,7 @@ private:
     ErrCode RegisterRemoteDeviceObserverInner(MessageParcel &data, MessageParcel &reply);
     ErrCode DeregisterRemoteDeviceObserverInner(MessageParcel &data, MessageParcel &reply);
     ErrCode GetBleMaxAdvertisingDataLengthInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetConnectedBLEDevicesInner(MessageParcel &data, MessageParcel &reply);
     ErrCode GetDeviceTypeInner(MessageParcel &data, MessageParcel &reply);
     ErrCode GetPhonebookPermissionInner(MessageParcel &data, MessageParcel &reply);
     ErrCode SetPhonebookPermissionInner(MessageParcel &data, MessageParcel &reply);

@@ -115,6 +115,7 @@ public:
     void DeregisterBlePeripheralCallback(const sptr<IBluetoothBlePeripheralObserver> &observer) override;
     void GetLocalSupportedUuids(std::vector<std::string> &uuids) override;
     int32_t GetDeviceUuids(const std::string &address, std::vector<std::string> &uuids) override;
+    int32_t GetConnectedBLEDevices(int32_t bleProfile, std::vector<std::string> &ConnectedDevices) override;
     int32_t GetLocalProfileUuids(std::vector<std::string> &uuids) override;
     int32_t Dump(int32_t fd, const std::vector<std::u16string>& args) override;
     int32_t SetFastScan(bool isEnable) override;
