@@ -919,12 +919,12 @@ int32_t BluetoothHostStub::StartPairInner(MessageParcel &data, MessageParcel &re
         HILOGE("BluetoothHostStub::StartPair transport failed");
         return BT_ERR_IPC_TRANS_FAILED;
     }
-    std::string address;
-    if (!data.ReadString(address)) {
-        HILOGE("BluetoothHostStub::StartPair address failed");
+    std::shared_ptr<BluetoothAddress> bluetoothAddress(data.ReadStrongParcelable<BluetoothAddress>());
+    if (bluetoothAddress == nullptr) {
+        HILOGE("BluetoothHostStub::StartPair bluetoothAddress failed");
         return BT_ERR_IPC_TRANS_FAILED;
     }
-    int32_t result = StartPair(transport, address);
+    int32_t result = StartPair(transport, *bluetoothAddress);
     bool ret = reply.WriteInt32(result);
     if (!ret) {
         HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
