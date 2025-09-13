@@ -1458,8 +1458,9 @@ int32_t BluetoothHostServer::GetPairState(int32_t transport, const std::string &
     return BT_NO_ERROR;
 }
 
-int32_t BluetoothHostServer::StartPair(int32_t transport, const std::string &address)
+int32_t BluetoothHostServer::StartPair(int32_t transport, const BluetoothRawAddress &bluetoothRawAddress)
 {
+    std::string address = bluetoothRawAddress.GetAddress();
     HILOGI("transport: %{public}d, address: %{public}s", transport, GetEncryptAddr(address).c_str());
     if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
         HILOGE("StartPair false, check permission failed");
