@@ -22,22 +22,8 @@ namespace OHOS {
 namespace Bluetooth {
 BluetoothHfpAgStub::BluetoothHfpAgStub() {
     HILOGI("%{public}s start.", __func__);
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_CONNECT_DEVICES)] =
-        &BluetoothHfpAgStub::GetConnectDevicesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_DEVICES_BY_STATES)] =
-        &BluetoothHfpAgStub::GetDevicesByStatesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_DEVICE_STATE)] =
-        &BluetoothHfpAgStub::GetDeviceStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_CONNECT)] =
-        &BluetoothHfpAgStub::ConnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_DISCONNECT)] =
-        &BluetoothHfpAgStub::DisconnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_SCO_STATE)] =
-        &BluetoothHfpAgStub::GetScoStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_CONNECT_SCO)] =
-        &BluetoothHfpAgStub::ConnectScoInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_DISCONNECT_SCO)] =
-        &BluetoothHfpAgStub::DisconnectScoInner;
+    RegisterBasicConnectionFunctions();
+    RegisterScoConnectionFunctions();
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_PHONE_STATE_CHANGED)] =
         &BluetoothHfpAgStub::PhoneStateChangedInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_CLCC_RESPONSE)] =
@@ -46,6 +32,8 @@ BluetoothHfpAgStub::BluetoothHfpAgStub() {
         &BluetoothHfpAgStub::OpenVoiceRecognitionInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_CLOSE_VOICE_RECOGNITION)] =
         &BluetoothHfpAgStub::CloseVoiceRecognitionInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_IS_AUDIO_CONNECTED)] =
+        &BluetoothHfpAgStub::IsAudioConnectedInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_SET_ACTIVE_DEVICE)] =
         &BluetoothHfpAgStub::SetActiveDeviceInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_ACTIVE_DEVICE)] =
@@ -64,10 +52,6 @@ BluetoothHfpAgStub::BluetoothHfpAgStub() {
         &BluetoothHfpAgStub::GetConnectStrategyInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_IS_IN_BAND_RINGING_ENABLE)] =
         &BluetoothHfpAgStub::IsInbandRingingEnabledInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_CONNECT_SCO_EX)] =
-        &BluetoothHfpAgStub::ConnectScoInnerEx;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_DISCONNECT_SCO_EX)] =
-        &BluetoothHfpAgStub::DisconnectScoInnerEx;
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_CALL_DETAILS_CHANGED)] =
         &BluetoothHfpAgStub::CallDetailsChangedInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_IS_HFP_FEATURE_SUPPORTED)] =
@@ -81,6 +65,34 @@ BluetoothHfpAgStub::BluetoothHfpAgStub() {
     memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_CALLTYPE)] =
         &BluetoothHfpAgStub::GetCurrentCallTypeInner;
     HILOGI("%{public}s ends.", __func__);
+}
+
+void BluetoothHfpAgStub::RegisterBasicConnectionFunctions()
+{
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_CONNECT_DEVICES)] =
+        &BluetoothHfpAgStub::GetConnectDevicesInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_DEVICES_BY_STATES)] =
+        &BluetoothHfpAgStub::GetDevicesByStatesInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_DEVICE_STATE)] =
+        &BluetoothHfpAgStub::GetDeviceStateInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_CONNECT)] =
+        &BluetoothHfpAgStub::ConnectInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_DISCONNECT)] =
+        &BluetoothHfpAgStub::DisconnectInner;
+}
+
+void BluetoothHfpAgStub::RegisterScoConnectionFunctions()
+{
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_GET_SCO_STATE)] =
+        &BluetoothHfpAgStub::GetScoStateInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_CONNECT_SCO)] =
+        &BluetoothHfpAgStub::ConnectScoInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_DISCONNECT_SCO)] =
+        &BluetoothHfpAgStub::DisconnectScoInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_CONNECT_SCO_EX)] =
+        &BluetoothHfpAgStub::ConnectScoInnerEx;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothHfpAgInterfaceCode::BT_HFP_AG_DISCONNECT_SCO_EX)] =
+        &BluetoothHfpAgStub::DisconnectScoInnerEx;
 }
 
 BluetoothHfpAgStub::~BluetoothHfpAgStub()
@@ -280,6 +292,15 @@ ErrCode BluetoothHfpAgStub::CloseVoiceRecognitionInner(MessageParcel &data, Mess
         HILOGE("BluetoothHfpAgStub: reply writing failed in: %{public}s.", __func__);
         return ERR_INVALID_VALUE;
     }
+    return NO_ERROR;
+}
+
+ErrCode BluetoothHfpAgStub::IsAudioConnectedInner(MessageParcel &data, MessageParcel &reply)
+{
+    bool isAudioOn = false;
+    int result = IsAudioConnected(isAudioOn);
+    CHECK_AND_RETURN_LOG_RET(reply.WriteInt32(result), BT_ERR_INTERNAL_ERROR, "reply WriteInt32 failed");
+    CHECK_AND_RETURN_LOG_RET(reply.WriteBool(isAudioOn), BT_ERR_INTERNAL_ERROR, "reply WriteBool failed");
     return NO_ERROR;
 }
 

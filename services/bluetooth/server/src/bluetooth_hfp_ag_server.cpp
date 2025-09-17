@@ -338,6 +338,12 @@ bool BluetoothHfpAgServer::SetActiveDevice(const BluetoothRawAddress &device)
     return false;
 }
 
+int32_t BluetoothHfpAgServer::IsAudioConnected(bool &isAudioOn)
+{
+    isAudioOn = false;
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
 bool BluetoothHfpAgServer::IntoMock(const BluetoothRawAddress &device, int state) {
     HILOGI("[%{public}s]: %{public}s(): Enter!", __FILE__, __FUNCTION__);
     if (pimpl->HfpAgService_ ) {
