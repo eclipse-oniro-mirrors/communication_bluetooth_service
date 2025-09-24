@@ -30,6 +30,8 @@ public:
         uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
 
 private:
+    void RegisterBasicConnectionFunctions();
+    void RegisterScoConnectionFunctions();
     int32_t GetConnectDevicesInner(MessageParcel &data, MessageParcel &reply);
     ErrCode GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
@@ -42,6 +44,7 @@ private:
     ErrCode ClccResponseInner(MessageParcel &data, MessageParcel &reply);
     ErrCode OpenVoiceRecognitionInner(MessageParcel &data, MessageParcel &reply);
     ErrCode CloseVoiceRecognitionInner(MessageParcel &data, MessageParcel &reply);
+    ErrCode IsAudioConnectedInner(MessageParcel &data, MessageParcel &reply);
     ErrCode SetActiveDeviceInner(MessageParcel &data, MessageParcel &reply);
     ErrCode GetActiveDeviceInner(MessageParcel &data, MessageParcel &reply);
     ErrCode IntoMockInner(MessageParcel &data, MessageParcel &reply);
