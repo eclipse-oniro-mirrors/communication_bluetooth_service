@@ -45,6 +45,7 @@ private:
     ErrCode RespondCharacteristicWriteInner(MessageParcel &data, MessageParcel &reply);
     ErrCode RespondDescriptorReadInner(MessageParcel &data, MessageParcel &reply);
     ErrCode RespondDescriptorWriteInner(MessageParcel &data, MessageParcel &reply);
+    ErrCode GetConnectedStateInner(MessageParcel &data, MessageParcel &reply);
     using BluetoothGattServerFunc = ErrCode (BluetoothGattServerStub::*)(MessageParcel &data, MessageParcel &reply);
     std::map<uint32_t, BluetoothGattServerFunc> memberFuncMap_;
 

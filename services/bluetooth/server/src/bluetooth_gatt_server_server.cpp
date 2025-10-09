@@ -521,6 +521,11 @@ int BluetoothGattServerServer::DeregisterApplication(int32_t appId)
         "UID", OHOS::IPCSkeleton::GetCallingUid(), "APPID", appId);
     return (ret == GattStatus::GATT_SUCCESS ? NO_ERROR : BT_ERR_INTERNAL_ERROR);
 }
+int BluetoothGattServerServer::GetConnectedState(const std::string &deviceId, int &state)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return NO_ERROR;
+}
 BluetoothGattServerServer::BluetoothGattServerServer() : pimpl(new impl())
 {
     HILOGI("Bluetooth Gatt Server Server Created!");

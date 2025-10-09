@@ -15,6 +15,7 @@
 
 #include "bluetooth_gatt_server_stub.h"
 #include "bluetooth_log.h"
+#include "bluetooth_errorcode.h"
 #include "ipc_types.h"
 #include "string_ex.h"
 
@@ -47,6 +48,8 @@ BluetoothGattServerStub::BluetoothGattServerStub()
         &BluetoothGattServerStub::RespondDescriptorWriteInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_CONNECT)] =
         &BluetoothGattServerStub::ConnectInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_CONNECT)] =
+        &BluetoothGattServerStub::GetConnectedStateInner;
 }
 
 BluetoothGattServerStub::~BluetoothGattServerStub()
@@ -243,6 +246,16 @@ ErrCode BluetoothGattServerStub::RespondDescriptorWriteInner(MessageParcel &data
     if (!ret2) {
         HILOGE("BluetoothGattServerStub: reply writing failed in: %{public}s.", __func__);
         return ERR_INVALID_VALUE;
+    }
+    return NO_ERROR;
+}
+
+ErrCode BluetoothGattServerStub::GetConnectedStateInner(MessageParcel &data, MessageParcel &reply)
+{
+    HILOGI("Not Support");
+    if (!reply.WriteInt32(BT_ERR_API_NOT_SUPPORT)) {
+        HILOGE("BluetoothA2dpSrcStub: WriteFrameInner reply writing failed in: %{public}s.", __func__);
+        return TRANSACTION_ERR;
     }
     return NO_ERROR;
 }
