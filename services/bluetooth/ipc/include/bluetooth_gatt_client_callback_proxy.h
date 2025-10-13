@@ -36,7 +36,7 @@ public:
     void OnMtuChanged(int32_t state, int32_t mtu) override;
     void OnServicesDiscovered(int32_t status) override;
     void OnConnectionParameterChanged(int32_t interval, int32_t latency, int32_t timeout, int32_t status) override;
-    void OnServicesChanged(std::vector<BluetoothGattService> &service) override;
+    void OnServicesChanged() override;
     void OnReadRemoteRssiValue(const bluetooth::RawAddress &addr, int rssi, int status) override;
 
 private:

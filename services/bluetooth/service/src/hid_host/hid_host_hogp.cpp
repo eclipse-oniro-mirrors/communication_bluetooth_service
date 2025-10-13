@@ -714,7 +714,7 @@ void HidHostHogp::HogpGattClientCallback::OnConnectionStateChanged(int state, in
     }
 }
 
-void HidHostHogp::HogpGattClientCallback::OnServicesChanged(const std::vector<Service> &services)
+void HidHostHogp::HogpGattClientCallback::OnServicesChanged()
 {
     LOG_DEBUG("[HOGP]%{public}s", __FUNCTION__);
 }

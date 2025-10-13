@@ -1033,7 +1033,7 @@ void GattClientService::impl::OnCharacteristicNotifyEvent(
         }
 
         if (Uuid::ConvertFrom16Bits(UUID_SERVICE_CHANGED) == ccc->uuid_) {
-            client.value()->second.callback_.OnServicesChanged(std::vector<Service>());
+            client.value()->second.callback_.OnServicesChanged();
         } else {
             Characteristic gattCCC(ccc->uuid_, ccc->handle_, ccc->properties_);
             gattCCC.value_ = std::make_unique<uint8_t[]>(length);

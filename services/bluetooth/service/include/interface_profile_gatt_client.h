@@ -56,7 +56,7 @@ public:
      * @since 6
      *
      */
-    virtual void OnServicesChanged(const std::vector<Service> &services) = 0;
+    virtual void OnServicesChanged() = 0;
     /**
      * @brief The callback function to notify characteristic read.
      *
