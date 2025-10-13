@@ -161,15 +161,10 @@ public:
         callback_->OnConnectionParameterChanged(interval, latency, timeout, status);
     }
 
-    void OnServicesChanged(const std::vector<Service> &services) override
+    void OnServicesChanged() override
     {
         HILOGI("enter");
-        std::vector<BluetoothGattService> result;
-        int num = services.size();
-        for (int i = 0; i < num; i++) {
-            result.push_back((BluetoothGattService)services[i]);
-        }
-        callback_->OnServicesChanged(result);
+        callback_->OnServicesChanged();
     }
 
     sptr<IBluetoothGattClientCallback> GetCallback()

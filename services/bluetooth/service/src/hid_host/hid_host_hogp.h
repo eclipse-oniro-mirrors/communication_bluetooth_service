@@ -58,7 +58,7 @@ private:
         explicit HogpGattClientCallback(HidHostHogp *hogp);
         ~HogpGattClientCallback() = default;
         void OnConnectionStateChanged(int state, int newState) override;
-        void OnServicesChanged(const std::vector<Service> &services) override;
+        void OnServicesChanged() override;
         void OnCharacteristicRead(int ret, const Characteristic &characteristic) override;
         void OnCharacteristicWrite(int ret, const Characteristic &characteristic) override;
         void OnCharacteristicChanged(const Characteristic &characteristic) override;

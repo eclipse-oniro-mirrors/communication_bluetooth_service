@@ -49,7 +49,7 @@ struct BleAdapter::impl {
             LOG_DEBUG("%{public}s:%{public}d:%{public}s state:%{public}d", __FILE__, __LINE__, __FUNCTION__, newState);
         }
 
-        void OnServicesChanged(const std::vector<Service> &services) override
+        void OnServicesChanged() override
         {
             LOG_DEBUG("%{public}s:%{public}d:%{public}s", __FILE__, __LINE__, __FUNCTION__);
         }

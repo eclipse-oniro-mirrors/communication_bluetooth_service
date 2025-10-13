@@ -278,24 +278,13 @@ void BluetoothGattClientCallbackProxy::OnConnectionParameterChanged(
     }
 }
 
-void BluetoothGattClientCallbackProxy::OnServicesChanged(std::vector<BluetoothGattService> &service)
+void BluetoothGattClientCallbackProxy::OnServicesChanged()
 {
     HILOGI("BluetoothGattClientCallbackProxy::OnServicesChanged Triggered!");
     MessageParcel data;
     if (!data.WriteInterfaceToken(BluetoothGattClientCallbackProxy::GetDescriptor())) {
         HILOGE("BluetoothGattClientCallbackProxy::OnServicesChanged WriteInterfaceToken error");
         return;
-    }
-    int num = service.size();
-    if (!data.WriteInt32(num)) {
-        HILOGE("BluetoothGattClientCallbackProxy::OnServicesChanged transport error");
-        return;
-    }
-    for (int i = 0; i < num; i++) {
-        if (!data.WriteParcelable(&service[i])) {
-            HILOGE("BluetoothGattClientCallbackProxy::OnServicesChanged transport error");
-            return;
-        }
     }
     MessageParcel reply;
     MessageOption option {
