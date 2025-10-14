@@ -15,6 +15,7 @@
 
 #include "bluetooth_gatt_client_stub.h"
 #include "bluetooth_log.h"
+#include "bluetooth_errorcode.h"
 #include "ipc_types.h"
 #include "string_ex.h"
 
@@ -59,6 +60,8 @@ BluetoothGattClientStub::BluetoothGattClientStub()
         &BluetoothGattClientStub::ReadRemoteRssiValueInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothGattClientInterfaceCode::BT_GATT_CLIENT_REQUEST_NOTIFICATION)] =
         &BluetoothGattClientStub::RequestNotificationInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothGattClientInterfaceCode::BT_GATT_CLIENT_GET_CONNECTED_STATE)] =
+        &BluetoothGattClientStub::GetConnectedStateInner;
 }
 
 BluetoothGattClientStub::~BluetoothGattClientStub()
@@ -330,6 +333,16 @@ ErrCode BluetoothGattClientStub::ReadRemoteRssiValueInner(MessageParcel &data, M
 
 ErrCode BluetoothGattClientStub::RequestNotificationInner(MessageParcel &data, MessageParcel &reply)
 {
+    return NO_ERROR;
+}
+
+ErrCode BluetoothGattClientStub::GetConnectedStateInner(MessageParcel &data, MessageParcel &reply)
+{
+    HILOGI("Not Support");
+    if (!reply.WriteInt32(BT_ERR_API_NOT_SUPPORT)) {
+        HILOGE("BluetoothA2dpSrcStub: WriteFrameInner reply writing failed in: %{public}s.", __func__);
+        return TRANSACTION_ERR;
+    }
     return NO_ERROR;
 }
 }  // namespace Bluetooth
