@@ -48,7 +48,7 @@ BluetoothGattServerStub::BluetoothGattServerStub()
         &BluetoothGattServerStub::RespondDescriptorWriteInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_CONNECT)] =
         &BluetoothGattServerStub::ConnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_CONNECT)] =
+    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_GET_CONNECTED_STATE)] =
         &BluetoothGattServerStub::GetConnectedStateInner;
 }
 
