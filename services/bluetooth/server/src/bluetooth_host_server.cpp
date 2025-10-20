@@ -1982,11 +1982,11 @@ void BluetoothHostServer::SetCallingPackageName(const std::string &address, cons
 
 bool BluetoothHostServer::StartRemoteSdpSearch(const std::string &address, const std::string &uuid)
 {
-    return false;
+    return true;
 }
 bool BluetoothHostServer::GetRemoteServices(const std::string &address)
 {
-    return false;
+    return true;
 }
 }  // namespace Bluetooth
 }  // namespace OHOS
