@@ -1979,5 +1979,14 @@ int32_t BluetoothHostServer::NotifyDialogResult(uint32_t dialogType, bool dialog
 
 void BluetoothHostServer::SetCallingPackageName(const std::string &address, const std::string &packageName)
 {}
+
+bool BluetoothHostServer::StartRemoteSdpSearch(const std::string &address, const std::string &uuid)
+{
+    return false;   
+}
+bool BluetoothHostServer::GetRemoteServices(const std::string &address)
+{
+    return false;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS

@@ -148,6 +148,8 @@ public:
     int32_t SetCarKeyCardData(const std::string &address, int32_t action) override;
     int32_t NotifyDialogResult(uint32_t dialogType, bool dialogResult) override;
     void SetCallingPackageName(const std::string &address, const std::string &packageName) override;
+    bool StartRemoteSdpSearch(const std::string &address, const std::string &uuid) override;
+    bool GetRemoteServices(const std::string &address) override;
 private:
     static sptr<BluetoothHostServer> instance;
     static std::mutex instanceLock;
