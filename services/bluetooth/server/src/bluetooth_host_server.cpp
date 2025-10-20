@@ -1982,7 +1982,7 @@ void BluetoothHostServer::SetCallingPackageName(const std::string &address, cons
 
 bool BluetoothHostServer::StartRemoteSdpSearch(const std::string &address, const std::string &uuid)
 {
-    return false;   
+    return false;
 }
 bool BluetoothHostServer::GetRemoteServices(const std::string &address)
 {
