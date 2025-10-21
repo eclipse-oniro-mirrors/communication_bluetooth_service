@@ -282,6 +282,12 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
         {BluetoothHostInterfaceCode::BT_NOTIFY_DIALOG_RESULT,
             std::bind(&BluetoothHostStub::NotifyDialogResultInner,
                 std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::START_REMOTE_SDP_SEARCH,
+            std::bind(&BluetoothHostStub::StartRemoteSdpSearchInner,
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::GET_REMOTE_SERVICES,
+            std::bind(&BluetoothHostStub::GetRemoteServicesInner,
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
 };
 
 BluetoothHostStub::BluetoothHostStub(){};
@@ -1493,6 +1499,16 @@ int32_t BluetoothHostStub::SetCarKeyCardDataInner(MessageParcel &data, MessagePa
 }
 
 int32_t BluetoothHostStub::NotifyDialogResultInner(MessageParcel &data, MessageParcel &reply)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t BluetoothHostStub::StartRemoteSdpSearchInner(MessageParcel &data, MessageParcel &reply)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t GetRemoteServicesInner(MessageParcel &data, MessageParcel &reply)
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
