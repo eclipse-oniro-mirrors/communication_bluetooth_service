@@ -1980,13 +1980,13 @@ int32_t BluetoothHostServer::NotifyDialogResult(uint32_t dialogType, bool dialog
 void BluetoothHostServer::SetCallingPackageName(const std::string &address, const std::string &packageName)
 {}
 
-bool BluetoothHostServer::StartRemoteSdpSearch(const std::string &address, const std::string &uuid)
+int32_t BluetoothHostServer::StartRemoteSdpSearch(const std::string &address, const std::string &uuid)
 {
-    return true;
+    return BT_ERR_API_NOT_SUPPORT;
 }
-bool BluetoothHostServer::GetRemoteServices(const std::string &address)
+int32_t BluetoothHostServer::GetRemoteServices(const std::string &address)
 {
-    return true;
+    return BT_ERR_API_NOT_SUPPORT;
 }
 }  // namespace Bluetooth
 }  // namespace OHOS
