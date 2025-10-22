@@ -1509,7 +1509,7 @@ int32_t BluetoothHostStub::StartRemoteSdpSearchInner(MessageParcel &data, Messag
     return NO_ERROR;
 }
 
-int32_t GetRemoteServicesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetRemoteServicesInner(MessageParcel &data, MessageParcel &reply)
 {
     reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
     return NO_ERROR;
