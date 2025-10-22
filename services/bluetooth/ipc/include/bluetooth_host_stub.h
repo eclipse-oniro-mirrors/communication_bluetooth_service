@@ -120,6 +120,8 @@ private:
     int32_t GetCarKeyDfxDataInner(MessageParcel &data, MessageParcel &reply);
     int32_t SetCarKeyCardDataInner(MessageParcel &data, MessageParcel &reply);
     int32_t NotifyDialogResultInner(MessageParcel &data, MessageParcel &reply);
+    int32_t StartRemoteSdpSearchInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetRemoteServicesInner(MessageParcel &data, MessageParcel &reply);
     static const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParcel &, MessageParcel &)>>
         memberFuncMap_;
 
