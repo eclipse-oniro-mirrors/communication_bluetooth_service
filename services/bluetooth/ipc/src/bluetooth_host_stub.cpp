@@ -901,21 +901,22 @@ int32_t BluetoothHostStub::GetPairedDevicesInner(MessageParcel &data, MessagePar
 {
     std::vector<BluetoothRawAddress> pairDevice;
     int32_t result = GetPairedDevices(pairDevice);
-    bool ret = true;
+    if (!reply.WriteInt32(result)) {
+        HILOGE("BluetoothHostStub: reply writing result failed in: %{public}s.", __func__);
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
+    if (result != BT_NO_ERROR) {
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
     if (!reply.WriteInt32(pairDevice.size())) {
-        HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
+        HILOGE("BluetoothHostStub: reply writing size failed in: %{public}s.", __func__);
         return BT_ERR_IPC_TRANS_FAILED;
     } else {
         for (auto device : pairDevice) {
             reply.WriteParcelable(&device);
         }
     }
-    ret = reply.WriteInt32(result);
-    if (!ret) {
-        HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
-        return BT_ERR_IPC_TRANS_FAILED;
-    }
-    return NO_ERROR;
+    return BT_NO_ERROR;
 }
 
 int32_t BluetoothHostStub::StartPairInner(MessageParcel &data, MessageParcel &reply)
