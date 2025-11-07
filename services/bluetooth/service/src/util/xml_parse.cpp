@@ -98,6 +98,9 @@ void XmlParse::impl::ConstructPropertyNode(
     }
     if (propertyNode == NULL) {
         propertyNode = xmlNewNode(NULL, BAD_CAST "T1");
+        if (propertyNode == NULL) {
+            return;
+        }
         xmlSetProp(propertyNode, BAD_CAST "property", (xmlChar *)property.c_str());
         xmlAddChild(sectionNode, propertyNode);
     }
@@ -127,6 +130,9 @@ xmlNodePtr XmlParse::impl::FindOrCreatePropertyNode(
 
     if (sectionNode == NULL) {
         sectionNode = xmlNewNode(NULL, BAD_CAST "T1");
+        if (sectionNode == NULL) {
+            return NULL;
+        }
         xmlSetProp(sectionNode, BAD_CAST "section", (xmlChar *)section.c_str());
         xmlAddChild(rootNode, sectionNode);
     }
@@ -142,6 +148,9 @@ xmlNodePtr XmlParse::impl::FindOrCreatePropertyNode(
         }
         if (!subSectionNode) {
             subSectionNode = xmlNewNode(NULL, BAD_CAST "T1");
+            if (subSectionNode == NULL) {
+                return NULL;
+            }
             xmlSetProp(subSectionNode, BAD_CAST "section", (xmlChar *)subSection.c_str());
             xmlAddChild(sectionNode, subSectionNode);
         }
