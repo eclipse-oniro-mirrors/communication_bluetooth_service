@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2021-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1651,6 +1651,7 @@ void BleCentralManagerImpl::Stop() const
     LOG_DEBUG("[BleCentralManagerImpl] %{public}s", __func__);
 
     int ret;
+    std::lock_guard<std::recursive_mutex> lk(pimpl->mutex_);
     if (BleFeature::GetInstance().IsExtendedScanSupported()) {
         ret = SetExScanEnable(false);
     } else {
@@ -1662,7 +1663,6 @@ void BleCentralManagerImpl::Stop() const
         centralManagerCallbacks_->OnStartOrStopScanEvent(SCAN_FAILED_INTERNAL_ERROR, false);
         return;
     } else {
-        std::lock_guard<std::recursive_mutex> lk(pimpl->mutex_);
         pimpl->stopScanType_ = STOP_SCAN_TYPE_NOR;
         pimpl->isStopScan_ = true;
         pimpl->settings_.SetReportDelay(0);
