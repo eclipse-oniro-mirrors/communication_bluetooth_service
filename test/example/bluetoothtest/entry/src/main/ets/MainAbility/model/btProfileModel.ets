@@ -22,11 +22,13 @@ import BaseModel from '../../Utils/BaseModel';
 import bt from '@ohos.bluetooth';
 import hid from '@ohos.bluetooth.hid'
 import pan from '@ohos.bluetooth.pan'
+import { opp } from '@kit.ConnectivityKit'
 
 
 export class BTProfileModel extends BaseModel {
   private TAG = ConfigData.TAG + 'BTProfileModel';
-  private profiles: bt.A2dpSourceProfile | bt.HandsFreeAudioGatewayProfile | hid.HidHostProfile | pan.PanProfile | bt.OppProfile | null [] = []
+  private profiles: bt.A2dpSourceProfile | bt.HandsFreeAudioGatewayProfile | hid.HidHostProfile |
+    pan.PanProfile | opp.OppServerProfile | null [] = []
   public PROFILE_A2DP_SOURCE = 1;
   public PROFILE_HANDS_FREE_AUDIO_GATEWAY = 4;
   public PROFILE_HID_HOST = 6;
@@ -49,7 +51,7 @@ export class BTProfileModel extends BaseModel {
 
     this.profiles[ this.PROFILE_PAN_NETWORK ] = pan.createPanProfile() as pan.PanProfile;
 
-    this.profiles[ this.PROFILE_OPP ] = bt.getProfile(this.PROFILE_OPP) as bt.OppProfile;
+    this.profiles[ this.PROFILE_OPP ] = opp.createOppServerProfile();
 
     console.log("this.profiles[ this.PROFILE_A2DP_SOURCE ]" + JSON.stringify(bt.getProfile(this.PROFILE_A2DP_SOURCE)))
     console.log("this.profiles[ this.PROFILE_HANDS_FREE_AUDIO_GATEWAY ]" + bt.getProfile(this.PROFILE_HANDS_FREE_AUDIO_GATEWAY))
@@ -95,14 +97,15 @@ export class BTProfileModel extends BaseModel {
     return null;
   }
 
-  getOppProfile(): bt.OppProfile | null {
+  getOppProfile(): opp.OppServerProfile | null {
     if ( this.profiles[ this.PROFILE_OPP ] != null ) {
-      return this.profiles[ this.PROFILE_OPP ] as bt.OppProfile;
+      return this.profiles[ this.PROFILE_OPP ] as opp.OppServerProfile;
     }
     return null;
   }
 
-  getProfile(type: number): bt.A2dpSourceProfile | bt.HandsFreeAudioGatewayProfile | hid.HidHostProfile | pan.PanProfile | bt.OppProfile | null {
+  getProfile(type: number): bt.A2dpSourceProfile | bt.HandsFreeAudioGatewayProfile | hid.HidHostProfile |
+    pan.PanProfile | opp.OppServerProfile | null {
     if ( this.profiles[ type ] != null ) {
       return this.profiles[ type ];
     }

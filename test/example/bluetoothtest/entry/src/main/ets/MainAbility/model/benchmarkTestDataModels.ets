@@ -54,364 +54,364 @@ interface BenchmarkTest {
 
 export const BrBenchmarkTestCase: BenchmarkTest[] = [
   {
-    'name' : '注册状态变化' ,
-    'detail' : '1' ,
-    'method' : 'on.stateChange' ,
-    'api' : testOnStateChange ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BrBenchmark
+    name : '注册状态变化' ,
+    detail : '1' ,
+    method : 'on.stateChange' ,
+    api : testOnStateChange ,
+    result : 'None' ,
+    category : BenchmarkCategory.BrBenchmark
   },
   {
-    'name' : '开蓝牙' ,
-    'detail' : '2' ,
-    'method' : 'enableBluetooth' ,
-    'api' : testEnableBluetooth ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BrBenchmark
+    name : '开蓝牙' ,
+    detail : '2' ,
+    method : 'enableBluetooth' ,
+    api : testEnableBluetooth ,
+    result : 'None' ,
+    category : BenchmarkCategory.BrBenchmark
   },
   {
-    'name' : '获取状态' ,
-    'detail' : '3' ,
-    'method' : 'getState' ,
-    'api' : testGetState ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BrBenchmark
+    name : '获取状态' ,
+    detail : '3' ,
+    method : 'getState' ,
+    api : testGetState ,
+    result : 'None' ,
+    category : BenchmarkCategory.BrBenchmark
   },
   {
-    'name' : '设置本地名称' ,
-    'detail' : '4' ,
-    'method' : 'setLocalName' ,
-    'api' : testSetLocalName ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BrBenchmark
+    name : '设置本地名称' ,
+    detail : '4' ,
+    method : 'setLocalName' ,
+    api : testSetLocalName ,
+    result : 'None' ,
+    category : BenchmarkCategory.BrBenchmark
   },
   {
-    'name' : '获取本地名称' ,
-    'detail' : '5' ,
-    'method' : 'getLocalName' ,
-    'api' : testGetLocalName ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BrBenchmark
+    name : '获取本地名称' ,
+    detail : '5' ,
+    method : 'getLocalName' ,
+    api : testGetLocalName ,
+    result : 'None' ,
+    category : BenchmarkCategory.BrBenchmark
   },
   {
-    'name' : '设置扫描模式' ,
-    'detail' : '6' ,
-    'method' : 'setBluetoothScanMode' ,
-    'api' : testSetBluetoothScanMode ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BrBenchmark
+    name : '设置扫描模式' ,
+    detail : '6' ,
+    method : 'setBluetoothScanMode' ,
+    api : testSetBluetoothScanMode ,
+    result : 'None' ,
+    category : BenchmarkCategory.BrBenchmark
   },
   {
-    'name' : '获取扫描模式' ,
-    'detail' : '7' ,
-    'method' : 'getBluetoothScanMode' ,
-    'api' : testGetBluetoothScanMode ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BrBenchmark
+    name : '获取扫描模式' ,
+    detail : '7' ,
+    method : 'getBluetoothScanMode' ,
+    api : testGetBluetoothScanMode ,
+    result : 'None' ,
+    category : BenchmarkCategory.BrBenchmark
   },
 ]
 
 export const BleBenchmarkTestCase: BenchmarkTest[] = [
   {
-    'name' : '注册状态变化' ,
-    'detail' : '1' ,
-    'method' : 'on.stateChange' ,
-    'api' : testOnStateChange ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BleBenchmark
+    name : '注册状态变化' ,
+    detail : '1' ,
+    method : 'on.stateChange' ,
+    api : testOnStateChange ,
+    result : 'None' ,
+    category : BenchmarkCategory.BleBenchmark
   },
   {
-    'name' : '开蓝牙' ,
-    'detail' : '2' ,
-    'method' : 'enableBluetooth' ,
-    'api' : testEnableBluetooth ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BleBenchmark
+    name : '开蓝牙' ,
+    detail : '2' ,
+    method : 'enableBluetooth' ,
+    api : testEnableBluetooth ,
+    result : 'None' ,
+    category : BenchmarkCategory.BleBenchmark
   },
   {
-    'name' : '获取状态' ,
-    'detail' : '3' ,
-    'method' : 'getState' ,
-    'api' : testGetState ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BleBenchmark
+    name : '获取状态' ,
+    detail : '3' ,
+    method : 'getState' ,
+    api : testGetState ,
+    result : 'None' ,
+    category : BenchmarkCategory.BleBenchmark
   },
   {
-    'name' : '设置本地名称' ,
-    'detail' : '4' ,
-    'method' : 'setLocalName' ,
-    'api' : testSetLocalName ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BleBenchmark
+    name : '设置本地名称' ,
+    detail : '4' ,
+    method : 'setLocalName' ,
+    api : testSetLocalName ,
+    result : 'None' ,
+    category : BenchmarkCategory.BleBenchmark
   },
   {
-    'name' : '获取本地名称' ,
-    'detail' : '5' ,
-    'method' : 'getLocalName' ,
-    'api' : testGetLocalName ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BleBenchmark
+    name : '获取本地名称' ,
+    detail : '5' ,
+    method : 'getLocalName' ,
+    api : testGetLocalName ,
+    result : 'None' ,
+    category : BenchmarkCategory.BleBenchmark
   },
   {
-    'name' : '设置扫描模式' ,
-    'detail' : '6' ,
-    'method' : 'setBluetoothScanMode' ,
-    'api' : testSetBluetoothScanMode ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BleBenchmark
+    name : '设置扫描模式' ,
+    detail : '6' ,
+    method : 'setBluetoothScanMode' ,
+    api : testSetBluetoothScanMode ,
+    result : 'None' ,
+    category : BenchmarkCategory.BleBenchmark
   },
   {
-    'name' : '获取扫描模式' ,
-    'detail' : '7' ,
-    'method' : 'getBluetoothScanMode' ,
-    'api' : testGetBluetoothScanMode ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.BleBenchmark
+    name : '获取扫描模式' ,
+    detail : '7' ,
+    method : 'getBluetoothScanMode' ,
+    api : testGetBluetoothScanMode ,
+    result : 'None' ,
+    category : BenchmarkCategory.BleBenchmark
   },
 
 ]
 
 export const GattClientBenchmarkTestCase: BenchmarkTest[] = [
   {
-    'name' : '创建Gatt客户端' ,
-    'detail' : '1' ,
-    'method' : 'createGattClient' ,
-    'api' : testCreateGattClient ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattClientBenchmark
+    name : '创建Gatt客户端' ,
+    detail : '1' ,
+    method : 'createGattClient' ,
+    api : testCreateGattClient ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    'name' : 'Ble连接状态' ,
-    'detail' : '2' ,
-    'method' : 'on.BleConnectionStateChange' ,
-    'api' : testOnBLEConnectionStateChange ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattClientBenchmark
+    name : 'Ble连接状态' ,
+    detail : '2' ,
+    method : 'on.BleConnectionStateChange' ,
+    api : testOnBLEConnectionStateChange ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    'name' : '连接' ,
-    'detail' : '3' ,
-    'method' : 'connect' ,
-    'api' : testConnect ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattClientBenchmark
+    name : '连接' ,
+    detail : '3' ,
+    method : 'connect' ,
+    api : testConnect ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    'name' : '设置通知特性更改' ,
-    'detail' : '4' ,
-    'method' : 'setNotifyCharacteristicChanged' ,
-    'api' : testSetNotifyCharacteristicChanged ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattClientBenchmark
+    name : '设置通知特性更改' ,
+    detail : '4' ,
+    method : 'setNotifyCharacteristicChanged' ,
+    api : testSetNotifyCharacteristicChanged ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    'name' : 'Ble特征值变化' ,
-    'detail' : '5' ,
-    'method' : 'on.BleCharacteristicChange' ,
-    'api' : testOnBLECharacteristicChange ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattClientBenchmark
+    name : 'Ble特征值变化' ,
+    detail : '5' ,
+    method : 'on.BleCharacteristicChange' ,
+    api : testOnBLECharacteristicChange ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    'name' : '获取服务callback' ,
-    'detail' : '6' ,
-    'method' : 'getServices(Callback)' ,
-    'api' : testGetServicesCallback ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattClientBenchmark
+    name : '获取服务callback' ,
+    detail : '6' ,
+    method : 'getServices(Callback)' ,
+    api : testGetServicesCallback ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    'name' : '读取特征值callback' ,
-    'detail' : '7' ,
-    'method' : 'readCharacteristicValue(callback)' ,
-    'api' : testReadCharacteristicValueCallback ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattClientBenchmark
+    name : '读取特征值callback' ,
+    detail : '7' ,
+    method : 'readCharacteristicValue(callback)' ,
+    api : testReadCharacteristicValueCallback ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    'name' : '写入特征值' ,
-    'detail' : '8' ,
-    'method' : 'writeCharacteristicValue' ,
-    'api' : testWriteCharacteristicValue ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattClientBenchmark
+    name : '写入特征值' ,
+    detail : '8' ,
+    method : 'writeCharacteristicValue' ,
+    api : testWriteCharacteristicValue ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattClientBenchmark
   },
 ]
 
 export const GattServerBenchmarkTestCase: BenchmarkTest[] = [
   {
-    'name' : '创建Gatt服务器' ,
-    'detail' : '1' ,
-    'method' : 'createGattServer' ,
-    'api' : testCreateGattServer ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattServerBenchmark
+    name : '创建Gatt服务器' ,
+    detail : '1' ,
+    method : 'createGattServer' ,
+    api : testCreateGattServer ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattServerBenchmark
   },
   {
-    'name' : '添加服务' ,
-    'detail' : '2' ,
-    'method' : 'addService' ,
-    'api' : testAddService ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattServerBenchmark
+    name : '添加服务' ,
+    detail : '2' ,
+    method : 'addService' ,
+    api : testAddService ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattServerBenchmark
   },
   {
-    'name' : '连接状态' ,
-    'detail' : '3' ,
-    'method' : 'on.connectStateChange' ,
-    'api' : testOnConnectStateChange ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattServerBenchmark
+    name : '连接状态' ,
+    detail : '3' ,
+    method : 'on.connectStateChange' ,
+    api : testOnConnectStateChange ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattServerBenchmark
   },
   {
-    'name' : '开始广播' ,
-    'detail' : '4' ,
-    'method' : 'startAdvertising' ,
-    'api' : testStartAdvertising ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattServerBenchmark
+    name : '开始广播' ,
+    detail : '4' ,
+    method : 'startAdvertising' ,
+    api : testStartAdvertising ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattServerBenchmark
   },
   {
-    'name' : '读取特征值' ,
-    'detail' : '5' ,
-    'method' : 'on.characteristicRead' ,
-    'api' : testOnCharacteristicRead ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattServerBenchmark
+    name : '读取特征值' ,
+    detail : '5' ,
+    method : 'on.characteristicRead' ,
+    api : testOnCharacteristicRead ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattServerBenchmark
   },
   {
-    'name' : '写入特征值' ,
-    'detail' : '6' ,
-    'method' : 'on.characteristicWrite' ,
-    'api' : testOnCharacteristicWrite ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.GattServerBenchmark
+    name : '写入特征值' ,
+    detail : '6' ,
+    method : 'on.characteristicWrite' ,
+    api : testOnCharacteristicWrite ,
+    result : 'None' ,
+    category : BenchmarkCategory.GattServerBenchmark
   },
 ]
 
 export const SppClientBenchmarkTestCase: BenchmarkTest[] = [
   {
-    'name' : '注册状态变化' ,
-    'detail' : '1' ,
-    'method' : 'on.stateChange' ,
-    'api' : testOnStateChange ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppClientBenchmark
+    name : '注册状态变化' ,
+    detail : '1' ,
+    method : 'on.stateChange' ,
+    api : testOnStateChange ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    'name' : '开蓝牙' ,
-    'detail' : '2' ,
-    'method' : 'enableBluetooth' ,
-    'api' : testEnableBluetooth ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppClientBenchmark
+    name : '开蓝牙' ,
+    detail : '2' ,
+    method : 'enableBluetooth' ,
+    api : testEnableBluetooth ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    'name' : '获取状态' ,
-    'detail' : '3' ,
-    'method' : 'getState' ,
-    'api' : testGetState ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppClientBenchmark
+    name : '获取状态' ,
+    detail : '3' ,
+    method : 'getState' ,
+    api : testGetState ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    'name' : '设置本地名称' ,
-    'detail' : '4' ,
-    'method' : 'setLocalName' ,
-    'api' : testSetLocalName ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppClientBenchmark
+    name : '设置本地名称' ,
+    detail : '4' ,
+    method : 'setLocalName' ,
+    api : testSetLocalName ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    'name' : '获取本地名称' ,
-    'detail' : '5' ,
-    'method' : 'getLocalName' ,
-    'api' : testGetLocalName ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppClientBenchmark
+    name : '获取本地名称' ,
+    detail : '5' ,
+    method : 'getLocalName' ,
+    api : testGetLocalName ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    'name' : '设置SPP扫描模式' ,
-    'detail' : '6' ,
-    'method' : 'setBluetoothScanMode' ,
-    'api' : testSetBluetoothScanMode ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppClientBenchmark
+    name : '设置SPP扫描模式' ,
+    detail : '6' ,
+    method : 'setBluetoothScanMode' ,
+    api : testSetBluetoothScanMode ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    'name' : '获取扫描模式' ,
-    'detail' : '7' ,
-    'method' : 'getBluetoothScanMode' ,
-    'api' : testGetBluetoothScanMode ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppClientBenchmark
+    name : '获取扫描模式' ,
+    detail : '7' ,
+    method : 'getBluetoothScanMode' ,
+    api : testGetBluetoothScanMode ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    'name' : 'Spp客户端连接(安全模式)' ,
-    'detail' : '8' ,
-    'method' : 'sppConnect' ,
-    'api' : testSppClientConnectSafe ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppClientBenchmark
+    name : 'Spp客户端连接(安全模式)' ,
+    detail : '8' ,
+    method : 'sppConnect' ,
+    api : testSppClientConnectSafe ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppClientBenchmark
   },
 ]
 
 export const SppServerBenchmarkTestCase: BenchmarkTest[] = [
   {
-    'name' : '注册状态变化' ,
-    'detail' : '1' ,
-    'method' : 'on.stateChange' ,
-    'api' : testOnStateChange ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppServerBenchmark
+    name : '注册状态变化' ,
+    detail : '1' ,
+    method : 'on.stateChange' ,
+    api : testOnStateChange ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    'name' : '开蓝牙' ,
-    'detail' : '2' ,
-    'method' : 'enableBluetooth' ,
-    'api' : testEnableBluetooth ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppServerBenchmark
+    name : '开蓝牙' ,
+    detail : '2' ,
+    method : 'enableBluetooth' ,
+    api : testEnableBluetooth ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    'name' : '获取状态' ,
-    'detail' : '3' ,
-    'method' : 'getState' ,
-    'api' : testGetState ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppServerBenchmark
+    name : '获取状态' ,
+    detail : '3' ,
+    method : 'getState' ,
+    api : testGetState ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    'name' : '设置本地名称' ,
-    'detail' : '4' ,
-    'method' : 'setLocalName' ,
-    'api' : testSetLocalName ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppServerBenchmark
+    name : '设置本地名称' ,
+    detail : '4' ,
+    method : 'setLocalName' ,
+    api : testSetLocalName ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    'name' : '获取本地名称' ,
-    'detail' : '5' ,
-    'method' : 'getLocalName' ,
-    'api' : testGetLocalName ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppServerBenchmark
+    name : '获取本地名称' ,
+    detail : '5' ,
+    method : 'getLocalName' ,
+    api : testGetLocalName ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    'name' : '设置SPP扫描模式' ,
-    'detail' : '6' ,
-    'method' : 'setBluetoothScanMode' ,
-    'api' : testSetBluetoothScanMode ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppServerBenchmark
+    name : '设置SPP扫描模式' ,
+    detail : '6' ,
+    method : 'setBluetoothScanMode' ,
+    api : testSetBluetoothScanMode ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    'name' : '获取扫描模式' ,
-    'detail' : '7' ,
-    'method' : 'getBluetoothScanMode' ,
-    'api' : testGetBluetoothScanMode ,
-    'result' : 'None' ,
-    'category' : BenchmarkCategory.SppServerBenchmark
+    name : '获取扫描模式' ,
+    detail : '7' ,
+    method : 'getBluetoothScanMode' ,
+    api : testGetBluetoothScanMode ,
+    result : 'None' ,
+    category : BenchmarkCategory.SppServerBenchmark
   },
 ]
 
