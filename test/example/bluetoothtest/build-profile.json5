@@ -18,22 +18,24 @@
       {
         "name": "default",
         "material": {
-          "certpath": "C:\\Users\\kaihong\\.ohos\\config\\openharmony\\auto_ohos_default_bluetoothtest_com.example.myapplicationbt.cer",
-          "storePassword": "0000001B348872D05640B2A1092FFB2B2D083ED96916795F17E95EF16DF5D2E3CB0FCB1A9FF7E05A773A36",
+          "certpath": "C:/Users/Administrator/.ohos/config/openharmony/default_bluetoothtest_RG-BAy_lt-8l_PwsoJ06pfRQWy_SsnNzzGcNrd-4zWg=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B3BDA70A4C58E362FD2F436450570CD70D2F51DCDC42BCEF3AE1D878E74AB38923327DD09C63C8E",
-          "profile": "C:\\Users\\kaihong\\.ohos\\config\\openharmony\\auto_ohos_default_bluetoothtest_com.example.myapplicationbt.p7b",
+          "keyPassword": "0000001B589A11C71B04E339E205932112DEFFE64A21184805D12758D824A79259F7E58B7A0380B657955F",
+          "profile": "C:/Users/Administrator/.ohos/config/openharmony/default_bluetoothtest_RG-BAy_lt-8l_PwsoJ06pfRQWy_SsnNzzGcNrd-4zWg=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\kaihong\\.ohos\\config\\openharmony\\auto_ohos_default_bluetoothtest_com.example.myapplicationbt.p12"
+          "storeFile": "C:/Users/Administrator/.ohos/config/openharmony/default_bluetoothtest_RG-BAy_lt-8l_PwsoJ06pfRQWy_SsnNzzGcNrd-4zWg=.p12",
+          "storePassword": "0000001B476CC679492C16E58CC4F706FF4D51224A6E4800142848DBBA8C758648CFBA82C19D879850B146"
         }
       }
     ],
-    "compileSdkVersion": 11,
-    "compatibleSdkVersion": 10,
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
+        "compileSdkVersion": 20,
+        "compatibleSdkVersion": 10,
+        "arkTSVersion": "1.0",
+        "targetSdkVersion": 20,
       }
     ]
   },

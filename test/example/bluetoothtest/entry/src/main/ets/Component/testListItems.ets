@@ -28,7 +28,7 @@ export struct TestListItem {
   }
 
   build() {
-    Navigator({ target : this.testItem.url }) {
+    Navigator({ target : this.testItem.url ? this.testItem.url : "" }) {
       Flex({ justifyContent : FlexAlign.Start , alignItems : ItemAlign.Center }) {
         Row() {
           Image(this.testItem.image)

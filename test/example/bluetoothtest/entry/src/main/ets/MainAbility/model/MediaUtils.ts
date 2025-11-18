@@ -14,7 +14,7 @@
  */
 import image from '@ohos.multimedia.image'
 import fileio from '@ohos.fileio'
-import { photoAccessHelper } from 'Kit.MediaLibraryKit'
+import { photoAccessHelper } from '@kit.MediaLibraryKit'
 import DateTimeUtil from './DateTimeUtil'
 import Logger from './Logger'
 import promptAction from '@ohos.promptAction';
@@ -23,7 +23,7 @@ const TAG: string = '[MediaUtils]'
 
 class MediaUtils {
   async createAndGetFile(context: any) {
-    let mediaTest = photoAccessHelper.getMediaLibrary(context)
+    let mediaTest = photoAccessHelper.getPhotoAccessHelper(context)
     let options: photoAccessHelper.CreateOptions = {
       title: 'IMG_'
     }
@@ -32,24 +32,25 @@ class MediaUtils {
 
   async savePicture(data: image.PixelMap, context: any) {
     Logger.info(TAG, `savePicture`)
-    let packOpts: image.PackingOption = {
-      format: "image/jpeg", quality: 100
-    }
-    let imagePackerApi = image.createImagePacker()
-    let arrayBuffer = await imagePackerApi.packing(data, packOpts)
-    let fileAsset = await this.createAndGetFile(context)
-    let fd = await fileAsset.open('Rw')
-    imagePackerApi.release()
-    try {
-      await fileio.write(fd, arrayBuffer)
-    } catch(err) {
-      Logger.error(`write failed, code is ${err.code}, message is ${err.message}`)
-    }
-    await fileAsset.close(fd)
-    Logger.info(TAG, `write done`)
-    promptAction.showToast({
-      message: '图片保存成功', duration: 1000
-    })
+    //[TODO] 接口变化重新写
+    // let packOpts: image.PackingOption = {
+    //   format: "image/jpeg", quality: 100
+    // }
+    // let imagePackerApi = image.createImagePacker()
+    // let arrayBuffer = await imagePackerApi.packing(data, packOpts)
+    // let fileAsset = await this.createAndGetFile(context)
+    // let fd = await fileAsset.open('Rw')
+    // imagePackerApi.release()
+    // try {
+    //   await fileio.write(fd, arrayBuffer)
+    // } catch(err) {
+    //   Logger.error(`write failed, code is ${err.code}, message is ${err.message}`)
+    // }
+    // await fileAsset.close(fd)
+    // Logger.info(TAG, `write done`)
+    // promptAction.showToast({
+    //   message: '图片保存成功', duration: 1000
+    // })
   }
 }
 
