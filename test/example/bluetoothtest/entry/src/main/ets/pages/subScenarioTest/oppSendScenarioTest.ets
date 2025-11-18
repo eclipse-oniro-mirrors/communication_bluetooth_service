@@ -20,6 +20,7 @@ import { PageTitle } from '../../Component/pageTitle';
 import { TestImageDisplay } from '../../Component/testImageDisplay';
 import { TestData } from '../../MainAbility/model/testData'
 import bluetooth from '@ohos.bluetooth';
+import { opp } from '@kit.ConnectivityKit';
 
 /**
  * OppSend Scenario Test Page Of Bluetooth test
@@ -31,7 +32,7 @@ struct oppSendScenarioTest {
   @State changeIndex: number = - 1;
   private testItem: TestData = (router.getParams() as myParams).testItem
   @StorageLink("oppSendScenarioMessage") oppSendScenarioMessage: string = ""
-  private oppProfile!: bluetooth.OppProfile
+  private oppProfile!: opp.OppServerProfile;
   private pairDevices: PairDevices[] = []
   @State serverMac: string = "00:00:00:00:00:00";
   private fileName: string = "test.jpg";
@@ -39,7 +40,7 @@ struct oppSendScenarioTest {
 
   aboutToAppear() {
     try {
-      this.oppProfile = bluetooth.getProfile(bluetooth.ProfileId.PROFILE_OPP) as bluetooth.OppProfile;
+      this.oppProfile = opp.createOppServerProfile();
       testLog("OppSend get opp profile success");
     } catch( error ) {
       testLog("OppSend get opp profile fail, err: " + JSON.stringify(error));
@@ -176,12 +177,16 @@ struct oppSendScenarioTest {
               .alignSelf(ItemAlign.Center)
               .onClick(async(event: ClickEvent) => {
                 try {
-                  let result: boolean = this.oppProfile.sendFile(this.serverMac , [ "/data/bluetooth/log/" + this.fileName ] , [ this.fileType ])
-                  if ( result ) {
-                    this.oppSendScenarioMessage += "opp发送文件成功！ result: " + JSON.stringify(result)
-                  } else {
-                    this.oppSendScenarioMessage += "opp发送文件失败， result: " + JSON.stringify(result) + "; 请核对文件名称或文件路径或者设备配对情况"
-                  }
+                  let fileHolders : Array<opp.FileHolder> = [];
+                  this.oppProfile.sendFile(this.serverMac , fileHolders).then(() => {
+                    let result: boolean = true;
+                    if ( result ) {
+                      this.oppSendScenarioMessage += "opp发送文件成功！ result: " + JSON.stringify(result)
+                    } else {
+                      this.oppSendScenarioMessage += "opp发送文件失败， result: " + JSON.stringify(result) +
+                        "; 请核对文件名称或文件路径或者设备配对情况"
+                    }
+                  })
                 } catch( error ) {
                   this.oppSendScenarioMessage += "opp发送文件失败，err :" + JSON.stringify(error)
                 }

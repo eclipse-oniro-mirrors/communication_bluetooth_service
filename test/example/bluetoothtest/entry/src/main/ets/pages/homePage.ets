@@ -22,6 +22,7 @@ import { AutoTest } from '../Component/autoTest';
 import { ProfileTest } from '../Component/profileTest';
 import { BenchmarkTest } from '../Component/benchmarkTest';
 import abilityAccessCtrl from '@ohos.abilityAccessCtrl';
+import common from '@ohos.app.ability.common';
 
 const TAG = '[Screenshot]'
 
@@ -93,9 +94,12 @@ struct HomePage {
 
   aboutToAppear() {
     let abilityMgr = abilityAccessCtrl.createAtManager();
-    abilityMgr.requestPermissionsFromUser(globalThis.context , [ "ohos.permission.LOCATION", "ohos.permission.APPROXIMATELY_LOCATION",
-      "ohos.permission.CAPTURE_SCREEN", "ohos.permission.WRITE_MEDIA", "ohos.permission.READ_MEDIA" ] , (error , result) => {
-      console.log("bluetooth requestPermissionsFromUser, err: " + JSON.stringify(error) + " ; result: " + JSON.stringify(result))
+    let context: Context = getContext(this) as common.UIAbilityContext;
+    abilityMgr.requestPermissionsFromUser(context , [ "ohos.permission.LOCATION", "ohos.permission.ACCESS_BLUETOOTH",
+      "ohos.permission.APPROXIMATELY_LOCATION", "ohos.permission.CAPTURE_SCREEN", "ohos.permission.WRITE_MEDIA",
+      "ohos.permission.READ_MEDIA" ] , (error , result) => {
+        console.log("bluetooth requestPermissionsFromUser, err: " + JSON.stringify(error) +
+          " ; result: " + JSON.stringify(result))
     })
   }
 

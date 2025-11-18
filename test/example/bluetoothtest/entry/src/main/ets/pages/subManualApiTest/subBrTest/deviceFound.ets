@@ -228,7 +228,7 @@ export struct PairedDeviceComponent {
     && item.connectionState != DeviceState.STATE_DISCONNECTING ) {
       LogUtil.info(this.TAG_PAGE + 'item right icon on click : ' + JSON.stringify(item));
       let param: BluetoothDeviceParam = {
-        'bluetoothDevice' : JSON.stringify(item)
+        bluetoothDevice : JSON.stringify(item)
       }
       router.pushUrl({
         url : PAGE_URI_BLUETOOTH_PAIRED_DEVICE_INFO ,

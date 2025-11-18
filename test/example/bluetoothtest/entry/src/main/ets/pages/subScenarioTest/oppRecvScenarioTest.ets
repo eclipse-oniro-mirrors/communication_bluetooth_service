@@ -20,6 +20,8 @@ import { TestImageDisplay } from '../../Component/testImageDisplay';
 import { TestData } from '../../MainAbility/model/testData'
 import bluetooth from '@ohos.bluetooth';
 import promptAction from '@ohos.promptAction';
+import { opp } from '@kit.ConnectivityKit'
+import { fileIo as fs} from '@kit.CoreFileKit';
 
 /**
  * OppRecv Scenario Test Page Of Bluetooth test
@@ -31,7 +33,7 @@ struct OppRecvScenarioTest {
   private testItem: TestData = (router.getParams() as myParams).testItem
   @State changeIndex: number = - 1;
   @StorageLink("oppRecvScenarioMessage") oppRecvScenarioMessage: string = ""
-  private oppProfile!: bluetooth.OppProfile
+  private oppProfile!: opp.OppServerProfile
   @State showProgress: boolean = false;
   @State curProgress: number = 0;
   @State serverMac: string = "00:00:00:00:00:00";
@@ -44,7 +46,9 @@ struct OppRecvScenarioTest {
       fileName : this.fileName ,
       confirm : () => {
         try {
-          this.oppProfile.setIncomingFileConfirmation(true);
+          let pathDir = "/test.jpg"; // Replace the example path with the actual one.
+          let file = fs.openSync(pathDir, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
+          this.oppProfile.setIncomingFileConfirmation(true, file.fd);
           this.receiveDialogController.close();
           this.onTransferStateChange();
           console.log("receive success");
@@ -54,7 +58,9 @@ struct OppRecvScenarioTest {
       } ,
       cancel : () => {
         try {
-          this.oppProfile.setIncomingFileConfirmation(false);
+          let pathDir = "/test.jpg"; // Replace the example path with the actual one.
+          let file = fs.openSync(pathDir, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
+          this.oppProfile.setIncomingFileConfirmation(false, file.fd);
           this.receiveDialogController.close();
           console.log("reject receive success");
         } catch( error ) {
@@ -66,7 +72,7 @@ struct OppRecvScenarioTest {
 
   aboutToAppear() {
     try {
-      this.oppProfile = bluetooth.getProfile(bluetooth.ProfileId.PROFILE_OPP) as bluetooth.OppProfile
+      this.oppProfile = opp.createOppServerProfile();
       testLog("oppRecv get opp profile success");
     } catch( error ) {
       testLog("oppRecv get opp profile fail, err: " + JSON.stringify(error));
@@ -208,8 +214,8 @@ struct OppRecvScenarioTest {
                 try {
                   this.oppProfile.on("receiveIncomingFile" , ( information) => {
                     testLog("opp开启接收文件")
-                    this.deviceName = information.deviceName;
-                    this.fileName = information.fileName;
+                    this.deviceName = information.remoteDeviceName;
+                    this.fileName = information.filePath;
                     this.oppRecvScenarioMessage = "发送端为：" + this.deviceName + ";文件名为：" + this.fileName + "\n"
                     testLog(this.oppRecvScenarioMessage);
                     console.log(JSON.stringify(information));

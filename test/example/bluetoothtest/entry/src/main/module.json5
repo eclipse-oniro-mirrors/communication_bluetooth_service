@@ -54,6 +54,15 @@
       },
       {
         "name": "ohos.permission.WRITE_IMAGEVIDEO",
+        "reason": "$string:reason",
+        "usedScene": {
+        }
+      },
+      {
+        "name": "ohos.permission.ACCESS_BLUETOOTH",
+        "reason": "$string:reason",
+        "usedScene": {
+        }
       },
       {
         "name": "ohos.permission.DISCOVER_BLUETOOTH"
@@ -66,11 +75,16 @@
       },
       {
         "name": "ohos.permission.LOCATION",
-        "reason": "$string:reason"
+        "reason": "$string:reason",
+        "usedScene": {
+        }
       },
       {
         "name": "ohos.permission.APPROXIMATELY_LOCATION",
-        "reason": "$string:reason"
+        "reason": "$string:reason",
+        "usedScene": {
+
+        }
       }
     ]
   }
