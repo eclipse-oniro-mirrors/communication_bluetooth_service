@@ -304,7 +304,7 @@ export struct SetConnectionStrategyDialog {
  */
 @Component
 export struct ContentTable {
-  @State currentApiItem: TestApi = new TestApi('' , '' , '' , Function , '' , CaseCategory.BR);
+  @State currentApiItem: TestApi = new TestApi('', '', '', (): void => {}, '', CaseCategory.BR);
   @State apiItems: TestApi[] = [];
   @State changeIndex: number = - 1
   @State localName: string = 'DaYuBlue1'

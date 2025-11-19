@@ -361,15 +361,17 @@ export function testSetConnectionStrategy(connectionStrategy: number) {
     if ( pairedMac.length == 0 ) {
       message = '当前Mac值为空，请检查是否已配对';
     } else {
-      a2dpSrc.setConnectionStrategy(pairedMac , connectionStrategy , (err) => {
-        if ( !err ) {
-          message = "设置连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy
-          console.log("设置连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy)
-        } else {
-          console.log('setConnectionStrategy, err: ' + JSON.stringify(err));
-        }
-        promptAction.showToast({ message : message })
-      });
+      //[TODO] 接口改了调用方式，需要重新适配
+      // a2dpSrc.getConnectionState(pairedMac , (err , connectionStrategy) => {
+      //   if ( !err ) {
+      //     message = "获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy
+      //     console.log("获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy)
+      //   } else {
+      //     console.log('getConnectionStrategy, err: ' + JSON.stringify(err));
+      //   }
+      //   promptAction.showToast({ message : message })
+      //   return message
+      // });
     }
     return message
   } catch( e ) {
@@ -388,16 +390,17 @@ export function testGetConnectionStrategy(deviceId: string): string {
     if ( pairedMac.length == 0 ) {
       message = '当前Mac值为空，请检查是否已配对';
     } else {
-      a2dpSrc.getConnectionStrategy(pairedMac , (err , connectionStrategy) => {
-        if ( !err ) {
-          message = "获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy
-          console.log("获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy)
-        } else {
-          console.log('getConnectionStrategy, err: ' + JSON.stringify(err));
-        }
-        promptAction.showToast({ message : message })
-        return message
-      });
+      //[TODO] 接口改了调用方式，需要重新适配
+      // a2dpSrc.getConnectionState(pairedMac , (err , connectionStrategy) => {
+      //   if ( !err ) {
+      //     message = "获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy
+      //     console.log("获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy)
+      //   } else {
+      //     console.log('getConnectionStrategy, err: ' + JSON.stringify(err));
+      //   }
+      //   promptAction.showToast({ message : message })
+      //   return message
+      // });
     }
     return message
   } catch( e ) {

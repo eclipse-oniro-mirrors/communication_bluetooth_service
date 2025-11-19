@@ -19,6 +19,8 @@
 import LogUtil from '../../Utils/LogUtil'
 import BaseModel from '../../Utils/BaseModel'
 import bluetooth from '@ohos.bluetooth';
+import access from '@ohos.bluetooth.access';
+import { BusinessError } from '@ohos.base';
 
 export enum ProfileCode {
   CODE_BT_PROFILE_A2DP_SINK = 0,
@@ -226,8 +228,9 @@ export class BluetoothModel extends BaseModel {
     }
   }
 
+  //TODO: 这个要舍弃了，重新
   getProfileConnState(profileId: ProfileId): string {
-    let state = bluetooth.getProfileConnState(profileId);
+    let state: ProfileConnectionState = bluetooth.getProfileConnState(1);
     switch(state) {
       case 0:
         return 'STATE_DISCONNECTED';
@@ -377,7 +380,13 @@ export class BluetoothModel extends BaseModel {
    * Turn on Bluetooth
    */
   enableBluetooth(): boolean {
-    return bluetooth.enableBluetooth();
+    try {
+      access.enableBluetooth();
+      return true;
+    } catch (err) {
+      console.error('errCode: ' + (err as BusinessError).code + ', errMessage: ' + (err as BusinessError).message);
+      return false;
+    }
   }
   /**
    * Turn off Bluetooth

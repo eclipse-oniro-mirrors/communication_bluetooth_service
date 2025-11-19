@@ -14,8 +14,12 @@
  */
 
 import bluetooth from '@ohos.bluetooth';
+import bluetoothManager from '@ohos.bluetoothManager';
 import btProfileModel from './btProfileModel'
 import promptAction from '@ohos.promptAction';
+import { fileIo as fs} from '@kit.CoreFileKit';
+import { opp } from '@kit.ConnectivityKit';
+
 
 /**
  * Profile A2DP Test Page Of Bluetooth test
@@ -151,12 +155,12 @@ export function testOnTransferStateChange() {
     let textMessage = ""
     let profileType: number = AppStorage.get("profileType") !
     if ( transferStateChange ) {
-      (btProfileModel.getProfile(profileType) as bluetooth.OppProfile).off("transferStateChange" , () => {
+      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).off("transferStateChange" , () => {
         promptAction.showToast({ message : "on.transferStateChange监听已关闭" })
       })
       message = ("关闭传输状态改变事件")
     } else {
-      (btProfileModel.getProfile(profileType) as bluetooth.OppProfile).on("transferStateChange" , (stateInformation) => {
+      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).on("transferStateChange" , (stateInformation) => {
         console.log("transferStateChange enter");
         textMessage = "transferStateChange success";
         message = "transferStateChange success";
@@ -187,17 +191,17 @@ export function testOnReceiveIncomingFile() {
     let textMessage = ""
     let profileType: number = AppStorage.get("profileType") !
     if ( receiveIncomingFile ) {
-      (btProfileModel.getProfile(profileType) as bluetooth.OppProfile).off("receiveIncomingFile" , () => {
+      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).off("receiveIncomingFile" , () => {
         promptAction.showToast({ message : "on.receiveIncomingFile监听已关闭" })
       })
       message = ("关闭接受文件状态改变事件")
     } else {
-      (btProfileModel.getProfile(profileType) as bluetooth.OppProfile).on("receiveIncomingFile" , (information) => {
+      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).on("receiveIncomingFile" , (information) => {
         console.log("receiveIncomingFile enter");
-        let deviceName: string = information.deviceName;
-        let fileName: string = information.fileName;
-        textMessage = "deviceName: " + deviceName + " fileName: " + fileName;
-        message = "deviceName: " + deviceName + " fileName: " + fileName;
+        let deviceName: string = information.remoteDeviceName;
+        let fileName: string = information.filePath;
+        textMessage = "remoteDeviceName: " + deviceName + " filePath: " + fileName;
+        message = "remoteDeviceName: " + deviceName + " filePath: " + fileName;
         AppStorage.SetOrCreate("textMessage" , textMessage)
         promptAction.showToast({ message : message });
       })
@@ -218,13 +222,17 @@ export function testSendFile(serverMac: string , fileName: string , fileType: st
   try {
     let message = "sendFile test"
     let textMessage = ""
-    let profileType: number = AppStorage.get("profileType") !
-    let result: boolean = (btProfileModel.getProfile(profileType) as bluetooth.OppProfile).sendFile(serverMac , [ "/data/bluetooth/log/" + fileName ] , [ fileType ])
-    console.log("opp发送文件成功！ result: " + JSON.stringify(result));
-    textMessage = "testSendFile ret: " + JSON.stringify(result);
-    AppStorage.SetOrCreate("textMessage" , textMessage)
-    message = "opp发送文件成功！ result: " + JSON.stringify(result)
-    promptAction.showToast({ message : message })
+    let profileType: number | undefined = AppStorage.get("profileType")
+    let fileHolders : Array<opp.FileHolder> = [];
+    (btProfileModel.getProfile(profileType) as opp.OppServerProfile).sendFile(
+      serverMac , fileHolders).then(() => {
+      console.log("opp发送文件成功！ result: ");
+      textMessage = "testSendFile ret: ";
+      AppStorage.SetOrCreate("textMessage" , textMessage)
+      message = "opp发送文件成功！ result: "
+      promptAction.showToast({ message : message })
+    })
+
     return message
   } catch( e ) {
     console.log(`Failed to testSendFile. message: ${ e.message }, code: ${ e.code }`)
@@ -238,13 +246,19 @@ export function testSetIncomingFileConfirmation() {
   try {
     let message = "setIncomingFileConfirmation test"
     let textMessage = ""
-    let profileType: number = AppStorage.get("profileType") !
-    let result: boolean = (btProfileModel.getProfile(profileType) as bluetooth.OppProfile).setIncomingFileConfirmation(true)
-    console.log("result: " + result);
-    textMessage = "result: " + result;
-    AppStorage.SetOrCreate("textMessage" , textMessage)
-    message = "result: " + result
-    promptAction.showToast({ message : message })
+    let profileType: number | undefined = AppStorage.get("profileType")
+    let pathDir = "/test.jpg";
+    let file = fs.openSync(pathDir, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
+    (btProfileModel.getProfile(profileType) as opp.OppServerProfile).setIncomingFileConfirmation(true, file.fd).
+      then(() => {
+        let result = true;
+        console.log("result: " + result);
+        textMessage = "result: " + result;
+        AppStorage.SetOrCreate("textMessage" , textMessage)
+        message = "result: " + result
+        promptAction.showToast({ message : message })
+      })
+
     return message
   } catch( e ) {
     console.log(`Failed to testSetIncomingFileConfirmation. message: ${ e.message }, code: ${ e.code }`)
@@ -258,13 +272,17 @@ export function testGetCurrentTransferInformation() {
   try {
     let message = "getCurrentTransferInformation test"
     let textMessage = ""
-    let profileType: number = AppStorage.get("profileType") !
-    let result: bluetooth.BluetoothOppTransferInformation = (btProfileModel.getProfile(profileType) as bluetooth.OppProfile).getCurrentTransferInformation()
-    console.log("当前信息: " + JSON.stringify(result));
-    textMessage = "当前信息: " + JSON.stringify(result);
-    AppStorage.SetOrCreate("textMessage" , textMessage)
-    message = "当前信息: " + JSON.stringify(result)
-    promptAction.showToast({ message : message })
+    let profileType: number | undefined = AppStorage.get("profileType");
+    (btProfileModel.getProfile(profileType) as opp.OppServerProfile).
+      getCurrentTransferInformation().then((value: opp.OppTransferInformation) => {
+        let result = true;
+        console.log("当前信息: " + JSON.stringify(result));
+        textMessage = "当前信息: " + JSON.stringify(result);
+        AppStorage.SetOrCreate("textMessage" , textMessage)
+        message = "当前信息: " + JSON.stringify(result)
+        promptAction.showToast({ message : message })
+      })
+
     return message
   } catch( e ) {
     console.log(`Failed to testGetCurrentTransferInformation. message: ${ e.message }, code: ${ e.code }`)
@@ -278,13 +296,16 @@ export function testCancelTransfer() {
   try {
     let message = "cancelTransfer test"
     let textMessage = ""
-    let profileType: number = AppStorage.get("profileType") !
-    let result: boolean = (btProfileModel.getProfile(profileType) as bluetooth.OppProfile).cancelTransfer()
-    console.log("取消传输: " + JSON.stringify(result));
-    textMessage = "取消传输: " + JSON.stringify(result);
-    AppStorage.SetOrCreate("textMessage" , textMessage)
-    message = "取消传输: " + JSON.stringify(result)
-    promptAction.showToast({ message : message })
+    let profileType: number | undefined = AppStorage.get("profileType");
+    (btProfileModel.getProfile(profileType) as opp.OppServerProfile).cancelTransfer().then(() => {
+      let result = true;
+      console.log("取消传输: " + JSON.stringify(result));
+      textMessage = "取消传输: " + JSON.stringify(result);
+      AppStorage.SetOrCreate("textMessage" , textMessage)
+      message = "取消传输: " + JSON.stringify(result)
+      promptAction.showToast({ message : message })
+    })
+
     return message
   } catch( e ) {
     console.log(`Failed to testCancelTransfer. message: ${ e.message }, code: ${ e.code }`)
