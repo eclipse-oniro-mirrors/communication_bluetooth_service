@@ -288,6 +288,9 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
         {BluetoothHostInterfaceCode::GET_REMOTE_SERVICES,
             std::bind(&BluetoothHostStub::GetRemoteServicesInner,
                 std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::SET_CONNECTION_PRIORITY,
+            std::bind(&BluetoothHostStub::SetConnectionPriorityInner,
+                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
 };
 
 BluetoothHostStub::BluetoothHostStub(){};
@@ -1511,6 +1514,12 @@ int32_t BluetoothHostStub::StartRemoteSdpSearchInner(MessageParcel &data, Messag
 }
 
 int32_t BluetoothHostStub::GetRemoteServicesInner(MessageParcel &data, MessageParcel &reply)
+{
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::SetConnectionPriorityInner(MessageParcel &data, MessageParcel &reply)
 {
     reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
     return NO_ERROR;
