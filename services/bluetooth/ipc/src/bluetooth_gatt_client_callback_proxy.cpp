@@ -105,7 +105,7 @@ void BluetoothGattClientCallbackProxy::OnCharacteristicRead(
 }
 
 void BluetoothGattClientCallbackProxy::OnCharacteristicWrite(
-    int32_t ret, const BluetoothGattCharacteristic &characteristic)
+    int32_t ret, const BluetoothGattCharacteristic &characteristic, const BluetoothGattRspContext &rspContext)
 {
     HILOGI("BluetoothGattClientCallbackProxy::OnCharacteristicWrite Triggered!");
     MessageParcel data;
@@ -119,6 +119,10 @@ void BluetoothGattClientCallbackProxy::OnCharacteristicWrite(
     }
     if (!data.WriteParcelable(&characteristic)) {
         HILOGE("BluetoothGattClientCallbackProxy::OnCharacteristicWrite transport error");
+        return;
+    }
+    if (!data.WriteParcelable(&rspContext)) {
+        HILOGE("BluetoothGattClientCallbackProxy::OnCharacteristicWrite rspContext error");
         return;
     }
     MessageParcel reply;
