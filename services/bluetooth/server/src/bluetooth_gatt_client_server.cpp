@@ -122,7 +122,8 @@ public:
     void OnCharacteristicWrite(int ret, const Characteristic &characteristic) override
     {
         HILOGI("ret: %{public}d", ret);
-        callback_->OnCharacteristicWrite(ret, (BluetoothGattCharacteristic)characteristic);
+        BluetoothGattRspContext rspContext; // To adapt to WriteCharacteristicValueWithContext, useless.
+        callback_->OnCharacteristicWrite(ret, (BluetoothGattCharacteristic)characteristic, rspContext);
     }
 
     void OnDescriptorRead(int ret, const Descriptor &descriptor) override
@@ -398,8 +399,12 @@ int BluetoothGattClientServer::ReadCharacteristic(int32_t appId, const Bluetooth
 }
 
 int BluetoothGattClientServer::WriteCharacteristic(
-    int32_t appId, BluetoothGattCharacteristic *characteristic, bool withoutRespond)
+    int32_t appId, BluetoothGattCharacteristic *characteristic, bool withoutRespond, bool isWithContext)
 {
+    if (isWithContext) {
+        HILOGE("API WriteCharacteristicValueWithContext is not supported.");
+        return BT_ERR_API_NOT_SUPPORT;
+    }
     HILOGI("appId: %{public}d, withoutRespond: %{public}d", appId, withoutRespond);
     if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
         HILOGE("check permission failed");

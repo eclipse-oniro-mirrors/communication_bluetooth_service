@@ -191,7 +191,8 @@ ErrCode BluetoothGattClientStub::WriteCharacteristicInner(MessageParcel &data, M
         return TRANSACTION_ERR;
     }
     bool withoutRespond = data.ReadBool();
-    int result = WriteCharacteristic(appId, characteristic.get(), withoutRespond);
+    bool isWithContext = data.ReadBool();
+    int result = WriteCharacteristic(appId, characteristic.get(), withoutRespond, isWithContext);
     bool ret = reply.WriteInt32(result);
     if (!ret) {
         HILOGE("BluetoothGattClientStub: reply writing failed in: %{public}s.", __func__);

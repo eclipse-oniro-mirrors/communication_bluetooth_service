@@ -30,7 +30,8 @@ public:
     void OnConnectionStateChanged(int32_t state, int32_t newState, int32_t disconnectReason) override;
     void OnCharacteristicChanged(const BluetoothGattCharacteristic &characteristic) override;
     void OnCharacteristicRead(int32_t ret, const BluetoothGattCharacteristic &characteristic) override;
-    void OnCharacteristicWrite(int32_t ret, const BluetoothGattCharacteristic &characteristic) override;
+    void OnCharacteristicWrite(int32_t ret, const BluetoothGattCharacteristic &characteristic,
+        const BluetoothGattRspContext &rspContext) override;
     void OnDescriptorRead(int32_t ret, const BluetoothGattDescriptor &descriptor) override;
     void OnDescriptorWrite(int32_t ret, const BluetoothGattDescriptor &descriptor) override;
     void OnMtuChanged(int32_t state, int32_t mtu) override;
