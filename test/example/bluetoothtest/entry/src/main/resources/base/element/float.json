@@ -859,6 +859,14 @@
     {
       "name": "distance_5",
       "value": "5vp"
+    },
+    {
+      "name": "bar_width_80",
+      "value": "80%"
+    },
+    {
+      "name": "wh_value_100p",
+      "value": "100%"
     }
   ]
 }
