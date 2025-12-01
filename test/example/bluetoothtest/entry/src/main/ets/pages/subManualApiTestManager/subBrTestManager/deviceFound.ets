@@ -324,13 +324,13 @@ export struct AvailableItem {
 
       Column() {
         Text(this.name)
-          .fontSize(17.4)
+          .fontSize($r('app.float.wh_value_17_4'))
           .fontWeight(FontWeight.Bold)
           .width($r('app.float.wh_value_90p'))
           .height($r('app.float.wh_value_40'))
           .padding({ left : 10 , top : 15 })
         Text(this.mac)
-          .fontSize(17.4)
+          .fontSize($r('app.float.wh_value_17_4'))
           .fontWeight(FontWeight.Bold)
           .width($r('app.float.wh_value_90p'))
           .height($r('app.float.wh_value_30'))
@@ -341,7 +341,7 @@ export struct AvailableItem {
 
       Row() {
         Text(this.state)
-          .fontSize(17.4)
+          .fontSize($r('app.float.wh_value_17_4'))
           .flexGrow(1)
       }
       .width($r('app.float.wh_value_10p'))
@@ -374,13 +374,13 @@ export struct PairedItem {
 
       Column() {
         Text(this.name)
-          .fontSize(17.4)
+          .fontSize($r('app.float.wh_value_17_4'))
           .fontWeight(FontWeight.Bold)
           .width($r('app.float.wh_value_90p'))
           .height($r('app.float.wh_value_40'))
           .padding({ left : 10 , top : 15 })
         Text(this.mac)
-          .fontSize(17.4)
+          .fontSize($r('app.float.wh_value_17_4'))
           .fontWeight(FontWeight.Bold)
           .width($r('app.float.wh_value_90p'))
           .height($r('app.float.wh_value_30'))
@@ -391,7 +391,7 @@ export struct PairedItem {
 
       Row() {
         Text(this.state)
-          .fontSize(17.4)
+          .fontSize($r('app.float.wh_value_17_4'))
           .flexGrow(1)
       }
       .width($r('app.float.wh_value_10p'))
@@ -399,7 +399,7 @@ export struct PairedItem {
 
       Row() {
         Text("取消")
-          .fontSize(17.4)
+          .fontSize($r('app.float.wh_value_17_4'))
           .flexGrow(1)
       }
       .width($r('app.float.wh_value_10p'))

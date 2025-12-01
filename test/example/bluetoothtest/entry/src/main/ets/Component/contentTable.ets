@@ -391,12 +391,12 @@ export struct ContentTable {
 
         Flex({ direction : FlexDirection.Column , alignItems : ItemAlign.Start }) {
           Text(apiItem.name)
-            .fontSize(17.4)
+            .fontSize($r('app.float.wh_value_17_4'))
             .fontWeight(FontWeight.Bold)
             .layoutWeight(1)
             .padding({ left : 10 , top : 10 })
           Text(apiItem.method)
-            .fontSize(17.4)
+            .fontSize($r('app.float.wh_value_17_4'))
             .fontWeight(FontWeight.Bold)
             .layoutWeight(1)
             .padding({ left : 10 , top : 5 })
@@ -406,7 +406,7 @@ export struct ContentTable {
 
         Flex({ alignItems : ItemAlign.Center }) {
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : apiItem.result)
-            .fontSize(17.4)
+            .fontSize($r('app.float.wh_value_17_4'))
             .flexGrow(1)
             .padding({ top : 15 })
         }
