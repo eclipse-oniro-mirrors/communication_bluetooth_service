@@ -59,8 +59,8 @@ struct PanNetworkAutoTest {
         Scroll() {
           Column() {
             Text("API验证:")
-              .fontSize("17vp")
-              .margin({ top : "10vp" , bottom : "10vp" , left : "15vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_15') })
               .textAlign(TextAlign.Start)
               .width($r('app.float.wh_value_100p'))
             AutoContentTable({
@@ -80,15 +80,15 @@ struct PanNetworkAutoTest {
         Scroll() {
           Column() {
             Text("Debug日志:")
-              .fontSize("17vp")
-              .margin({ top : "8vp" , bottom : "8vp" , left : "15vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_8') , bottom : $r('app.float.wh_value_8') , left : $r('app.float.wh_value_15') })
               .textAlign(TextAlign.Start)
               .width($r('app.float.wh_value_100p'))
             List() {
               ListItem() {
                 Text("log:" + "\n" + this.PanNetworkProfileAutoTestMessage)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "30vp" , right : "10vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_30') , right : $r('app.float.wh_value_10') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
               }
@@ -113,14 +113,14 @@ struct PanNetworkAutoTest {
       Column() {
         Button({ type : ButtonType.Normal , stateEffect : true }) {
           Row() {
-            Text('自动测试').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+            Text('自动测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
           }.alignItems(VerticalAlign.Center)
         }
         .borderRadius(8)
         .backgroundColor($r("app.color.blue"))
         .width($r('app.float.wh_value_180'))
         .height($r('app.float.wh_value_50'))
-        .margin({ top : "15vp" })
+        .margin({ top : $r('app.float.wh_value_15') })
         .onClick(async(event: ClickEvent) => {
           this.forLoop()
         })

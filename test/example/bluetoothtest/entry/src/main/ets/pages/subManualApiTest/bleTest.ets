@@ -81,28 +81,28 @@ struct BleTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("0.5vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
       Column() {
         Row() {
           Text("外设MAC:")
-            .fontSize("18vp")
-            .height(40)
+            .fontSize($r('app.float.wh_value_18'))
+            .height($r('app.float.wh_value_40'))
             .width($r('app.float.wh_value_25p'))
             .align(Alignment.Start)
 
           TextInput({ text : this.peripheralDeviceId , placeholder : "input peripheral deviceId." })
-            .fontSize("18vp")
+            .fontSize($r('app.float.wh_value_18'))
             .onChange((strInput) => {
               this.peripheralDeviceId = strInput;
               AppStorage.setOrCreate("peripheralDeviceId" , strInput)
             })
             .width($r('app.float.wh_value_55p'))
             .padding({ top : 5 , left : 5 })
-            .height(40)
+            .height($r('app.float.wh_value_40'))
             .borderStyle(BorderStyle.Dashed)
             .backgroundColor($r("app.color.white"))
           Image($r('app.media.Switch'))
-            .height(50)
+            .height($r('app.float.wh_value_50'))
             .width($r('app.float.wh_value_15p'))
             .padding({ top : 5 , bottom : 5 , left : 10 })
             .onClick(() => {

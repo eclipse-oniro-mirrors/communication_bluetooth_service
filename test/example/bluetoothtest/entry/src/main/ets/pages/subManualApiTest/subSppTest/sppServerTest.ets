@@ -86,12 +86,12 @@ struct SppServer {
             PageTitle({ testItem : this.testItem })
           }
 
-          Stack().height("0.5vp").backgroundColor("#000000");
+          Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
 
           Row() {
-            Text("本机设备UUID：").fontSize(17).width(85)
+            Text("本机设备UUID：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_85'))
             TextInput({ text : this.uuid , placeholder : "请输入uuid" })
-              .fontSize("17vp")
+              .fontSize($r('app.float.wh_value_17'))
               .onChange((str) => {
                 this.uuid = str;
                 AppStorage.setOrCreate('inputUuid' , str)
@@ -100,14 +100,14 @@ struct SppServer {
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("写入目标设备数据：").fontSize(17).width(95)
+            Text("写入目标设备数据：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_95'))
             TextInput({ text : this.writeServerData , placeholder : "请输入写入的数据" })
-              .fontSize("14vp")
+              .fontSize($r('app.float.wh_value_14'))
               .onChange((str) => {
                 this.writeServerData = str;
                 AppStorage.setOrCreate("writeServerData" , str);
@@ -116,24 +116,24 @@ struct SppServer {
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.moon"))
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("读取的数据为：").fontSize("17vp")
+            Text("读取的数据为：").fontSize($r('app.float.wh_value_17'))
             Text(this.dataReadMessage)
-              .fontSize("14vp")
+              .fontSize($r('app.float.wh_value_14'))
               .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Column() {
-            Text("接口调用结果：" + this.message).fontSize("17vp")
-              .padding(10)
+            Text("接口调用结果：" + this.message).fontSize($r('app.float.wh_value_17'))
+              .padding($r('app.float.wh_value_10'))
               .textAlign(TextAlign.Start)
           }
           .backgroundColor($r("app.color.moon"))

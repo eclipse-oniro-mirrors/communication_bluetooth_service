@@ -80,11 +80,11 @@ struct SppClient {
             PageTitle({ testItem : this.testItem })
           }
 
-          Stack().height("0.5vp").backgroundColor("#000000");
+          Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
           Row() {
-            Text("目标设备MAC：").fontSize(17).width(70);
+            Text("目标设备MAC：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70'));
             TextInput({ text : this.deviceId , placeholder : "请输入mac地址" })
-              .fontSize("15vp")
+              .fontSize($r('app.float.wh_value_15'))
               .onChange((str) => {
                 this.deviceId = str;
                 AppStorage.setOrCreate('inputDeviceId' , str)
@@ -93,14 +93,14 @@ struct SppClient {
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.moon"))
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("目标设备UUID：").fontSize(17).width(70);
+            Text("目标设备UUID：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70'));
             TextInput({ text : this.uuid , placeholder : "请输入uuid" })
-              .fontSize("15vp")
+              .fontSize($r('app.float.wh_value_15'))
               .onChange((str) => {
                 this.uuid = str;
                 AppStorage.setOrCreate('inputUuid' , str)
@@ -109,14 +109,14 @@ struct SppClient {
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("写入目标设备数据：").fontSize(17).width(95);
+            Text("写入目标设备数据：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_95'));
             TextInput({ text : this.writeClientData , placeholder : "请输入写入的数据" })
-              .fontSize("15vp")
+              .fontSize($r('app.float.wh_value_15'))
               .onChange((str) => {
                 this.writeClientData = str;
                 AppStorage.setOrCreate("writeClientData" , str);
@@ -125,24 +125,24 @@ struct SppClient {
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.moon"))
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("读取的数据为：").fontSize("17vp")
+            Text("读取的数据为：").fontSize($r('app.float.wh_value_17'))
             Text(this.dataReadMessage)
-              .fontSize("15vp")
+              .fontSize($r('app.float.wh_value_15'))
               .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Column() {
-            Text("接口调用结果： " + this.message).fontSize("17vp")
-              .padding(10)
+            Text("接口调用结果： " + this.message).fontSize($r('app.float.wh_value_17'))
+              .padding($r('app.float.wh_value_10'))
               .textAlign(TextAlign.Center)
           }
           .backgroundColor($r("app.color.moon"))

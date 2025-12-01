@@ -45,21 +45,21 @@ struct setScanMode {
               TitleComponent({
                 title : "SCAN_MODE_SELECT" ,
                 bgColor : $r('app.color.moon') ,
-                fontSize : '17vp' ,
+                fontSize : $r('app.float.wh_value_17') ,
               });
             }
-            .height(80)
+            .height($r('app.float.wh_value_80'))
             .borderRadius(10)
 
             ListItem() {
               TitleComponent({
                 title : "SCAN_MODE_NONE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
             .padding({ top : 10 })
-            .height(80)
+            .height($r('app.float.wh_value_80'))
             .borderRadius(10)
             .onClick(() => {
               this.currentClick = 0;
@@ -68,12 +68,12 @@ struct setScanMode {
             ListItem() {
               TitleComponent({
                 title : "CONNECTABLE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
             .padding({ top : 10 })
-            .height(80)
+            .height($r('app.float.wh_value_80'))
             .borderRadius(10)
             .onClick(() => {
               this.currentClick = 1;
@@ -82,12 +82,12 @@ struct setScanMode {
             ListItem() {
               TitleComponent({
                 title : "GENERAL_DISCOVERABLE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
             .padding({ top : 10 })
-            .height(80)
+            .height($r('app.float.wh_value_80'))
             .borderRadius(10)
             .onClick(() => {
               this.currentClick = 2;
@@ -96,12 +96,12 @@ struct setScanMode {
             ListItem() {
               TitleComponent({
                 title : "LIMITED_DISCOVERABLE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 3 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
             .padding({ top : 10 })
-            .height(80)
+            .height($r('app.float.wh_value_80'))
             .borderRadius(10)
             .onClick(() => {
               this.currentClick = 3;
@@ -110,12 +110,12 @@ struct setScanMode {
             ListItem() {
               TitleComponent({
                 title : "CONNECTABLE_GENERAL_DISCOVERABLE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 4 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
             .padding({ top : 10 })
-            .height(80)
+            .height($r('app.float.wh_value_80'))
             .borderRadius(10)
             .onClick(() => {
               this.currentClick = 4;
@@ -124,12 +124,12 @@ struct setScanMode {
             ListItem() {
               TitleComponent({
                 title : "CONNECTABLE_LIMITED_DISCOVERABLE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 5 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
             .padding({ top : 10 })
-            .height(80)
+            .height($r('app.float.wh_value_80'))
             .borderRadius(10)
             .onClick(() => {
               this.currentClick = 5;
@@ -179,7 +179,7 @@ struct setScanMode {
       Text(this.message)
         .textAlign(TextAlign.Center)
         .fontSize('17fp')
-        .height(50)
+        .height($r('app.float.wh_value_50'))
         .width($r('app.float.wh_value_100p'))
         .fontWeight(FontWeight.Medium)
         .backgroundColor($r("app.color.moon"))

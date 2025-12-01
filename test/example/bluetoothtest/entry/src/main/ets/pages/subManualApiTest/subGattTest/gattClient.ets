@@ -51,9 +51,9 @@ struct GattClientSetting {
   build() {
     Column() {
       Row() {
-        Text("外围设备MAC:").fontSize(16).width(70)
+        Text("外围设备MAC:").fontSize($r('app.float.wh_value_16')).width($r('app.float.wh_value_70'))
         TextInput({ text : this.peripheralDeviceId , placeholder : "input peripheral deviceId." })
-          .fontSize("15vp")
+          .fontSize($r('app.float.wh_value_15'))
           .onChange((strInput) => {
             this.peripheralDeviceId = strInput;
             //判断合法性
@@ -65,17 +65,17 @@ struct GattClientSetting {
           .borderRadius(1)
       }
       .backgroundColor($r("app.color.moon"))
-      .padding(5)
+      .padding($r('app.float.wh_value_5'))
       .justifyContent(FlexAlign.Start)
       .alignItems(VerticalAlign.Center)
 
       Column() {
-        Stack().height("0.25vp").backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_0_25')).backgroundColor("#000000");
         Column() {
           Row() {
-            Text("服务UUID:").fontSize(15).width(60);
+            Text("服务UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_60'));
             TextInput({ text : this.serviceUUID , placeholder : "input Service UUID" })
-              .fontSize("15vp")
+              .fontSize($r('app.float.wh_value_15'))
               .onChange((strInput) => {
                 this.serviceUUID = strInput;
                 if ( strInput.length >= 36 ) {
@@ -85,15 +85,15 @@ struct GattClientSetting {
               .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
           .backgroundColor($r("app.color.spring"))
 
           Row() {
-            Text("特征值UUID:").fontSize(15).width(60);
+            Text("特征值UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_60'));
             TextInput({ text : this.characteristicUUID , placeholder : "input Characteristic UUID" })
-              .fontSize("15vp")
+              .fontSize($r('app.float.wh_value_15'))
               .onChange((strInput) => {
                 this.characteristicUUID = strInput;
                 if ( strInput.length >= 36 ) {
@@ -104,14 +104,14 @@ struct GattClientSetting {
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("特征值Value:").fontSize(15).width(60);
+            Text("特征值Value:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_60'));
             TextInput({ text : this.characteristicUUID , placeholder : "Characteristic Value" })
-              .fontSize("15vp")
+              .fontSize($r('app.float.wh_value_15'))
               .onChange((strInput) => {
                 this.characteristicValue = strInput;
                 if ( strInput.length >= 1 ) {
@@ -122,14 +122,14 @@ struct GattClientSetting {
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("描述符UUID:").fontSize(15).width(60);
+            Text("描述符UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_60'));
             TextInput({ text : this.descriptorUUID , placeholder : "input descriptor UUID" })
-              .fontSize("15vp")
+              .fontSize($r('app.float.wh_value_15'))
               .onChange((strInput) => {
                 this.descriptorUUID = strInput;
                 if ( strInput.length >= 36 ) {
@@ -140,14 +140,14 @@ struct GattClientSetting {
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("描述符Value:").fontSize(15).width(60);
+            Text("描述符Value:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_60'));
             TextInput({ text : this.descriptorUUID , placeholder : "descriptor Value" })
-              .fontSize("15vp")
+              .fontSize($r('app.float.wh_value_15'))
               .onChange((strInput) => {
                 this.descriptorValue = strInput;
                 if ( strInput.length >= 1 ) {
@@ -158,11 +158,11 @@ struct GattClientSetting {
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
         }
-        Stack().height("0.25vp").backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_0_25')).backgroundColor("#000000");
       }
     }
   }
@@ -214,16 +214,16 @@ struct GattClient {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("0.5vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
       Row() {
         Text("GattClientSetting")
-          .fontSize("20vp")
-          .height(60)
+          .fontSize($r('app.float.wh_value_20'))
+          .height($r('app.float.wh_value_60'))
           .width($r('app.float.wh_value_80p'))
-          .padding({ left : "15vp" })
+          .padding({ left : $r('app.float.wh_value_15') })
         Image($r('app.media.Switch'))
-          .height(50)
-          .width(50)
+          .height($r('app.float.wh_value_50'))
+          .width($r('app.float.wh_value_50'))
           .padding({ top : 5 , bottom : 5 , left : 10 })
           .onClick(() => {
             this.showList = !this.showList;
@@ -238,48 +238,48 @@ struct GattClient {
             Scroll() {
               Column() {
                 Text("结果显示:")
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "10vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_100p'))
                 Text("当前配置:" + this.message)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "15vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
                 Text("BLE连接状态:" + this.bleConnectionStateInfo)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "15vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
                 Text("BLE特征变化:" + this.bleCharacteristicChangeInfo)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "15vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
                 Text("deviceName:" + this.deviceName)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "15vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
                 Text("Rssi:" + this.Rssi)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "15vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
                 Text("getService:" + this.getServices)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "15vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
                 Text("readCharacteristic:" + this.read_CharacteristicValue)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "15vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
                 Text("readDescriptor:" + this.read_DescriptorValue)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "15vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
               }
@@ -288,16 +288,16 @@ struct GattClient {
             .scrollBarWidth(10)
             .scrollBar(BarState.Auto)
           }
-          .height(110)
+          .height($r('app.float.wh_value_110'))
           .width($r('app.float.wh_value_95p'))
           .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
 
-          Stack().height("0.5vp").backgroundColor("#000000");
+          Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
           Column() {
             Text("功能测试:")
-              .margin({ top : "5vp" , left : "10vp" })
-              .padding("5vp")
-              .fontSize("18vp")
+              .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
+              .padding($r('app.float.wh_value_5'))
+              .fontSize($r('app.float.wh_value_18'))
               .width($r('app.float.wh_value_100p'))
             Scroll() {
               ContentTable({ apiItems : initGattClientApiData() })

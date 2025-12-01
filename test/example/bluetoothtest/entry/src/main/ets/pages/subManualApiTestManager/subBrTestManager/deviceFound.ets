@@ -59,8 +59,8 @@ struct deviceFound {
       GridContainer({
         columns : 12 ,
         sizeType : SizeType.Auto ,
-        gutter : vp2px(1) === 2 ? '12vp' : '0vp' ,
-        margin : vp2px(1) === 2 ? '24vp' : '0vp'
+        gutter : vp2px(1) === 2 ? $r('app.float.wh_value_12') : $r('app.float.wh_value_0') ,
+        margin : vp2px(1) === 2 ? $r('app.float.wh_value_24') : $r('app.float.wh_value_0')
       }) {
         Row({}) {
           Column() {
@@ -71,7 +71,7 @@ struct deviceFound {
             xs : { span : 0 , offset : 0 } , sm : { span : 0 , offset : 0 } ,
             md : { span : 0 , offset : 0 } , lg : { span : 2 , offset : 0 }
           });
-          Column({ space : '12vp' }) {
+          Column({ space : $r('app.float.wh_value_12') }) {
             PageTitle({ detail : '扫描蓝牙设备' })
             Scroll() {
               Column() {
@@ -188,7 +188,7 @@ export struct PairedDeviceComponent {
             }
           } , item => JSON.stringify(item));
         }
-        .height(200)
+        .height($r('app.float.wh_value_200'))
         .divider({
           strokeWidth : 1 ,
           color : $r('app.color.color_E3E3E3_grey') ,
@@ -316,8 +316,8 @@ export struct AvailableItem {
         Image($r('app.media.bleSmall'))
           .objectFit(ImageFit.Contain)
           .autoResize(false)
-          .height(30)
-          .width(30)
+          .height($r('app.float.wh_value_30'))
+          .width($r('app.float.wh_value_30'))
       }
       .width($r('app.float.wh_value_10p'))
       .padding({ left : 10 })
@@ -327,16 +327,16 @@ export struct AvailableItem {
           .fontSize(17.4)
           .fontWeight(FontWeight.Bold)
           .width($r('app.float.wh_value_90p'))
-          .height(40)
+          .height($r('app.float.wh_value_40'))
           .padding({ left : 10 , top : 15 })
         Text(this.mac)
           .fontSize(17.4)
           .fontWeight(FontWeight.Bold)
           .width($r('app.float.wh_value_90p'))
-          .height(30)
+          .height($r('app.float.wh_value_30'))
           .padding({ left : 10 , top : 5 })
       }
-      .height(80)
+      .height($r('app.float.wh_value_80'))
       .width($r('app.float.wh_value_80p'))
 
       Row() {
@@ -366,8 +366,8 @@ export struct PairedItem {
         Image($r('app.media.bleSmall'))
           .objectFit(ImageFit.Contain)
           .autoResize(false)
-          .height(30)
-          .width(30)
+          .height($r('app.float.wh_value_30'))
+          .width($r('app.float.wh_value_30'))
       }
       .width($r('app.float.wh_value_10p'))
       .padding({ left : 10 })
@@ -377,16 +377,16 @@ export struct PairedItem {
           .fontSize(17.4)
           .fontWeight(FontWeight.Bold)
           .width($r('app.float.wh_value_90p'))
-          .height(40)
+          .height($r('app.float.wh_value_40'))
           .padding({ left : 10 , top : 15 })
         Text(this.mac)
           .fontSize(17.4)
           .fontWeight(FontWeight.Bold)
           .width($r('app.float.wh_value_90p'))
-          .height(30)
+          .height($r('app.float.wh_value_30'))
           .padding({ left : 10 , top : 5 })
       }
-      .height(80)
+      .height($r('app.float.wh_value_80'))
       .width($r('app.float.wh_value_70p'))
 
       Row() {

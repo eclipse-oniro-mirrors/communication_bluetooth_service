@@ -89,16 +89,16 @@ struct BrTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("0.5vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
       Column() {
         Row() {
           Text("目标设备MAC：")
-            .fontSize("18vp")
-            .height(40)
+            .fontSize($r('app.float.wh_value_18'))
+            .height($r('app.float.wh_value_40'))
             .width(ConfigData.WH_30_100)
             .align(Alignment.Start)
           TextInput({ text : this.pairedMac , placeholder : "请输入即将连接的设备MAC" })
-            .height(40)
+            .height($r('app.float.wh_value_40'))
             .borderStyle(BorderStyle.Dashed)
             .backgroundColor($r("app.color.white"))
             .onChange((str) => {

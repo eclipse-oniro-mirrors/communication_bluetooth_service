@@ -88,15 +88,15 @@ struct brTestManager {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("0.5vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
       Column() {
         Text("目标设备MAC：")
-          .fontSize("20vp")
-          .height(50)
+          .fontSize($r('app.float.wh_value_20'))
+          .height($r('app.float.wh_value_50'))
           .width($r('app.float.wh_value_100p'))
           .padding({ top : 10 , left : 10 })
         TextInput({ text : this.pairedMac , placeholder : "请输入即将连接的设备MAC" })
-          .height(50)
+          .height($r('app.float.wh_value_50'))
           .borderStyle(BorderStyle.Dashed)
           .backgroundColor($r("app.color.white"))
           .onChange((str) => {

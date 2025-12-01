@@ -38,21 +38,21 @@ struct ProfileConnState {
             TitleComponent({
               title : "SELECT_PROFILE_ID" ,
               bgColor : $r("app.color.moon") ,
-              fontSize : '17vp' ,
+              fontSize : $r('app.float.wh_value_17') ,
             })
           }
-          .height(80)
+          .height($r('app.float.wh_value_80'))
           .borderRadius(10)
 
           ListItem() {
             TitleComponent({
               title : "A2DP_SOURCE" ,
-              fontSize : '15vp' ,
+              fontSize : $r('app.float.wh_value_15') ,
               bgColor : this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
           .padding({ top : 10 })
-          .height(80)
+          .height($r('app.float.wh_value_80'))
           .borderRadius(10)
           .onClick(() => {
             this.currentClick = 0;
@@ -62,12 +62,12 @@ struct ProfileConnState {
           ListItem() {
             TitleComponent({
               title : "HANDS_FREE_AUDIO_GATEWAY" ,
-              fontSize : '15vp' ,
+              fontSize : $r('app.float.wh_value_15') ,
               bgColor : this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             })
           }
           .padding({ top : 20 })
-          .height(80)
+          .height($r('app.float.wh_value_80'))
           .borderRadius(10)
           .onClick(() => {
             this.currentClick = 1;
@@ -77,25 +77,25 @@ struct ProfileConnState {
           ListItem() {
             TitleComponent({
               title : "HID_HOST" ,
-              fontSize : '15vp' ,
+              fontSize : $r('app.float.wh_value_15') ,
               bgColor : this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
           .padding({ top : 20 })
-          .height(80)
+          .height($r('app.float.wh_value_80'))
           .borderRadius(10)
           .onClick(() => {
             this.currentClick = 2;
             this.profileId = 6;
           })
         }
-        .height(400)
+        .height($r('app.float.wh_value_400'))
       }
 
       Text(this.message)
         .textAlign(TextAlign.Center)
         .fontSize('17fp')
-        .height(60)
+        .height($r('app.float.wh_value_60'))
         .width($r('app.float.wh_value_100p'))
         .backgroundColor($r("app.color.moon"))
 
@@ -105,8 +105,8 @@ struct ProfileConnState {
           Text("取消")
             .textAlign(TextAlign.Center)
             .fontSize('17fp')
-            .height(60)
-            .width(100)
+            .height($r('app.float.wh_value_60'))
+            .width($r('app.float.wh_value_100'))
             .borderRadius(10)
             .borderColor($r("app.color.moon"))
             .backgroundColor($r("app.color.white"))
@@ -117,8 +117,8 @@ struct ProfileConnState {
           Text("确认")
             .textAlign(TextAlign.Center)
             .fontSize('17fp')
-            .height(60)
-            .width(100)
+            .height($r('app.float.wh_value_60'))
+            .width($r('app.float.wh_value_100'))
             .borderRadius(10)
             .borderColor($r("app.color.moon"))
             .backgroundColor($r("app.color.white"))
@@ -150,7 +150,7 @@ struct ButtonComponent {
         .lineHeight($r('app.float.wh_value_22'))
         .fontColor($r('app.color.font_color_007DFF'))
         .textAlign(TextAlign.Center)
-        .width(100)
+        .width($r('app.float.wh_value_100'))
         .height($r("app.float.wh_value_40"))
         .borderRadius($r('app.float.radius_20'))
         .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") : $r("sys.color.ohos_id_color_foreground_contrary"))

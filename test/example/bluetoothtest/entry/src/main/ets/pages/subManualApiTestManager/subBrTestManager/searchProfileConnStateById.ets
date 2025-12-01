@@ -31,9 +31,9 @@ struct profileConnState2 {
     Row() {
       Column() {
         Row() {
-          Text("目标设备MAC：").fontSize("20vp")
+          Text("目标设备MAC：").fontSize($r('app.float.wh_value_20'))
           TextInput({ text : this.deviceId , placeholder : "请输入mac地址" })
-            .fontSize("20vp")
+            .fontSize($r('app.float.wh_value_20'))
             .onChange((str) => {
               this.deviceId = str;
               AppStorage.setOrCreate('inputDeviceId' , str)
@@ -41,19 +41,19 @@ struct profileConnState2 {
             .width($r('app.float.wh_value_70p'))
         }
         .backgroundColor($r("app.color.moon"))
-        .margin({ top : "20vp" , left : "20vp" , right : "20vp" })
+        .margin({ top : $r('app.float.wh_value_20') , left : $r('app.float.wh_value_20') , right : $r('app.float.wh_value_20') })
         .alignItems(VerticalAlign.Center)
 
         List() {
           ListItem() {
             TitleComponent({
               title : "A2DP_SOURCE" ,
-              fontSize : '15vp' ,
+              fontSize : $r('app.float.wh_value_15') ,
               bgColor : this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
           .padding({ top : 20 })
-          .height(80)
+          .height($r('app.float.wh_value_80'))
           .borderRadius(10)
           .onClick(() => {
             this.currentClick = 0;
@@ -83,12 +83,12 @@ struct profileConnState2 {
           ListItem() {
             TitleComponent({
               title : "HANDS_FREE_AUDIO_GATEWAY" ,
-              fontSize : '15vp' ,
+              fontSize : $r('app.float.wh_value_15') ,
               bgColor : this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
           .padding({ top : 20 })
-          .height(80)
+          .height($r('app.float.wh_value_80'))
           .borderRadius(10)
           .onClick(() => {
             this.currentClick = 1;
@@ -118,12 +118,12 @@ struct profileConnState2 {
           ListItem() {
             TitleComponent({
               title : "HID_HOST" ,
-              fontSize : '15vp' ,
+              fontSize : $r('app.float.wh_value_15') ,
               bgColor : this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
           .padding({ top : 20 })
-          .height(80)
+          .height($r('app.float.wh_value_80'))
           .borderRadius(10)
           .onClick(() => {
             this.currentClick = 2;
@@ -150,8 +150,8 @@ struct profileConnState2 {
             this.message = "当前HID的状态是：" + this.stateProfile;
           })
         }
-        .height(300)
-        .margin(20);
+        .height($r('app.float.wh_value_300'))
+        .margin($r('app.float.wh_value_20'));
 
         Text("接口调用结果：" + this.message)
           .textAlign(TextAlign.Start)

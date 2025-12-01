@@ -36,8 +36,8 @@ struct PairedDevices {
       GridContainer({
         columns : 12 ,
         sizeType : SizeType.Auto ,
-        gutter : vp2px(1) === 2 ? '12vp' : '0vp' ,
-        margin : vp2px(1) === 2 ? '24vp' : '0vp'
+        gutter : vp2px(1) === 2 ? $r('app.float.wh_value_12') : $r('app.float.wh_value_0') ,
+        margin : vp2px(1) === 2 ? $r('app.float.wh_value_24') : $r('app.float.wh_value_0')
       }) {
         Row({}) {
           Column() {

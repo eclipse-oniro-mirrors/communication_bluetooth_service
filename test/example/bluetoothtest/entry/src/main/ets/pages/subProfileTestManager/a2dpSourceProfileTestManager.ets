@@ -61,22 +61,22 @@ struct A2dpSourceProfileManagerTest {
           PageTitle({ testItem : this.testItem })
         }
 
-        Stack().height("0.5vp").backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
-          .margin({ top : "10vp" })
-          .fontSize("20vp")
+          .margin({ top : $r('app.float.wh_value_10') })
+          .fontSize($r('app.float.wh_value_20'))
           .fontColor(this.hasProfile ? "#66ccff" : "#ff0000")
           .border({ width : 0.5 })
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .fontStyle(FontStyle.Italic);
         Column() {
           Row() {
             Text("现在正在连接的设备为：")
               .fontSize("17")
               .width($r('app.float.wh_value_110'))
-              .margin("5vp")
+              .margin($r('app.float.wh_value_5'))
             TextInput({ text : JSON.stringify(this.deviceId) , placeholder : "请输入需要连接的deviceId" })
-              .fontSize("17vp")
+              .fontSize($r('app.float.wh_value_17'))
               .onChange((str) => {
                 this.deviceId = str;
                 AppStorage.setOrCreate("deviceId" , str)
@@ -85,18 +85,18 @@ struct A2dpSourceProfileManagerTest {
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.moon"))
-          .margin({ top : "20vp" , bottom : "20vp" , left : "20vp" , right : "20vp" })
+          .margin({ top : $r('app.float.wh_value_20') , bottom : $r('app.float.wh_value_20') , left : $r('app.float.wh_value_20') , right : $r('app.float.wh_value_20') })
           .alignItems(VerticalAlign.Center)
 
           Column() {
             Text("接口调用结果： " + this.a2dpMessage)
-              .fontSize("17vp")
+              .fontSize($r('app.float.wh_value_17'))
               .textAlign(TextAlign.Start)
-              .margin({ top : "5vp" , left : "10vp" })
+              .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
               .width($r('app.float.wh_value_100p'))
             Text("connectionStateChange： " + this.connectionStateInfo)
-              .fontSize("17vp")
-              .margin({ top : "10vp" , left : "10vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
               .textAlign(TextAlign.Start)
               .width($r('app.float.wh_value_90p'))
           }
@@ -105,9 +105,9 @@ struct A2dpSourceProfileManagerTest {
           .width($r('app.float.wh_value_88p'))
 
           Text("请点击需要测试的方法")
-            .margin({ top : "10vp" })
-            .padding("5vp")
-            .fontSize("17vp")
+            .margin({ top : $r('app.float.wh_value_10') })
+            .padding($r('app.float.wh_value_5'))
+            .fontSize($r('app.float.wh_value_17'))
             .fontColor("#4444444");
           Column() {
             ContentTable({ apiItems : initA2dpSourceProfileManagerApiData() })

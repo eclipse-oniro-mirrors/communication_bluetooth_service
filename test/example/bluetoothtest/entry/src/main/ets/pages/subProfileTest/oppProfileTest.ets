@@ -76,28 +76,28 @@ struct OppProfileTest {
           PageTitle({ testItem : this.testItem })
         }
 
-        Stack().height("0.5vp").backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
-          .margin({ top : "10vp" })
-          .fontSize("20vp")
+          .margin({ top : $r('app.float.wh_value_10') })
+          .fontSize($r('app.float.wh_value_20'))
           .fontColor(this.hasProfile ? "#66ccff" : "#ff0000")
           .border({ width : 0.5 })
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .fontStyle(FontStyle.Italic);
         Column() {
           Column() {
             Scroll() {
               Column() {
                 Text("已配对设备列表：(点击选择设备)")
-                  .fontSize("20vp")
+                  .fontSize($r('app.float.wh_value_20'))
                   .fontWeight(FontWeight.Bold)
-                  .margin({ top : "5vp" })
+                  .margin({ top : $r('app.float.wh_value_5') })
                 Scroll() {
                   List({ space : 5 }) {
                     ForEach(this.pairDevices , (item: PairDevices) => {
                       ListItem() {
                         Text(item.name)
-                          .fontSize("25vp")
+                          .fontSize($r('app.float.wh_value_25'))
                           .width($r('app.float.wh_value_80p'))
                           .margin({ left : '10%' })
                           .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") : $r("app.color.white"))
@@ -115,11 +115,11 @@ struct OppProfileTest {
                 .width($r('app.float.wh_value_80p'))
 
                 Text("已选择的设备的蓝牙mac地址：")
-                  .fontSize("18vp")
+                  .fontSize($r('app.float.wh_value_18'))
                   .fontWeight(FontWeight.Bold)
-                  .margin({ top : "3vp" })
+                  .margin({ top : $r('app.float.wh_value_3') })
                 Text(this.serverMac)
-                  .fontSize("25vp")
+                  .fontSize($r('app.float.wh_value_25'))
                   .width($r('app.float.wh_value_70p'))
                   .borderRadius(5)
                   .backgroundColor($r("app.color.moon"))
@@ -136,13 +136,13 @@ struct OppProfileTest {
           Scroll() {
             Column() {
               Text("接口调用结果： " + this.oppMessage)
-                .fontSize("17vp")
+                .fontSize($r('app.float.wh_value_17'))
                 .textAlign(TextAlign.Start)
-                .margin({ top : "5vp" , left : "10vp" })
+                .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
                 .width($r('app.float.wh_value_100p'))
               Text("connectionStateChange： " + this.connectionStateInfo)
-                .fontSize("17vp")
-                .margin({ top : "10vp" , left : "10vp" })
+                .fontSize($r('app.float.wh_value_17'))
+                .margin({ top : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
                 .textAlign(TextAlign.Start)
                 .width($r('app.float.wh_value_90p'))
             }
@@ -154,9 +154,9 @@ struct OppProfileTest {
           .scrollBar(BarState.Auto)
 
           Text("请点击需要测试的方法")
-            .margin({ top : "10vp" })
-            .padding("5vp")
-            .fontSize("17vp")
+            .margin({ top : $r('app.float.wh_value_10') })
+            .padding($r('app.float.wh_value_5'))
+            .fontSize($r('app.float.wh_value_17'))
             .fontColor("#4444444");
           Column() {
             ContentTable({ apiItems : initOppProfileApiData() })
