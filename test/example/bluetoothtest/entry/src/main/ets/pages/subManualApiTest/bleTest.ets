@@ -87,7 +87,7 @@ struct BleTest {
           Text("外设MAC:")
             .fontSize("18vp")
             .height(40)
-            .width("25%")
+            .width($r('app.float.wh_value_25p'))
             .align(Alignment.Start)
 
           TextInput({ text : this.peripheralDeviceId , placeholder : "input peripheral deviceId." })
@@ -96,7 +96,7 @@ struct BleTest {
               this.peripheralDeviceId = strInput;
               AppStorage.setOrCreate("peripheralDeviceId" , strInput)
             })
-            .width('55%')
+            .width($r('app.float.wh_value_55p'))
             .padding({ top : 5 , left : 5 })
             .height(40)
             .borderStyle(BorderStyle.Dashed)

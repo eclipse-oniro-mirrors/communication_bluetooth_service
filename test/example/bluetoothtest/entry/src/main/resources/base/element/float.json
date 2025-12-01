@@ -939,6 +939,38 @@
     {
       "name": "wh_value_85p",
       "value": "85%"
+    },
+    {
+      "name": "wh_value_93p",
+      "value": "93%"
+    },
+    {
+      "name": "wh_value_78p",
+      "value": "78%"
+    },
+    {
+      "name": "wh_value_77p",
+      "value": "77%"
+    },
+    {
+      "name": "wh_value_55p",
+      "value": "55%"
+    },
+    {
+      "name": "wh_value_45p",
+      "value": "45%"
+    },
+    {
+      "name": "wh_value_35p",
+      "value": "35%"
+    },
+    {
+      "name": "wh_value_25p",
+      "value": "25%"
+    },
+    {
+      "name": "wh_value_5p",
+      "value": "5%"
     }
   ]
 }

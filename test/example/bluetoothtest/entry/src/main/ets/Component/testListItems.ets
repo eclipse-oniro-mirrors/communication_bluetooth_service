@@ -44,11 +44,11 @@ export struct TestListItem {
           .fontSize(20)
           .flexGrow(1)
           .margin({ left : 12 })
-          .width("45%")
+          .width($r('app.float.wh_value_45p'))
         Text(this.testItem.detail)
           .fontSize(17)
           .margin({ left : 10 , right : 5 })
-          .width("45%")
+          .width($r('app.float.wh_value_45p'))
       }
       .height(95)
     }

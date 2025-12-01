@@ -122,7 +122,7 @@ export struct BleFilterTable {
                     this.txtScanFilter_serviceUuid = strInput;
                     AppStorage.setOrCreate('txtScanFilterServiceUuid' , strInput);
                   })
-                  .width("77%")
+                  .width($r('app.float.wh_value_77p'))
                   .borderRadius(1)
               }
               .padding(5)
@@ -224,7 +224,7 @@ export struct BleFilterTable {
                       console.log("Select:" + index)
                       AppStorage.setOrCreate('txtScanOptionsMatchMode' , index);
                     })
-                }.width("78%")
+                }.width($r('app.float.wh_value_78p'))
               }
               .padding(5)
               .justifyContent(FlexAlign.Start)
