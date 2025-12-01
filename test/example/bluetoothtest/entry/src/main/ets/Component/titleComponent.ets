@@ -36,7 +36,7 @@ export struct TitleComponent {
       Flex({ justifyContent : FlexAlign.SpaceBetween , alignItems : ItemAlign.Center }) {
         Text(this.stateChangeFlag ? this.state : (this.pinRequiredFlag ? this.pin : (this.bondStateChangeFlag ? this.bondState : this.title)))
           .textAlign(TextAlign.Center)
-          .width("100%")
+          .width($r('app.float.wh_value_100p'))
           .height(70)
           .fontSize(this.fontSize)
           .fontColor($r('app.color.font_color_182431'))

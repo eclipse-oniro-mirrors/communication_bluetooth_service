@@ -54,12 +54,12 @@ struct BleBenchmarkTest {
               .fontSize("17vp")
               .margin({ top : "10vp" , bottom : "10vp" , left : "20vp" })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             Text("Ble的性能测试是测试在发现BLE蓝牙时的时间性能和稳定性能")
               .fontSize("17vp")
               .margin({ left : "10vp" })
           }
-          .width("100%")
+          .width($r('app.float.wh_value_100p'))
           .height(100)
         }
         .scrollBarWidth(10)
@@ -73,27 +73,27 @@ struct BleBenchmarkTest {
               .fontSize("17vp")
               .margin({ top : "8vp" , bottom : "8vp" , left : "10vp" })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             List() {
               ListItem() {
                 Text(this.bleBenchmarkTestMessage)
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "10vp" , right : "10vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
               }
             }
-            .height("90%")
-            .width("90%")
+            .height($r('app.float.wh_value_90p'))
+            .width($r('app.float.wh_value_90p'))
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
-          .width("100%")
+          .width($r('app.float.wh_value_100p'))
           .height(400)
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.On)
       }
-      .width("100%")
+      .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
       Column() {
@@ -196,11 +196,11 @@ struct BleBenchmarkTest {
           })
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width("100%")
+        .width($r('app.float.wh_value_100p'))
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-      .width("100%")
-      .height("100%");
+      .width($r('app.float.wh_value_100p'))
+      .height($r('app.float.wh_value_100p'));
     }
   }
 

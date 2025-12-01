@@ -62,13 +62,13 @@ struct A2dpSourceAutoTestManager {
               .fontSize("17vp")
               .margin({ top : "10vp" , bottom : "10vp" , left : "15vp" })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             AutoContentTable({
               autoItems : initA2dpSourceProfileManagerAutoData() ,
               changeIndex : this.changeIndex
             })
           }
-          .width("100%")
+          .width($r('app.float.wh_value_100p'))
           .height(260)
         }
         .scrollBarWidth(10)
@@ -82,28 +82,28 @@ struct A2dpSourceAutoTestManager {
               .fontSize("17vp")
               .margin({ top : "8vp" , bottom : "8vp" , left : "15vp" })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             List() {
               ListItem() {
                 Text("log:" + "\n" + this.a2dpSourceProfileAutoTestMessage)
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "30vp" , right : "10vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
               }
             }
-            .height("80%")
-            .width("90%")
+            .height($r('app.float.wh_value_80p'))
+            .width($r('app.float.wh_value_90p'))
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
-          .width("100%")
+          .width($r('app.float.wh_value_100p'))
           .height(280)
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.Auto)
       }
       .height(500)
-      .width("100%")
+      .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
       Stack().height("1vp").backgroundColor("#000000");

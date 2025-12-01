@@ -129,7 +129,7 @@ struct OppRecvScenarioTest {
                   ListItem() {
                     Text(item.name)
                       .fontSize("25vp")
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                       .margin({ left : '10%' })
                       .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") : $r("app.color.white"))
                       .border({
@@ -143,10 +143,10 @@ struct OppRecvScenarioTest {
               }
             }
             .height("70%")
-            .width("80%")
+            .width($r('app.float.wh_value_80p'))
           }
           .height("40%")
-          .width("100%")
+          .width($r('app.float.wh_value_100p'))
 
         }
         .scrollBarWidth(10)
@@ -172,28 +172,28 @@ struct OppRecvScenarioTest {
               .fontSize("18vp")
               .margin({ top : "8vp" , bottom : "8vp" , left : "20vp" })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             List() {
               ListItem() {
                 Text(this.oppRecvScenarioMessage)
                   .fontSize("18vp")
                   .margin({ top : "5vp" , left : "30vp" , right : "10vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
               }
             }
-            .height("80%")
-            .width("90%")
+            .height($r('app.float.wh_value_80p'))
+            .width($r('app.float.wh_value_90p'))
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
-          .width("100%")
+          .width($r('app.float.wh_value_100p'))
           .height("30%")
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.On)
       }
       .height("66%")
-      .width("100%")
+      .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
       Stack().height("1vp").backgroundColor("#000000");
@@ -228,7 +228,7 @@ struct OppRecvScenarioTest {
               })
               .width('60%')
           }
-          .width("100%")
+          .width($r('app.float.wh_value_100p'))
           .align(Alignment.Center)
           .alignItems(HorizontalAlign.Center)
           .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
@@ -244,11 +244,11 @@ struct OppRecvScenarioTest {
           }
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width("100%")
+        .width($r('app.float.wh_value_100p'))
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-      .width("100%")
-      .height("100%");
+      .width($r('app.float.wh_value_100p'))
+      .height($r('app.float.wh_value_100p'));
     }
   }
 }

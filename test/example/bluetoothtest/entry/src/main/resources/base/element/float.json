@@ -867,6 +867,14 @@
     {
       "name": "wh_value_100p",
       "value": "100%"
+    },
+    {
+      "name": "wh_value_90p",
+      "value": "90%"
+    },
+    {
+      "name": "wh_value_80p",
+      "value": "80%"
     }
   ]
 }

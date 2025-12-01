@@ -159,9 +159,9 @@ struct ProfileConnState2 {
           .textAlign(TextAlign.Start)
           .fontSize('17fp')
           .backgroundColor($r("app.color.white"))
-      }.width('100%')
+      }.width($r('app.float.wh_value_100p'))
     }
-    .height('100%')
+    .height($r('app.float.wh_value_100p'))
     .alignItems(VerticalAlign.Top)
     .backgroundColor($r("app.color.lead"))
   }

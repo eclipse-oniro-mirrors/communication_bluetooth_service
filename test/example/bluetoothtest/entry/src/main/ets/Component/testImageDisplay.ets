@@ -37,14 +37,14 @@ export struct TestImageDisplay {
             .fontSize(26)
             .fontWeight(500)
             .margin({ left : 26 , top : 10 })
-            .width("90%")
+            .width($r('app.float.wh_value_90p'))
           Text(this.testItem.detail)
             .fontSize(17)
             .fontWeight(500)
             .margin({ top : 8 })
-            .width("80%")
+            .width($r('app.float.wh_value_80p'))
         }
-        .width("80%")
+        .width($r('app.float.wh_value_80p'))
         .padding({ left : 20 })
       }
     }

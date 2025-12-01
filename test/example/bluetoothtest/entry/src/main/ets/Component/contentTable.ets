@@ -52,7 +52,7 @@ export struct GetProfileConnSateDialog {
         .selectedOptionFont({ size : 20 })
         .optionFont({ size : 17 })
         .height(80)
-        .width("90%")
+        .width($r('app.float.wh_value_90p'))
         .onSelect((index: number) => {
           console.log("Select:" + index)
           this.currentClick = index
@@ -124,7 +124,7 @@ export struct SetScanModeDialog {
         .selectedOptionFont({ size : 12 })
         .optionFont({ size : 12 })
         .height(60)
-        .width("90%")
+        .width($r('app.float.wh_value_90p'))
         .onSelect((index: number) => {
           console.log("Select:" + index)
           this.currentClick = index
@@ -133,7 +133,7 @@ export struct SetScanModeDialog {
         placeholder : '请输入延迟时间' ,
         text : this.duration.toString() ,
       }).type(InputType.Number)
-        .height(60).width('90%')
+        .height(60).width($r('app.float.wh_value_90p'))
         .onChange((value: string) => {
           if ( value == "" ) {
             this.duration = 0
@@ -195,7 +195,7 @@ export struct InputDialog {
         .margin({ top : 10 , bottom : 10 })
       TextInput({ placeholder : '' , text : this.textValue })
         .height(60)
-        .width('90%')
+        .width($r('app.float.wh_value_90p'))
         .onChange((value: string) => {
           this.textValue = value
         })
@@ -261,7 +261,7 @@ export struct SetConnectionStrategyDialog {
         .selectedOptionFont({ size : 18 })
         .optionFont({ size : 17 })
         .height(80)
-        .width("90%")
+        .width($r('app.float.wh_value_90p'))
         .onSelect((index: number) => {
           console.log("Select:" + index)
           this.currentClick = index
@@ -402,7 +402,7 @@ export struct ContentTable {
             .padding({ left : 10 , top : 5 })
         }
         .layoutWeight(6)
-        .width("80%")
+        .width($r('app.float.wh_value_80p'))
 
         Flex({ alignItems : ItemAlign.Center }) {
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : apiItem.result)

@@ -86,11 +86,11 @@ struct GattServerSetting {
                   this.curServiceUUID = strInput;
                   AppStorage.setOrCreate('curServiceUUID' , strInput);
                 })
-                .width("80%")
+                .width($r('app.float.wh_value_80p'))
                 .borderRadius(1)
             }
             .height(60)
-            .width('100%')
+            .width($r('app.float.wh_value_100p'))
             .padding(5)
             .backgroundColor($r("app.color.moon"));
 
@@ -103,10 +103,10 @@ struct GattServerSetting {
                     this.curCharacteristicUUID = strInput;
                     AppStorage.setOrCreate('curCharacteristicUUID' , strInput);
                   })
-                  .width("80%")
+                  .width($r('app.float.wh_value_80p'))
                   .borderRadius(1)
               }
-              .width('100%')
+              .width($r('app.float.wh_value_100p'))
               .padding(5)
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
@@ -119,16 +119,16 @@ struct GattServerSetting {
                     this.curCharacteristicValue = strInput;
                     AppStorage.setOrCreate('curCharacteristicValue' , strInput);
                   })
-                  .width("80%")
+                  .width($r('app.float.wh_value_80p'))
                   .borderRadius(1)
               }
-              .width('100%')
+              .width($r('app.float.wh_value_100p'))
               .padding(5)
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
             }
             .height(100)
-            .width('100%')
+            .width($r('app.float.wh_value_100p'))
             .padding(5)
             .backgroundColor($r("app.color.spring"));
 
@@ -141,10 +141,10 @@ struct GattServerSetting {
                     this.curDescriptorUUID = strInput;
                     AppStorage.setOrCreate('curDescriptorUUID' , strInput);
                   })
-                  .width("80%")
+                  .width($r('app.float.wh_value_80p'))
                   .borderRadius(1)
               }
-              .width('100%')
+              .width($r('app.float.wh_value_100p'))
               .padding(5)
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
@@ -157,16 +157,16 @@ struct GattServerSetting {
                     this.curDescriptorValue = strInput;
                     AppStorage.setOrCreate('curDescriptorValue' , strInput);
                   })
-                  .width("80%")
+                  .width($r('app.float.wh_value_80p'))
                   .borderRadius(1)
               }
-              .width('100%')
+              .width($r('app.float.wh_value_100p'))
               .padding(5)
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
             }
             .height(100)
-            .width('100%')
+            .width($r('app.float.wh_value_100p'))
             .backgroundColor($r("app.color.moon"));
           }
         }
@@ -277,14 +277,14 @@ struct GattServerSetting {
                   })
                   .width(30)
                   .margin({ left : "1vp" })
-                Text("connectable").fontSize(17).width("80%")
+                Text("connectable").fontSize(17).width($r('app.float.wh_value_80p'))
               }
               .height(40)
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
             }
             .height(120)
-            .width('100%')
+            .width($r('app.float.wh_value_100p'))
             .padding(5)
             .backgroundColor(0xAFEEEE);
 
@@ -297,12 +297,12 @@ struct GattServerSetting {
                     this.advDataServiceUuids_serviceUuid = strInput;
                     AppStorage.setOrCreate('advDataServiceUuids_serviceUuid' , strInput);
                   })
-                  .width("80%")
+                  .width($r('app.float.wh_value_80p'))
               }
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
 
               Column() {
-                Text("manufactureData").fontSize(17).width("100%")
+                Text("manufactureData").fontSize(17).width($r('app.float.wh_value_100p'))
                 Row() {
                   Text("Id").fontSize(17).width(30)
                   TextInput({
@@ -327,13 +327,13 @@ struct GattServerSetting {
                     })
                     .width("100vp")
                 }
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               }
               .borderWidth(1)
               .borderColor($r("app.color.lead"))
 
               Column() {
-                Text("serviceData").fontSize(17).width("100%")
+                Text("serviceData").fontSize(17).width($r('app.float.wh_value_100p'))
                 Column() {
                   Row() {
                     Text("serviceUuid").fontSize(17).width(70)
@@ -342,7 +342,7 @@ struct GattServerSetting {
                       .onChange((strInput) => {
                         this.advDataServiceData_serviceUuid = strInput;
                         AppStorage.setOrCreate('advDataServiceData_serviceUuid' , strInput)
-                      }).width("80%")
+                      }).width($r('app.float.wh_value_80p'))
                   }
 
                   Row() {
@@ -356,7 +356,7 @@ struct GattServerSetting {
                         this.advDataServiceData_serviceValue = strInput;
                         AppStorage.setOrCreate('advDataServiceData_serviceValue' , strInput)
                       })
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                   }
                   .padding({ top : 10 })
                 }
@@ -364,7 +364,7 @@ struct GattServerSetting {
               .borderWidth(1)
               .borderColor($r("app.color.lead"))
             }
-            .width('100%')
+            .width($r('app.float.wh_value_100p'))
             .backgroundColor($r("app.color.moon"));
 
             Row() {
@@ -389,7 +389,7 @@ struct GattServerSetting {
                 .fontColor("#4444444");
             }
             .height(40)
-            .width('100%')
+            .width($r('app.float.wh_value_100p'))
             .padding(5);
             Column() {
               Row() {
@@ -400,11 +400,11 @@ struct GattServerSetting {
                     this.advResponseServiceUuids_serviceUuid = strInput;
                     AppStorage.setOrCreate('advResponseServiceUuids_serviceUuid' , strInput)
                   })
-                  .width("80%")
+                  .width($r('app.float.wh_value_80p'))
               }
 
               Column() {
-                Text("manufactureData").fontSize(17).width("100%")
+                Text("manufactureData").fontSize(17).width($r('app.float.wh_value_100p'))
                   .backgroundColor($r("app.color.lead"))
                 Column() {
                   Row() {
@@ -416,7 +416,7 @@ struct GattServerSetting {
                         this.advResponseManufactureData_manufactureId = strInput;
                         AppStorage.setOrCreate('advResponseManufactureData_manufactureId' , strInput)
                       })
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                   }
 
                   Row() {
@@ -428,7 +428,7 @@ struct GattServerSetting {
                         this.advResponseManufactureData_manufactureValue = strInput;
                         AppStorage.setOrCreate('advResponseManufactureData_manufactureValue' , strInput)
                       })
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                   }
                   .padding({ top : 5 })
                 }
@@ -437,7 +437,7 @@ struct GattServerSetting {
               .borderColor($r("app.color.lead"))
 
               Column() {
-                Text("serviceData").fontSize(17).width("100%")
+                Text("serviceData").fontSize(17).width($r('app.float.wh_value_100p'))
                   .backgroundColor($r("app.color.lead"))
                 Column() {
                   Row() {
@@ -451,7 +451,7 @@ struct GattServerSetting {
                         this.advResponseServiceData_serviceUuid = strInput;
                         AppStorage.setOrCreate('advResponseServiceData_serviceUuid' , strInput)
                       })
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                   }
 
                   Row() {
@@ -465,7 +465,7 @@ struct GattServerSetting {
                         this.advResponseServiceData_serviceValue = strInput;
                         AppStorage.setOrCreate('advResponseServiceData_serviceValue' , strInput)
                       })
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                   }
                   .padding({ top : 5 })
                 }
@@ -474,7 +474,7 @@ struct GattServerSetting {
               .borderColor($r("app.color.lead"))
             }
             .height("85%")
-            .width('100%')
+            .width($r('app.float.wh_value_100p'))
             .padding(5)
             .backgroundColor($r("app.color.moon"));
           }
@@ -642,7 +642,7 @@ struct GattServerManager {
         Text("GattServerSetting")
           .fontSize("20vp")
           .height(60)
-          .width("80%")
+          .width($r('app.float.wh_value_80p'))
           .padding({ left : 10 })
         Image($r('app.media.Switch'))
           .height(50)
@@ -652,7 +652,7 @@ struct GattServerManager {
             this.showList = !this.showList;
           })
       }
-      .width("100%")
+      .width($r('app.float.wh_value_100p'))
 
       Column() {
         if ( this.showList ) {
@@ -664,37 +664,37 @@ struct GattServerManager {
                 .fontSize("17vp")
                 .margin({ top : "5vp" , left : "10vp" })
                 .textAlign(TextAlign.Start)
-                .width("100%")
+                .width($r('app.float.wh_value_100p'))
               Text("Result:" + this.message)
                 .fontSize("17vp")
                 .margin({ top : "1vp" , left : "10vp" })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               Text("ConnectionStateChange:" + this.connectStateMsg)
                 .fontSize("17vp")
                 .margin({ top : "1vp" , left : "10vp" })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               Text("characteristicRead:" + this.characteristicReadMsg)
                 .fontSize("17vp")
                 .margin({ top : "1vp" , left : "10vp" })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               Text("characteristicWrite:" + this.characteristicWriteMsg)
                 .fontSize("17vp")
                 .margin({ top : "1vp" , left : "10vp" })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               Text("descriptorRead:" + this.descriptorReadMsg)
                 .fontSize("17vp")
                 .margin({ top : "1vp" , left : "10vp" })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               Text("descriptorWrite:" + this.descriptorWriteMsg)
                 .fontSize("17vp")
                 .margin({ top : "1vp" , left : "10vp" })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
             }
             .width("95%")
             .height(160)
@@ -706,7 +706,7 @@ struct GattServerManager {
                 .margin({ top : "5vp" , left : "10vp" })
                 .padding("5vp")
                 .fontSize("18vp")
-                .width("100%")
+                .width($r('app.float.wh_value_100p'))
               Scroll() {
                 ContentTable({ apiItems : initGattServerManagerApiData() }) //子层调用
               }
@@ -721,7 +721,7 @@ struct GattServerManager {
       }
       .visibility(Visibility.Visible);
     }
-    .width('100%')
+    .width($r('app.float.wh_value_100p'))
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
   }
 

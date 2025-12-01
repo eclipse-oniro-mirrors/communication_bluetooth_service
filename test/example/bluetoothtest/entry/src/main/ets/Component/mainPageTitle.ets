@@ -68,8 +68,8 @@ export struct MainPageTitle {
     .key(isFullScreen + 'FullScreenShot')
     .type(ButtonType.Normal)
     .backgroundColor($r("app.color.blue"))
-    .height("100%")
-    .width("100%")
+    .height($r('app.float.wh_value_100p'))
+    .width($r('app.float.wh_value_100p'))
     //    .size({ width: 55, height: 55 })
     .margin({ left : 6 , right : 6 , top : 3 })
     .onClick(() => {
@@ -89,8 +89,8 @@ export struct MainPageTitle {
         Column() {
           this.CustomBtn($r('app.string.btn_fullscreen') , true)
         }
-        .width("100%")
-        .height("100%")
+        .width($r('app.float.wh_value_100p'))
+        .height($r('app.float.wh_value_100p'))
         .borderWidth(this.myborderWidth)
         .borderRadius(this.myborderRadius)
         .borderColor(Color.Green)

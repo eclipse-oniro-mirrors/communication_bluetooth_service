@@ -334,18 +334,18 @@ export struct AvailableItem {
         Text(this.name)
           .fontSize(17.4)
           .fontWeight(FontWeight.Bold)
-          .width("90%")
+          .width($r('app.float.wh_value_90p'))
           .height(40)
           .padding({ left : 10 , top : 15 })
         Text(this.mac)
           .fontSize(17.4)
           .fontWeight(FontWeight.Bold)
-          .width("90%")
+          .width($r('app.float.wh_value_90p'))
           .height(30)
           .padding({ left : 10 , top : 5 })
       }
       .height(80)
-      .width("80%")
+      .width($r('app.float.wh_value_80p'))
 
       Row() {
         Text(this.state)
@@ -384,13 +384,13 @@ export struct PairedItem {
         Text(this.name)
           .fontSize(17.4)
           .fontWeight(FontWeight.Bold)
-          .width("90%")
+          .width($r('app.float.wh_value_90p'))
           .height(40)
           .padding({ left : 10 , top : 15 })
         Text(this.mac)
           .fontSize(17.4)
           .fontWeight(FontWeight.Bold)
-          .width("90%")
+          .width($r('app.float.wh_value_90p'))
           .height(30)
           .padding({ left : 10 , top : 5 })
       }
@@ -511,7 +511,7 @@ export struct AvailableDeviceComponent {
           }
           .backgroundColor($r("app.color.white_bg_color"))
           .borderRadius($r("app.float.radius_24"))
-          .height("80%")
+          .height($r('app.float.wh_value_80p'))
           .divider({
             strokeWidth : 1 ,
             color : $r('app.color.color_E3E3E3_grey') ,

@@ -95,7 +95,7 @@ struct profileConnState {
         .textAlign(TextAlign.Center)
         .fontSize('17fp')
         .height(60)
-        .width("100%")
+        .width($r('app.float.wh_value_100p'))
         .backgroundColor($r("app.color.moon"))
 
       Row() {
@@ -123,10 +123,10 @@ struct profileConnState {
         }
         .padding({ left : 50 })
       }
-      .width("80%")
+      .width($r('app.float.wh_value_80p'))
     }
     .padding({ left : $r('app.float.distance_24') , right : $r('app.float.distance_24') })
-    .width("100%")
+    .width($r('app.float.wh_value_100p'))
     .height(ConfigData.WH_100_100)
     .backgroundColor($r("app.color.lead"))
   }

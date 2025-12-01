@@ -176,13 +176,13 @@ struct etScanMode {
           })
       }
       .padding($r('app.float.distance_15'))
-      .width('100%')
+      .width($r('app.float.wh_value_100p'))
 
       Text(this.message)
         .textAlign(TextAlign.Center)
         .fontSize('17fp')
         .height(50)
-        .width("100%")
+        .width($r('app.float.wh_value_100p'))
         .fontWeight(FontWeight.Medium)
         .backgroundColor($r("app.color.moon"))
 
@@ -213,7 +213,7 @@ struct etScanMode {
       }
     }
     .padding({ left : $r('app.float.distance_24') , right : $r('app.float.distance_24') })
-    .width("100%")
+    .width($r('app.float.wh_value_100p'))
     .height(ConfigData.WH_100_100)
     .backgroundColor($r("app.color.lead"))
   }

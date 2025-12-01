@@ -73,8 +73,8 @@ export struct PageTitle {
     .key(isFullScreen + 'FullScreenShot')
     .type(ButtonType.Normal)
     .backgroundColor($r("app.color.blue"))
-    .height("100%")
-    .width("100%")
+    .height($r('app.float.wh_value_100p'))
+    .width($r('app.float.wh_value_100p'))
     .margin({ left : 3 , right : 3 , top : 2 })
     .onClick(() => {
       console.log('[Screenshot] onClick,screenshot')
@@ -92,7 +92,7 @@ export struct PageTitle {
         }
         .type(ButtonType.Normal)
         .width("20%")
-        .height("100%")
+        .height($r('app.float.wh_value_100p'))
         .backgroundColor($r("app.color.blue"))
         .padding({ left : 1 , top : 15 })
         .onClick(() => {
@@ -108,8 +108,8 @@ export struct PageTitle {
           Column() {
             this.CustomBtn($r('app.string.btn_fullscreen') , true)
           }
-          .width("100%")
-          .height("100%")
+          .width($r('app.float.wh_value_100p'))
+          .height($r('app.float.wh_value_100p'))
           .borderWidth(this.myborderWidth)
           .borderRadius(this.myborderRadius)
           .borderColor(Color.Green)

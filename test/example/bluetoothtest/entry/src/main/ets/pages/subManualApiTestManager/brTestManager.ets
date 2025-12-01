@@ -93,7 +93,7 @@ struct brTestManager {
         Text("目标设备MAC：")
           .fontSize("20vp")
           .height(50)
-          .width('100%')
+          .width($r('app.float.wh_value_100p'))
           .padding({ top : 10 , left : 10 })
         TextInput({ text : this.pairedMac , placeholder : "请输入即将连接的设备MAC" })
           .height(50)
@@ -110,7 +110,7 @@ struct brTestManager {
     }
     .alignItems(HorizontalAlign.Center)
     .backgroundColor($r("app.color.lead"))
-    .height("100%")
+    .height($r('app.float.wh_value_100p'))
   }
 
   /**

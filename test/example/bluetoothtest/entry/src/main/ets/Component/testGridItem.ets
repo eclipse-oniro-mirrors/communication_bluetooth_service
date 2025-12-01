@@ -27,7 +27,7 @@ export struct TestGridItem {
         Image(this.testItem.image)
           .objectFit(ImageFit.Contain)
           .height(152)
-          .width('100%')
+          .width($r('app.float.wh_value_100p'))
       }.backgroundColor('#FFf1f3f5')
 
       Flex({ justifyContent : FlexAlign.Start , alignItems : ItemAlign.Center }) {
@@ -40,11 +40,11 @@ export struct TestGridItem {
           .margin({ right : 6 })
       }
       .height(32)
-      .width('100%')
+      .width($r('app.float.wh_value_100p'))
       .backgroundColor('#FFe5e5e5')
     }
     .height(184)
-    .width('100%')
+    .width($r('app.float.wh_value_100p'))
     .onClick(() => {
       router.pushUrl({ url : 'MainAbility/pagesTestDetail' , params : { testId : this.testItem } })
     })

@@ -70,7 +70,7 @@ struct GattClientVelocityBenchmarkTest {
               .fontSize("17vp")
               .margin({ top : "10vp" , bottom : "10vp" , left : "20vp" })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             Text("Gatt的性能测试是测试Gatt两端收发notify信息变化的速率性能")
               .fontSize("17vp")
               .margin({ left : "15vp" })
@@ -97,13 +97,13 @@ struct GattClientVelocityBenchmarkTest {
                     AppStorage.setOrCreate("gatt_Cycle_index" , index);
                   })
               }
-              .width("90%")
+              .width($r('app.float.wh_value_90p'))
             }
             .padding(3)
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
           }
-          .width("100%")
+          .width($r('app.float.wh_value_100p'))
           .height(130)
         }
         .scrollBarWidth(10)
@@ -117,27 +117,27 @@ struct GattClientVelocityBenchmarkTest {
               .fontSize("17vp")
               .margin({ top : "8vp" , bottom : "8vp" , left : "10vp" })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             List() {
               ListItem() {
                 Text(this.gattClientBenchmarkTestMessage)
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "10vp" , right : "10vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
               }
             }
-            .height("90%")
-            .width("90%")
+            .height($r('app.float.wh_value_90p'))
+            .width($r('app.float.wh_value_90p'))
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
-          .width("100%")
+          .width($r('app.float.wh_value_100p'))
           .height(330)
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.On)
       }
-      .width("100%")
+      .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
       Column() {
@@ -237,11 +237,11 @@ struct GattClientVelocityBenchmarkTest {
           })
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width("100%")
+        .width($r('app.float.wh_value_100p'))
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-      .width("100%")
-      .height("100%");
+      .width($r('app.float.wh_value_100p'))
+      .height($r('app.float.wh_value_100p'));
     }
   }
 }

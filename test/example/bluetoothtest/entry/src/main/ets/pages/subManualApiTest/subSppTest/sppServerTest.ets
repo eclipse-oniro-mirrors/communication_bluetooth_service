@@ -96,7 +96,7 @@ struct SppServer {
                 this.uuid = str;
                 AppStorage.setOrCreate('inputUuid' , str)
               })
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
@@ -112,7 +112,7 @@ struct SppServer {
                 this.writeServerData = str;
                 AppStorage.setOrCreate("writeServerData" , str);
               })
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.moon"))
@@ -124,7 +124,7 @@ struct SppServer {
             Text("读取的数据为：").fontSize("17vp")
             Text(this.dataReadMessage)
               .fontSize("14vp")
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .padding(5)
@@ -146,15 +146,15 @@ struct SppServer {
             .align(Alignment.TopStart)
             .layoutWeight(1)
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
-            .height("100%")
+            .height($r('app.float.wh_value_100p'))
           }
           .height("85%")
         }
       }
-      .width('100%')
+      .width($r('app.float.wh_value_100p'))
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-    .height('100%')
+    .height($r('app.float.wh_value_100p'))
     .alignItems(VerticalAlign.Top)
   }
 

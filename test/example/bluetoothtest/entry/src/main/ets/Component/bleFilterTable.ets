@@ -57,7 +57,7 @@ export struct BleFilterTable {
           Text("BLE扫描过滤参数:")
             .fontSize("17vp")
             .fontColor("#4444444")
-            .width("80%")
+            .width($r('app.float.wh_value_80p'))
             .padding("5vp")
           Checkbox({ name : 'bleScanFilter' , group : 'checkboxGroup99' })
             .select(this.cbxBleScanFilter)
@@ -73,7 +73,7 @@ export struct BleFilterTable {
             .width(20)
         }
         .height(40)
-        .width("100%")
+        .width($r('app.float.wh_value_100p'))
         .borderWidth(1)
         .padding(5)
         .borderColor($r("app.color.lead"))
@@ -131,7 +131,7 @@ export struct BleFilterTable {
               .backgroundColor( $r( "app.color.spring" ) )
             }
             .height(180)
-            .width('100%')
+            .width($r('app.float.wh_value_100p'))
             .padding(5)
           }
           .borderColor($r("app.color.lead"))
@@ -143,7 +143,7 @@ export struct BleFilterTable {
                 .padding("5vp")
                 .fontSize("17vp")
                 .fontColor("#4444444")
-                .width("80%")
+                .width($r('app.float.wh_value_80p'))
               Checkbox({ name : 'bleScanOptions' , group : 'checkboxGroup95' })
                 .select(this.cbxBleScanOptions)
                 .selectedColor(0x39a2db)
@@ -162,7 +162,7 @@ export struct BleFilterTable {
                 .margin({ left : "1vp" })
             }
             .height(40)
-            .width('100%')
+            .width($r('app.float.wh_value_100p'))
             .padding(5)
             .backgroundColor( $r( "app.color.moon" ) );
 
@@ -175,7 +175,7 @@ export struct BleFilterTable {
                     this.txtScanOptions_interval = strInput;
                     AppStorage.setOrCreate('txtScanOptionsInterval' , strInput);
                   })
-                  .width("80%")
+                  .width($r('app.float.wh_value_80p'))
               }
               .padding(5)
               .justifyContent(FlexAlign.Start)
@@ -195,13 +195,13 @@ export struct BleFilterTable {
                     .font({ size : 17 })
                     .selectedOptionFont({ size : 17 })
                     .optionFont({ size : 15 })
-                    .width("80%")
+                    .width($r('app.float.wh_value_80p'))
                     .onSelect((index: number) => {
                       console.log("Select:" + index)
                       AppStorage.setOrCreate('txtScanOptionsDutyMode' , index);
                     })
                 }
-                .width("80%")
+                .width($r('app.float.wh_value_80p'))
               }
               .padding(5)
               .justifyContent(FlexAlign.Start)
@@ -231,7 +231,7 @@ export struct BleFilterTable {
               .alignItems(VerticalAlign.Center)
               .backgroundColor( $r( "app.color.spring" ) )
             }
-            .width('100%')
+            .width($r('app.float.wh_value_100p'))
             .padding(5)
           }
           .height(240)
@@ -239,7 +239,7 @@ export struct BleFilterTable {
           .borderColor($r("app.color.lead"))
         }
       }
-      .height("100%")
+      .height($r('app.float.wh_value_100p'))
     }
     .scrollBarWidth(20)
     .padding({ bottom : 10 })

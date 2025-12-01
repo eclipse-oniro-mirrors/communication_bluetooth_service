@@ -98,7 +98,7 @@ struct OppProfileTest {
                       ListItem() {
                         Text(item.name)
                           .fontSize("25vp")
-                          .width("80%")
+                          .width($r('app.float.wh_value_80p'))
                           .margin({ left : '10%' })
                           .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") : $r("app.color.white"))
                           .border({
@@ -112,7 +112,7 @@ struct OppProfileTest {
                   }
                 }
                 .height("50%")
-                .width("80%")
+                .width($r('app.float.wh_value_80p'))
 
                 Text("已选择的设备的蓝牙mac地址：")
                   .fontSize("18vp")
@@ -125,7 +125,7 @@ struct OppProfileTest {
                   .backgroundColor($r("app.color.moon"))
               }
               .height("15%")
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             }
             .scrollBarWidth(10)
             .scrollBar(BarState.Auto)
@@ -139,12 +139,12 @@ struct OppProfileTest {
                 .fontSize("17vp")
                 .textAlign(TextAlign.Start)
                 .margin({ top : "5vp" , left : "10vp" })
-                .width("100%")
+                .width($r('app.float.wh_value_100p'))
               Text("connectionStateChange： " + this.connectionStateInfo)
                 .fontSize("17vp")
                 .margin({ top : "10vp" , left : "10vp" })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
             }
             .height(80)
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
@@ -164,14 +164,14 @@ struct OppProfileTest {
           .height("66%")
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width("100%")
-        .height("100%")
+        .width($r('app.float.wh_value_100p'))
+        .height($r('app.float.wh_value_100p'))
         .visibility(this.hasProfile ? Visibility.Visible : Visibility.Hidden);
       }
-      .width('100%')
+      .width($r('app.float.wh_value_100p'))
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-    .height('100%')
+    .height($r('app.float.wh_value_100p'))
     .alignItems(VerticalAlign.Top)
   }
 

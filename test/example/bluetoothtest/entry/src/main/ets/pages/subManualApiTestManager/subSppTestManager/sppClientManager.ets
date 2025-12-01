@@ -90,7 +90,7 @@ struct SppClientManager {
                 this.deviceId = str;
                 AppStorage.setOrCreate('inputDeviceId' , str)
               })
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.moon"))
@@ -106,7 +106,7 @@ struct SppClientManager {
                 this.uuid = str;
                 AppStorage.setOrCreate('inputUuid' , str)
               })
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
@@ -122,7 +122,7 @@ struct SppClientManager {
                 this.writeClientData = str;
                 AppStorage.setOrCreate("writeClientData" , str);
               })
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.moon"))
@@ -134,7 +134,7 @@ struct SppClientManager {
             Text("读取的数据为：").fontSize("17vp")
             Text(this.dataReadMessage)
               .fontSize("15vp")
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .padding(5)
@@ -158,15 +158,15 @@ struct SppClientManager {
             .align(Alignment.TopStart)
             .layoutWeight(1)
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
-            .height("100%")
+            .height($r('app.float.wh_value_100p'))
           }
           .height("75%")
         }
       }
-      .width('100%')
+      .width($r('app.float.wh_value_100p'))
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-    .height('100%')
+    .height($r('app.float.wh_value_100p'))
     .alignItems(VerticalAlign.Top)
   }
 

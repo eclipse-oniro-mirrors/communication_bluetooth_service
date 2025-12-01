@@ -91,12 +91,12 @@ struct HidHostProfileManagerTest {
               .fontSize("17vp")
               .textAlign(TextAlign.Start)
               .margin({ top : "5vp" , left : "10vp" })
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             Text("connectionStateChange： " + this.connectionStateInfo)
               .fontSize("17vp")
               .margin({ top : "10vp" , left : "10vp" })
               .textAlign(TextAlign.Start)
-              .width("90%")
+              .width($r('app.float.wh_value_90p'))
           }
           .height(90)
           .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
@@ -114,10 +114,10 @@ struct HidHostProfileManagerTest {
         }
         .visibility(this.hasProfile ? Visibility.Visible : Visibility.Hidden);
       }
-      .width('100%')
+      .width($r('app.float.wh_value_100p'))
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-    .height('100%')
+    .height($r('app.float.wh_value_100p'))
     .alignItems(VerticalAlign.Top)
   }
 

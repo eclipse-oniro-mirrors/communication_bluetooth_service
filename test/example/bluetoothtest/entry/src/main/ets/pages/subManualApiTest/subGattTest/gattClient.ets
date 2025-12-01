@@ -61,7 +61,7 @@ struct GattClientSetting {
               AppStorage.setOrCreate('peripheralDeviceId' , strInput);
             }
           })
-          .width("80%")
+          .width($r('app.float.wh_value_80p'))
           .borderRadius(1)
       }
       .backgroundColor($r("app.color.moon"))
@@ -82,7 +82,7 @@ struct GattClientSetting {
                   AppStorage.setOrCreate('serviceUUID' , strInput);
                 }
               })
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .padding(5)
@@ -100,7 +100,7 @@ struct GattClientSetting {
                   AppStorage.setOrCreate('characteristicUUID' , strInput);
                 }
               })
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
@@ -118,7 +118,7 @@ struct GattClientSetting {
                   AppStorage.setOrCreate('characteristicValue' , strInput);
                 }
               })
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
@@ -136,7 +136,7 @@ struct GattClientSetting {
                   AppStorage.setOrCreate('descriptorUUID' , strInput);
                 }
               })
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
@@ -154,7 +154,7 @@ struct GattClientSetting {
                   AppStorage.setOrCreate('descriptorValue' , strInput);
                 }
               })
-              .width("80%")
+              .width($r('app.float.wh_value_80p'))
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.spring"))
@@ -219,7 +219,7 @@ struct GattClient {
         Text("GattClientSetting")
           .fontSize("20vp")
           .height(60)
-          .width("80%")
+          .width($r('app.float.wh_value_80p'))
           .padding({ left : "15vp" })
         Image($r('app.media.Switch'))
           .height(50)
@@ -228,7 +228,7 @@ struct GattClient {
           .onClick(() => {
             this.showList = !this.showList;
           })
-      }.width("100%")
+      }.width($r('app.float.wh_value_100p'))
 
       Column() {
         if ( this.showList ) {
@@ -241,49 +241,49 @@ struct GattClient {
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "10vp" })
                   .textAlign(TextAlign.Start)
-                  .width("100%")
+                  .width($r('app.float.wh_value_100p'))
                 Text("当前配置:" + this.message)
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "15vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
                 Text("BLE连接状态:" + this.bleConnectionStateInfo)
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "15vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
                 Text("BLE特征变化:" + this.bleCharacteristicChangeInfo)
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "15vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
                 Text("deviceName:" + this.deviceName)
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "15vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
                 Text("Rssi:" + this.Rssi)
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "15vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
                 Text("getService:" + this.getServices)
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "15vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
                 Text("readCharacteristic:" + this.read_CharacteristicValue)
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "15vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
                 Text("readDescriptor:" + this.read_DescriptorValue)
                   .fontSize("17vp")
                   .margin({ top : "5vp" , left : "15vp" })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
               }
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             }
             .scrollBarWidth(10)
             .scrollBar(BarState.Auto)
@@ -298,7 +298,7 @@ struct GattClient {
               .margin({ top : "5vp" , left : "10vp" })
               .padding("5vp")
               .fontSize("18vp")
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             Scroll() {
               ContentTable({ apiItems : initGattClientApiData() })
             }
@@ -306,15 +306,15 @@ struct GattClient {
             .align(Alignment.TopStart)
             .layoutWeight(1)
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
-            .height("100%")
+            .height($r('app.float.wh_value_100p'))
           }
-          .height("80%")
+          .height($r('app.float.wh_value_80p'))
         }
       }
       .visibility(Visibility.Visible);
     }
     .backgroundColor($r("app.color.lead"))
-    .height('100%')
+    .height($r('app.float.wh_value_100p'))
   }
 }
 

@@ -94,7 +94,7 @@ export struct AutoContentTable {
       }
       .scrollBarWidth(20)
     }
-    .height("80%")
+    .height($r('app.float.wh_value_80p'))
     .padding({ top : 5 , right : 10 , left : 10 })
   }
 }

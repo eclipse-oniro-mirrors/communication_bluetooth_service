@@ -49,7 +49,7 @@ struct ProfileAutoTestManager {
           }
         } , (item: TestData) => item.id)
       }
-      .height('80%')
+      .height($r('app.float.wh_value_80p'))
       .backgroundColor($r("app.color.lead"))
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))

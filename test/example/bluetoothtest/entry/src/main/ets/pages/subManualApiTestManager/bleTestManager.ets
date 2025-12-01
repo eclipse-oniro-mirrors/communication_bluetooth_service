@@ -121,7 +121,7 @@ struct BleTestManager {
     }
     .alignItems(HorizontalAlign.Center)
     .backgroundColor($r("app.color.lead"))
-    .height("100%")
+    .height($r('app.float.wh_value_100p'))
   }
 
   /**
