@@ -62,8 +62,8 @@ export struct MainPageTitle {
   CustomBtn(text: Resource , isFullScreen: boolean) {
     Button() {
       Image($r('app.media.screenShot'))
-        .height(50)
-        .width(50)
+        .height($r('app.float.wh_value_50'))
+        .width($r('app.float.wh_value_50'))
     }
     .key(isFullScreen + 'FullScreenShot')
     .type(ButtonType.Normal)
@@ -81,7 +81,7 @@ export struct MainPageTitle {
   build() {
     Flex({ alignItems : ItemAlign.Start }) {
       Text('蓝牙调试助手')
-        .fontSize(26)
+        .fontSize($r('app.float.wh_value_26'))
         .margin({ left : 15 })
         .padding({ top : 28 })
 
@@ -152,7 +152,7 @@ export struct MainPageTitle {
       }
       .layoutWeight(1)
     }
-    .height(80)
+    .height($r('app.float.wh_value_80'))
     .backgroundColor($r("app.color.blue"))
     .padding({ left : 20 })
   }

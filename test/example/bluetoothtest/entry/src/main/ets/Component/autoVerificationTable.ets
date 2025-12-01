@@ -35,8 +35,8 @@ export struct AutoVerificationTable {
           Image($r('app.media.bluetooth'))
             .objectFit(ImageFit.Contain)
             .autoResize(false)
-            .height(30)
-            .width(30)
+            .height($r('app.float.wh_value_30'))
+            .width($r('app.float.wh_value_30'))
         }
         .layoutWeight(1)
         .padding({ left : 10 })
@@ -64,7 +64,7 @@ export struct AutoVerificationTable {
         .padding({ left : 10 })
       }
     }
-    .height(80)
+    .height($r('app.float.wh_value_80'))
     .borderRadius(10)
     .margin({ top : 5 , bottom : 5 })
     .backgroundColor($r("app.color.white"))

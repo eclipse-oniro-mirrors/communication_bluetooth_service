@@ -57,7 +57,7 @@ struct SppClientAutoTestManager {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("1vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
       Column() {
         Scroll() {
           Column() {
@@ -72,12 +72,12 @@ struct SppClientAutoTestManager {
             })
           }
           .width($r('app.float.wh_value_100p'))
-          .height(260)
+          .height($r('app.float.wh_value_260'))
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.Auto)
 
-        Stack().height("1vp").backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
 
         Scroll() {
           Column() {
@@ -100,18 +100,18 @@ struct SppClientAutoTestManager {
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
           .width($r('app.float.wh_value_100p'))
-          .height(280)
+          .height($r('app.float.wh_value_280'))
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.Auto)
 
       }
-      .height(500)
+      .height($r('app.float.wh_value_500'))
       .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
 
-      Stack().height("1vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
       Column() {
         Button({ type : ButtonType.Normal , stateEffect : true }) {
           Row() {
@@ -120,8 +120,8 @@ struct SppClientAutoTestManager {
         }
         .borderRadius(8)
         .backgroundColor($r("app.color.blue"))
-        .width(180)
-        .height(50)
+        .width($r('app.float.wh_value_180'))
+        .height($r('app.float.wh_value_50'))
         .margin({ top : "15vp" })
         .onClick(async(event: ClickEvent) => {
           this.forLoop()

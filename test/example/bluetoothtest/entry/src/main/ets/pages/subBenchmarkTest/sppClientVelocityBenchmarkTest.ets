@@ -56,27 +56,27 @@ struct SppClientVelocityBenchmarkTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("1vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
 
       Column() {
         Scroll() {
           Column() {
             Text("性能测试:")
-              .fontSize("17vp")
-              .margin({ top : "5vp" , bottom : "5vp" , left : "20vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_20') })
               .textAlign(TextAlign.Start)
               .width($r('app.float.wh_value_100p'))
             Text("Spp的性能测试是测试Spp两端收发信息的速率和带宽性能")
-              .fontSize("17vp")
-              .margin({ left : "15vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ left : $r('app.float.wh_value_15') })
               .backgroundColor($r("app.color.spring"))
 
-            Stack().height("1vp").backgroundColor("#000000")
+            Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000")
 
             Row() {
-              Text("目标设备MAC：").fontSize(17).width(130)
+              Text("目标设备MAC：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_130'))
               TextInput({ text : this.deviceId , placeholder : "请输入mac地址" })
-                .fontSize("17vp")
+                .fontSize($r('app.float.wh_value_17'))
                 .onChange((str) => {
                   this.deviceId = str;
                   AppStorage.setOrCreate('inputDeviceId' , str)
@@ -84,15 +84,15 @@ struct SppClientVelocityBenchmarkTest {
                 .width($r('app.float.wh_value_70p'))
                 .borderRadius(1)
                 .backgroundColor($r("app.color.white"))
-                .height(35)
+                .height($r('app.float.wh_value_35'))
             }
-            .padding(5)
+            .padding($r('app.float.wh_value_5'))
             .width($r('app.float.wh_value_96p'))
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
             Row() {
-              Text("clientV_Cycle_index:").fontSize(17).width(200)
+              Text("clientV_Cycle_index:").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_200'))
               Column() {
                 Select([
                   { value : "100" },
@@ -108,7 +108,7 @@ struct SppClientVelocityBenchmarkTest {
                   .selectedOptionFont({ size : 17 })
                   .optionFont({ size : 15 })
                   .width($r('app.float.wh_value_80p'))
-                  .height(40)
+                  .height($r('app.float.wh_value_40'))
                   .onSelect((index: number) => {
                     console.log("index Select:" + index)
                     AppStorage.setOrCreate('clientV_Cycle_index' , index);
@@ -116,16 +116,16 @@ struct SppClientVelocityBenchmarkTest {
               }
               .width($r('app.float.wh_value_70p'))
             }
-            .padding(2)
+            .padding($r('app.float.wh_value_2'))
             .width($r('app.float.wh_value_96p'))
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
             Row() {
-              Text("写入目标设备数据：").fontSize(17).width(170)
+              Text("写入目标设备数据：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_170'))
               TextInput({ text : this.writeClientData , placeholder : "请输入写入的数据" })
                 .align(Alignment.Center)
-                .fontSize("15vp")
+                .fontSize($r('app.float.wh_value_15'))
                 .backgroundColor($r("app.color.white"))
                 .onChange((str) => {
                   this.writeClientData = str;
@@ -133,9 +133,9 @@ struct SppClientVelocityBenchmarkTest {
                 })
                 .width($r('app.float.wh_value_60p'))
                 .borderRadius(10)
-                .height(32)
+                .height($r('app.float.wh_value_32'))
             }
-            .padding(2)
+            .padding($r('app.float.wh_value_2'))
             .width($r('app.float.wh_value_96p'))
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
@@ -143,8 +143,8 @@ struct SppClientVelocityBenchmarkTest {
             Scroll() {
               Column() {
                 Text("读取的数据为：")
-                  .fontSize("17vp")
-                  .margin({ left : "10vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ left : $r('app.float.wh_value_10') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_100p'))
                 Scroll() {
@@ -152,9 +152,9 @@ struct SppClientVelocityBenchmarkTest {
                     ListItem() {
                       Text(this.dataClientReadMessage)
                         .align(Alignment.TopStart)
-                        .fontSize("14vp")
+                        .fontSize($r('app.float.wh_value_14'))
                         .width($r('app.float.wh_value_90p'))
-                        .height(150)
+                        .height($r('app.float.wh_value_150'))
                         .borderRadius(10)
                         .backgroundColor($r("app.color.white"))
                     }
@@ -167,34 +167,34 @@ struct SppClientVelocityBenchmarkTest {
                 .scrollBar(BarState.On)
               }
               .width($r('app.float.wh_value_100p'))
-              .height(150)
+              .height($r('app.float.wh_value_150'))
             }
             .scrollBarWidth(10)
             .scrollBar(BarState.On)
 
           }
           .width($r('app.float.wh_value_100p'))
-          .height(360)
+          .height($r('app.float.wh_value_360'))
           .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.Auto)
 
-        Stack().height("1vp").backgroundColor("#000000")
+        Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000")
 
         Scroll() {
           Column() {
             Text("日志:")
-              .fontSize("17vp")
-              .margin({ top : "8vp" , bottom : "8vp" , left : "10vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_8') , bottom : $r('app.float.wh_value_8') , left : $r('app.float.wh_value_10') })
               .textAlign(TextAlign.Start)
               .width($r('app.float.wh_value_100p'))
               .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
             List() {
               ListItem() {
                 Text(this.sppClientVelocityBenchmarkTestMessage)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "10vp" , right : "10vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') , right : $r('app.float.wh_value_10') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
               }
@@ -204,7 +204,7 @@ struct SppClientVelocityBenchmarkTest {
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
           .width($r('app.float.wh_value_100p'))
-          .height(150)
+          .height($r('app.float.wh_value_150'))
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.On)
@@ -216,14 +216,14 @@ struct SppClientVelocityBenchmarkTest {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('速率性能测试').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('速率性能测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
             }.alignItems(VerticalAlign.Center)
           }
           .borderRadius(8)
           .backgroundColor($r("app.color.blue"))
-          .width(100)
-          .height(66)
-          .margin({ top : "15vp" , left : "5vp" , right : "5vp" })
+          .width($r('app.float.wh_value_100'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppClientVelocityBenchmarkTestMessage = ""
@@ -242,14 +242,14 @@ struct SppClientVelocityBenchmarkTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('结束测试').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('结束测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
             }.alignItems(VerticalAlign.Center)
           }
           .borderRadius(8)
           .backgroundColor($r("app.color.blue"))
-          .width(80)
-          .height(66)
-          .margin({ top : "15vp" , left : "5vp" , right : "5vp" })
+          .width($r('app.float.wh_value_80'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppClientVelocityBenchmarkTestMessage = ""
@@ -266,15 +266,15 @@ struct SppClientVelocityBenchmarkTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Image($r('app.media.ic_public_delete_filled')).width(30).height(40).margin({ left : 5 })
-              //              Text('清空').fontSize("24vp").fontColor(0xffffff).margin({ left: 5, right: 10 })
+              Image($r('app.media.ic_public_delete_filled')).width($r('app.float.wh_value_30')).height($r('app.float.wh_value_40')).margin({ left : 5 })
+              //              Text('清空').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left: 5, right: 10 })
             }.alignItems(VerticalAlign.Center)
           }
           .borderRadius(8)
           .backgroundColor($r("app.color.moon"))
-          .width(50)
-          .height(66)
-          .margin({ top : "15vp" , right : "40vp" })
+          .width($r('app.float.wh_value_50'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , right : $r('app.float.wh_value_40') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppClientVelocityBenchmarkTestMessage = ""

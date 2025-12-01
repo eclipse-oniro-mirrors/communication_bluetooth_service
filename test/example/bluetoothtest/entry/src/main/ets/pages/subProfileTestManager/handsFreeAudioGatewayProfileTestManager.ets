@@ -72,7 +72,7 @@ struct HandsFreeAudioGatewayProfileManagerTest {
         Column() {
           Row() {
             Text("现在正在连接的设备为：")
-              .fontSize("17").width(110).margin("5vp")
+              .fontSize("17").width($r('app.float.wh_value_110')).margin("5vp")
             TextInput({ text : JSON.stringify(this.deviceId) , placeholder : "请输入需要连接的deviceId" })
               .fontSize("17vp")
               .onChange((str) => {
@@ -98,7 +98,7 @@ struct HandsFreeAudioGatewayProfileManagerTest {
               .textAlign(TextAlign.Start)
               .width($r('app.float.wh_value_90p'))
           }
-          .height(90)
+          .height($r('app.float.wh_value_90'))
           .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           .width($r('app.float.wh_value_88p'))
 

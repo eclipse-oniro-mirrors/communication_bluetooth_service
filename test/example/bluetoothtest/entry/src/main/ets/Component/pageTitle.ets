@@ -67,8 +67,8 @@ export struct PageTitle {
   CustomBtn(text: Resource , isFullScreen: boolean) {
     Button() {
       Image($r('app.media.screenShot'))
-        .height(40)
-        .width(40)
+        .height($r('app.float.wh_value_40'))
+        .width($r('app.float.wh_value_40'))
     }
     .key(isFullScreen + 'FullScreenShot')
     .type(ButtonType.Normal)
@@ -100,7 +100,7 @@ export struct PageTitle {
         })
 
         Text(this.testItem != null ? this.testItem.detail : this.detail)
-          .fontSize(24)
+          .fontSize($r('app.float.wh_value_24'))
           .margin({ left : 3 })
           .padding({ top : 18 })
 
@@ -171,7 +171,7 @@ export struct PageTitle {
         }
         .layoutWeight(1)
       }
-      .height(61)
+      .height($r('app.float.wh_value_61'))
       .backgroundColor('#FFedf2f5')
       .padding({ left : 10 })
       .borderColor($r("app.color.black"))

@@ -34,23 +34,23 @@ export struct TestListItem {
           Image(this.testItem.image)
             .objectFit(ImageFit.Contain)
             .autoResize(false)
-            .height(60)
-            .width(60)
+            .height($r('app.float.wh_value_60'))
+            .width($r('app.float.wh_value_60'))
         }
         .backgroundColor($r("app.color.white"))
         .width($r('app.float.wh_value_30p'))
 
         Text(this.testItem.name)
-          .fontSize(20)
+          .fontSize($r('app.float.wh_value_20'))
           .flexGrow(1)
           .margin({ left : 12 })
           .width($r('app.float.wh_value_45p'))
         Text(this.testItem.detail)
-          .fontSize(17)
+          .fontSize($r('app.float.wh_value_17'))
           .margin({ left : 10 , right : 5 })
           .width($r('app.float.wh_value_45p'))
       }
-      .height(95)
+      .height($r('app.float.wh_value_95'))
     }
     .params({ testItem : this.testItem })
     .margin({ right : 10 , left : 10 , top : 10 })

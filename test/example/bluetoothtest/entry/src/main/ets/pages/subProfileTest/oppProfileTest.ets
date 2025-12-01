@@ -131,7 +131,7 @@ struct OppProfileTest {
             .scrollBar(BarState.Auto)
           }
 
-          Stack().height("1vp").backgroundColor("#000000");
+          Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
 
           Scroll() {
             Column() {
@@ -146,7 +146,7 @@ struct OppProfileTest {
                 .textAlign(TextAlign.Start)
                 .width($r('app.float.wh_value_90p'))
             }
-            .height(80)
+            .height($r('app.float.wh_value_80'))
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
             .width($r('app.float.wh_value_88p'))
           }

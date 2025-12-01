@@ -42,40 +42,40 @@ struct BrBenchmarkTestManager {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("1vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
 
       Column() {
         Scroll() {
           Column() {
             Text("性能测试:")
-              .fontSize("17vp")
-              .margin({ top : "10vp" , bottom : "10vp" , left : "20vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_20') })
               .textAlign(TextAlign.Start)
               .width($r('app.float.wh_value_100p'))
             Text("Br的性能测试是测试在发现蓝牙时的时间性能和稳定性能")
-              .fontSize("17vp")
-              .margin({ left : "10vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ left : $r('app.float.wh_value_10') })
           }
           .width($r('app.float.wh_value_100p'))
-          .height(100)
+          .height($r('app.float.wh_value_100'))
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.Auto)
 
-        Stack().height("1vp").backgroundColor("#000000")
+        Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000")
 
         Scroll() {
           Column() {
             Text("日志:")
-              .fontSize("17vp")
-              .margin({ top : "8vp" , bottom : "8vp" , left : "10vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_8') , bottom : $r('app.float.wh_value_8') , left : $r('app.float.wh_value_10') })
               .textAlign(TextAlign.Start)
               .width($r('app.float.wh_value_100p'))
             List() {
               ListItem() {
                 Text(this.brBenchmarkTestMessage)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "10vp" , right : "10vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') , right : $r('app.float.wh_value_10') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
               }
@@ -85,7 +85,7 @@ struct BrBenchmarkTestManager {
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
           .width($r('app.float.wh_value_100p'))
-          .height(400)
+          .height($r('app.float.wh_value_400'))
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.On)
@@ -96,13 +96,13 @@ struct BrBenchmarkTestManager {
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Text('性能测试准备').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+            Text('性能测试准备').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
           }
           .borderRadius(8)
           .backgroundColor($r("app.color.blue"))
-          .width(100)
-          .height(66)
-          .margin({ top : "15vp" , left : "5vp" })
+          .width($r('app.float.wh_value_100'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_5') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             this.forLoop()
@@ -110,14 +110,14 @@ struct BrBenchmarkTestManager {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('时间性能测试').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('时间性能测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
             }.alignItems(VerticalAlign.Center)
           }
           .borderRadius(8)
           .backgroundColor($r("app.color.blue"))
-          .width(100)
-          .height(66)
-          .margin({ top : "15vp" , left : "5vp" , right : "5vp" })
+          .width($r('app.float.wh_value_100'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let brBenchmarkTestMessage = ""
@@ -137,14 +137,14 @@ struct BrBenchmarkTestManager {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('稳定性能测试').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('稳定性能测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
             }.alignItems(VerticalAlign.Center)
           }
           .borderRadius(8)
           .backgroundColor($r("app.color.blue"))
-          .width(100)
-          .height(66)
-          .margin({ top : "15vp" , left : "5vp" , right : "5vp" })
+          .width($r('app.float.wh_value_100'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let brBenchmarkTestMessage = ""
@@ -174,14 +174,14 @@ struct BrBenchmarkTestManager {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Image($r('app.media.ic_public_delete_filled')).width(30).height(40).margin({ left : 5 })
+              Image($r('app.media.ic_public_delete_filled')).width($r('app.float.wh_value_30')).height($r('app.float.wh_value_40')).margin({ left : 5 })
             }.alignItems(VerticalAlign.Center)
           }
           .borderRadius(8)
           .backgroundColor($r("app.color.moon"))
-          .width(50)
-          .height(66)
-          .margin({ top : "15vp" , right : "5vp" })
+          .width($r('app.float.wh_value_50'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , right : $r('app.float.wh_value_5') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let brBenchmarkTestMessage = ""

@@ -43,7 +43,7 @@ export struct GetProfileConnSateDialog {
   build() {
     Column() {
       Text(this.hitText)
-        .fontSize(20)
+        .fontSize($r('app.float.wh_value_20'))
         .margin({ top : 10 , bottom : 10 })
       Select(this.getProfileList)
         .selected(this.currentClick)
@@ -51,7 +51,7 @@ export struct GetProfileConnSateDialog {
         .font({ size : 20 })
         .selectedOptionFont({ size : 20 })
         .optionFont({ size : 17 })
-        .height(80)
+        .height($r('app.float.wh_value_80'))
         .width($r('app.float.wh_value_90p'))
         .onSelect((index: number) => {
           console.log("Select:" + index)
@@ -115,7 +115,7 @@ export struct SetScanModeDialog {
   build() {
     Column() {
       Text(this.hitText)
-        .fontSize(20)
+        .fontSize($r('app.float.wh_value_20'))
         .margin({ top : 10 , bottom : 10 })
       Select(this.scanModeList)
         .selected(this.currentClick)
@@ -123,7 +123,7 @@ export struct SetScanModeDialog {
         .font({ size : 12 })
         .selectedOptionFont({ size : 12 })
         .optionFont({ size : 12 })
-        .height(60)
+        .height($r('app.float.wh_value_60'))
         .width($r('app.float.wh_value_90p'))
         .onSelect((index: number) => {
           console.log("Select:" + index)
@@ -133,7 +133,7 @@ export struct SetScanModeDialog {
         placeholder : '请输入延迟时间' ,
         text : this.duration.toString() ,
       }).type(InputType.Number)
-        .height(60).width($r('app.float.wh_value_90p'))
+        .height($r('app.float.wh_value_60')).width($r('app.float.wh_value_90p'))
         .onChange((value: string) => {
           if ( value == "" ) {
             this.duration = 0
@@ -191,10 +191,10 @@ export struct InputDialog {
   build() {
     Column() {
       Text(this.hitText)
-        .fontSize(20)
+        .fontSize($r('app.float.wh_value_20'))
         .margin({ top : 10 , bottom : 10 })
       TextInput({ placeholder : '' , text : this.textValue })
-        .height(60)
+        .height($r('app.float.wh_value_60'))
         .width($r('app.float.wh_value_90p'))
         .onChange((value: string) => {
           this.textValue = value
@@ -252,7 +252,7 @@ export struct SetConnectionStrategyDialog {
   build() {
     Column() {
       Text(this.hitText)
-        .fontSize(20)
+        .fontSize($r('app.float.wh_value_20'))
         .margin({ top : 10 , bottom : 10 })
       Select(this.connectionStrategyList)
         .selected(this.currentClick)
@@ -260,7 +260,7 @@ export struct SetConnectionStrategyDialog {
         .font({ size : 18 })
         .selectedOptionFont({ size : 18 })
         .optionFont({ size : 17 })
-        .height(80)
+        .height($r('app.float.wh_value_80'))
         .width($r('app.float.wh_value_90p'))
         .onSelect((index: number) => {
           console.log("Select:" + index)
@@ -382,9 +382,9 @@ export struct ContentTable {
           Image($r('app.media.bleSmall'))
             .objectFit(ImageFit.Contain)
             .autoResize(false)
-            .height(50)
-            .width(40)
-            .padding({ top : "15vp" })
+            .height($r('app.float.wh_value_50'))
+            .width($r('app.float.wh_value_40'))
+            .padding({ top : $r('app.float.wh_value_15') })
         }
         .layoutWeight(1)
         .padding({ left : 10 })
@@ -414,7 +414,7 @@ export struct ContentTable {
         .padding({ left : 25 })
       }
     }
-    .height(80)
+    .height($r('app.float.wh_value_80'))
     .borderRadius(10)
     .margin({ top : 5 , bottom : 5 })
     .backgroundColor($r("app.color.white"))

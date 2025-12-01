@@ -21,7 +21,7 @@ import ConfigData from '../Utils/ConfigData';
 @Component
 export struct TitleComponent {
   private title: string | Resource = 'defaultTitle';
-  private fontSize: string = '30vp';
+  private fontSize: string = $r('app.float.wh_value_30');
   private stateChangeFlag: boolean = false;
   private pinRequiredFlag: boolean = false;
   private bondStateChangeFlag: boolean = false;
@@ -37,12 +37,12 @@ export struct TitleComponent {
         Text(this.stateChangeFlag ? this.state : (this.pinRequiredFlag ? this.pin : (this.bondStateChangeFlag ? this.bondState : this.title)))
           .textAlign(TextAlign.Center)
           .width($r('app.float.wh_value_100p'))
-          .height(70)
+          .height($r('app.float.wh_value_70'))
           .fontSize(this.fontSize)
           .fontColor($r('app.color.font_color_182431'))
           .fontWeight(FontWeight.Medium)
       }
-      .height(80)
+      .height($r('app.float.wh_value_80'))
       .width(ConfigData.WH_100_100)
       .backgroundColor(this.bgColor)
       .linearGradient(this.isTouched ?
@@ -66,7 +66,7 @@ export struct TitleComponent {
       })
     }
     .padding($r('app.float.distance_4'))
-    .height("100vp")
+    .height($r('app.float.wh_value_100'))
     .borderRadius($r('app.float.radius_12'))
     .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"));
   }

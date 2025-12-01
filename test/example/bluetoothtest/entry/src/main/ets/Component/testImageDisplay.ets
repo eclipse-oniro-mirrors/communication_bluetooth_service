@@ -26,20 +26,20 @@ export struct TestImageDisplay {
       Flex({ alignItems : ItemAlign.Start }) {
         Stack() {
           Image(this.testItem.image)
-            .height(80)
-            .width(80)
+            .height($r('app.float.wh_value_80'))
+            .width($r('app.float.wh_value_80'))
             .margin({ left : 10 , bottom : 10 })
         }
         .width($r('app.float.wh_value_20p'))
 
         Column() {
           Text(this.testItem.name)
-            .fontSize(26)
+            .fontSize($r('app.float.wh_value_26'))
             .fontWeight(500)
             .margin({ left : 26 , top : 10 })
             .width($r('app.float.wh_value_90p'))
           Text(this.testItem.detail)
-            .fontSize(17)
+            .fontSize($r('app.float.wh_value_17'))
             .fontWeight(500)
             .margin({ top : 8 })
             .width($r('app.float.wh_value_80p'))
@@ -49,6 +49,6 @@ export struct TestImageDisplay {
       }
     }
     .backgroundColor('#FFedf2f5')
-    .height(160)
+    .height($r('app.float.wh_value_160'))
   }
 }

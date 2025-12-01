@@ -55,27 +55,27 @@ struct SppClientBandWidthBenchmarkTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("1vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
 
       Column() {
         Scroll() {
           Column() {
             Text("性能测试:")
-              .fontSize("17vp")
-              .margin({ top : "5vp" , bottom : "5vp" , left : "20vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_20') })
               .textAlign(TextAlign.Start)
               .width($r('app.float.wh_value_100p'))
             Text("Spp的性能测试是测试Spp两端收发信息的速率和带宽性能")
-              .fontSize("17vp")
-              .margin({ left : "15vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ left : $r('app.float.wh_value_15') })
               .backgroundColor($r("app.color.spring"))
 
-            Stack().height("1vp").backgroundColor("#000000")
+            Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000")
 
             Row() {
-              Text("目标设备MAC：").fontSize(17).width(130)
+              Text("目标设备MAC：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_130'))
               TextInput({ text : this.deviceId , placeholder : "请输入mac地址" })
-                .fontSize("17vp")
+                .fontSize($r('app.float.wh_value_17'))
                 .onChange((str) => {
                   this.deviceId = str;
                   AppStorage.setOrCreate('inputDeviceId' , str)
@@ -83,18 +83,18 @@ struct SppClientBandWidthBenchmarkTest {
                 .width($r('app.float.wh_value_70p'))
                 .borderRadius(1)
                 .backgroundColor($r("app.color.white"))
-                .height(40)
+                .height($r('app.float.wh_value_40'))
             }
-            .padding(5)
+            .padding($r('app.float.wh_value_5'))
             .width($r('app.float.wh_value_96p'))
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
             Row() {
-              Text("写入目标设备数据：").fontSize(17).width(170)
+              Text("写入目标设备数据：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_170'))
               TextInput({ text : this.writeClientDataBW , placeholder : "请输入写入的数据" })
                 .align(Alignment.Start)
-                .fontSize("15vp")
+                .fontSize($r('app.float.wh_value_15'))
                 .backgroundColor($r("app.color.white"))
                 .onChange((str) => {
                   this.writeClientDataBW = str;
@@ -102,9 +102,9 @@ struct SppClientBandWidthBenchmarkTest {
                 })
                 .width($r('app.float.wh_value_70p'))
                 .borderRadius(1)
-                .height(35)
+                .height($r('app.float.wh_value_35'))
             }
-            .padding(5)
+            .padding($r('app.float.wh_value_5'))
             .width($r('app.float.wh_value_96p'))
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
@@ -112,8 +112,8 @@ struct SppClientBandWidthBenchmarkTest {
             Scroll() {
               Column() {
                 Text("读取的数据为：")
-                  .fontSize("17vp")
-                  .margin({ left : "10vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ left : $r('app.float.wh_value_10') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_100p'))
                 Scroll() {
@@ -121,9 +121,9 @@ struct SppClientBandWidthBenchmarkTest {
                     ListItem() {
                       Text(this.dataClientReadMessageBW)
                         .align(Alignment.TopStart)
-                        .fontSize("14vp")
+                        .fontSize($r('app.float.wh_value_14'))
                         .width($r('app.float.wh_value_90p'))
-                        .height(150)
+                        .height($r('app.float.wh_value_150'))
                         .borderRadius(10)
                         .backgroundColor($r("app.color.white"))
                     }
@@ -136,33 +136,33 @@ struct SppClientBandWidthBenchmarkTest {
                 .scrollBar(BarState.On)
               }
               .width($r('app.float.wh_value_100p'))
-              .height(150)
+              .height($r('app.float.wh_value_150'))
             }
             .scrollBarWidth(10)
             .scrollBar(BarState.On)
           }
           .width($r('app.float.wh_value_100p'))
-          .height(360)
+          .height($r('app.float.wh_value_360'))
           .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.Auto)
 
-        Stack().height("1vp").backgroundColor("#000000")
+        Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000")
 
         Scroll() {
           Column() {
             Text("日志:")
-              .fontSize("17vp")
-              .margin({ top : "8vp" , bottom : "8vp" , left : "10vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_8') , bottom : $r('app.float.wh_value_8') , left : $r('app.float.wh_value_10') })
               .textAlign(TextAlign.Start)
               .width($r('app.float.wh_value_100p'))
               .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
             List() {
               ListItem() {
                 Text(this.sppClientBandWidthBenchmarkTestMessage)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "10vp" , right : "10vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') , right : $r('app.float.wh_value_10') })
                   .textAlign(TextAlign.Start)
                   .width($r('app.float.wh_value_90p'))
               }
@@ -172,7 +172,7 @@ struct SppClientBandWidthBenchmarkTest {
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
           .width($r('app.float.wh_value_100p'))
-          .height(150)
+          .height($r('app.float.wh_value_150'))
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.On)
@@ -184,14 +184,14 @@ struct SppClientBandWidthBenchmarkTest {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('带宽性能测试').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('带宽性能测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
             }.alignItems(VerticalAlign.Center)
           }
           .borderRadius(8)
           .backgroundColor($r("app.color.blue"))
-          .width(100)
-          .height(66)
-          .margin({ top : "15vp" , left : "5vp" , right : "5vp" })
+          .width($r('app.float.wh_value_100'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppClientBandWidthBenchmarkTestMessage = ""
@@ -210,14 +210,14 @@ struct SppClientBandWidthBenchmarkTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('结束测试').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('结束测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
             }.alignItems(VerticalAlign.Center)
           }
           .borderRadius(8)
           .backgroundColor($r("app.color.blue"))
-          .width(80)
-          .height(66)
-          .margin({ top : "15vp" , left : "5vp" , right : "5vp" })
+          .width($r('app.float.wh_value_80'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppClientBandWidthBenchmarkTestMessage = ""
@@ -233,14 +233,14 @@ struct SppClientBandWidthBenchmarkTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Image($r('app.media.ic_public_delete_filled')).width(30).height(40).margin({ left : 5 })
+              Image($r('app.media.ic_public_delete_filled')).width($r('app.float.wh_value_30')).height($r('app.float.wh_value_40')).margin({ left : 5 })
             }.alignItems(VerticalAlign.Center)
           }
           .borderRadius(8)
           .backgroundColor($r("app.color.moon"))
-          .width(50)
-          .height(66)
-          .margin({ top : "15vp" , right : "40vp" })
+          .width($r('app.float.wh_value_50'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , right : $r('app.float.wh_value_40') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppClientBandWidthBenchmarkTestMessage = ""

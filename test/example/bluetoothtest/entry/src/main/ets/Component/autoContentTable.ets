@@ -32,39 +32,39 @@ export struct AutoContentTable {
           Image($r('app.media.bluetooth'))
             .objectFit(ImageFit.Contain)
             .autoResize(false)
-            .height(26)
-            .width(25)
+            .height($r('app.float.wh_value_26'))
+            .width($r('app.float.wh_value_25'))
         }
-        .height(30)
+        .height($r('app.float.wh_value_30'))
         .width($r('app.float.wh_value_10p'))
         .padding({ left : 10 })
 
         Flex({ direction : FlexDirection.Column , alignItems : ItemAlign.Start }) {
           Row() {
             Text(autoItem.method)
-              .fontSize("17vp")
-              .margin({ top : "3vp" , bottom : "3vp" , left : "10vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_3') , bottom : $r('app.float.wh_value_3') , left : $r('app.float.wh_value_10') })
               .textAlign(TextAlign.Start)
-              .height(40)
-              .width(200)
+              .height($r('app.float.wh_value_40'))
+              .width($r('app.float.wh_value_200'))
           }
-          .height(30)
+          .height($r('app.float.wh_value_30'))
           .width($r('app.float.wh_value_70p'))
         }
-        .height(30)
+        .height($r('app.float.wh_value_30'))
         .layoutWeight(6)
 
         Flex({ alignItems : ItemAlign.Center }) {
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : autoItem.result)
-            .margin({ left : "10vp" })
-            .fontSize("17vp")
+            .margin({ left : $r('app.float.wh_value_10') })
+            .fontSize($r('app.float.wh_value_17'))
             .flexGrow(1)
         }
         .layoutWeight(3)
         .padding({ left : 10 })
       }
     }
-    .height(40)
+    .height($r('app.float.wh_value_40'))
     .borderRadius(10)
     .margin({ top : 3 , bottom : 3 })
     .backgroundColor($r("app.color.white"))

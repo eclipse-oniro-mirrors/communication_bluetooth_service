@@ -26,24 +26,24 @@ export struct TestGridItem {
       Row() {
         Image(this.testItem.image)
           .objectFit(ImageFit.Contain)
-          .height(152)
+          .height($r('app.float.wh_value_152'))
           .width($r('app.float.wh_value_100p'))
       }.backgroundColor('#FFf1f3f5')
 
       Flex({ justifyContent : FlexAlign.Start , alignItems : ItemAlign.Center }) {
         Text(this.testItem.name)
-          .fontSize(14)
+          .fontSize($r('app.float.wh_value_14'))
           .flexGrow(1)
           .padding({ left : 8 })
         Text(this.testItem.detail)
-          .fontSize(14)
+          .fontSize($r('app.float.wh_value_14'))
           .margin({ right : 6 })
       }
-      .height(32)
+      .height($r('app.float.wh_value_32'))
       .width($r('app.float.wh_value_100p'))
       .backgroundColor('#FFe5e5e5')
     }
-    .height(184)
+    .height($r('app.float.wh_value_184'))
     .width($r('app.float.wh_value_100p'))
     .onClick(() => {
       router.pushUrl({ url : 'MainAbility/pagesTestDetail' , params : { testId : this.testItem } })
