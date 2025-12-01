@@ -38,7 +38,7 @@ export struct TestListItem {
             .width(60)
         }
         .backgroundColor($r("app.color.white"))
-        .width("30%")
+        .width($r('app.float.wh_value_30p'))
 
         Text(this.testItem.name)
           .fontSize(20)

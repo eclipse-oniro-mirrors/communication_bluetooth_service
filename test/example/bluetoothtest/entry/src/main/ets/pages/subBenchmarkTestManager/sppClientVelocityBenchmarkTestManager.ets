@@ -131,7 +131,7 @@ struct SppClientVelocityBenchmarkTestManager {
                   this.writeClientData = str;
                   AppStorage.setOrCreate("writeClientData" , str);
                 })
-                .width("50%")
+                .width($r('app.float.wh_value_50p'))
                 .borderRadius(10)
                 .height(32)
             }
@@ -158,7 +158,7 @@ struct SppClientVelocityBenchmarkTestManager {
                         .backgroundColor($r("app.color.white"))
                     }
                   }
-                  .height("95%")
+                  .height($r('app.float.wh_value_95p'))
                   .width($r('app.float.wh_value_90p'))
                   .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
                 }

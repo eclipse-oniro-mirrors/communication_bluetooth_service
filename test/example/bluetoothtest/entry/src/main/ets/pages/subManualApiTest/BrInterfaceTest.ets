@@ -104,7 +104,7 @@ struct BrTest {
             .onChange((str) => {
               this.deviceId = str;
             })
-            .width('60%')
+            .width($r('app.float.wh_value_60p'))
             .padding({ top : 5 , left : 5 })
         }
       }

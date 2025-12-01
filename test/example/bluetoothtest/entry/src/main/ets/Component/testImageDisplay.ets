@@ -30,7 +30,7 @@ export struct TestImageDisplay {
             .width(80)
             .margin({ left : 10 , bottom : 10 })
         }
-        .width("20%")
+        .width($r('app.float.wh_value_20p'))
 
         Column() {
           Text(this.testItem.name)

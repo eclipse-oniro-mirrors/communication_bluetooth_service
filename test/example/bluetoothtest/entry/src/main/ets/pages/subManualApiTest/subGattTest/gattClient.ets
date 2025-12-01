@@ -289,7 +289,7 @@ struct GattClient {
             .scrollBar(BarState.Auto)
           }
           .height(110)
-          .width("95%")
+          .width($r('app.float.wh_value_95p'))
           .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
 
           Stack().height("0.5vp").backgroundColor("#000000");

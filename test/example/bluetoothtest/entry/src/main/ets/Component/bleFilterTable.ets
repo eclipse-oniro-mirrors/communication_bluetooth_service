@@ -90,7 +90,7 @@ export struct BleFilterTable {
                     this.txtScanFilter_deviceId = strInput;
                     AppStorage.setOrCreate('txtScanFilterDeviceId' , strInput);
                   })
-                  .width("85%")
+                  .width($r('app.float.wh_value_85p'))
                   .borderRadius(1)
               }
               .padding(5)
@@ -106,7 +106,7 @@ export struct BleFilterTable {
                     this.txtScanFilter_name = strInput;
                     AppStorage.setOrCreate('txtScanFilterName' , strInput);
                   })
-                  .width("85%")
+                  .width($r('app.float.wh_value_85p'))
                   .borderRadius(1)
               }
               .padding(5)
@@ -219,7 +219,7 @@ export struct BleFilterTable {
                     .font({ size : 17 })
                     .selectedOptionFont({ size : 17 })
                     .optionFont({ size : 15 })
-                    .width("75%")
+                    .width($r('app.float.wh_value_75p'))
                     .onSelect((index: number) => {
                       console.log("Select:" + index)
                       AppStorage.setOrCreate('txtScanOptionsMatchMode' , index);

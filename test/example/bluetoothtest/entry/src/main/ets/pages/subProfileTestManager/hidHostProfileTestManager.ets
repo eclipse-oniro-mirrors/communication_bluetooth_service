@@ -79,7 +79,7 @@ struct HidHostProfileManagerTest {
                 this.deviceId = str;
                 AppStorage.setOrCreate("deviceId" , str)
               })
-              .width("70%")
+              .width($r('app.float.wh_value_70p'))
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.moon"))
@@ -100,7 +100,7 @@ struct HidHostProfileManagerTest {
           }
           .height(90)
           .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
-          .width("88%")
+          .width($r('app.float.wh_value_88p'))
 
           Text("请点击需要测试的方法")
             .margin({ top : "10vp" })
@@ -110,7 +110,7 @@ struct HidHostProfileManagerTest {
           Column() {
             ContentTable({ apiItems : initHitHostProfileManagerApiData() })
           }
-          .height("66%")
+          .height($r('app.float.wh_value_66p'))
         }
         .visibility(this.hasProfile ? Visibility.Visible : Visibility.Hidden);
       }

@@ -147,7 +147,7 @@ struct SppServerManager {
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
             .height($r('app.float.wh_value_100p'))
           }
-          .height("85%")
+          .height($r('app.float.wh_value_85p'))
         }
       }
       .width($r('app.float.wh_value_100p'))

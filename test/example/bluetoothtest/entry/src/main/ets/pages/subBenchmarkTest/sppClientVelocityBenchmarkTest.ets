@@ -81,13 +81,13 @@ struct SppClientVelocityBenchmarkTest {
                   this.deviceId = str;
                   AppStorage.setOrCreate('inputDeviceId' , str)
                 })
-                .width("70%")
+                .width($r('app.float.wh_value_70p'))
                 .borderRadius(1)
                 .backgroundColor($r("app.color.white"))
                 .height(35)
             }
             .padding(5)
-            .width("96%")
+            .width($r('app.float.wh_value_96p'))
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
@@ -114,10 +114,10 @@ struct SppClientVelocityBenchmarkTest {
                     AppStorage.setOrCreate('clientV_Cycle_index' , index);
                   })
               }
-              .width("70%")
+              .width($r('app.float.wh_value_70p'))
             }
             .padding(2)
-            .width("96%")
+            .width($r('app.float.wh_value_96p'))
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
@@ -131,12 +131,12 @@ struct SppClientVelocityBenchmarkTest {
                   this.writeClientData = str;
                   AppStorage.setOrCreate("writeClientData" , str);
                 })
-                .width("60%")
+                .width($r('app.float.wh_value_60p'))
                 .borderRadius(10)
                 .height(32)
             }
             .padding(2)
-            .width("96%")
+            .width($r('app.float.wh_value_96p'))
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
@@ -159,7 +159,7 @@ struct SppClientVelocityBenchmarkTest {
                         .backgroundColor($r("app.color.white"))
                     }
                   }
-                  .height("95%")
+                  .height($r('app.float.wh_value_95p'))
                   .width($r('app.float.wh_value_90p'))
                   .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
                 }

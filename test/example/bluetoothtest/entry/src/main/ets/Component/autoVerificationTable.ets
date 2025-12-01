@@ -101,7 +101,7 @@ export struct AutoVerificationTable {
       }
       .scrollBarWidth(20)
     }
-    .height("88%")
+    .height($r('app.float.wh_value_88p'))
     .padding({ top : 5 , right : 10 , left : 10 })
   }
 }

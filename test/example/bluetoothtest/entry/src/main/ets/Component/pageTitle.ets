@@ -87,11 +87,11 @@ export struct PageTitle {
       Flex({ alignItems : ItemAlign.Start }) {
         Button() {
           Image($r('app.media.Back'))
-            .width("60%")
-            .height("60%")
+            .width($r('app.float.wh_value_60p'))
+            .height($r('app.float.wh_value_60p'))
         }
         .type(ButtonType.Normal)
-        .width("20%")
+        .width($r('app.float.wh_value_20p'))
         .height($r('app.float.wh_value_100p'))
         .backgroundColor($r("app.color.blue"))
         .padding({ left : 1 , top : 15 })

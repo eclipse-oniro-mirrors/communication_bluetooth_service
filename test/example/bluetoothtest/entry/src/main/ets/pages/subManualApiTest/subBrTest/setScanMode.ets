@@ -141,7 +141,7 @@ struct etScanMode {
           Blank()
         }
       }
-      .height('50%')
+      .height($r('app.float.wh_value_50p'))
       .scrollable(ScrollDirection.Vertical)
       .scrollBar(BarState.On)
       .scrollBarColor(Color.Gray)

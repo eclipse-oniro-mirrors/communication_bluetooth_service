@@ -36,7 +36,7 @@ export struct AutoContentTable {
             .width(25)
         }
         .height(30)
-        .width("10%")
+        .width($r('app.float.wh_value_10p'))
         .padding({ left : 10 })
 
         Flex({ direction : FlexDirection.Column , alignItems : ItemAlign.Start }) {
@@ -49,7 +49,7 @@ export struct AutoContentTable {
               .width(200)
           }
           .height(30)
-          .width("70%")
+          .width($r('app.float.wh_value_70p'))
         }
         .height(30)
         .layoutWeight(6)

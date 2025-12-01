@@ -569,7 +569,7 @@ export struct ContentTable {
       }
       .scrollBarWidth(20)
     }
-    .height("66%")
+    .height($r('app.float.wh_value_66p'))
     .padding({ top : 5 , right : 10 , left : 10 })
   }
 }

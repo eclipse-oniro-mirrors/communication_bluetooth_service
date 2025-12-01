@@ -142,10 +142,10 @@ struct OppRecvScenarioTest {
                 })
               }
             }
-            .height("70%")
+            .height($r('app.float.wh_value_70p'))
             .width($r('app.float.wh_value_80p'))
           }
-          .height("40%")
+          .height($r('app.float.wh_value_40p'))
           .width($r('app.float.wh_value_100p'))
 
         }
@@ -161,10 +161,10 @@ struct OppRecvScenarioTest {
             .margin({ top : "3vp" })
           Text(this.serverMac)
             .fontSize("25vp")
-            .width("70%")
+            .width($r('app.float.wh_value_70p'))
             .borderRadius(5)
             .backgroundColor($r("app.color.moon"))
-        }.height("20%")
+        }.height($r('app.float.wh_value_20p'))
 
         Scroll() {
           Column() {
@@ -187,12 +187,12 @@ struct OppRecvScenarioTest {
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
           .width($r('app.float.wh_value_100p'))
-          .height("30%")
+          .height($r('app.float.wh_value_30p'))
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.On)
       }
-      .height("66%")
+      .height($r('app.float.wh_value_66p'))
       .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
@@ -226,7 +226,7 @@ struct OppRecvScenarioTest {
                   testLog(this.oppRecvScenarioMessage);
                 }
               })
-              .width('60%')
+              .width($r('app.float.wh_value_60p'))
           }
           .width($r('app.float.wh_value_100p'))
           .align(Alignment.Center)

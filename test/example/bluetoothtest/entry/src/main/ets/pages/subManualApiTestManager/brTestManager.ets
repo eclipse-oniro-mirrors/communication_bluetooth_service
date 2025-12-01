@@ -102,7 +102,7 @@ struct brTestManager {
           .onChange((str) => {
             this.deviceId = str;
           })
-          .width('96%')
+          .width($r('app.float.wh_value_96p'))
           .padding({ top : 10 , left : 10 })
       }
       .align(Alignment.TopStart)

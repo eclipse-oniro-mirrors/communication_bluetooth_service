@@ -80,13 +80,13 @@ struct SppClientBandWidthBenchmarkTest {
                   this.deviceId = str;
                   AppStorage.setOrCreate('inputDeviceId' , str)
                 })
-                .width("70%")
+                .width($r('app.float.wh_value_70p'))
                 .borderRadius(1)
                 .backgroundColor($r("app.color.white"))
                 .height(40)
             }
             .padding(5)
-            .width("96%")
+            .width($r('app.float.wh_value_96p'))
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
@@ -100,12 +100,12 @@ struct SppClientBandWidthBenchmarkTest {
                   this.writeClientDataBW = str;
                   AppStorage.setOrCreate("writeClientDataBW" , str);
                 })
-                .width("70%")
+                .width($r('app.float.wh_value_70p'))
                 .borderRadius(1)
                 .height(35)
             }
             .padding(5)
-            .width("96%")
+            .width($r('app.float.wh_value_96p'))
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
@@ -128,7 +128,7 @@ struct SppClientBandWidthBenchmarkTest {
                         .backgroundColor($r("app.color.white"))
                     }
                   }
-                  .height("95%")
+                  .height($r('app.float.wh_value_95p'))
                   .width($r('app.float.wh_value_90p'))
                   .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
                 }

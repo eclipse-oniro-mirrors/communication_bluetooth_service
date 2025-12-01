@@ -40,7 +40,7 @@ struct ProfileConnState2 {
               this.deviceId = str;
               AppStorage.setOrCreate('inputDeviceId' , str)
             })
-            .width('70%')
+            .width($r('app.float.wh_value_70p'))
         }
         .backgroundColor($r("app.color.moon"))
         .margin({ top : "20vp" , left : "20vp" , right : "20vp" })

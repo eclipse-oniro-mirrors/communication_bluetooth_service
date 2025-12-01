@@ -111,7 +111,7 @@ struct OppProfileTest {
                     })
                   }
                 }
-                .height("50%")
+                .height($r('app.float.wh_value_50p'))
                 .width($r('app.float.wh_value_80p'))
 
                 Text("已选择的设备的蓝牙mac地址：")
@@ -120,11 +120,11 @@ struct OppProfileTest {
                   .margin({ top : "3vp" })
                 Text(this.serverMac)
                   .fontSize("25vp")
-                  .width("70%")
+                  .width($r('app.float.wh_value_70p'))
                   .borderRadius(5)
                   .backgroundColor($r("app.color.moon"))
               }
-              .height("15%")
+              .height($r('app.float.wh_value_15p'))
               .width($r('app.float.wh_value_100p'))
             }
             .scrollBarWidth(10)
@@ -148,7 +148,7 @@ struct OppProfileTest {
             }
             .height(80)
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
-            .width("88%")
+            .width($r('app.float.wh_value_88p'))
           }
           .scrollBarWidth(10)
           .scrollBar(BarState.Auto)
@@ -161,7 +161,7 @@ struct OppProfileTest {
           Column() {
             ContentTable({ apiItems : initOppProfileApiData() })
           }
-          .height("66%")
+          .height($r('app.float.wh_value_66p'))
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width($r('app.float.wh_value_100p'))

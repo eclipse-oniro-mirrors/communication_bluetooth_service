@@ -96,7 +96,7 @@ struct oppSendScenarioTest {
             .height($r('app.float.wh_value_80p'))
             .width($r('app.float.wh_value_80p'))
           }
-          .height("30%")
+          .height($r('app.float.wh_value_30p'))
           .width($r('app.float.wh_value_100p'))
         }
         .scrollBarWidth(10)
@@ -111,10 +111,10 @@ struct oppSendScenarioTest {
             .margin({ top : "3vp" })
           Text(this.serverMac)
             .fontSize("25vp")
-            .width("70%")
+            .width($r('app.float.wh_value_70p'))
             .borderRadius(5)
             .backgroundColor($r("app.color.moon"))
-        }.height("15%")
+        }.height($r('app.float.wh_value_15p'))
 
         Column() {
           Text("请输入需要发送的文件名称，如：test.txt").fontSize(18).fontWeight(FontWeight.Bold)
@@ -128,8 +128,8 @@ struct oppSendScenarioTest {
                 this.fileType = strs[ 1 ];
               }
               this.oppSendScenarioMessage = "需要发送的文件为：/data/bluetooth/log/" + str + "\n"
-            }).width("70%").borderRadius(1)
-        }.height("20%")
+            }).width($r('app.float.wh_value_70p')).borderRadius(1)
+        }.height($r('app.float.wh_value_20p'))
 
         Scroll() {
           Column() {
@@ -152,12 +152,12 @@ struct oppSendScenarioTest {
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
           .width($r('app.float.wh_value_100p'))
-          .height("30%")
+          .height($r('app.float.wh_value_30p'))
         }
         .scrollBarWidth(10)
         .scrollBar(BarState.On)
       }
-      .height("66%")
+      .height($r('app.float.wh_value_66p'))
       .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 

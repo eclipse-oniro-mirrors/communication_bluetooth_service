@@ -157,7 +157,7 @@ struct SppClient {
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
             .height($r('app.float.wh_value_100p'))
           }
-          .height("75%")
+          .height($r('app.float.wh_value_75p'))
         }
       }
       .width($r('app.float.wh_value_100p'))

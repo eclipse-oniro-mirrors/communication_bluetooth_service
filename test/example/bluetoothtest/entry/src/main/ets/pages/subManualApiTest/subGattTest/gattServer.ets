@@ -75,7 +75,7 @@ struct GattServerSetting {
           .fontSize(17)
           .fontColor("#4444444")
           .height("30vp")
-          .width("94%")
+          .width($r('app.float.wh_value_94p'))
           .textAlign(TextAlign.Start)
         Scroll() {
           Column() {
@@ -171,7 +171,7 @@ struct GattServerSetting {
             .backgroundColor($r("app.color.moon"));
           }
         }
-        .height("22%")
+        .height($r('app.float.wh_value_22p'))
       }
       .backgroundColor($r("app.color.lead"))
 
@@ -183,7 +183,7 @@ struct GattServerSetting {
             .fontSize(17)
             .fontColor("#4444444")
             .height("30vp")
-            .width("70%")
+            .width($r('app.float.wh_value_70p'))
             .textAlign(TextAlign.Start)
           Checkbox({ name : 'AdvSettings' , group : 'checkboxGroup1' })
             .select(this.cbxAdvSettings)
@@ -228,7 +228,7 @@ struct GattServerSetting {
                     this.advSettings_interval = strInput;
                     AppStorage.setOrCreate('advSettings_interval' , strInput);
                   })
-                  .width("60%")
+                  .width($r('app.float.wh_value_60p'))
                   .borderRadius(1)
               }
               .height(40)
@@ -255,7 +255,7 @@ struct GattServerSetting {
                     this.advSettings_txPower = strInput;
                     AppStorage.setOrCreate('advSettings_txPower' , strInput);
                   })
-                  .width("60%")
+                  .width($r('app.float.wh_value_60p'))
                   .borderRadius(1)
               }
               .height(40)
@@ -475,13 +475,13 @@ struct GattServerSetting {
               .borderWidth(1)
               .borderColor($r("app.color.lead"))
             }
-            .height("85%")
+            .height($r('app.float.wh_value_85p'))
             .width($r('app.float.wh_value_100p'))
             .padding(5)
             .backgroundColor($r("app.color.moon"));
           }
         }
-        .height("50%")
+        .height($r('app.float.wh_value_50p'))
       }
       .backgroundColor($r("app.color.lead"))
     }
@@ -697,7 +697,7 @@ struct GattServer {
                 .textAlign(TextAlign.Start)
                 .width($r('app.float.wh_value_90p'))
             }
-            .width("95%")
+            .width($r('app.float.wh_value_95p'))
             .height(160)
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
 
@@ -716,7 +716,7 @@ struct GattServer {
               .layoutWeight(1)
               .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
             }
-            .height("75%")
+            .height($r('app.float.wh_value_75p'))
           }
         }
       }

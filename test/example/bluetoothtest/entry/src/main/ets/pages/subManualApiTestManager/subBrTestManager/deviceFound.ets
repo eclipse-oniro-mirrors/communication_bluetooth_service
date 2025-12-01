@@ -319,7 +319,7 @@ export struct AvailableItem {
           .height(30)
           .width(30)
       }
-      .width("10%")
+      .width($r('app.float.wh_value_10p'))
       .padding({ left : 10 })
 
       Column() {
@@ -344,7 +344,7 @@ export struct AvailableItem {
           .fontSize(17.4)
           .flexGrow(1)
       }
-      .width("10%")
+      .width($r('app.float.wh_value_10p'))
       .padding({ left : 10 })
     }
   }
@@ -369,7 +369,7 @@ export struct PairedItem {
           .height(30)
           .width(30)
       }
-      .width("10%")
+      .width($r('app.float.wh_value_10p'))
       .padding({ left : 10 })
 
       Column() {
@@ -387,14 +387,14 @@ export struct PairedItem {
           .padding({ left : 10 , top : 5 })
       }
       .height(80)
-      .width("70%")
+      .width($r('app.float.wh_value_70p'))
 
       Row() {
         Text(this.state)
           .fontSize(17.4)
           .flexGrow(1)
       }
-      .width("10%")
+      .width($r('app.float.wh_value_10p'))
       .padding({ left : 10 })
 
       Row() {
@@ -402,7 +402,7 @@ export struct PairedItem {
           .fontSize(17.4)
           .flexGrow(1)
       }
-      .width("10%")
+      .width($r('app.float.wh_value_10p'))
       .padding({ left : 10 })
       .onClick(() => {
         let ret = bluetooth.cancelPairedDevice(this.mac)

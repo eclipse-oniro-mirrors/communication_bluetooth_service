@@ -104,7 +104,7 @@ struct BleTestManager {
             .backgroundColor($r("app.color.white"))
           Image($r('app.media.Switch'))
             .height(50)
-            .width('15%')
+            .width($r('app.float.wh_value_15p'))
             .padding({ top : 5 , bottom : 5 , left : 10 })
             .onClick(() => {
               this.showList = !this.showList;

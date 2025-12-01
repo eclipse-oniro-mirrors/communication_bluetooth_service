@@ -80,7 +80,7 @@ struct PanNetWorkTest {
                 this.deviceId = str;
                 AppStorage.setOrCreate("deviceId" , str)
               })
-              .width("70%")
+              .width($r('app.float.wh_value_70p'))
               .borderRadius(1)
           }
           .backgroundColor($r("app.color.moon"))
@@ -100,7 +100,7 @@ struct PanNetWorkTest {
               .width($r('app.float.wh_value_90p'))
           }
           .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
-          .width("88%")
+          .width($r('app.float.wh_value_88p'))
           .height(90)
 
           Text("请点击需要测试的方法")

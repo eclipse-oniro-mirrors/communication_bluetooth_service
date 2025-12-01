@@ -105,7 +105,7 @@ struct GattServerVelocityBenchmarkTestManager {
                   .margin({ right : 120 })
                   .selectedOptionFont({ size : 17 })
                   .optionFont({ size : 15 })
-                  .width("50%")
+                  .width($r('app.float.wh_value_50p'))
                   .onSelect((index: number) => {
                     console.log("Select:" + index)
                     AppStorage.setOrCreate('gatt_Cycle_index' , index);
