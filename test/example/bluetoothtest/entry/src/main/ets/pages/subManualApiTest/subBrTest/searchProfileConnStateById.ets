@@ -54,9 +54,9 @@ struct ProfileConnState2 {
               bgColor : this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : 20 })
+          .padding({ top : $r('app.float.wh_value_20') })
           .height($r('app.float.wh_value_80'))
-          .borderRadius(10)
+          .borderRadius($r('app.float.wh_value_10'))
           .onClick(() => {
             this.currentClick = 0;
             this.profileId = 1;
@@ -89,9 +89,9 @@ struct ProfileConnState2 {
               bgColor : this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : 20 })
+          .padding({ top : $r('app.float.wh_value_20') })
           .height($r('app.float.wh_value_80'))
-          .borderRadius(10)
+          .borderRadius($r('app.float.wh_value_10'))
           .onClick(() => {
             this.currentClick = 1;
             this.profileId = 4;
@@ -124,9 +124,9 @@ struct ProfileConnState2 {
               bgColor : this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : 20 })
+          .padding({ top : $r('app.float.wh_value_20') })
           .height($r('app.float.wh_value_80'))
-          .borderRadius(10)
+          .borderRadius($r('app.float.wh_value_10'))
           .onClick(() => {
             this.currentClick = 2;
             this.profileId = 6;

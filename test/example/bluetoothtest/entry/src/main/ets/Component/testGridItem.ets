@@ -28,20 +28,20 @@ export struct TestGridItem {
           .objectFit(ImageFit.Contain)
           .height($r('app.float.wh_value_152'))
           .width($r('app.float.wh_value_100p'))
-      }.backgroundColor('#FFf1f3f5')
+      }.backgroundColor($r('app.color.color_FFF1F3F5_bg'))
 
       Flex({ justifyContent : FlexAlign.Start , alignItems : ItemAlign.Center }) {
         Text(this.testItem.name)
           .fontSize($r('app.float.wh_value_14'))
-          .flexGrow(1)
-          .padding({ left : 8 })
+          .flexGrow($r('app.float.wh_value_1'))
+          .padding({ left : $r('app.float.wh_value_8') })
         Text(this.testItem.detail)
           .fontSize($r('app.float.wh_value_14'))
-          .margin({ right : 6 })
+          .margin({ right : $r('app.float.wh_value_6') })
       }
       .height($r('app.float.wh_value_32'))
       .width($r('app.float.wh_value_100p'))
-      .backgroundColor('#FFe5e5e5')
+      .backgroundColor($r('app.color.color_FFE5E5E5_bg'))
     }
     .height($r('app.float.wh_value_184'))
     .width($r('app.float.wh_value_100p'))

@@ -115,7 +115,7 @@ struct OppRecvScenarioTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -124,7 +124,7 @@ struct OppRecvScenarioTest {
               .fontWeight(FontWeight.Bold)
               .margin({ top : $r('app.float.wh_value_5') })
             Scroll() {
-              List({ space : 5 }) {
+              List({ space : $r('app.float.wh_value_5') }) {
                 ForEach(this.pairedDevices , (item: PairDevices) => {
                   ListItem() {
                     Text(item.name)
@@ -149,10 +149,10 @@ struct OppRecvScenarioTest {
           .width($r('app.float.wh_value_100p'))
 
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.On)
 
-        Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
         Column() {
           Text("已选择的设备的蓝牙mac地址：")
@@ -162,7 +162,7 @@ struct OppRecvScenarioTest {
           Text(this.serverMac)
             .fontSize($r('app.float.wh_value_25'))
             .width($r('app.float.wh_value_70p'))
-            .borderRadius(5)
+            .borderRadius($r('app.float.wh_value_5'))
             .backgroundColor($r("app.color.moon"))
         }.height($r('app.float.wh_value_20p'))
 
@@ -189,21 +189,21 @@ struct OppRecvScenarioTest {
           .width($r('app.float.wh_value_100p'))
           .height($r('app.float.wh_value_30p'))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.On)
       }
       .height($r('app.float.wh_value_66p'))
       .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Column() {
             Button('opp开启接收文件')
               .fontSize($r('app.float.wh_value_20'))
-              .borderRadius(8)
+              .borderRadius($r('app.float.wh_value_8'))
               .backgroundColor($r("app.color.blue"))
               .width($r('app.float.wh_value_200'))
               .height($r('app.float.wh_value_60'))
@@ -234,9 +234,9 @@ struct OppRecvScenarioTest {
           .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
           if ( this.showProgress ) {
-            Row({ space : 5 }) {
+            Row({ space : $r('app.float.wh_value_5') }) {
               Progress({ value : this.curProgress , total : 100 , type : ProgressType.Linear })
-                .style({ strokeWidth : 10 })
+                .style({ strokeWidth : $r('app.float.wh_value_10') })
 
               Text(this.curProgress + "%")
                 .fontSize($r('app.float.wh_value_30'))
@@ -263,8 +263,8 @@ struct ReceiveCustomDialog {
 
   build() {
     Column() {
-      Text("是否接收来自 " + this.deviceName + " 的文件").fontSize($r('app.float.wh_value_20')).margin({ top : 10 , bottom : 10 })
-      Text(this.fileName).fontSize($r('app.float.wh_value_18')).margin({ bottom : 10 })
+      Text("是否接收来自 " + this.deviceName + " 的文件").fontSize($r('app.float.wh_value_20')).margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
+      Text(this.fileName).fontSize($r('app.float.wh_value_18')).margin({ bottom : $r('app.float.wh_value_10') })
       Flex({ justifyContent : FlexAlign.SpaceAround }) {
         Button('拒接')
           .onClick(() => {
@@ -274,7 +274,7 @@ struct ReceiveCustomDialog {
           .onClick(() => {
             this.confirm()
           })
-      }.margin({ bottom : 10 })
+      }.margin({ bottom : $r('app.float.wh_value_10') })
     }
   }
 }

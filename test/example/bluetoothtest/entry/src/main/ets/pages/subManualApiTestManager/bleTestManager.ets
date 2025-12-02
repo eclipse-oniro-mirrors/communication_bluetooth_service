@@ -82,7 +82,7 @@ struct BleTestManager {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
       Column() {
         Row() {
           Text("外设MAC:")
@@ -98,14 +98,14 @@ struct BleTestManager {
               AppStorage.setOrCreate("peripheralDeviceId" , strInput)
             })
             .width($r('app.float.wh_value_55p'))
-            .padding({ top : 5 , left : 5 })
+            .padding({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_5') })
             .height($r('app.float.wh_value_40'))
             .borderStyle(BorderStyle.Dashed)
             .backgroundColor($r("app.color.white"))
           Image($r('app.media.Switch'))
             .height($r('app.float.wh_value_50'))
             .width($r('app.float.wh_value_15p'))
-            .padding({ top : 5 , bottom : 5 , left : 10 })
+            .padding({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
             .onClick(() => {
               this.showList = !this.showList;
             })

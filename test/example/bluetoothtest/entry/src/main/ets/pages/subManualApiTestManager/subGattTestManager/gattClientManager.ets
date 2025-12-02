@@ -59,7 +59,7 @@ struct GattClientSetting {
             }
           })
           .width($r('app.float.wh_value_80p'))
-          .borderRadius(1)
+          .borderRadius($r('app.float.wh_value_1'))
       }
       .backgroundColor($r("app.color.moon"))
       .padding($r('app.float.wh_value_5'))
@@ -67,7 +67,7 @@ struct GattClientSetting {
       .alignItems(VerticalAlign.Center)
 
       Column() {
-        Stack().height($r('app.float.wh_value_0_25')).backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_0_25')).backgroundColor($r('app.color.black'));
         Column() {
           Row() {
             Text("服务UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_60'));
@@ -80,7 +80,7 @@ struct GattClientSetting {
                 }
               })
               .width($r('app.float.wh_value_80p'))
-              .borderRadius(1)
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
@@ -98,7 +98,7 @@ struct GattClientSetting {
                 }
               })
               .width($r('app.float.wh_value_80p'))
-              .borderRadius(1)
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .backgroundColor($r("app.color.spring"))
           .padding($r('app.float.wh_value_5'))
@@ -116,7 +116,7 @@ struct GattClientSetting {
                 }
               })
               .width($r('app.float.wh_value_80p'))
-              .borderRadius(1)
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .backgroundColor($r("app.color.spring"))
           .padding($r('app.float.wh_value_5'))
@@ -134,7 +134,7 @@ struct GattClientSetting {
                 }
               })
               .width($r('app.float.wh_value_80p'))
-              .borderRadius(1)
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .backgroundColor($r("app.color.spring"))
           .padding($r('app.float.wh_value_5'))
@@ -152,7 +152,7 @@ struct GattClientSetting {
                 }
               })
               .width($r('app.float.wh_value_80p'))
-              .borderRadius(1)
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .backgroundColor($r("app.color.spring"))
           .padding($r('app.float.wh_value_5'))
@@ -160,7 +160,7 @@ struct GattClientSetting {
           .alignItems(VerticalAlign.Center)
         }
 
-        Stack().height($r('app.float.wh_value_0_25')).backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_0_25')).backgroundColor($r('app.color.black'));
       }
     }
   }
@@ -213,7 +213,7 @@ struct GattClientManager {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
       Row() {
         Text("GattClientSetting")
           .fontSize($r('app.float.wh_value_20'))
@@ -223,7 +223,7 @@ struct GattClientManager {
         Image($r('app.media.Switch'))
           .height($r('app.float.wh_value_50'))
           .width($r('app.float.wh_value_50'))
-          .padding({ top : 10 , bottom : 10 , left : 10 })
+          .padding({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
           .onClick(() => {
             this.showList = !this.showList;
           })
@@ -285,14 +285,14 @@ struct GattClientManager {
               }
               .width($r('app.float.wh_value_100p'))
             }
-            .scrollBarWidth(10)
+            .scrollBarWidth($r('app.float.wh_value_10'))
             .scrollBar(BarState.Auto)
           }
           .height($r('app.float.wh_value_110'))
           .width($r('app.float.wh_value_95p'))
           .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
 
-          Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
+          Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
           Column() {
             Text("功能测试:")
               .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
@@ -304,7 +304,7 @@ struct GattClientManager {
             }
             .width(ConfigData.WH_100_100)
             .align(Alignment.TopStart)
-            .layoutWeight(1)
+            .layoutWeight($r('app.float.wh_value_1'))
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
             .height($r('app.float.wh_value_100p'))
           }

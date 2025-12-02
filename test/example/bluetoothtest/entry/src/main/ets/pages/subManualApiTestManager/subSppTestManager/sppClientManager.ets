@@ -81,7 +81,7 @@ struct SppClientManager {
             PageTitle({ testItem : this.testItem })
           }
 
-          Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
+          Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
           Row() {
             Text("目标设备MAC：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70'));
             TextInput({ text : this.deviceId , placeholder : "请输入mac地址" })
@@ -91,7 +91,7 @@ struct SppClientManager {
                 AppStorage.setOrCreate('inputDeviceId' , str)
               })
               .width($r('app.float.wh_value_80p'))
-              .borderRadius(1)
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .backgroundColor($r("app.color.moon"))
           .padding($r('app.float.wh_value_5'))
@@ -107,7 +107,7 @@ struct SppClientManager {
                 AppStorage.setOrCreate('inputUuid' , str)
               })
               .width($r('app.float.wh_value_80p'))
-              .borderRadius(1)
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .backgroundColor($r("app.color.spring"))
           .padding($r('app.float.wh_value_5'))
@@ -123,7 +123,7 @@ struct SppClientManager {
                 AppStorage.setOrCreate("writeClientData" , str);
               })
               .width($r('app.float.wh_value_80p'))
-              .borderRadius(1)
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .backgroundColor($r("app.color.moon"))
           .padding($r('app.float.wh_value_5'))
@@ -135,7 +135,7 @@ struct SppClientManager {
             Text(this.dataReadMessage)
               .fontSize($r('app.float.wh_value_15'))
               .width($r('app.float.wh_value_80p'))
-              .borderRadius(1)
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
@@ -156,7 +156,7 @@ struct SppClientManager {
             }
             .width(ConfigData.WH_100_100)
             .align(Alignment.TopStart)
-            .layoutWeight(1)
+            .layoutWeight($r('app.float.wh_value_1'))
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
             .height($r('app.float.wh_value_100p'))
           }
@@ -335,7 +335,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width($r("app.float.wh_value_160"))
           .height($r("app.float.wh_value_40"))
-          .flexGrow(1)
+          .flexGrow($r('app.float.wh_value_1'))
           .onClick(() => {
             this.dialogController.close();
             this.action(false);
@@ -343,7 +343,7 @@ struct PairDialog {
 
           Divider()
             .height($r("app.float.wh_value_24"))
-            .strokeWidth(0.5)
+            .strokeWidth($r('app.float.wh_value_0_5'))
             .vertical(true)
             .color(($r("app.color.color_E3E3E3_grey")))
 
@@ -355,7 +355,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width($r("app.float.wh_value_160"))
           .height($r("app.float.wh_value_40"))
-          .flexGrow(1)
+          .flexGrow($r('app.float.wh_value_1'))
           .onClick(() => {
             this.dialogController.close();
             this.action(true);

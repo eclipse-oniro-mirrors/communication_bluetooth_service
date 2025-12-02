@@ -30,7 +30,7 @@ struct pairedDevices {
   build() {
     Column() {
       GridContainer({
-        columns : 12 ,
+        columns : $r('app.float.wh_value_12') ,
         sizeType : SizeType.Auto ,
         gutter : vp2px(1) === 2 ? $r('app.float.wh_value_12') : $r('app.float.wh_value_0') ,
         margin : vp2px(1) === 2 ? $r('app.float.wh_value_24') : $r('app.float.wh_value_0')
@@ -42,7 +42,7 @@ struct pairedDevices {
           .height(ConfigData.WH_100_100)
           .useSizeType({
             xs : { span : 0 , offset : 0 } , sm : { span : 0 , offset : 0 } ,
-            md : { span : 0 , offset : 0 } , lg : { span : 2 , offset : 0 }
+            md : { span : 0 , offset : 0 } , lg : { span : $r('app.float.wh_value_2') , offset : 0 }
           });
 
           Column() {
@@ -91,8 +91,8 @@ struct pairedDevices {
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 12 , offset : 0 } , sm : { span : 12 , offset : 0 } ,
-            md : { span : 12 , offset : 0 } , lg : { span : 8 , offset : 2 }
+            xs : { span : $r('app.float.wh_value_12') , offset : 0 } , sm : { span : $r('app.float.wh_value_12') , offset : 0 } ,
+            md : { span : $r('app.float.wh_value_12') , offset : 0 } , lg : { span : $r('app.float.wh_value_8') , offset : $r('app.float.wh_value_2') }
           });
         }
         .width(ConfigData.WH_100_100)

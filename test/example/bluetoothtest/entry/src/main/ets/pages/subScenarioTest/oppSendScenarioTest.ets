@@ -66,7 +66,7 @@ struct oppSendScenarioTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -75,7 +75,7 @@ struct oppSendScenarioTest {
               .fontWeight(FontWeight.Bold)
               .margin({ top : $r('app.float.wh_value_5') })
             Scroll() {
-              List({ space : 5 }) {
+              List({ space : $r('app.float.wh_value_5') }) {
                 ForEach(this.pairDevices , (item: PairDevices) => {
                   ListItem() {
                     Text(item.name)
@@ -99,10 +99,10 @@ struct oppSendScenarioTest {
           .height($r('app.float.wh_value_30p'))
           .width($r('app.float.wh_value_100p'))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.Auto)
 
-        Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
         Column() {
           Text("已选择的设备的蓝牙mac地址：")
@@ -112,7 +112,7 @@ struct oppSendScenarioTest {
           Text(this.serverMac)
             .fontSize($r('app.float.wh_value_25'))
             .width($r('app.float.wh_value_70p'))
-            .borderRadius(5)
+            .borderRadius($r('app.float.wh_value_5'))
             .backgroundColor($r("app.color.moon"))
         }.height($r('app.float.wh_value_15p'))
 
@@ -128,7 +128,7 @@ struct oppSendScenarioTest {
                 this.fileType = strs[ 1 ];
               }
               this.oppSendScenarioMessage = "需要发送的文件为：/data/bluetooth/log/" + str + "\n"
-            }).width($r('app.float.wh_value_70p')).borderRadius(1)
+            }).width($r('app.float.wh_value_70p')).borderRadius($r('app.float.wh_value_1'))
         }.height($r('app.float.wh_value_20p'))
 
         Scroll() {
@@ -154,20 +154,20 @@ struct oppSendScenarioTest {
           .width($r('app.float.wh_value_100p'))
           .height($r('app.float.wh_value_30p'))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.On)
       }
       .height($r('app.float.wh_value_66p'))
       .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Column() {
             Button('oppSendFile')
-              .borderRadius(8)
+              .borderRadius($r('app.float.wh_value_8'))
               .backgroundColor($r("app.color.blue"))
               .width($r('app.float.wh_value_200'))
               .height($r('app.float.wh_value_60'))

@@ -32,7 +32,7 @@ struct DeviceNameCard {
   build() {
     Column() {
       GridContainer({
-        columns : 12 ,
+        columns : $r('app.float.wh_value_12') ,
         sizeType : SizeType.Auto ,
         gutter : vp2px(1) === 2 ? $r('app.float.wh_value_12') : $r('app.float.wh_value_0') ,
         margin : vp2px(1) === 2 ? $r('app.float.wh_value_24') : $r('app.float.wh_value_0')
@@ -44,7 +44,7 @@ struct DeviceNameCard {
           .height(ConfigData.WH_100_100)
           .useSizeType({
             xs : { span : 0 , offset : 0 } , sm : { span : 0 , offset : 0 } ,
-            md : { span : 0 , offset : 0 } , lg : { span : 2 , offset : 0 }
+            md : { span : 0 , offset : 0 } , lg : { span : $r('app.float.wh_value_2') , offset : 0 }
           });
 
           Column() {
@@ -64,7 +64,7 @@ struct DeviceNameCard {
                 right : $r('sys.float.ohos_id_card_margin_end')
               })
               .height($r("app.float.wh_value_40"))
-              .borderRadius(0)
+              .borderRadius($r('app.float.wh_value_0'))
               .backgroundColor($r('app.color.color_00000000_transparent'))
               .onChange((value: string) => {
                 console.log(ConfigData.TAG + 'device name changed to: ' + JSON.stringify(value));
@@ -111,8 +111,8 @@ struct DeviceNameCard {
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 12 , offset : 0 } , sm : { span : 12 , offset : 0 } ,
-            md : { span : 12 , offset : 0 } , lg : { span : 8 , offset : 2 }
+            xs : { span : $r('app.float.wh_value_12') , offset : 0 } , sm : { span : $r('app.float.wh_value_12') , offset : 0 } ,
+            md : { span : $r('app.float.wh_value_12') , offset : 0 } , lg : { span : $r('app.float.wh_value_8') , offset : $r('app.float.wh_value_2') }
           });
 
           Column() {
@@ -120,8 +120,8 @@ struct DeviceNameCard {
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 0 , offset : 12 } , sm : { span : 0 , offset : 12 } ,
-            md : { span : 0 , offset : 12 } , lg : { span : 2 , offset : 10 }
+            xs : { span : 0 , offset : $r('app.float.wh_value_12') } , sm : { span : 0 , offset : $r('app.float.wh_value_12') } ,
+            md : { span : 0 , offset : $r('app.float.wh_value_12') } , lg : { span : $r('app.float.wh_value_2') , offset : $r('app.float.wh_value_10') }
           })
         }
         .width(ConfigData.WH_100_100)

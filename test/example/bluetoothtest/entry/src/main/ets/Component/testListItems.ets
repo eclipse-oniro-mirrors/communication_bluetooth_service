@@ -42,20 +42,20 @@ export struct TestListItem {
 
         Text(this.testItem.name)
           .fontSize($r('app.float.wh_value_20'))
-          .flexGrow(1)
-          .margin({ left : 12 })
+          .flexGrow($r('app.float.wh_value_1'))
+          .margin({ left : $r('app.float.wh_value_12') })
           .width($r('app.float.wh_value_45p'))
         Text(this.testItem.detail)
           .fontSize($r('app.float.wh_value_17'))
-          .margin({ left : 10 , right : 5 })
+          .margin({ left : $r('app.float.wh_value_10') , right : $r('app.float.wh_value_5') })
           .width($r('app.float.wh_value_45p'))
       }
       .height($r('app.float.wh_value_95'))
     }
     .params({ testItem : this.testItem })
-    .margin({ right : 10 , left : 10 , top : 10 })
-    .padding({ left : 15 , right : 15 })
-    .borderRadius(10)
+    .margin({ right : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_10') })
+    .padding({ left : $r('app.float.wh_value_15') , right : $r('app.float.wh_value_15') })
+    .borderRadius($r('app.float.wh_value_10'))
     .backgroundColor($r("app.color.white"))
   }
 }

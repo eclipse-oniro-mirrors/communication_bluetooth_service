@@ -41,11 +41,11 @@ export struct TestGrid {
       }
       .rowsTemplate(this.gridRowTemplate)
       .columnsTemplate('1fr 1fr')
-      .columnsGap(8)
-      .rowsGap(8)
+      .columnsGap($r('app.float.wh_value_8'))
+      .rowsGap($r('app.float.wh_value_8'))
       .height(this.heightValue)
     }
     .scrollBar(BarState.Off)
-    .padding({ left : 16 , right : 16 })
+    .padding({ left : $r('app.float.wh_value_16') , right : $r('app.float.wh_value_16') })
   }
 }

@@ -56,7 +56,7 @@ export struct BleFilterTable {
         Row() {
           Text("BLE扫描过滤参数:")
             .fontSize($r('app.float.wh_value_17'))
-            .fontColor("#4444444")
+            .fontColor($r('app.color.color_4444444_grey'))
             .width($r('app.float.wh_value_80p'))
             .padding($r('app.float.wh_value_5'))
           Checkbox({ name : 'bleScanFilter' , group : 'checkboxGroup99' })
@@ -74,7 +74,7 @@ export struct BleFilterTable {
         }
         .height($r('app.float.wh_value_40'))
         .width($r('app.float.wh_value_100p'))
-        .borderWidth(1)
+        .borderWidth($r('app.float.wh_value_1'))
         .padding($r('app.float.wh_value_5'))
         .borderColor($r("app.color.lead"))
         .backgroundColor( $r( "app.color.moon" ) )
@@ -91,7 +91,7 @@ export struct BleFilterTable {
                     AppStorage.setOrCreate('txtScanFilterDeviceId' , strInput);
                   })
                   .width($r('app.float.wh_value_85p'))
-                  .borderRadius(1)
+                  .borderRadius($r('app.float.wh_value_1'))
               }
               .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
@@ -107,7 +107,7 @@ export struct BleFilterTable {
                     AppStorage.setOrCreate('txtScanFilterName' , strInput);
                   })
                   .width($r('app.float.wh_value_85p'))
-                  .borderRadius(1)
+                  .borderRadius($r('app.float.wh_value_1'))
               }
               .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
@@ -123,7 +123,7 @@ export struct BleFilterTable {
                     AppStorage.setOrCreate('txtScanFilterServiceUuid' , strInput);
                   })
                   .width($r('app.float.wh_value_77p'))
-                  .borderRadius(1)
+                  .borderRadius($r('app.float.wh_value_1'))
               }
               .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
@@ -135,14 +135,14 @@ export struct BleFilterTable {
             .padding($r('app.float.wh_value_5'))
           }
           .borderColor($r("app.color.lead"))
-          .borderWidth(1)
+          .borderWidth($r('app.float.wh_value_1'))
 
           Column() {
             Row() {
               Text("BLE扫描配置:")
                 .padding($r('app.float.wh_value_5'))
                 .fontSize($r('app.float.wh_value_17'))
-                .fontColor("#4444444")
+                .fontColor($r('app.color.color_4444444_grey'))
                 .width($r('app.float.wh_value_80p'))
               Checkbox({ name : 'bleScanOptions' , group : 'checkboxGroup95' })
                 .select(this.cbxBleScanOptions)
@@ -194,7 +194,7 @@ export struct BleFilterTable {
                     .value('LOW_POWER')
                     .font({ size : 17 })
                     .selectedOptionFont({ size : 17 })
-                    .optionFont({ size : 15 })
+                    .optionFont({ size : $r('app.float.wh_value_15') })
                     .width($r('app.float.wh_value_80p'))
                     .onSelect((index: number) => {
                       console.log("Select:" + index)
@@ -218,7 +218,7 @@ export struct BleFilterTable {
                     .value('MATCH_MODE_AGGRESSIVE')
                     .font({ size : 17 })
                     .selectedOptionFont({ size : 17 })
-                    .optionFont({ size : 15 })
+                    .optionFont({ size : $r('app.float.wh_value_15') })
                     .width($r('app.float.wh_value_75p'))
                     .onSelect((index: number) => {
                       console.log("Select:" + index)
@@ -235,13 +235,13 @@ export struct BleFilterTable {
             .padding($r('app.float.wh_value_5'))
           }
           .height($r('app.float.wh_value_240'))
-          .borderWidth(1)
+          .borderWidth($r('app.float.wh_value_1'))
           .borderColor($r("app.color.lead"))
         }
       }
       .height($r('app.float.wh_value_100p'))
     }
-    .scrollBarWidth(20)
-    .padding({ bottom : 10 })
+    .scrollBarWidth($r('app.float.wh_value_20'))
+    .padding({ bottom : $r('app.float.wh_value_10') })
   }
 }

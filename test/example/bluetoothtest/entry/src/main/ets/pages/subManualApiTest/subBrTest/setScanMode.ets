@@ -51,7 +51,7 @@ struct etScanMode {
               });
             }
             .height($r('app.float.wh_value_80'))
-            .borderRadius(10)
+            .borderRadius($r('app.float.wh_value_10'))
 
             ListItem() {
               TitleComponent({
@@ -60,9 +60,9 @@ struct etScanMode {
                 bgColor : this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
+            .padding({ top : $r('app.float.wh_value_10') })
             .height($r('app.float.wh_value_80'))
-            .borderRadius(10)
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 0;
             })
@@ -74,9 +74,9 @@ struct etScanMode {
                 bgColor : this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
+            .padding({ top : $r('app.float.wh_value_10') })
             .height($r('app.float.wh_value_80'))
-            .borderRadius(10)
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 1;
             })
@@ -88,9 +88,9 @@ struct etScanMode {
                 bgColor : this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
+            .padding({ top : $r('app.float.wh_value_10') })
             .height($r('app.float.wh_value_80'))
-            .borderRadius(10)
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 2;
             })
@@ -102,9 +102,9 @@ struct etScanMode {
                 bgColor : this.currentClick === 3 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
+            .padding({ top : $r('app.float.wh_value_10') })
             .height($r('app.float.wh_value_80'))
-            .borderRadius(10)
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 3;
             })
@@ -116,9 +116,9 @@ struct etScanMode {
                 bgColor : this.currentClick === 4 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
+            .padding({ top : $r('app.float.wh_value_10') })
             .height($r('app.float.wh_value_80'))
-            .borderRadius(10)
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 4;
             })
@@ -130,9 +130,9 @@ struct etScanMode {
                 bgColor : this.currentClick === 5 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
+            .padding({ top : $r('app.float.wh_value_10') })
             .height($r('app.float.wh_value_80'))
-            .borderRadius(10)
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 5;
             })
@@ -145,7 +145,7 @@ struct etScanMode {
       .scrollable(ScrollDirection.Vertical)
       .scrollBar(BarState.On)
       .scrollBarColor(Color.Gray)
-      .scrollBarWidth(30)
+      .scrollBarWidth($r('app.float.wh_value_30'))
 
       Row() {
         Text('duration')
@@ -163,7 +163,7 @@ struct etScanMode {
           .enterKeyType(EnterKeyType.Done)
           .caretColor(Color.Blue)
           .height($r("app.float.wh_value_40"))
-          .borderRadius(0)
+          .borderRadius($r('app.float.wh_value_0'))
           .backgroundColor($r('app.color.color_00000000_transparent'))
           .onChange((value: string) => {
             console.log(ConfigData.TAG + 'device name changed to: ' + JSON.stringify(value));

@@ -61,7 +61,7 @@ struct GattClientVelocityBenchmarkTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
       Column() {
         Scroll() {
@@ -83,14 +83,14 @@ struct GattClientVelocityBenchmarkTest {
                   { value : "1000" },
                   { value : "10000" }
                 ])
-                  .borderRadius(10)
+                  .borderRadius($r('app.float.wh_value_10'))
                   .backgroundColor($r("app.color.white"))
                   .selected(0)
                   .value("100")
                   .font({ size : 17 })
-                  .margin({ right : 80 })
+                  .margin({ right : $r('app.float.wh_value_80') })
                   .selectedOptionFont({ size : 17 })
-                  .optionFont({ size : 15 })
+                  .optionFont({ size : $r('app.float.wh_value_15') })
                   .width($r('app.float.wh_value_50p'))
                   .onSelect((index: number) => {
                     console.log("Select:" + index)
@@ -106,10 +106,10 @@ struct GattClientVelocityBenchmarkTest {
           .width($r('app.float.wh_value_100p'))
           .height($r('app.float.wh_value_130'))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.Auto)
 
-        Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000")
+        Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'))
 
         Scroll() {
           Column() {
@@ -134,7 +134,7 @@ struct GattClientVelocityBenchmarkTest {
           .width($r('app.float.wh_value_100p'))
           .height($r('app.float.wh_value_330'))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.On)
       }
       .width($r('app.float.wh_value_100p'))
@@ -144,10 +144,10 @@ struct GattClientVelocityBenchmarkTest {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text("速率性能测试").fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text("速率性能测试").fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.blue"))
           .width($r('app.float.wh_value_100'))
           .height($r('app.float.wh_value_66'))
@@ -198,10 +198,10 @@ struct GattClientVelocityBenchmarkTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text("结束测试").fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text("结束测试").fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.blue"))
           .width($r('app.float.wh_value_100'))
           .height($r('app.float.wh_value_66'))
@@ -222,10 +222,10 @@ struct GattClientVelocityBenchmarkTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Image($r("app.media.ic_public_delete_filled")).width($r('app.float.wh_value_30')).height($r('app.float.wh_value_40')).margin({ left : 5 })
+              Image($r("app.media.ic_public_delete_filled")).width($r('app.float.wh_value_30')).height($r('app.float.wh_value_40')).margin({ left : $r('app.float.wh_value_5') })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.moon"))
           .width($r('app.float.wh_value_50'))
           .height($r('app.float.wh_value_66'))

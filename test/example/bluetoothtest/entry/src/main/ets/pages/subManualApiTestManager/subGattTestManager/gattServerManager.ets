@@ -72,14 +72,14 @@ struct GattServerSetting {
           .margin({ top : $r('app.float.wh_value_1') })
           .padding($r('app.float.wh_value_1'))
           .fontSize($r('app.float.wh_value_17'))
-          .fontColor("#4444444")
+          .fontColor($r('app.color.color_4444444_grey'))
           .height($r('app.float.wh_value_30'))
           .width($r('app.float.wh_value_94p'))
           .textAlign(TextAlign.Start)
         Scroll() {
           Column() {
             Row() {
-              Text("服务UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_70')).padding({ left : 10 });
+              Text("服务UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_70')).padding({ left : $r('app.float.wh_value_10') });
               TextInput({ text : this.curServiceUUID , placeholder : "input service UUID" })
                 .fontSize($r('app.float.wh_value_17'))
                 .onChange((strInput) => {
@@ -87,7 +87,7 @@ struct GattServerSetting {
                   AppStorage.setOrCreate('curServiceUUID' , strInput);
                 })
                 .width($r('app.float.wh_value_80p'))
-                .borderRadius(1)
+                .borderRadius($r('app.float.wh_value_1'))
             }
             .height($r('app.float.wh_value_60'))
             .width($r('app.float.wh_value_100p'))
@@ -96,7 +96,7 @@ struct GattServerSetting {
 
             Column() {
               Row() {
-                Text("CCC UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_70')).padding({ left : 10 });
+                Text("CCC UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_70')).padding({ left : $r('app.float.wh_value_10') });
                 TextInput({ text : this.curCharacteristicUUID , placeholder : "input characteristic UUID" })
                   .fontSize($r('app.float.wh_value_17'))
                   .onChange((strInput) => {
@@ -104,7 +104,7 @@ struct GattServerSetting {
                     AppStorage.setOrCreate('curCharacteristicUUID' , strInput);
                   })
                   .width($r('app.float.wh_value_80p'))
-                  .borderRadius(1)
+                  .borderRadius($r('app.float.wh_value_1'))
               }
               .width($r('app.float.wh_value_100p'))
               .padding($r('app.float.wh_value_5'))
@@ -112,7 +112,7 @@ struct GattServerSetting {
               .alignItems(VerticalAlign.Center)
 
               Row() {
-                Text("CCC Value:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_70')).padding({ left : 10 });
+                Text("CCC Value:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_70')).padding({ left : $r('app.float.wh_value_10') });
                 TextInput({ text : this.curCharacteristicValue , placeholder : "input characteristic Value" })
                   .fontSize($r('app.float.wh_value_17'))
                   .onChange((strInput) => {
@@ -120,7 +120,7 @@ struct GattServerSetting {
                     AppStorage.setOrCreate('curCharacteristicValue' , strInput);
                   })
                   .width($r('app.float.wh_value_80p'))
-                  .borderRadius(1)
+                  .borderRadius($r('app.float.wh_value_1'))
               }
               .width($r('app.float.wh_value_100p'))
               .padding($r('app.float.wh_value_5'))
@@ -142,7 +142,7 @@ struct GattServerSetting {
                     AppStorage.setOrCreate('curDescriptorUUID' , strInput);
                   })
                   .width($r('app.float.wh_value_80p'))
-                  .borderRadius(1)
+                  .borderRadius($r('app.float.wh_value_1'))
               }
               .width($r('app.float.wh_value_100p'))
               .padding($r('app.float.wh_value_5'))
@@ -158,7 +158,7 @@ struct GattServerSetting {
                     AppStorage.setOrCreate('curDescriptorValue' , strInput);
                   })
                   .width($r('app.float.wh_value_80p'))
-                  .borderRadius(1)
+                  .borderRadius($r('app.float.wh_value_1'))
               }
               .width($r('app.float.wh_value_100p'))
               .padding($r('app.float.wh_value_5'))
@@ -180,7 +180,7 @@ struct GattServerSetting {
             .margin({ top : $r('app.float.wh_value_1') })
             .padding($r('app.float.wh_value_5'))
             .fontSize($r('app.float.wh_value_17'))
-            .fontColor("#4444444")
+            .fontColor($r('app.color.color_4444444_grey'))
             .height($r('app.float.wh_value_30'))
             .width($r('app.float.wh_value_70p'))
             .textAlign(TextAlign.Start)
@@ -200,7 +200,7 @@ struct GattServerSetting {
             .margin({ left : $r('app.float.wh_value_1') })
           Text("设置")
             .fontSize($r('app.float.wh_value_14'))
-            .fontColor("#4444444")
+            .fontColor($r('app.color.color_4444444_grey'))
         }
         .height($r('app.float.wh_value_40'))
 
@@ -228,7 +228,7 @@ struct GattServerSetting {
                     AppStorage.setOrCreate('advSettings_interval' , strInput);
                   })
                   .width($r('app.float.wh_value_60p'))
-                  .borderRadius(1)
+                  .borderRadius($r('app.float.wh_value_1'))
               }
               .height($r('app.float.wh_value_40'))
               .justifyContent(FlexAlign.Start)
@@ -255,10 +255,10 @@ struct GattServerSetting {
                     AppStorage.setOrCreate('advSettings_txPower' , strInput);
                   })
                   .width($r('app.float.wh_value_60p'))
-                  .borderRadius(1)
+                  .borderRadius($r('app.float.wh_value_1'))
               }
               .height($r('app.float.wh_value_40'))
-              .padding({ top : 5 })
+              .padding({ top : $r('app.float.wh_value_5') })
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
 
@@ -290,7 +290,7 @@ struct GattServerSetting {
 
             Column() {
               Row() {
-                Text("服务Uuid").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_60')).padding({ left : 10 })
+                Text("服务Uuid").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_60')).padding({ left : $r('app.float.wh_value_10') })
                 TextInput({ text : this.advDataServiceUuids_serviceUuid , placeholder : "input serviceUuid" })
                   .fontSize($r('app.float.wh_value_17'))
                   .onChange((strInput) => {
@@ -315,7 +315,7 @@ struct GattServerSetting {
                       AppStorage.setOrCreate('advDataManufactureData_manufactureId' , strInput)
                     })
                     .width($r('app.float.wh_value_100'))
-                  Text("Value").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70')).padding({ left : 10 })
+                  Text("Value").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70')).padding({ left : $r('app.float.wh_value_10') })
                   TextInput({
                     text : this.advDataManufactureData_manufactureValue ,
                     placeholder : "input manufactureValue(less than 8 char)"
@@ -329,7 +329,7 @@ struct GattServerSetting {
                 }
                 .width($r('app.float.wh_value_90p'))
               }
-              .borderWidth(1)
+              .borderWidth($r('app.float.wh_value_1'))
               .borderColor($r("app.color.lead"))
 
               Column() {
@@ -358,10 +358,10 @@ struct GattServerSetting {
                       })
                       .width($r('app.float.wh_value_80p'))
                   }
-                  .padding({ top : 10 })
+                  .padding({ top : $r('app.float.wh_value_10') })
                 }
               }
-              .borderWidth(1)
+              .borderWidth($r('app.float.wh_value_1'))
               .borderColor($r("app.color.lead"))
             }
             .width($r('app.float.wh_value_100p'))
@@ -386,7 +386,7 @@ struct GattServerSetting {
               Text("Response:")
                 .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_5') })
                 .fontSize($r('app.float.wh_value_17'))
-                .fontColor("#4444444");
+                .fontColor($r('app.color.color_4444444_grey'));
             }
             .height($r('app.float.wh_value_40'))
             .width($r('app.float.wh_value_100p'))
@@ -430,10 +430,10 @@ struct GattServerSetting {
                       })
                       .width($r('app.float.wh_value_80p'))
                   }
-                  .padding({ top : 5 })
+                  .padding({ top : $r('app.float.wh_value_5') })
                 }
               }
-              .borderWidth(1)
+              .borderWidth($r('app.float.wh_value_1'))
               .borderColor($r("app.color.lead"))
 
               Column() {
@@ -467,10 +467,10 @@ struct GattServerSetting {
                       })
                       .width($r('app.float.wh_value_80p'))
                   }
-                  .padding({ top : 5 })
+                  .padding({ top : $r('app.float.wh_value_5') })
                 }
               }
-              .borderWidth(1)
+              .borderWidth($r('app.float.wh_value_1'))
               .borderColor($r("app.color.lead"))
             }
             .height($r('app.float.wh_value_85p'))
@@ -535,7 +535,7 @@ struct GattServerManager {
   private serverResponse_value: string = 'respond value';
   private serverResponse: bluetoothManager.ServerResponse = {
     deviceId : '08:FB:EA:1B:3C:63' , //'88:36:CF:09:C1:90'
-    transId : 1 ,
+    transId : $r('app.float.wh_value_1') ,
     status : 0 ,
     offset : 0 ,
     value : string2ArrayBuffer("respond value")
@@ -637,17 +637,17 @@ struct GattServerManager {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
       Row() {
         Text("GattServerSetting")
           .fontSize($r('app.float.wh_value_20'))
           .height($r('app.float.wh_value_60'))
           .width($r('app.float.wh_value_80p'))
-          .padding({ left : 10 })
+          .padding({ left : $r('app.float.wh_value_10') })
         Image($r('app.media.Switch'))
           .height($r('app.float.wh_value_50'))
           .width($r('app.float.wh_value_50'))
-          .padding({ top : 10 , bottom : 10 , left : 10 })
+          .padding({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
           .onClick(() => {
             this.showList = !this.showList;
           })
@@ -700,7 +700,7 @@ struct GattServerManager {
             .height($r('app.float.wh_value_160'))
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
 
-            Stack().height($r('app.float.wh_value_0_25')).backgroundColor("#000000");
+            Stack().height($r('app.float.wh_value_0_25')).backgroundColor($r('app.color.black'));
             Column() {
               Text("功能测试:")
                 .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
@@ -712,7 +712,7 @@ struct GattServerManager {
               }
               .width(ConfigData.WH_100_100)
               .align(Alignment.TopStart)
-              .layoutWeight(1)
+              .layoutWeight($r('app.float.wh_value_1'))
               .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
             }
             .height($r('app.float.wh_value_75p'))

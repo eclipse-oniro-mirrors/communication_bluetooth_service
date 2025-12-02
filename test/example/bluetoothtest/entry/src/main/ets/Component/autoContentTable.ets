@@ -37,7 +37,7 @@ export struct AutoContentTable {
         }
         .height($r('app.float.wh_value_30'))
         .width($r('app.float.wh_value_10p'))
-        .padding({ left : 10 })
+        .padding({ left : $r('app.float.wh_value_10') })
 
         Flex({ direction : FlexDirection.Column , alignItems : ItemAlign.Start }) {
           Row() {
@@ -52,21 +52,21 @@ export struct AutoContentTable {
           .width($r('app.float.wh_value_70p'))
         }
         .height($r('app.float.wh_value_30'))
-        .layoutWeight(6)
+        .layoutWeight($r('app.float.wh_value_6'))
 
         Flex({ alignItems : ItemAlign.Center }) {
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : autoItem.result)
             .margin({ left : $r('app.float.wh_value_10') })
             .fontSize($r('app.float.wh_value_17'))
-            .flexGrow(1)
+            .flexGrow($r('app.float.wh_value_1'))
         }
-        .layoutWeight(3)
-        .padding({ left : 10 })
+        .layoutWeight($r('app.float.wh_value_3'))
+        .padding({ left : $r('app.float.wh_value_10') })
       }
     }
     .height($r('app.float.wh_value_40'))
-    .borderRadius(10)
-    .margin({ top : 3 , bottom : 3 })
+    .borderRadius($r('app.float.wh_value_10'))
+    .margin({ top : $r('app.float.wh_value_3') , bottom : $r('app.float.wh_value_3') })
     .backgroundColor($r("app.color.white"))
   }
 
@@ -92,9 +92,9 @@ export struct AutoContentTable {
           })
         }
       }
-      .scrollBarWidth(20)
+      .scrollBarWidth($r('app.float.wh_value_20'))
     }
     .height($r('app.float.wh_value_80p'))
-    .padding({ top : 5 , right : 10 , left : 10 })
+    .padding({ top : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
   }
 }

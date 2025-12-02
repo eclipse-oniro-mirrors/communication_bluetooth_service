@@ -55,7 +55,7 @@ struct SppClientBandWidthBenchmarkTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
       Column() {
         Scroll() {
@@ -70,7 +70,7 @@ struct SppClientBandWidthBenchmarkTest {
               .margin({ left : $r('app.float.wh_value_15') })
               .backgroundColor($r("app.color.spring"))
 
-            Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000")
+            Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'))
 
             Row() {
               Text("目标设备MAC：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_130'))
@@ -81,7 +81,7 @@ struct SppClientBandWidthBenchmarkTest {
                   AppStorage.setOrCreate('inputDeviceId' , str)
                 })
                 .width($r('app.float.wh_value_70p'))
-                .borderRadius(1)
+                .borderRadius($r('app.float.wh_value_1'))
                 .backgroundColor($r("app.color.white"))
                 .height($r('app.float.wh_value_40'))
             }
@@ -101,7 +101,7 @@ struct SppClientBandWidthBenchmarkTest {
                   AppStorage.setOrCreate("writeClientDataBW" , str);
                 })
                 .width($r('app.float.wh_value_70p'))
-                .borderRadius(1)
+                .borderRadius($r('app.float.wh_value_1'))
                 .height($r('app.float.wh_value_35'))
             }
             .padding($r('app.float.wh_value_5'))
@@ -124,7 +124,7 @@ struct SppClientBandWidthBenchmarkTest {
                         .fontSize($r('app.float.wh_value_14'))
                         .width($r('app.float.wh_value_90p'))
                         .height($r('app.float.wh_value_150'))
-                        .borderRadius(10)
+                        .borderRadius($r('app.float.wh_value_10'))
                         .backgroundColor($r("app.color.white"))
                     }
                   }
@@ -132,23 +132,23 @@ struct SppClientBandWidthBenchmarkTest {
                   .width($r('app.float.wh_value_90p'))
                   .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
                 }
-                .scrollBarWidth(10)
+                .scrollBarWidth($r('app.float.wh_value_10'))
                 .scrollBar(BarState.On)
               }
               .width($r('app.float.wh_value_100p'))
               .height($r('app.float.wh_value_150'))
             }
-            .scrollBarWidth(10)
+            .scrollBarWidth($r('app.float.wh_value_10'))
             .scrollBar(BarState.On)
           }
           .width($r('app.float.wh_value_100p'))
           .height($r('app.float.wh_value_360'))
           .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.Auto)
 
-        Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000")
+        Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'))
 
         Scroll() {
           Column() {
@@ -174,7 +174,7 @@ struct SppClientBandWidthBenchmarkTest {
           .width($r('app.float.wh_value_100p'))
           .height($r('app.float.wh_value_150'))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.On)
       }
       .width($r('app.float.wh_value_100p'))
@@ -184,10 +184,10 @@ struct SppClientBandWidthBenchmarkTest {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('带宽性能测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('带宽性能测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.blue"))
           .width($r('app.float.wh_value_100'))
           .height($r('app.float.wh_value_66'))
@@ -210,10 +210,10 @@ struct SppClientBandWidthBenchmarkTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('结束测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('结束测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.blue"))
           .width($r('app.float.wh_value_80'))
           .height($r('app.float.wh_value_66'))
@@ -233,10 +233,10 @@ struct SppClientBandWidthBenchmarkTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Image($r('app.media.ic_public_delete_filled')).width($r('app.float.wh_value_30')).height($r('app.float.wh_value_40')).margin({ left : 5 })
+              Image($r('app.media.ic_public_delete_filled')).width($r('app.float.wh_value_30')).height($r('app.float.wh_value_40')).margin({ left : $r('app.float.wh_value_5') })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.moon"))
           .width($r('app.float.wh_value_50'))
           .height($r('app.float.wh_value_66'))

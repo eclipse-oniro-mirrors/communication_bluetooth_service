@@ -44,12 +44,12 @@ export struct GetProfileConnSateDialog {
     Column() {
       Text(this.hitText)
         .fontSize($r('app.float.wh_value_20'))
-        .margin({ top : 10 , bottom : 10 })
+        .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
       Select(this.getProfileList)
         .selected(this.currentClick)
         .value(this.getProfileList[ this.currentClick ].value)
-        .font({ size : 20 })
-        .selectedOptionFont({ size : 20 })
+        .font({ size : $r('app.float.wh_value_20') })
+        .selectedOptionFont({ size : $r('app.float.wh_value_20') })
         .optionFont({ size : 17 })
         .height($r('app.float.wh_value_80'))
         .width($r('app.float.wh_value_90p'))
@@ -85,7 +85,7 @@ export struct GetProfileConnSateDialog {
           })
           .backgroundColor(0xffffff).fontColor(Color.Red)
       }
-      .margin({ bottom : 10 })
+      .margin({ bottom : $r('app.float.wh_value_10') })
     }
   }
 }
@@ -116,13 +116,13 @@ export struct SetScanModeDialog {
     Column() {
       Text(this.hitText)
         .fontSize($r('app.float.wh_value_20'))
-        .margin({ top : 10 , bottom : 10 })
+        .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
       Select(this.scanModeList)
         .selected(this.currentClick)
         .value(this.scanModeList[ this.currentClick ].value)
-        .font({ size : 12 })
-        .selectedOptionFont({ size : 12 })
-        .optionFont({ size : 12 })
+        .font({ size : $r('app.float.wh_value_12') })
+        .selectedOptionFont({ size : $r('app.float.wh_value_12') })
+        .optionFont({ size : $r('app.float.wh_value_12') })
         .height($r('app.float.wh_value_60'))
         .width($r('app.float.wh_value_90p'))
         .onSelect((index: number) => {
@@ -171,7 +171,7 @@ export struct SetScanModeDialog {
           .backgroundColor(0xffffff)
           .fontColor(Color.Red)
       }
-      .margin({ bottom : 10 })
+      .margin({ bottom : $r('app.float.wh_value_10') })
     }
   }
 }
@@ -192,7 +192,7 @@ export struct InputDialog {
     Column() {
       Text(this.hitText)
         .fontSize($r('app.float.wh_value_20'))
-        .margin({ top : 10 , bottom : 10 })
+        .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
       TextInput({ placeholder : '' , text : this.textValue })
         .height($r('app.float.wh_value_60'))
         .width($r('app.float.wh_value_90p'))
@@ -226,7 +226,7 @@ export struct InputDialog {
           .backgroundColor(0xffffff)
           .fontColor(Color.Red)
       }
-      .margin({ bottom : 10 })
+      .margin({ bottom : $r('app.float.wh_value_10') })
     }
   }
 }
@@ -253,12 +253,12 @@ export struct SetConnectionStrategyDialog {
     Column() {
       Text(this.hitText)
         .fontSize($r('app.float.wh_value_20'))
-        .margin({ top : 10 , bottom : 10 })
+        .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
       Select(this.connectionStrategyList)
         .selected(this.currentClick)
         .value(this.connectionStrategyList[ this.currentClick ].value)
-        .font({ size : 18 })
-        .selectedOptionFont({ size : 18 })
+        .font({ size : $r('app.float.wh_value_18') })
+        .selectedOptionFont({ size : $r('app.float.wh_value_18') })
         .optionFont({ size : 17 })
         .height($r('app.float.wh_value_80'))
         .width($r('app.float.wh_value_90p'))
@@ -294,7 +294,7 @@ export struct SetConnectionStrategyDialog {
           })
           .backgroundColor(0xffffff).fontColor(Color.Red)
       }
-      .margin({ bottom : 10 })
+      .margin({ bottom : $r('app.float.wh_value_10') })
     }
   }
 }
@@ -386,37 +386,37 @@ export struct ContentTable {
             .width($r('app.float.wh_value_40'))
             .padding({ top : $r('app.float.wh_value_15') })
         }
-        .layoutWeight(1)
-        .padding({ left : 10 })
+        .layoutWeight($r('app.float.wh_value_1'))
+        .padding({ left : $r('app.float.wh_value_10') })
 
         Flex({ direction : FlexDirection.Column , alignItems : ItemAlign.Start }) {
           Text(apiItem.name)
             .fontSize($r('app.float.wh_value_17_4'))
             .fontWeight(FontWeight.Bold)
-            .layoutWeight(1)
-            .padding({ left : 10 , top : 10 })
+            .layoutWeight($r('app.float.wh_value_1'))
+            .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_10') })
           Text(apiItem.method)
             .fontSize($r('app.float.wh_value_17_4'))
             .fontWeight(FontWeight.Bold)
-            .layoutWeight(1)
-            .padding({ left : 10 , top : 5 })
+            .layoutWeight($r('app.float.wh_value_1'))
+            .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_5') })
         }
-        .layoutWeight(6)
+        .layoutWeight($r('app.float.wh_value_6'))
         .width($r('app.float.wh_value_80p'))
 
         Flex({ alignItems : ItemAlign.Center }) {
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : apiItem.result)
             .fontSize($r('app.float.wh_value_17_4'))
-            .flexGrow(1)
-            .padding({ top : 15 })
+            .flexGrow($r('app.float.wh_value_1'))
+            .padding({ top : $r('app.float.wh_value_15') })
         }
-        .layoutWeight(3)
-        .padding({ left : 25 })
+        .layoutWeight($r('app.float.wh_value_3'))
+        .padding({ left : $r('app.float.wh_value_25') })
       }
     }
     .height($r('app.float.wh_value_80'))
-    .borderRadius(10)
-    .margin({ top : 5 , bottom : 5 })
+    .borderRadius($r('app.float.wh_value_10'))
+    .margin({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') })
     .backgroundColor($r("app.color.white"))
     .onClick(() => {
       switch ( apiItem.method ) {
@@ -567,9 +567,9 @@ export struct ContentTable {
           })
         }
       }
-      .scrollBarWidth(20)
+      .scrollBarWidth($r('app.float.wh_value_20'))
     }
     .height($r('app.float.wh_value_66p'))
-    .padding({ top : 5 , right : 10 , left : 10 })
+    .padding({ top : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
   }
 }

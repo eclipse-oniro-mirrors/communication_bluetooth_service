@@ -75,7 +75,7 @@ export struct PageTitle {
     .backgroundColor($r("app.color.blue"))
     .height($r('app.float.wh_value_100p'))
     .width($r('app.float.wh_value_100p'))
-    .margin({ left : 3 , right : 3 , top : 2 })
+    .margin({ left : $r('app.float.wh_value_3') , right : $r('app.float.wh_value_3') , top : $r('app.float.wh_value_2') })
     .onClick(() => {
       console.log('[Screenshot] onClick,screenshot')
       this.getScreen(isFullScreen)
@@ -94,15 +94,15 @@ export struct PageTitle {
         .width($r('app.float.wh_value_20p'))
         .height($r('app.float.wh_value_100p'))
         .backgroundColor($r("app.color.blue"))
-        .padding({ left : 1 , top : 15 })
+        .padding({ left : $r('app.float.wh_value_1') , top : $r('app.float.wh_value_15') })
         .onClick(() => {
           router.back()
         })
 
         Text(this.testItem != null ? this.testItem.detail : this.detail)
           .fontSize($r('app.float.wh_value_24'))
-          .margin({ left : 3 })
-          .padding({ top : 18 })
+          .margin({ left : $r('app.float.wh_value_3') })
+          .padding({ top : $r('app.float.wh_value_18') })
 
         Scroll() {
           Column() {
@@ -115,11 +115,11 @@ export struct PageTitle {
           .borderColor(Color.Green)
           .gesture(
             GestureGroup(GestureMode.Parallel ,
-              TapGesture({ count : 2 , fingers : 1 })
+              TapGesture({ count : $r('app.float.wh_value_2') , fingers : $r('app.float.wh_value_1') })
                 .onAction(() => {
                   this.myborderWidth += 1
                 }) ,
-              LongPressGesture({ fingers : 1 , repeat : true , duration : 1000 })
+              LongPressGesture({ fingers : $r('app.float.wh_value_1') , repeat : true , duration : 1000 })
                 .onAction((event: GestureEvent) => {
                   this.colOpacity -= 0.1
                   if ( event.repeat ) {
@@ -130,7 +130,7 @@ export struct PageTitle {
                   this.colOpacity = 1;
                   this.count = 0;
                 }) ,
-              PanGesture({ fingers : 1 , direction : PanDirection.All , distance : 5.0 })
+              PanGesture({ fingers : $r('app.float.wh_value_1') , direction : PanDirection.All , distance : 5.0 })
                 .onActionStart(() => {
                   console.log('Pan start')
                 })
@@ -141,7 +141,7 @@ export struct PageTitle {
                 .onActionEnd(() => {
                   console.log('Pan end')
                 }) ,
-              PinchGesture({ fingers : 2 , distance : 4 })
+              PinchGesture({ fingers : $r('app.float.wh_value_2') , distance : 4 })
                 .onActionStart(() => {
                   console.log('PinchGesture start')
                 })
@@ -153,7 +153,7 @@ export struct PageTitle {
                   console.log('PinchGesture end')
                   this.getScreen(true);
                 }) ,
-              RotationGesture({ fingers : 2 , angle : 2 })
+              RotationGesture({ fingers : $r('app.float.wh_value_2') , angle : $r('app.float.wh_value_2') })
                 .onActionStart(() => {
                   console.log('RotationGesture start')
                 })
@@ -169,11 +169,11 @@ export struct PageTitle {
               })
           )
         }
-        .layoutWeight(1)
+        .layoutWeight($r('app.float.wh_value_1'))
       }
       .height($r('app.float.wh_value_61'))
-      .backgroundColor('#FFedf2f5')
-      .padding({ left : 10 })
+      .backgroundColor($r('app.color.color_FFEDF2F5_bg'))
+      .padding({ left : $r('app.float.wh_value_10') })
       .borderColor($r("app.color.black"))
       .backgroundColor($r("app.color.blue"))
     }

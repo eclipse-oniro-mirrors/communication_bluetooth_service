@@ -89,7 +89,7 @@ struct BrTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
       Column() {
         Row() {
           Text("目标设备MAC：")
@@ -105,7 +105,7 @@ struct BrTest {
               this.deviceId = str;
             })
             .width($r('app.float.wh_value_60p'))
-            .padding({ top : 5 , left : 5 })
+            .padding({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_5') })
         }
       }
       .align(Alignment.TopStart)
@@ -244,7 +244,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width($r("app.float.wh_value_160"))
           .height($r("app.float.wh_value_40"))
-          .flexGrow(1)
+          .flexGrow($r('app.float.wh_value_1'))
           .onClick(() => {
             this.dialogController.close();
             this.action(false);
@@ -252,7 +252,7 @@ struct PairDialog {
 
           Divider()
             .height($r("app.float.wh_value_24"))
-            .strokeWidth(0.5)
+            .strokeWidth($r('app.float.wh_value_0_5'))
             .vertical(true)
             .color(($r("app.color.color_E3E3E3_grey")))
 
@@ -264,7 +264,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width($r("app.float.wh_value_160"))
           .height($r("app.float.wh_value_40"))
-          .flexGrow(1)
+          .flexGrow($r('app.float.wh_value_1'))
           .onClick(() => {
             this.dialogController.close();
             console.log("onClick start --------------")

@@ -28,27 +28,27 @@ export struct TestImageDisplay {
           Image(this.testItem.image)
             .height($r('app.float.wh_value_80'))
             .width($r('app.float.wh_value_80'))
-            .margin({ left : 10 , bottom : 10 })
+            .margin({ left : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
         }
         .width($r('app.float.wh_value_20p'))
 
         Column() {
           Text(this.testItem.name)
             .fontSize($r('app.float.wh_value_26'))
-            .fontWeight(500)
-            .margin({ left : 26 , top : 10 })
+            .fontWeight($r('app.float.wh_value_500'))
+            .margin({ left : $r('app.float.wh_value_26') , top : $r('app.float.wh_value_10') })
             .width($r('app.float.wh_value_90p'))
           Text(this.testItem.detail)
             .fontSize($r('app.float.wh_value_17'))
-            .fontWeight(500)
-            .margin({ top : 8 })
+            .fontWeight($r('app.float.wh_value_500'))
+            .margin({ top : $r('app.float.wh_value_8') })
             .width($r('app.float.wh_value_80p'))
         }
         .width($r('app.float.wh_value_80p'))
-        .padding({ left : 20 })
+        .padding({ left : $r('app.float.wh_value_20') })
       }
     }
-    .backgroundColor('#FFedf2f5')
+    .backgroundColor($r('app.color.color_FFEDF2F5_bg'))
     .height($r('app.float.wh_value_160'))
   }
 }

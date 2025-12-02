@@ -41,7 +41,7 @@ struct profileConnState {
             })
           }
           .height($r('app.float.wh_value_80'))
-          .borderRadius(10)
+          .borderRadius($r('app.float.wh_value_10'))
 
           ListItem() {
             TitleComponent({
@@ -50,9 +50,9 @@ struct profileConnState {
               bgColor : this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : 10 })
+          .padding({ top : $r('app.float.wh_value_10') })
           .height($r('app.float.wh_value_80'))
-          .borderRadius(10)
+          .borderRadius($r('app.float.wh_value_10'))
           .onClick(() => {
             this.currentClick = 0;
             this.profileId = 1;
@@ -65,9 +65,9 @@ struct profileConnState {
               bgColor : this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             })
           }
-          .padding({ top : 20 })
+          .padding({ top : $r('app.float.wh_value_20') })
           .height($r('app.float.wh_value_80'))
-          .borderRadius(10)
+          .borderRadius($r('app.float.wh_value_10'))
           .onClick(() => {
             this.currentClick = 1;
             this.profileId = 4;
@@ -80,9 +80,9 @@ struct profileConnState {
               bgColor : this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : 20 })
+          .padding({ top : $r('app.float.wh_value_20') })
           .height($r('app.float.wh_value_80'))
-          .borderRadius(10)
+          .borderRadius($r('app.float.wh_value_10'))
           .onClick(() => {
             this.currentClick = 2;
             this.profileId = 6;
@@ -105,11 +105,11 @@ struct profileConnState {
             .fontSize('17fp')
             .height($r('app.float.wh_value_60'))
             .width($r('app.float.wh_value_100'))
-            .borderRadius(10)
+            .borderRadius($r('app.float.wh_value_10'))
             .borderColor($r("app.color.moon"))
             .backgroundColor($r("app.color.white"))
         }
-        .padding({ right : 10 })
+        .padding({ right : $r('app.float.wh_value_10') })
 
         Column() {
           Text("确认")
@@ -117,11 +117,11 @@ struct profileConnState {
             .fontSize('17fp')
             .height($r('app.float.wh_value_60'))
             .width($r('app.float.wh_value_100'))
-            .borderRadius(10)
+            .borderRadius($r('app.float.wh_value_10'))
             .borderColor($r("app.color.moon"))
             .backgroundColor($r("app.color.white"))
         }
-        .padding({ left : 50 })
+        .padding({ left : $r('app.float.wh_value_50') })
       }
       .width($r('app.float.wh_value_80p'))
     }
