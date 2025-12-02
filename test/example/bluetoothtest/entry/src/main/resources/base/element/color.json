@@ -127,6 +127,34 @@
     {
       "name": "lead",
       "value": "#F0EFF4"
+    },
+    {
+      "name": "color_4444444_grey",
+      "value": "#4444444"
+    },
+    {
+      "name": "color_66CCFF_blue",
+      "value": "#66CCFF"
+    },
+    {
+      "name": "color_FF0000_red",
+      "value": "#FF0000"
+    },
+    {
+      "name": "color_FFEDF2F5_bg",
+      "value": "#FFEDF2F5"
+    },
+    {
+      "name": "color_FFF1F3F5_bg",
+      "value": "#FFF1F3F5"
+    },
+    {
+      "name": "color_FFE5E5E5_bg",
+      "value": "#FFE5E5E5"
+    },
+    {
+      "name": "color_0D9FFB_blue",
+      "value": "#0D9FFB"
     }
 
   ]

@@ -76,11 +76,11 @@ struct OppProfileTest {
           PageTitle({ testItem : this.testItem })
         }
 
-        Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
           .margin({ top : $r('app.float.wh_value_10') })
           .fontSize($r('app.float.wh_value_20'))
-          .fontColor(this.hasProfile ? "#66ccff" : "#ff0000")
+          .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') : $r('app.color.color_FF0000_red'))
           .border({ width : 0.5 })
           .padding($r('app.float.wh_value_5'))
           .fontStyle(FontStyle.Italic);
@@ -93,7 +93,7 @@ struct OppProfileTest {
                   .fontWeight(FontWeight.Bold)
                   .margin({ top : $r('app.float.wh_value_5') })
                 Scroll() {
-                  List({ space : 5 }) {
+                  List({ space : $r('app.float.wh_value_5') }) {
                     ForEach(this.pairDevices , (item: PairDevices) => {
                       ListItem() {
                         Text(item.name)
@@ -121,17 +121,17 @@ struct OppProfileTest {
                 Text(this.serverMac)
                   .fontSize($r('app.float.wh_value_25'))
                   .width($r('app.float.wh_value_70p'))
-                  .borderRadius(5)
+                  .borderRadius($r('app.float.wh_value_5'))
                   .backgroundColor($r("app.color.moon"))
               }
               .height($r('app.float.wh_value_15p'))
               .width($r('app.float.wh_value_100p'))
             }
-            .scrollBarWidth(10)
+            .scrollBarWidth($r('app.float.wh_value_10'))
             .scrollBar(BarState.Auto)
           }
 
-          Stack().height($r('app.float.wh_value_1')).backgroundColor("#000000");
+          Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
           Scroll() {
             Column() {
@@ -150,14 +150,14 @@ struct OppProfileTest {
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
             .width($r('app.float.wh_value_88p'))
           }
-          .scrollBarWidth(10)
+          .scrollBarWidth($r('app.float.wh_value_10'))
           .scrollBar(BarState.Auto)
 
           Text("请点击需要测试的方法")
             .margin({ top : $r('app.float.wh_value_10') })
             .padding($r('app.float.wh_value_5'))
             .fontSize($r('app.float.wh_value_17'))
-            .fontColor("#4444444");
+            .fontColor($r('app.color.color_4444444_grey'));
           Column() {
             ContentTable({ apiItems : initOppProfileApiData() })
           }

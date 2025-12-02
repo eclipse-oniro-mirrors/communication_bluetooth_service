@@ -61,11 +61,11 @@ struct A2dpSourceProfileManagerTest {
           PageTitle({ testItem : this.testItem })
         }
 
-        Stack().height($r('app.float.wh_value_0_5')).backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
           .margin({ top : $r('app.float.wh_value_10') })
           .fontSize($r('app.float.wh_value_20'))
-          .fontColor(this.hasProfile ? "#66ccff" : "#ff0000")
+          .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') : $r('app.color.color_FF0000_red'))
           .border({ width : 0.5 })
           .padding($r('app.float.wh_value_5'))
           .fontStyle(FontStyle.Italic);
@@ -82,7 +82,7 @@ struct A2dpSourceProfileManagerTest {
                 AppStorage.setOrCreate("deviceId" , str)
               })
               .width($r('app.float.wh_value_70p'))
-              .borderRadius(1)
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .backgroundColor($r("app.color.moon"))
           .margin({ top : $r('app.float.wh_value_20') , bottom : $r('app.float.wh_value_20') , left : $r('app.float.wh_value_20') , right : $r('app.float.wh_value_20') })
@@ -108,7 +108,7 @@ struct A2dpSourceProfileManagerTest {
             .margin({ top : $r('app.float.wh_value_10') })
             .padding($r('app.float.wh_value_5'))
             .fontSize($r('app.float.wh_value_17'))
-            .fontColor("#4444444");
+            .fontColor($r('app.color.color_4444444_grey'));
           Column() {
             ContentTable({ apiItems : initA2dpSourceProfileManagerApiData() })
           }

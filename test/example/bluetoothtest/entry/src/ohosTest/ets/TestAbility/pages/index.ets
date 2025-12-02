@@ -31,11 +31,11 @@ struct Index {
               Text('next page')
                 .fontSize($r('app.float.wh_value_20'))
                 .fontWeight(FontWeight.Bold)
-             }.type(ButtonType.Capsule)
-             .margin({
-               top: 20
-             })
-             .backgroundColor('#0D9FFB')
+            }.type(ButtonType.Capsule)
+            .margin({
+              top: $r('app.float.wh_value_20')
+            })
+            .backgroundColor($r('app.color.color_0D9FFB_blue'))
              .width('35%')
              .height('5%')
              .onClick(()=>{
