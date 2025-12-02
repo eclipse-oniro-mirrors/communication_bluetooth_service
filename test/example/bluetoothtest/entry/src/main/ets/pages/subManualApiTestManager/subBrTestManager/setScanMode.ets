@@ -45,22 +45,22 @@ struct setScanMode {
               TitleComponent({
                 title : "SCAN_MODE_SELECT" ,
                 bgColor : $r('app.color.moon') ,
-                fontSize : '17vp' ,
+                fontSize : $r('app.float.wh_value_17') ,
               });
             }
-            .height(80)
-            .borderRadius(10)
+            .height($r('app.float.wh_value_80'))
+            .borderRadius($r('app.float.wh_value_10'))
 
             ListItem() {
               TitleComponent({
                 title : "SCAN_MODE_NONE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
-            .height(80)
-            .borderRadius(10)
+            .padding({ top : $r('app.float.wh_value_10') })
+            .height($r('app.float.wh_value_80'))
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 0;
             })
@@ -68,13 +68,13 @@ struct setScanMode {
             ListItem() {
               TitleComponent({
                 title : "CONNECTABLE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
-            .height(80)
-            .borderRadius(10)
+            .padding({ top : $r('app.float.wh_value_10') })
+            .height($r('app.float.wh_value_80'))
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 1;
             })
@@ -82,13 +82,13 @@ struct setScanMode {
             ListItem() {
               TitleComponent({
                 title : "GENERAL_DISCOVERABLE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
-            .height(80)
-            .borderRadius(10)
+            .padding({ top : $r('app.float.wh_value_10') })
+            .height($r('app.float.wh_value_80'))
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 2;
             })
@@ -96,13 +96,13 @@ struct setScanMode {
             ListItem() {
               TitleComponent({
                 title : "LIMITED_DISCOVERABLE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 3 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
-            .height(80)
-            .borderRadius(10)
+            .padding({ top : $r('app.float.wh_value_10') })
+            .height($r('app.float.wh_value_80'))
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 3;
             })
@@ -110,13 +110,13 @@ struct setScanMode {
             ListItem() {
               TitleComponent({
                 title : "CONNECTABLE_GENERAL_DISCOVERABLE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 4 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
-            .height(80)
-            .borderRadius(10)
+            .padding({ top : $r('app.float.wh_value_10') })
+            .height($r('app.float.wh_value_80'))
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 4;
             })
@@ -124,13 +124,13 @@ struct setScanMode {
             ListItem() {
               TitleComponent({
                 title : "CONNECTABLE_LIMITED_DISCOVERABLE" ,
-                fontSize : '15vp' ,
+                fontSize : $r('app.float.wh_value_15') ,
                 bgColor : this.currentClick === 5 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
               });
             }
-            .padding({ top : 10 })
-            .height(80)
-            .borderRadius(10)
+            .padding({ top : $r('app.float.wh_value_10') })
+            .height($r('app.float.wh_value_80'))
+            .borderRadius($r('app.float.wh_value_10'))
             .onClick(() => {
               this.currentClick = 5;
             })
@@ -139,11 +139,11 @@ struct setScanMode {
           Blank()
         }
       }
-      .height('50%')
+      .height($r('app.float.wh_value_50p'))
       .scrollable(ScrollDirection.Vertical)
       .scrollBar(BarState.On)
       .scrollBarColor(Color.Gray)
-      .scrollBarWidth(30)
+      .scrollBarWidth($r('app.float.wh_value_30'))
 
       Row() {
         Text('duration')
@@ -161,7 +161,7 @@ struct setScanMode {
           .enterKeyType(EnterKeyType.Done)
           .caretColor(Color.Blue)
           .height($r("app.float.wh_value_40"))
-          .borderRadius(0)
+          .borderRadius($r('app.float.wh_value_0'))
           .backgroundColor($r('app.color.color_00000000_transparent'))
           .onChange((value: string) => {
             console.log(ConfigData.TAG + 'device name changed to: ' + JSON.stringify(value));
@@ -174,13 +174,13 @@ struct setScanMode {
           })
       }
       .padding($r('app.float.distance_15'))
-      .width('100%')
+      .width($r('app.float.wh_value_100p'))
 
       Text(this.message)
         .textAlign(TextAlign.Center)
         .fontSize('17fp')
-        .height(50)
-        .width("100%")
+        .height($r('app.float.wh_value_50'))
+        .width($r('app.float.wh_value_100p'))
         .fontWeight(FontWeight.Medium)
         .backgroundColor($r("app.color.moon"))
 
@@ -211,7 +211,7 @@ struct setScanMode {
       }
     }
     .padding({ left : $r('app.float.distance_24') , right : $r('app.float.distance_24') })
-    .width("100%")
+    .width($r('app.float.wh_value_100p'))
     .height(ConfigData.WH_100_100)
     .backgroundColor($r("app.color.lead"))
   }

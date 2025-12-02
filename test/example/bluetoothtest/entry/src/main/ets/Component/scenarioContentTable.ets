@@ -31,39 +31,39 @@ export struct ScenarioContentTable {
         Flex({ direction : FlexDirection.Column , alignItems : ItemAlign.Start }) {
           Row() {
             Text(scenarioItem.detail)
-              .fontSize("17vp")
-              .margin({ top : "3vp" , bottom : "3vp" , left : "10vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_3') , bottom : $r('app.float.wh_value_3') , left : $r('app.float.wh_value_10') })
               .textAlign(TextAlign.Start)
-              .height(40)
-              .width(30)
+              .height($r('app.float.wh_value_40'))
+              .width($r('app.float.wh_value_30'))
 
             Text(scenarioItem.method)
-              .fontSize("17vp")
-              .margin({ top : "3vp" , bottom : "3vp" , left : "10vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_3') , bottom : $r('app.float.wh_value_3') , left : $r('app.float.wh_value_10') })
               .textAlign(TextAlign.Start)
-              .height(40)
-              .width(240)
+              .height($r('app.float.wh_value_40'))
+              .width($r('app.float.wh_value_240'))
           }
-          .height(30)
-          .width("70%")
+          .height($r('app.float.wh_value_30'))
+          .width($r('app.float.wh_value_70p'))
         }
-        .height(30)
-        .layoutWeight(6)
+        .height($r('app.float.wh_value_30'))
+        .layoutWeight($r('app.float.wh_value_6'))
 
         Flex({ alignItems : ItemAlign.Center }) {
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : scenarioItem.result)
-            .margin({ left : "10vp" })
-            .fontSize("17vp")
-            .flexGrow(1)
+            .margin({ left : $r('app.float.wh_value_10') })
+            .fontSize($r('app.float.wh_value_17'))
+            .flexGrow($r('app.float.wh_value_1'))
         }
-        .layoutWeight(3)
-        .padding({ left : 10 })
-        .margin({ left : 10 })
+        .layoutWeight($r('app.float.wh_value_3'))
+        .padding({ left : $r('app.float.wh_value_10') })
+        .margin({ left : $r('app.float.wh_value_10') })
       }
     }
-    .height(40)
-    .borderRadius(10)
-    .margin({ top : 3 , bottom : 3 })
+    .height($r('app.float.wh_value_40'))
+    .borderRadius($r('app.float.wh_value_10'))
+    .margin({ top : $r('app.float.wh_value_3') , bottom : $r('app.float.wh_value_3') })
     .backgroundColor($r("app.color.white"))
   }
 
@@ -89,9 +89,9 @@ export struct ScenarioContentTable {
           })
         }
       }
-      .scrollBarWidth(20)
+      .scrollBarWidth($r('app.float.wh_value_20'))
     }
-    .height("80%")
-    .padding({ top : 5 , right : 10 , left : 10 })
+    .height($r('app.float.wh_value_80p'))
+    .padding({ top : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
   }
 }

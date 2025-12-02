@@ -85,54 +85,54 @@ struct SppServerManager {
             PageTitle({ testItem : this.testItem })
           }
 
-          Stack().height("0.5vp").backgroundColor("#000000");
+          Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
 
           Row() {
-            Text("本机设备UUID：").fontSize(17).width(85)
+            Text("本机设备UUID：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_85'))
             TextInput({ text : this.uuid , placeholder : "请输入uuid" })
-              .fontSize("17vp")
+              .fontSize($r('app.float.wh_value_17'))
               .onChange((str) => {
                 this.uuid = str;
                 AppStorage.setOrCreate('inputUuid' , str)
               })
-              .width("80%")
-              .borderRadius(1)
+              .width($r('app.float.wh_value_80p'))
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .backgroundColor($r("app.color.spring"))
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("写入目标设备数据：").fontSize(17).width(95)
+            Text("写入目标设备数据：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_95'))
             TextInput({ text : this.writeServerData , placeholder : "请输入写入的数据" })
-              .fontSize("14vp")
+              .fontSize($r('app.float.wh_value_14'))
               .onChange((str) => {
                 this.writeServerData = str;
                 AppStorage.setOrCreate("writeServerData" , str);
               })
-              .width("80%")
-              .borderRadius(1)
+              .width($r('app.float.wh_value_80p'))
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .backgroundColor($r("app.color.moon"))
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("读取的数据为：").fontSize("17vp")
+            Text("读取的数据为：").fontSize($r('app.float.wh_value_17'))
             Text(this.dataReadMessage)
-              .fontSize("14vp")
-              .width("80%")
-              .borderRadius(1)
+              .fontSize($r('app.float.wh_value_14'))
+              .width($r('app.float.wh_value_80p'))
+              .borderRadius($r('app.float.wh_value_1'))
           }
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Column() {
-            Text("接口调用结果：" + this.message).fontSize("17vp")
-              .padding(10)
+            Text("接口调用结果：" + this.message).fontSize($r('app.float.wh_value_17'))
+              .padding($r('app.float.wh_value_10'))
               .textAlign(TextAlign.Start)
           }
           .backgroundColor($r("app.color.moon"))
@@ -143,17 +143,17 @@ struct SppServerManager {
             }
             .width(ConfigData.WH_100_100)
             .align(Alignment.TopStart)
-            .layoutWeight(1)
+            .layoutWeight($r('app.float.wh_value_1'))
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
-            .height("100%")
+            .height($r('app.float.wh_value_100p'))
           }
-          .height("85%")
+          .height($r('app.float.wh_value_85p'))
         }
       }
-      .width('100%')
+      .width($r('app.float.wh_value_100p'))
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-    .height('100%')
+    .height($r('app.float.wh_value_100p'))
     .alignItems(VerticalAlign.Top)
   }
 
@@ -304,7 +304,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width($r("app.float.wh_value_160"))
           .height($r("app.float.wh_value_40"))
-          .flexGrow(1)
+          .flexGrow($r('app.float.wh_value_1'))
           .onClick(() => {
             this.dialogController.close();
             this.action(false);
@@ -312,7 +312,7 @@ struct PairDialog {
 
           Divider()
             .height($r("app.float.wh_value_24"))
-            .strokeWidth(0.5)
+            .strokeWidth($r('app.float.wh_value_0_5'))
             .vertical(true)
             .color(($r("app.color.color_E3E3E3_grey")))
 
@@ -324,7 +324,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width($r("app.float.wh_value_160"))
           .height($r("app.float.wh_value_40"))
-          .flexGrow(1)
+          .flexGrow($r('app.float.wh_value_1'))
           .onClick(() => {
             this.dialogController.close();
             this.action(true);

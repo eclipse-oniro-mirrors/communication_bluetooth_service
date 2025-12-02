@@ -1,8 +1,20 @@
 {
   "float": [
     {
+      "name": "wh_value_0",
+      "value": "0vp"
+    },
+    {
+      "name": "wh_value_0_5",
+      "value": "0.5vp"
+    },
+    {
       "name": "wh_value_1",
       "value": "1vp"
+    },
+    {
+      "name": "wh_value_2",
+      "value": "2vp"
     },
     {
       "name": "wh_value_3",
@@ -41,12 +53,24 @@
       "value": "13vp"
     },
     {
+      "name": "wh_value_14",
+      "value": "14vp"
+    },
+    {
       "name": "wh_value_15",
       "value": "15vp"
     },
     {
       "name": "wh_value_16",
       "value": "16vp"
+    },
+    {
+      "name": "wh_value_17",
+      "value": "17vp"
+    },
+    {
+      "name": "wh_value_17_4",
+      "value": "17.4vp"
     },
     {
       "name": "wh_value_18",
@@ -859,6 +883,194 @@
     {
       "name": "distance_5",
       "value": "5vp"
+    },
+    {
+      "name": "bar_width_80",
+      "value": "80%"
+    },
+    {
+      "name": "wh_value_100p",
+      "value": "100%"
+    },
+    {
+      "name": "wh_value_90p",
+      "value": "90%"
+    },
+    {
+      "name": "wh_value_80p",
+      "value": "80%"
+    },
+    {
+      "name": "wh_value_75p",
+      "value": "75%"
+    },
+    {
+      "name": "wh_value_70p",
+      "value": "70%"
+    },
+    {
+      "name": "wh_value_66p",
+      "value": "66%"
+    },
+    {
+      "name": "wh_value_60p",
+      "value": "60%"
+    },
+    {
+      "name": "wh_value_50p",
+      "value": "50%"
+    },
+    {
+      "name": "wh_value_40p",
+      "value": "40%"
+    },
+    {
+      "name": "wh_value_30p",
+      "value": "30%"
+    },
+    {
+      "name": "wh_value_22p",
+      "value": "22%"
+    },
+    {
+      "name": "wh_value_20p",
+      "value": "20%"
+    },
+    {
+      "name": "wh_value_15p",
+      "value": "15%"
+    },
+    {
+      "name": "wh_value_10p",
+      "value": "10%"
+    },
+    {
+      "name": "wh_value_96p",
+      "value": "96%"
+    },
+    {
+      "name": "wh_value_95p",
+      "value": "95%"
+    },
+    {
+      "name": "wh_value_94p",
+      "value": "94%"
+    },
+    {
+      "name": "wh_value_88p",
+      "value": "88%"
+    },
+    {
+      "name": "wh_value_85p",
+      "value": "85%"
+    },
+    {
+      "name": "wh_value_93p",
+      "value": "93%"
+    },
+    {
+      "name": "wh_value_78p",
+      "value": "78%"
+    },
+    {
+      "name": "wh_value_77p",
+      "value": "77%"
+    },
+    {
+      "name": "wh_value_55p",
+      "value": "55%"
+    },
+    {
+      "name": "wh_value_45p",
+      "value": "45%"
+    },
+    {
+      "name": "wh_value_35p",
+      "value": "35%"
+    },
+    {
+      "name": "wh_value_25p",
+      "value": "25%"
+    },
+    {
+      "name": "wh_value_5p",
+      "value": "5%"
+    },
+    {
+      "name": "wh_value_25",
+      "value": "25vp"
+    },
+    {
+      "name": "wh_value_35",
+      "value": "35vp"
+    },
+    {
+      "name": "wh_value_36",
+      "value": "36vp"
+    },
+    {
+      "name": "wh_value_61",
+      "value": "61vp"
+    },
+    {
+      "name": "wh_value_66",
+      "value": "66vp"
+    },
+    {
+      "name": "wh_value_85",
+      "value": "85vp"
+    },
+    {
+      "name": "wh_value_90",
+      "value": "90vp"
+    },
+    {
+      "name": "wh_value_95",
+      "value": "95vp"
+    },
+    {
+      "name": "wh_value_110",
+      "value": "110vp"
+    },
+    {
+      "name": "wh_value_150",
+      "value": "150vp"
+    },
+    {
+      "name": "wh_value_152",
+      "value": "152vp"
+    },
+    {
+      "name": "wh_value_170",
+      "value": "170vp"
+    },
+    {
+      "name": "wh_value_180",
+      "value": "180vp"
+    },
+    {
+      "name": "wh_value_184",
+      "value": "184vp"
+    },
+    {
+      "name": "wh_value_300",
+      "value": "300vp"
+    },
+    {
+      "name": "wh_value_330",
+      "value": "330vp"
+    },
+    {
+      "name": "wh_value_360",
+      "value": "360vp"
+    },
+    {
+      "name": "wh_value_500",
+      "value": "500vp"
+    },
+    {
+      "name": "wh_value_800",
+      "value": "800vp"
     }
   ]
 }

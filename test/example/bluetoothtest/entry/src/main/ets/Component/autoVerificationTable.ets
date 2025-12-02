@@ -35,38 +35,38 @@ export struct AutoVerificationTable {
           Image($r('app.media.bluetooth'))
             .objectFit(ImageFit.Contain)
             .autoResize(false)
-            .height(30)
-            .width(30)
+            .height($r('app.float.wh_value_30'))
+            .width($r('app.float.wh_value_30'))
         }
-        .layoutWeight(1)
-        .padding({ left : 10 })
+        .layoutWeight($r('app.float.wh_value_1'))
+        .padding({ left : $r('app.float.wh_value_10') })
 
         Flex({ direction : FlexDirection.Column , alignItems : ItemAlign.Start }) {
           Text(apiItem.name)
-            .fontSize(17.4)
+            .fontSize($r('app.float.wh_value_17_4'))
             .fontWeight(FontWeight.Bold)
-            .layoutWeight(1)
-            .padding({ left : 10 , top : 15 })
+            .layoutWeight($r('app.float.wh_value_1'))
+            .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_15') })
           Text(apiItem.detail)
-            .fontSize(17.4)
+            .fontSize($r('app.float.wh_value_17_4'))
             .fontWeight(FontWeight.Bold)
-            .layoutWeight(1)
-            .padding({ left : 10 , top : 5 })
+            .layoutWeight($r('app.float.wh_value_1'))
+            .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_5') })
         }
-        .layoutWeight(6)
+        .layoutWeight($r('app.float.wh_value_6'))
 
         Flex({ alignItems : ItemAlign.Center }) {
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : apiItem.result)
-            .fontSize(17.4)
-            .flexGrow(1)
+            .fontSize($r('app.float.wh_value_17_4'))
+            .flexGrow($r('app.float.wh_value_1'))
         }
-        .layoutWeight(3)
-        .padding({ left : 10 })
+        .layoutWeight($r('app.float.wh_value_3'))
+        .padding({ left : $r('app.float.wh_value_10') })
       }
     }
-    .height(80)
-    .borderRadius(10)
-    .margin({ top : 5 , bottom : 5 })
+    .height($r('app.float.wh_value_80'))
+    .borderRadius($r('app.float.wh_value_10'))
+    .margin({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') })
     .backgroundColor($r("app.color.white"))
     .onClick(() => {
       switch ( apiItem.method ) {
@@ -99,9 +99,9 @@ export struct AutoVerificationTable {
           })
         }
       }
-      .scrollBarWidth(20)
+      .scrollBarWidth($r('app.float.wh_value_20'))
     }
-    .height("88%")
-    .padding({ top : 5 , right : 10 , left : 10 })
+    .height($r('app.float.wh_value_88p'))
+    .padding({ top : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
   }
 }

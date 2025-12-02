@@ -70,120 +70,120 @@ struct GattServerSetting {
     Column() {
       Column() {
         Text("Gatt服务配置:")
-          .margin({ top : "1vp" })
-          .padding("1vp")
-          .fontSize(17)
-          .fontColor("#4444444")
-          .height("30vp")
-          .width("94%")
+          .margin({ top : $r('app.float.wh_value_1') })
+          .padding($r('app.float.wh_value_1'))
+          .fontSize($r('app.float.wh_value_17'))
+          .fontColor($r('app.color.color_4444444_grey'))
+          .height($r('app.float.wh_value_30'))
+          .width($r('app.float.wh_value_94p'))
           .textAlign(TextAlign.Start)
         Scroll() {
           Column() {
             Row() {
-              Text("服务UUID:").fontSize(15).width(70).padding({ left : 10 });
+              Text("服务UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_70')).padding({ left : $r('app.float.wh_value_10') });
               TextInput({ text : this.curServiceUUID , placeholder : "input service UUID" })
-                .fontSize(17)
+                .fontSize($r('app.float.wh_value_17'))
                 .onChange((strInput) => {
                   this.curServiceUUID = strInput;
                   AppStorage.setOrCreate('curServiceUUID' , strInput);
                 })
-                .width("80%")
-                .borderRadius(1)
+                .width($r('app.float.wh_value_80p'))
+                .borderRadius($r('app.float.wh_value_1'))
             }
-            .height(60)
-            .width('100%')
-            .padding(5)
+            .height($r('app.float.wh_value_60'))
+            .width($r('app.float.wh_value_100p'))
+            .padding($r('app.float.wh_value_5'))
             .backgroundColor($r("app.color.moon"));
 
             Column() {
               Row() {
-                Text("CCC UUID:").fontSize(15).width(70).padding({ left : 10 });
+                Text("CCC UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_70')).padding({ left : $r('app.float.wh_value_10') });
                 TextInput({ text : this.curCharacteristicUUID , placeholder : "input characteristic UUID" })
-                  .fontSize(17)
+                  .fontSize($r('app.float.wh_value_17'))
                   .onChange((strInput) => {
                     this.curCharacteristicUUID = strInput;
                     AppStorage.setOrCreate('curCharacteristicUUID' , strInput);
                   })
-                  .width("80%")
-                  .borderRadius(1)
+                  .width($r('app.float.wh_value_80p'))
+                  .borderRadius($r('app.float.wh_value_1'))
               }
-              .width('100%')
-              .padding(5)
+              .width($r('app.float.wh_value_100p'))
+              .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
 
               Row() {
-                Text("CCC Value:").fontSize(15).width(70).padding({ left : 10 });
+                Text("CCC Value:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_70')).padding({ left : $r('app.float.wh_value_10') });
                 TextInput({ text : this.curCharacteristicValue , placeholder : "input characteristic Value" })
-                  .fontSize(17)
+                  .fontSize($r('app.float.wh_value_17'))
                   .onChange((strInput) => {
                     this.curCharacteristicValue = strInput;
                     AppStorage.setOrCreate('curCharacteristicValue' , strInput);
                   })
-                  .width("80%")
-                  .borderRadius(1)
+                  .width($r('app.float.wh_value_80p'))
+                  .borderRadius($r('app.float.wh_value_1'))
               }
-              .width('100%')
-              .padding(5)
+              .width($r('app.float.wh_value_100p'))
+              .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
             }
-            .height(100)
-            .width('100%')
-            .padding(5)
+            .height($r('app.float.wh_value_100'))
+            .width($r('app.float.wh_value_100p'))
+            .padding($r('app.float.wh_value_5'))
             .backgroundColor($r("app.color.spring"));
 
             Flex({ direction : FlexDirection.Column }) {
               Row() {
-                Text("Descriptor UUID:").fontSize(15).width(70);
+                Text("Descriptor UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_70'));
                 TextInput({ text : this.curDescriptorUUID , placeholder : "input descriptor UUID" })
-                  .fontSize(17)
+                  .fontSize($r('app.float.wh_value_17'))
                   .onChange((strInput) => {
                     this.curDescriptorUUID = strInput;
                     AppStorage.setOrCreate('curDescriptorUUID' , strInput);
                   })
-                  .width("80%")
-                  .borderRadius(1)
+                  .width($r('app.float.wh_value_80p'))
+                  .borderRadius($r('app.float.wh_value_1'))
               }
-              .width('100%')
-              .padding(5)
+              .width($r('app.float.wh_value_100p'))
+              .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
 
               Row() {
-                Text("Descriptor Value:").fontSize(15).width(70);
+                Text("Descriptor Value:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_70'));
                 TextInput({ text : this.curDescriptorValue , placeholder : "input descriptor Value" })
-                  .fontSize(17)
+                  .fontSize($r('app.float.wh_value_17'))
                   .onChange((strInput) => {
                     this.curDescriptorValue = strInput;
                     AppStorage.setOrCreate('curDescriptorValue' , strInput);
                   })
-                  .width("80%")
-                  .borderRadius(1)
+                  .width($r('app.float.wh_value_80p'))
+                  .borderRadius($r('app.float.wh_value_1'))
               }
-              .width('100%')
-              .padding(5)
+              .width($r('app.float.wh_value_100p'))
+              .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
             }
-            .height(100)
-            .width('100%')
+            .height($r('app.float.wh_value_100'))
+            .width($r('app.float.wh_value_100p'))
             .backgroundColor($r("app.color.moon"));
           }
         }
-        .height("22%")
+        .height($r('app.float.wh_value_22p'))
       }
       .backgroundColor($r("app.color.lead"))
 
       Column() {
         Row() {
           Text("广播配置:")
-            .margin({ top : "1vp" })
-            .padding("5vp")
-            .fontSize(17)
-            .fontColor("#4444444")
-            .height("30vp")
-            .width("70%")
+            .margin({ top : $r('app.float.wh_value_1') })
+            .padding($r('app.float.wh_value_5'))
+            .fontSize($r('app.float.wh_value_17'))
+            .fontColor($r('app.color.color_4444444_grey'))
+            .height($r('app.float.wh_value_30'))
+            .width($r('app.float.wh_value_70p'))
             .textAlign(TextAlign.Start)
           Checkbox({ name : 'AdvSettings' , group : 'checkboxGroup1' })
             .select(this.cbxAdvSettings)
@@ -197,13 +197,13 @@ struct GattServerSetting {
               AppStorage.setOrCreate('cbxAdvSettings' , value);
               promptAction.showToast({ message : String(value) })
             })
-            .width(30)
-            .margin({ left : "1vp" })
+            .width($r('app.float.wh_value_30'))
+            .margin({ left : $r('app.float.wh_value_1') })
           Text("设置")
-            .fontSize(14)
-            .fontColor("#4444444")
+            .fontSize($r('app.float.wh_value_14'))
+            .fontColor($r('app.color.color_4444444_grey'))
         }
-        .height(40)
+        .height($r('app.float.wh_value_40'))
 
         Scroll() {
           Column() {
@@ -212,7 +212,7 @@ struct GattServerSetting {
                 Checkbox({ name : 'interval' , group : 'checkboxGroup1' })
                   .select(this.cbxInterval)
                   .selectedColor(0x39a2db)
-                  .width(30)
+                  .width($r('app.float.wh_value_30'))
                   .onChange((value) => {
                     if ( value ) {
                       this.cbxInterval = true;
@@ -221,17 +221,17 @@ struct GattServerSetting {
                     }
                     AppStorage.setOrCreate('cbxInterval' , value);
                   })
-                Text("interval").fontSize(17).width(70);
+                Text("interval").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70'));
                 TextInput({ text : this.advSettings_interval , placeholder : "32~1600" })
-                  .fontSize(18)
+                  .fontSize($r('app.float.wh_value_18'))
                   .onChange((strInput) => {
                     this.advSettings_interval = strInput;
                     AppStorage.setOrCreate('advSettings_interval' , strInput);
                   })
-                  .width("60%")
-                  .borderRadius(1)
+                  .width($r('app.float.wh_value_60p'))
+                  .borderRadius($r('app.float.wh_value_1'))
               }
-              .height(40)
+              .height($r('app.float.wh_value_40'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
 
@@ -239,7 +239,7 @@ struct GattServerSetting {
                 Checkbox({ name : 'txPower' , group : 'checkboxGroup' })
                   .select(this.cbxTxPower)
                   .selectedColor(0x39a2db)
-                  .width(30)
+                  .width($r('app.float.wh_value_30'))
                   .onChange((value) => {
                     if ( value ) {
                       this.cbxTxPower = true;
@@ -248,18 +248,18 @@ struct GattServerSetting {
                     }
                     AppStorage.setOrCreate('cbxTxPower' , value);
                   })
-                Text("txPower").fontSize(17).width(70)
+                Text("txPower").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70'))
                 TextInput({ text : this.advSettings_txPower.toString() , placeholder : "input txPower" })
-                  .fontSize(18)
+                  .fontSize($r('app.float.wh_value_18'))
                   .onChange((strInput) => {
                     this.advSettings_txPower = strInput;
                     AppStorage.setOrCreate('advSettings_txPower' , strInput);
                   })
-                  .width("60%")
-                  .borderRadius(1)
+                  .width($r('app.float.wh_value_60p'))
+                  .borderRadius($r('app.float.wh_value_1'))
               }
-              .height(40)
-              .padding({ top : 5 })
+              .height($r('app.float.wh_value_40'))
+              .padding({ top : $r('app.float.wh_value_5') })
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
 
@@ -276,97 +276,97 @@ struct GattServerSetting {
                     this.advSettings_connectable = this.cbxConnectable;
                     AppStorage.setOrCreate('advSettings_connectable' , value);
                   })
-                  .width(30)
-                  .margin({ left : "1vp" })
-                Text("connectable").fontSize(17).width("80%")
+                  .width($r('app.float.wh_value_30'))
+                  .margin({ left : $r('app.float.wh_value_1') })
+                Text("connectable").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_80p'))
               }
-              .height(40)
+              .height($r('app.float.wh_value_40'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
             }
-            .height(120)
-            .width('100%')
-            .padding(5)
+            .height($r('app.float.wh_value_120'))
+            .width($r('app.float.wh_value_100p'))
+            .padding($r('app.float.wh_value_5'))
             .backgroundColor(0xAFEEEE);
 
             Column() {
               Row() {
-                Text("服务Uuid").fontSize(17).width(60).padding({ left : 10 })
+                Text("服务Uuid").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_60')).padding({ left : $r('app.float.wh_value_10') })
                 TextInput({ text : this.advDataServiceUuids_serviceUuid , placeholder : "input serviceUuid" })
-                  .fontSize(17)
+                  .fontSize($r('app.float.wh_value_17'))
                   .onChange((strInput) => {
                     this.advDataServiceUuids_serviceUuid = strInput;
                     AppStorage.setOrCreate('advDataServiceUuids_serviceUuid' , strInput);
                   })
-                  .width("80%")
+                  .width($r('app.float.wh_value_80p'))
               }
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
 
               Column() {
-                Text("manufactureData").fontSize(17).width("100%")
+                Text("manufactureData").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_100p'))
                 Row() {
-                  Text("Id").fontSize(17).width(30)
+                  Text("Id").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_30'))
                   TextInput({
                     text : this.advDataManufactureData_manufactureId ,
                     placeholder : "input manufactureId(less than 8 digi)"
                   })
-                    .fontSize(17)
+                    .fontSize($r('app.float.wh_value_17'))
                     .onChange((strInput) => {
                       this.advDataManufactureData_manufactureId = strInput;
                       AppStorage.setOrCreate('advDataManufactureData_manufactureId' , strInput)
                     })
-                    .width("100vp")
-                  Text("Value").fontSize(17).width(70).padding({ left : 10 })
+                    .width($r('app.float.wh_value_100'))
+                  Text("Value").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70')).padding({ left : $r('app.float.wh_value_10') })
                   TextInput({
                     text : this.advDataManufactureData_manufactureValue ,
                     placeholder : "input manufactureValue(less than 8 char)"
                   })
-                    .fontSize(17)
+                    .fontSize($r('app.float.wh_value_17'))
                     .onChange((strInput) => {
                       this.advDataManufactureData_manufactureValue = strInput;
                       AppStorage.setOrCreate('advDataManufactureData_manufactureValue' , strInput)
                     })
-                    .width("100vp")
+                    .width($r('app.float.wh_value_100'))
                 }
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               }
-              .borderWidth(1)
+              .borderWidth($r('app.float.wh_value_1'))
               .borderColor($r("app.color.lead"))
 
               Column() {
-                Text("serviceData").fontSize(17).width("100%")
+                Text("serviceData").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_100p'))
                 Column() {
                   Row() {
-                    Text("serviceUuid").fontSize(17).width(70)
+                    Text("serviceUuid").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70'))
                     TextInput({ text : '' + this.advDataServiceData_serviceUuid , placeholder : "input serviceUuid" })
-                      .fontSize(17)
+                      .fontSize($r('app.float.wh_value_17'))
                       .onChange((strInput) => {
                         this.advDataServiceData_serviceUuid = strInput;
                         AppStorage.setOrCreate('advDataServiceData_serviceUuid' , strInput)
                       })
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                   }
 
                   Row() {
-                    Text("serviceValue").fontSize(17).width(70)
+                    Text("serviceValue").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70'))
                     TextInput({
                       text : this.advDataServiceData_serviceValue ,
                       placeholder : "input manufactureValue(less than 8 char)"
                     })
-                      .fontSize(17)
+                      .fontSize($r('app.float.wh_value_17'))
                       .onChange((strInput) => {
                         this.advDataServiceData_serviceValue = strInput;
                         AppStorage.setOrCreate('advDataServiceData_serviceValue' , strInput)
                       })
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                   }
-                  .padding({ top : 10 })
+                  .padding({ top : $r('app.float.wh_value_10') })
                 }
               }
-              .borderWidth(1)
+              .borderWidth($r('app.float.wh_value_1'))
               .borderColor($r("app.color.lead"))
             }
-            .width('100%')
+            .width($r('app.float.wh_value_100p'))
             .backgroundColor($r("app.color.moon"));
 
             Row() {
@@ -383,105 +383,105 @@ struct GattServerSetting {
                   console.log('cbxAdvResponse' , value)
                   promptAction.showToast({ message : value.toString() })
                 })
-                .width(30)
-                .margin({ left : "1vp" })
+                .width($r('app.float.wh_value_30'))
+                .margin({ left : $r('app.float.wh_value_1') })
               Text("Response:")
-                .margin({ top : "5vp" , left : "5vp" })
-                .fontSize(17)
-                .fontColor("#4444444");
+                .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_5') })
+                .fontSize($r('app.float.wh_value_17'))
+                .fontColor($r('app.color.color_4444444_grey'));
             }
-            .height(40)
-            .width('100%')
-            .padding(5);
+            .height($r('app.float.wh_value_40'))
+            .width($r('app.float.wh_value_100p'))
+            .padding($r('app.float.wh_value_5'));
             Column() {
               Row() {
-                Text("serviceUuid").fontSize(17).width(70) //.width("40vp")
+                Text("serviceUuid").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70')) //.width($r('app.float.wh_value_40'))
                 TextInput({ text : this.advResponseServiceUuids_serviceUuid , placeholder : "input serviceUuid" })
-                  .fontSize(17)
+                  .fontSize($r('app.float.wh_value_17'))
                   .onChange((strInput) => {
                     this.advResponseServiceUuids_serviceUuid = strInput;
                     AppStorage.setOrCreate('advResponseServiceUuids_serviceUuid' , strInput)
                   })
-                  .width("80%")
+                  .width($r('app.float.wh_value_80p'))
               }
 
               Column() {
-                Text("manufactureData").fontSize(17).width("100%")
+                Text("manufactureData").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_100p'))
                   .backgroundColor($r("app.color.lead"))
                 Column() {
                   Row() {
-                    Text("Id").fontSize(17).width(50)
+                    Text("Id").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_50'))
                     TextInput({ text : this.advResponseManufactureData_manufactureId ,
                       placeholder : "input manufactureId(less than 8 char)" })
-                      .fontSize(17)
+                      .fontSize($r('app.float.wh_value_17'))
                       .onChange((strInput) => {
                         this.advResponseManufactureData_manufactureId = strInput;
                         AppStorage.setOrCreate('advResponseManufactureData_manufactureId' , strInput)
                       })
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                   }
 
                   Row() {
-                    Text("Value").fontSize(17).width(50)
+                    Text("Value").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_50'))
                     TextInput({ text : this.advResponseManufactureData_manufactureValue ,
                       placeholder : "input manufactureValue(less than 8 char)" })
-                      .fontSize(17)
+                      .fontSize($r('app.float.wh_value_17'))
                       .onChange((strInput) => {
                         this.advResponseManufactureData_manufactureValue = strInput;
                         AppStorage.setOrCreate('advResponseManufactureData_manufactureValue' , strInput)
                       })
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                   }
-                  .padding({ top : 5 })
+                  .padding({ top : $r('app.float.wh_value_5') })
                 }
               }
-              .borderWidth(1)
+              .borderWidth($r('app.float.wh_value_1'))
               .borderColor($r("app.color.lead"))
 
               Column() {
-                Text("serviceData").fontSize(17).width("100%")
+                Text("serviceData").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_100p'))
                   .backgroundColor($r("app.color.lead"))
                 Column() {
                   Row() {
-                    Text("serviceUuid").fontSize(17).width(70)
+                    Text("serviceUuid").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70'))
                     TextInput({
                       text : '' + this.advResponseServiceData_serviceUuid ,
                       placeholder : "input serviceUuid"
                     })
-                      .fontSize(17)
+                      .fontSize($r('app.float.wh_value_17'))
                       .onChange((strInput) => {
                         this.advResponseServiceData_serviceUuid = strInput;
                         AppStorage.setOrCreate('advResponseServiceData_serviceUuid' , strInput)
                       })
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                   }
 
                   Row() {
-                    Text("serviceValue").fontSize(17).width(70)
+                    Text("serviceValue").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_70'))
                     TextInput({
                       text : this.advResponseServiceData_serviceValue ,
                       placeholder : "input manufactureValue(less than 8 char)"
                     })
-                      .fontSize(17)
+                      .fontSize($r('app.float.wh_value_17'))
                       .onChange((strInput) => {
                         this.advResponseServiceData_serviceValue = strInput;
                         AppStorage.setOrCreate('advResponseServiceData_serviceValue' , strInput)
                       })
-                      .width("80%")
+                      .width($r('app.float.wh_value_80p'))
                   }
-                  .padding({ top : 5 })
+                  .padding({ top : $r('app.float.wh_value_5') })
                 }
               }
-              .borderWidth(1)
+              .borderWidth($r('app.float.wh_value_1'))
               .borderColor($r("app.color.lead"))
             }
-            .height("85%")
-            .width('100%')
-            .padding(5)
+            .height($r('app.float.wh_value_85p'))
+            .width($r('app.float.wh_value_100p'))
+            .padding($r('app.float.wh_value_5'))
             .backgroundColor($r("app.color.moon"));
           }
         }
-        .height("50%")
+        .height($r('app.float.wh_value_50p'))
       }
       .backgroundColor($r("app.color.lead"))
     }
@@ -537,7 +537,7 @@ struct GattServer {
   private serverResponse_value: string = 'respond value';
   private serverResponse: bluetooth.ServerResponse = {
     deviceId : '08:FB:EA:1B:3C:63' , //'88:36:CF:09:C1:90'
-    transId : 1 ,
+    transId : $r('app.float.wh_value_1') ,
     status : 0 ,
     offset : 0 ,
     value : string2ArrayBuffer("respond value")
@@ -638,22 +638,22 @@ struct GattServer {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("0.5vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
       Row() {
         Text("GattServerSetting")
-          .fontSize("20vp")
-          .height(60)
-          .width("80%")
-          .padding({ left : 10 })
+          .fontSize($r('app.float.wh_value_20'))
+          .height($r('app.float.wh_value_60'))
+          .width($r('app.float.wh_value_80p'))
+          .padding({ left : $r('app.float.wh_value_10') })
         Image($r('app.media.Switch'))
-          .height(50)
-          .width(50)
-          .padding({ top : 5 , bottom : 5 , left : 10 })
+          .height($r('app.float.wh_value_50'))
+          .width($r('app.float.wh_value_50'))
+          .padding({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
           .onClick(() => {
             this.showList = !this.showList;
           })
       }
-      .width("100%")
+      .width($r('app.float.wh_value_100p'))
 
       Column() {
         if ( this.showList ) {
@@ -662,67 +662,67 @@ struct GattServer {
           Column() {
             Column() {
               Text("结果显示:")
-                .fontSize("17vp")
-                .margin({ top : "5vp" , left : "10vp" })
+                .fontSize($r('app.float.wh_value_17'))
+                .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
                 .textAlign(TextAlign.Start)
-                .width("100%")
+                .width($r('app.float.wh_value_100p'))
               Text("Result:" + this.message)
-                .fontSize("17vp")
-                .margin({ top : "1vp" , left : "10vp" })
+                .fontSize($r('app.float.wh_value_17'))
+                .margin({ top : $r('app.float.wh_value_1') , left : $r('app.float.wh_value_10') })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               Text("ConnectionStateChange:" + this.connectStateMsg)
-                .fontSize("17vp")
-                .margin({ top : "1vp" , left : "10vp" })
+                .fontSize($r('app.float.wh_value_17'))
+                .margin({ top : $r('app.float.wh_value_1') , left : $r('app.float.wh_value_10') })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               Text("characteristicRead:" + this.characteristicReadMsg)
-                .fontSize("17vp")
-                .margin({ top : "1vp" , left : "10vp" })
+                .fontSize($r('app.float.wh_value_17'))
+                .margin({ top : $r('app.float.wh_value_1') , left : $r('app.float.wh_value_10') })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               Text("characteristicWrite:" + this.characteristicWriteMsg)
-                .fontSize("17vp")
-                .margin({ top : "1vp" , left : "10vp" })
+                .fontSize($r('app.float.wh_value_17'))
+                .margin({ top : $r('app.float.wh_value_1') , left : $r('app.float.wh_value_10') })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               Text("descriptorRead:" + this.descriptorReadMsg)
-                .fontSize("17vp")
-                .margin({ top : "1vp" , left : "10vp" })
+                .fontSize($r('app.float.wh_value_17'))
+                .margin({ top : $r('app.float.wh_value_1') , left : $r('app.float.wh_value_10') })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
               Text("descriptorWrite:" + this.descriptorWriteMsg)
-                .fontSize("17vp")
-                .margin({ top : "1vp" , left : "10vp" })
+                .fontSize($r('app.float.wh_value_17'))
+                .margin({ top : $r('app.float.wh_value_1') , left : $r('app.float.wh_value_10') })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
             }
-            .width("95%")
-            .height(160)
+            .width($r('app.float.wh_value_95p'))
+            .height($r('app.float.wh_value_160'))
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
 
-            Stack().height("0.25vp").backgroundColor("#000000");
+            Stack().height($r('app.float.wh_value_0_25')).backgroundColor($r('app.color.black'));
             Column() {
               Text("功能测试:")
-                .margin({ top : "5vp" , left : "10vp" })
-                .padding("5vp")
-                .fontSize("18vp")
-                .width("100%")
+                .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
+                .padding($r('app.float.wh_value_5'))
+                .fontSize($r('app.float.wh_value_18'))
+                .width($r('app.float.wh_value_100p'))
               Scroll() {
                 ContentTable({ apiItems : initGattServerApiData() }) //子层调用
               }
               .width(ConfigData.WH_100_100)
               .align(Alignment.TopStart)
-              .layoutWeight(1)
+              .layoutWeight($r('app.float.wh_value_1'))
               .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
             }
-            .height("75%")
+            .height($r('app.float.wh_value_75p'))
           }
         }
       }
       .visibility(Visibility.Visible);
     }
-    .width('100%')
+    .width($r('app.float.wh_value_100p'))
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
   }
 

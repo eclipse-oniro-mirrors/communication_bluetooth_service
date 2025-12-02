@@ -48,7 +48,7 @@ struct SppAutoTestManager {
           }
         } , (item: TestData) => item.id)
       }
-      .height('93%')
+      .height($r('app.float.wh_value_93p'))
       .backgroundColor($r("app.color.lead"))
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))

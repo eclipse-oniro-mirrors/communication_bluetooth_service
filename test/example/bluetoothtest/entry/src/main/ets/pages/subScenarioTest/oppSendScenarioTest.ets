@@ -66,21 +66,21 @@ struct oppSendScenarioTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("1vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
             Text("已配对设备列表：(点击选择设备)")
-              .fontSize("20vp")
+              .fontSize($r('app.float.wh_value_20'))
               .fontWeight(FontWeight.Bold)
-              .margin({ top : "5vp" })
+              .margin({ top : $r('app.float.wh_value_5') })
             Scroll() {
-              List({ space : 5 }) {
+              List({ space : $r('app.float.wh_value_5') }) {
                 ForEach(this.pairDevices , (item: PairDevices) => {
                   ListItem() {
                     Text(item.name)
-                      .fontSize("25vp")
-                      .width("80%")
+                      .fontSize($r('app.float.wh_value_25'))
+                      .width($r('app.float.wh_value_80p'))
                       .margin({ left : '10%' })
                       .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") : $r("app.color.white"))
                       .border({
@@ -93,34 +93,34 @@ struct oppSendScenarioTest {
                 })
               }
             }
-            .height("80%")
-            .width("80%")
+            .height($r('app.float.wh_value_80p'))
+            .width($r('app.float.wh_value_80p'))
           }
-          .height("30%")
-          .width("100%")
+          .height($r('app.float.wh_value_30p'))
+          .width($r('app.float.wh_value_100p'))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.Auto)
 
-        Stack().height("1vp").backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
         Column() {
           Text("已选择的设备的蓝牙mac地址：")
-            .fontSize("18vp")
+            .fontSize($r('app.float.wh_value_18'))
             .fontWeight(FontWeight.Bold)
-            .margin({ top : "3vp" })
+            .margin({ top : $r('app.float.wh_value_3') })
           Text(this.serverMac)
-            .fontSize("25vp")
-            .width("70%")
-            .borderRadius(5)
+            .fontSize($r('app.float.wh_value_25'))
+            .width($r('app.float.wh_value_70p'))
+            .borderRadius($r('app.float.wh_value_5'))
             .backgroundColor($r("app.color.moon"))
-        }.height("15%")
+        }.height($r('app.float.wh_value_15p'))
 
         Column() {
-          Text("请输入需要发送的文件名称，如：test.txt").fontSize(18).fontWeight(FontWeight.Bold)
-          Text("注：文件必须在/data/bluetooth/log/目录下").fontSize(18).fontWeight(FontWeight.Bold)
+          Text("请输入需要发送的文件名称，如：test.txt").fontSize($r('app.float.wh_value_18')).fontWeight(FontWeight.Bold)
+          Text("注：文件必须在/data/bluetooth/log/目录下").fontSize($r('app.float.wh_value_18')).fontWeight(FontWeight.Bold)
           TextInput({ placeholder : "文件名称" })
-            .fontSize("20vp")
+            .fontSize($r('app.float.wh_value_20'))
             .onChange((str) => {
               if ( str ) {
                 let strs = str.split(".");
@@ -128,51 +128,51 @@ struct oppSendScenarioTest {
                 this.fileType = strs[ 1 ];
               }
               this.oppSendScenarioMessage = "需要发送的文件为：/data/bluetooth/log/" + str + "\n"
-            }).width("70%").borderRadius(1)
-        }.height("20%")
+            }).width($r('app.float.wh_value_70p')).borderRadius($r('app.float.wh_value_1'))
+        }.height($r('app.float.wh_value_20p'))
 
         Scroll() {
           Column() {
             Text("流程日志:")
-              .fontSize("17vp")
-              .margin({ top : "8vp" , bottom : "8vp" , left : "20vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_8') , bottom : $r('app.float.wh_value_8') , left : $r('app.float.wh_value_20') })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             List() {
               ListItem() {
                 Text(this.oppSendScenarioMessage)
-                  .fontSize("18vp")
-                  .margin({ top : "5vp" , left : "30vp" , right : "10vp" })
+                  .fontSize($r('app.float.wh_value_18'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_30') , right : $r('app.float.wh_value_10') })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
               }
             }
-            .height("80%")
-            .width("90%")
+            .height($r('app.float.wh_value_80p'))
+            .width($r('app.float.wh_value_90p'))
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
-          .width("100%")
-          .height("30%")
+          .width($r('app.float.wh_value_100p'))
+          .height($r('app.float.wh_value_30p'))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.On)
       }
-      .height("66%")
-      .width("100%")
+      .height($r('app.float.wh_value_66p'))
+      .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Stack().height("1vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Column() {
             Button('oppSendFile')
-              .borderRadius(8)
+              .borderRadius($r('app.float.wh_value_8'))
               .backgroundColor($r("app.color.blue"))
-              .width(200)
-              .height(60)
-              .fontSize("20vp")
-              .margin({ top : "15vp" })
+              .width($r('app.float.wh_value_200'))
+              .height($r('app.float.wh_value_60'))
+              .fontSize($r('app.float.wh_value_20'))
+              .margin({ top : $r('app.float.wh_value_15') })
               .align(Alignment.Center)
               .alignSelf(ItemAlign.Center)
               .onClick(async(event: ClickEvent) => {
@@ -194,17 +194,17 @@ struct oppSendScenarioTest {
                 AppStorage.setOrCreate("oppSendScenarioMessage" , this.oppSendScenarioMessage)
               })
           }
-          .width("100%")
+          .width($r('app.float.wh_value_100p'))
           .align(Alignment.Center)
           .alignItems(HorizontalAlign.Center)
           .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width("100%")
+        .width($r('app.float.wh_value_100p'))
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-      .width("100%")
-      .height("100%");
+      .width($r('app.float.wh_value_100p'))
+      .height($r('app.float.wh_value_100p'));
     }
   }
 }

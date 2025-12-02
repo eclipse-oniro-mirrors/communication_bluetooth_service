@@ -26,29 +26,29 @@ export struct TestImageDisplay {
       Flex({ alignItems : ItemAlign.Start }) {
         Stack() {
           Image(this.testItem.image)
-            .height(80)
-            .width(80)
-            .margin({ left : 10 , bottom : 10 })
+            .height($r('app.float.wh_value_80'))
+            .width($r('app.float.wh_value_80'))
+            .margin({ left : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
         }
-        .width("20%")
+        .width($r('app.float.wh_value_20p'))
 
         Column() {
           Text(this.testItem.name)
-            .fontSize(26)
-            .fontWeight(500)
-            .margin({ left : 26 , top : 10 })
-            .width("90%")
+            .fontSize($r('app.float.wh_value_26'))
+            .fontWeight($r('app.float.wh_value_500'))
+            .margin({ left : $r('app.float.wh_value_26') , top : $r('app.float.wh_value_10') })
+            .width($r('app.float.wh_value_90p'))
           Text(this.testItem.detail)
-            .fontSize(17)
-            .fontWeight(500)
-            .margin({ top : 8 })
-            .width("80%")
+            .fontSize($r('app.float.wh_value_17'))
+            .fontWeight($r('app.float.wh_value_500'))
+            .margin({ top : $r('app.float.wh_value_8') })
+            .width($r('app.float.wh_value_80p'))
         }
-        .width("80%")
-        .padding({ left : 20 })
+        .width($r('app.float.wh_value_80p'))
+        .padding({ left : $r('app.float.wh_value_20') })
       }
     }
-    .backgroundColor('#FFedf2f5')
-    .height(160)
+    .backgroundColor($r('app.color.color_FFEDF2F5_bg'))
+    .height($r('app.float.wh_value_160'))
   }
 }

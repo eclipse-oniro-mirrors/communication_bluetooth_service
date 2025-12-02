@@ -91,7 +91,8 @@ export class TestApi {
   result?: string;
   category?: CaseCategory;
 
-  constructor(name: string , detail: string , method: string , api: Function , result: string , category: CaseCategory) {
+  constructor(name: string, detail: string, method: string, api: Function,
+    result: string, category: CaseCategory) {
     this.id = `${ NextId ++ }`;
     this.name = name;
     this.detail = detail;

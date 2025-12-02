@@ -1,10 +1,6 @@
 {
   "src": [
     "pages/homePage",
-    "pages/manualApiTestPage",
-    "pages/manualSceneTest",
-    "pages/autoTest",
-    "pages/profile",
 
     "pages/subManualApiTest/BrInterfaceTest",
     "pages/subManualApiTest/bleTest",

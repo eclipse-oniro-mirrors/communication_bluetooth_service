@@ -57,10 +57,10 @@ struct deviceFound {
   build() {
     Column() {
       GridContainer({
-        columns : 12 ,
+        columns : $r('app.float.wh_value_12') ,
         sizeType : SizeType.Auto ,
-        gutter : vp2px(1) === 2 ? '12vp' : '0vp' ,
-        margin : vp2px(1) === 2 ? '24vp' : '0vp'
+        gutter : vp2px(1) === 2 ? $r('app.float.wh_value_12') : $r('app.float.wh_value_0') ,
+        margin : vp2px(1) === 2 ? $r('app.float.wh_value_24') : $r('app.float.wh_value_0')
       }) {
         Row({}) {
           Column() {
@@ -69,9 +69,9 @@ struct deviceFound {
           .height(ConfigData.WH_100_100)
           .useSizeType({
             xs : { span : 0 , offset : 0 } , sm : { span : 0 , offset : 0 } ,
-            md : { span : 0 , offset : 0 } , lg : { span : 2 , offset : 0 }
+            md : { span : 0 , offset : 0 } , lg : { span : $r('app.float.wh_value_2') , offset : 0 }
           });
-          Column({ space : '12vp' }) {
+          Column({ space : $r('app.float.wh_value_12') }) {
             PageTitle({ detail : '扫描蓝牙设备' })
             Scroll() {
               Column() {
@@ -91,7 +91,7 @@ struct deviceFound {
             }
             .width(ConfigData.WH_100_100)
             .align(Alignment.TopStart)
-            .layoutWeight(1)
+            .layoutWeight($r('app.float.wh_value_1'))
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
           }
           .padding({
@@ -102,8 +102,8 @@ struct deviceFound {
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 12 , offset : 0 } , sm : { span : 12 , offset : 0 } ,
-            md : { span : 12 , offset : 0 } , lg : { span : 8 , offset : 2 }
+            xs : { span : $r('app.float.wh_value_12') , offset : 0 } , sm : { span : $r('app.float.wh_value_12') , offset : 0 } ,
+            md : { span : $r('app.float.wh_value_12') , offset : 0 } , lg : { span : $r('app.float.wh_value_8') , offset : $r('app.float.wh_value_2') }
           });
 
           Column() {
@@ -111,8 +111,8 @@ struct deviceFound {
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 0 , offset : 12 } , sm : { span : 0 , offset : 12 } ,
-            md : { span : 0 , offset : 12 } , lg : { span : 2 , offset : 10 }
+            xs : { span : 0 , offset : $r('app.float.wh_value_12') } , sm : { span : 0 , offset : $r('app.float.wh_value_12') } ,
+            md : { span : 0 , offset : $r('app.float.wh_value_12') } , lg : { span : $r('app.float.wh_value_2') , offset : $r('app.float.wh_value_10') }
           })
         }
         .width(ConfigData.WH_100_100)
@@ -188,9 +188,9 @@ export struct PairedDeviceComponent {
             }
           } , item => JSON.stringify(item));
         }
-        .height(200)
+        .height($r('app.float.wh_value_200'))
         .divider({
-          strokeWidth : 1 ,
+          strokeWidth : $r('app.float.wh_value_1') ,
           color : $r('app.color.color_E3E3E3_grey') ,
           startMargin : $r('app.float.wh_value_52') ,
           endMargin : $r('app.float.wh_value_12')
@@ -316,36 +316,36 @@ export struct AvailableItem {
         Image($r('app.media.bleSmall'))
           .objectFit(ImageFit.Contain)
           .autoResize(false)
-          .height(30)
-          .width(30)
+          .height($r('app.float.wh_value_30'))
+          .width($r('app.float.wh_value_30'))
       }
-      .width("10%")
-      .padding({ left : 10 })
+      .width($r('app.float.wh_value_10p'))
+      .padding({ left : $r('app.float.wh_value_10') })
 
       Column() {
         Text(this.name)
-          .fontSize(17.4)
+          .fontSize($r('app.float.wh_value_17_4'))
           .fontWeight(FontWeight.Bold)
-          .width("90%")
-          .height(40)
-          .padding({ left : 10 , top : 15 })
+          .width($r('app.float.wh_value_90p'))
+          .height($r('app.float.wh_value_40'))
+          .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_15') })
         Text(this.mac)
-          .fontSize(17.4)
+          .fontSize($r('app.float.wh_value_17_4'))
           .fontWeight(FontWeight.Bold)
-          .width("90%")
-          .height(30)
-          .padding({ left : 10 , top : 5 })
+          .width($r('app.float.wh_value_90p'))
+          .height($r('app.float.wh_value_30'))
+          .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_5') })
       }
-      .height(80)
-      .width("80%")
+      .height($r('app.float.wh_value_80'))
+      .width($r('app.float.wh_value_80p'))
 
       Row() {
         Text(this.state)
-          .fontSize(17.4)
-          .flexGrow(1)
+          .fontSize($r('app.float.wh_value_17_4'))
+          .flexGrow($r('app.float.wh_value_1'))
       }
-      .width("10%")
-      .padding({ left : 10 })
+      .width($r('app.float.wh_value_10p'))
+      .padding({ left : $r('app.float.wh_value_10') })
     }
   }
 }
@@ -366,44 +366,44 @@ export struct PairedItem {
         Image($r('app.media.bleSmall'))
           .objectFit(ImageFit.Contain)
           .autoResize(false)
-          .height(30)
-          .width(30)
+          .height($r('app.float.wh_value_30'))
+          .width($r('app.float.wh_value_30'))
       }
-      .width("10%")
-      .padding({ left : 10 })
+      .width($r('app.float.wh_value_10p'))
+      .padding({ left : $r('app.float.wh_value_10') })
 
       Column() {
         Text(this.name)
-          .fontSize(17.4)
+          .fontSize($r('app.float.wh_value_17_4'))
           .fontWeight(FontWeight.Bold)
-          .width("90%")
-          .height(40)
-          .padding({ left : 10 , top : 15 })
+          .width($r('app.float.wh_value_90p'))
+          .height($r('app.float.wh_value_40'))
+          .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_15') })
         Text(this.mac)
-          .fontSize(17.4)
+          .fontSize($r('app.float.wh_value_17_4'))
           .fontWeight(FontWeight.Bold)
-          .width("90%")
-          .height(30)
-          .padding({ left : 10 , top : 5 })
+          .width($r('app.float.wh_value_90p'))
+          .height($r('app.float.wh_value_30'))
+          .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_5') })
       }
-      .height(80)
-      .width("70%")
+      .height($r('app.float.wh_value_80'))
+      .width($r('app.float.wh_value_70p'))
 
       Row() {
         Text(this.state)
-          .fontSize(17.4)
-          .flexGrow(1)
+          .fontSize($r('app.float.wh_value_17_4'))
+          .flexGrow($r('app.float.wh_value_1'))
       }
-      .width("10%")
-      .padding({ left : 10 })
+      .width($r('app.float.wh_value_10p'))
+      .padding({ left : $r('app.float.wh_value_10') })
 
       Row() {
         Text("取消")
-          .fontSize(17.4)
-          .flexGrow(1)
+          .fontSize($r('app.float.wh_value_17_4'))
+          .flexGrow($r('app.float.wh_value_1'))
       }
-      .width("10%")
-      .padding({ left : 10 })
+      .width($r('app.float.wh_value_10p'))
+      .padding({ left : $r('app.float.wh_value_10') })
       .onClick(() => {
         let ret = bluetooth.cancelPairedDevice(this.mac)
         if ( ret ) {
@@ -501,16 +501,16 @@ export struct AvailableDeviceComponent {
           }
           .backgroundColor($r("app.color.white_bg_color"))
           .borderRadius($r("app.float.radius_24"))
-          .height("80%")
+          .height($r('app.float.wh_value_80p'))
           .divider({
-            strokeWidth : 1 ,
+            strokeWidth : $r('app.float.wh_value_1') ,
             color : $r('app.color.color_E3E3E3_grey') ,
             startMargin : $r('app.float.wh_value_52') ,
             endMargin : $r('app.float.wh_value_12')
           })
         }
         .scrollBar(BarState.Auto)
-        .scrollBarWidth(20)
+        .scrollBarWidth($r('app.float.wh_value_20'))
       } else {
         Row() {
           // Scanning...
@@ -651,7 +651,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width($r("app.float.wh_value_160"))
           .height($r("app.float.wh_value_40"))
-          .flexGrow(1)
+          .flexGrow($r('app.float.wh_value_1'))
           .onClick(() => {
             this.dialogController.close();
             this.action(false);
@@ -659,7 +659,7 @@ struct PairDialog {
 
           Divider()
             .height($r("app.float.wh_value_24"))
-            .strokeWidth(0.5)
+            .strokeWidth($r('app.float.wh_value_0_5'))
             .vertical(true)
             .color(($r("app.color.color_E3E3E3_grey")))
 
@@ -671,7 +671,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width($r("app.float.wh_value_160"))
           .height($r("app.float.wh_value_40"))
-          .flexGrow(1)
+          .flexGrow($r('app.float.wh_value_1'))
           .onClick(() => {
             this.dialogController.close();
             this.action(true);

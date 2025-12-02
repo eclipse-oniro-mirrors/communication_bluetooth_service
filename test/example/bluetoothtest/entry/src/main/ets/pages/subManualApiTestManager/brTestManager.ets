@@ -88,29 +88,29 @@ struct brTestManager {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("0.5vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
       Column() {
         Text("目标设备MAC：")
-          .fontSize("20vp")
-          .height(50)
-          .width('100%')
-          .padding({ top : 10 , left : 10 })
+          .fontSize($r('app.float.wh_value_20'))
+          .height($r('app.float.wh_value_50'))
+          .width($r('app.float.wh_value_100p'))
+          .padding({ top : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
         TextInput({ text : this.pairedMac , placeholder : "请输入即将连接的设备MAC" })
-          .height(50)
+          .height($r('app.float.wh_value_50'))
           .borderStyle(BorderStyle.Dashed)
           .backgroundColor($r("app.color.white"))
           .onChange((str) => {
             this.deviceId = str;
           })
-          .width('96%')
-          .padding({ top : 10 , left : 10 })
+          .width($r('app.float.wh_value_96p'))
+          .padding({ top : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
       }
       .align(Alignment.TopStart)
       ContentTable({ apiItems : initBRManagerApiData() })
     }
     .alignItems(HorizontalAlign.Center)
     .backgroundColor($r("app.color.lead"))
-    .height("100%")
+    .height($r('app.float.wh_value_100p'))
   }
 
   /**
@@ -241,7 +241,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width($r("app.float.wh_value_160"))
           .height($r("app.float.wh_value_40"))
-          .flexGrow(1)
+          .flexGrow($r('app.float.wh_value_1'))
           .onClick(() => {
             this.dialogController.close();
             this.action(false);
@@ -249,7 +249,7 @@ struct PairDialog {
 
           Divider()
             .height($r("app.float.wh_value_24"))
-            .strokeWidth(0.5)
+            .strokeWidth($r('app.float.wh_value_0_5'))
             .vertical(true)
             .color(($r("app.color.color_E3E3E3_grey")))
 
@@ -261,7 +261,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width($r("app.float.wh_value_160"))
           .height($r("app.float.wh_value_40"))
-          .flexGrow(1)
+          .flexGrow($r('app.float.wh_value_1'))
           .onClick(() => {
             this.dialogController.close();
             console.log("onClick start --------------")

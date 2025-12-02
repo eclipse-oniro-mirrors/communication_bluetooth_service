@@ -44,7 +44,7 @@ struct ProfileTestManager {
       ContentTable({ apiItems : initA2dpSourceProfileManagerApiData() })
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-    .height('100%')
+    .height($r('app.float.wh_value_100p'))
     .alignItems(HorizontalAlign.Start)
   }
 }

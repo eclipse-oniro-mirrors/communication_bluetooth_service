@@ -55,10 +55,10 @@ export struct BleFilterTable {
       Column() {
         Row() {
           Text("BLE扫描过滤参数:")
-            .fontSize("17vp")
-            .fontColor("#4444444")
-            .width("80%")
-            .padding("5vp")
+            .fontSize($r('app.float.wh_value_17'))
+            .fontColor($r('app.color.color_4444444_grey'))
+            .width($r('app.float.wh_value_80p'))
+            .padding($r('app.float.wh_value_5'))
           Checkbox({ name : 'bleScanFilter' , group : 'checkboxGroup99' })
             .select(this.cbxBleScanFilter)
             .selectedColor(0x39a2db)
@@ -70,12 +70,12 @@ export struct BleFilterTable {
               }
               AppStorage.setOrCreate('cbxBleScanFilter' , value);
             })
-            .width(20)
+            .width($r('app.float.wh_value_20'))
         }
-        .height(40)
-        .width("100%")
-        .borderWidth(1)
-        .padding(5)
+        .height($r('app.float.wh_value_40'))
+        .width($r('app.float.wh_value_100p'))
+        .borderWidth($r('app.float.wh_value_1'))
+        .padding($r('app.float.wh_value_5'))
         .borderColor($r("app.color.lead"))
         .backgroundColor( $r( "app.color.moon" ) )
 
@@ -83,67 +83,67 @@ export struct BleFilterTable {
           Column() {
             Column() {
               Row() {
-                Text("mac").fontSize("17vp").width(60);
+                Text("mac").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_60'));
                 TextInput({ text : this.txtScanFilter_deviceId , placeholder : "input deviceId" })
-                  .fontSize("15vp")
+                  .fontSize($r('app.float.wh_value_15'))
                   .onChange((strInput) => {
                     this.txtScanFilter_deviceId = strInput;
                     AppStorage.setOrCreate('txtScanFilterDeviceId' , strInput);
                   })
-                  .width("85%")
-                  .borderRadius(1)
+                  .width($r('app.float.wh_value_85p'))
+                  .borderRadius($r('app.float.wh_value_1'))
               }
-              .padding(5)
+              .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
               .backgroundColor( $r( "app.color.spring" ) )
 
               Row() {
-                Text("name").fontSize(17).width(60);
+                Text("name").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_60'));
                 TextInput({ text : this.txtScanFilter_name , placeholder : "input name" })
-                  .fontSize("15vp")
+                  .fontSize($r('app.float.wh_value_15'))
                   .onChange((strInput) => {
                     this.txtScanFilter_name = strInput;
                     AppStorage.setOrCreate('txtScanFilterName' , strInput);
                   })
-                  .width("85%")
-                  .borderRadius(1)
+                  .width($r('app.float.wh_value_85p'))
+                  .borderRadius($r('app.float.wh_value_1'))
               }
-              .padding(5)
+              .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
               .backgroundColor( $r( "app.color.spring" ) )
 
               Row() {
-                Text("serviceUuid").fontSize(17).width(100);
+                Text("serviceUuid").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_100'));
                 TextInput({ text : this.txtScanFilter_serviceUuid , placeholder : "input serviceUuid" })
-                  .fontSize("15vp")
+                  .fontSize($r('app.float.wh_value_15'))
                   .onChange((strInput) => {
                     this.txtScanFilter_serviceUuid = strInput;
                     AppStorage.setOrCreate('txtScanFilterServiceUuid' , strInput);
                   })
-                  .width("77%")
-                  .borderRadius(1)
+                  .width($r('app.float.wh_value_77p'))
+                  .borderRadius($r('app.float.wh_value_1'))
               }
-              .padding(5)
+              .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
               .backgroundColor( $r( "app.color.spring" ) )
             }
-            .height(180)
-            .width('100%')
-            .padding(5)
+            .height($r('app.float.wh_value_180'))
+            .width($r('app.float.wh_value_100p'))
+            .padding($r('app.float.wh_value_5'))
           }
           .borderColor($r("app.color.lead"))
-          .borderWidth(1)
+          .borderWidth($r('app.float.wh_value_1'))
 
           Column() {
             Row() {
               Text("BLE扫描配置:")
-                .padding("5vp")
-                .fontSize("17vp")
-                .fontColor("#4444444")
-                .width("80%")
+                .padding($r('app.float.wh_value_5'))
+                .fontSize($r('app.float.wh_value_17'))
+                .fontColor($r('app.color.color_4444444_grey'))
+                .width($r('app.float.wh_value_80p'))
               Checkbox({ name : 'bleScanOptions' , group : 'checkboxGroup95' })
                 .select(this.cbxBleScanOptions)
                 .selectedColor(0x39a2db)
@@ -158,32 +158,32 @@ export struct BleFilterTable {
                     AppStorage.setOrCreate('cbxBleScanOptions' , this.cbxBleScanOptions);
                   }
                 })
-                .width(20)
-                .margin({ left : "1vp" })
+                .width($r('app.float.wh_value_20'))
+                .margin({ left : $r('app.float.wh_value_1') })
             }
-            .height(40)
-            .width('100%')
-            .padding(5)
+            .height($r('app.float.wh_value_40'))
+            .width($r('app.float.wh_value_100p'))
+            .padding($r('app.float.wh_value_5'))
             .backgroundColor( $r( "app.color.moon" ) );
 
             Column() {
               Row() {
-                Text("interval").fontSize(17).width(80)
+                Text("interval").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_80'))
                 TextInput({ text : this.txtScanOptions_interval , placeholder : "input interval" })
-                  .fontSize("17vp")
+                  .fontSize($r('app.float.wh_value_17'))
                   .onChange((strInput) => {
                     this.txtScanOptions_interval = strInput;
                     AppStorage.setOrCreate('txtScanOptionsInterval' , strInput);
                   })
-                  .width("80%")
+                  .width($r('app.float.wh_value_80p'))
               }
-              .padding(5)
+              .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
               .backgroundColor( $r( "app.color.spring" ) )
 
               Row() {
-                Text("dutyMode").fontSize(17).width(80)
+                Text("dutyMode").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_80'))
                 Column() {
                   Select([
                     { value : 'LOW_POWER' },
@@ -194,22 +194,22 @@ export struct BleFilterTable {
                     .value('LOW_POWER')
                     .font({ size : 17 })
                     .selectedOptionFont({ size : 17 })
-                    .optionFont({ size : 15 })
-                    .width("80%")
+                    .optionFont({ size : $r('app.float.wh_value_15') })
+                    .width($r('app.float.wh_value_80p'))
                     .onSelect((index: number) => {
                       console.log("Select:" + index)
                       AppStorage.setOrCreate('txtScanOptionsDutyMode' , index);
                     })
                 }
-                .width("80%")
+                .width($r('app.float.wh_value_80p'))
               }
-              .padding(5)
+              .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
               .backgroundColor( $r( "app.color.spring" ) )
 
               Row() {
-                Text("matchMode").fontSize(17).width(90)
+                Text("matchMode").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_90'))
                 Column() {
                   Select([
                     { value : 'MATCH_MODE_AGGRESSIVE' },
@@ -218,30 +218,30 @@ export struct BleFilterTable {
                     .value('MATCH_MODE_AGGRESSIVE')
                     .font({ size : 17 })
                     .selectedOptionFont({ size : 17 })
-                    .optionFont({ size : 15 })
-                    .width("75%")
+                    .optionFont({ size : $r('app.float.wh_value_15') })
+                    .width($r('app.float.wh_value_75p'))
                     .onSelect((index: number) => {
                       console.log("Select:" + index)
                       AppStorage.setOrCreate('txtScanOptionsMatchMode' , index);
                     })
-                }.width("78%")
+                }.width($r('app.float.wh_value_78p'))
               }
-              .padding(5)
+              .padding($r('app.float.wh_value_5'))
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
               .backgroundColor( $r( "app.color.spring" ) )
             }
-            .width('100%')
-            .padding(5)
+            .width($r('app.float.wh_value_100p'))
+            .padding($r('app.float.wh_value_5'))
           }
-          .height(240)
-          .borderWidth(1)
+          .height($r('app.float.wh_value_240'))
+          .borderWidth($r('app.float.wh_value_1'))
           .borderColor($r("app.color.lead"))
         }
       }
-      .height("100%")
+      .height($r('app.float.wh_value_100p'))
     }
-    .scrollBarWidth(20)
-    .padding({ bottom : 10 })
+    .scrollBarWidth($r('app.float.wh_value_20'))
+    .padding({ bottom : $r('app.float.wh_value_10') })
   }
 }

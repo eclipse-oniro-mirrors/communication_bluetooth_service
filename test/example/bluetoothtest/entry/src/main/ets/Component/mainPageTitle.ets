@@ -62,16 +62,16 @@ export struct MainPageTitle {
   CustomBtn(text: Resource , isFullScreen: boolean) {
     Button() {
       Image($r('app.media.screenShot'))
-        .height(50)
-        .width(50)
+        .height($r('app.float.wh_value_50'))
+        .width($r('app.float.wh_value_50'))
     }
     .key(isFullScreen + 'FullScreenShot')
     .type(ButtonType.Normal)
     .backgroundColor($r("app.color.blue"))
-    .height("100%")
-    .width("100%")
+    .height($r('app.float.wh_value_100p'))
+    .width($r('app.float.wh_value_100p'))
     //    .size({ width: 55, height: 55 })
-    .margin({ left : 6 , right : 6 , top : 3 })
+    .margin({ left : $r('app.float.wh_value_6') , right : $r('app.float.wh_value_6') , top : $r('app.float.wh_value_3') })
     .onClick(() => {
       console.log('[Screenshot] onClick,screenshot')
       this.getScreen(isFullScreen)
@@ -81,26 +81,26 @@ export struct MainPageTitle {
   build() {
     Flex({ alignItems : ItemAlign.Start }) {
       Text('蓝牙调试助手')
-        .fontSize(26)
-        .margin({ left : 15 })
-        .padding({ top : 28 })
+        .fontSize($r('app.float.wh_value_26'))
+        .margin({ left : $r('app.float.wh_value_15') })
+        .padding({ top : $r('app.float.wh_value_28') })
 
       Scroll() {
         Column() {
           this.CustomBtn($r('app.string.btn_fullscreen') , true)
         }
-        .width("100%")
-        .height("100%")
+        .width($r('app.float.wh_value_100p'))
+        .height($r('app.float.wh_value_100p'))
         .borderWidth(this.myborderWidth)
         .borderRadius(this.myborderRadius)
         .borderColor(Color.Green)
         .gesture(
           GestureGroup(GestureMode.Parallel ,
-            TapGesture({ count : 2 , fingers : 1 })
+            TapGesture({ count : $r('app.float.wh_value_2') , fingers : $r('app.float.wh_value_1') })
               .onAction(() => {
                 this.myborderWidth += 1
               }) ,
-            LongPressGesture({ fingers : 1 , repeat : true , duration : 1000 })
+            LongPressGesture({ fingers : $r('app.float.wh_value_1') , repeat : true , duration : 1000 })
               .onAction((event: GestureEvent) => {
                 this.colOpacity -= 0.1
                 if ( event.repeat ) {
@@ -111,7 +111,7 @@ export struct MainPageTitle {
                 this.colOpacity = 1;
                 this.count = 0;
               }) ,
-            PanGesture({ fingers : 1 , direction : PanDirection.All , distance : 5.0 })
+            PanGesture({ fingers : $r('app.float.wh_value_1') , direction : PanDirection.All , distance : 5.0 })
               .onActionStart(() => {
                 console.log('Pan start')
               })
@@ -122,7 +122,7 @@ export struct MainPageTitle {
               .onActionEnd(() => {
                 console.log('Pan end')
               }) ,
-            PinchGesture({ fingers : 2 , distance : 4 })
+            PinchGesture({ fingers : $r('app.float.wh_value_2') , distance : 4 })
               .onActionStart(() => {
                 console.log('PinchGesture start')
               })
@@ -134,7 +134,7 @@ export struct MainPageTitle {
                 console.log('PinchGesture end')
                 this.getScreen(true);
               }) ,
-            RotationGesture({ fingers : 2 , angle : 2 })
+            RotationGesture({ fingers : $r('app.float.wh_value_2') , angle : $r('app.float.wh_value_2') })
               .onActionStart(() => {
                 console.log('RotationGesture start')
               })
@@ -150,10 +150,10 @@ export struct MainPageTitle {
             })
         )
       }
-      .layoutWeight(1)
+      .layoutWeight($r('app.float.wh_value_1'))
     }
-    .height(80)
+    .height($r('app.float.wh_value_80'))
     .backgroundColor($r("app.color.blue"))
-    .padding({ left : 20 })
+    .padding({ left : $r('app.float.wh_value_20') })
   }
 }

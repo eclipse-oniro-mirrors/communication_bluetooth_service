@@ -52,70 +52,70 @@ struct BleFoundScenarioTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("1vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
             Text("场景流程验证:")
-              .fontSize("17vp")
-              .margin({ top : "10vp" , bottom : "10vp" , left : "20vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_20') })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             ScenarioContentTable({
               scenarioItems : initBleFoundScenarioData() ,
               changeIndex : this.changeIndex
             })
           }
-          .width("100%")
-          .height(280)
+          .width($r('app.float.wh_value_100p'))
+          .height($r('app.float.wh_value_280'))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.Auto)
 
-        Stack().height("1vp").backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
             Text("流程日志:")
-              .fontSize("17vp")
-              .margin({ top : "8vp" , bottom : "8vp" , left : "20vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_8') , bottom : $r('app.float.wh_value_8') , left : $r('app.float.wh_value_20') })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             List() {
               ListItem() {
                 Text(this.bleFoundScenarioMessage)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "30vp" , right : "10vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_30') , right : $r('app.float.wh_value_10') })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
               }
             }
-            .height("80%")
-            .width("90%")
+            .height($r('app.float.wh_value_80p'))
+            .width($r('app.float.wh_value_90p'))
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
-          .width("100%")
-          .height(260)
+          .width($r('app.float.wh_value_100p'))
+          .height($r('app.float.wh_value_260'))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.On)
       }
-      .height(500)
-      .width("100%")
+      .height($r('app.float.wh_value_500'))
+      .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
 
-      Stack().height("1vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Text('场景测试开始').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+            Text('场景测试开始').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.blue"))
-          .width(100)
-          .height(66)
-          .margin({ top : "15vp" , left : "20vp" })
+          .width($r('app.float.wh_value_100'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_20') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             this.forLoop()
@@ -123,14 +123,14 @@ struct BleFoundScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('场景测试结束').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('场景测试结束').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
             }.alignItems(VerticalAlign.Top)
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.blue"))
-          .width(100)
-          .height(66)
-          .margin({ top : "15vp" , left : "10vp" , right : "10vp" })
+          .width($r('app.float.wh_value_100'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_10') , right : $r('app.float.wh_value_10') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let bleFoundScenarioMessage = ""
@@ -157,14 +157,14 @@ struct BleFoundScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('清空日志').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('清空日志').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
             }.alignItems(VerticalAlign.Top)
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.moon"))
-          .width(80)
-          .height(66)
-          .margin({ top : "15vp" , right : "20vp" })
+          .width($r('app.float.wh_value_80'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , right : $r('app.float.wh_value_20') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let bleFoundScenarioMessage = ""
@@ -172,11 +172,11 @@ struct BleFoundScenarioTest {
           })
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width("100%")
+        .width($r('app.float.wh_value_100p'))
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-      .width("100%")
-      .height("100%");
+      .width($r('app.float.wh_value_100p'))
+      .height($r('app.float.wh_value_100p'));
     }
   }
 

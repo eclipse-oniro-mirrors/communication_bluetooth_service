@@ -71,10 +71,10 @@ export default struct EntryComponentTable {
         }
         .alignItems(HorizontalAlign.Start);
       }
-      .flexShrink(0)
+      .flexShrink($r('app.float.wh_value_0'))
       .alignItems(VerticalAlign.Center)
       .align(Alignment.Start)
-      .layoutWeight(1)
+      .layoutWeight($r('app.float.wh_value_1'))
 
       Row() {
         Text(this.settingValue)

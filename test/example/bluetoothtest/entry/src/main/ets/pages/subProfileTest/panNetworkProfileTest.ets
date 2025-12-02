@@ -62,63 +62,63 @@ struct PanNetWorkTest {
           PageTitle({ testItem : this.testItem })
         }
 
-        Stack().height("0.5vp").backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
-          .margin({ top : "10vp" })
-          .fontSize("20vp")
-          .fontColor(this.hasProfile ? "#66ccff" : "#ff0000")
+          .margin({ top : $r('app.float.wh_value_10') })
+          .fontSize($r('app.float.wh_value_20'))
+          .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') : $r('app.color.color_FF0000_red'))
           .border({ width : 0.5 })
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .fontStyle(FontStyle.Italic);
         Column() {
           Row() {
             Text("现在正在连接的设备为：")
-              .fontSize("17").width(110).margin("5vp")
+              .fontSize("17").width($r('app.float.wh_value_110')).margin($r('app.float.wh_value_5'))
             TextInput({ text : JSON.stringify(this.deviceId) , placeholder : "请输入需要连接的deviceId" })
-              .fontSize("17vp")
+              .fontSize($r('app.float.wh_value_17'))
               .onChange((str) => {
                 this.deviceId = str;
                 AppStorage.setOrCreate("deviceId" , str)
               })
-              .width("70%")
-              .borderRadius(1)
+              .width($r('app.float.wh_value_70p'))
+              .borderRadius($r('app.float.wh_value_1'))
           }
           .backgroundColor($r("app.color.moon"))
-          .margin({ top : "20vp" , bottom : "20vp" , left : "20vp" , right : "20vp" })
+          .margin({ top : $r('app.float.wh_value_20') , bottom : $r('app.float.wh_value_20') , left : $r('app.float.wh_value_20') , right : $r('app.float.wh_value_20') })
           .alignItems(VerticalAlign.Center)
 
           Column() {
             Text("接口调用结果： " + this.panMessage)
-              .fontSize("17vp")
+              .fontSize($r('app.float.wh_value_17'))
               .textAlign(TextAlign.Start)
-              .margin({ top : "5vp" , left : "10vp" })
-              .width("100%")
+              .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
+              .width($r('app.float.wh_value_100p'))
             Text("connectionStateChange： " + this.connectionStateInfo)
-              .fontSize("17vp")
-              .margin({ top : "10vp" , left : "10vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
               .textAlign(TextAlign.Start)
-              .width("90%")
+              .width($r('app.float.wh_value_90p'))
           }
           .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
-          .width("88%")
-          .height(90)
+          .width($r('app.float.wh_value_88p'))
+          .height($r('app.float.wh_value_90'))
 
           Text("请点击需要测试的方法")
-            .margin({ top : "10vp" })
-            .padding("5vp")
-            .fontSize("17vp")
-            .fontColor("#4444444");
+            .margin({ top : $r('app.float.wh_value_10') })
+            .padding($r('app.float.wh_value_5'))
+            .fontSize($r('app.float.wh_value_17'))
+            .fontColor($r('app.color.color_4444444_grey'));
           Column() {
             ContentTable({ apiItems : initPanNetworkProfileApiData() })
           }
-          .height(800)
+          .height($r('app.float.wh_value_800'))
         }
         .visibility(this.hasProfile ? Visibility.Visible : Visibility.Hidden);
       }
-      .width('100%')
+      .width($r('app.float.wh_value_100p'))
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-    .height('100%')
+    .height($r('app.float.wh_value_100p'))
     .alignItems(VerticalAlign.Top)
   }
 

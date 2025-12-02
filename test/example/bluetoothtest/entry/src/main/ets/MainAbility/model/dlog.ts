@@ -13,23 +13,26 @@
  * limitations under the License.
  */
 
-/**
- * Auto Test Page Of Bluetooth test
- */
-@Entry
-@Component
-struct AutoTest {
-  @State message: string = 'AutoTest'
+import hilog from '@ohos.hilog';
 
-  build() {
-    Column() {
-      Text(this.message)
-        .fontSize($r('app.float.font_20'))
-        .lineHeight($r('app.float.wh_value_22'))
-        .fontColor($r('app.color.font_color_182431'))
-        .fontWeight(FontWeight.Medium)
-        .margin({ left : $r('app.float.distance_8') })
-        .textAlign(TextAlign.Start);
-    }
+const DOMAIN = 0x0000;
+const TAG = 'bttestTag';
+
+export default class dlog {
+  static info(format: string, ...args: any[]) {
+    hilog.info(DOMAIN, TAG, format, ...args);
+  }
+
+  static debug(format: string, ...args: any[]) {
+    hilog.debug(DOMAIN, TAG, format, ...args);
+  }
+
+  static warn(format: string, ...args: any[]) {
+    hilog.warn(DOMAIN, TAG, format, ...args);
+  }
+
+  static err(format: string, ...args: any[]) {
+    hilog.error(DOMAIN, TAG, format, ...args);
   }
 }
+

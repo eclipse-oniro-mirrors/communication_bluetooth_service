@@ -76,29 +76,29 @@ struct OppProfileTest {
           PageTitle({ testItem : this.testItem })
         }
 
-        Stack().height("0.5vp").backgroundColor("#000000");
+        Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
-          .margin({ top : "10vp" })
-          .fontSize("20vp")
-          .fontColor(this.hasProfile ? "#66ccff" : "#ff0000")
+          .margin({ top : $r('app.float.wh_value_10') })
+          .fontSize($r('app.float.wh_value_20'))
+          .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') : $r('app.color.color_FF0000_red'))
           .border({ width : 0.5 })
-          .padding(5)
+          .padding($r('app.float.wh_value_5'))
           .fontStyle(FontStyle.Italic);
         Column() {
           Column() {
             Scroll() {
               Column() {
                 Text("已配对设备列表：(点击选择设备)")
-                  .fontSize("20vp")
+                  .fontSize($r('app.float.wh_value_20'))
                   .fontWeight(FontWeight.Bold)
-                  .margin({ top : "5vp" })
+                  .margin({ top : $r('app.float.wh_value_5') })
                 Scroll() {
-                  List({ space : 5 }) {
+                  List({ space : $r('app.float.wh_value_5') }) {
                     ForEach(this.pairDevices , (item: PairDevices) => {
                       ListItem() {
                         Text(item.name)
-                          .fontSize("25vp")
-                          .width("80%")
+                          .fontSize($r('app.float.wh_value_25'))
+                          .width($r('app.float.wh_value_80p'))
                           .margin({ left : '10%' })
                           .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") : $r("app.color.white"))
                           .border({
@@ -111,67 +111,67 @@ struct OppProfileTest {
                     })
                   }
                 }
-                .height("50%")
-                .width("80%")
+                .height($r('app.float.wh_value_50p'))
+                .width($r('app.float.wh_value_80p'))
 
                 Text("已选择的设备的蓝牙mac地址：")
-                  .fontSize("18vp")
+                  .fontSize($r('app.float.wh_value_18'))
                   .fontWeight(FontWeight.Bold)
-                  .margin({ top : "3vp" })
+                  .margin({ top : $r('app.float.wh_value_3') })
                 Text(this.serverMac)
-                  .fontSize("25vp")
-                  .width("70%")
-                  .borderRadius(5)
+                  .fontSize($r('app.float.wh_value_25'))
+                  .width($r('app.float.wh_value_70p'))
+                  .borderRadius($r('app.float.wh_value_5'))
                   .backgroundColor($r("app.color.moon"))
               }
-              .height("15%")
-              .width("100%")
+              .height($r('app.float.wh_value_15p'))
+              .width($r('app.float.wh_value_100p'))
             }
-            .scrollBarWidth(10)
+            .scrollBarWidth($r('app.float.wh_value_10'))
             .scrollBar(BarState.Auto)
           }
 
-          Stack().height("1vp").backgroundColor("#000000");
+          Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
           Scroll() {
             Column() {
               Text("接口调用结果： " + this.oppMessage)
-                .fontSize("17vp")
+                .fontSize($r('app.float.wh_value_17'))
                 .textAlign(TextAlign.Start)
-                .margin({ top : "5vp" , left : "10vp" })
-                .width("100%")
+                .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
+                .width($r('app.float.wh_value_100p'))
               Text("connectionStateChange： " + this.connectionStateInfo)
-                .fontSize("17vp")
-                .margin({ top : "10vp" , left : "10vp" })
+                .fontSize($r('app.float.wh_value_17'))
+                .margin({ top : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
                 .textAlign(TextAlign.Start)
-                .width("90%")
+                .width($r('app.float.wh_value_90p'))
             }
-            .height(80)
+            .height($r('app.float.wh_value_80'))
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
-            .width("88%")
+            .width($r('app.float.wh_value_88p'))
           }
-          .scrollBarWidth(10)
+          .scrollBarWidth($r('app.float.wh_value_10'))
           .scrollBar(BarState.Auto)
 
           Text("请点击需要测试的方法")
-            .margin({ top : "10vp" })
-            .padding("5vp")
-            .fontSize("17vp")
-            .fontColor("#4444444");
+            .margin({ top : $r('app.float.wh_value_10') })
+            .padding($r('app.float.wh_value_5'))
+            .fontSize($r('app.float.wh_value_17'))
+            .fontColor($r('app.color.color_4444444_grey'));
           Column() {
             ContentTable({ apiItems : initOppProfileApiData() })
           }
-          .height("66%")
+          .height($r('app.float.wh_value_66p'))
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width("100%")
-        .height("100%")
+        .width($r('app.float.wh_value_100p'))
+        .height($r('app.float.wh_value_100p'))
         .visibility(this.hasProfile ? Visibility.Visible : Visibility.Hidden);
       }
-      .width('100%')
+      .width($r('app.float.wh_value_100p'))
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-    .height('100%')
+    .height($r('app.float.wh_value_100p'))
     .alignItems(VerticalAlign.Top)
   }
 

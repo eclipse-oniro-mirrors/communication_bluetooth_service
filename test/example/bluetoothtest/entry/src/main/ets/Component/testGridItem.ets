@@ -26,25 +26,25 @@ export struct TestGridItem {
       Row() {
         Image(this.testItem.image)
           .objectFit(ImageFit.Contain)
-          .height(152)
-          .width('100%')
-      }.backgroundColor('#FFf1f3f5')
+          .height($r('app.float.wh_value_152'))
+          .width($r('app.float.wh_value_100p'))
+      }.backgroundColor($r('app.color.color_FFF1F3F5_bg'))
 
       Flex({ justifyContent : FlexAlign.Start , alignItems : ItemAlign.Center }) {
         Text(this.testItem.name)
-          .fontSize(14)
-          .flexGrow(1)
-          .padding({ left : 8 })
+          .fontSize($r('app.float.wh_value_14'))
+          .flexGrow($r('app.float.wh_value_1'))
+          .padding({ left : $r('app.float.wh_value_8') })
         Text(this.testItem.detail)
-          .fontSize(14)
-          .margin({ right : 6 })
+          .fontSize($r('app.float.wh_value_14'))
+          .margin({ right : $r('app.float.wh_value_6') })
       }
-      .height(32)
-      .width('100%')
-      .backgroundColor('#FFe5e5e5')
+      .height($r('app.float.wh_value_32'))
+      .width($r('app.float.wh_value_100p'))
+      .backgroundColor($r('app.color.color_FFE5E5E5_bg'))
     }
-    .height(184)
-    .width('100%')
+    .height($r('app.float.wh_value_184'))
+    .width($r('app.float.wh_value_100p'))
     .onClick(() => {
       router.pushUrl({ url : 'MainAbility/pagesTestDetail' , params : { testId : this.testItem } })
     })

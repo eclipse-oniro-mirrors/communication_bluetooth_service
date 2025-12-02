@@ -49,123 +49,123 @@ struct SppServerBandWidthBenchmarkTestManager {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height("1vp").backgroundColor("#000000");
+      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
 
       Column() {
         Scroll() {
           Column() {
             Text("性能测试:")
-              .fontSize("17vp")
-              .margin({ top : "5vp" , bottom : "5vp" , left : "20vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_20') })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
             Text("Spp的性能测试是测试Spp两端收发信息的速率和带宽性能")
-              .fontSize("17vp")
-              .margin({ left : "15vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ left : $r('app.float.wh_value_15') })
               .backgroundColor($r("app.color.spring"))
-            Stack().height("1vp").backgroundColor("#000000")
+            Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'))
 
             Row() {
-              Text("写入目标设备数据：").fontSize(17).width(160)
+              Text("写入目标设备数据：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_160'))
               TextInput({ text : this.writeServerDataBW , placeholder : "请输入写入的数据" })
-                .fontSize("14vp")
+                .fontSize($r('app.float.wh_value_14'))
                 .backgroundColor($r("app.color.white"))
                 .onChange((str) => {
                   this.writeServerDataBW = str;
                   AppStorage.setOrCreate("writeServerDataBW" , str);
                 })
-                .width("50%")
-                .borderRadius(10)
-                .height(32)
+                .width($r('app.float.wh_value_50p'))
+                .borderRadius($r('app.float.wh_value_10'))
+                .height($r('app.float.wh_value_32'))
 
             }
-            .padding(2)
+            .padding($r('app.float.wh_value_2'))
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
             Scroll() {
               Column() {
                 Text("读取的数据为：")
-                  .fontSize("17vp")
-                  .margin({ left : "10vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ left : $r('app.float.wh_value_10') })
                   .textAlign(TextAlign.Start)
-                  .width("100%")
+                  .width($r('app.float.wh_value_100p'))
                 Scroll() {
                   List() {
                     ListItem() {
                       Text(this.dataServerReadMessageBW)
                         .align(Alignment.TopStart)
-                        .fontSize("14vp")
-                        .width("90%")
-                        .height(180)
-                        .borderRadius(10)
+                        .fontSize($r('app.float.wh_value_14'))
+                        .width($r('app.float.wh_value_90p'))
+                        .height($r('app.float.wh_value_180'))
+                        .borderRadius($r('app.float.wh_value_10'))
                         .backgroundColor($r("app.color.white"))
                     }
                   }
-                  .height("95%")
-                  .width("90%")
+                  .height($r('app.float.wh_value_95p'))
+                  .width($r('app.float.wh_value_90p'))
                   .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
                 }
-                .scrollBarWidth(10)
+                .scrollBarWidth($r('app.float.wh_value_10'))
                 .scrollBar(BarState.On)
               }
-              .width("100%")
-              .height(180)
+              .width($r('app.float.wh_value_100p'))
+              .height($r('app.float.wh_value_180'))
             }
-            .scrollBarWidth(10)
+            .scrollBarWidth($r('app.float.wh_value_10'))
             .scrollBar(BarState.On)
           }
-          .width("100%")
-          .height(360)
+          .width($r('app.float.wh_value_100p'))
+          .height($r('app.float.wh_value_360'))
           .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.Auto)
 
-        Stack().height("1vp").backgroundColor("#000000")
+        Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'))
 
         Scroll() {
           Column() {
             Text("日志:")
-              .fontSize("17vp")
-              .margin({ top : "5vp" , bottom : "5vp" , left : "10vp" })
+              .fontSize($r('app.float.wh_value_17'))
+              .margin({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
               .textAlign(TextAlign.Start)
-              .width("100%")
+              .width($r('app.float.wh_value_100p'))
               .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
             List() {
               ListItem() {
                 Text(this.sppServerBandWidthBenchmarkTestMessage)
-                  .fontSize("17vp")
-                  .margin({ top : "5vp" , left : "10vp" , right : "10vp" })
+                  .fontSize($r('app.float.wh_value_17'))
+                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') , right : $r('app.float.wh_value_10') })
                   .textAlign(TextAlign.Start)
-                  .width("90%")
+                  .width($r('app.float.wh_value_90p'))
               }
             }
-            .height("90%")
-            .width("90%")
+            .height($r('app.float.wh_value_90p'))
+            .width($r('app.float.wh_value_90p'))
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
-          .width("100%")
-          .height(150)
+          .width($r('app.float.wh_value_100p'))
+          .height($r('app.float.wh_value_150'))
         }
-        .scrollBarWidth(10)
+        .scrollBarWidth($r('app.float.wh_value_10'))
         .scrollBar(BarState.On)
       }
-      .width("100%")
+      .width($r('app.float.wh_value_100p'))
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('带宽性能测试').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('带宽性能测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.blue"))
-          .width(100)
-          .height(66)
-          .margin({ top : "15vp" , left : "5vp" , right : "5vp" })
+          .width($r('app.float.wh_value_100'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppServerBandWidthBenchmarkTestMessage = ""
@@ -186,14 +186,14 @@ struct SppServerBandWidthBenchmarkTestManager {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('结束测试').fontSize("24vp").fontColor(0xffffff).margin({ left : 5 , right : 5 })
+              Text('结束测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.blue"))
-          .width(80)
-          .height(66)
-          .margin({ top : "15vp" , left : "5vp" , right : "5vp" })
+          .width($r('app.float.wh_value_80'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppServerBandWidthBenchmarkTestMessage = ""
@@ -213,14 +213,14 @@ struct SppServerBandWidthBenchmarkTestManager {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Image($r('app.media.ic_public_delete_filled')).width(30).height(40).margin({ left : 5 })
+              Image($r('app.media.ic_public_delete_filled')).width($r('app.float.wh_value_30')).height($r('app.float.wh_value_40')).margin({ left : $r('app.float.wh_value_5') })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius(8)
+          .borderRadius($r('app.float.wh_value_8'))
           .backgroundColor($r("app.color.moon"))
-          .width(50)
-          .height(66)
-          .margin({ top : "15vp" , right : "40vp" })
+          .width($r('app.float.wh_value_50'))
+          .height($r('app.float.wh_value_66'))
+          .margin({ top : $r('app.float.wh_value_15') , right : $r('app.float.wh_value_40') })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppServerBandWidthBenchmarkTestMessage = ""
@@ -228,11 +228,11 @@ struct SppServerBandWidthBenchmarkTestManager {
           })
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width("100%")
+        .width($r('app.float.wh_value_100p'))
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-      .width("100%")
-      .height("100%");
+      .width($r('app.float.wh_value_100p'))
+      .height($r('app.float.wh_value_100p'));
     }
   }
 

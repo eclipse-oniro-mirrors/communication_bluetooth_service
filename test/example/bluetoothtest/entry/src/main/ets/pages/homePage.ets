@@ -23,12 +23,14 @@ import { ProfileTest } from '../Component/profileTest';
 import { BenchmarkTest } from '../Component/benchmarkTest';
 import abilityAccessCtrl from '@ohos.abilityAccessCtrl';
 import common from '@ohos.app.ability.common';
+import { Permissions } from '@ohos.abilityAccessCtrl';
+import dlog from '../MainAbility/model/dlog';
 
 const TAG = '[Screenshot]'
 
 @Component
 struct TestCategory {
-  private testItems!: TestData[]
+  private testItems: TestData[] = []
 
   build() {
     Stack() {
@@ -75,8 +77,8 @@ struct TestCategory {
           })
         }.tabBar($r("app.string.benchmark_M"))
       }
-      .barWidth("80%")
-      .barHeight("40vp")
+      .barWidth($r('app.float.bar_width_80'))
+      .barHeight($r('app.float.wh_value_40'))
       .align(Alignment.TopStart)
       .barMode(BarMode.Scrollable)
       .backgroundColor($r("app.color.white"))
@@ -91,15 +93,25 @@ struct TestCategory {
 @Component
 struct HomePage {
   private testItems: TestData[] = initTestData()
+  private permissions: Array<Permissions> = [
+    "ohos.permission.LOCATION",
+    "ohos.permission.ACCESS_BLUETOOTH",
+    "ohos.permission.APPROXIMATELY_LOCATION",
+    "ohos.permission.CAPTURE_SCREEN",
+    "ohos.permission.WRITE_MEDIA",
+    "ohos.permission.READ_MEDIA"
+  ]
+
+  init() {
+    this.testItems = initTestData();
+  }
 
   aboutToAppear() {
     let abilityMgr = abilityAccessCtrl.createAtManager();
     let context: Context = getContext(this) as common.UIAbilityContext;
-    abilityMgr.requestPermissionsFromUser(context , [ "ohos.permission.LOCATION", "ohos.permission.ACCESS_BLUETOOTH",
-      "ohos.permission.APPROXIMATELY_LOCATION", "ohos.permission.CAPTURE_SCREEN", "ohos.permission.WRITE_MEDIA",
-      "ohos.permission.READ_MEDIA" ] , (error , result) => {
-        console.log("bluetooth requestPermissionsFromUser, err: " + JSON.stringify(error) +
-          " ; result: " + JSON.stringify(result))
+    abilityMgr.requestPermissionsFromUser(context , this.permissions , (error , result) => {
+        dlog.info("bluetooth requestPermissionsFromUser, err: %{public}s ; result: %{public}s",
+          JSON.stringify(error), JSON.stringify(result));
     })
   }
 
@@ -109,13 +121,13 @@ struct HomePage {
       Stack({ alignContent : Alignment.TopEnd }) {
         TestCategory({ testItems : this.testItems })
         Image($r('app.media.Switch'))
-          .height(30)
-          .width(30)
+          .height($r('app.float.wh_value_30'))
+          .width($r('app.float.wh_value_30'))
           .margin({ top : $r("app.float.distance_5") , right : $r("app.float.distance_10") })
           .onClick(() => {
           })
       }
-      .height('100%')
+      .height($r('app.float.wh_value_100p'))
     }
   }
 }
