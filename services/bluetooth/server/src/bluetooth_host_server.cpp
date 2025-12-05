@@ -1988,5 +1988,10 @@ int32_t BluetoothHostServer::GetRemoteServices(const std::string &address)
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
+
+int32_t BluetoothHostServer::SetConnectionPriority(const std::string &address, int32_t priority)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS
