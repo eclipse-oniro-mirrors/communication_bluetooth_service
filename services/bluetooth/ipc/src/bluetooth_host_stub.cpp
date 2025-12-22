@@ -934,7 +934,12 @@ int32_t BluetoothHostStub::StartPairInner(MessageParcel &data, MessageParcel &re
         HILOGE("BluetoothHostStub::StartPair device failed");
         return BT_ERR_IPC_TRANS_FAILED;
     }
-    int32_t result = StartPair(transport, *device);
+    sptr<BluetoothOobData> oobData(data.ReadStrongParcelable<BluetoothOobData>());
+    if (!oobData) {
+        HILOGE("BluetoothHostStub::StartPair oobData failed");
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
+    int32_t result = StartPair(transport, *device, *oobData);
     bool ret = reply.WriteInt32(result);
     if (!ret) {
         HILOGE("BluetoothHostStub: reply writing failed in: %{public}s.", __func__);
