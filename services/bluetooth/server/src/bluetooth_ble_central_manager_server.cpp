@@ -318,9 +318,10 @@ BluetoothBleCentralManagerServer::~BluetoothBleCentralManagerServer()
 std::mutex BluetoothBleCentralManagerServer::proxyMutex_;
 std::set<int32_t> BluetoothBleCentralManagerServer::proxyPids_;
 
-bool BluetoothBleCentralManagerServer::FreezeByRss(std::set<int> pidSet, bool isProxy)
+bool BluetoothBleCentralManagerServer::FreezeByRss(std::set<int> pidSet, bool isProxy, uint8_t freezeType)
 {
-    HILOGD("bluetooth proxy, pid[%{public}s] isProxy: %{public}d", ToLogString(pidSet).c_str(), isProxy);
+    HILOGD("bluetooth proxy, pid[%{public}s] isProxy: %{public}d, type: %{public}d",
+        ToLogString(pidSet).c_str(), isProxy, freezeType);
     std::lock_guard<std::mutex> lock(proxyMutex_);
     for (int pid : pidSet) {
         if (isProxy) {
