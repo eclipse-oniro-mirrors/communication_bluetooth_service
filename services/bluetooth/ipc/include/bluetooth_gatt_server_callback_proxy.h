@@ -42,6 +42,9 @@ public:
         const BluetoothGattDevice &device, const BluetoothGattCharacteristic &characteristic, int result) override;
     void OnConnectionParameterChanged(
         const BluetoothGattDevice &device, int32_t interval, int32_t latency, int32_t timeout, int32_t status) override;
+    void OnBlePhyUpdate(
+        const BluetoothGattDevice &device, int32_t txPhy, int32_t rxPhy, int32_t status) override;
+    void OnBlePhyRead(int32_t txPhy, int32_t rxPhy, int32_t status) override;
 
 private:
     static inline BrokerDelegator<BluetoothGattServerCallbackProxy> delegator_;

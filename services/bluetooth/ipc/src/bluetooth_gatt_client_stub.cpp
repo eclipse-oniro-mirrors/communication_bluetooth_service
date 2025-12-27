@@ -62,6 +62,10 @@ BluetoothGattClientStub::BluetoothGattClientStub()
         &BluetoothGattClientStub::RequestNotificationInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothGattClientInterfaceCode::BT_GATT_CLIENT_GET_CONNECTED_STATE)] =
         &BluetoothGattClientStub::GetConnectedStateInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothGattClientInterfaceCode::BT_GATT_CLIENT_SET_PHY)] =
+        &BluetoothGattClientStub::SetPhyInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothGattClientInterfaceCode::BT_GATT_CLIENT_READ_PHY)] =
+        &BluetoothGattClientStub::ReadPhyInner;
 }
 
 BluetoothGattClientStub::~BluetoothGattClientStub()
@@ -338,6 +342,26 @@ ErrCode BluetoothGattClientStub::RequestNotificationInner(MessageParcel &data, M
 }
 
 ErrCode BluetoothGattClientStub::GetConnectedStateInner(MessageParcel &data, MessageParcel &reply)
+{
+    HILOGI("Not Support");
+    if (!reply.WriteInt32(BT_ERR_API_NOT_SUPPORT)) {
+        HILOGE("BluetoothA2dpSrcStub: WriteFrameInner reply writing failed in: %{public}s.", __func__);
+        return TRANSACTION_ERR;
+    }
+    return NO_ERROR;
+}
+
+ErrCode BluetoothGattClientStub::SetPhyInner(MessageParcel &data, MessageParcel &reply)
+{
+    HILOGI("Not Support");
+    if (!reply.WriteInt32(BT_ERR_API_NOT_SUPPORT)) {
+        HILOGE("BluetoothA2dpSrcStub: WriteFrameInner reply writing failed in: %{public}s.", __func__);
+        return TRANSACTION_ERR;
+    }
+    return NO_ERROR;
+}
+
+ErrCode BluetoothGattClientStub::ReadPhyInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("Not Support");
     if (!reply.WriteInt32(BT_ERR_API_NOT_SUPPORT)) {

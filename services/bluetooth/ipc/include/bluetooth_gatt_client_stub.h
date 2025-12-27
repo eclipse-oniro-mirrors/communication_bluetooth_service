@@ -50,6 +50,8 @@ private:
     ErrCode ReadRemoteRssiValueInner(MessageParcel &data, MessageParcel &reply);
     ErrCode RequestNotificationInner(MessageParcel &data, MessageParcel &reply);
     ErrCode GetConnectedStateInner(MessageParcel &data, MessageParcel &reply);
+    ErrCode SetPhyInner(MessageParcel &data, MessageParcel &reply);
+    ErrCode ReadPhyInner(MessageParcel &data, MessageParcel &reply);
 
     using BluetoothHostFunc = ErrCode (BluetoothGattClientStub::*)(MessageParcel &data, MessageParcel &reply);
     std::map<uint32_t, BluetoothHostFunc> memberFuncMap_;

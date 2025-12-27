@@ -299,5 +299,76 @@ void BluetoothGattServerCallbackProxy::OnConnectionParameterChanged(
     }
     return;
 }
+
+void BluetoothGattServerCallbackProxy::OnBlePhyUpdate(
+    const BluetoothGattDevice &device, int32_t txPhy, int32_t rxPhy, int32_t status)
+{
+    MessageParcel data;
+    if (!data.WriteInterfaceToken(BluetoothGattServerCallbackProxy::GetDescriptor())) {
+        HILOGE("BluetoothGattServerCallbackProxy::OnBlePhyUpdate WriteInterfaceToken error");
+        return;
+    }
+    if (!data.WriteParcelable(&device)) {
+        HILOGE("BluetoothGattServerCallbackProxy::write device error");
+        return;
+    }
+    if (!data.WriteInt32(txPhy)) {
+        HILOGE("BluetoothGattServerCallbackProxy::write txPhy error");
+        return;
+    }
+    if (!data.WriteInt32(rxPhy)) {
+        HILOGE("BluetoothGattServerCallbackProxy::write rxPhy error");
+        return;
+    }
+    if (!data.WriteInt32(status)) {
+        HILOGE("BluetoothGattServerCallbackProxy::write status error");
+        return;
+    }
+    MessageParcel reply;
+    MessageOption option {
+        MessageOption::TF_ASYNC
+    };
+    int error = Remote()->SendRequest(
+        BluetoothGattServerCallbackInterfaceCode::GATT_SERVER_CALLBACK_BLE_PHY_UPDATE,
+        data, reply, option);
+    if (error != NO_ERROR) {
+        HILOGE("BluetoothGattServerCallbackProxy::OnBlePhyUpdate done fail, error: %d", error);
+        return;
+    }
+    return;
+}
+
+void BluetoothGattServerCallbackProxy::OnBlePhyRead(int32_t txPhy, int32_t rxPhy, int32_t status)
+{
+    MessageParcel data;
+    if (!data.WriteInterfaceToken(BluetoothGattServerCallbackProxy::GetDescriptor())) {
+        HILOGE("BluetoothGattServerCallbackProxy::OnBlePhyRead WriteInterfaceToken error");
+        return;
+    }
+    if (!data.WriteInt32(txPhy)) {
+        HILOGE("BluetoothGattServerCallbackProxy::write txPhy error");
+        return;
+    }
+    if (!data.WriteInt32(rxPhy)) {
+        HILOGE("BluetoothGattServerCallbackProxy::write rxPhy error");
+        return;
+    }
+    if (!data.WriteInt32(status)) {
+        HILOGE("BluetoothGattServerCallbackProxy::write status error");
+        return;
+    }
+    MessageParcel reply;
+    MessageOption option {
+        MessageOption::TF_ASYNC
+    };
+    int error = Remote()->SendRequest(
+        BluetoothGattServerCallbackInterfaceCode::GATT_SERVER_CALLBACK_BLE_PHY_READ,
+        data, reply, option);
+    if (error != NO_ERROR) {
+        HILOGE("BluetoothGattServerCallbackProxy::OnBlePhyRead done fail, error: %d", error);
+        return;
+    }
+    return;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS
