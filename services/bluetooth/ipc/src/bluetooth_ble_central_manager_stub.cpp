@@ -200,9 +200,10 @@ ErrCode BluetoothBleCentralManagerStub::FreezeByRssInner(MessageParcel &data, Me
     std::vector<int> pidVec {};
     CHECK_AND_RETURN_LOG_RET(data.ReadInt32Vector(&pidVec), ERR_INVALID_VALUE, "ipc failed");
     bool isProxy = data.ReadBool();
+    uint8_t freezeType = data.ReadUint8();
 
     std::set<int> pidSet(pidVec.begin(), pidVec.end());
-    bool ret = FreezeByRss(pidSet, isProxy);
+    bool ret = FreezeByRss(pidSet, isProxy, freezeType);
     if (!reply.WriteBool(ret)) {
         return ERR_INVALID_VALUE;
     }
