@@ -39,6 +39,8 @@ public:
     void OnConnectionParameterChanged(int32_t interval, int32_t latency, int32_t timeout, int32_t status) override;
     void OnServicesChanged() override;
     void OnReadRemoteRssiValue(const bluetooth::RawAddress &addr, int rssi, int status) override;
+    void OnBlePhyUpdate(int32_t txPhy, int32_t rxPhy, int32_t status) override;
+    void OnBlePhyRead(int32_t txPhy, int32_t rxPhy, int32_t status) override;
 
 private:
     static inline BrokerDelegator<BluetoothGattClientCallbackProxy> delegator_;

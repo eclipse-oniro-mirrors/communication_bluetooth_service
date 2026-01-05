@@ -549,5 +549,15 @@ int BluetoothGattClientServer::GetConnectedState(const std::string &deviceId, in
     HILOGI("NOT SUPPORT NOW");
     return NO_ERROR;
 }
+int BluetoothGattClientServer::SetPhy(int32_t appId, int32_t txPhy, int32_t rxPhy, int32_t phyOptions)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return NO_ERROR;
+}
+int BluetoothGattClientServer::ReadPhy(int32_t appId)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return NO_ERROR;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS

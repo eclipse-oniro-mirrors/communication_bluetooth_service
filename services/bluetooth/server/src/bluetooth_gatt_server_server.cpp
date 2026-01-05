@@ -526,6 +526,17 @@ int BluetoothGattServerServer::GetConnectedState(const std::string &deviceId, in
     HILOGI("NOT SUPPORT NOW");
     return NO_ERROR;
 }
+int BluetoothGattServerServer::SetPhy(int32_t appId,
+    const std::string &deviceId, int32_t txPhy, int32_t rxPhy, int32_t phyOptions)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return NO_ERROR;
+}
+int BluetoothGattServerServer::ReadPhy(int32_t appId, const std::string &deviceId)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return NO_ERROR;
+}
 BluetoothGattServerServer::BluetoothGattServerServer() : pimpl(new impl())
 {
     HILOGI("Bluetooth Gatt Server Server Created!");
