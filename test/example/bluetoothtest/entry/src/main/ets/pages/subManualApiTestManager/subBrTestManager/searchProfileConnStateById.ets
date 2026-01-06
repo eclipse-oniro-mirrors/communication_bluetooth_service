@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,30 +31,30 @@ struct profileConnState2 {
     Row() {
       Column() {
         Row() {
-          Text("目标设备MAC：").fontSize($r('app.float.wh_value_20'))
+          Text("目标设备MAC：").fontSize('20vp')
           TextInput({ text : this.deviceId , placeholder : "请输入mac地址" })
-            .fontSize($r('app.float.wh_value_20'))
+            .fontSize('20vp')
             .onChange((str) => {
               this.deviceId = str;
               AppStorage.setOrCreate('inputDeviceId' , str)
             })
-            .width($r('app.float.wh_value_70p'))
+            .width('70%')
         }
         .backgroundColor($r("app.color.moon"))
-        .margin({ top : $r('app.float.wh_value_20') , left : $r('app.float.wh_value_20') , right : $r('app.float.wh_value_20') })
+        .margin({ top : '20vp' , left : '20vp' , right : '20vp' })
         .alignItems(VerticalAlign.Center)
 
         List() {
           ListItem() {
             TitleComponent({
               title : "A2DP_SOURCE" ,
-              fontSize : $r('app.float.wh_value_15') ,
+              fontSize : '15vp' ,
               bgColor : this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : $r('app.float.wh_value_20') })
-          .height($r('app.float.wh_value_80'))
-          .borderRadius($r('app.float.wh_value_10'))
+          .padding({ top : '20vp' })
+          .height('80vp')
+          .borderRadius('10vp')
           .onClick(() => {
             this.currentClick = 0;
             this.profileId = 1;
@@ -83,13 +83,13 @@ struct profileConnState2 {
           ListItem() {
             TitleComponent({
               title : "HANDS_FREE_AUDIO_GATEWAY" ,
-              fontSize : $r('app.float.wh_value_15') ,
+              fontSize : '15vp' ,
               bgColor : this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : $r('app.float.wh_value_20') })
-          .height($r('app.float.wh_value_80'))
-          .borderRadius($r('app.float.wh_value_10'))
+          .padding({ top : '20vp' })
+          .height('80vp')
+          .borderRadius('10vp')
           .onClick(() => {
             this.currentClick = 1;
             this.profileId = 4;
@@ -118,13 +118,13 @@ struct profileConnState2 {
           ListItem() {
             TitleComponent({
               title : "HID_HOST" ,
-              fontSize : $r('app.float.wh_value_15') ,
+              fontSize : '15vp' ,
               bgColor : this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : $r('app.float.wh_value_20') })
-          .height($r('app.float.wh_value_80'))
-          .borderRadius($r('app.float.wh_value_10'))
+          .padding({ top : '20vp' })
+          .height('80vp')
+          .borderRadius('10vp')
           .onClick(() => {
             this.currentClick = 2;
             this.profileId = 6;
@@ -150,16 +150,16 @@ struct profileConnState2 {
             this.message = "当前HID的状态是：" + this.stateProfile;
           })
         }
-        .height($r('app.float.wh_value_300'))
-        .margin($r('app.float.wh_value_20'));
+        .height('300vp')
+        .margin('20vp');
 
         Text("接口调用结果：" + this.message)
           .textAlign(TextAlign.Start)
           .fontSize('17fp')
           .backgroundColor($r("app.color.white"))
-      }.width($r('app.float.wh_value_100p'))
+      }.width('100%')
     }
-    .height($r('app.float.wh_value_100p'))
+    .height('100%')
     .alignItems(VerticalAlign.Top)
     .backgroundColor($r("app.color.lead"))
   }
