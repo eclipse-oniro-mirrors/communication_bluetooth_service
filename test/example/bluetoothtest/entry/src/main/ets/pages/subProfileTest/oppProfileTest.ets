@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,29 +76,29 @@ struct OppProfileTest {
           PageTitle({ testItem : this.testItem })
         }
 
-        Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
+        Stack().height('0.5vp').backgroundColor($r('app.color.black'));
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
-          .margin({ top : $r('app.float.wh_value_10') })
-          .fontSize($r('app.float.wh_value_20'))
+          .margin({ top : '10vp' })
+          .fontSize('20vp')
           .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') : $r('app.color.color_FF0000_red'))
           .border({ width : 0.5 })
-          .padding($r('app.float.wh_value_5'))
+          .padding('5vp')
           .fontStyle(FontStyle.Italic);
         Column() {
           Column() {
             Scroll() {
               Column() {
                 Text("已配对设备列表：(点击选择设备)")
-                  .fontSize($r('app.float.wh_value_20'))
+                  .fontSize('20vp')
                   .fontWeight(FontWeight.Bold)
-                  .margin({ top : $r('app.float.wh_value_5') })
+                  .margin({ top : '5vp' })
                 Scroll() {
-                  List({ space : $r('app.float.wh_value_5') }) {
+                  List({ space : '5vp' }) {
                     ForEach(this.pairDevices , (item: PairDevices) => {
                       ListItem() {
                         Text(item.name)
-                          .fontSize($r('app.float.wh_value_25'))
-                          .width($r('app.float.wh_value_80p'))
+                          .fontSize('25vp')
+                          .width('80%')
                           .margin({ left : '10%' })
                           .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") : $r("app.color.white"))
                           .border({
@@ -111,67 +111,67 @@ struct OppProfileTest {
                     })
                   }
                 }
-                .height($r('app.float.wh_value_50p'))
-                .width($r('app.float.wh_value_80p'))
+                .height('50%')
+                .width('80%')
 
                 Text("已选择的设备的蓝牙mac地址：")
-                  .fontSize($r('app.float.wh_value_18'))
+                  .fontSize('18vp')
                   .fontWeight(FontWeight.Bold)
-                  .margin({ top : $r('app.float.wh_value_3') })
+                  .margin({ top : '3vp' })
                 Text(this.serverMac)
-                  .fontSize($r('app.float.wh_value_25'))
-                  .width($r('app.float.wh_value_70p'))
-                  .borderRadius($r('app.float.wh_value_5'))
+                  .fontSize('25vp')
+                  .width('70%')
+                  .borderRadius('5vp')
                   .backgroundColor($r("app.color.moon"))
               }
-              .height($r('app.float.wh_value_15p'))
-              .width($r('app.float.wh_value_100p'))
+              .height('15%')
+              .width('100%')
             }
-            .scrollBarWidth($r('app.float.wh_value_10'))
+            .scrollBarWidth('10vp')
             .scrollBar(BarState.Auto)
           }
 
-          Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
+          Stack().height('1vp').backgroundColor($r('app.color.black'));
 
           Scroll() {
             Column() {
               Text("接口调用结果： " + this.oppMessage)
-                .fontSize($r('app.float.wh_value_17'))
+                .fontSize('17vp')
                 .textAlign(TextAlign.Start)
-                .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
-                .width($r('app.float.wh_value_100p'))
+                .margin({ top : '5vp' , left : '10vp' })
+                .width('100%')
               Text("connectionStateChange： " + this.connectionStateInfo)
-                .fontSize($r('app.float.wh_value_17'))
-                .margin({ top : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
+                .fontSize('17vp')
+                .margin({ top : '10vp' , left : '10vp' })
                 .textAlign(TextAlign.Start)
-                .width($r('app.float.wh_value_90p'))
+                .width('90%')
             }
-            .height($r('app.float.wh_value_80'))
+            .height('80vp')
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
-            .width($r('app.float.wh_value_88p'))
+            .width('88%')
           }
-          .scrollBarWidth($r('app.float.wh_value_10'))
+          .scrollBarWidth('10vp')
           .scrollBar(BarState.Auto)
 
           Text("请点击需要测试的方法")
-            .margin({ top : $r('app.float.wh_value_10') })
-            .padding($r('app.float.wh_value_5'))
-            .fontSize($r('app.float.wh_value_17'))
+            .margin({ top : '10vp' })
+            .padding('5vp')
+            .fontSize('17vp')
             .fontColor($r('app.color.color_4444444_grey'));
           Column() {
             ContentTable({ apiItems : initOppProfileApiData() })
           }
-          .height($r('app.float.wh_value_66p'))
+          .height('66%')
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width($r('app.float.wh_value_100p'))
-        .height($r('app.float.wh_value_100p'))
+        .width('100%')
+        .height('100%')
         .visibility(this.hasProfile ? Visibility.Visible : Visibility.Hidden);
       }
-      .width($r('app.float.wh_value_100p'))
+      .width('100%')
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-    .height($r('app.float.wh_value_100p'))
+    .height('100%')
     .alignItems(VerticalAlign.Top)
   }
 
