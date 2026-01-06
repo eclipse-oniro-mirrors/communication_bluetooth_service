@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,97 +61,97 @@ struct GattClientVelocityBenchmarkTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
+      Stack().height('1vp').backgroundColor($r('app.color.black'));
 
       Column() {
         Scroll() {
           Column() {
             Text("性能测试:")
-              .fontSize($r('app.float.wh_value_17'))
-              .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_20') })
+              .fontSize('17vp')
+              .margin({ top : '10vp' , bottom : '10vp' , left : '20vp' })
               .textAlign(TextAlign.Start)
-              .width($r('app.float.wh_value_100p'))
+              .width('100%')
             Text("Gatt的性能测试是测试Gatt两端收发notify信息变化的速率性能")
-              .fontSize($r('app.float.wh_value_17'))
-              .margin({ left : $r('app.float.wh_value_15') })
+              .fontSize('17vp')
+              .margin({ left : '15vp' })
               .backgroundColor($r("app.color.spring"))
             Row() {
-              Text("gatt_Cycle_index:").fontSize($r('app.float.wh_value_20')).width($r('app.float.wh_value_180')).padding({ left : $r('app.float.wh_value_15') })
+              Text("gatt_Cycle_index:").fontSize('20vp').width('180vp').padding({ left : '15vp' })
               Column() {
                 Select([
                   { value : "100" },
                   { value : "1000" },
                   { value : "10000" }
                 ])
-                  .borderRadius($r('app.float.wh_value_10'))
+                  .borderRadius('10vp')
                   .backgroundColor($r("app.color.white"))
                   .selected(0)
                   .value("100")
                   .font({ size : 17 })
-                  .margin({ right : $r('app.float.wh_value_80') })
+                  .margin({ right : '80vp' })
                   .selectedOptionFont({ size : 17 })
-                  .optionFont({ size : $r('app.float.wh_value_15') })
-                  .width($r('app.float.wh_value_50p'))
+                  .optionFont({ size : '15vp' })
+                  .width('50%')
                   .onSelect((index: number) => {
                     console.log("Select:" + index)
                     AppStorage.setOrCreate("gatt_Cycle_index" , index);
                   })
               }
-              .width($r('app.float.wh_value_90p'))
+              .width('90%')
             }
-            .padding($r('app.float.wh_value_3'))
+            .padding('3vp')
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
           }
-          .width($r('app.float.wh_value_100p'))
-          .height($r('app.float.wh_value_130'))
+          .width('100%')
+          .height('1300vp')
         }
-        .scrollBarWidth($r('app.float.wh_value_10'))
+        .scrollBarWidth('10vp')
         .scrollBar(BarState.Auto)
 
-        Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'))
+        Stack().height('1vp').backgroundColor($r('app.color.black'))
 
         Scroll() {
           Column() {
             Text("日志:")
-              .fontSize($r('app.float.wh_value_17'))
-              .margin({ top : $r('app.float.wh_value_8') , bottom : $r('app.float.wh_value_8') , left : $r('app.float.wh_value_10') })
+              .fontSize('17vp')
+              .margin({ top : '8vp' , bottom : '8vp' , left : '10vp' })
               .textAlign(TextAlign.Start)
-              .width($r('app.float.wh_value_100p'))
+              .width('100%')
             List() {
               ListItem() {
                 Text(this.gattClientBenchmarkTestMessage)
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') , right : $r('app.float.wh_value_10') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '10vp' , right : '10vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
               }
             }
-            .height($r('app.float.wh_value_90p'))
-            .width($r('app.float.wh_value_90p'))
+            .height('90%')
+            .width('90%')
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
-          .width($r('app.float.wh_value_100p'))
-          .height($r('app.float.wh_value_330'))
+          .width('100%')
+          .height('330vp')
         }
-        .scrollBarWidth($r('app.float.wh_value_10'))
+        .scrollBarWidth('10vp')
         .scrollBar(BarState.On)
       }
-      .width($r('app.float.wh_value_100p'))
+      .width('100%')
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text("速率性能测试").fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
+              Text("速率性能测试").fontSize('24vp').fontColor(0xffffff).margin({ left : '5vp' , right : '5vp' })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius($r('app.float.wh_value_8'))
+          .borderRadius('8vp')
           .backgroundColor($r("app.color.blue"))
-          .width($r('app.float.wh_value_100'))
-          .height($r('app.float.wh_value_66'))
-          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
+          .width('100vp')
+          .height('66vp')
+          .margin({ top : '15vp' , left : '5vp' , right : '5vp' })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let gattClientBenchmarkTestMessage = ""
@@ -198,14 +198,14 @@ struct GattClientVelocityBenchmarkTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text("结束测试").fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
+              Text("结束测试").fontSize('24vp').fontColor(0xffffff).margin({ left : '5vp' , right : '5vp' })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius($r('app.float.wh_value_8'))
+          .borderRadius('8vp')
           .backgroundColor($r("app.color.blue"))
-          .width($r('app.float.wh_value_100'))
-          .height($r('app.float.wh_value_66'))
-          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
+          .width('100vp')
+          .height('66vp')
+          .margin({ top : '15vp' , left : '5vp' , right : '5vp' })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let gattClientBenchmarkTestMessage = ""
@@ -222,14 +222,14 @@ struct GattClientVelocityBenchmarkTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Image($r("app.media.ic_public_delete_filled")).width($r('app.float.wh_value_30')).height($r('app.float.wh_value_40')).margin({ left : $r('app.float.wh_value_5') })
+              Image($r("app.media.ic_public_delete_filled")).width('30vp').height('40vp').margin({ left : '5vp' })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius($r('app.float.wh_value_8'))
+          .borderRadius('8vp')
           .backgroundColor($r("app.color.moon"))
-          .width($r('app.float.wh_value_50'))
-          .height($r('app.float.wh_value_66'))
-          .margin({ top : $r('app.float.wh_value_15') , right : $r('app.float.wh_value_40') })
+          .width('50vp')
+          .height('66vp')
+          .margin({ top : '15vp' , right : '40vp' })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let gattClientBenchmarkTestMessage = ""
@@ -237,11 +237,11 @@ struct GattClientVelocityBenchmarkTest {
           })
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width($r('app.float.wh_value_100p'))
+        .width('100%')
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-      .width($r('app.float.wh_value_100p'))
-      .height($r('app.float.wh_value_100p'));
+      .width('100%')
+      .height('100%');
     }
   }
 }
