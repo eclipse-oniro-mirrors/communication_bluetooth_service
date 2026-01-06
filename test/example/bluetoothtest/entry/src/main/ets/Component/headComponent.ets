@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,10 +31,10 @@ export default struct HeadComponent {
     Row() {
       Stack({ alignContent : Alignment.Center }) {
         Image($r('app.media.ic_back'))
-          .width($r('app.float.wh_value_30'))
-          .height($r('app.float.wh_value_30'))
+          .width('30vp')
+          .height('30vp')
       }
-      .margin({ left : $r('app.float.wh_value_4') , right : $r('app.float.wh_value_16') })
+      .margin({ left : '4vp' , right : '16vp' })
       .backgroundColor(this.isTouch ? $r('app.color.color_E3E3E3_grey') : $r('app.color.color_00000000_transparent'))
       .visibility(this.icBackIsVisibility ? Visibility.Visible : Visibility.None)
       .onClick(() => {
@@ -50,19 +50,19 @@ export default struct HeadComponent {
       });
 
       Text(this.headName)
-        .fontSize($r('app.float.font_24'))
-        .lineHeight($r('app.float.wh_value_33'))
+        .fontSize('24fp')
+        .lineHeight('33vp')
         .fontFamily('HarmonyHeiTi-Bold')
         .fontWeight(FontWeight.Bold)
         .fontColor($r('app.color.font_color_182431'))
         .maxLines(ConfigData.MAX_LINES_1)
         .textOverflow({ overflow : TextOverflow.Ellipsis })
         .textAlign(TextAlign.Start)
-        .margin({ top : $r('app.float.wh_value_13') , bottom : $r('app.float.wh_value_15') });
+        .margin({ top : '13vp' , bottom : '15vp' });
     }
     .width(ConfigData.WH_100_100)
-    .padding({ left : $r('app.float.wh_value_8') })
-    .height($r('app.float.wh_value_56'))
+    .padding({ left : '8vp' })
+    .height('56vp')
     .alignItems(VerticalAlign.Center)
     .align(Alignment.Start);
   }

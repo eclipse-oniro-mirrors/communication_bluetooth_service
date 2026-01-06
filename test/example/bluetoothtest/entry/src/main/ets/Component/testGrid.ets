@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,11 +41,11 @@ export struct TestGrid {
       }
       .rowsTemplate(this.gridRowTemplate)
       .columnsTemplate('1fr 1fr')
-      .columnsGap($r('app.float.wh_value_8'))
-      .rowsGap($r('app.float.wh_value_8'))
+      .columnsGap('8vp')
+      .rowsGap('8vp')
       .height(this.heightValue)
     }
     .scrollBar(BarState.Off)
-    .padding({ left : $r('app.float.wh_value_16') , right : $r('app.float.wh_value_16') })
+    .padding({ left : '16vp' , right : '16vp' })
   }
 }

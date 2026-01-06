@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,25 +26,25 @@ export struct TestGridItem {
       Row() {
         Image(this.testItem.image)
           .objectFit(ImageFit.Contain)
-          .height($r('app.float.wh_value_152'))
-          .width($r('app.float.wh_value_100p'))
+          .height('152vp')
+          .width('100%')
       }.backgroundColor($r('app.color.color_FFF1F3F5_bg'))
 
       Flex({ justifyContent : FlexAlign.Start , alignItems : ItemAlign.Center }) {
         Text(this.testItem.name)
-          .fontSize($r('app.float.wh_value_14'))
-          .flexGrow($r('app.float.wh_value_1'))
-          .padding({ left : $r('app.float.wh_value_8') })
+          .fontSize('14vp')
+          .flexGrow(1)
+          .padding({ left : '8vp' })
         Text(this.testItem.detail)
-          .fontSize($r('app.float.wh_value_14'))
-          .margin({ right : $r('app.float.wh_value_6') })
+          .fontSize('14vp')
+          .margin({ right : '6vp' })
       }
-      .height($r('app.float.wh_value_32'))
-      .width($r('app.float.wh_value_100p'))
+      .height('32vp')
+      .width('100%')
       .backgroundColor($r('app.color.color_FFE5E5E5_bg'))
     }
-    .height($r('app.float.wh_value_184'))
-    .width($r('app.float.wh_value_100p'))
+    .height('184vp')
+    .width('100%')
     .onClick(() => {
       router.pushUrl({ url : 'MainAbility/pagesTestDetail' , params : { testId : this.testItem } })
     })

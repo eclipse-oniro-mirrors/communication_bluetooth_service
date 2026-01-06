@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,39 +31,39 @@ export struct ScenarioContentTable {
         Flex({ direction : FlexDirection.Column , alignItems : ItemAlign.Start }) {
           Row() {
             Text(scenarioItem.detail)
-              .fontSize($r('app.float.wh_value_17'))
-              .margin({ top : $r('app.float.wh_value_3') , bottom : $r('app.float.wh_value_3') , left : $r('app.float.wh_value_10') })
+              .fontSize('17vp')
+              .margin({ top : '3vp' , bottom : '3vp' , left : '10vp' })
               .textAlign(TextAlign.Start)
-              .height($r('app.float.wh_value_40'))
-              .width($r('app.float.wh_value_30'))
+              .height('40vp')
+              .width('30vp')
 
             Text(scenarioItem.method)
-              .fontSize($r('app.float.wh_value_17'))
-              .margin({ top : $r('app.float.wh_value_3') , bottom : $r('app.float.wh_value_3') , left : $r('app.float.wh_value_10') })
+              .fontSize('17vp')
+              .margin({ top : '3vp' , bottom : '3vp' , left : '10vp' })
               .textAlign(TextAlign.Start)
-              .height($r('app.float.wh_value_40'))
-              .width($r('app.float.wh_value_240'))
+              .height('40vp')
+              .width('240vp')
           }
-          .height($r('app.float.wh_value_30'))
-          .width($r('app.float.wh_value_70p'))
+          .height('30vp')
+          .width('70%')
         }
-        .height($r('app.float.wh_value_30'))
-        .layoutWeight($r('app.float.wh_value_6'))
+        .height('30vp')
+        .layoutWeight(6)
 
         Flex({ alignItems : ItemAlign.Center }) {
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : scenarioItem.result)
-            .margin({ left : $r('app.float.wh_value_10') })
-            .fontSize($r('app.float.wh_value_17'))
-            .flexGrow($r('app.float.wh_value_1'))
+            .margin({ left : '10vp' })
+            .fontSize('17vp')
+            .flexGrow(1)
         }
-        .layoutWeight($r('app.float.wh_value_3'))
-        .padding({ left : $r('app.float.wh_value_10') })
-        .margin({ left : $r('app.float.wh_value_10') })
+        .layoutWeight(3)
+        .padding({ left : '10vp' })
+        .margin({ left : '10vp' })
       }
     }
-    .height($r('app.float.wh_value_40'))
-    .borderRadius($r('app.float.wh_value_10'))
-    .margin({ top : $r('app.float.wh_value_3') , bottom : $r('app.float.wh_value_3') })
+    .height('40vp')
+    .borderRadius('10vp')
+    .margin({ top : '3vp' , bottom : '3vp' })
     .backgroundColor($r("app.color.white"))
   }
 
@@ -89,9 +89,9 @@ export struct ScenarioContentTable {
           })
         }
       }
-      .scrollBarWidth($r('app.float.wh_value_20'))
+      .scrollBarWidth('20vp')
     }
-    .height($r('app.float.wh_value_80p'))
-    .padding({ top : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
+    .height('80%')
+    .padding({ top : '5vp' , right : '10vp' , left : '10vp' })
   }
 }

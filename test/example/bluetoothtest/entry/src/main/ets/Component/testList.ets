@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ export struct TestList {
         }
         .height(ConfigData.WH_100_100)
         .backgroundColor($r("app.color.lead"))
-      }.scrollBarWidth($r('app.float.wh_value_20'))
+      }.scrollBarWidth('20vp')
     }
   }
 }

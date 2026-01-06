@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,16 +62,16 @@ export struct MainPageTitle {
   CustomBtn(text: Resource , isFullScreen: boolean) {
     Button() {
       Image($r('app.media.screenShot'))
-        .height($r('app.float.wh_value_50'))
-        .width($r('app.float.wh_value_50'))
+        .height('50vp')
+        .width('50vp')
     }
     .key(isFullScreen + 'FullScreenShot')
     .type(ButtonType.Normal)
     .backgroundColor($r("app.color.blue"))
-    .height($r('app.float.wh_value_100p'))
-    .width($r('app.float.wh_value_100p'))
+    .height('100%')
+    .width('100%')
     //    .size({ width: 55, height: 55 })
-    .margin({ left : $r('app.float.wh_value_6') , right : $r('app.float.wh_value_6') , top : $r('app.float.wh_value_3') })
+    .margin({ left : '6vp' , right : '6vp' , top : '3vp' })
     .onClick(() => {
       console.log('[Screenshot] onClick,screenshot')
       this.getScreen(isFullScreen)
@@ -81,26 +81,26 @@ export struct MainPageTitle {
   build() {
     Flex({ alignItems : ItemAlign.Start }) {
       Text('蓝牙调试助手')
-        .fontSize($r('app.float.wh_value_26'))
-        .margin({ left : $r('app.float.wh_value_15') })
-        .padding({ top : $r('app.float.wh_value_28') })
+        .fontSize('26vp')
+        .margin({ left : '15vp' })
+        .padding({ top : '28vp' })
 
       Scroll() {
         Column() {
           this.CustomBtn($r('app.string.btn_fullscreen') , true)
         }
-        .width($r('app.float.wh_value_100p'))
-        .height($r('app.float.wh_value_100p'))
+        .width('100%')
+        .height('100%')
         .borderWidth(this.myborderWidth)
         .borderRadius(this.myborderRadius)
         .borderColor(Color.Green)
         .gesture(
           GestureGroup(GestureMode.Parallel ,
-            TapGesture({ count : $r('app.float.wh_value_2') , fingers : $r('app.float.wh_value_1') })
+            TapGesture({ count : 2 , fingers : 1 })
               .onAction(() => {
                 this.myborderWidth += 1
               }) ,
-            LongPressGesture({ fingers : $r('app.float.wh_value_1') , repeat : true , duration : 1000 })
+            LongPressGesture({ fingers : 1 , repeat : true , duration : 1000 })
               .onAction((event: GestureEvent) => {
                 this.colOpacity -= 0.1
                 if ( event.repeat ) {
@@ -111,7 +111,7 @@ export struct MainPageTitle {
                 this.colOpacity = 1;
                 this.count = 0;
               }) ,
-            PanGesture({ fingers : $r('app.float.wh_value_1') , direction : PanDirection.All , distance : 5.0 })
+            PanGesture({ fingers : 1 , direction : PanDirection.All , distance : 5.0 })
               .onActionStart(() => {
                 console.log('Pan start')
               })
@@ -122,7 +122,7 @@ export struct MainPageTitle {
               .onActionEnd(() => {
                 console.log('Pan end')
               }) ,
-            PinchGesture({ fingers : $r('app.float.wh_value_2') , distance : 4 })
+            PinchGesture({ fingers : 2 , distance : 4 })
               .onActionStart(() => {
                 console.log('PinchGesture start')
               })
@@ -134,7 +134,7 @@ export struct MainPageTitle {
                 console.log('PinchGesture end')
                 this.getScreen(true);
               }) ,
-            RotationGesture({ fingers : $r('app.float.wh_value_2') , angle : $r('app.float.wh_value_2') })
+            RotationGesture({ fingers : 2 , angle : 2 })
               .onActionStart(() => {
                 console.log('RotationGesture start')
               })
@@ -150,10 +150,10 @@ export struct MainPageTitle {
             })
         )
       }
-      .layoutWeight($r('app.float.wh_value_1'))
+      .layoutWeight(1)
     }
-    .height($r('app.float.wh_value_80'))
+    .height('80vp')
     .backgroundColor($r("app.color.blue"))
-    .padding({ left : $r('app.float.wh_value_20') })
+    .padding({ left : '20vp' })
   }
 }

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,16 +43,16 @@ export struct GetProfileConnSateDialog {
   build() {
     Column() {
       Text(this.hitText)
-        .fontSize($r('app.float.wh_value_20'))
-        .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
+        .fontSize('20vp')
+        .margin({ top : '10vp' , bottom : '10vp' })
       Select(this.getProfileList)
         .selected(this.currentClick)
         .value(this.getProfileList[ this.currentClick ].value)
-        .font({ size : $r('app.float.wh_value_20') })
-        .selectedOptionFont({ size : $r('app.float.wh_value_20') })
+        .font({ size : '20vp' })
+        .selectedOptionFont({ size : '20vp' })
         .optionFont({ size : 17 })
-        .height($r('app.float.wh_value_80'))
-        .width($r('app.float.wh_value_90p'))
+        .height('80vp')
+        .width('90%')
         .onSelect((index: number) => {
           console.log("Select:" + index)
           this.currentClick = index
@@ -85,7 +85,7 @@ export struct GetProfileConnSateDialog {
           })
           .backgroundColor(0xffffff).fontColor(Color.Red)
       }
-      .margin({ bottom : $r('app.float.wh_value_10') })
+      .margin({ bottom : '10vp' })
     }
   }
 }
@@ -115,16 +115,16 @@ export struct SetScanModeDialog {
   build() {
     Column() {
       Text(this.hitText)
-        .fontSize($r('app.float.wh_value_20'))
-        .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
+        .fontSize('20vp')
+        .margin({ top : '10vp' , bottom : '10vp' })
       Select(this.scanModeList)
         .selected(this.currentClick)
         .value(this.scanModeList[ this.currentClick ].value)
-        .font({ size : $r('app.float.wh_value_12') })
-        .selectedOptionFont({ size : $r('app.float.wh_value_12') })
-        .optionFont({ size : $r('app.float.wh_value_12') })
-        .height($r('app.float.wh_value_60'))
-        .width($r('app.float.wh_value_90p'))
+        .font({ size : '12vp' })
+        .selectedOptionFont({ size : '12vp' })
+        .optionFont({ size : '12vp' })
+        .height('60vp')
+        .width('90%')
         .onSelect((index: number) => {
           console.log("Select:" + index)
           this.currentClick = index
@@ -133,7 +133,7 @@ export struct SetScanModeDialog {
         placeholder : '请输入延迟时间' ,
         text : this.duration.toString() ,
       }).type(InputType.Number)
-        .height($r('app.float.wh_value_60')).width($r('app.float.wh_value_90p'))
+        .height('60vp').width('90%')
         .onChange((value: string) => {
           if ( value == "" ) {
             this.duration = 0
@@ -171,7 +171,7 @@ export struct SetScanModeDialog {
           .backgroundColor(0xffffff)
           .fontColor(Color.Red)
       }
-      .margin({ bottom : $r('app.float.wh_value_10') })
+      .margin({ bottom : '10vp' })
     }
   }
 }
@@ -191,11 +191,11 @@ export struct InputDialog {
   build() {
     Column() {
       Text(this.hitText)
-        .fontSize($r('app.float.wh_value_20'))
-        .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
+        .fontSize('20vp')
+        .margin({ top : '10vp' , bottom : '10vp' })
       TextInput({ placeholder : '' , text : this.textValue })
-        .height($r('app.float.wh_value_60'))
-        .width($r('app.float.wh_value_90p'))
+        .height('60vp')
+        .width('90%')
         .onChange((value: string) => {
           this.textValue = value
         })
@@ -226,7 +226,7 @@ export struct InputDialog {
           .backgroundColor(0xffffff)
           .fontColor(Color.Red)
       }
-      .margin({ bottom : $r('app.float.wh_value_10') })
+      .margin({ bottom : '10vp' })
     }
   }
 }
@@ -252,16 +252,16 @@ export struct SetConnectionStrategyDialog {
   build() {
     Column() {
       Text(this.hitText)
-        .fontSize($r('app.float.wh_value_20'))
-        .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
+        .fontSize('20vp')
+        .margin({ top : '10vp' , bottom : '10vp' })
       Select(this.connectionStrategyList)
         .selected(this.currentClick)
         .value(this.connectionStrategyList[ this.currentClick ].value)
-        .font({ size : $r('app.float.wh_value_18') })
-        .selectedOptionFont({ size : $r('app.float.wh_value_18') })
+        .font({ size : '18vp' })
+        .selectedOptionFont({ size : '18vp' })
         .optionFont({ size : 17 })
-        .height($r('app.float.wh_value_80'))
-        .width($r('app.float.wh_value_90p'))
+        .height('80vp')
+        .width('90%')
         .onSelect((index: number) => {
           console.log("Select:" + index)
           this.currentClick = index
@@ -294,7 +294,7 @@ export struct SetConnectionStrategyDialog {
           })
           .backgroundColor(0xffffff).fontColor(Color.Red)
       }
-      .margin({ bottom : $r('app.float.wh_value_10') })
+      .margin({ bottom : '10vp' })
     }
   }
 }
@@ -382,41 +382,41 @@ export struct ContentTable {
           Image($r('app.media.bleSmall'))
             .objectFit(ImageFit.Contain)
             .autoResize(false)
-            .height($r('app.float.wh_value_50'))
-            .width($r('app.float.wh_value_40'))
-            .padding({ top : $r('app.float.wh_value_15') })
+            .height('50vp')
+            .width('40vp')
+            .padding({ top : '15vp' })
         }
-        .layoutWeight($r('app.float.wh_value_1'))
-        .padding({ left : $r('app.float.wh_value_10') })
+        .layoutWeight(1)
+        .padding({ left : '10vp' })
 
         Flex({ direction : FlexDirection.Column , alignItems : ItemAlign.Start }) {
           Text(apiItem.name)
-            .fontSize($r('app.float.wh_value_17_4'))
+            .fontSize('17.4vp')
             .fontWeight(FontWeight.Bold)
-            .layoutWeight($r('app.float.wh_value_1'))
-            .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_10') })
+            .layoutWeight(1)
+            .padding({ left : '10vp' , top : '10vp' })
           Text(apiItem.method)
-            .fontSize($r('app.float.wh_value_17_4'))
+            .fontSize('17.4vp')
             .fontWeight(FontWeight.Bold)
-            .layoutWeight($r('app.float.wh_value_1'))
-            .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_5') })
+            .layoutWeight(1)
+            .padding({ left : '10vp' , top : '5vp' })
         }
-        .layoutWeight($r('app.float.wh_value_6'))
-        .width($r('app.float.wh_value_80p'))
+        .layoutWeight(6)
+        .width('80%')
 
         Flex({ alignItems : ItemAlign.Center }) {
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : apiItem.result)
-            .fontSize($r('app.float.wh_value_17_4'))
-            .flexGrow($r('app.float.wh_value_1'))
-            .padding({ top : $r('app.float.wh_value_15') })
+            .fontSize('17.4vp')
+            .flexGrow(1)
+            .padding({ top : '15vp' })
         }
-        .layoutWeight($r('app.float.wh_value_3'))
-        .padding({ left : $r('app.float.wh_value_25') })
+        .layoutWeight(3)
+        .padding({ left : '25vp' })
       }
     }
-    .height($r('app.float.wh_value_80'))
-    .borderRadius($r('app.float.wh_value_10'))
-    .margin({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') })
+    .height('80vp')
+    .borderRadius('10vp')
+    .margin({ top : '5vp' , bottom : '5vp' })
     .backgroundColor($r("app.color.white"))
     .onClick(() => {
       switch ( apiItem.method ) {
@@ -567,9 +567,9 @@ export struct ContentTable {
           })
         }
       }
-      .scrollBarWidth($r('app.float.wh_value_20'))
+      .scrollBarWidth('20vp')
     }
-    .height($r('app.float.wh_value_66p'))
-    .padding({ top : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
+    .height('66%')
+    .padding({ top : '5vp' , right : '10vp' , left : '10vp' })
   }
 }

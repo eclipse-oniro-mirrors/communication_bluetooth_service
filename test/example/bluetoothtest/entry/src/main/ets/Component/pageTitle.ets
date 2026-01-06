@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,15 +67,15 @@ export struct PageTitle {
   CustomBtn(text: Resource , isFullScreen: boolean) {
     Button() {
       Image($r('app.media.screenShot'))
-        .height($r('app.float.wh_value_40'))
-        .width($r('app.float.wh_value_40'))
+        .height('40vp')
+        .width('40vp')
     }
     .key(isFullScreen + 'FullScreenShot')
     .type(ButtonType.Normal)
     .backgroundColor($r("app.color.blue"))
-    .height($r('app.float.wh_value_100p'))
-    .width($r('app.float.wh_value_100p'))
-    .margin({ left : $r('app.float.wh_value_3') , right : $r('app.float.wh_value_3') , top : $r('app.float.wh_value_2') })
+    .height('100%')
+    .width('100%')
+    .margin({ left : '3vp' , right : '3vp' , top : '2vp' })
     .onClick(() => {
       console.log('[Screenshot] onClick,screenshot')
       this.getScreen(isFullScreen)
@@ -87,39 +87,39 @@ export struct PageTitle {
       Flex({ alignItems : ItemAlign.Start }) {
         Button() {
           Image($r('app.media.Back'))
-            .width($r('app.float.wh_value_60p'))
-            .height($r('app.float.wh_value_60p'))
+            .width('60%')
+            .height('60%')
         }
         .type(ButtonType.Normal)
-        .width($r('app.float.wh_value_20p'))
-        .height($r('app.float.wh_value_100p'))
+        .width('20%')
+        .height('100%')
         .backgroundColor($r("app.color.blue"))
-        .padding({ left : $r('app.float.wh_value_1') , top : $r('app.float.wh_value_15') })
+        .padding({ left : '1vp' , top : '15vp' })
         .onClick(() => {
           router.back()
         })
 
         Text(this.testItem != null ? this.testItem.detail : this.detail)
-          .fontSize($r('app.float.wh_value_24'))
-          .margin({ left : $r('app.float.wh_value_3') })
-          .padding({ top : $r('app.float.wh_value_18') })
+          .fontSize('24vp')
+          .margin({ left : '3vp' })
+          .padding({ top : '18vp' })
 
         Scroll() {
           Column() {
             this.CustomBtn($r('app.string.btn_fullscreen') , true)
           }
-          .width($r('app.float.wh_value_100p'))
-          .height($r('app.float.wh_value_100p'))
+          .width('100%')
+          .height('100%')
           .borderWidth(this.myborderWidth)
           .borderRadius(this.myborderRadius)
           .borderColor(Color.Green)
           .gesture(
             GestureGroup(GestureMode.Parallel ,
-              TapGesture({ count : $r('app.float.wh_value_2') , fingers : $r('app.float.wh_value_1') })
+              TapGesture({ count : 2 , fingers : 1 })
                 .onAction(() => {
                   this.myborderWidth += 1
                 }) ,
-              LongPressGesture({ fingers : $r('app.float.wh_value_1') , repeat : true , duration : 1000 })
+              LongPressGesture({ fingers : 1 , repeat : true , duration : 1000 })
                 .onAction((event: GestureEvent) => {
                   this.colOpacity -= 0.1
                   if ( event.repeat ) {
@@ -130,7 +130,7 @@ export struct PageTitle {
                   this.colOpacity = 1;
                   this.count = 0;
                 }) ,
-              PanGesture({ fingers : $r('app.float.wh_value_1') , direction : PanDirection.All , distance : 5.0 })
+              PanGesture({ fingers : 1 , direction : PanDirection.All , distance : 5.0 })
                 .onActionStart(() => {
                   console.log('Pan start')
                 })
@@ -141,7 +141,7 @@ export struct PageTitle {
                 .onActionEnd(() => {
                   console.log('Pan end')
                 }) ,
-              PinchGesture({ fingers : $r('app.float.wh_value_2') , distance : 4 })
+              PinchGesture({ fingers : 2 , distance : 4 })
                 .onActionStart(() => {
                   console.log('PinchGesture start')
                 })
@@ -153,7 +153,7 @@ export struct PageTitle {
                   console.log('PinchGesture end')
                   this.getScreen(true);
                 }) ,
-              RotationGesture({ fingers : $r('app.float.wh_value_2') , angle : $r('app.float.wh_value_2') })
+              RotationGesture({ fingers : 2 , angle : 2 })
                 .onActionStart(() => {
                   console.log('RotationGesture start')
                 })
@@ -169,11 +169,11 @@ export struct PageTitle {
               })
           )
         }
-        .layoutWeight($r('app.float.wh_value_1'))
+        .layoutWeight(1)
       }
-      .height($r('app.float.wh_value_61'))
+      .height('61vp')
       .backgroundColor($r('app.color.color_FFEDF2F5_bg'))
-      .padding({ left : $r('app.float.wh_value_10') })
+      .padding({ left : '10vp' })
       .borderColor($r("app.color.black"))
       .backgroundColor($r("app.color.blue"))
     }

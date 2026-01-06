@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,28 +34,28 @@ export struct TestListItem {
           Image(this.testItem.image)
             .objectFit(ImageFit.Contain)
             .autoResize(false)
-            .height($r('app.float.wh_value_60'))
-            .width($r('app.float.wh_value_60'))
+            .height('60vp')
+            .width('60vp')
         }
         .backgroundColor($r("app.color.white"))
-        .width($r('app.float.wh_value_30p'))
+        .width('30%')
 
         Text(this.testItem.name)
-          .fontSize($r('app.float.wh_value_20'))
-          .flexGrow($r('app.float.wh_value_1'))
-          .margin({ left : $r('app.float.wh_value_12') })
-          .width($r('app.float.wh_value_45p'))
+          .fontSize('20vp')
+          .flexGrow(1)
+          .margin({ left : '12vp' })
+          .width('45%')
         Text(this.testItem.detail)
-          .fontSize($r('app.float.wh_value_17'))
-          .margin({ left : $r('app.float.wh_value_10') , right : $r('app.float.wh_value_5') })
-          .width($r('app.float.wh_value_45p'))
+          .fontSize('17vp')
+          .margin({ left : '10vp' , right : '5vp' })
+          .width('45%')
       }
-      .height($r('app.float.wh_value_95'))
+      .height('95vp')
     }
     .params({ testItem : this.testItem })
-    .margin({ right : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_10') })
-    .padding({ left : $r('app.float.wh_value_15') , right : $r('app.float.wh_value_15') })
-    .borderRadius($r('app.float.wh_value_10'))
+    .margin({ right : '10vp' , left : '10vp' , top : '10vp' })
+    .padding({ left : '15vp' , right : '15vp' })
+    .borderRadius('10vp')
     .backgroundColor($r("app.color.white"))
   }
 }
