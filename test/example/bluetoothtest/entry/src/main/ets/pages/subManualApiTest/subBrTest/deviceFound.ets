@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,10 +64,10 @@ struct DeviceFound {
   build() {
     Column() {
       GridContainer({
-        columns : $r('app.float.wh_value_12') ,
+        columns : 12 ,
         sizeType : SizeType.Auto ,
-        gutter : vp2px(1) === 2 ? $r('app.float.wh_value_12') : $r('app.float.wh_value_0') ,
-        margin : vp2px(1) === 2 ? $r('app.float.wh_value_24') : $r('app.float.wh_value_0')
+        gutter : vp2px(1) === 2 ? '12vp' : '0vp' ,
+        margin : vp2px(1) === 2 ? '24vp' : '0vp'
       }) {
         Row({}) {
           Column() {
@@ -76,9 +76,9 @@ struct DeviceFound {
           .height(ConfigData.WH_100_100)
           .useSizeType({
             xs : { span : 0 , offset : 0 } , sm : { span : 0 , offset : 0 } ,
-            md : { span : 0 , offset : 0 } , lg : { span : $r('app.float.wh_value_2') , offset : 0 }
+            md : { span : 0 , offset : 0 } , lg : { span : 2 , offset : 0 }
           });
-          Column({ space : $r('app.float.wh_value_12') }) {
+          Column({ space : '12vp' }) {
             PageTitle({ detail : '扫描蓝牙设备' })
             Scroll() {
               Column() {
@@ -98,19 +98,19 @@ struct DeviceFound {
             }
             .width(ConfigData.WH_100_100)
             .align(Alignment.TopStart)
-            .layoutWeight($r('app.float.wh_value_1'))
+            .layoutWeight(1)
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
           }
           .padding({
-            left : $r('app.float.distance_24') ,
-            right : $r('app.float.distance_24') ,
-            bottom : $r('app.float.distance_32')
+            left : '24vp' ,
+            right : '24vp' ,
+            bottom : '32vp'
           })
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : $r('app.float.wh_value_12') , offset : 0 } , sm : { span : $r('app.float.wh_value_12') , offset : 0 } ,
-            md : { span : $r('app.float.wh_value_12') , offset : 0 } , lg : { span : $r('app.float.wh_value_8') , offset : $r('app.float.wh_value_2') }
+            xs : { span : 12 , offset : 0 } , sm : { span : 12 , offset : 0 } ,
+            md : { span : 12 , offset : 0 } , lg : { span : 8 , offset : 2 }
           });
 
           Column() {
@@ -118,8 +118,8 @@ struct DeviceFound {
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 0 , offset : $r('app.float.wh_value_12') } , sm : { span : 0 , offset : $r('app.float.wh_value_12') } ,
-            md : { span : 0 , offset : $r('app.float.wh_value_12') } , lg : { span : $r('app.float.wh_value_2') , offset : $r('app.float.wh_value_10') }
+            xs : { span : 0 , offset : 12 } , sm : { span : 0 , offset : 12 } ,
+            md : { span : 0 , offset : 12 } , lg : { span : 2 , offset : 10 }
           })
         }
         .width(ConfigData.WH_100_100)
@@ -162,14 +162,14 @@ export struct PairedDeviceComponent {
         // paired devices title
         Row() {
           Text($r('app.string.bluetooth_paired_devices'))
-            .fontSize($r('app.float.font_14'))
+            .fontSize('14fp')
             .fontColor($r('app.color.font_color_182431'))
         }
         .width(ConfigData.WH_100_100)
         .padding({
-          left : $r('app.float.distance_24') ,
-          top : $r('app.float.distance_19_5') ,
-          bottom : $r('app.float.distance_9_5')
+          left : '24vp' ,
+          top : '19.5vp' ,
+          bottom : '9.5vp'
         })
 
         List() {
@@ -185,8 +185,8 @@ export struct PairedDeviceComponent {
                 })
               }
               .width(ConfigData.WH_100_100)
-              .borderRadius($r("app.float.radius_24"))
-              .padding($r('app.float.distance_4'))
+              .borderRadius('24vp')
+              .padding('4vp')
               .backgroundColor($r("app.color.white_bg_color"))
               .onClick(() => {
                 this.itemClicked(item);
@@ -195,15 +195,15 @@ export struct PairedDeviceComponent {
             }
           } , (item: BluetoothDevice) => JSON.stringify(item));
         }
-        .height($r('app.float.wh_value_200'))
+        .height('200vp')
         .divider({
-          strokeWidth : $r('app.float.wh_value_1') ,
+          strokeWidth : '1vp' ,
           color : $r('app.color.color_E3E3E3_grey') ,
-          startMargin : $r('app.float.wh_value_52') ,
-          endMargin : $r('app.float.wh_value_12')
+          startMargin : '52vp' ,
+          endMargin : '12vp'
         })
         .backgroundColor($r("app.color.white_bg_color"))
-        .borderRadius($r("app.float.radius_24"))
+        .borderRadius('24vp')
 
       }
     }
@@ -301,8 +301,8 @@ struct DiscoveringAnimatorComponent {
     Column() {
       Row() {
         ImageAnimatorComponent({
-          imageWidth : $r('app.float.wh_value_40') ,
-          imageHeight : $r('app.float.wh_value_40') })
+          imageWidth : 40 ,
+          imageHeight : 40 })
       }
     }
   }
@@ -324,36 +324,36 @@ export struct AvailableItem {
         Image($r('app.media.bleSmall'))
           .objectFit(ImageFit.Contain)
           .autoResize(false)
-          .height($r('app.float.wh_value_30'))
-          .width($r('app.float.wh_value_30'))
+          .height('30vp')
+          .width('30vp')
       }
-      .width($r('app.float.wh_value_10p'))
-      .padding({ left : $r('app.float.wh_value_10') })
+      .width('10%')
+      .padding({ left : '10vp' })
 
       Column() {
         Text(this.name)
-          .fontSize($r('app.float.wh_value_17_4'))
+          .fontSize('17.4vp')
           .fontWeight(FontWeight.Bold)
-          .width($r('app.float.wh_value_90p'))
-          .height($r('app.float.wh_value_40'))
-          .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_15') })
+          .width('90%')
+          .height('40vp')
+          .padding({ left : '10vp' , top : '15vp' })
         Text(this.mac)
-          .fontSize($r('app.float.wh_value_17_4'))
+          .fontSize('17.4vp')
           .fontWeight(FontWeight.Bold)
-          .width($r('app.float.wh_value_90p'))
-          .height($r('app.float.wh_value_30'))
-          .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_5') })
+          .width('90%')
+          .height('30vp')
+          .padding({ left : '10vp' , top : '5vp' })
       }
-      .height($r('app.float.wh_value_80'))
-      .width($r('app.float.wh_value_80p'))
+      .height('80vp')
+      .width('80%')
 
       Row() {
         Text(this.state)
-          .fontSize($r('app.float.wh_value_17_4'))
-          .flexGrow($r('app.float.wh_value_1'))
+          .fontSize('17.4vp')
+          .flexGrow(1)
       }
-      .width($r('app.float.wh_value_10p'))
-      .padding({ left : $r('app.float.wh_value_10') })
+      .width('10%')
+      .padding({ left : '10vp' })
     }
   }
 }
@@ -374,44 +374,44 @@ export struct PairedItem {
         Image($r('app.media.bleSmall'))
           .objectFit(ImageFit.Contain)
           .autoResize(false)
-          .height($r('app.float.wh_value_30'))
-          .width($r('app.float.wh_value_30'))
+          .height('30vp')
+          .width('30vp')
       }
-      .width($r('app.float.wh_value_10p'))
-      .padding({ left : $r('app.float.wh_value_10') })
+      .width('10%')
+      .padding({ left : '10vp' })
 
       Column() {
         Text(this.name)
-          .fontSize($r('app.float.wh_value_17_4'))
+          .fontSize('17.4vp')
           .fontWeight(FontWeight.Bold)
-          .width($r('app.float.wh_value_90p'))
-          .height($r('app.float.wh_value_40'))
-          .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_15') })
+          .width('90%')
+          .height('40vp')
+          .padding({ left : '10vp' , top : '15vp' })
         Text(this.mac)
-          .fontSize($r('app.float.wh_value_17_4'))
+          .fontSize('17.4vp')
           .fontWeight(FontWeight.Bold)
-          .width($r('app.float.wh_value_90p'))
-          .height($r('app.float.wh_value_30'))
-          .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_5') })
+          .width('90%')
+          .height('30vp')
+          .padding({ left : '10vp' , top : '5vp' })
       }
-      .height($r('app.float.wh_value_80'))
-      .width($r('app.float.wh_value_70p'))
+      .height('80vp')
+      .width('70%')
 
       Row() {
         Text(this.state)
-          .fontSize($r('app.float.wh_value_17_4'))
-          .flexGrow($r('app.float.wh_value_1'))
+          .fontSize('17.4vp')
+          .flexGrow(1)
       }
-      .width($r('app.float.wh_value_10p'))
-      .padding({ left : $r('app.float.wh_value_10') })
+      .width('10%')
+      .padding({ left : '10vp' })
 
       Row() {
         Text("取消")
-          .fontSize($r('app.float.wh_value_17_4'))
-          .flexGrow($r('app.float.wh_value_1'))
+          .fontSize('17.4vp')
+          .flexGrow(1)
       }
-      .width($r('app.float.wh_value_10p'))
-      .padding({ left : $r('app.float.wh_value_10') })
+      .width('10%')
+      .padding({ left : '10vp' })
       .onClick(() => {
         let ret = bluetooth.cancelPairedDevice(this.mac)
         if ( ret ) {
@@ -465,13 +465,13 @@ export struct AvailableDeviceComponent {
       Row() {
         // available devices title
         Text($r('app.string.bluetooth_available_devices'))
-          .fontSize($r('app.float.font_14'))
+          .fontSize('14fp')
           .fontColor($r('app.color.font_color_182431'))
           .width(ConfigData.WH_100_100)
           .padding({
-            left : $r('app.float.distance_24') ,
-            top : $r('app.float.distance_19_5') ,
-            bottom : $r('app.float.distance_9_5')
+            left : '24vp' ,
+            top : '19.5vp' ,
+            bottom : '9.5vp'
           })
         Blank()
 
@@ -497,8 +497,8 @@ export struct AvailableDeviceComponent {
                   })
                 }
                 .width(ConfigData.WH_100_100)
-                .borderRadius($r("app.float.radius_24"))
-                .padding($r('app.float.distance_4'))
+                .borderRadius('24vp')
+                .padding('4vp')
                 .backgroundColor($r("app.color.white_bg_color"))
                 .onClick(() => {
                   LogUtil.info(this.TAG_PAGE + 'item on click : ' + JSON.stringify(item));
@@ -510,22 +510,22 @@ export struct AvailableDeviceComponent {
             } , (item: BluetoothDevice) => JSON.stringify(item));
           }
           .backgroundColor($r("app.color.white_bg_color"))
-          .borderRadius($r("app.float.radius_24"))
-          .height($r('app.float.wh_value_80p'))
+          .borderRadius('24vp')
+          .height('80%')
           .divider({
-            strokeWidth : $r('app.float.wh_value_1') ,
+            strokeWidth : '1vp' ,
             color : $r('app.color.color_E3E3E3_grey') ,
-            startMargin : $r('app.float.wh_value_52') ,
-            endMargin : $r('app.float.wh_value_12')
+            startMargin : '52vp' ,
+            endMargin : '12vp'
           })
         }
         .scrollBar(BarState.Auto)
-        .scrollBarWidth($r('app.float.wh_value_20'))
+        .scrollBarWidth('20vp')
       } else {
         Row() {
           // Scanning...
           Text($r('app.string.scanning'))
-            .fontSize($r('app.float.font_20'))
+            .fontSize('20fp')
             .textCase(TextCase.UpperCase);
         }
       }
@@ -608,44 +608,44 @@ struct PairDialog {
   build() {
     Column() {
       Text($r('app.string.bluetooth_pairing_request'))
-        .fontSize($r('app.float.font_22'))
-        .height($r('app.float.wh_value_60'))
+        .fontSize('22fp')
+        .height('60vp')
         .width(ConfigData.WH_100_100)
         .padding({
-          left : $r('app.float.distance_24') ,
-          top : $r('app.float.distance_14') ,
-          bottom : $r('app.float.distance_14')
+          left : '24vp' ,
+          top : '14vp' ,
+          bottom : '14vp'
         })
       Column() {
         if ( this.pinCode ) {
           Text($r('app.string.bluetooth_pairing_intelligent_device_hit' , this.deviceName , this.deviceName))
-            .fontSize($r('app.float.font_16'))
+            .fontSize('16fp')
             .width(ConfigData.WH_100_100)
             .margin({
-              top : $r('app.float.distance_14') ,
-              bottom : $r('app.float.distance_14')
+              top : '14vp' ,
+              bottom : '14vp'
             })
 
           Text(`${ this.pinCode }`)
-            .fontSize($r('app.float.pinCode_font_size'))
+            .fontSize('32fp')
             .fontWeight(FontWeight.Bolder)
             .width(ConfigData.WH_100_100)
             .textAlign(TextAlign.Center)
             .margin({
-              top : $r('app.float.item_common_horizontal_margin') ,
-              bottom : $r('app.float.item_common_horizontal_margin')
+              top : '24vp' ,
+              bottom : '24vp'
             })
 
         } else {
           Text($r('app.string.bluetooth_pairing_media_device_hit'))
-            .fontSize($r('app.float.font_16'))
+            .fontSize('16fp')
             .width(ConfigData.WH_100_100)
             .margin({
-              bottom : $r('app.float.switch_summary_margin')
+              bottom : '2vp'
             })
 
           Text(this.deviceName)
-            .fontSize($r('app.float.font_16'))
+            .fontSize('16fp')
             .width(ConfigData.WH_100_100)
             .fontWeight(FontWeight.Bold)
         }
@@ -655,50 +655,50 @@ struct PairDialog {
 
           Button() {
             Text($r('app.string.cancel'))
-              .fontSize($r('app.float.font_16'))
+              .fontSize('16fp')
               .fontColor(Color.Blue)
           }
           .backgroundColor($r("app.color.white_bg_color"))
-          .width($r("app.float.wh_value_160"))
-          .height($r("app.float.wh_value_40"))
-          .flexGrow($r('app.float.wh_value_1'))
+          .width('160vp')
+          .height('40vp')
+          .flexGrow(1)
           .onClick(() => {
             this.dialogController.close();
             this.action(false);
           })
 
           Divider()
-            .height($r("app.float.wh_value_24"))
-            .strokeWidth($r('app.float.wh_value_0_5'))
+            .height('24vp')
+            .strokeWidth('0.5vp')
             .vertical(true)
             .color(($r("app.color.color_E3E3E3_grey")))
 
           Button() {
             Text($r('app.string.bluetooth_pair_button'))
-              .fontSize($r('app.float.font_16'))
+              .fontSize('16fp')
               .fontColor(Color.Blue)
           }
           .backgroundColor($r("app.color.white_bg_color"))
-          .width($r("app.float.wh_value_160"))
-          .height($r("app.float.wh_value_40"))
-          .flexGrow($r('app.float.wh_value_1'))
+          .width('160vp')
+          .height('40vp')
+          .flexGrow(1)
           .onClick(() => {
             this.dialogController.close();
             this.action(true);
           })
         }
         .width(ConfigData.WH_100_100)
-        .height($r('app.float.wh_value_60'));
+        .height('60vp');
       }
       .width(ConfigData.WH_100_100)
       .padding({
-        left : $r('app.float.distance_24') ,
-        right : $r('app.float.distance_24')
+        left : '24vp' ,
+        right : '24vp'
       })
     }
     .padding({
-      left : $r('app.float.distance_24') ,
-      right : $r('app.float.distance_24')
+      left : '24vp' ,
+      right : '24vp'
     })
     .width(ConfigData.WH_100_100);
   }

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,9 +51,9 @@ struct GattClientSetting {
   build() {
     Column() {
       Row() {
-        Text("外围设备MAC:").fontSize($r('app.float.wh_value_16')).width($r('app.float.wh_value_70'))
+        Text("外围设备MAC:").fontSize('16vp').width('70vp')
         TextInput({ text : this.peripheralDeviceId , placeholder : "input peripheral deviceId." })
-          .fontSize($r('app.float.wh_value_15'))
+          .fontSize('15vp')
           .onChange((strInput) => {
             this.peripheralDeviceId = strInput;
             //判断合法性
@@ -61,108 +61,108 @@ struct GattClientSetting {
               AppStorage.setOrCreate('peripheralDeviceId' , strInput);
             }
           })
-          .width($r('app.float.wh_value_80p'))
-          .borderRadius($r('app.float.wh_value_1'))
+          .width('80%')
+          .borderRadius('1vp')
       }
       .backgroundColor($r("app.color.moon"))
-      .padding($r('app.float.wh_value_5'))
+      .padding('5vp')
       .justifyContent(FlexAlign.Start)
       .alignItems(VerticalAlign.Center)
 
       Column() {
-        Stack().height($r('app.float.wh_value_0_25')).backgroundColor($r('app.color.black'));
+        Stack().height('0.25vp').backgroundColor($r('app.color.black'));
         Column() {
           Row() {
-            Text("服务UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_60'));
+            Text("服务UUID:").fontSize('15vp').width('60vp');
             TextInput({ text : this.serviceUUID , placeholder : "input Service UUID" })
-              .fontSize($r('app.float.wh_value_15'))
+              .fontSize('15vp')
               .onChange((strInput) => {
                 this.serviceUUID = strInput;
                 if ( strInput.length >= 36 ) {
                   AppStorage.setOrCreate('serviceUUID' , strInput);
                 }
               })
-              .width($r('app.float.wh_value_80p'))
-              .borderRadius($r('app.float.wh_value_1'))
+              .width('80%')
+              .borderRadius('1vp')
           }
-          .padding($r('app.float.wh_value_5'))
+          .padding('5vp')
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
           .backgroundColor($r("app.color.spring"))
 
           Row() {
-            Text("特征值UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_60'));
+            Text("特征值UUID:").fontSize('15vp').width('60vp');
             TextInput({ text : this.characteristicUUID , placeholder : "input Characteristic UUID" })
-              .fontSize($r('app.float.wh_value_15'))
+              .fontSize('15vp')
               .onChange((strInput) => {
                 this.characteristicUUID = strInput;
                 if ( strInput.length >= 36 ) {
                   AppStorage.setOrCreate('characteristicUUID' , strInput);
                 }
               })
-              .width($r('app.float.wh_value_80p'))
-              .borderRadius($r('app.float.wh_value_1'))
+              .width('80%')
+              .borderRadius('1vp')
           }
           .backgroundColor($r("app.color.spring"))
-          .padding($r('app.float.wh_value_5'))
+          .padding('5vp')
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("特征值Value:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_60'));
+            Text("特征值Value:").fontSize('15vp').width('60vp');
             TextInput({ text : this.characteristicUUID , placeholder : "Characteristic Value" })
-              .fontSize($r('app.float.wh_value_15'))
+              .fontSize('15vp')
               .onChange((strInput) => {
                 this.characteristicValue = strInput;
                 if ( strInput.length >= 1 ) {
                   AppStorage.setOrCreate('characteristicValue' , strInput);
                 }
               })
-              .width($r('app.float.wh_value_80p'))
-              .borderRadius($r('app.float.wh_value_1'))
+              .width('80%')
+              .borderRadius('1vp')
           }
           .backgroundColor($r("app.color.spring"))
-          .padding($r('app.float.wh_value_5'))
+          .padding('5vp')
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("描述符UUID:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_60'));
+            Text("描述符UUID:").fontSize('15vp').width('60vp');
             TextInput({ text : this.descriptorUUID , placeholder : "input descriptor UUID" })
-              .fontSize($r('app.float.wh_value_15'))
+              .fontSize('15vp')
               .onChange((strInput) => {
                 this.descriptorUUID = strInput;
                 if ( strInput.length >= 36 ) {
                   AppStorage.setOrCreate('descriptorUUID' , strInput);
                 }
               })
-              .width($r('app.float.wh_value_80p'))
-              .borderRadius($r('app.float.wh_value_1'))
+              .width('80%')
+              .borderRadius('1vp')
           }
           .backgroundColor($r("app.color.spring"))
-          .padding($r('app.float.wh_value_5'))
+          .padding('5vp')
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("描述符Value:").fontSize($r('app.float.wh_value_15')).width($r('app.float.wh_value_60'));
+            Text("描述符Value:").fontSize('15vp').width('60vp');
             TextInput({ text : this.descriptorUUID , placeholder : "descriptor Value" })
-              .fontSize($r('app.float.wh_value_15'))
+              .fontSize('15vp')
               .onChange((strInput) => {
                 this.descriptorValue = strInput;
                 if ( strInput.length >= 1 ) {
                   AppStorage.setOrCreate('descriptorValue' , strInput);
                 }
               })
-              .width($r('app.float.wh_value_80p'))
-              .borderRadius($r('app.float.wh_value_1'))
+              .width('80%')
+              .borderRadius('1vp')
           }
           .backgroundColor($r("app.color.spring"))
-          .padding($r('app.float.wh_value_5'))
+          .padding('5vp')
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
         }
-        Stack().height($r('app.float.wh_value_0_25')).backgroundColor($r('app.color.black'));
+        Stack().height('0.25vp').backgroundColor($r('app.color.black'));
       }
     }
   }
@@ -214,21 +214,21 @@ struct GattClient {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
+      Stack().height('0.5vp').backgroundColor($r('app.color.black'));
       Row() {
         Text("GattClientSetting")
-          .fontSize($r('app.float.wh_value_20'))
-          .height($r('app.float.wh_value_60'))
-          .width($r('app.float.wh_value_80p'))
-          .padding({ left : $r('app.float.wh_value_15') })
+          .fontSize('20vp')
+          .height('60vp')
+          .width('80%')
+          .padding({ left : '15vp' })
         Image($r('app.media.Switch'))
-          .height($r('app.float.wh_value_50'))
-          .width($r('app.float.wh_value_50'))
-          .padding({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
+          .height('50vp')
+          .width('50vp')
+          .padding({ top : '5vp' , bottom : '5vp' , left : '10vp' })
           .onClick(() => {
             this.showList = !this.showList;
           })
-      }.width($r('app.float.wh_value_100p'))
+      }.width('100%')
 
       Column() {
         if ( this.showList ) {
@@ -238,83 +238,83 @@ struct GattClient {
             Scroll() {
               Column() {
                 Text("结果显示:")
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '10vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_100p'))
+                  .width('100%')
                 Text("当前配置:" + this.message)
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '15vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
                 Text("BLE连接状态:" + this.bleConnectionStateInfo)
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '15vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
                 Text("BLE特征变化:" + this.bleCharacteristicChangeInfo)
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '15vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
                 Text("deviceName:" + this.deviceName)
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '15vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
                 Text("Rssi:" + this.Rssi)
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '15vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
                 Text("getService:" + this.getServices)
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '15vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
                 Text("readCharacteristic:" + this.read_CharacteristicValue)
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '15vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
                 Text("readDescriptor:" + this.read_DescriptorValue)
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_15') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '15vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
               }
-              .width($r('app.float.wh_value_100p'))
+              .width('100%')
             }
-            .scrollBarWidth($r('app.float.wh_value_10'))
+            .scrollBarWidth('10vp')
             .scrollBar(BarState.Auto)
           }
-          .height($r('app.float.wh_value_110'))
-          .width($r('app.float.wh_value_95p'))
+          .height('110vp')
+          .width('95%')
           .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
 
-          Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
+          Stack().height('0.5vp').backgroundColor($r('app.color.black'));
           Column() {
             Text("功能测试:")
-              .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
-              .padding($r('app.float.wh_value_5'))
-              .fontSize($r('app.float.wh_value_18'))
-              .width($r('app.float.wh_value_100p'))
+              .margin({ top : '5vp' , left : '10vp' })
+              .padding('5vp')
+              .fontSize('18vp')
+              .width('100%')
             Scroll() {
               ContentTable({ apiItems : initGattClientApiData() })
             }
             .width(ConfigData.WH_100_100)
             .align(Alignment.TopStart)
-            .layoutWeight($r('app.float.wh_value_1'))
+            .layoutWeight(1)
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
-            .height($r('app.float.wh_value_100p'))
+            .height('100%')
           }
-          .height($r('app.float.wh_value_80p'))
+          .height('80%')
         }
       }
       .visibility(Visibility.Visible);
     }
     .backgroundColor($r("app.color.lead"))
-    .height($r('app.float.wh_value_100p'))
+    .height('100%')
   }
 }
 
