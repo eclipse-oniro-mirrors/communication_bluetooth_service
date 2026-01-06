@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,15 +25,15 @@ struct Index {
          Row() {
            Column() {
             Text(this.message)
-              .fontSize($r('app.float.wh_value_50'))
+              .fontSize('50vp')
               .fontWeight(FontWeight.Bold)
             Button() {
               Text('next page')
-                .fontSize($r('app.float.wh_value_20'))
+                .fontSize('20vp')
                 .fontWeight(FontWeight.Bold)
             }.type(ButtonType.Capsule)
             .margin({
-              top: $r('app.float.wh_value_20')
+              top: '20vp'
             })
             .backgroundColor($r('app.color.color_0D9FFB_blue'))
              .width('35%')

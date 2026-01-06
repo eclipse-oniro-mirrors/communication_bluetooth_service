@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,39 +37,39 @@ struct TestCategory {
       Tabs() {
         TabContent() {
           ManualApiTest({ testItems : this.testItems.filter(item => (item.category === Category.API)) })
-        }.tabBar($r("app.string.api")).margin({ top : $r("app.float.distance_5") })
+        }.tabBar($r("app.string.api")).margin({ top : '5vp' })
 
         TabContent() {
           ManualApiTest({ testItems : this.testItems.filter(item => (item.category === Category.APIManager)) })
-        }.tabBar($r("app.string.api_M")).margin({ top : $r("app.float.distance_5") })
+        }.tabBar($r("app.string.api_M")).margin({ top : '5vp' })
 
         TabContent() {
           AutoTest({ testItems : this.testItems.filter(item => (item.category === Category.AutoTest)) })
-        }.tabBar($r("app.string.autotest")).margin({ top : $r("app.float.distance_5") })
+        }.tabBar($r("app.string.autotest")).margin({ top : '5vp' })
 
         TabContent() {
           AutoTest({ testItems : this.testItems.filter(item => (item.category === Category.AutoTestManager)) })
-        }.tabBar($r("app.string.autotest_M")).margin({ top : $r("app.float.distance_5") })
+        }.tabBar($r("app.string.autotest_M")).margin({ top : '5vp' })
 
         TabContent() {
           ManualSceneTest({ testItems : this.testItems.filter(item => (item.category === Category.Scenario)) })
-        }.tabBar($r("app.string.scenario")).margin({ top : $r("app.float.distance_5") })
+        }.tabBar($r("app.string.scenario")).margin({ top : '5vp' })
 
         TabContent() {
           ManualSceneTest({ testItems : this.testItems.filter(item => (item.category === Category.ScenarioManager)) })
-        }.tabBar($r("app.string.scenario_M")).margin({ top : $r("app.float.distance_5") })
+        }.tabBar($r("app.string.scenario_M")).margin({ top : '5vp' })
 
         TabContent() {
           ProfileTest({ testItems : this.testItems.filter(item => (item.category === Category.Profile)) })
-        }.tabBar($r("app.string.profile")).margin({ top : $r("app.float.distance_5") })
+        }.tabBar($r("app.string.profile")).margin({ top : '5vp' })
 
         TabContent() {
           ProfileTest({ testItems : this.testItems.filter(item => (item.category === Category.ProfileManager)) })
-        }.tabBar($r("app.string.profile_M")).margin({ top : $r("app.float.distance_5") })
+        }.tabBar($r("app.string.profile_M")).margin({ top : '5vp' })
 
         TabContent() {
           BenchmarkTest({ testItems : this.testItems.filter(item => (item.category === Category.BenchMark)) })
-        }.tabBar($r("app.string.benchmark")).margin({ top : $r("app.float.distance_5") })
+        }.tabBar($r("app.string.benchmark")).margin({ top : '5vp' })
 
         TabContent() {
           BenchmarkTest({
@@ -77,8 +77,8 @@ struct TestCategory {
           })
         }.tabBar($r("app.string.benchmark_M"))
       }
-      .barWidth($r('app.float.bar_width_80'))
-      .barHeight($r('app.float.wh_value_40'))
+      .barWidth('80%')
+      .barHeight('40vp')
       .align(Alignment.TopStart)
       .barMode(BarMode.Scrollable)
       .backgroundColor($r("app.color.white"))
@@ -121,13 +121,13 @@ struct HomePage {
       Stack({ alignContent : Alignment.TopEnd }) {
         TestCategory({ testItems : this.testItems })
         Image($r('app.media.Switch'))
-          .height($r('app.float.wh_value_30'))
-          .width($r('app.float.wh_value_30'))
-          .margin({ top : $r("app.float.distance_5") , right : $r("app.float.distance_10") })
+          .height('30vp')
+          .width('30vp')
+          .margin({ top : '5vp' , right : '10vp' })
           .onClick(() => {
           })
       }
-      .height($r('app.float.wh_value_100p'))
+      .height('100%')
     }
   }
 }
