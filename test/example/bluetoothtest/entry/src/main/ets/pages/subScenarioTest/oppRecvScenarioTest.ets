@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,21 +115,21 @@ struct OppRecvScenarioTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
+      Stack().height('1vp').backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
             Text("已配对设备列表：(点击选择设备)")
-              .fontSize($r('app.float.wh_value_20'))
+              .fontSize('20vp')
               .fontWeight(FontWeight.Bold)
-              .margin({ top : $r('app.float.wh_value_5') })
+              .margin({ top : '5vp' })
             Scroll() {
-              List({ space : $r('app.float.wh_value_5') }) {
+              List({ space : '5vp' }) {
                 ForEach(this.pairedDevices , (item: PairDevices) => {
                   ListItem() {
                     Text(item.name)
-                      .fontSize($r('app.float.wh_value_25'))
-                      .width($r('app.float.wh_value_80p'))
+                      .fontSize('25vp')
+                      .width('80%')
                       .margin({ left : '10%' })
                       .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") : $r("app.color.white"))
                       .border({
@@ -142,72 +142,72 @@ struct OppRecvScenarioTest {
                 })
               }
             }
-            .height($r('app.float.wh_value_70p'))
-            .width($r('app.float.wh_value_80p'))
+            .height('70%')
+            .width('80%')
           }
-          .height($r('app.float.wh_value_40p'))
-          .width($r('app.float.wh_value_100p'))
+          .height('40%')
+          .width('100%')
 
         }
-        .scrollBarWidth($r('app.float.wh_value_10'))
+        .scrollBarWidth('10vp')
         .scrollBar(BarState.On)
 
-        Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
+        Stack().height('1vp').backgroundColor($r('app.color.black'));
 
         Column() {
           Text("已选择的设备的蓝牙mac地址：")
-            .fontSize($r('app.float.wh_value_18'))
+            .fontSize('18vp')
             .fontWeight(FontWeight.Bold)
-            .margin({ top : $r('app.float.wh_value_3') })
+            .margin({ top : '3vp' })
           Text(this.serverMac)
-            .fontSize($r('app.float.wh_value_25'))
-            .width($r('app.float.wh_value_70p'))
-            .borderRadius($r('app.float.wh_value_5'))
+            .fontSize('25vp')
+            .width('70%')
+            .borderRadius('5vp')
             .backgroundColor($r("app.color.moon"))
-        }.height($r('app.float.wh_value_20p'))
+        }.height('20%')
 
         Scroll() {
           Column() {
             Text("流程日志:")
-              .fontSize($r('app.float.wh_value_18'))
-              .margin({ top : $r('app.float.wh_value_8') , bottom : $r('app.float.wh_value_8') , left : $r('app.float.wh_value_20') })
+              .fontSize('18vp')
+              .margin({ top : '8vp' , bottom : '8vp' , left : '20vp' })
               .textAlign(TextAlign.Start)
-              .width($r('app.float.wh_value_100p'))
+              .width('100%')
             List() {
               ListItem() {
                 Text(this.oppRecvScenarioMessage)
-                  .fontSize($r('app.float.wh_value_18'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_30') , right : $r('app.float.wh_value_10') })
+                  .fontSize('18vp')
+                  .margin({ top : '5vp' , left : '30vp' , right : '10vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
               }
             }
-            .height($r('app.float.wh_value_80p'))
-            .width($r('app.float.wh_value_90p'))
+            .height('80%')
+            .width('90%')
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
-          .width($r('app.float.wh_value_100p'))
-          .height($r('app.float.wh_value_30p'))
+          .width('100%')
+          .height('30%')
         }
-        .scrollBarWidth($r('app.float.wh_value_10'))
+        .scrollBarWidth('10vp')
         .scrollBar(BarState.On)
       }
-      .height($r('app.float.wh_value_66p'))
-      .width($r('app.float.wh_value_100p'))
+      .height('66%')
+      .width('100%')
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
+      Stack().height('1vp').backgroundColor($r('app.color.black'));
 
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Column() {
             Button('opp开启接收文件')
-              .fontSize($r('app.float.wh_value_20'))
-              .borderRadius($r('app.float.wh_value_8'))
+              .fontSize('20vp')
+              .borderRadius('8vp')
               .backgroundColor($r("app.color.blue"))
-              .width($r('app.float.wh_value_200'))
-              .height($r('app.float.wh_value_60'))
-              .margin({ top : $r('app.float.wh_value_15') })
+              .width('200vp')
+              .height('60vp')
+              .margin({ top : '15vp' })
               .align(Alignment.Center)
               .alignSelf(ItemAlign.Center)
               .onClick(() => {
@@ -226,29 +226,29 @@ struct OppRecvScenarioTest {
                   testLog(this.oppRecvScenarioMessage);
                 }
               })
-              .width($r('app.float.wh_value_60p'))
+              .width('60%')
           }
-          .width($r('app.float.wh_value_100p'))
+          .width('100%')
           .align(Alignment.Center)
           .alignItems(HorizontalAlign.Center)
           .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
           if ( this.showProgress ) {
-            Row({ space : $r('app.float.wh_value_5') }) {
+            Row({ space : '5vp' }) {
               Progress({ value : this.curProgress , total : 100 , type : ProgressType.Linear })
-                .style({ strokeWidth : $r('app.float.wh_value_10') })
+                .style({ strokeWidth : '10vp' })
 
               Text(this.curProgress + "%")
-                .fontSize($r('app.float.wh_value_30'))
+                .fontSize('30vp')
             }
           }
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width($r('app.float.wh_value_100p'))
+        .width('100%')
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-      .width($r('app.float.wh_value_100p'))
-      .height($r('app.float.wh_value_100p'));
+      .width('100%')
+      .height('100%');
     }
   }
 }
@@ -263,8 +263,8 @@ struct ReceiveCustomDialog {
 
   build() {
     Column() {
-      Text("是否接收来自 " + this.deviceName + " 的文件").fontSize($r('app.float.wh_value_20')).margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') })
-      Text(this.fileName).fontSize($r('app.float.wh_value_18')).margin({ bottom : $r('app.float.wh_value_10') })
+      Text("是否接收来自 " + this.deviceName + " 的文件").fontSize('20vp').margin({ top : '10vp' , bottom : '10vp' })
+      Text(this.fileName).fontSize('18vp').margin({ bottom : '10vp' })
       Flex({ justifyContent : FlexAlign.SpaceAround }) {
         Button('拒接')
           .onClick(() => {
@@ -274,7 +274,7 @@ struct ReceiveCustomDialog {
           .onClick(() => {
             this.confirm()
           })
-      }.margin({ bottom : $r('app.float.wh_value_10') })
+      }.margin({ bottom : '10vp' })
     }
   }
 }
