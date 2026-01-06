@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,70 +52,70 @@ struct GattClientAutoTestManager {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
+      Stack().height('1vp').backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
             Text("API验证:")
-              .fontSize($r('app.float.wh_value_17'))
-              .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_15') })
+              .fontSize('17vp')
+              .margin({ top : '10vp' , bottom : '10vp' , left : '15vp' })
               .textAlign(TextAlign.Start)
-              .width($r('app.float.wh_value_100p'))
+              .width('100%')
             AutoContentTable({
               autoItems : initGattClientManagerAutoData() ,
               changeIndex : this.changeIndex
             })
           }
-          .width($r('app.float.wh_value_100p'))
-          .height($r('app.float.wh_value_260'))
+          .width('100%')
+          .height('260vp')
         }
-        .scrollBarWidth($r('app.float.wh_value_10'))
+        .scrollBarWidth('10vp')
         .scrollBar(BarState.Auto)
 
-        Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
+        Stack().height('1vp').backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
             Text("Debug日志:")
-              .fontSize($r('app.float.wh_value_17'))
-              .margin({ top : $r('app.float.wh_value_8') , bottom : $r('app.float.wh_value_8') , left : $r('app.float.wh_value_15') })
+              .fontSize('17vp')
+              .margin({ top : '8vp' , bottom : '8vp' , left : '15vp' })
               .textAlign(TextAlign.Start)
-              .width($r('app.float.wh_value_100p'))
+              .width('100%')
             List() {
               ListItem() {
                 Text("log:" + "\n" + this.gattClientAutoTestMessage)
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_30') , right : $r('app.float.wh_value_10') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '30vp' , right : '10vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
               }
             }
-            .height($r('app.float.wh_value_80p'))
-            .width($r('app.float.wh_value_90p'))
+            .height('80%')
+            .width('90%')
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
-          .width($r('app.float.wh_value_100p'))
-          .height($r('app.float.wh_value_280'))
+          .width('100%')
+          .height('280vp')
         }
-        .scrollBarWidth($r('app.float.wh_value_10'))
+        .scrollBarWidth('10vp')
         .scrollBar(BarState.Auto)
       }
-      .height($r('app.float.wh_value_500'))
-      .width($r('app.float.wh_value_100p'))
+      .height('500vp')
+      .width('100%')
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
+      Stack().height('1vp').backgroundColor($r('app.color.black'));
       Column() {
         Button({ type : ButtonType.Normal , stateEffect : true }) {
           Row() {
-            Text('自动测试').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
+            Text('自动测试').fontSize('24vp').fontColor(0xffffff).margin({ left : '5vp' , right : '5vp' })
           }.alignItems(VerticalAlign.Center)
         }
-        .borderRadius($r('app.float.wh_value_8'))
+        .borderRadius('8vp')
         .backgroundColor($r("app.color.blue"))
-        .width($r('app.float.wh_value_180'))
-        .height($r('app.float.wh_value_50'))
-        .margin({ top : $r('app.float.wh_value_15') })
+        .width('180vp')
+        .height('50vp')
+        .margin({ top : '15vp' })
         .onClick(async(event: ClickEvent) => {
           this.forLoop()
         })
