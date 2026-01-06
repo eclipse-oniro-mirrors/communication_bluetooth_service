@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,70 +42,70 @@ struct BrFoundScenarioTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
+      Stack().height('1vp').backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
             Text("场景流程验证:")
-              .fontSize($r('app.float.wh_value_17'))
-              .margin({ top : $r('app.float.wh_value_10') , bottom : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_20') })
+              .fontSize('17vp')
+              .margin({ top : '10vp' , bottom : '10vp' , left : '20vp' })
               .textAlign(TextAlign.Start)
-              .width($r('app.float.wh_value_100p'))
+              .width('100%')
             ScenarioContentTable({
               scenarioItems : initBRFoundScenarioData() ,
               changeIndex : this.changeIndex
             })
           }
-          .width($r('app.float.wh_value_100p'))
-          .height($r('app.float.wh_value_280'))
+          .width('100%')
+          .height('280vp')
         }
-        .scrollBarWidth($r('app.float.wh_value_10'))
+        .scrollBarWidth('10vp')
         .scrollBar(BarState.Auto)
 
-        Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
+        Stack().height('1vp').backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
             Text("流程日志:")
-              .fontSize($r('app.float.wh_value_17'))
-              .margin({ top : $r('app.float.wh_value_8') , bottom : $r('app.float.wh_value_8') , left : $r('app.float.wh_value_20') })
+              .fontSize('17vp')
+              .margin({ top : '8vp' , bottom : '8vp' , left : '20vp' })
               .textAlign(TextAlign.Start)
-              .width($r('app.float.wh_value_100p'))
+              .width('100%')
             List() {
               ListItem() {
                 Text(this.brFoundScenarioMessage)
-                  .fontSize($r('app.float.wh_value_17'))
-                  .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_30') , right : $r('app.float.wh_value_10') })
+                  .fontSize('17vp')
+                  .margin({ top : '5vp' , left : '30vp' , right : '10vp' })
                   .textAlign(TextAlign.Start)
-                  .width($r('app.float.wh_value_90p'))
+                  .width('90%')
               }
             }
-            .height($r('app.float.wh_value_80p'))
-            .width($r('app.float.wh_value_90p'))
+            .height('80%')
+            .width('90%')
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
           }
-          .width($r('app.float.wh_value_100p'))
-          .height($r('app.float.wh_value_260'))
+          .width('100%')
+          .height('260vp')
         }
-        .scrollBarWidth($r('app.float.wh_value_10'))
+        .scrollBarWidth('10vp')
         .scrollBar(BarState.On)
       }
-      .height($r('app.float.wh_value_500'))
-      .width($r('app.float.wh_value_100p'))
+      .height('500vp')
+      .width('100%')
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
 
-      Stack().height($r('app.float.wh_value_1')).backgroundColor($r('app.color.black'));
+      Stack().height('1vp').backgroundColor($r('app.color.black'));
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Text('场景测试开始').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
+            Text('场景测试开始').fontSize('24vp').fontColor(0xffffff).margin({ left : '5vp' , right : '5vp' })
           }
-          .borderRadius($r('app.float.wh_value_8'))
+          .borderRadius('8vp')
           .backgroundColor($r("app.color.blue"))
-          .width($r('app.float.wh_value_100'))
-          .height($r('app.float.wh_value_66'))
-          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_20') })
+          .width('100vp')
+          .height('66vp')
+          .margin({ top : '15vp' , left : '20vp' })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             promptAction.showToast({ message : '开始Br蓝牙发现场景测试' })
@@ -114,14 +114,14 @@ struct BrFoundScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('场景测试结束').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
+              Text('场景测试结束').fontSize('24vp').fontColor(0xffffff).margin({ left : '5vp' , right : '5vp' })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius($r('app.float.wh_value_8'))
+          .borderRadius('8vp')
           .backgroundColor($r("app.color.blue"))
-          .width($r('app.float.wh_value_100'))
-          .height($r('app.float.wh_value_66'))
-          .margin({ top : $r('app.float.wh_value_15') , left : $r('app.float.wh_value_10') , right : $r('app.float.wh_value_10') })
+          .width('100vp')
+          .height('66vp')
+          .margin({ top : '15vp' , left : '10vp' , right : '10vp' })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let brFoundScenarioMessage = ""
@@ -144,14 +144,14 @@ struct BrFoundScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text('清空日志').fontSize($r('app.float.wh_value_24')).fontColor(0xffffff).margin({ left : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_5') })
+              Text('清空日志').fontSize('24vp').fontColor(0xffffff).margin({ left : '5vp' , right : '5vp' })
             }.alignItems(VerticalAlign.Center)
           }
-          .borderRadius($r('app.float.wh_value_8'))
+          .borderRadius('8vp')
           .backgroundColor($r("app.color.moon"))
-          .width($r('app.float.wh_value_80'))
-          .height($r('app.float.wh_value_66'))
-          .margin({ top : $r('app.float.wh_value_15') , right : $r('app.float.wh_value_20') })
+          .width('80vp')
+          .height('66vp')
+          .margin({ top : '15vp' , right : '20vp' })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let brFoundScenarioMessage = ""
@@ -159,11 +159,11 @@ struct BrFoundScenarioTest {
           })
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-        .width($r('app.float.wh_value_100p'))
+        .width('100%')
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-      .width($r('app.float.wh_value_100p'))
-      .height($r('app.float.wh_value_100p'));
+      .width('100%')
+      .height('100%');
     }
   }
 

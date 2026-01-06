@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,38 +35,38 @@ export struct AutoVerificationTable {
           Image($r('app.media.bluetooth'))
             .objectFit(ImageFit.Contain)
             .autoResize(false)
-            .height($r('app.float.wh_value_30'))
-            .width($r('app.float.wh_value_30'))
+            .height('30vp')
+            .width('30vp')
         }
-        .layoutWeight($r('app.float.wh_value_1'))
-        .padding({ left : $r('app.float.wh_value_10') })
+        .layoutWeight(1)
+        .padding({ left : '10vp' })
 
         Flex({ direction : FlexDirection.Column , alignItems : ItemAlign.Start }) {
           Text(apiItem.name)
-            .fontSize($r('app.float.wh_value_17_4'))
+            .fontSize('17.4vp')
             .fontWeight(FontWeight.Bold)
-            .layoutWeight($r('app.float.wh_value_1'))
-            .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_15') })
+            .layoutWeight(1)
+            .padding({ left : '10vp' , top : '15vp' })
           Text(apiItem.detail)
-            .fontSize($r('app.float.wh_value_17_4'))
+            .fontSize('17.4vp')
             .fontWeight(FontWeight.Bold)
-            .layoutWeight($r('app.float.wh_value_1'))
-            .padding({ left : $r('app.float.wh_value_10') , top : $r('app.float.wh_value_5') })
+            .layoutWeight(1)
+            .padding({ left : '10vp' , top : '5vp' })
         }
-        .layoutWeight($r('app.float.wh_value_6'))
+        .layoutWeight(6)
 
         Flex({ alignItems : ItemAlign.Center }) {
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : apiItem.result)
-            .fontSize($r('app.float.wh_value_17_4'))
-            .flexGrow($r('app.float.wh_value_1'))
+            .fontSize('17.4vp')
+            .flexGrow(1)
         }
-        .layoutWeight($r('app.float.wh_value_3'))
-        .padding({ left : $r('app.float.wh_value_10') })
+        .layoutWeight(3)
+        .padding({ left : '10vp' })
       }
     }
-    .height($r('app.float.wh_value_80'))
-    .borderRadius($r('app.float.wh_value_10'))
-    .margin({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') })
+    .height('80vp')
+    .borderRadius('10vp')
+    .margin({ top : '5vp' , bottom : '5vp' })
     .backgroundColor($r("app.color.white"))
     .onClick(() => {
       switch ( apiItem.method ) {
@@ -99,9 +99,9 @@ export struct AutoVerificationTable {
           })
         }
       }
-      .scrollBarWidth($r('app.float.wh_value_20'))
+      .scrollBarWidth('20vp')
     }
-    .height($r('app.float.wh_value_88p'))
-    .padding({ top : $r('app.float.wh_value_5') , right : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
+    .height('88%')
+    .padding({ top : '5vp' , right : '10vp' , left : '10vp' })
   }
 }

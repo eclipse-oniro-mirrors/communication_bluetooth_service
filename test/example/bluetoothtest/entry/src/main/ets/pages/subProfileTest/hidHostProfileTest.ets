@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,63 +61,63 @@ struct HidHostProfileTest {
           PageTitle({ testItem : this.testItem })
         }
 
-        Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
+        Stack().height('0.5vp').backgroundColor($r('app.color.black'));
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
-          .margin({ top : $r('app.float.wh_value_10') })
-          .fontSize($r('app.float.wh_value_20'))
+          .margin({ top : '10vp' })
+          .fontSize('20vp')
           .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') : $r('app.color.color_FF0000_red'))
           .border({ width : 0.5 })
-          .padding($r('app.float.wh_value_5'))
+          .padding('5vp')
           .fontStyle(FontStyle.Italic);
         Column() {
           Row() {
             Text("现在正在连接的设备为：")
-              .fontSize("17").width($r('app.float.wh_value_110')).margin($r('app.float.wh_value_5'))
+              .fontSize("17").width('110vp').margin('5vp')
             TextInput({ text : JSON.stringify(this.deviceId) , placeholder : "请输入需要连接的deviceId" })
-              .fontSize($r('app.float.wh_value_17'))
+              .fontSize('17vp')
               .onChange((str) => {
                 this.deviceId = str;
                 AppStorage.setOrCreate("deviceId" , str)
               })
-              .width($r('app.float.wh_value_70p'))
-              .borderRadius($r('app.float.wh_value_1'))
+              .width('70%')
+              .borderRadius('1vp')
           }
           .backgroundColor($r("app.color.moon"))
-          .margin({ top : $r('app.float.wh_value_20') , bottom : $r('app.float.wh_value_20') , left : $r('app.float.wh_value_20') , right : $r('app.float.wh_value_20') })
+          .margin({ top : '20vp' , bottom : '20vp' , left : '20vp' , right : '20vp' })
           .alignItems(VerticalAlign.Center)
 
           Column() {
             Text("接口调用结果： " + this.hidHostMessage)
-              .fontSize($r('app.float.wh_value_17'))
+              .fontSize('17vp')
               .textAlign(TextAlign.Start)
-              .margin({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
-              .width($r('app.float.wh_value_100p'))
+              .margin({ top : '5vp' , left : '10vp' })
+              .width('100%')
             Text("connectionStateChange： " + this.connectionStateInfo)
-              .fontSize($r('app.float.wh_value_17'))
-              .margin({ top : $r('app.float.wh_value_10') , left : $r('app.float.wh_value_10') })
+              .fontSize('17vp')
+              .margin({ top : '10vp' , left : '10vp' })
               .textAlign(TextAlign.Start)
-              .width($r('app.float.wh_value_90p'))
+              .width('90%')
           }
-          .height($r('app.float.wh_value_90'))
+          .height('90vp')
           .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
-          .width($r('app.float.wh_value_88p'))
+          .width('88%')
 
           Text("请点击需要测试的方法")
-            .margin({ top : $r('app.float.wh_value_10') })
-            .padding($r('app.float.wh_value_5'))
-            .fontSize($r('app.float.wh_value_17'))
+            .margin({ top : '10vp' })
+            .padding('5vp')
+            .fontSize('17vp')
             .fontColor($r('app.color.color_4444444_grey'));
           Column() {
             ContentTable({ apiItems : initHitHostProfileApiData() })
           }
-          .height($r('app.float.wh_value_66p'))
+          .height('66%')
         }
         .visibility(this.hasProfile ? Visibility.Visible : Visibility.Hidden);
       }
-      .width($r('app.float.wh_value_100p'))
+      .width('100%')
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-    .height($r('app.float.wh_value_100p'))
+    .height('100%')
     .alignItems(VerticalAlign.Top)
   }
 

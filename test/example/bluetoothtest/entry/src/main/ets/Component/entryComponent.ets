@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,8 @@ export default struct EntryComponentTable {
   private enabled: boolean = true;
   private onArrowClick?: () => void;
   @State isTouched: boolean = false;
-  private height ? = $r('app.float.wh_value_70');
-  private image_wh ? = $r('app.float.wh_value_50');
+  private height ? = '70vp';
+  private image_wh ? = '50vp';
   private fontSize ? = $r('sys.float.ohos_id_text_size_body1');
   private valueFontSize ? = $r('sys.float.ohos_id_text_size_body2');
 
@@ -71,34 +71,34 @@ export default struct EntryComponentTable {
         }
         .alignItems(HorizontalAlign.Start);
       }
-      .flexShrink($r('app.float.wh_value_0'))
+      .flexShrink('0vp')
       .alignItems(VerticalAlign.Center)
       .align(Alignment.Start)
-      .layoutWeight($r('app.float.wh_value_1'))
+      .layoutWeight(1)
 
       Row() {
         Text(this.settingValue)
           .fontSize(this.valueFontSize)
           .fontColor($r('sys.color.ohos_id_color_text_secondary'))
           .fontWeight('sans-serif')
-          .height($r('app.float.wh_value_40'))
+          .height('40vp')
           .margin({ left : $r('sys.float.ohos_id_elements_margin_horizontal_l') })
           .align(Alignment.End);
 
         if ( !this.settingArrowStyle && this.settingArrow ) {
           Image(this.settingArrow)
             .visibility(null === this.settingArrow ? Visibility.None : Visibility.Visible)
-            .width($r("app.float.wh_value_12"))
-            .height($r("app.float.wh_value_24"))
-            .margin({ left : $r("app.float.distance_4") , right : $r("app.float.distance_8") })
+            .width('12vp')
+            .height('24vp')
+            .margin({ left : '4vp' , right : '8vp' })
 
         } else if ( this.settingArrow ) {
           Image(this.settingArrow)
             .visibility(null === this.settingArrow ? Visibility.None : Visibility.Visible)
-            .width($r('app.float.wh_value_48'))
-            .height($r('app.float.wh_value_48'))
-            .padding($r('app.float.wh_value_4'))
-            .margin({ left : $r('app.float.wh_value_4') , right : $r('app.float.wh_value_4') })
+            .width('48vp')
+            .height('48vp')
+            .padding('4vp')
+            .margin({ left : '4vp' , right : '4vp' })
             .borderRadius($r("sys.float.ohos_id_corner_radius_default_l"))
             .onClick(this.onArrowClick);
         }

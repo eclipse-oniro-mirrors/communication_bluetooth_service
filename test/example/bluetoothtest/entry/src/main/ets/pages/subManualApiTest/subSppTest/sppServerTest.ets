@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,54 +86,54 @@ struct SppServer {
             PageTitle({ testItem : this.testItem })
           }
 
-          Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
+          Stack().height('0.5vp').backgroundColor($r('app.color.black'));
 
           Row() {
-            Text("本机设备UUID：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_85'))
+            Text("本机设备UUID：").fontSize('17vp').width('85vp')
             TextInput({ text : this.uuid , placeholder : "请输入uuid" })
-              .fontSize($r('app.float.wh_value_17'))
+              .fontSize('17vp')
               .onChange((str) => {
                 this.uuid = str;
                 AppStorage.setOrCreate('inputUuid' , str)
               })
-              .width($r('app.float.wh_value_80p'))
-              .borderRadius($r('app.float.wh_value_1'))
+              .width('80%')
+              .borderRadius('1vp')
           }
           .backgroundColor($r("app.color.spring"))
-          .padding($r('app.float.wh_value_5'))
+          .padding('5vp')
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("写入目标设备数据：").fontSize($r('app.float.wh_value_17')).width($r('app.float.wh_value_95'))
+            Text("写入目标设备数据：").fontSize('17vp').width('95vp')
             TextInput({ text : this.writeServerData , placeholder : "请输入写入的数据" })
-              .fontSize($r('app.float.wh_value_14'))
+              .fontSize('14vp')
               .onChange((str) => {
                 this.writeServerData = str;
                 AppStorage.setOrCreate("writeServerData" , str);
               })
-              .width($r('app.float.wh_value_80p'))
-              .borderRadius($r('app.float.wh_value_1'))
+              .width('80%')
+              .borderRadius('1vp')
           }
           .backgroundColor($r("app.color.moon"))
-          .padding($r('app.float.wh_value_5'))
+          .padding('5vp')
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text("读取的数据为：").fontSize($r('app.float.wh_value_17'))
+            Text("读取的数据为：").fontSize('17vp')
             Text(this.dataReadMessage)
-              .fontSize($r('app.float.wh_value_14'))
-              .width($r('app.float.wh_value_80p'))
-              .borderRadius($r('app.float.wh_value_1'))
+              .fontSize('14vp')
+              .width('80%')
+              .borderRadius('1vp')
           }
-          .padding($r('app.float.wh_value_5'))
+          .padding('5vp')
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
           Column() {
-            Text("接口调用结果：" + this.message).fontSize($r('app.float.wh_value_17'))
-              .padding($r('app.float.wh_value_10'))
+            Text("接口调用结果：" + this.message).fontSize('17vp')
+              .padding('10vp')
               .textAlign(TextAlign.Start)
           }
           .backgroundColor($r("app.color.moon"))
@@ -144,17 +144,17 @@ struct SppServer {
             }
             .width(ConfigData.WH_100_100)
             .align(Alignment.TopStart)
-            .layoutWeight($r('app.float.wh_value_1'))
+            .layoutWeight(1)
             .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
-            .height($r('app.float.wh_value_100p'))
+            .height('100%')
           }
-          .height($r('app.float.wh_value_85p'))
+          .height('85%')
         }
       }
-      .width($r('app.float.wh_value_100p'))
+      .width('100%')
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-    .height($r('app.float.wh_value_100p'))
+    .height('100%')
     .alignItems(VerticalAlign.Top)
   }
 
@@ -254,44 +254,44 @@ struct PairDialog {
   build() {
     Column() {
       Text($r('app.string.bluetooth_pairing_request'))
-        .fontSize($r('app.float.font_22'))
-        .height($r('app.float.wh_value_60'))
+        .fontSize('22fp')
+        .height('60vp')
         .width(ConfigData.WH_100_100)
         .padding({
-          left : $r('app.float.distance_24') ,
-          top : $r('app.float.distance_14') ,
-          bottom : $r('app.float.distance_14')
+          left : '24vp' ,
+          top : '14vp' ,
+          bottom : '14vp'
         })
       Column() {
         if ( this.pinCode ) {
           Text($r('app.string.bluetooth_pairing_intelligent_device_hit' , this.deviceName , this.deviceName))
-            .fontSize($r('app.float.font_16'))
+            .fontSize('16fp')
             .width(ConfigData.WH_100_100)
             .margin({
-              top : $r('app.float.distance_14') ,
-              bottom : $r('app.float.distance_14')
+              top : '14vp' ,
+              bottom : '14vp'
             })
 
           Text(`${ this.pinCode }`)
-            .fontSize($r('app.float.pinCode_font_size'))
+            .fontSize('32fp')
             .fontWeight(FontWeight.Bolder)
             .width(ConfigData.WH_100_100)
             .textAlign(TextAlign.Center)
             .margin({
-              top : $r('app.float.item_common_horizontal_margin') ,
-              bottom : $r('app.float.item_common_horizontal_margin')
+              top : '24vp' ,
+              bottom : '24vp'
             })
 
         } else {
           Text($r('app.string.bluetooth_pairing_media_device_hit'))
-            .fontSize($r('app.float.font_16'))
+            .fontSize('16fp')
             .width(ConfigData.WH_100_100)
             .margin({
-              bottom : $r('app.float.switch_summary_margin')
+              bottom : '2vp'
             })
 
           Text(this.deviceName)
-            .fontSize($r('app.float.font_16'))
+            .fontSize('16fp')
             .width(ConfigData.WH_100_100)
             .fontWeight(FontWeight.Bold)
         }
@@ -300,50 +300,50 @@ struct PairDialog {
         Flex({ justifyContent : FlexAlign.Center , alignItems : ItemAlign.Center }) {
           Button() {
             Text($r('app.string.cancel'))
-              .fontSize($r('app.float.font_16'))
+              .fontSize('16fp')
               .fontColor(Color.Blue)
           }
           .backgroundColor($r("app.color.white_bg_color"))
-          .width($r("app.float.wh_value_160"))
-          .height($r("app.float.wh_value_40"))
-          .flexGrow($r('app.float.wh_value_1'))
+          .width('160vp')
+          .height('40vp')
+          .flexGrow(1)
           .onClick(() => {
             this.dialogController.close();
             this.action(false);
           })
 
           Divider()
-            .height($r("app.float.wh_value_24"))
-            .strokeWidth($r('app.float.wh_value_0_5'))
+            .height('24vp')
+            .strokeWidth('0.5vp')
             .vertical(true)
             .color(($r("app.color.color_E3E3E3_grey")))
 
           Button() {
             Text($r('app.string.bluetooth_pair_button'))
-              .fontSize($r('app.float.font_16'))
+              .fontSize('16fp')
               .fontColor(Color.Blue)
           }
           .backgroundColor($r("app.color.white_bg_color"))
-          .width($r("app.float.wh_value_160"))
-          .height($r("app.float.wh_value_40"))
-          .flexGrow($r('app.float.wh_value_1'))
+          .width('160vp')
+          .height('40vp')
+          .flexGrow(1)
           .onClick(() => {
             this.dialogController.close();
             this.action(true);
           })
         }
         .width(ConfigData.WH_100_100)
-        .height($r('app.float.wh_value_60'));
+        .height('60vp');
       }
       .width(ConfigData.WH_100_100)
       .padding({
-        left : $r('app.float.distance_24') ,
-        right : $r('app.float.distance_24')
+        left : '24vp' ,
+        right : '24vp'
       })
     }
     .padding({
-      left : $r('app.float.distance_24') ,
-      right : $r('app.float.distance_24')
+      left : '24vp' ,
+      right : '24vp'
     })
     .width(ConfigData.WH_100_100);
   }

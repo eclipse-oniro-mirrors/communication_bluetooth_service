@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,30 +81,30 @@ struct BleTest {
         PageTitle({ testItem : this.testItem })
       }
 
-      Stack().height($r('app.float.wh_value_0_5')).backgroundColor($r('app.color.black'));
+      Stack().height('0.5vp').backgroundColor($r('app.color.black'));
       Column() {
         Row() {
           Text("外设MAC:")
-            .fontSize($r('app.float.wh_value_18'))
-            .height($r('app.float.wh_value_40'))
-            .width($r('app.float.wh_value_25p'))
+            .fontSize('18vp')
+            .height('40vp')
+            .width('25%')
             .align(Alignment.Start)
 
           TextInput({ text : this.peripheralDeviceId , placeholder : "input peripheral deviceId." })
-            .fontSize($r('app.float.wh_value_18'))
+            .fontSize('18vp')
             .onChange((strInput) => {
               this.peripheralDeviceId = strInput;
               AppStorage.setOrCreate("peripheralDeviceId" , strInput)
             })
-            .width($r('app.float.wh_value_55p'))
-            .padding({ top : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_5') })
-            .height($r('app.float.wh_value_40'))
+            .width('55%')
+            .padding({ top : '5vp' , left : '5vp' })
+            .height('40vp')
             .borderStyle(BorderStyle.Dashed)
             .backgroundColor($r("app.color.white"))
           Image($r('app.media.Switch'))
-            .height($r('app.float.wh_value_50'))
-            .width($r('app.float.wh_value_15p'))
-            .padding({ top : $r('app.float.wh_value_5') , bottom : $r('app.float.wh_value_5') , left : $r('app.float.wh_value_10') })
+            .height('50vp')
+            .width('15%')
+            .padding({ top : '5vp' , bottom : '5vp' , left : '10vp' })
             .onClick(() => {
               this.showList = !this.showList;
             })
@@ -120,7 +120,7 @@ struct BleTest {
     }
     .alignItems(HorizontalAlign.Center)
     .backgroundColor($r("app.color.lead"))
-    .height($r('app.float.wh_value_100p'))
+    .height('100%')
   }
 
   /**

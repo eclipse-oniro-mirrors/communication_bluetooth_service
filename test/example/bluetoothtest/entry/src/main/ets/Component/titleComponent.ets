@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import ConfigData from '../Utils/ConfigData';
 @Component
 export struct TitleComponent {
   private title: string | Resource = 'defaultTitle';
-  private fontSize: string = $r('app.float.wh_value_30');
+  private fontSize: string = '30vp';
   private stateChangeFlag: boolean = false;
   private pinRequiredFlag: boolean = false;
   private bondStateChangeFlag: boolean = false;
@@ -36,13 +36,13 @@ export struct TitleComponent {
       Flex({ justifyContent : FlexAlign.SpaceBetween , alignItems : ItemAlign.Center }) {
         Text(this.stateChangeFlag ? this.state : (this.pinRequiredFlag ? this.pin : (this.bondStateChangeFlag ? this.bondState : this.title)))
           .textAlign(TextAlign.Center)
-          .width($r('app.float.wh_value_100p'))
-          .height($r('app.float.wh_value_70'))
+          .width('100%')
+          .height('70vp')
           .fontSize(this.fontSize)
           .fontColor($r('app.color.font_color_182431'))
           .fontWeight(FontWeight.Medium)
       }
-      .height($r('app.float.wh_value_80'))
+      .height('80vp')
       .width(ConfigData.WH_100_100)
       .backgroundColor(this.bgColor)
       .linearGradient(this.isTouched ?
@@ -65,9 +65,9 @@ export struct TitleComponent {
         }
       })
     }
-    .padding($r('app.float.distance_4'))
-    .height($r('app.float.wh_value_100'))
-    .borderRadius($r('app.float.radius_12'))
+    .padding('4vp')
+    .height('100vp')
+    .borderRadius('12vp')
     .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"));
   }
 }

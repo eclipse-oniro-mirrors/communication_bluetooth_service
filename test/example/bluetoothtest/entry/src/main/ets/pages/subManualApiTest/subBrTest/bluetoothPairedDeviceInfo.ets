@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,10 +42,10 @@ struct BluetoothPairedDeviceInfo {
   build() {
     Column() {
       GridContainer({
-        columns : $r('app.float.wh_value_12') ,
+        columns : 12 ,
         sizeType : SizeType.Auto ,
-        gutter : vp2px(1) === 2 ? $r('app.float.wh_value_12') : $r('app.float.wh_value_0') ,
-        margin : vp2px(1) === 2 ? $r('app.float.wh_value_24') : $r('app.float.wh_value_0')
+        gutter : vp2px(1) === 2 ? '12vp' : '0vp' ,
+        margin : vp2px(1) === 2 ? '24vp' : '0vp'
       }) {
         Row({}) {
           Column() {
@@ -54,7 +54,7 @@ struct BluetoothPairedDeviceInfo {
           .height(ConfigData.WH_100_100)
           .useSizeType({
             xs : { span : 0 , offset : 0 } , sm : { span : 0 , offset : 0 } ,
-            md : { span : 0 , offset : 0 } , lg : { span : $r('app.float.wh_value_2') , offset : 0 }
+            md : { span : 0 , offset : 0 } , lg : { span : 2 , offset : 0 }
           });
           Column() {
             HeadTableComponent({ headName : this.bluetoothDevice.deviceName , isActive : true });
@@ -62,12 +62,12 @@ struct BluetoothPairedDeviceInfo {
             Row() {
               Button() {
                 Text($r("app.string.cancelPairing"))
-                  .fontSize($r('app.float.application_button_subtitle_size'))
+                  .fontSize('16fp')
                   .fontColor(Color.Blue)
               }
               .backgroundColor($r('app.color.color_E3E3E3_grey'))
-              .width($r("app.float.paired_device_button_width"))
-              .height($r("app.float.wh_value_40"))
+              .width('186vp')
+              .height('40vp')
               .align(Alignment.Center)
               .onTouch((event: TouchEvent) => {
                 if ( event.type === TouchType.Down ) {
@@ -83,14 +83,14 @@ struct BluetoothPairedDeviceInfo {
                   router.back();
                 }
               })
-            }.margin({ bottom : $r('app.float.distance_24') });
+            }.margin({ bottom : '24vp' });
           }
-          .padding({ left : $r('app.float.distance_24') , right : $r('app.float.distance_24') })
+          .padding({ left : '24vp' , right : '24vp' })
           .height(ConfigData.WH_100_100)
           .width(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : $r('app.float.wh_value_12') , offset : 0 } , sm : { span : $r('app.float.wh_value_12') , offset : 0 } ,
-            md : { span : $r('app.float.wh_value_12') , offset : 0 } , lg : { span : $r('app.float.wh_value_8') , offset : $r('app.float.wh_value_2') }
+            xs : { span : 12 , offset : 0 } , sm : { span : 12 , offset : 0 } ,
+            md : { span : 12 , offset : 0 } , lg : { span : 8 , offset : 2 }
           });
 
           Column() {
@@ -98,8 +98,8 @@ struct BluetoothPairedDeviceInfo {
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 0 , offset : $r('app.float.wh_value_12') } , sm : { span : 0 , offset : $r('app.float.wh_value_12') } ,
-            md : { span : 0 , offset : $r('app.float.wh_value_12') } , lg : { span : $r('app.float.wh_value_2') , offset : $r('app.float.wh_value_10') }
+            xs : { span : 0 , offset : 12 } , sm : { span : 0 , offset : 12 } ,
+            md : { span : 0 , offset : 12 } , lg : { span : 2 , offset : 10 }
           })
         }
         .width(ConfigData.WH_100_100)

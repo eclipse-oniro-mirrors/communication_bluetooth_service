@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,10 +30,10 @@ struct pairedDevices {
   build() {
     Column() {
       GridContainer({
-        columns : $r('app.float.wh_value_12') ,
+        columns : 12 ,
         sizeType : SizeType.Auto ,
-        gutter : vp2px(1) === 2 ? $r('app.float.wh_value_12') : $r('app.float.wh_value_0') ,
-        margin : vp2px(1) === 2 ? $r('app.float.wh_value_24') : $r('app.float.wh_value_0')
+        gutter : vp2px(1) === 2 ? '12vp' : '0vp' ,
+        margin : vp2px(1) === 2 ? '24vp' : '0vp'
       }) {
         Row({}) {
           Column() {
@@ -42,7 +42,7 @@ struct pairedDevices {
           .height(ConfigData.WH_100_100)
           .useSizeType({
             xs : { span : 0 , offset : 0 } , sm : { span : 0 , offset : 0 } ,
-            md : { span : 0 , offset : 0 } , lg : { span : $r('app.float.wh_value_2') , offset : 0 }
+            md : { span : 0 , offset : 0 } , lg : { span : 2 , offset : 0 }
           });
 
           Column() {
@@ -60,7 +60,7 @@ struct pairedDevices {
                 ForEach(this.pairedDevices , (item: string) => {
                   ListItem() {
                     TitleComponent({ title : item });
-                  }.padding({ top : $r('app.float.distance_2') , bottom : $r('app.float.distance_2') })
+                  }.padding({ top : '2vp' , bottom : '2vp' })
                 } , item => JSON.stringify(item));
               }
 
@@ -77,22 +77,22 @@ struct pairedDevices {
                   router.back();
                 } })
               }
-              .width($r("app.float.deviceName_button_width"))
-              .margin({ right : $r("app.float.distance_12") })
+              .width('120vp')
+              .margin({ right : '12vp' })
 
               Row() {
                 ButtonComponent({ text : $r("app.string.confirm") , isOnClick : () => {
                   router.back();
                 } })
-              }.width($r("app.float.deviceName_button_width"))
+              }.width('120vp')
             }
           }
-          .padding({ left : $r('app.float.distance_24') , right : $r('app.float.distance_24') })
+          .padding({ left : '24vp' , right : '24vp' })
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : $r('app.float.wh_value_12') , offset : 0 } , sm : { span : $r('app.float.wh_value_12') , offset : 0 } ,
-            md : { span : $r('app.float.wh_value_12') , offset : 0 } , lg : { span : $r('app.float.wh_value_8') , offset : $r('app.float.wh_value_2') }
+            xs : { span : 12 , offset : 0 } , sm : { span : 12 , offset : 0 } ,
+            md : { span : 12 , offset : 0 } , lg : { span : 8 , offset : 2 }
           });
         }
         .width(ConfigData.WH_100_100)
@@ -118,14 +118,14 @@ struct ButtonComponent {
   build() {
     Column() {
       Text(this.text)
-        .fontSize($r('app.float.font_16'))
+        .fontSize('16fp')
         .fontWeight(FontWeight.Medium)
-        .lineHeight($r('app.float.wh_value_22'))
+        .lineHeight('22vp')
         .fontColor($r('app.color.font_color_007DFF'))
         .textAlign(TextAlign.Center)
-        .width($r('app.float.deviceName_button_width'))
-        .height($r("app.float.wh_value_40"))
-        .borderRadius($r('app.float.radius_20'))
+        .width('120vp')
+        .height('40vp')
+        .borderRadius('20vp')
         .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") : $r("sys.color.ohos_id_color_foreground_contrary"))
         .onTouch((event: TouchEvent) => {
           if ( event.type === TouchType.Down ) {

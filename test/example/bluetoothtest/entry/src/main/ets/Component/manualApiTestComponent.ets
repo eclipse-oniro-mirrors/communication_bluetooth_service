@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,6 @@ export struct ManualApiTest {
       TestList({
         testItems : this.testItems
       })
-    }.height($r('app.float.wh_value_100p'))
+    }.height('100%')
   }
 }

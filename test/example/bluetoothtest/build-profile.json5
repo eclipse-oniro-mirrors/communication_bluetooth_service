@@ -18,13 +18,13 @@
       {
         "name": "default",
         "material": {
-          "certpath": "C:/Users/Administrator/.ohos/config/openharmony/default_bluetoothtest_RG-BAy_lt-8l_PwsoJ06pfRQWy_SsnNzzGcNrd-4zWg=.cer",
+          "certpath": "C:/Users/Administrator/.ohos/config/openharmony/default_bluetoothtest_1wOWTIyH4sXgIjR3eRfMrzcLjaSgtwhWL7WVvcjpr6I=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B589A11C71B04E339E205932112DEFFE64A21184805D12758D824A79259F7E58B7A0380B657955F",
-          "profile": "C:/Users/Administrator/.ohos/config/openharmony/default_bluetoothtest_RG-BAy_lt-8l_PwsoJ06pfRQWy_SsnNzzGcNrd-4zWg=.p7b",
+          "keyPassword": "0000001BDF20B5B0907B69D9CD907ECEF0335FF38C3CD99ECF7EE7A24B801B748B8C2B05DBA5706644FF76",
+          "profile": "C:/Users/Administrator/.ohos/config/openharmony/default_bluetoothtest_1wOWTIyH4sXgIjR3eRfMrzcLjaSgtwhWL7WVvcjpr6I=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:/Users/Administrator/.ohos/config/openharmony/default_bluetoothtest_RG-BAy_lt-8l_PwsoJ06pfRQWy_SsnNzzGcNrd-4zWg=.p12",
-          "storePassword": "0000001B476CC679492C16E58CC4F706FF4D51224A6E4800142848DBBA8C758648CFBA82C19D879850B146"
+          "storeFile": "C:/Users/Administrator/.ohos/config/openharmony/default_bluetoothtest_1wOWTIyH4sXgIjR3eRfMrzcLjaSgtwhWL7WVvcjpr6I=.p12",
+          "storePassword": "0000001B72366441D2F2DAD7481D71AA5E0F8DB4C0DD48A752921CBCCC5AD811E7861447283B73E0B28C3F"
         }
       }
     ],

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,22 +38,22 @@ struct ProfileConnState {
             TitleComponent({
               title : "SELECT_PROFILE_ID" ,
               bgColor : $r("app.color.moon") ,
-              fontSize : $r('app.float.wh_value_17') ,
+              fontSize : '17vp' ,
             })
           }
-          .height($r('app.float.wh_value_80'))
-          .borderRadius($r('app.float.wh_value_10'))
+          .height('80vp')
+          .borderRadius('10vp')
 
           ListItem() {
             TitleComponent({
               title : "A2DP_SOURCE" ,
-              fontSize : $r('app.float.wh_value_15') ,
+              fontSize : '15vp' ,
               bgColor : this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : $r('app.float.wh_value_10') })
-          .height($r('app.float.wh_value_80'))
-          .borderRadius($r('app.float.wh_value_10'))
+          .padding({ top : '10vp' })
+          .height('80vp')
+          .borderRadius('10vp')
           .onClick(() => {
             this.currentClick = 0;
             this.profileId = 1;
@@ -62,13 +62,13 @@ struct ProfileConnState {
           ListItem() {
             TitleComponent({
               title : "HANDS_FREE_AUDIO_GATEWAY" ,
-              fontSize : $r('app.float.wh_value_15') ,
+              fontSize : '15vp' ,
               bgColor : this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             })
           }
-          .padding({ top : $r('app.float.wh_value_20') })
-          .height($r('app.float.wh_value_80'))
-          .borderRadius($r('app.float.wh_value_10'))
+          .padding({ top : '20vp' })
+          .height('80vp')
+          .borderRadius('10vp')
           .onClick(() => {
             this.currentClick = 1;
             this.profileId = 4;
@@ -77,26 +77,26 @@ struct ProfileConnState {
           ListItem() {
             TitleComponent({
               title : "HID_HOST" ,
-              fontSize : $r('app.float.wh_value_15') ,
+              fontSize : '15vp' ,
               bgColor : this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : $r('app.float.wh_value_20') })
-          .height($r('app.float.wh_value_80'))
-          .borderRadius($r('app.float.wh_value_10'))
+          .padding({ top : '20vp' })
+          .height('80vp')
+          .borderRadius('10vp')
           .onClick(() => {
             this.currentClick = 2;
             this.profileId = 6;
           })
         }
-        .height($r('app.float.wh_value_400'))
+        .height('400vp')
       }
 
       Text(this.message)
         .textAlign(TextAlign.Center)
         .fontSize('17fp')
-        .height($r('app.float.wh_value_60'))
-        .width($r('app.float.wh_value_100p'))
+        .height('60vp')
+        .width('100%')
         .backgroundColor($r("app.color.moon"))
 
 
@@ -105,31 +105,31 @@ struct ProfileConnState {
           Text("取消")
             .textAlign(TextAlign.Center)
             .fontSize('17fp')
-            .height($r('app.float.wh_value_60'))
-            .width($r('app.float.wh_value_100'))
-            .borderRadius($r('app.float.wh_value_10'))
+            .height('60vp')
+            .width('100vp')
+            .borderRadius('10vp')
             .borderColor($r("app.color.moon"))
             .backgroundColor($r("app.color.white"))
         }
-        .padding({ right : $r('app.float.wh_value_10') })
+        .padding({ right : '10vp' })
 
         Column() {
           Text("确认")
             .textAlign(TextAlign.Center)
             .fontSize('17fp')
-            .height($r('app.float.wh_value_60'))
-            .width($r('app.float.wh_value_100'))
-            .borderRadius($r('app.float.wh_value_10'))
+            .height('60vp')
+            .width('100vp')
+            .borderRadius('10vp')
             .borderColor($r("app.color.moon"))
             .backgroundColor($r("app.color.white"))
         }
-        .padding({ left : $r('app.float.wh_value_50') })
+        .padding({ left : '50vp' })
 
       }
-      .width($r('app.float.wh_value_80p'))
+      .width('80%')
     }
-    .padding({ left : $r('app.float.distance_24') , right : $r('app.float.distance_24') })
-    .width($r('app.float.wh_value_100p'))
+    .padding({ left : '24vp' , right : '24vp' })
+    .width('100%')
     .height(ConfigData.WH_100_100)
     .backgroundColor($r("app.color.lead"))
   }
@@ -145,14 +145,14 @@ struct ButtonComponent {
   build() {
     Column() {
       Text(this.text)
-        .fontSize($r('app.float.font_16'))
+        .fontSize('16fp')
         .fontWeight(FontWeight.Medium)
-        .lineHeight($r('app.float.wh_value_22'))
+        .lineHeight('22vp')
         .fontColor($r('app.color.font_color_007DFF'))
         .textAlign(TextAlign.Center)
-        .width($r('app.float.wh_value_100'))
-        .height($r("app.float.wh_value_40"))
-        .borderRadius($r('app.float.radius_20'))
+        .width('100vp')
+        .height('40vp')
+        .borderRadius('20vp')
         .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") : $r("sys.color.ohos_id_color_foreground_contrary"))
         .onTouch((event: TouchEvent) => {
           if ( event.type === TouchType.Down ) {

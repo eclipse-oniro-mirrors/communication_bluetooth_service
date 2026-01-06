@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,23 +31,23 @@ export struct SubEntryComponent {
       Flex({ justifyContent : FlexAlign.SpaceBetween , alignItems : ItemAlign.Center }) {
         Row() {
           Text(this.title)
-            .fontSize($r('app.float.font_30'))
-            .lineHeight($r('app.float.wh_value_32'))
+            .fontSize('30fp')
+            .lineHeight('32vp')
             .fontColor($r('app.color.font_color_182431'))
             .fontWeight(FontWeight.Medium)
-            .margin({ left : $r('app.float.distance_8') })
+            .margin({ left : '8vp' })
             .textAlign(TextAlign.Start)
-            .height($r('app.float.wh_value_32'));
+            .height('32vp');
         }
 
         Image(('app.media.ic_settings_arrow'))
-          .width($r('app.float.wh_value_12'))
-          .height($r('app.float.wh_value_100'))
-          .margin({ right : $r('app.float.distance_8') });
+          .width('12vp')
+          .height('100vp')
+          .margin({ right : '8vp' });
       }
       .height(ConfigData.WH_100_100)
       .width(ConfigData.WH_100_100)
-      .borderRadius($r('app.float.radius_12'))
+      .borderRadius('12vp')
       .linearGradient(this.isTouched ? {
                                          angle : 90 ,
                                          direction : GradientDirection.Right ,
@@ -67,9 +67,9 @@ export struct SubEntryComponent {
       })
     }
     .params({ date : this.date , deviceId : this.deviceId })
-    .padding($r('app.float.distance_4'))
-    .height($r('app.float.wh_value_100'))
-    .borderRadius($r('app.float.radius_24'))
+    .padding('4vp')
+    .height('100vp')
+    .borderRadius('24vp')
     .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"));
   }
 }
@@ -89,31 +89,31 @@ export struct SubEntryComponentWithEndText {
       Flex({ justifyContent : FlexAlign.SpaceBetween , alignItems : ItemAlign.Center }) {
         Row() {
           Text(this.title)
-            .fontSize($r('app.float.font_16'))
-            .lineHeight($r('app.float.wh_value_22'))
+            .fontSize('16fp')
+            .lineHeight('22vp')
             .fontWeight(FontWeight.Medium)
             .fontColor($r('app.color.font_color_182431'))
-            .margin({ left : $r('app.float.distance_8') })
+            .margin({ left : '8vp' })
             .textAlign(TextAlign.Start);
         }
 
         Row() {
           Text(this.endText)
-            .fontSize($r('app.float.font_14'))
-            .lineHeight($r('app.float.wh_value_19'))
+            .fontSize('14fp')
+            .lineHeight('19vp')
             .fontWeight(FontWeight.Regular)
             .fontColor($r('sys.color.ohos_id_color_text_secondary'))
-            .margin({ right : $r('app.float.distance_4') })
+            .margin({ right : '4vp' })
             .textAlign(TextAlign.End);
           Image(('app.media.ic_settings_arrow'))
-            .width($r('app.float.wh_value_12'))
-            .height($r('app.float.wh_value_24'))
-            .margin({ right : $r('app.float.distance_8') });
+            .width('12vp')
+            .height('24vp')
+            .margin({ right : '8vp' });
         }
       }
       .height(ConfigData.WH_100_100)
       .width(ConfigData.WH_100_100)
-      .borderRadius($r('app.float.radius_20'))
+      .borderRadius('20vp')
       .linearGradient(this.isTouched ? {
                                          angle : 90 ,
                                          direction : GradientDirection.Right ,
@@ -132,9 +132,9 @@ export struct SubEntryComponentWithEndText {
         }
       });
     }
-    .padding($r('app.float.distance_4'))
-    .height($r('app.float.wh_value_56'))
-    .borderRadius($r('app.float.radius_24'))
+    .padding('4vp')
+    .height('56vp')
+    .borderRadius('24vp')
     .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"));
   }
 }
