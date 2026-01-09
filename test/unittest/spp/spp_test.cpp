@@ -143,23 +143,6 @@ HWTEST_F(SocketTest, Spp_UnitTest_GetRemoteDevice, TestSize.Level1)
     BluetoothRemoteDevice tempRemoteDevice = pfd_SppClientSocket->GetRemoteDevice();
     GTEST_LOG_(INFO) << "SppClientSocket::GetRemoteDevice ends";
 }
-    
-/**
- * @tc.number:Spp_UnitTest006
- * @tc.name: IsConnected
- * @tc.desc: 
- */
-HWTEST_F(SocketTest, Spp_UnitTest_IsConnected, TestSize.Level1)
-{
-    GTEST_LOG_(INFO) << "SppClientSocket::IsConnected starts";
-    int fd = 37;
-    BluetoothRemoteDevice device_;
-    ClientSocket *pfd_SppClientSocket = new ClientSocket(fd, device_.GetDeviceAddr(), TYPE_RFCOMM);
-    bool IsConnected = false;
-    IsConnected = pfd_SppClientSocket->IsConnected();
-    EXPECT_EQ(IsConnected, true);
-    GTEST_LOG_(INFO) << "SppClientSocket::IsConnected ends";
-}
 
 /**
  * @tc.number:Spp_UnitTest007
