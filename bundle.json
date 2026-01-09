@@ -104,7 +104,7 @@
           "//foundation/communication/bluetooth_service/services/bluetooth/service:btsbc"
         ]
       },
-      "inner_api": [
+      "inner_kits": [
       ],
       "test": [
         "//foundation/communication/bluetooth_service/test/unittest/spp:unittest",
