@@ -52,6 +52,9 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
         {BluetoothHostInterfaceCode::BT_GET_LOCAL_ADDRESS,
             std::bind(&BluetoothHostStub::GetLocalAddressInner, std::placeholders::_1, std::placeholders::_2,
                 std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::BT_GENERATE_LOCAL_OOB_DATA,
+            std::bind(&BluetoothHostStub::GenerateLocalOobDataInner, std::placeholders::_1, std::placeholders::_2,
+                std::placeholders::_3)},
         {BluetoothHostInterfaceCode::BT_DISABLE_BLE,
             std::bind(&BluetoothHostStub::DisableBleInner, std::placeholders::_1, std::placeholders::_2,
                 std::placeholders::_3)},
@@ -416,6 +419,13 @@ int32_t BluetoothHostStub::GetLocalAddressInner(MessageParcel &data, MessageParc
     CHECK_AND_RETURN_LOG_RET(reply.WriteInt32(result), BT_ERR_IPC_TRANS_FAILED, "writing res failed");
     CHECK_AND_RETURN_LOG_RET((result == BT_NO_ERROR), NO_ERROR, "get local addr failed");
     CHECK_AND_RETURN_LOG_RET(reply.WriteString(addr), BT_ERR_IPC_TRANS_FAILED, "writing addr failed");
+    return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::GenerateLocalOobDataInner(MessageParcel &data, MessageParcel &reply)
+{
+    HILOGE("API not supported.");
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
     return NO_ERROR;
 }
 
