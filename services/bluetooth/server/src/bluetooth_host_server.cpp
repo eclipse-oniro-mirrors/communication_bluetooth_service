@@ -1438,6 +1438,12 @@ int32_t BluetoothHostServer::GetRemoteDeviceBatteryInfo(const std::string &addre
     return BT_ERR_INTERNAL_ERROR;
 }
 
+int32_t BluetoothHostServer::SetRemoteDeviceBatteryInfo(const std::string &address,
+    const BluetoothBatteryInfo &batteryInfo)
+{
+    return NO_ERROR;
+}
+
 int32_t BluetoothHostServer::GetPairState(int32_t transport, const std::string &address, int32_t &pairState)
 {
     HILOGI("transport: %{public}d, address: %{public}s", transport, GetEncryptAddr(address).c_str());

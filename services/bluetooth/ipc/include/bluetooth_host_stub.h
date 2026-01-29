@@ -77,6 +77,7 @@ private:
     ErrCode GetDeviceAliasInner(MessageParcel &data, MessageParcel &reply);
     ErrCode SetDeviceAliasInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetRemoteDeviceBatteryInfoInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetRemoteDeviceBatteryInfoInner(MessageParcel &data, MessageParcel &reply);
     ErrCode GetPairStateInner(MessageParcel &data, MessageParcel &reply);
     int32_t StartPairInner(MessageParcel &data, MessageParcel &reply);
     ErrCode CancelPairingInner(MessageParcel &data, MessageParcel &reply);
