@@ -155,6 +155,9 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
         {BluetoothHostInterfaceCode::GET_DEVICE_BATTERY_INFO,
             std::bind(&BluetoothHostStub::GetRemoteDeviceBatteryInfoInner, std::placeholders::_1, std::placeholders::_2,
                 std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::SET_DEVICE_BATTERY_INFO,
+            std::bind(&BluetoothHostStub::SetRemoteDeviceBatteryInfoInner, std::placeholders::_1, std::placeholders::_2,
+                std::placeholders::_3)},
         {BluetoothHostInterfaceCode::GET_PAIR_STATE,
             std::bind(&BluetoothHostStub::GetPairStateInner, std::placeholders::_1, std::placeholders::_2,
                 std::placeholders::_3)},
@@ -860,6 +863,13 @@ int32_t BluetoothHostStub::GetRemoteDeviceBatteryInfoInner(MessageParcel &data, 
     CHECK_AND_RETURN_LOG_RET(reply.WriteParcelable(&info), BT_ERR_INTERNAL_ERROR,
         "write battery failed");
     return BT_NO_ERROR;
+}
+
+int32_t BluetoothHostStub::SetRemoteDeviceBatteryInfoInner(MessageParcel &data, MessageParcel &reply)
+{
+    HILOGE("API not supported.");
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
 }
 
 ErrCode BluetoothHostStub::GetBtDiscoveryEndMillisInner(MessageParcel &data, MessageParcel &reply)
