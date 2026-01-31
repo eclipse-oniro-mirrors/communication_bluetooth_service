@@ -194,6 +194,9 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
         {BluetoothHostInterfaceCode::GET_LOCAL_SUPPORTED_UUIDS,
             std::bind(&BluetoothHostStub::GetLocalSupportedUuidsInner, std::placeholders::_1, std::placeholders::_2,
                 std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::IS_PROFILE_EXIST,
+            std::bind(&BluetoothHostStub::IsProfileExistInner, std::placeholders::_1, std::placeholders::_2,
+                std::placeholders::_3)},
         {BluetoothHostInterfaceCode::GET_DEVICE_UUIDS,
             std::bind(&BluetoothHostStub::GetDeviceUuidsInner, std::placeholders::_1, std::placeholders::_2,
                 std::placeholders::_3)},
@@ -1452,6 +1455,13 @@ int32_t BluetoothHostStub::EnableBluetoothToRestrictModeInner(MessageParcel &dat
 int32_t BluetoothHostStub::ControlDeviceActionInner(MessageParcel &data, MessageParcel &reply)
 {
     return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t BluetoothHostStub::IsProfileExistInner(MessageParcel &data, MessageParcel &reply)
+{
+    HILOGE("API not supported.");
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
 }
 
 int32_t BluetoothHostStub::GetLastConnectionTimeInner(MessageParcel &data, MessageParcel &reply)

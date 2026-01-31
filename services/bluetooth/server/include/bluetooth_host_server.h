@@ -145,6 +145,7 @@ public:
         const int32_t pid, const int64_t prohibitedSecondsTime) override;
     int32_t ProcessRandomDeviceIdCommand(
         int32_t command, std::vector<std::string> &deviceIdVec, bool &isValid) override;
+    int32_t IsProfileExist(const std::string &profileName, bool &isProfileExist) override;
     int32_t GetCarKeyDfxData(std::string &dfxData) override;
     int32_t SetCarKeyCardData(const std::string &address, int32_t action) override;
     int32_t NotifyDialogResult(uint32_t dialogType, bool dialogResult) override;
