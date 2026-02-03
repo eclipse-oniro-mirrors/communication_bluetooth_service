@@ -51,6 +51,7 @@ public:
     int32_t GetDeviceType(int32_t transport, const std::string &address) override;
 
     int32_t GetLocalAddress(std::string &addr) override;
+    int32_t GenerateLocalOobData(int32_t transport, const sptr<IBluetoothOobObserver> &observer) override;
     sptr<IRemoteObject> GetProfile(const std::string &name) override;
     sptr<IRemoteObject> GetBleRemote(const std::string &name) override;
 
