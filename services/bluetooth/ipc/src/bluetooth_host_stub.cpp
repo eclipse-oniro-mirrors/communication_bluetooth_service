@@ -1469,9 +1469,23 @@ int32_t BluetoothHostStub::ControlDeviceActionInner(MessageParcel &data, Message
 
 int32_t BluetoothHostStub::IsProfileExistInner(MessageParcel &data, MessageParcel &reply)
 {
-    HILOGE("API not supported.");
-    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
-    return NO_ERROR;
+    std::string profileName;
+ 	    CHECK_AND_RETURN_LOG_RET(data.ReadString(profileName), BT_ERR_INTERNAL_ERROR, "Read profileName failed");
+ 	    bool isProfileExist = false;
+ 	    int res = IsProfileExist(profileName, isProfileExist);
+ 	    if (!reply.WriteInt32(res)) {
+ 	        HILOGE("reply writing failed.");
+ 	        return BT_ERR_INTERNAL_ERROR;
+ 	    }
+ 	    if (res != BT_NO_ERROR) {
+ 	        return res;
+ 	    }
+ 	    if (!reply.WriteBool(isProfileExist)) {
+ 	        HILOGE("reply writing failed.");
+ 	        return BT_ERR_INTERNAL_ERROR;
+ 	    }
+ 	    return BT_NO_ERROR;
+ 	}
 }
 
 int32_t BluetoothHostStub::GetLastConnectionTimeInner(MessageParcel &data, MessageParcel &reply)
