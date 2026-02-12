@@ -1428,6 +1428,17 @@ int32_t BluetoothHostServer::SetDeviceAlias(const std::string &address, const st
     return BT_ERR_INVALID_STATE;
 }
 
+int32_t BluetoothHostServer::IsProfileExist(const std::string &profileName, bool &isProfileExist)
+{
+    sptr<IRemoteObject> profilePtr = GetProfile(profileName);
+    if (profilePtr == nullptr) {
+        isProfileExist = false;
+    } else {
+        isProfileExist = true;
+    }
+    return BT_NO_ERROR;
+}
+
 int32_t BluetoothHostServer::GetRemoteDeviceBatteryInfo(const std::string &address,
     BluetoothBatteryInfo &batteryInfo)
 {

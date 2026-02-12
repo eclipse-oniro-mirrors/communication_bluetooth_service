@@ -197,6 +197,9 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
         {BluetoothHostInterfaceCode::GET_LOCAL_SUPPORTED_UUIDS,
             std::bind(&BluetoothHostStub::GetLocalSupportedUuidsInner, std::placeholders::_1, std::placeholders::_2,
                 std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::IS_PROFILE_EXIST,
+            std::bind(&BluetoothHostStub::IsProfileExistInner, std::placeholders::_1, std::placeholders::_2,
+                std::placeholders::_3)},
         {BluetoothHostInterfaceCode::GET_DEVICE_UUIDS,
             std::bind(&BluetoothHostStub::GetDeviceUuidsInner, std::placeholders::_1, std::placeholders::_2,
                 std::placeholders::_3)},
@@ -1462,6 +1465,26 @@ int32_t BluetoothHostStub::EnableBluetoothToRestrictModeInner(MessageParcel &dat
 int32_t BluetoothHostStub::ControlDeviceActionInner(MessageParcel &data, MessageParcel &reply)
 {
     return BT_ERR_API_NOT_SUPPORT;
+}
+
+int32_t BluetoothHostStub::IsProfileExistInner(MessageParcel &data, MessageParcel &reply)
+{
+    std::string profileName;
+    CHECK_AND_RETURN_LOG_RET(data.ReadString(profileName), BT_ERR_INTERNAL_ERROR, "Read profileName failed");
+    bool isProfileExist = false;
+    int res = IsProfileExist(profileName, isProfileExist);
+    if (!reply.WriteInt32(res)) {
+        HILOGE("reply writing failed.");
+        return BT_ERR_INTERNAL_ERROR;
+    }
+    if (res != BT_NO_ERROR) {
+        return res;
+    }
+    if (!reply.WriteBool(isProfileExist)) {
+        HILOGE("reply writing failed.");
+        return BT_ERR_INTERNAL_ERROR;
+    }
+    return BT_NO_ERROR;
 }
 
 int32_t BluetoothHostStub::GetLastConnectionTimeInner(MessageParcel &data, MessageParcel &reply)
