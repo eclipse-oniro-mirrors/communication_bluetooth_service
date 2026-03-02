@@ -905,6 +905,11 @@ int32_t BluetoothHostServer::GetLocalAddress(std::string &addr)
     }
 }
 
+int32_t BluetoothHostServer::GenerateLocalOobData(int32_t transport, const sptr<IBluetoothOobObserver> &observer)
+{
+    return NO_ERROR;
+}
+
 int32_t BluetoothHostServer::EnableBle(bool noAutoConnect, bool isAsync, const std::string &callingName)
 {
     HILOGI("Enter!");
