@@ -20,6 +20,7 @@
 #include "ipc_types.h"
 #include "parcel_bt_uuid.h"
 #include "bt_def.h"
+#include "bluetooth_errorcode.h"
 
 using std::placeholders::_1;
 using std::placeholders::_2;
@@ -48,6 +49,8 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothBleAdvertiserStub *, Mes
             std::bind(&BluetoothBleAdvertiserStub::SetAdvertisingDataInner, _1, _2, _3)},
         {BluetoothBleAdvertiserInterfaceCode::BLE_CHANGE_ADVERTISING_PARAMS,
             std::bind(&BluetoothBleAdvertiserStub::ChangeAdvertisingParamsInner, _1, _2, _3)},
+        {BluetoothBleAdvertiserInterfaceCode::BLE_SET_ADVE_OR_RSP_DATA,
+ 	        std::bind(&BluetoothBleAdvertiserStub::SetAdvOrRspDataInner, _1, _2, _3)},
 };
 
 BluetoothBleAdvertiserStub::BluetoothBleAdvertiserStub()
@@ -203,5 +206,16 @@ ErrCode BluetoothBleAdvertiserStub::ChangeAdvertisingParamsInner(MessageParcel &
     ChangeAdvertisingParams(advHandle, *settings);
     return NO_ERROR;
 }
+
+ErrCode BluetoothBleAdvertiserStub::SetAdvOrRspDataInner(MessageParcel &data, MessageParcel &reply)
+{
+    HILOGI("Not Support");
+    if (!reply.WriteInt32(BT_ERR_API_NOT_SUPPORT)) {
+        HILOGE("BluetoothBleAdvertiserStub: WriteFrameInner reply writing failed in: %{public}s.", __func__);
+        return TRANSACTION_ERR;
+    }
+    return NO_ERROR;
+}
+
 }  // namespace Bluetooth
 }  // namespace OHOS

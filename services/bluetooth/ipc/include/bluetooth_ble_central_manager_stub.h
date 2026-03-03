@@ -54,6 +54,7 @@ private:
     ErrCode RemoveLpDeviceParamInner(MessageParcel &data, MessageParcel &reply);
     ErrCode ChangeScanParamsInner(MessageParcel &data, MessageParcel &reply);
     ErrCode IsValidScannerIdInner(MessageParcel &data, MessageParcel &reply);
+    ErrCode FlushBatchScanResultsInner(MessageParcel &data, MessageParcel &reply);
 };
 }  // namespace Bluetooth
 }  // namespace OHOS

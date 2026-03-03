@@ -43,6 +43,8 @@ public:
     void SetAdvertisingData(const BluetoothBleAdvertiserData &advData,
         const BluetoothBleAdvertiserData &scanResponse, int32_t advHandle) override;
     virtual int ChangeAdvertisingParams(uint8_t advHandle, const BluetoothBleAdvertiserSettings &settings) override;
+    virtual void SetAdvOrRspData(const BluetoothBleAdvertiserData &bleAdvData,
+ 	    bool isAdv, int32_t advHandle) override;
 
 private:
     std::recursive_mutex mutex_ {};
