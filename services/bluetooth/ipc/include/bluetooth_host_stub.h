@@ -100,6 +100,7 @@ private:
     ErrCode RegisterBlePeripheralCallbackInner(MessageParcel &data, MessageParcel &reply);
     ErrCode DeregisterBlePeripheralCallbackInner(MessageParcel &data, MessageParcel &reply);
     ErrCode GetRandomAddressInner(MessageParcel &data, MessageParcel &reply);
+    ErrCode GetRealAddressInner(MessageParcel &data, MessageParcel &reply);
     ErrCode SyncRandomAddressInner(MessageParcel &data, MessageParcel &reply);
     ErrCode StartCrediblePairInner(MessageParcel &data, MessageParcel &reply);
     int32_t ConnectAllowedProfilesInner(MessageParcel &data, MessageParcel &reply);
