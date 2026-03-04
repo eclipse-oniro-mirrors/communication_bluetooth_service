@@ -38,7 +38,7 @@ private:
     ErrCode DisconnectInner(MessageParcel &data, MessageParcel &reply);
     ErrCode DiscoveryServicesInner(MessageParcel &data, MessageParcel &reply);
     ErrCode ReadCharacteristicInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode FlushBatchScanResultsInner(MessageParcel &data, MessageParcel &reply);
+    ErrCode ReadUsingCharacteristicUuidInner(MessageParcel &data, MessageParcel &reply);
     ErrCode WriteCharacteristicInner(MessageParcel &data, MessageParcel &reply);
     ErrCode SignedWriteCharacteristicInner(MessageParcel &data, MessageParcel &reply);
     ErrCode ReadDescriptorInner(MessageParcel &data, MessageParcel &reply);
