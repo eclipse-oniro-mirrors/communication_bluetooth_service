@@ -50,7 +50,7 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothBleAdvertiserStub *, Mes
         {BluetoothBleAdvertiserInterfaceCode::BLE_CHANGE_ADVERTISING_PARAMS,
             std::bind(&BluetoothBleAdvertiserStub::ChangeAdvertisingParamsInner, _1, _2, _3)},
         {BluetoothBleAdvertiserInterfaceCode::BLE_SET_ADVE_OR_RSP_DATA,
- 	        std::bind(&BluetoothBleAdvertiserStub::SetAdvOrRspDataInner, _1, _2, _3)},
+            std::bind(&BluetoothBleAdvertiserStub::SetAdvOrRspDataInner, _1, _2, _3)},
 };
 
 BluetoothBleAdvertiserStub::BluetoothBleAdvertiserStub()
