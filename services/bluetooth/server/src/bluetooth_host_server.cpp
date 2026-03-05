@@ -1880,6 +1880,11 @@ int32_t BluetoothHostServer::GetRandomAddress(const std::string &realAddr, std::
     return BT_ERR_API_NOT_SUPPORT;
 }
 
+int32_t BluetoothHostServer::GetRealAddress(const std::string &randomAddr, std::string &realAddr)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
 int32_t BluetoothHostServer::SyncRandomAddress(const std::string &realAddr, const std::string &randomAddr)
 {
     return NO_ERROR;

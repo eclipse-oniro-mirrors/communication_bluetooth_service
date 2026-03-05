@@ -226,6 +226,8 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParce
                 std::placeholders::_2, std::placeholders::_3)},
         {BluetoothHostInterfaceCode::GET_RANDOM_ADDRESS, std::bind(&BluetoothHostStub::GetRandomAddressInner,
             std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothHostInterfaceCode::GET_REAL_ADDRESS, std::bind(&BluetoothHostStub::GetRealAddressInner,
+            std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
         {BluetoothHostInterfaceCode::SYNC_RANDOM_ADDRESS, std::bind(&BluetoothHostStub::SyncRandomAddressInner,
             std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
         {BluetoothHostInterfaceCode::START_CREDIBLE_PAIR,
@@ -1370,6 +1372,12 @@ ErrCode BluetoothHostStub::GetRandomAddressInner(MessageParcel &data, MessagePar
             return TRANSACTION_ERR;
         }
     }
+    return NO_ERROR;
+}
+
+ErrCode BluetoothHostStub::GetRealAddressInner(MessageParcel &data, MessageParcel &reply)
+{
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
     return NO_ERROR;
 }
 
