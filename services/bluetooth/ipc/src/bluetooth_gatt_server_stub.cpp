@@ -100,7 +100,12 @@ ErrCode BluetoothGattServerStub::AddServiceInner(MessageParcel &data, MessagePar
 ErrCode BluetoothGattServerStub::ClearServicesInner(MessageParcel &data, MessageParcel &reply)
 {
     int appId = data.ReadInt32();
-    ClearServices(appId);
+    int result = ClearServices(appId);
+    bool ret = reply.WriteInt32(result);
+    if (!ret) {
+        HILOGE("BluetoothGattServerStub: reply writing failed in: %{public}s.", __func__);
+        return TRANSACTION_ERR;
+    }
     return NO_ERROR;
 }
 
