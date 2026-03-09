@@ -323,15 +323,16 @@ int BluetoothGattServerServer::AddService(int32_t appId, BluetoothGattService *s
     return (ret == GattStatus::GATT_SUCCESS ? NO_ERROR : BT_ERR_INTERNAL_ERROR);
 }
 
-void BluetoothGattServerServer::ClearServices(int appId)
+int BluetoothGattServerServer::ClearServices(int appId)
 {
     HILOGI("enter, appId: %{public}d", appId);
     std::lock_guard<std::mutex> lck(pimpl->registerMutex_);
     if (!pimpl->serverService_) {
         HILOGE("serverService_ is null");
-        return;
+        return BT_ERR_INTERNAL_ERROR;
     }
-    pimpl->serverService_->ClearServices(appId);
+    int ret = pimpl->serverService_->ClearServices(appId);
+    return (ret == GattStatus::GATT_SUCCESS ? NO_ERROR : BT_ERR_INTERNAL_ERROR);
 }
 
 int BluetoothGattServerServer::Connect(int appId, const BluetoothGattDevice &device, bool isDirect)
