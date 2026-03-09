@@ -32,7 +32,7 @@ public:
     void OnEnableResultEvent(int32_t result, int32_t advHandle) override;
     void OnDisableResultEvent(int32_t result, int32_t advHandle) override;
     void OnStopResultEvent(int32_t result, int32_t advHandle) override;
-    void OnSetAdvDataEvent(int32_t result, int32_t advHandle) override;
+    void OnSetAdvDataEvent(int32_t result, int32_t advHandle, FwkOnSetAdvDataType type = FWK_ON_BOTH) override;
     void OnChangeAdvResultEvent(int32_t result, int32_t advHandle) override;
 private:
     ErrCode InnerTransact(uint32_t code, MessageOption &flags, MessageParcel &data, MessageParcel &reply);

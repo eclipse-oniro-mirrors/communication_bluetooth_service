@@ -168,7 +168,7 @@ void BluetoothBleAdvertiseCallbackProxy::OnAutoStopAdvEvent(int32_t advHandle)
     }
 }
 
-void BluetoothBleAdvertiseCallbackProxy::OnSetAdvDataEvent(int32_t result, int32_t advHandle)
+void BluetoothBleAdvertiseCallbackProxy::OnSetAdvDataEvent(int32_t result, int32_t advHandle, FwkOnSetAdvDataType type)
 {
     return;
 }

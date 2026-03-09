@@ -66,8 +66,8 @@ BluetoothGattClientStub::BluetoothGattClientStub()
         &BluetoothGattClientStub::SetPhyInner;
     memberFuncMap_[static_cast<uint32_t>(BluetoothGattClientInterfaceCode::BT_GATT_CLIENT_READ_PHY)] =
         &BluetoothGattClientStub::ReadPhyInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattClientInterfaceCode::BT_GATT_READ_USING_CHARACTERISTIC_UUID)] =
- 	    &BluetoothGattClientStub::ReadUsingCharacteristicUuidInner;
+    memberFuncMap_[static_cast<uint32_t>(BluetoothGattClientInterfaceCode::BT_GATT_READ_CHARACTERISTIC_BY_UUID)] =
+ 	    &BluetoothGattClientStub::ReadCharacteristicByUuidInner;
 }
 
 BluetoothGattClientStub::~BluetoothGattClientStub()
@@ -373,7 +373,7 @@ ErrCode BluetoothGattClientStub::ReadPhyInner(MessageParcel &data, MessageParcel
     return NO_ERROR;
 }
 
-ErrCode BluetoothGattClientStub::ReadUsingCharacteristicUuidInner(MessageParcel &data, MessageParcel &reply)
+ErrCode BluetoothGattClientStub::ReadCharacteristicByUuidInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("Not Support");
     if (!reply.WriteInt32(BT_ERR_API_NOT_SUPPORT)) {

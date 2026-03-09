@@ -559,7 +559,7 @@ int BluetoothGattClientServer::ReadPhy(int32_t appId)
     HILOGI("NOT SUPPORT NOW");
     return NO_ERROR;
 }
-int BluetoothGattClientServer::ReadUsingCharacteristicUuid(int32_t appId, const std::string &uuid,
+int BluetoothGattClientServer::ReadCharacteristicByUuid(int32_t appId, const std::string &uuid,
     int32_t startHandle, int32_t endHandle)
 {
     HILOGI("NOT SUPPORT NOW");

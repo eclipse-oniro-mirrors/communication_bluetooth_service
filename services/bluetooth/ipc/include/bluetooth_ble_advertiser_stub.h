@@ -47,7 +47,6 @@ private:
     ErrCode GetAdvertiserHandleInner(MessageParcel &data, MessageParcel &reply);
     ErrCode SetAdvertisingDataInner(MessageParcel &data, MessageParcel &reply);
     ErrCode ChangeAdvertisingParamsInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetAdvOrRspDataInner(MessageParcel &data, MessageParcel &reply);
 };
 }  // namespace Bluetooth
 }  // namespace OHOS
