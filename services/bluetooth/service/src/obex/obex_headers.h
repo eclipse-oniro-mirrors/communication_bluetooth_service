@@ -538,7 +538,7 @@ private:
     void AppendTlvTriplets(const uint8_t headerId, ObexTlvParamters &tlvParamters);
 
     void ParseBytes(const uint8_t &headerId, const uint8_t *buf, uint16_t &pos);
-    void ParseUnicodeText(const uint8_t &headerId, const uint8_t *buf, uint16_t &pos);
+    void ParseUnicodeText(const uint8_t &headerId, const uint8_t *buf, uint16_t &pos, uint16_t size);
     void ParseFields(const uint8_t *buf, const uint8_t &code, uint16_t &pos, bool isRequest, bool isConnect);
     bool ParseOptionalHeaders(const uint8_t *buf, const uint16_t &size, uint16_t &pos);
     static const std::string &GetHeaderName(uint8_t headerId);

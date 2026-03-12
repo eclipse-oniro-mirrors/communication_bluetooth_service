@@ -913,7 +913,7 @@ static int SdpGetString(BufferInfo *bufferInfo, char *name, SdpDescriptorType na
     }
     offset += pos;
     if (length >= SDP_MAX_ATTRIBUTE_LEN - 1) {
-        length = SDP_MAX_ATTRIBUTE_LEN;
+        length = SDP_MAX_ATTRIBUTE_LEN - 1;
     }
     if (memcpy_s(name, length, bufferInfo->buffer + offset, length) != EOK) {
         LOG_ERROR("[%{public}s][%{public}d] memcpy_s fail", __FUNCTION__, __LINE__);
