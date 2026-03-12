@@ -139,7 +139,7 @@ bool ObexHeader::ParseOptionalHeaders(const uint8_t *buf, const uint16_t &size, 
                 ParseBytes(headerId, buf, pos);
                 break;
             case ObexHdrType::UNICODE_TEXT:
-                ParseUnicodeText(headerId, buf, pos);
+                ParseUnicodeText(headerId, buf, pos, size);
                 break;
             case ObexHdrType::WORD:
                 AppendWord(headerId, ObexUtils::GetBufData32(buf, pos));
@@ -212,11 +212,19 @@ void ObexHeader::ParseBytes(const uint8_t &headerId, const uint8_t *buf, uint16_
     pos += dataLen;
 }
 
-void ObexHeader::ParseUnicodeText(const uint8_t &headerId, const uint8_t *buf, uint16_t &pos)
+void ObexHeader::ParseUnicodeText(const uint8_t &headerId, const uint8_t *buf, uint16_t &pos, uint16_t size)
 {
     uint16_t bytesLen = ObexUtils::GetBufData16(buf, pos) - HDR_UNICODE_PREFIX_LENGTH;
     pos += UINT16_LENGTH;
+    if (pos > size) {
+        OBEX_LOG_ERROR("ParseUnicodeText error, buffer overflow");
+        return;
+    }
     if (bytesLen > 0) {
+        if (pos + bytesLen > size) {
+            OBEX_LOG_ERROR("ParseUnicodeText error, buffer overflow when read data");
+            return;
+        }
         auto tmpBuf = std::make_unique<uint8_t[]>(bytesLen);
         if (memcpy_s(tmpBuf.get(), bytesLen, &buf[pos], bytesLen) != EOK) {
             OBEX_LOG_ERROR("ParseUnicodeText, memcpy_s fail");
@@ -1174,7 +1182,15 @@ ObexOptionalTlvHeader::ObexOptionalTlvHeader(const uint8_t headerId, const uint8
     uint16_t pos = 0;
     while (pos < dataSize) {
         const uint8_t tagId = data[pos++];
+        if (pos >= dataSize) {
+            OBEX_LOG_ERROR("ObexOptionalTlvHeader pos is overflow");
+            break;
+        }
         const uint8_t len = data[pos++];
+        if (pos + len >= dataSize) {
+            OBEX_LOG_ERROR("ObexOptionalTlvHeader pos&len is overflow");
+            break;
+        }
         TlvTriplet tlv(tagId, len, &data[pos]);
         newTlvParamters->AppendTlvtriplet(tlv);
         pos += len;
