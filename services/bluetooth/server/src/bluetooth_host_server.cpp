@@ -2021,6 +2021,12 @@ int32_t BluetoothHostServer::GetRemoteServices(const std::string &address)
     return BT_ERR_API_NOT_SUPPORT;
 }
 
+int32_t BluetoothHostServer::GetVirtualAddressByHash(
+    int hashAlgorithmType, const std::string &hashValue, std::string &virtualAddress)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
 int32_t BluetoothHostServer::SetConnectionPriority(const std::string &address, int32_t priority)
 {
     return BT_ERR_API_NOT_SUPPORT;
