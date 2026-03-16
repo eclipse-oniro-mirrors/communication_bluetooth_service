@@ -333,7 +333,7 @@ int32_t BluetoothBleAdvertiserServer::GetAdvertiserHandle(int32_t &advHandle,
 }
 
 void BluetoothBleAdvertiserServer::SetAdvertisingData(const BluetoothBleAdvertiserData &advData,
-    const BluetoothBleAdvertiserData &scanResponse, int32_t advHandle, SetAdvDataType type)
+    const BluetoothBleAdvertiserData &scanResponse, int32_t advHandle, bluetooth::SetAdvDataType type)
 {
     HILOGI("NOT SUPPORT NOW");
     return;
