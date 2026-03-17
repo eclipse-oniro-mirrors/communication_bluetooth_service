@@ -21,6 +21,7 @@
 #include "ipc_types.h"
 #include "parcel_bt_uuid.h"
 #include "bluetooth_bt_uuid.h"
+#include "bluetooth_errorcode.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -77,6 +78,9 @@ const std::map<uint32_t, std::function<ErrCode(BluetoothBleCentralManagerStub *,
             std::placeholders::_2, std::placeholders::_3)},
         {BluetoothBleCentralManagerInterfaceCode::BLE_IS_VALID_SCANNERID,
             std::bind(&BluetoothBleCentralManagerStub::IsValidScannerIdInner, std::placeholders::_1,
+            std::placeholders::_2, std::placeholders::_3)},
+        {BluetoothBleCentralManagerInterfaceCode::BLE_FLUSH_BATCH_SCAN_RESULTS,
+            std::bind(&BluetoothBleCentralManagerStub::FlushBatchScanResultsInner, std::placeholders::_1,
             std::placeholders::_2, std::placeholders::_3)},
 };
 
@@ -302,6 +306,16 @@ ErrCode BluetoothBleCentralManagerStub::IsValidScannerIdInner(MessageParcel &dat
     if (!reply.WriteBool(isValid)) {
         HILOGE("reply writing failed");
         return ERR_INVALID_VALUE;
+    }
+    return NO_ERROR;
+}
+
+ErrCode BluetoothBleCentralManagerStub::FlushBatchScanResultsInner(MessageParcel &data, MessageParcel &reply)
+{
+    HILOGI("Not Support");
+    if (!reply.WriteInt32(BT_ERR_API_NOT_SUPPORT)) {
+        HILOGE("BluetoothBleCentralManagerStub: WriteFrameInner reply writing failed in: %{public}s.", __func__);
+        return TRANSACTION_ERR;
     }
     return NO_ERROR;
 }

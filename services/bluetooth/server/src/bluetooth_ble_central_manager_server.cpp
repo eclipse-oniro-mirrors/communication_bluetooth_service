@@ -801,5 +801,11 @@ int BluetoothBleCentralManagerServer::RemoveLpDeviceParam(const bluetooth::Uuid 
     HILOGI("NOT SUPPORT NOW");
     return NO_ERROR;
 }
+
+int BluetoothBleCentralManagerServer::FlushBatchScanResults(int32_t scannerId)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return NO_ERROR;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS
