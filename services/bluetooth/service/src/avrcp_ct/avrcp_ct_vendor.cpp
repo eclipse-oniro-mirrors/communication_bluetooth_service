@@ -229,6 +229,20 @@ bool AvrcCtGcPacket::DisassembleParameters(uint8_t *buffer)
     offset += PopOctets1((buffer + offset), payload);
     capabilityCount_ = static_cast<uint8_t>(payload);
     HILOGI("capabilityCount_: %{public}d", capabilityCount_);
+    if (capabilityCount_ > AVRC_CT_GC_CAPABILITY_COUNT_MAX) {
+        HILOGE("capabilityCount_ %{public}d exceeds maximum limit", capabilityCount_);
+        return false;
+    }
+    size_t requiredLength = 0;
+    if (capabilityId_ == AVRC_CAPABILITY_COMPANYID) {
+        requiredLength = capabilityCount_ * AVRC_CT_GC_COMPANY_ID_SIZE;
+    } else if (capabilityId_ == AVRC_CAPABILITY_EVENTID) {
+        requiredLength = capabilityCount_ * AVRC_CT_GC_EVENT_ID_SIZE;
+    }
+    if (offset + requiredLength > parameterLength_) {
+        HILOGE("Buffer overflow");
+        return false;
+    }
 
     if (capabilityId_ == AVRC_CAPABILITY_COMPANYID) {
         for (int i = 0; i < capabilityCount_; i++) {
@@ -322,6 +336,15 @@ bool AvrcCtLpasaPacket::DisassembleParameters(uint8_t *buffer)
     numOfAttributes_ = static_cast<uint8_t>(payload);
     HILOGI("numOfAttributes_: %{public}d", numOfAttributes_);
 
+    if (numOfAttributes_ > AVRC_CT_LPASA_ATTRIBUTE_COUNT_MAX) {
+        HILOGE("numOfAttributes exceeds maximum");
+        return false;
+    }
+    size_t requiredLength = numOfAttributes_ * AVRC_CT_LPASA_ATTRIBUTE_SIZE;
+    if (offset + requiredLength > parameterLength_) {
+        HILOGE("Buffer overflow");
+        return false;
+    }
     for (int i = 0; i < numOfAttributes_; i++) {
         offset += PopOctets1((buffer + offset), payload);
         attributes_.push_back(static_cast<uint8_t>(payload));
@@ -414,6 +437,15 @@ bool AvrcCtLpasvPacket::DisassembleParameters(uint8_t *buffer)
     numOfValues_ = static_cast<uint8_t>(payload);
     HILOGI("numOfValues_: %{public}d", numOfValues_);
 
+    if (numOfValues_ > AVRC_CT_LPASV_VALUE_COUNT_MAX) {
+        HILOGE("numOfAttributes exceeds maximum");
+        return false;
+    }
+    size_t requiredLength = numOfValues_ * AVRC_CT_LPASV_VALUE_SIZE;
+    if (offset + requiredLength > parameterLength_) {
+        HILOGE("Buffer overflow");
+        return false;
+    }
     for (int i = 0; i < numOfValues_; i++) {
         offset += PopOctets1((buffer + offset), payload);
         values_.push_back(static_cast<uint8_t>(payload));
@@ -544,6 +576,20 @@ bool AvrcCtGcpasvPacket::DisassembleParameters(uint8_t *buffer)
     numOfValues_ = static_cast<uint8_t>(payload);
     HILOGI("numOfValues_: %{public}d", numOfValues_);
 
+    if (numOfValues_ > AVRC_CT_GCPASV_VALUE_COUNT_MAX) {
+        HILOGE("numOfAttributes exceeds maximum");
+        return false;
+    }
+    size_t requiredLength = numOfValues_ * AVRC_CT_GCPASV_ATTRIBUTE_VALUE_SIZE;
+    if (offset + requiredLength > parameterLength_) {
+        HILOGE("Buffer overflow");
+        return false;
+    }
+    for (int i = 0; i < numOfValues_; i++) {
+        offset += PopOctets1((buffer + offset), payload);
+        values_.push_back(static_cast<uint8_t>(payload));
+        HILOGI("value: %{public}x", values_.back());
+    }
     for (int i = 0; i < numOfValues_; i++) {
         offset += PopOctets1((buffer + offset), payload);
         attributes_.push_back(static_cast<uint8_t>(payload));
@@ -792,6 +838,10 @@ bool AvrcCtGpasatPacket::DisassembleParameters(uint8_t *buffer)
     numOfAttributes_ = static_cast<uint8_t>(payload);
     HILOGI("numOfAttributes_: %{public}d", numOfAttributes_);
 
+    if (numOfAttributes_ > AVRC_CT_GPASAT_ATTRIBUTE_COUNT_MAX) {
+        HILOGE("numOfValues_ exceeds maximum");
+        return false;
+    }
     for (int i = 0; i < numOfAttributes_; i++) {
         offset += PopOctets1((buffer + offset), payload);
         attributes_.push_back(static_cast<uint32_t>(payload));
@@ -804,6 +854,10 @@ bool AvrcCtGpasatPacket::DisassembleParameters(uint8_t *buffer)
         AttributeValueLength_ = static_cast<uint8_t>(payload);
         HILOGI("AttributeValueLength: %{public}d", AttributeValueLength_);
 
+        if (offset + AttributeValueLength_ > parameterLength_) {
+            HILOGE("Buffer overflow");
+            return false;
+        }
         char *tempName = nullptr;
         tempName = new char[AttributeValueLength_ + 1];
         for (int j = 0; j < AttributeValueLength_; j++) {
@@ -915,6 +969,10 @@ bool AvrcCtGpasvtPacket::DisassembleParameters(uint8_t *buffer)
     numOfValues_ = static_cast<uint8_t>(payload);
     HILOGI("numOfValues_: %{public}d", numOfValues_);
 
+    if (numOfValues_ > AVRC_CT_GPASVT_VALUE_COUNT_MAX) {
+        HILOGE("numOfAttributes exceeds maximum");
+        return false;
+    }
     for (int i = 0; i < numOfValues_; i++) {
         offset += PopOctets1((buffer + offset), payload);
         values_.push_back(static_cast<uint32_t>(payload));
@@ -926,6 +984,10 @@ bool AvrcCtGpasvtPacket::DisassembleParameters(uint8_t *buffer)
         offset += PopOctets1((buffer + offset), payload);
         AttributeValueLength_ = static_cast<uint8_t>(payload);
         HILOGI("AttributeValueLength: %{public}d", AttributeValueLength_);
+        if (offset + AttributeValueLength_ > parameterLength_) {
+            HILOGE("Buffer overflow");
+            return false;
+        }
 
         char *tempName = nullptr;
         tempName = new char[AttributeValueLength_ + 1];
