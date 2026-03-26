@@ -32,6 +32,8 @@ enum AvrcCtLpasa {
     AVRC_CT_LPASA_PARAMETER_LENGTH_SIZE = 0x0002,   // The Length of the "Parameter Length".
     AVRC_CT_LPASA_NUM_OF_ATTRIBUTE = 0x00,          // The Number of attribute
     AVRC_CT_LPASA_NUM_OF_ATTRIBUTES_OFFSET = 0x0A,  // The Offset of attribute
+    AVRC_CT_LPASA_ATTRIBUTE_COUNT_MAX = 0x10, // Maximum attribute count
+    AVRC_CT_LPASA_ATTRIBUTE_SIZE = 1, // Size of each attribute in bytes
 };
 
 /**
@@ -122,6 +124,8 @@ private:
 enum AvrcCtLpasv {
     AVRC_CT_LPASV_PARAMETER_LENGTH = 0x0001,  // The value of the "Parameter Length".
     AVRC_CT_LPASV_NUM_OF_VALUES = 0x0000,     // The default value of the "NumPlayerApplicationSettingValues".
+    AVRC_CT_LPASV_VALUE_COUNT_MAX = 0x10, // Maximum value count
+    AVRC_CT_LPASV_VALUE_SIZE = 1, // Size of each value in bytes.
 };
 
 /**
@@ -251,6 +255,8 @@ enum AvrcCtGcpasv {
     AVRC_CT_GCPASV_NUM_OF_ATTRIBUTES = 0x0000,     // The value of the "NumPlayerApplicationSettingAttributeID".
     AVRC_CT_GCPASV_NUM_OF_VALUES = 0x0000,         // The value of the "NumPlayerApplicationSettingValues".
     AVRC_CT_GCPASV_NUM_OF_ATTRIBUTES_SIZE = 0x01,  // The size of the "NumPlayerApplicationSettingAttributeID".
+    AVRC_CT_GCPASV_VALUE_COUNT_MAX = 0x10, // Maximum value count
+    AVRC_CT_GCPASV_ATTRIBUTE_VALUE_SIZE = 2, // Size of attribute + value pair in bytes.
 };
 
 /**
@@ -526,6 +532,9 @@ enum AvrcCtGpasat {
     AVRC_CT_GPASAT_ATTRIBUTE_NUM_LENGTH = 0x01,  // The Length of "AttributeNum".
     AVRC_CT_GPASAT_NUM_OF_ATTRIBUTE = 0x00,      // The Number of "Attribute".
     AVRC_CT_GPASAT_VALUE_LENGTH = 0x00,          // The Length of "Attribute Name".
+    AVRC_CT_GPASAT_ATTRIBUTE_COUNT_MAX = 0x10, // Maximum attribute count
+    AVRC_CT_GPASAT_ATTRIBUTE_SIZE = 4, // Size of attribute ID in bytes.
+    AVRC_CT_GPASAT_CHARSET_SIZE = 2, // Size of charset ID in bytes.
 };
 
 /**
@@ -669,6 +678,7 @@ enum AvrcCtGpasvt {
     AVRC_CT_GPASVT_PARAMETER_LENGTH_SIZE = 0x0002,  // The Length of the "Parameter Length".
     AVRC_CT_GPASVT_NUM_OF_VALUE = 0x00,             // The Number of value.
     AVRC_CT_GPASVT_VALUE_LENGTH = 0x00,             // The Length of value.
+    AVRC_CT_GPASVT_VALUE_COUNT_MAX = 0x10, // Maximum value count.
 };
 
 /**

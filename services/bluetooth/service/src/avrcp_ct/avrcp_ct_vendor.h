@@ -229,6 +229,9 @@ protected:
 enum AvrcCtGc {
     AVRC_CT_GC_PARAMETER_LENGTH = 0x01,  // The Length of each "Parameter".
     AVRC_CT_GC_CAPABILITY_COUT = 0x00,   // The Init value of "CapabilityID".
+    AVRC_CT_GC_CAPABILITY_COUNT_MAX = 0x10, // Maximum capability count
+    AVRC_CT_GC_COMPANY_ID_SIZE = 3, // Size of company ID in bytes
+    AVRC_CT_GC_EVENT_ID_SIZE = 1, // Size of event ID in bytes
 };
 
 /**
