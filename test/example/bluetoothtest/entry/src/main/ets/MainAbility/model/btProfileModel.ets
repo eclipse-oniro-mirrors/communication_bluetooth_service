@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 /**
  * BT ProfileModel Test Page Of Bluetooth test
  */
@@ -41,7 +42,7 @@ export class BTProfileModel extends BaseModel {
   }
 
   initProfile() {
-    console.log('bt_test BTProfileModel start');
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'bt_test BTProfileModel start');
 
     this.profiles[ this.PROFILE_A2DP_SOURCE ] = bt.getProfile(this.PROFILE_A2DP_SOURCE) as bt.A2dpSourceProfile;
 
@@ -53,16 +54,16 @@ export class BTProfileModel extends BaseModel {
 
     this.profiles[ this.PROFILE_OPP ] = opp.createOppServerProfile();
 
-    console.log("this.profiles[ this.PROFILE_A2DP_SOURCE ]" + JSON.stringify(bt.getProfile(this.PROFILE_A2DP_SOURCE)))
-    console.log("this.profiles[ this.PROFILE_HANDS_FREE_AUDIO_GATEWAY ]" + bt.getProfile(this.PROFILE_HANDS_FREE_AUDIO_GATEWAY))
-    console.log("this.profiles[ this.PROFILE_HID_HOST ]" + this.profiles[ this.PROFILE_HID_HOST ])
-    console.log("this.profiles[ this.PROFILE_PAN_NETWORK ]" + this.profiles[ this.PROFILE_PAN_NETWORK ])
-    console.log("this.profiles[ this.PROFILE_OPP ]" + bt.getProfile(this.PROFILE_OPP))
-    console.log('bt_test BTProfileModel end');
+    hilog.info(0x0000, 'BtTest', '%{public}s', "this.profiles[ this.PROFILE_A2DP_SOURCE ]" + JSON.stringify(bt.getProfile(this.PROFILE_A2DP_SOURCE)))
+    hilog.info(0x0000, 'BtTest', '%{public}s', "this.profiles[ this.PROFILE_HANDS_FREE_AUDIO_GATEWAY ]" + bt.getProfile(this.PROFILE_HANDS_FREE_AUDIO_GATEWAY))
+    hilog.info(0x0000, 'BtTest', '%{public}s', "this.profiles[ this.PROFILE_HID_HOST ]" + this.profiles[ this.PROFILE_HID_HOST ])
+    hilog.info(0x0000, 'BtTest', '%{public}s', "this.profiles[ this.PROFILE_PAN_NETWORK ]" + this.profiles[ this.PROFILE_PAN_NETWORK ])
+    hilog.info(0x0000, 'BtTest', '%{public}s', "this.profiles[ this.PROFILE_OPP ]" + bt.getProfile(this.PROFILE_OPP))
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'bt_test BTProfileModel end');
   }
 
   hasProfile(type: number): boolean {
-    console.log("hasProfile1:" + JSON.stringify(this.profiles[ type ]))
+    hilog.info(0x0000, 'BtTest', '%{public}s', "hasProfile1:" + JSON.stringify(this.profiles[ type ]))
     if ( !this.profiles[ type ] ) {
       return false;
     }

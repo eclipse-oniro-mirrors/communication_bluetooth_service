@@ -92,7 +92,7 @@ interface BenchmarkManagerTest {
 
 export const BrManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
   {
-    name : '注册状态变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcztbhm') ,
     detail : '1' ,
     method : 'on.stateChangeManager' ,
     api : testOnStateChangeManager ,
@@ -100,7 +100,7 @@ export const BrManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BrBenchmarkManager
   },
   {
-    name : '开蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_klym') ,
     detail : '2' ,
     method : 'enableBluetoothManager' ,
     api : testEnableBluetoothManager ,
@@ -108,7 +108,7 @@ export const BrManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BrBenchmarkManager
   },
   {
-    name : '获取状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqztm') ,
     detail : '3' ,
     method : 'getStateManager' ,
     api : testGetStateManager ,
@@ -116,7 +116,7 @@ export const BrManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BrBenchmarkManager
   },
   {
-    name : '设置本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_szbdmcm') ,
     detail : '4' ,
     method : 'setLocalNameManager' ,
     api : testSetLocalNameManager ,
@@ -124,7 +124,7 @@ export const BrManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BrBenchmarkManager
   },
   {
-    name : '获取本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmcm') ,
     detail : '5' ,
     method : 'getLocalNameManager' ,
     api : testGetLocalNameManager ,
@@ -132,7 +132,7 @@ export const BrManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BrBenchmarkManager
   },
   {
-    name : '设置扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_szsmmsm') ,
     detail : '6' ,
     method : 'setBluetoothScanModeManager' ,
     api : testSetBluetoothScanModeManager ,
@@ -140,7 +140,7 @@ export const BrManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BrBenchmarkManager
   },
   {
-    name : '获取扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqsmmsm') ,
     detail : '7' ,
     method : 'getBluetoothScanModeManager' ,
     api : testGetBluetoothScanModeManager ,
@@ -151,7 +151,7 @@ export const BrManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
 
 export const BleManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
   {
-    name : '注册状态变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcztbhm') ,
     detail : '1' ,
     method : 'on.stateChangeManager' ,
     api : testOnStateChangeManager ,
@@ -159,7 +159,7 @@ export const BleManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BleBenchmarkManager
   },
   {
-    name : '开蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_klym') ,
     detail : '2' ,
     method : 'enableBluetoothManager' ,
     api : testEnableBluetoothManager ,
@@ -167,7 +167,7 @@ export const BleManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BleBenchmarkManager
   },
   {
-    name : '获取状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqztm') ,
     detail : '3' ,
     method : 'getStateManager' ,
     api : testGetStateManager ,
@@ -175,7 +175,7 @@ export const BleManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BleBenchmarkManager
   },
   {
-    name : '设置本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_szbdmcm') ,
     detail : '5' ,
     method : 'setLocalNameManager' ,
     api : testSetLocalNameManager ,
@@ -183,7 +183,7 @@ export const BleManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BleBenchmarkManager
   },
   {
-    name : '获取本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmcm') ,
     detail : '6' ,
     method : 'getLocalNameManager' ,
     api : testGetLocalNameManager ,
@@ -191,7 +191,7 @@ export const BleManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BleBenchmarkManager
   },
   {
-    name : '设置扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_szsmmsm') ,
     detail : '7' ,
     method : 'setBluetoothScanModeManager' ,
     api : testSetBluetoothScanModeManager ,
@@ -199,7 +199,7 @@ export const BleManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.BleBenchmarkManager
   },
   {
-    name : '获取扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqsmmsm') ,
     detail : '8' ,
     method : 'getBluetoothScanModeManager' ,
     api : testGetBluetoothScanModeManager ,
@@ -210,7 +210,7 @@ export const BleManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
 
 export const GattClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
   {
-    name : '创建Gatt客户端Manager' ,
+    name : $r('app.string.bluetoothtest_str_cjgkhdm') ,
     detail : '4' ,
     method : 'createGattClientManager' ,
     api : testCreateGattClientManager ,
@@ -218,7 +218,7 @@ export const GattClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattClientBenchmarkManager
   },
   {
-    name : 'Ble连接状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_bljztm_1') ,
     detail : '5' ,
     method : 'on.BleConnectionStateChangeManager' ,
     api : testOnBLEConnectionStateChangeManager ,
@@ -226,7 +226,7 @@ export const GattClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattClientBenchmarkManager
   },
   {
-    name : '连接Manager' ,
+    name : $r('app.string.bluetoothtest_str_ljm') ,
     detail : '6' ,
     method : 'connectManager' ,
     api : testConnectManager ,
@@ -234,7 +234,7 @@ export const GattClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattClientBenchmarkManager
   },
   {
-    name : '设置通知特性更改Manager' ,
+    name : $r('app.string.bluetoothtest_str_sztztxggm') ,
     detail : '7' ,
     method : 'setNotifyCharacteristicChangedManager' ,
     api : testSetNotifyCharacteristicChangedManager ,
@@ -242,7 +242,7 @@ export const GattClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattClientBenchmarkManager
   },
   {
-    name : 'Ble特征值变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_btzzbhm_1') ,
     detail : '8' ,
     method : 'on.BleCharacteristicChangeManager' ,
     api : testOnBLECharacteristicChangeManager ,
@@ -250,7 +250,7 @@ export const GattClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattClientBenchmarkManager
   },
   {
-    name : '获取服务callbackManager' ,
+    name : $r('app.string.bluetoothtest_str_hqfwc') ,
     detail : '9' ,
     method : 'getServices(Callback)Manager' ,
     api : testGetServicesCallbackManager ,
@@ -258,7 +258,7 @@ export const GattClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattClientBenchmarkManager
   },
   {
-    name : '读取特征值callbackManager' ,
+    name : $r('app.string.bluetoothtest_str_dqtzzc') ,
     detail : '10' ,
     method : 'readCharacteristicValue(callback)Manager' ,
     api : testReadCharacteristicValueCallbackManager ,
@@ -266,7 +266,7 @@ export const GattClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattClientBenchmarkManager
   },
   {
-    name : '写入特征值Manager' ,
+    name : $r('app.string.bluetoothtest_str_xrtzzm') ,
     detail : '11' ,
     method : 'writeCharacteristicValueManager' ,
     api : testWriteCharacteristicValueManager ,
@@ -277,7 +277,7 @@ export const GattClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
 
 export const GattServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
   {
-    name : '创建Gatt服务器Manager' ,
+    name : $r('app.string.bluetoothtest_str_cjgfwqm') ,
     detail : '4' ,
     method : 'createGattServerManager' ,
     api : testCreateGattServerManager ,
@@ -285,7 +285,7 @@ export const GattServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattServerBenchmarkManager
   },
   {
-    name : '添加服务Manager' ,
+    name : $r('app.string.bluetoothtest_str_tjfwm') ,
     detail : '5' ,
     method : 'addServiceManager' ,
     api : testAddServiceManager ,
@@ -293,7 +293,7 @@ export const GattServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattServerBenchmarkManager
   },
   {
-    name : '连接状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_ljztm') ,
     detail : '6' ,
     method : 'on.connectStateChangeManager' ,
     api : testOnConnectStateChangeManager ,
@@ -301,7 +301,7 @@ export const GattServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattServerBenchmarkManager
   },
   {
-    name : '开始广播Manager' ,
+    name : $r('app.string.bluetoothtest_str_ksgbm') ,
     detail : '7' ,
     method : 'startAdvertisingManager' ,
     api : testStartAdvertisingManager ,
@@ -309,7 +309,7 @@ export const GattServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattServerBenchmarkManager
   },
   {
-    name : '读取特征值Manager' ,
+    name : $r('app.string.bluetoothtest_str_dqtzzm') ,
     detail : '8' ,
     method : 'on.characteristicReadManager' ,
     api : testOnCharacteristicReadManager ,
@@ -317,7 +317,7 @@ export const GattServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.GattServerBenchmarkManager
   },
   {
-    name : '写入特征值Manager' ,
+    name : $r('app.string.bluetoothtest_str_xrtzzm') ,
     detail : '9' ,
     method : 'on.characteristicWriteManager' ,
     api : testOnCharacteristicWriteManager ,
@@ -328,7 +328,7 @@ export const GattServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
 
 export const SppClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
   {
-    name : '注册状态变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcztbhm') ,
     detail : '1' ,
     method : 'on.stateChangeManager' ,
     api : testOnStateChangeManager ,
@@ -336,7 +336,7 @@ export const SppClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.SppClientBenchmarkManager
   },
   {
-    name : '开蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_klym') ,
     detail : '2' ,
     method : 'enableBluetoothManager' ,
     api : testEnableBluetoothManager ,
@@ -344,7 +344,7 @@ export const SppClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.SppClientBenchmarkManager
   },
   {
-    name : '获取状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqztm') ,
     detail : '3' ,
     method : 'getStateManager' ,
     api : testGetStateManager ,
@@ -352,7 +352,7 @@ export const SppClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.SppClientBenchmarkManager
   },
   {
-    name : '设置本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_szbdmcm') ,
     detail : '5' ,
     method : 'setLocalNameManager' ,
     api : testSetLocalNameManager ,
@@ -360,7 +360,7 @@ export const SppClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.SppClientBenchmarkManager
   },
   {
-    name : '获取本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmcm') ,
     detail : '6' ,
     method : 'getLocalNameManager' ,
     api : testGetLocalNameManager ,
@@ -369,7 +369,7 @@ export const SppClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
   },
 
   {
-    name : '设置SPP扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_szssmmsm') ,
     detail : '4' ,
     method : 'setBluetoothScanModeManager' ,
     api : testSetBluetoothScanModeManager ,
@@ -377,7 +377,7 @@ export const SppClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.SppClientBenchmarkManager
   },
   {
-    name : '获取扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqsmmsm') ,
     detail : '5' ,
     method : 'getBluetoothScanModeManager' ,
     api : testGetBluetoothScanModeManager ,
@@ -385,7 +385,7 @@ export const SppClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.SppClientBenchmarkManager
   },
   {
-    name : 'Spp客户端连接(安全模式)Manager' ,
+    name : $r('app.string.bluetoothtest_str_skhdljaqmsm') ,
     detail : '6' ,
     method : 'sppConnectManager' ,
     api : testSppClientConnectSafeManager ,
@@ -396,7 +396,7 @@ export const SppClientManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
 
 export const SppServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
   {
-    name : '注册状态变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcztbhm') ,
     detail : '1' ,
     method : 'on.stateChangeManager' ,
     api : testOnStateChangeManager ,
@@ -404,7 +404,7 @@ export const SppServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.SppServerBenchmarkManager
   },
   {
-    name : '开蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_klym') ,
     detail : '2' ,
     method : 'enableBluetoothManager' ,
     api : testEnableBluetoothManager ,
@@ -412,7 +412,7 @@ export const SppServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.SppServerBenchmarkManager
   },
   {
-    name : '获取状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqztm') ,
     detail : '3' ,
     method : 'getStateManager' ,
     api : testGetStateManager ,
@@ -420,7 +420,7 @@ export const SppServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.SppServerBenchmarkManager
   },
   {
-    name : '设置本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_szbdmcm') ,
     detail : '5' ,
     method : 'setLocalNameManager' ,
     api : testSetLocalNameManager ,
@@ -428,7 +428,7 @@ export const SppServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.SppServerBenchmarkManager
   },
   {
-    name : '获取本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmcm') ,
     detail : '6' ,
     method : 'getLocalNameManager' ,
     api : testGetLocalNameManager ,
@@ -437,7 +437,7 @@ export const SppServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
   },
 
   {
-    name : '设置SPP扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_szssmmsm') ,
     detail : '4' ,
     method : 'setBluetoothScanModeManager' ,
     api : testSetBluetoothScanModeManager ,
@@ -445,7 +445,7 @@ export const SppServerManagerBenchmarkTestCase: BenchmarkManagerTest[] = [
     category : BenchmarkCategory.SppServerBenchmarkManager
   },
   {
-    name : '获取扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqsmmsm') ,
     detail : '5' ,
     method : 'getBluetoothScanModeManager' ,
     api : testGetBluetoothScanModeManager ,
