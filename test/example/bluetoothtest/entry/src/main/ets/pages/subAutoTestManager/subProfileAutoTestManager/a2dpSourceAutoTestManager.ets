@@ -55,7 +55,9 @@ struct A2dpSourceAutoTestManager {
               .id('pages_subAutoTestManager_subProfileAutoTestManager_a2dpSourceAutoTestManager__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -77,7 +79,9 @@ struct A2dpSourceAutoTestManager {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
@@ -113,12 +117,18 @@ struct A2dpSourceAutoTestManager {
       .width(ConfigData.WH_100_100)
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Button({ type : ButtonType.Normal , stateEffect : true }) {
           Row() {
-            Text($r('app.string.autotest')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-          }.alignItems(VerticalAlign.Center)
+            Text($r('app.string.autotest'))
+              .fontSize(ConfigData.VP_24)
+              .fontColor(0xffffff)
+              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+          }
+            .alignItems(VerticalAlign.Center)
         }
         .accessibilityLevel('yes')
         .id('pages_subAutoTestManager_subProfileAutoTestManager_a2dpSourceAutoTestManager__btn_0')

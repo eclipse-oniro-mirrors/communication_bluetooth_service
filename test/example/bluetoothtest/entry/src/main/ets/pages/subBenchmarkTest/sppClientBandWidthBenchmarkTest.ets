@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import { PageTitle } from '../../Component/pageTitle';
@@ -57,7 +58,9 @@ struct SppClientBandWidthBenchmarkTest {
               .id('pages_subBenchmarkTest_sppClientBandWidthBenchmarkTest__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
 
       Column() {
         Scroll() {
@@ -72,11 +75,15 @@ struct SppClientBandWidthBenchmarkTest {
               .margin({ left : ConfigData.VP_15 })
               .backgroundColor($r("app.color.spring"))
 
-            Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'))
+              Stack()
+                .height(ConfigData.HEIGHT_1_VP)
+                .backgroundColor($r('app.color.black'))
 
             Row() {
-              Text($r('app.string.bluetoothtest_text_mbsbm')).fontSize(ConfigData.VP_17).width(ConfigData.VP_1300)
-              TextInput({ text : this.deviceId , placeholder : "请输入mac地址" })
+              Text($r('app.string.bluetoothtest_text_mbsbm'))
+                .fontSize(ConfigData.VP_17)
+                .width(ConfigData.VP_1300)
+              TextInput({ text : this.deviceId , placeholder : $r('app.string.bluetoothtest_str_qsrmdz') })
                 .accessibilityLevel('yes')
                 .id('pages_subBenchmarkTest_sppClientBandWidthBenchmarkTest__ti_0')
                 .fontSize(ConfigData.VP_17)
@@ -95,8 +102,10 @@ struct SppClientBandWidthBenchmarkTest {
             .alignItems(VerticalAlign.Center)
 
             Row() {
-              Text($r('app.string.bluetoothtest_text_xrmbsbsj')).fontSize(ConfigData.VP_17).width(ConfigData.VP_170)
-              TextInput({ text : this.writeClientDataBW , placeholder : "请输入写入的数据" })
+              Text($r('app.string.bluetoothtest_text_xrmbsbsj'))
+                .fontSize(ConfigData.VP_17)
+                .width(ConfigData.VP_170)
+              TextInput({ text : this.writeClientDataBW , placeholder : $r('app.string.bluetoothtest_str_qsrxrdsj') })
                 .accessibilityLevel('yes')
                 .id('pages_subBenchmarkTest_sppClientBandWidthBenchmarkTest__ti_1')
                 .align(Alignment.Start)
@@ -162,7 +171,9 @@ struct SppClientBandWidthBenchmarkTest {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'))
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'))
 
         Scroll() {
           Column() {
@@ -202,8 +213,12 @@ struct SppClientBandWidthBenchmarkTest {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_dkxncs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+              Text($r('app.string.bluetoothtest_text_dkxncs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTest_sppClientBandWidthBenchmarkTest__btn_0')
@@ -230,8 +245,12 @@ struct SppClientBandWidthBenchmarkTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_jscs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+              Text($r('app.string.bluetoothtest_text_jscs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTest_sppClientBandWidthBenchmarkTest__btn_1')
@@ -244,11 +263,11 @@ struct SppClientBandWidthBenchmarkTest {
           .onClick(async(event: ClickEvent) => {
             let sppClientBandWidthBenchmarkTestMessage = ""
 
-            sppClientBandWidthBenchmarkTestMessage += "testSppClientReadOff 执行：" + testFunc(SppClientInterface.testSppClientReadOff) + "\n"
+            sppClientBandWidthBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_13') + testFunc(SppClientInterface.testSppClientReadOff) + "\n"
             AppStorage.setOrCreate("sppClientBandWidthBenchmarkTestMessage" , sppClientBandWidthBenchmarkTestMessage)
             await sleep(1)
 
-            sppClientBandWidthBenchmarkTestMessage += "testSppClientClose 执行：" + testFunc(SppClientInterface.testSppClientClose) + "\n"
+            sppClientBandWidthBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_19') + testFunc(SppClientInterface.testSppClientClose) + "\n"
             AppStorage.setOrCreate("sppClientBandWidthBenchmarkTestMessage" , sppClientBandWidthBenchmarkTestMessage)
             await sleep(1)
           })
@@ -258,7 +277,8 @@ struct SppClientBandWidthBenchmarkTest {
               Image($r('app.media.ic_public_delete_filled'))
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTest_sppClientBandWidthBenchmarkTest__img_0').width(ConfigData.VP_30).height(ConfigData.VP_40).margin({ left : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTest_sppClientBandWidthBenchmarkTest__btn_2')
@@ -284,18 +304,18 @@ struct SppClientBandWidthBenchmarkTest {
 
   dataRead(dataBuffer: ArrayBuffer) {
     const data = new Uint8Array(dataBuffer);
-    console.log('spp bluetooth read is: ' + data);
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetooth read is: ' + data);
     if ( data != null ) {
-      this.dataClientReadMessageBW = "读取成功" + JSON.stringify(data);
+      this.dataClientReadMessageBW = $r('app.string.bluetoothtest_str_dqcg_2') + JSON.stringify(data);
     } else {
-      this.dataClientReadMessageBW = "读取失败";
+      this.dataClientReadMessageBW = $r('app.string.bluetoothtest_str_dqsb');
     }
   }
 
   sppClientClose() {
     LogUtil.info('sppCloseClientSocket clientNumber: ' + JSON.stringify(this.clientNumber))
     bluetooth.sppCloseClientSocket(this.clientNumber);
-    this.message = '关闭成功 clientNumber' + this.clientNumber;
+    this.message = $r('app.string.bluetoothtest_str_gbcgc') + this.clientNumber;
   }
 }
 
@@ -317,12 +337,12 @@ export function testFunc(func: Function) {
   }
 
   let end = new Date().getTime()
-  console.log("开始:" + Number(start) + "ms")
-  console.log("结束:" + Number(end) + "ms")
-  console.log("花费:" + Number(end - start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_ks') + Number(start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_js') + Number(end) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_hf') + Number(end - start) + "ms")
   let message = ""
-  message += "花费:" + Number(end - start) + "ms" + "\n"
-  message += "开始:" + Number(start) + "ms; " + "结束:" + Number(end) + "ms" + "\n"
+  message += $r('app.string.bluetoothtest_str_hf') + Number(end - start) + "ms" + "\n"
+  message += $r('app.string.bluetoothtest_str_ks') + Number(start) + $r('app.string.bluetoothtest_str_m_1') + $r('app.string.bluetoothtest_str_js') + Number(end) + "ms" + "\n"
   return message
 }
 
@@ -338,26 +358,26 @@ async function sleep(time: number): Promise<void> {
 let clientNumber = - 1
 
 function sppClientConnectSafe(): string {
-  let message = "sppClientConnectSafe test"
-  console.log('testSppClientConnectSafe create! ');
+  let message = $r('app.string.bluetoothtest_str_st_8')
+  hilog.info(0x0000, 'BtTest', '%{public}s', 'testSppClientConnectSafe create! ');
   let uuid: string = AppStorage.get('inputUuid') !
   let deviceId: string = AppStorage.get('inputDeviceId') !
-  console.log('bluetoothModel sppConnect inputDeviceId: ' + deviceId);
+  hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothModel sppConnect inputDeviceId: ' + deviceId);
   bluetooth.sppConnect(deviceId , {
     uuid : uuid ,
     secure : true ,
     type : 0
   } , (code , socketID) => {
-    console.log("spp client code:" + JSON.stringify(code))
+    hilog.info(0x0000, 'BtTest', '%{public}s', "spp client code:" + JSON.stringify(code))
     if ( code.code != 0  ) {
-      message = "客户端连接失败!";
-      console.log('bluetoothModel sppConnect callback socketNumber(safe mode): ' + JSON.stringify(code));
+      message = $r('app.string.bluetoothtest_str_khdljsb');
+      hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothModel sppConnect callback socketNumber(safe mode): ' + JSON.stringify(code));
       promptAction.showToast({ message : message })
       return message;
     }
     acceptClientSocket(socketID);
-    console.log('bluetoothModel sppConnect callback socketNumber(safe mode): ' + socketID);
-    message = "客户端连接成功!";
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothModel sppConnect callback socketNumber(safe mode): ' + socketID);
+    message = $r('app.string.bluetoothtest_str_khdljcg');
     promptAction.showToast({ message : message })
     return message
   })
@@ -366,28 +386,28 @@ function sppClientConnectSafe(): string {
 }
 
 function acceptClientSocket(number: number) {
-  console.log('spp clientSocket socketID: ' + number);
+  hilog.info(0x0000, 'BtTest', '%{public}s', 'spp clientSocket socketID: ' + number);
   // 获取的clientNumber用作服务端后续读/写操作socket的id。
   clientNumber = number;
   AppStorage.setOrCreate("clientNumber" , clientNumber)
 }
 
 function sppClientWrite(): string {
-  let message = "sppClientWrite test"
+  let message = $r('app.string.bluetoothtest_str_st_18')
   let clientNumber: number = AppStorage.get("clientNumber") !
-  console.log('bluetoothModel sppClientWrite sppWrite clientNumber: ' + JSON.stringify(clientNumber));
+  hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothModel sppClientWrite sppWrite clientNumber: ' + JSON.stringify(clientNumber));
   let writeClientDataBW: string = AppStorage.get("writeClientDataBW") !
   let writeArrayBuffer: ArrayBuffer = strToArrayBuffer(writeClientDataBW) as ArrayBuffer;
   let writeStartTimeBW: number = new Date().getTime()
   const sppWriteSuccess = bluetooth.sppWrite(clientNumber , writeArrayBuffer);
   if ( sppWriteSuccess ) {
-    console.log('sppClientWrite successfully');
-    message = "sppClientWrite写入成功 ";
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'sppClientWrite successfully');
+    message = $r('app.string.bluetoothtest_str_sxrcg');
     AppStorage.setOrCreate("writeStartTimeBW" , writeStartTimeBW)
     sppClientReadOn()
   } else {
-    console.log('sppClientWrite failed');
-    message = "sppClientWrite写入失败";
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'sppClientWrite failed');
+    message = $r('app.string.bluetoothtest_str_sxrsb');
   }
   promptAction.showToast({ message : message })
   return message
@@ -395,30 +415,30 @@ function sppClientWrite(): string {
 
 
 function sppClientReadOn(): string {
-  let message = "sppClientReadOn test"
+  let message = $r('app.string.bluetoothtest_str_st_14')
   let clientReadMessageBW = ""
-  console.log("sppClientReadOn");
+  hilog.info(0x0000, 'BtTest', '%{public}s', "sppClientReadOn");
   let clientNumber: number = AppStorage.get("clientNumber") !
   bluetooth.on('sppRead' , clientNumber , (dataBuffer: ArrayBuffer) => {
     const data = new Uint8Array(dataBuffer);
-    console.log('spp bluetooth read is: ' + data);
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetooth read is: ' + data);
     if ( data != null ) {
-      clientReadMessageBW += "读取成功！" + "\n"
-      console.log("读取成功：" + JSON.stringify(data));
+      clientReadMessageBW += $r('app.string.bluetoothtest_str_dqcg') + "\n"
+      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_dqcg_1') + JSON.stringify(data));
       AppStorage.setOrCreate("dataClientReadMessageBW" , clientReadMessageBW)
       promptAction.showToast({ message : clientReadMessageBW })
 
       let readEndTimeBW = new Date().getTime()
       let writeStartTimeBW: number = AppStorage.get("writeStartTimeBW") !
       let sppRunTime = ""
-      sppRunTime += "sppRunTime,花费:" + Number(readEndTimeBW - writeStartTimeBW) + "ms;" + "\n"
-      sppRunTime += "开始:" + Number(writeStartTimeBW) + "ms; " + "结束:" + Number(readEndTimeBW) + "ms" + "\n"
+      sppRunTime += $r('app.string.bluetoothtest_str_shf') + Number(readEndTimeBW - writeStartTimeBW) + "ms;" + "\n"
+      sppRunTime += $r('app.string.bluetoothtest_str_ks') + Number(writeStartTimeBW) + "ms; " + $r('app.string.bluetoothtest_str_js') + Number(readEndTimeBW) + "ms" + "\n"
       AppStorage.setOrCreate("sppClientBandWidthBenchmarkTestMessage" , sppRunTime)
-      console.log("花费:" + Number(readEndTimeBW - writeStartTimeBW) + "ms;" + "\n")
-      console.log("开始:" + Number(writeStartTimeBW) + "ms; " + "结束:" + Number(readEndTimeBW) + "ms" + "\n")
+      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_hf') + Number(readEndTimeBW - writeStartTimeBW) + "ms;" + "\n")
+      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_ks') + Number(writeStartTimeBW) + "ms; " + $r('app.string.bluetoothtest_str_js') + Number(readEndTimeBW) + "ms" + "\n")
       sppClientReadOff()
     } else {
-      message = "读取失败";
+      message = $r('app.string.bluetoothtest_str_dqsb');
     }
     promptAction.showToast({ message : message })
     return message
@@ -429,16 +449,16 @@ function sppClientReadOn(): string {
 
 
 function sppClientReadOff(): string {
-  let message = "sppClientReadOff test"
+  let message = $r('app.string.bluetoothtest_str_st_11')
   let clientNumber: number = AppStorage.get("clientNumber") !
-  console.log("sppClientReadOff");
+  hilog.info(0x0000, 'BtTest', '%{public}s', "sppClientReadOff");
   bluetooth.off('sppRead' , clientNumber , (dataBuffer: ArrayBuffer) => {
     const data = new Uint8Array(dataBuffer);
-    console.log('spp bluetooth read is: ' + data);
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetooth read is: ' + data);
     if ( data != null ) {
-      message = "读取成功" + JSON.stringify(data);
+      message = $r('app.string.bluetoothtest_str_dqcg_2') + JSON.stringify(data);
     } else {
-      message = "读取失败";
+      message = $r('app.string.bluetoothtest_str_dqsb');
     }
     AppStorage.setOrCreate("dataClientReadMessageBW" , message)
     promptAction.showToast({ message : message })

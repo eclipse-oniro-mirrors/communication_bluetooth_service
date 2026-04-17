@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import { PageTitle } from '../../Component/pageTitle';
@@ -62,7 +63,9 @@ struct GattClientVelocityBenchmarkTest {
               .id('pages_subBenchmarkTestManager_gattClientVelocityBenchmarkTestManager__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
 
       Column() {
         Scroll() {
@@ -77,7 +80,10 @@ struct GattClientVelocityBenchmarkTest {
               .margin({ left : ConfigData.VP_15 })
               .backgroundColor($r("app.color.spring"))
             Row() {
-              Text($r('app.string.bluetoothtest_text_gci')).fontSize(ConfigData.VP_20).width(ConfigData.VP_180).padding({ left : ConfigData.VP_15 })
+              Text($r('app.string.bluetoothtest_text_gci'))
+                .fontSize(ConfigData.VP_20)
+                .width(ConfigData.VP_180)
+                .padding({ left : ConfigData.VP_15 })
               Column() {
                 Select([
                   { value : "100" },
@@ -94,7 +100,7 @@ struct GattClientVelocityBenchmarkTest {
                   .optionFont({ size : ConfigData.VP_15 })
                   .width(ConfigData.WH_50_100)
                   .onSelect((index: number) => {
-                    console.log("Select:" + index)
+                    hilog.info(0x0000, 'BtTest', '%{public}s', "Select:" + index)
                     AppStorage.setOrCreate("gatt_Cycle_index" , index);
                   })
               }
@@ -112,7 +118,9 @@ struct GattClientVelocityBenchmarkTest {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'))
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'))
 
         Scroll() {
           Column() {
@@ -151,8 +159,12 @@ struct GattClientVelocityBenchmarkTest {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_slxncs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+              Text($r('app.string.bluetoothtest_text_slxncs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTestManager_gattClientVelocityBenchmarkTestManager__btn_0')
@@ -165,50 +177,54 @@ struct GattClientVelocityBenchmarkTest {
           .onClick(async(event: ClickEvent) => {
             let gattClientBenchmarkTestMessage = ""
             //创建Gatt客户端
-            gattClientBenchmarkTestMessage += "testCreateGattClient 执行：" + testFunc(GattClientManagerInterface.testCreateGattClientManager) + "\n"
+            gattClientBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_11') + testFunc(GattClientManagerInterface.testCreateGattClientManager) + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage" , gattClientBenchmarkTestMessage)
             await sleep(5)
 
             //BLE连接状态
-            gattClientBenchmarkTestMessage += "testOnBLEConnectionStateChange 执行：" + testFunc(GattClientManagerInterface.testOnBLEConnectionStateChangeManager) + "\n"
+            gattClientBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_2') + testFunc(GattClientManagerInterface.testOnBLEConnectionStateChangeManager) + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage" , gattClientBenchmarkTestMessage)
             await sleep(2)
 
             //连接
-            gattClientBenchmarkTestMessage += "testConnect 执行：" + testFunc(GattClientManagerInterface.testConnectManager) + "\n"
+            gattClientBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_24') + testFunc(GattClientManagerInterface.testConnectManager) + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage" , gattClientBenchmarkTestMessage)
             await sleep(5)
 
             //设置通知特性更改
-            gattClientBenchmarkTestMessage += "testSetNotifyCharacteristicChanged 执行：" + testFunc(GattClientManagerInterface.testSetNotifyCharacteristicChangedManager) + "\n"
+            gattClientBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_1') + testFunc(GattClientManagerInterface.testSetNotifyCharacteristicChangedManager) + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage" , gattClientBenchmarkTestMessage)
             await sleep(3)
 
             //BLE特征值变化
-            gattClientBenchmarkTestMessage += "testOnBLECharacteristicChange 执行：" + testFunc(testOnBLECharacteristicChangeManager) + "\n"
+            gattClientBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_3') + testFunc(testOnBLECharacteristicChangeManager) + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage" , gattClientBenchmarkTestMessage)
             await sleep(2)
 
             //获取server
-            gattClientBenchmarkTestMessage += "testGetServicesCallback 执行：" + testFunc(GattClientManagerInterface.testGetServicesCallbackManager) + "\n"
+            gattClientBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_9') + testFunc(GattClientManagerInterface.testGetServicesCallbackManager) + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage" , gattClientBenchmarkTestMessage)
             await sleep(2)
 
             //获取特征值
-            gattClientBenchmarkTestMessage += "testReadCharacteristicValueCallback 执行：" + testFunc(GattClientManagerInterface.testReadCharacteristicValueCallbackManager) + "\n"
+            gattClientBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx') + testFunc(GattClientManagerInterface.testReadCharacteristicValueCallbackManager) + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage" , gattClientBenchmarkTestMessage)
             await sleep(2)
 
             //写入特征值
-            gattClientBenchmarkTestMessage += "testWriteCharacteristicValue 执行：" + testFunc(writeCharacteristicValue) + "\n"
+            gattClientBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_4') + testFunc(writeCharacteristicValue) + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage" , gattClientBenchmarkTestMessage)
             await sleep(2)
           })
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_jscs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+              Text($r('app.string.bluetoothtest_text_jscs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTestManager_gattClientVelocityBenchmarkTestManager__btn_1')
@@ -221,11 +237,11 @@ struct GattClientVelocityBenchmarkTest {
           .onClick(async(event: ClickEvent) => {
             let gattClientBenchmarkTestMessage = ""
 
-            gattClientBenchmarkTestMessage += "testDisconnect 执行：" + testFunc(GattClientManagerInterface.testDisconnectManager) + "\n"
+            gattClientBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_23') + testFunc(GattClientManagerInterface.testDisconnectManager) + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage" , gattClientBenchmarkTestMessage)
             await sleep(2)
 
-            gattClientBenchmarkTestMessage += "testGattClientClose 执行：" + testFunc(GattClientManagerInterface.testGattClientCloseManager) + "\n"
+            gattClientBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_16') + testFunc(GattClientManagerInterface.testGattClientCloseManager) + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage" , gattClientBenchmarkTestMessage)
             await sleep(2)
           })
@@ -235,7 +251,8 @@ struct GattClientVelocityBenchmarkTest {
               Image($r("app.media.ic_public_delete_filled"))
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTestManager_gattClientVelocityBenchmarkTestManager__img_0').width(ConfigData.VP_30).height(ConfigData.VP_40).margin({ left : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTestManager_gattClientVelocityBenchmarkTestManager__btn_2')
@@ -285,12 +302,12 @@ export function testFunc(func: Function) {
   }
 
   let end = new Date().getTime()
-  console.log("开始:" + Number(start) + "ms")
-  console.log("结束:" + Number(end) + "ms")
-  console.log("花费:" + Number(end - start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_ks') + Number(start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_js') + Number(end) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_hf') + Number(end - start) + "ms")
   let message = ""
-  message += "花费:" + Number(end - start) + "ms" + "\n"
-  message += "开始:" + Number(start) + "ms; " + "结束:" + Number(end) + "ms" + "\n"
+  message += $r('app.string.bluetoothtest_str_hf') + Number(end - start) + "ms" + "\n"
+  message += $r('app.string.bluetoothtest_str_ks') + Number(start) + $r('app.string.bluetoothtest_str_m_1') + $r('app.string.bluetoothtest_str_js') + Number(end) + "ms" + "\n"
   return message
 }
 
@@ -310,10 +327,10 @@ function writeCharacteristicValue(): string {
   let characteristicUUID: string = AppStorage.get('characteristicUUID') !;
   let descriptorUUID: string = AppStorage.get('descriptorUUID') !;
   let descriptorValue: string = AppStorage.get('descriptorValue') !;
-  let message = "writeCharacteristicValue test"
+  let message = $r('app.string.bluetoothtest_str_wt')
   let btState = bluetoothManager.getState();
   if ( btState === bluetoothManager.BluetoothState.STATE_OFF ) {
-    message = "BT is not enabled!";
+    message = $r('app.string.bluetoothtest_str_bine');
     promptAction.showToast({ message : message })
     return message;
   }
@@ -341,10 +358,10 @@ function writeCharacteristicValue(): string {
       descriptors : descriptors
     };
     if ( gattClientInstance.writeCharacteristicValue(bleCharacteristicDataIn) ) {
-      message = "writeCharacteristicValue succeeds.";
+      message = $r('app.string.bluetoothtest_str_ws');
       readCharacteristicValueCallback()
     } else {
-      message = "writeCharacteristicValue failed!";
+      message = $r('app.string.bluetoothtest_str_wf');
     }
   }
   promptAction.showToast({ message : message })
@@ -356,10 +373,10 @@ function readCharacteristicValueCallback(): string {
   let characteristicUUID: string = AppStorage.get('characteristicUUID') !;
   let descriptorUUID: string = AppStorage.get('descriptorUUID') !;
   let descriptorValue: string = AppStorage.get('descriptorValue') !;
-  let message = "readCharacteristicValueCallback test"
+  let message = $r('app.string.bluetoothtest_str_rt')
   let btState = bluetoothManager.getState();
   if ( btState === bluetoothManager.BluetoothState.STATE_OFF ) {
-    message = "BT is not enabled!";
+    message = $r('app.string.bluetoothtest_str_bine');
     promptAction.showToast({ message : message })
   }
   if ( !gattClientInstance ) {
@@ -385,22 +402,22 @@ function readCharacteristicValueCallback(): string {
   };
   gattClientInstance.readCharacteristicValue(bleCharacteristicDataIn , (err: BusinessError , bleCharacteristicDataOut: bluetoothManager.BLECharacteristic) => {
     if ( err.code != 0 ) {
-      message = "readCharacteristicValue error code:" + err.code + ",id:" + serviceUUID;
-      console.log(message)
+      message = $r('app.string.bluetoothtest_str_rec') + err.code + $r('app.string.bluetoothtest_str_i') + serviceUUID;
+      hilog.info(0x0000, 'BtTest', '%{public}s', message)
       promptAction.showToast({ message : message })
     }
-    message = "readCharacteristicValue callback:";
-    message += 'bluetooth characteristic uuid:' + bleCharacteristicDataOut.characteristicUuid + "\n";
+    message = $r('app.string.bluetoothtest_str_rc');
+    message += $r('app.string.bluetoothtest_str_bcu') + bleCharacteristicDataOut.characteristicUuid + "\n";
     let value = new Uint8Array(bleCharacteristicDataOut.characteristicValue);
     for ( let i = 0 ; i < bleCharacteristicDataOut.characteristicValue.byteLength ; i ++ ) {
-      message += 'bluetooth characteristic value: ' + value[ i ];
+      message += $r('app.string.bluetoothtest_str_bcv') + value[ i ];
     }
     AppStorage.setOrCreate("read_CharacteristicValue" , message)
     promptAction.showToast({ message : message })
     i ++
     writeCharacteristicValue()
   });
-  message = 'readCharacteristicValue(callback):invoke succeeds!';
+  message = $r('app.string.bluetoothtest_str_rcis');
   promptAction.showToast({ message : message })
   return message
 }
