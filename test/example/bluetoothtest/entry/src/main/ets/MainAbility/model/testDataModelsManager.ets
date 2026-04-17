@@ -106,8 +106,8 @@ import {
 } from './a2dpSinkProfileManagerInterface'
 
 interface BRManagerTest {
-  name: string;
-  detail: string;
+  name: Resource | string;
+  detail: Resource | string;
   method: string;
   api: Function;
   result: string;
@@ -115,8 +115,8 @@ interface BRManagerTest {
 }
 
 interface BRManagerTestComposition {
-  name: string;
-  detail: string;
+  name: Resource | string;
+  detail: Resource | string;
   url: string;
   image: Resource;
   category: Category;

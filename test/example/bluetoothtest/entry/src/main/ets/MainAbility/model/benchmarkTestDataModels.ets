@@ -44,8 +44,8 @@ import {
 import { testSppClientConnectSafe } from './sppClientInterface'
 
 interface BenchmarkTest {
-  name: string;
-  detail: string;
+  name: Resource | string;
+  detail: Resource | string;
   method: string;
   api: Function;
   result: string;

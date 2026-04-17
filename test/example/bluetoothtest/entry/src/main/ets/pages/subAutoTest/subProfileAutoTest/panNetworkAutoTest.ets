@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
+
 
 import { BTAutoArrayItem, testItemFromRouterOrPlaceholder } from '../../../Utils/common'
 import ConfigData from '../../../Utils/ConfigData';
@@ -93,7 +95,7 @@ struct PanNetworkAutoTest {
               .width(ConfigData.WH_100_100)
             List() {
               ListItem() {
-                Text($r('app.string.autotest_log_prefix') + "\n" + this.PanNetworkProfileAutoTestMessage)
+                Text(resStr($r('app.string.autotest_log_prefix')) + "\n" + this.PanNetworkProfileAutoTestMessage)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_30 , right : ConfigData.VP_10 })
                   .textAlign(TextAlign.Start)

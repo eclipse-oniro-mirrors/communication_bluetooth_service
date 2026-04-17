@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
@@ -148,16 +150,16 @@ struct BleBenchmarkTestManager {
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let bleBenchmarkTestMessage = ""
-            bleBenchmarkTestMessage += $r('app.string.bluetoothtest_str_s_1') + testFunc(subscribeBLEDeviceFind) + "\n"
+            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_s_1')) + testFunc(subscribeBLEDeviceFind) + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
             await sleep(1)
             bleBenchmarkTestMessage += "startBleScan" + testFunc(BluetoothModelManager.startBLEScan) + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
             await sleep(10)
-            bleBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_10') + testFunc(BleManagerInterface.testStopBLEScanManager) + "\n"
+            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_10')) + testFunc(BleManagerInterface.testStopBLEScanManager) + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
             await sleep(1)
-            bleBenchmarkTestMessage += $r('app.string.bluetoothtest_str_t') + testFunc(brManagerInterface.testOnStateChangeManager) + "\n"
+            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_t')) + testFunc(brManagerInterface.testOnStateChangeManager) + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
             await sleep(1)
           })
@@ -183,11 +185,11 @@ struct BleBenchmarkTestManager {
             let bleBenchmarkTestMessage = ""
             let i = 0
             for ( i ; i < 10 ; i ++ ) {
-              bleBenchmarkTestMessage = $r('app.string.bluetoothtest_str_d_1') + (i + 1) + $r('app.string.bluetoothtest_str_cwdxcs') + "\n"
+              bleBenchmarkTestMessage = resStr($r('app.string.bluetoothtest_str_d_1')) + (i + 1) + resStr($r('app.string.bluetoothtest_str_cwdxcs')) + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
               await sleep(1)
 
-              bleBenchmarkTestMessage += $r('app.string.bluetoothtest_str_s_1') + testFunc(subscribeBLEDeviceFind) + "\n"
+              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_s_1')) + testFunc(subscribeBLEDeviceFind) + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
               await sleep(1)
 
@@ -195,11 +197,11 @@ struct BleBenchmarkTestManager {
               AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
               await sleep(10)
 
-              bleBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_10') + testFunc(testStopBLEScanManager) + "\n"
+              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_10')) + testFunc(testStopBLEScanManager) + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
               await sleep(1)
 
-              bleBenchmarkTestMessage += $r('app.string.bluetoothtest_str_uzx_1') + testFunc(BluetoothModelManager.unsubscribeBLEDeviceFind) + "\n"
+              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_uzx_1')) + testFunc(BluetoothModelManager.unsubscribeBLEDeviceFind) + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
               await sleep(1)
 
@@ -291,12 +293,12 @@ export function testFunc(func: Function) {
   }
 
   let end = new Date().getTime()
-  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_ks') + Number(start) + "ms")
-  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_js') + Number(end) + "ms")
-  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_hf') + Number(end - start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms")
   let message = ""
-  message += $r('app.string.bluetoothtest_str_hf') + Number(end - start) + "ms" + "\n"
-  message += $r('app.string.bluetoothtest_str_ks') + Number(start) + $r('app.string.bluetoothtest_str_m_1') + $r('app.string.bluetoothtest_str_js') + Number(end) + "ms" + "\n"
+  message += resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms" + "\n"
+  message += resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + resStr($r('app.string.bluetoothtest_str_m_1')) + resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms" + "\n"
   return message
 }
 
@@ -310,8 +312,8 @@ async function sleep(time: number): Promise<void> {
 
 function subscribeBLEDeviceFind() {
   let start2 = new Date().getTime()
-  let bleRunMessage = $r('app.string.bluetoothtest_str_s_3')
-  let message = $r('app.string.bluetoothtest_str_st_5')
+  let bleRunMessage = resStr($r('app.string.bluetoothtest_str_s_3'))
+  let message = resStr($r('app.string.bluetoothtest_str_st_5'))
   hilog.info(0x0000, 'BtTest', '%{public}s', "subscribeBLEDeviceFind test")
   BluetoothModelManager.subscribeBLEDeviceFind((deviceIds: Array<bluetooth.ScanResult>) => {
     let end2 = new Date().getTime()
@@ -327,12 +329,12 @@ function subscribeBLEDeviceFind() {
       hilog.info(0x0000, 'BtTest', '%{public}s %{public}s', "btRssi:", btRssi)
       hilog.info(0x0000, 'BtTest', '%{public}s', "DeviceFound Start222 ------------------------")
       hilog.info(0x0000, 'BtTest', '%{public}s', 'available ble find [' + JSON.stringify(obj2) + '] ')
-      let message = ($r('app.string.bluetoothtest_str_abf_1') + JSON.stringify(obj2) + $r('app.string.bluetoothtest_str_str'))
+      let message = (resStr($r('app.string.bluetoothtest_str_abf_1')) + JSON.stringify(obj2) + resStr($r('app.string.bluetoothtest_str_str')))
       promptAction.showToast({ message : message })
-      bleRunMessage += "\n" + $r('app.string.bluetoothtest_str_hf') + Number(end2 - start2) + $r('app.string.bluetoothtest_str_m_2') + $r('app.string.bluetoothtest_str_mw') + JSON.stringify(obj2) + $r('app.string.bluetoothtest_str_d') + btRssi.toFixed(2) + $r('app.string.bluetoothtest_str_str_1') + "\n"
-      bleRunMessage += $r('app.string.bluetoothtest_str_ks') + Number(start2) + $r('app.string.bluetoothtest_str_m_1') + $r('app.string.bluetoothtest_str_js') + Number(end2) + "ms" + "\n"
-      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_hf') + Number(end2 - start2) + "ms;" + $r('app.string.bluetoothtest_str_mw') + JSON.stringify(obj2) + "]" + "\n")
-      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_ks') + Number(start2) + "ms; " + $r('app.string.bluetoothtest_str_js') + Number(end2) + "ms" + "\n")
+      bleRunMessage += "\n" + resStr($r('app.string.bluetoothtest_str_hf')) + Number(end2 - start2) + resStr($r('app.string.bluetoothtest_str_m_2')) + resStr($r('app.string.bluetoothtest_str_mw')) + JSON.stringify(obj2) + resStr($r('app.string.bluetoothtest_str_d')) + btRssi.toFixed(2) + resStr($r('app.string.bluetoothtest_str_str_1')) + "\n"
+      bleRunMessage += resStr($r('app.string.bluetoothtest_str_ks')) + Number(start2) + resStr($r('app.string.bluetoothtest_str_m_1')) + resStr($r('app.string.bluetoothtest_str_js')) + Number(end2) + "ms" + "\n"
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_hf')) + Number(end2 - start2) + "ms;" + resStr($r('app.string.bluetoothtest_str_mw')) + JSON.stringify(obj2) + "]" + "\n")
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_ks')) + Number(start2) + "ms; " + resStr($r('app.string.bluetoothtest_str_js')) + Number(end2) + "ms" + "\n")
       await sleep(1)
       AppStorage.setOrCreate('bleRunMessage' , bleRunMessage);
       await sleep(1)

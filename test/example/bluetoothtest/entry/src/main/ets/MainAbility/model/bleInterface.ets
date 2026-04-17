@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 
 import hilog from '@ohos.hilog';
@@ -28,20 +30,20 @@ let gattServerInstance: bluetooth.GattServer;
 
 export function testCreateGattServerDevice(): string {
   try {
-    let message = $r('app.string.bluetoothtest_str_ct')
+    let message = resStr($r('app.string.bluetoothtest_str_ct'))
     let btState = bluetooth.getState();
     if ( btState == bluetooth.BluetoothState.STATE_ON || btState == bluetooth.BluetoothState.STATE_BLE_ON ) {
-      message = $r('app.string.bluetoothtest_str_cs_6');
+      message = resStr($r('app.string.bluetoothtest_str_cs_6'));
       if ( !gattServerInstance ) {
         gattServerInstance = BluetoothModel.createGattServer();
-        message = $r('app.string.bluetoothtest_str_cs_2');
+        message = resStr($r('app.string.bluetoothtest_str_cs_2'));
       } else {
-        message = $r('app.string.bluetoothtest_str_ge');
+        message = resStr($r('app.string.bluetoothtest_str_ge'));
       }
     } else if ( btState == bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = $r('app.string.bluetoothtest_str_spw');
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
@@ -57,21 +59,21 @@ let gattClientDeviceInstance: bluetooth.GattClientDevice
 
 export function testCreateGattClientDevice(): string {
   try {
-    let message = $r('app.string.bluetoothtest_str_tc')
+    let message = resStr($r('app.string.bluetoothtest_str_tc'))
     let btState = bluetooth.getState();
     let peripheralDeviceId: string = AppStorage.get('peripheralDeviceId') !;
     if ( btState == bluetooth.BluetoothState.STATE_ON || btState == bluetooth.BluetoothState.STATE_BLE_ON ) {
-      message = $r('app.string.bluetoothtest_str_cs_7')
+      message = resStr($r('app.string.bluetoothtest_str_cs_7'))
       if ( !gattClientDeviceInstance ) {
         gattClientDeviceInstance = BluetoothModel.createGattClient(peripheralDeviceId);
-        message = $r('app.string.bluetoothtest_str_cs_5');
+        message = resStr($r('app.string.bluetoothtest_str_cs_5'));
       } else {
-        message = $r('app.string.bluetoothtest_str_ge_1');
+        message = resStr($r('app.string.bluetoothtest_str_ge_1'));
       }
     } else if ( btState == bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = $r('app.string.bluetoothtest_str_spw');
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
@@ -102,9 +104,9 @@ export function testStartBLEScan(): string {
   try {
     hilog.info(0x0000, 'BtTest', '%{public}s', "StartBLEScan -------------------------------")
     let btState = bluetooth.getState();
-    let message = $r('app.string.bluetoothtest_str_ts_1')
+    let message = resStr($r('app.string.bluetoothtest_str_ts_1'))
     if ( btState == bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       return message;
     }
     let txtScanFilter_deviceId: string = AppStorage.get('txtScanFilterDeviceId') !;
@@ -133,14 +135,14 @@ export function testStartBLEScan(): string {
     if ( !cbxBleScanOptions ) {
       if ( cbxBleScanFilter ) {
         BluetoothModel.startBLEScan(curScanFilters);
-        message = $r('app.string.bluetoothtest_str_sf') + JSON.stringify(curScanFilters);
+        message = resStr($r('app.string.bluetoothtest_str_sf')) + JSON.stringify(curScanFilters);
       } else {
         BluetoothModel.startBLEScan(null);
-        message = $r('app.string.bluetoothtest_str_sn');
+        message = resStr($r('app.string.bluetoothtest_str_sn'));
       }
     } else {
       BluetoothModel.startBLEScan(curScanFilters , curScanOptions);
-      message = $r('app.string.bluetoothtest_str_sf') + JSON.stringify(curScanFilters) + "\n" + $r('app.string.bluetoothtest_str_o') + JSON.stringify(curScanOptions);
+      message = resStr($r('app.string.bluetoothtest_str_sf')) + JSON.stringify(curScanFilters) + "\n" + resStr($r('app.string.bluetoothtest_str_o')) + JSON.stringify(curScanOptions);
     }
     hilog.info(0x0000, 'BtTest', '%{public}s', "StartBLEScan end-------------------------------")
     promptAction.showToast({ message : message })
@@ -156,7 +158,7 @@ export function testStartBLEScan(): string {
 export function testStopBLEScan(): string {
   try {
     BluetoothModel.stopBLEScan();
-    let message = $r('app.string.bluetoothtest_str_so');
+    let message = resStr($r('app.string.bluetoothtest_str_so'));
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
@@ -171,10 +173,10 @@ let bleDeviceFind = false
 
 export function testOnBLEDeviceFind(): string {
   try {
-    let message = $r('app.string.bluetoothtest_str_ot_10')
+    let message = resStr($r('app.string.bluetoothtest_str_ot_10'))
     if ( bleDeviceFind ) {
       BluetoothModel.unsubscribeBLEDeviceFind();
-      message = $r('app.string.bluetoothtest_str_gbbczztbh')
+      message = resStr($r('app.string.bluetoothtest_str_gbbczztbh'))
       promptAction.showToast({ message : message })
     } else {
       BluetoothModel.subscribeBLEDeviceFind((deviceItems: Array<bluetooth.ScanResult>) => {
@@ -183,14 +185,14 @@ export function testOnBLEDeviceFind(): string {
         let availBleDeviceIds: Array<string> = []
         deviceItems?.forEach(deviceItem => {
           let newDevice = deviceItem.deviceId;
-          message += $r('app.string.bluetoothtest_str_m') + newDevice;
+          message += resStr($r('app.string.bluetoothtest_str_m')) + newDevice;
           hilog.info(0x0000, 'BtTest', '%{public}s', "BLE Test:" + 'available bluetooth new device : ' + newDevice);
           availBleDeviceIds.push(newDevice);
         })
         AppStorage.setOrCreate('bluetoothAvailableDevices' , availBleDeviceIds);
         promptAction.showToast({ message : message })
       })
-      message = $r('app.string.bluetoothtest_str_dkbczztbh')
+      message = resStr($r('app.string.bluetoothtest_str_dkbczztbh'))
       promptAction.showToast({ message : message })
     }
     bleDeviceFind = !bleDeviceFind

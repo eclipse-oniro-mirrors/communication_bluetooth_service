@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import bluetooth from '@ohos.bluetooth';
@@ -28,7 +30,7 @@ import { opp } from '@kit.ConnectivityKit';
 
 export function testProfileConnect() {
   try {
-    let message = $r('app.string.bluetoothtest_str_pt_4')
+    let message = resStr($r('app.string.bluetoothtest_str_pt_4'))
     let textMessage = ""
     let btConnectionState: number = AppStorage.get("btConnectionState") !
     let deviceId: string = AppStorage.get("deviceId") !
@@ -41,8 +43,8 @@ export function testProfileConnect() {
     if ( ret ) {
       btConnectionState = 1;
     }
-    textMessage = $r('app.string.bluetoothtest_str_cr') + ret;
-    message = $r('app.string.bluetoothtest_str_cr') + ret;
+    textMessage = resStr($r('app.string.bluetoothtest_str_cr')) + ret;
+    message = resStr($r('app.string.bluetoothtest_str_cr')) + ret;
     AppStorage.SetOrCreate("textMessage" , textMessage)
     promptAction.showToast({ message : message });
     return message
@@ -56,7 +58,7 @@ export function testProfileConnect() {
 
 export function testProfileDisConnect() {
   try {
-    let message = $r('app.string.bluetoothtest_str_pt_3')
+    let message = resStr($r('app.string.bluetoothtest_str_pt_3'))
     let textMessage = ""
     let btConnectionState: number = AppStorage.get("btConnectionState") !
     let deviceId: string = AppStorage.get("deviceId") !
@@ -69,9 +71,9 @@ export function testProfileDisConnect() {
     if ( ret ) {
       btConnectionState = 3;
     }
-    textMessage = $r('app.string.bluetoothtest_str_dr') + ret;
+    textMessage = resStr($r('app.string.bluetoothtest_str_dr')) + ret;
     AppStorage.SetOrCreate("textMessage" , textMessage)
-    message = $r('app.string.bluetoothtest_str_dr') + ret;
+    message = resStr($r('app.string.bluetoothtest_str_dr')) + ret;
     promptAction.showToast({ message : message });
     return message
   } catch( e ) {
@@ -84,7 +86,7 @@ export function testProfileDisConnect() {
 
 export function testProfileGetPlayingState() {
   try {
-    let message = $r('app.string.bluetoothtest_str_pt_1')
+    let message = resStr($r('app.string.bluetoothtest_str_pt_1'))
     let textMessage = ""
     let deviceId: string = AppStorage.get("deviceId") !
     let profileType: string = AppStorage.get("profileType") !
@@ -96,8 +98,8 @@ export function testProfileGetPlayingState() {
     if ( profile ) {
       ret = profile.getPlayingState(deviceId);
     }
-    textMessage = $r('app.string.bluetoothtest_str_gr_1') + ret;
-    message = $r('app.string.bluetoothtest_str_gr_1') + ret;
+    textMessage = resStr($r('app.string.bluetoothtest_str_gr_1')) + ret;
+    message = resStr($r('app.string.bluetoothtest_str_gr_1')) + ret;
     AppStorage.SetOrCreate("textMessage" , textMessage)
     promptAction.showToast({ message : message });
     return message
@@ -111,12 +113,12 @@ export function testProfileGetPlayingState() {
 
 export function testProfileGetConnectionDevices() {
   try {
-    let message = $r('app.string.bluetoothtest_str_pt')
+    let message = resStr($r('app.string.bluetoothtest_str_pt'))
     let textMessage = ""
     let profileType: number = AppStorage.get("profileType") !
     let ret: Array<string> =(btProfileModel.getProfile(profileType) as bluetooth.BaseProfile).getConnectionDevices();
-    textMessage = $r('app.string.bluetoothtest_str_gr') + JSON.stringify(ret);
-    message = $r('app.string.bluetoothtest_str_gr') + JSON.stringify(ret);
+    textMessage = resStr($r('app.string.bluetoothtest_str_gr')) + JSON.stringify(ret);
+    message = resStr($r('app.string.bluetoothtest_str_gr')) + JSON.stringify(ret);
     AppStorage.SetOrCreate("textMessage" , textMessage)
     promptAction.showToast({ message : message });
     return message
@@ -130,13 +132,13 @@ export function testProfileGetConnectionDevices() {
 
 export function testProfileGetDeviceState() {
   try {
-    let message = $r('app.string.bluetoothtest_str_pt_2')
+    let message = resStr($r('app.string.bluetoothtest_str_pt_2'))
     let textMessage = ""
     let deviceId: string = AppStorage.get("deviceId") !
     let profileType: number = AppStorage.get("profileType") !
     let ret: number = (btProfileModel.getProfile(profileType) as bluetooth.BaseProfile).getDeviceState(deviceId);
-    textMessage = $r('app.string.bluetoothtest_str_gr_2') + ret;
-    message = $r('app.string.bluetoothtest_str_gr_2') + ret;
+    textMessage = resStr($r('app.string.bluetoothtest_str_gr_2')) + ret;
+    message = resStr($r('app.string.bluetoothtest_str_gr_2')) + ret;
     AppStorage.SetOrCreate("textMessage" , textMessage)
     promptAction.showToast({ message : message });
     return message
@@ -152,24 +154,24 @@ let transferStateChange = false
 
 export function testOnTransferStateChange() {
   try {
-    let message = $r('app.string.bluetoothtest_str_ot_3')
+    let message = resStr($r('app.string.bluetoothtest_str_ot_3'))
     let textMessage = ""
     let profileType: number = AppStorage.get("profileType") !
     if ( transferStateChange ) {
       (btProfileModel.getProfile(profileType) as opp.OppServerProfile).off("transferStateChange" , () => {
-        promptAction.showToast({ message : $r('app.string.bluetoothtest_str_otjtygb') })
+        promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_otjtygb')) })
       })
-      message = ($r('app.string.bluetoothtest_str_gbcsztgbsj'))
+      message = resStr($r('app.string.bluetoothtest_str_gbcsztgbsj'))
     } else {
       (btProfileModel.getProfile(profileType) as opp.OppServerProfile).on("transferStateChange" , (stateInformation) => {
         hilog.info(0x0000, 'BtTest', '%{public}s', "transferStateChange enter");
-        textMessage = $r('app.string.bluetoothtest_str_ts');
-        message = $r('app.string.bluetoothtest_str_ts');
+        textMessage = resStr($r('app.string.bluetoothtest_str_ts'));
+        message = resStr($r('app.string.bluetoothtest_str_ts'));
         AppStorage.SetOrCreate("textMessage" , textMessage)
         let curProgress = (stateInformation.currentBytes * 100) / stateInformation.totalBytes;
         if ( curProgress === 100 ) {
-          hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_jswjcgwjcflj') + JSON.stringify(stateInformation.filePath));
-          promptAction.showToast({ message : $r('app.string.bluetoothtest_str_jswjcgwjcflj') + JSON.stringify(stateInformation.filePath) })
+          hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_jswjcgwjcflj')) + JSON.stringify(stateInformation.filePath));
+          promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_jswjcgwjcflj')) + JSON.stringify(stateInformation.filePath) })
         }
         promptAction.showToast({ message : message });
       })
@@ -188,21 +190,21 @@ let receiveIncomingFile = false
 
 export function testOnReceiveIncomingFile() {
   try {
-    let message = $r('app.string.bluetoothtest_str_ot_2')
+    let message = resStr($r('app.string.bluetoothtest_str_ot_2'))
     let textMessage = ""
     let profileType: number = AppStorage.get("profileType") !
     if ( receiveIncomingFile ) {
       (btProfileModel.getProfile(profileType) as opp.OppServerProfile).off("receiveIncomingFile" , () => {
-        promptAction.showToast({ message : $r('app.string.bluetoothtest_str_orjtygb') })
+        promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_orjtygb')) })
       })
-      message = ($r('app.string.bluetoothtest_str_gbjswjztgbsj'))
+      message = resStr($r('app.string.bluetoothtest_str_gbjswjztgbsj'))
     } else {
       (btProfileModel.getProfile(profileType) as opp.OppServerProfile).on("receiveIncomingFile" , (information) => {
         hilog.info(0x0000, 'BtTest', '%{public}s', "receiveIncomingFile enter");
         let deviceName: string = information.remoteDeviceName;
         let fileName: string = information.filePath;
-        textMessage = $r('app.string.bluetoothtest_str_r') + deviceName + $r('app.string.bluetoothtest_str_f') + fileName;
-        message = $r('app.string.bluetoothtest_str_r') + deviceName + $r('app.string.bluetoothtest_str_f') + fileName;
+        textMessage = resStr($r('app.string.bluetoothtest_str_r')) + deviceName + resStr($r('app.string.bluetoothtest_str_f')) + fileName;
+        message = resStr($r('app.string.bluetoothtest_str_r')) + deviceName + resStr($r('app.string.bluetoothtest_str_f')) + fileName;
         AppStorage.SetOrCreate("textMessage" , textMessage)
         promptAction.showToast({ message : message });
       })
@@ -221,16 +223,16 @@ export function testOnReceiveIncomingFile() {
 
 export function testSendFile(serverMac: string , fileName: string , fileType: string) {
   try {
-    let message = $r('app.string.bluetoothtest_str_st_22')
+    let message = resStr($r('app.string.bluetoothtest_str_st_22'))
     let textMessage = ""
     let profileType: number | undefined = AppStorage.get("profileType")
     let fileHolders : Array<opp.FileHolder> = [];
     (btProfileModel.getProfile(profileType) as opp.OppServerProfile).sendFile(
       serverMac , fileHolders).then(() => {
       hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_ofswjcgr'));
-      textMessage = $r('app.string.bluetoothtest_str_tr');
+      textMessage = resStr($r('app.string.bluetoothtest_str_tr'));
       AppStorage.SetOrCreate("textMessage" , textMessage)
-      message = $r('app.string.bluetoothtest_str_ofswjcgr')
+      message = resStr($r('app.string.bluetoothtest_str_ofswjcgr'))
       promptAction.showToast({ message : message })
     })
 
@@ -245,7 +247,7 @@ export function testSendFile(serverMac: string , fileName: string , fileType: st
 
 export function testSetIncomingFileConfirmation() {
   try {
-    let message = $r('app.string.bluetoothtest_str_st_2')
+    let message = resStr($r('app.string.bluetoothtest_str_st_2'))
     let textMessage = ""
     let profileType: number | undefined = AppStorage.get("profileType")
     let pathDir = "/test.jpg";
@@ -254,9 +256,9 @@ export function testSetIncomingFileConfirmation() {
       then(() => {
         let result = true;
         hilog.info(0x0000, 'BtTest', '%{public}s', "result: " + result);
-        textMessage = $r('app.string.bluetoothtest_str_r_2') + result;
+        textMessage = resStr($r('app.string.bluetoothtest_str_r_2')) + result;
         AppStorage.SetOrCreate("textMessage" , textMessage)
-        message = $r('app.string.bluetoothtest_str_r_2') + result
+        message = resStr($r('app.string.bluetoothtest_str_r_2')) + result
         promptAction.showToast({ message : message })
       })
 
@@ -271,16 +273,16 @@ export function testSetIncomingFileConfirmation() {
 
 export function testGetCurrentTransferInformation() {
   try {
-    let message = $r('app.string.bluetoothtest_str_gt')
+    let message = resStr($r('app.string.bluetoothtest_str_gt'))
     let textMessage = ""
     let profileType: number | undefined = AppStorage.get("profileType");
     (btProfileModel.getProfile(profileType) as opp.OppServerProfile).
       getCurrentTransferInformation().then((value: opp.OppTransferInformation) => {
         let result = true;
-        hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_dqxx') + JSON.stringify(result));
-        textMessage = $r('app.string.bluetoothtest_str_dqxx') + JSON.stringify(result);
+        hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_dqxx')) + JSON.stringify(result));
+        textMessage = resStr($r('app.string.bluetoothtest_str_dqxx')) + JSON.stringify(result);
         AppStorage.SetOrCreate("textMessage" , textMessage)
-        message = $r('app.string.bluetoothtest_str_dqxx') + JSON.stringify(result)
+        message = resStr($r('app.string.bluetoothtest_str_dqxx')) + JSON.stringify(result)
         promptAction.showToast({ message : message })
       })
 
@@ -295,15 +297,15 @@ export function testGetCurrentTransferInformation() {
 
 export function testCancelTransfer() {
   try {
-    let message = $r('app.string.bluetoothtest_str_ct_3')
+    let message = resStr($r('app.string.bluetoothtest_str_ct_3'))
     let textMessage = ""
     let profileType: number | undefined = AppStorage.get("profileType");
     (btProfileModel.getProfile(profileType) as opp.OppServerProfile).cancelTransfer().then(() => {
       let result = true;
-      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_qxcs') + JSON.stringify(result));
-      textMessage = $r('app.string.bluetoothtest_str_qxcs') + JSON.stringify(result);
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_qxcs')) + JSON.stringify(result));
+      textMessage = resStr($r('app.string.bluetoothtest_str_qxcs')) + JSON.stringify(result);
       AppStorage.SetOrCreate("textMessage" , textMessage)
-      message = $r('app.string.bluetoothtest_str_qxcs') + JSON.stringify(result)
+      message = resStr($r('app.string.bluetoothtest_str_qxcs')) + JSON.stringify(result)
       promptAction.showToast({ message : message })
     })
 

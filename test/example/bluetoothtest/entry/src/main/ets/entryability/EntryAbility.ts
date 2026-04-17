@@ -18,6 +18,7 @@ import hilog from '@ohos.hilog';
 import window from '@ohos.window';
 import type { Want } from '@kit.AbilityKit';
 import { setSkipBluetoothPermissionForAutomatedTest } from '../bluetoothTestNav';
+import { setUiAbilityContext } from '../Utils/uiContextStore';
 
 const DEFAULT_PAGE = 'pages/homePage';
 const TEST_PAGE_KEY = 'testTargetPage';
@@ -36,7 +37,7 @@ export default class EntryAbility extends UIAbility {
 
   onCreate(want, launchParam) {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
-    globalThis.context = this.context;
+    setUiAbilityContext(this.context);
     const p = this.extractTestTargetPage(want);
     const fromAutomatedTest = p !== undefined;
     setSkipBluetoothPermissionForAutomatedTest(fromAutomatedTest);

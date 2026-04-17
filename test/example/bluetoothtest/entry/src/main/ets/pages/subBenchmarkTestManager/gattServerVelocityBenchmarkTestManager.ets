@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
@@ -192,27 +194,27 @@ struct GattServerVelocityBenchmarkTestManager {
           .onClick(async(event: ClickEvent) => {
             let gattServerBenchmarkTestMessage = ""
             //创建Gatt服务器
-            gattServerBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_12') + testFunc(GattServerManagerInterface.testCreateGattServerManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_12')) + testFunc(GattServerManagerInterface.testCreateGattServerManager) + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage" , gattServerBenchmarkTestMessage)
             await sleep(2)
             //添加服务
-            gattServerBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_22') + testFunc(GattServerManagerInterface.testAddServiceManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_22')) + testFunc(GattServerManagerInterface.testAddServiceManager) + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage" , gattServerBenchmarkTestMessage)
             await sleep(2)
 
-            gattServerBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_7') + testFunc(GattServerManagerInterface.testOnConnectStateChangeManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_7')) + testFunc(GattServerManagerInterface.testOnConnectStateChangeManager) + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage" , gattServerBenchmarkTestMessage)
             await sleep(2)
 
-            gattServerBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_15') + testFunc(GattServerManagerInterface.testStartAdvertisingManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_15')) + testFunc(GattServerManagerInterface.testStartAdvertisingManager) + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage" , gattServerBenchmarkTestMessage)
             await sleep(20)
 
-            gattServerBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_6') + testFunc(GattServerManagerInterface.testOnCharacteristicReadManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_6')) + testFunc(GattServerManagerInterface.testOnCharacteristicReadManager) + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage" , gattServerBenchmarkTestMessage)
             await sleep(2)
 
-            gattServerBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_5') + testFunc(GattServerManagerInterface.testOnCharacteristicWriteManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_5')) + testFunc(GattServerManagerInterface.testOnCharacteristicWriteManager) + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage" , gattServerBenchmarkTestMessage)
             await sleep(2)
           })
@@ -236,15 +238,15 @@ struct GattServerVelocityBenchmarkTestManager {
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let gattServerBenchmarkTestMessage = ""
-            gattServerBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_18') + testFunc(GattServerManagerInterface.testStopAdvertisingManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_18')) + testFunc(GattServerManagerInterface.testStopAdvertisingManager) + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage" , gattServerBenchmarkTestMessage)
             await sleep(2)
 
-            gattServerBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_20') + testFunc(GattServerManagerInterface.testRemoveServiceManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_20')) + testFunc(GattServerManagerInterface.testRemoveServiceManager) + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage" , gattServerBenchmarkTestMessage)
             await sleep(2)
 
-            gattServerBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_17') + testFunc(GattServerManagerInterface.testGattServerCloseManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_17')) + testFunc(GattServerManagerInterface.testGattServerCloseManager) + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage" , gattServerBenchmarkTestMessage)
             await sleep(2)
           })
@@ -305,12 +307,12 @@ export function testFunc(func: Function) {
   }
 
   let end = new Date().getTime()
-  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_ks') + Number(start) + "ms")
-  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_js') + Number(end) + "ms")
-  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_hf') + Number(end - start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms")
   let message = ""
-  message += $r('app.string.bluetoothtest_str_hf') + Number(end - start) + "ms" + "\n"
-  message += $r('app.string.bluetoothtest_str_ks') + Number(start) + $r('app.string.bluetoothtest_str_m_1') + $r('app.string.bluetoothtest_str_js') + Number(end) + "ms" + "\n"
+  message += resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms" + "\n"
+  message += resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + resStr($r('app.string.bluetoothtest_str_m_1')) + resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms" + "\n"
   return message
 }
 

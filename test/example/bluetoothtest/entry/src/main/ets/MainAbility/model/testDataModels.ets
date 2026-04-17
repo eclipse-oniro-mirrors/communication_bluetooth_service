@@ -116,8 +116,8 @@ import {
 import bluetooth from '@ohos.bluetooth';
 
 interface BRTest {
-  name: string;
-  detail: string;
+  name: Resource | string;
+  detail: Resource | string;
   method: string;
   api: Function;
   result: string;
@@ -125,8 +125,8 @@ interface BRTest {
 }
 
 interface BRTestComposition {
-  name: string;
-  detail: string;
+  name: Resource | string;
+  detail: Resource | string;
   url: string;
   image: Resource;
   category: Category;

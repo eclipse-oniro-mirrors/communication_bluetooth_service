@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import btmProfileModel from './btmProfileModel'
@@ -24,7 +26,7 @@ import btm from '@ohos.bluetoothManager'
 
 export function testProfileConnectManager() {
   try {
-    let message = $r('app.string.bluetoothtest_str_pt_4')
+    let message = resStr($r('app.string.bluetoothtest_str_pt_4'))
     let textMessage = ""
     let btConnectionState = AppStorage.get("btConnectionState") !
     let deviceId: string = AppStorage.get("deviceId") !
@@ -35,8 +37,8 @@ export function testProfileConnectManager() {
     }
     (btmProfileModel.getProfile(profileType) as btm.A2dpSourceProfile | btm.HandsFreeAudioGatewayProfile | btm.HidHostProfile).connect(deviceId);
     btConnectionState = 1;
-    textMessage = $r('app.string.bluetoothtest_str_cr')
-    message = $r('app.string.bluetoothtest_str_cr');
+    textMessage = resStr($r('app.string.bluetoothtest_str_cr'))
+    message = resStr($r('app.string.bluetoothtest_str_cr'));
     AppStorage.setOrCreate("textMessage" , textMessage)
     promptAction.showToast({ message : message });
     return message
@@ -50,7 +52,7 @@ export function testProfileConnectManager() {
 
 export function testProfileDisConnectManager() {
   try {
-    let message = $r('app.string.bluetoothtest_str_pt_3')
+    let message = resStr($r('app.string.bluetoothtest_str_pt_3'))
     let textMessage = ""
     let btConnectionState = AppStorage.get("btConnectionState") !
     let deviceId: string = AppStorage.get("deviceId") !
@@ -61,9 +63,9 @@ export function testProfileDisConnectManager() {
     }
     btmProfileModel.getProfile(profileType)!.disconnect(deviceId);
     btConnectionState = 3;
-    textMessage = $r('app.string.bluetoothtest_str_dr');
+    textMessage = resStr($r('app.string.bluetoothtest_str_dr'));
     AppStorage.setOrCreate("textMessage" , textMessage)
-    message = $r('app.string.bluetoothtest_str_dr');
+    message = resStr($r('app.string.bluetoothtest_str_dr'));
     promptAction.showToast({ message : message });
     return message
   } catch( e ) {
@@ -76,7 +78,7 @@ export function testProfileDisConnectManager() {
 
 export function testProfileGetPlayingStateManager() {
   try {
-    let message = $r('app.string.bluetoothtest_str_pt_1')
+    let message = resStr($r('app.string.bluetoothtest_str_pt_1'))
     let textMessage = ""
     let deviceId: string = AppStorage.get("deviceId") !
     let profileType: string = AppStorage.get("profileType") !
@@ -88,8 +90,8 @@ export function testProfileGetPlayingStateManager() {
     if ( profile ) {
       ret = profile.getPlayingState(deviceId);
     }
-    textMessage = $r('app.string.bluetoothtest_str_gr_1') + ret;
-    message = $r('app.string.bluetoothtest_str_gr_1') + ret;
+    textMessage = resStr($r('app.string.bluetoothtest_str_gr_1')) + ret;
+    message = resStr($r('app.string.bluetoothtest_str_gr_1')) + ret;
     AppStorage.setOrCreate("textMessage" , textMessage)
     promptAction.showToast({ message : message });
     return message
@@ -103,12 +105,12 @@ export function testProfileGetPlayingStateManager() {
 
 export function testProfileGetConnectionDevicesManager() {
   try {
-    let message = $r('app.string.bluetoothtest_str_pt')
+    let message = resStr($r('app.string.bluetoothtest_str_pt'))
     let textMessage = ""
     let profileType: number = AppStorage.get("profileType") !
     let msgArray: Array<string> = btmProfileModel.getProfile(profileType)!.getConnectionDevices();
-    textMessage = $r('app.string.bluetoothtest_str_gr') + JSON.stringify(msgArray);
-    message = $r('app.string.bluetoothtest_str_gr') + JSON.stringify(msgArray);
+    textMessage = resStr($r('app.string.bluetoothtest_str_gr')) + JSON.stringify(msgArray);
+    message = resStr($r('app.string.bluetoothtest_str_gr')) + JSON.stringify(msgArray);
     AppStorage.setOrCreate("textMessage" , textMessage)
     promptAction.showToast({ message : message });
     return message
@@ -122,13 +124,13 @@ export function testProfileGetConnectionDevicesManager() {
 
 export function testProfileGetDeviceStateManager() {
   try {
-    let message = $r('app.string.bluetoothtest_str_pt_2')
+    let message = resStr($r('app.string.bluetoothtest_str_pt_2'))
     let textMessage = ""
     let deviceId: string = AppStorage.get("deviceId") !
     let profileType: number = AppStorage.get("profileType") !
     btmProfileModel.getProfile(profileType)!.getDeviceState(deviceId);
-    textMessage = $r('app.string.bluetoothtest_str_gr_2');
-    message = $r('app.string.bluetoothtest_str_gr_2');
+    textMessage = resStr($r('app.string.bluetoothtest_str_gr_2'));
+    message = resStr($r('app.string.bluetoothtest_str_gr_2'));
     AppStorage.setOrCreate("textMessage" , textMessage)
     promptAction.showToast({ message : message });
     return message

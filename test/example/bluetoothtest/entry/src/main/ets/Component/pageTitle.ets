@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ const TAG = '[Screenshot]'
 @Component
 export struct PageTitle {
   private testItem!: TestData
-  private detail!: string
+  private detail!: Resource | string
   @State colOpacity: number = 1
   @State count: number = 0
   @State myborderWidth: number = 0

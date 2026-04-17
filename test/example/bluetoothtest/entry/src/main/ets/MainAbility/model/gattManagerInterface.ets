@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 /**
@@ -27,7 +29,7 @@ const PAGE_URI_GET_GATT_SERVER_MANAGER = 'pages/subManualApiTestManager/subGattT
 export function testGattClientManager(): string {
   try {
     router.pushUrl({ url : PAGE_URI_GET_GATT_CLIENT_MANAGER })
-    let message = $r('app.string.bluetoothtest_str_tzcg')
+    let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
@@ -41,7 +43,7 @@ export function testGattClientManager(): string {
 export function testGattServerManager(): string {
   try {
     router.pushUrl({ url : PAGE_URI_GET_GATT_SERVER_MANAGER })
-    let message = $r('app.string.bluetoothtest_str_tzcg')
+    let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {

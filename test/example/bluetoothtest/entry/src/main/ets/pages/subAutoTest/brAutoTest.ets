@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import ConfigData from '../../Utils/ConfigData';
 import { TestData } from '../../MainAbility/model/testData'
@@ -78,7 +80,7 @@ struct BrAutoTest {
               .width(ConfigData.WH_100_100)
             List() {
               ListItem() {
-                Text($r('app.string.autotest_log_prefix') + "\n" + this.brAutoTestMessage)
+                Text(resStr($r('app.string.autotest_log_prefix')) + "\n" + this.brAutoTestMessage)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_30 , right : ConfigData.VP_10 })
                   .textAlign(TextAlign.Start)

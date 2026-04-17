@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import ConfigData from '../Utils/ConfigData';
@@ -26,7 +28,7 @@ import { ProfileList , ScanMode } from '../Utils/common'
 @CustomDialog
 export struct GetProfileConnSateDialog {
   @StorageLink('pairedMac') pairedMac: string = "";
-  private hitText: string = 'defaultHitText'
+  private hitText: Resource | string = 'defaultHitText'
   private getProfileList: ProfileList[] = [
     { value : 'A2DP_SOURCE' },
     { value : 'HANDS_FREE_AUDIO_GATEWAY' },
@@ -75,7 +77,7 @@ export struct GetProfileConnSateDialog {
             if ( true ) {
               let message = ""
               message = this.apiItem.api!(this.currentClick , this.pairedMac)
-              this.apiItem.result = this.getProfileList[ this.currentClick ].value + $r('app.string.bluetoothtest_str_zt') + message
+              this.apiItem.result = this.getProfileList[ this.currentClick ].value + resStr($r('app.string.bluetoothtest_str_zt')) + message
               hilog.info(0x0000, 'BtTest', '%{public}s', "this.apiItem.result:" + this.apiItem.result)
             } else {
               let message = ""
@@ -94,7 +96,7 @@ export struct GetProfileConnSateDialog {
 
 @CustomDialog
 export struct SetScanModeDialog {
-  private hitText: string = 'defaultHitText'
+  private hitText: Resource | string = 'defaultHitText'
   private scanModeList: ProfileList[] = [
     { value : 'SCAN_MODE_NONE' },
     { value : 'CONNECTABLE' },
@@ -157,11 +159,11 @@ export struct SetScanModeDialog {
             //TODO: 设备调试时候需要打开
             if ( true ) {
               let message: string = this.apiItem.api!(this.currentClick , this.duration)
-              hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_lx') +typeof message)
+              hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_lx')) +typeof message)
               // hilog.info(0x0000, 'BtTest', '%{public}s', "类型:" + this.scanModeList[ message.mode ].value)
-              hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_yc') + message)
+              hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_yc')) + message)
               // this.apiItem.result = "类型:" + this.scanModeList[ message.mode ].value + ";延迟:" + message.duration.toString()
-              this.apiItem.result = $r('app.string.bluetoothtest_str_lxhyc') + message
+              this.apiItem.result = resStr($r('app.string.bluetoothtest_str_lxhyc')) + message
               hilog.info(0x0000, 'BtTest', '%{public}s', "this.apiItem.result:" + this.apiItem.result)
             } else {
               this.apiItem.result = this.scanModeList[ this.currentClick ].value
@@ -180,7 +182,7 @@ export struct SetScanModeDialog {
 
 @CustomDialog
 export struct InputDialog {
-  private hitText: string = 'defaultHitText'
+  private hitText: Resource | string = 'defaultHitText'
   @Link textValue: string
   @Link inputValue: string
   @Link apiItem: TestApi
@@ -235,7 +237,7 @@ export struct InputDialog {
 
 @CustomDialog
 export struct SetConnectionStrategyDialog {
-  private hitText: string = 'defaultHitText'
+  private hitText: Resource | string = 'defaultHitText'
   private connectionStrategyList: ProfileList[] = [
     { value : 'CONNECTION_STRATEGY_UNSUPPORTED' },
     { value : 'CONNECTION_STRATEGY_ALLOWED' },

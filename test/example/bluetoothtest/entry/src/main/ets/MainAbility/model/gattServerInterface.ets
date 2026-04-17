@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 /**
@@ -41,23 +43,23 @@ let gattServerInstance :bluetooth.GattServer
 export function testCreateGattServer(): string {
   try {
     let btState = bluetooth.getState();
-    let message = $r('app.string.bluetoothtest_str_ct_2')
+    let message = resStr($r('app.string.bluetoothtest_str_ct_2'))
     if ( btState === bluetooth.BluetoothState.STATE_ON || btState === bluetooth.BluetoothState.STATE_BLE_ON ) {
       if ( gattServerInstance ) {
-        message = $r('app.string.bluetoothtest_str_ge_3');
+        message = resStr($r('app.string.bluetoothtest_str_ge_3'));
         promptAction.showToast({ message : message })
         return message
       }
       hilog.info(0x0000, 'BtTest', '%{public}s', "CreateGattServer start -----------")
       gattServerInstance = BluetoothModel.createGattServer();
-      message = $r('app.string.bluetoothtest_str_cs_3');
+      message = resStr($r('app.string.bluetoothtest_str_cs_3'));
       hilog.info(0x0000, 'BtTest', '%{public}s', "CreateGattServer:succeeds!-----------")
       promptAction.showToast({ message : message })
       return message
     } else if ( btState === bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = $r('app.string.bluetoothtest_str_sw');
+      message = resStr($r('app.string.bluetoothtest_str_sw'));
     }
     promptAction.showToast({ message : message })
     return message
@@ -71,10 +73,10 @@ export function testCreateGattServer(): string {
 
 export function testAddService(): string {
   try {
-    let message = $r('app.string.bluetoothtest_str_at')
+    let message = resStr($r('app.string.bluetoothtest_str_at'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message
     }
@@ -117,8 +119,8 @@ export function testAddService(): string {
     }
     hilog.info(0x0000, 'BtTest', '%{public}s', "gattServerInstance.addService start -----------")
     let ret: boolean = gattServerInstance!.addService(curGattService);
-    message = $r('app.string.bluetoothtest_str_ra') + ret;
-    hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_fwdcsw') + JSON.stringify(curGattService))
+    message = resStr($r('app.string.bluetoothtest_str_ra')) + ret;
+    hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_fwdcsw')) + JSON.stringify(curGattService))
     hilog.info(0x0000, 'BtTest', '%{public}s', "gattServerInstance.addService succeeds!-----------" + message)
     promptAction.showToast({ message : message })
     return message
@@ -132,7 +134,7 @@ export function testAddService(): string {
 
 export function testRemoveService(): string {
   try {
-    let message = $r('app.string.bluetoothtest_str_rt_4')
+    let message = resStr($r('app.string.bluetoothtest_str_rt_4'))
     let curServiceUUID: string = AppStorage.get("curServiceUUID") !
     let btState = bluetooth.getState();
     if ( btState == bluetooth.BluetoothState.STATE_ON || btState == bluetooth.BluetoothState.STATE_BLE_ON ) {
@@ -141,16 +143,16 @@ export function testRemoveService(): string {
         promptAction.showToast({ message : message })
         return message
       }
-      message = $r('app.string.bluetoothtest_str_rr');
+      message = resStr($r('app.string.bluetoothtest_str_rr'));
       if ( gattServerInstance!.removeService(curServiceUUID) ) {
         message += 'true';
       } else {
         message += 'false';
       }
     } else if ( btState == bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = $r('app.string.bluetoothtest_str_spw');
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
@@ -200,7 +202,7 @@ let curAdvResponse: bluetooth.AdvertiseData = {
 
 export function testStartAdvertising(): string {
   try {
-    let message = $r('app.string.bluetoothtest_str_st_13')
+    let message = resStr($r('app.string.bluetoothtest_str_st_13'))
     let btState = bluetooth.getState();
     if ( btState === bluetooth.BluetoothState.STATE_ON || btState === bluetooth.BluetoothState.STATE_BLE_ON ) {
       if ( !gattServerInstance ) {
@@ -208,7 +210,7 @@ export function testStartAdvertising(): string {
         promptAction.showToast({ message : message })
         return message
       }
-      message = $r('app.string.bluetoothtest_str_sbipi');
+      message = resStr($r('app.string.bluetoothtest_str_sbipi'));
       // 调三个本地函数
       // buildAdvSettings();
       let cbxAdvSettings: boolean = AppStorage.get("cbxAdvSettings") !
@@ -292,7 +294,7 @@ export function testStartAdvertising(): string {
       let advData = curAdvData;
       let advResponse = curAdvResponse;
       let cbxAdvResponse: boolean = AppStorage.get("cbxAdvResponse") !
-      message = $r('app.string.bluetoothtest_str_sbipo');
+      message = resStr($r('app.string.bluetoothtest_str_sbipo'));
 
       if ( !cbxAdvResponse ) {
         hilog.info(0x0000, 'BtTest', '%{public}s', "advData.serviceUuids:" + advData.serviceUuids + "\n")
@@ -309,11 +311,11 @@ export function testStartAdvertising(): string {
       }
       hilog.info(0x0000, 'BtTest', '%{public}s', "cbxAdvSettings:" + cbxAdvSettings + "\n")
       hilog.info(0x0000, 'BtTest', '%{public}s', "cbxAdvResponse:" + cbxAdvResponse + "\n")
-      message = $r('app.string.bluetoothtest_str_ss') + cbxAdvSettings + "," + cbxAdvResponse;
+      message = resStr($r('app.string.bluetoothtest_str_ss')) + cbxAdvSettings + "," + cbxAdvResponse;
     } else if ( btState === bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = $r('app.string.bluetoothtest_str_spw');
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
@@ -327,7 +329,7 @@ export function testStartAdvertising(): string {
 
 export function testStopAdvertising(): String {
   try {
-    let message = $r('app.string.bluetoothtest_str_st_16')
+    let message = resStr($r('app.string.bluetoothtest_str_st_16'))
     let btState = bluetooth.getState();
     if ( btState == bluetooth.BluetoothState.STATE_ON || btState == bluetooth.BluetoothState.STATE_BLE_ON ) {
       if ( !gattServerInstance ) {
@@ -336,11 +338,11 @@ export function testStopAdvertising(): String {
         return message
       }
       gattServerInstance!.stopAdvertising();
-      message = $r('app.string.bluetoothtest_str_ss_1');
+      message = resStr($r('app.string.bluetoothtest_str_ss_1'));
     } else if ( btState == bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = $r('app.string.bluetoothtest_str_spw');
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
@@ -354,7 +356,7 @@ export function testStopAdvertising(): String {
 
 export function testGattServerClose(): String {
   try {
-    let message = $r('app.string.bluetoothtest_str_gt_10')
+    let message = resStr($r('app.string.bluetoothtest_str_gt_10'))
     let btState = bluetooth.getState();
     if ( btState == bluetooth.BluetoothState.STATE_ON || btState == bluetooth.BluetoothState.STATE_BLE_ON ) {
       if ( !gattServerInstance ) {
@@ -363,11 +365,11 @@ export function testGattServerClose(): String {
         return message
       }
       gattServerInstance!.close();
-      message = $r('app.string.bluetoothtest_str_gcs');
+      message = resStr($r('app.string.bluetoothtest_str_gcs'));
     } else if ( btState == bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = $r('app.string.bluetoothtest_str_spw');
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
@@ -384,17 +386,17 @@ let connectStateChange = false
 
 export function testOnConnectStateChange(): String {
   try {
-    let message = $r('app.string.bluetoothtest_str_ot_6')
+    let message = resStr($r('app.string.bluetoothtest_str_ot_6'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message
     }
     if ( connectStateChange ) {
       gattServerInstance!.off("connectStateChange" , () => {
       })
-      message = $r('app.string.bluetoothtest_str_gbljztbh')
+      message = resStr($r('app.string.bluetoothtest_str_gbljztbh'))
       promptAction.showToast({ message : message })
       return message
     } else {
@@ -414,7 +416,7 @@ export function testOnConnectStateChange(): String {
         hilog.info(0x0000, 'BtTest', '%{public}s', "connectStateChange:" + JSON.stringify(data))
         promptAction.showToast({ message : connectStateMsg })
       })
-      message = $r('app.string.bluetoothtest_str_dkljztbh')
+      message = resStr($r('app.string.bluetoothtest_str_dkljztbh'))
     }
     connectStateChange = !connectStateChange
     promptAction.showToast({ message : message })
@@ -432,17 +434,17 @@ let characteristicRead = false
 
 export function testOnCharacteristicRead(): String {
   try {
-    let message = $r('app.string.bluetoothtest_str_ot_5')
+    let message = resStr($r('app.string.bluetoothtest_str_ot_5'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message
     }
     if ( characteristicRead ) {
       gattServerInstance!.off("characteristicRead" , () => {
       })
-      message = $r('app.string.bluetoothtest_str_tzzdqgb')
+      message = resStr($r('app.string.bluetoothtest_str_tzzdqgb'))
       promptAction.showToast({ message : message })
       return message
     } else {
@@ -475,10 +477,10 @@ export function testOnCharacteristicRead(): String {
         }
 
         let ret: boolean = gattServerInstance!.sendResponse(serverResponse)
-        message = $r('app.string.bluetoothtest_str_cs_1') + ret
+        message = resStr($r('app.string.bluetoothtest_str_cs_1')) + ret
         promptAction.showToast({ message : message })
       })
-      message = $r('app.string.bluetoothtest_str_tzzdqdk')
+      message = resStr($r('app.string.bluetoothtest_str_tzzdqdk'))
     }
     characteristicRead = !characteristicRead
     promptAction.showToast({ message : message })
@@ -496,17 +498,17 @@ let characteristicWrite = false
 
 export function testOnCharacteristicWrite(): String {
   try {
-    let message = $r('app.string.bluetoothtest_str_ot_4')
+    let message = resStr($r('app.string.bluetoothtest_str_ot_4'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message
     }
     if ( characteristicWrite ) {
       gattServerInstance!.off("characteristicWrite" , () => {
       });
-      message = $r('app.string.bluetoothtest_str_tzzxrgb')
+      message = resStr($r('app.string.bluetoothtest_str_tzzxrgb'))
       promptAction.showToast({ message : message })
       return message
     } else {
@@ -549,7 +551,7 @@ export function testOnCharacteristicWrite(): String {
         // sendResponse
         if ( needRsp ) {
           let ret: boolean = gattServerInstance!.sendResponse(serverResponse);
-          message = $r('app.string.bluetoothtest_str_cs') + ret;
+          message = resStr($r('app.string.bluetoothtest_str_cs')) + ret;
           promptAction.showToast({ message : message })
         }
         let notifyCharacteristic_notifyCharacteristic: NotifyCharacteristic = {
@@ -560,12 +562,12 @@ export function testOnCharacteristicWrite(): String {
         }
         let notifyCharacteristic = notifyCharacteristic_notifyCharacteristic;
         if ( gattServerInstance!.notifyCharacteristicChanged(deviceId , notifyCharacteristic) ) {
-          message = $r('app.string.bluetoothtest_str_ns');
+          message = resStr($r('app.string.bluetoothtest_str_ns'));
         } else {
-          message = $r('app.string.bluetoothtest_str_nf');
+          message = resStr($r('app.string.bluetoothtest_str_nf'));
         }
       })
-      message = $r('app.string.bluetoothtest_str_tzzxrdk');
+      message = resStr($r('app.string.bluetoothtest_str_tzzxrdk'));
     }
     characteristicWrite = !characteristicWrite
     promptAction.showToast({ message : message })
@@ -583,16 +585,16 @@ let descriptorRead = false
 
 export function testOnDescriptorRead(): String {
   try {
-    let message = $r('app.string.bluetoothtest_str_ot_9')
+    let message = resStr($r('app.string.bluetoothtest_str_ot_9'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       return message;
     }
     if ( descriptorRead ) {
       gattServerInstance!.off("descriptorRead" , () => {
       });
-      message = $r('app.string.bluetoothtest_str_msfdqgb');
+      message = resStr($r('app.string.bluetoothtest_str_msfdqgb'));
       promptAction.showToast({ message : message })
       return message
     } else {
@@ -615,12 +617,12 @@ export function testOnDescriptorRead(): String {
           value : arrayBufferDesc
         }
         let ret: boolean = gattServerInstance!.sendResponse(serverResponse);
-        message = $r('app.string.bluetoothtest_str_ds_1') + ret;
+        message = resStr($r('app.string.bluetoothtest_str_ds_1')) + ret;
         descriptorReadMsg += message
         AppStorage.setOrCreate("descriptorReadMsg" , descriptorReadMsg)
         promptAction.showToast({ message : message })
       })
-      message = $r('app.string.bluetoothtest_str_msfdqdk');
+      message = resStr($r('app.string.bluetoothtest_str_msfdqdk'));
     }
     descriptorRead = !descriptorRead
     promptAction.showToast({ message : message })
@@ -638,17 +640,17 @@ let descriptorWrite = false
 
 export function testOnDescriptorWrite(): String {
   try {
-    let message = $r('app.string.bluetoothtest_str_ot_8')
+    let message = resStr($r('app.string.bluetoothtest_str_ot_8'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = $r('app.string.bluetoothtest_str_bine');
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message
     }
     if ( descriptorWrite ) {
       gattServerInstance!.off("descriptorWrite" , () => {
       });
-      message = $r('app.string.bluetoothtest_str_msfxrgb');
+      message = resStr($r('app.string.bluetoothtest_str_msfxrgb'));
       promptAction.showToast({ message : message })
       return message
     } else {
@@ -683,12 +685,12 @@ export function testOnDescriptorWrite(): String {
 
         if ( needRsp ) {
           let ret: boolean = gattServerInstance!.sendResponse(serverResponse);
-          message = $r('app.string.bluetoothtest_str_ds') + ret;
+          message = resStr($r('app.string.bluetoothtest_str_ds')) + ret;
           promptAction.showToast({ message : message })
         }
         descriptorWriteMsg += 'descriptorWrite Callback finished!';
       })
-      message = $r('app.string.bluetoothtest_str_msfxrdk');
+      message = resStr($r('app.string.bluetoothtest_str_msfxrdk'));
     }
     descriptorWrite = !descriptorWrite
     promptAction.showToast({ message : message })

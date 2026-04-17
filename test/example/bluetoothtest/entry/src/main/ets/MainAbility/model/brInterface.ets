@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 /**
@@ -44,18 +46,18 @@ let btEnable = false
 export function testEnableBluetooth() {
   try {
     hilog.info(0x0000, 'BtTest', '%{public}s', "testEnableBluetooth start-------------")
-    let message = $r('app.string.bluetoothtest_str_et')
+    let message = resStr($r('app.string.bluetoothtest_str_et'))
     if ( btEnable ) {
-      message = $r('app.string.bluetoothtest_str_lyyjsn');
+      message = resStr($r('app.string.bluetoothtest_str_lyyjsn'));
     } else {
       let ret = BluetoothModel.enableBluetooth();
       if ( ret ) {
-        message = $r('app.string.bluetoothtest_str_lysnzxjg') + ret
+        message = resStr($r('app.string.bluetoothtest_str_lysnzxjg')) + ret
       } else {
-        message = $r('app.string.bluetoothtest_str_lysnzxjg') + ret + "\n"
-        message += $r('app.string.bluetoothtest_str_lyydkhdksbqqr')
+        message = resStr($r('app.string.bluetoothtest_str_lysnzxjg')) + ret + "\n"
+        message += resStr($r('app.string.bluetoothtest_str_lyydkhdksbqqr'))
       }
-      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_lysnzxjg') + ret);
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_lysnzxjg')) + ret);
       btEnable = true;
       AppStorage.setOrCreate('bluetoothIsOn' , btEnable);
     }
@@ -73,18 +75,18 @@ export function testEnableBluetooth() {
 export function testDisableBluetooth(): string {
   try {
     hilog.info(0x0000, 'BtTest', '%{public}s', "testDisableBluetooth start-------------")
-    let message = $r('app.string.bluetoothtest_str_dt')
+    let message = resStr($r('app.string.bluetoothtest_str_dt'))
     if ( !btEnable ) {
-      message = $r('app.string.bluetoothtest_str_lyhwsn');
+      message = resStr($r('app.string.bluetoothtest_str_lyhwsn'));
     } else {
       let ret = BluetoothModel.disableBluetooth();
       if ( ret ) {
-        message = $r('app.string.bluetoothtest_str_lyqsnzxjg') + ret;
+        message = resStr($r('app.string.bluetoothtest_str_lyqsnzxjg')) + ret;
       } else {
-        message = $r('app.string.bluetoothtest_str_lyqsnzxjg') + ret + "\n"
+        message = resStr($r('app.string.bluetoothtest_str_lyqsnzxjg')) + ret + "\n"
         message += $r('app.string.bluetoothtest_str_lyygbhgbsbqqr')
       }
-      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_lyqsnzxjg') + ret);
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_lyqsnzxjg')) + ret);
       btEnable = false;
       AppStorage.setOrCreate('bluetoothIsOn' , btEnable);
     }
@@ -127,10 +129,10 @@ export function testGetState(): string {
         stateBT = 'STATE_BLE_TURNING_OFF';
         break;
       default:
-        stateBT = $r('app.string.bluetoothtest_str_wzzt');
+        stateBT = resStr($r('app.string.bluetoothtest_str_wzzt'));
         break;
     }
-    let message = $r('app.string.bluetoothtest_str_dqlydzts') + stateBT;
+    let message = resStr($r('app.string.bluetoothtest_str_dqlydzts')) + stateBT;
     if ( ret == 0 || ret == 3 ) {
       btEnable = false
       hilog.info(0x0000, 'BtTest', '%{public}s', "btEnable = false---------------")
@@ -153,7 +155,7 @@ export function testGetState(): string {
 export function testGetBtConnectionState(): string {
   try {
     let ret = BluetoothModel.getBtConnectionState();
-    let message = $r('app.string.bluetoothtest_str_dqljzts') + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_dqljzts')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
@@ -167,7 +169,7 @@ export function testGetBtConnectionState(): string {
 export function testSetLocalName(name: string): string {
   try {
     let ret = BluetoothModel.setLocalName(name);
-    let message = $r('app.string.bluetoothtest_str_sz') + ret + $r('app.string.bluetoothtest_str_sbmcw') + name;
+    let message = resStr($r('app.string.bluetoothtest_str_sz')) + ret + resStr($r('app.string.bluetoothtest_str_sbmcw')) + name;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
@@ -181,7 +183,7 @@ export function testSetLocalName(name: string): string {
 export function testGetLocalName(): string {
   try {
     let ret = BluetoothModel.getLocalName();
-    let message = $r('app.string.bluetoothtest_str_bsbmcs') + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_bsbmcs')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
@@ -206,8 +208,8 @@ export function testSetBluetoothScanMode(mode: number , dur: number): string {
     }
     hilog.info(0x0000, 'BtTest', '%{public}s', "BluetoothModel.setBluetoothScanMode success!" + JSON.stringify(retObj))
     // let message = ret ? "setBluetoothScanMode执行成功" + JSON.stringify( retObj ) : "setBluetoothScanMode执行失败"
-    let message = ret ? JSON.stringify(retObj) : $r('app.string.bluetoothtest_str_szxsb')
-    let showToastMessage = ret ? $r('app.string.bluetoothtest_str_szxcg') + JSON.stringify(retObj) : $r('app.string.bluetoothtest_str_szxsb')
+    let message = ret ? JSON.stringify(retObj) : resStr($r('app.string.bluetoothtest_str_szxsb'))
+    let showToastMessage = ret ? resStr($r('app.string.bluetoothtest_str_szxcg')) + JSON.stringify(retObj) : resStr($r('app.string.bluetoothtest_str_szxsb'))
     promptAction.showToast({ message : showToastMessage })
     return message
   } catch( e ) {
@@ -221,7 +223,7 @@ export function testSetBluetoothScanMode(mode: number , dur: number): string {
 export function testGetBluetoothScanMode(): string {
   try {
     let ret = BluetoothModel.getBluetoothScanMode();
-    let message = $r('app.string.bluetoothtest_str_ms') + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_ms')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
@@ -234,14 +236,14 @@ export function testGetBluetoothScanMode(): string {
 
 export function testStartBluetoothDiscovery() {
   try {
-    let message = $r('app.string.bluetoothtest_str_st_3')
+    let message = resStr($r('app.string.bluetoothtest_str_st_3'))
     let btEnable: boolean = AppStorage.get('bluetoothIsOn') !
     if ( !btEnable ) {
-      message = $r('app.string.bluetoothtest_str_lyhwsn');
+      message = resStr($r('app.string.bluetoothtest_str_lyhwsn'));
       return message;
     } else {
       router.pushUrl({ url : PAGE_URI_DEVICE_FOUND_MODE });
-      message = $r('app.string.bluetoothtest_str_lyfxcg')
+      message = resStr($r('app.string.bluetoothtest_str_lyfxcg'))
     }
     promptAction.showToast({ message : message })
     return message
@@ -256,7 +258,7 @@ export function testStartBluetoothDiscovery() {
 export function testStopBluetoothDiscovery(): string {
   try {
     let ret = BluetoothModel.stopBluetoothDiscovery();
-    let message = $r('app.string.bluetoothtest_str_szx_1') + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_szx_1')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
@@ -278,7 +280,7 @@ export function testPairDevice(deviceId: string): string {
     } , () => {
       promptAction.showToast({ message : "testPairDevice Failed" })
     })
-    message = $r('app.string.bluetoothtest_str_pd') + deviceId + ret ? $r('app.string.bluetoothtest_str_cg') : $r('app.string.bluetoothtest_str_sb_1')
+    message = resStr($r('app.string.bluetoothtest_str_pd')) + deviceId + (ret ? resStr($r('app.string.bluetoothtest_str_cg')) : resStr($r('app.string.bluetoothtest_str_sb_1')))
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
@@ -293,7 +295,7 @@ export function testUnPairedDevice(deviceId: string): string {
   //  let deviceId = "123123"
   try {
     let ret = BluetoothModel.unpairDevice(deviceId);
-    let message = $r('app.string.bluetoothtest_str_sb') + deviceId + $r('app.string.bluetoothtest_str_dk') + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_sb')) + deviceId + resStr($r('app.string.bluetoothtest_str_dk')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
@@ -307,7 +309,7 @@ export function testUnPairedDevice(deviceId: string): string {
 export function testGetRemoteDeviceName(deviceId: string): string {
   try {
     let ret = BluetoothModel.getDeviceName(deviceId);
-    let message = $r('app.string.bluetoothtest_str_ycsbm') + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_ycsbm')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
@@ -322,7 +324,7 @@ export function testGetRemoteDeviceClass(deviceId: string): string {
   //  let deviceId= "12312fsdf";
   try {
     let ret = BluetoothModel.getDeviceType(deviceId);
-    let message = $r('app.string.bluetoothtest_str_yccm') + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_yccm')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
@@ -336,12 +338,12 @@ export function testGetRemoteDeviceClass(deviceId: string): string {
 export function testGetPairedDevices(): string {
   try {
     let ret = BluetoothModel.getPairedDeviceIds();
-    let message = $r('app.string.bluetoothtest_str_gt_8')
+    let message = resStr($r('app.string.bluetoothtest_str_gt_8'))
     hilog.info(0x0000, 'BtTest', '%{public}s', "BluetoothModel.getPairedDeviceIds:" + ret)
     if ( ret.length == 0 ) {
-      message = $r('app.string.bluetoothtest_str_dqmyrhpdsb');
+      message = resStr($r('app.string.bluetoothtest_str_dqmyrhpdsb'));
     } else {
-      message = $r('app.string.bluetoothtest_str_sbw') + ret[ 0 ]
+      message = resStr($r('app.string.bluetoothtest_str_sbw')) + ret[ 0 ]
       AppStorage.setOrCreate('pairedMac' , ret[ 0 ]);
     }
     promptAction.showToast({ message : message })
@@ -356,11 +358,11 @@ export function testGetPairedDevices(): string {
 
 export function testSetConnectionStrategy(connectionStrategy: number) {
   try {
-    let message = $r('app.string.bluetoothtest_str_st_6')
+    let message = resStr($r('app.string.bluetoothtest_str_st_6'))
     let a2dpSrc = a2dp.createA2dpSrcProfile();
     let pairedMac: string = AppStorage.get('pairedMac') !
     if ( pairedMac.length == 0 ) {
-      message = $r('app.string.bluetoothtest_str_dqmzwkqjcsfypd');
+      message = resStr($r('app.string.bluetoothtest_str_dqmzwkqjcsfypd'));
     } else {
       //[TODO] 接口改了调用方式，需要重新适配
       // a2dpSrc.getConnectionState(pairedMac , (err , connectionStrategy) => {
@@ -385,11 +387,11 @@ export function testSetConnectionStrategy(connectionStrategy: number) {
 
 export function testGetConnectionStrategy(deviceId: string): string {
   try {
-    let message = $r('app.string.bluetoothtest_str_gt_1')
+    let message = resStr($r('app.string.bluetoothtest_str_gt_1'))
     let a2dpSrc = a2dp.createA2dpSrcProfile();
     let pairedMac: string = AppStorage.get('pairedMac') !
     if ( pairedMac.length == 0 ) {
-      message = $r('app.string.bluetoothtest_str_dqmzwkqjcsfypd');
+      message = resStr($r('app.string.bluetoothtest_str_dqmzwkqjcsfypd'));
     } else {
       //[TODO] 接口改了调用方式，需要重新适配
       // a2dpSrc.getConnectionState(pairedMac , (err , connectionStrategy) => {
@@ -446,7 +448,7 @@ export function testGetProfileConnState2(profileId: number , deviceId: string): 
         stateProfile = 'STATE_DISCONNECTING';
         break;
       default:
-        stateProfile = $r('app.string.bluetoothtest_str_wz');
+        stateProfile = resStr($r('app.string.bluetoothtest_str_wz'));
         break;
     }
     let message = stateProfile;
@@ -464,13 +466,13 @@ let stateChange = false
 
 export function testOnStateChange(): string {
   try {
-    let message = $r('app.string.bluetoothtest_str_ot_12')
+    let message = resStr($r('app.string.bluetoothtest_str_ot_12'))
     hilog.info(0x0000, 'BtTest', '%{public}s', 'testOnStateChange test');
     if ( stateChange ) {
       bluetooth.off('stateChange' , () => {
-        promptAction.showToast({ message : $r('app.string.bluetoothtest_str_osjtygb') })
+        promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_osjtygb')) })
       })
-      message = $r('app.string.bluetoothtest_str_gbzcztbh')
+      message = resStr($r('app.string.bluetoothtest_str_gbzcztbh'))
       hilog.info(0x0000, 'BtTest', '%{public}s', 'testOffStateChange test');
     } else {
       bluetooth.on('stateChange' , (data: bluetooth.BluetoothState) => {
@@ -498,12 +500,12 @@ export function testOnStateChange(): string {
             btStateMessage += 'STATE_BLE_TURNING_OFF';
             break;
           default:
-            btStateMessage += $r('app.string.bluetoothtest_str_wzzt');
+            btStateMessage += resStr($r('app.string.bluetoothtest_str_wzzt'));
             break;
         }
-        promptAction.showToast({ message : $r('app.string.bluetoothtest_str_zt') + btStateMessage })
+        promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_zt')) + btStateMessage })
       })
-      message = $r('app.string.bluetoothtest_str_dkzcztbh')
+      message = resStr($r('app.string.bluetoothtest_str_dkzcztbh'))
       promptAction.showToast({ message : message })
     }
     stateChange = !stateChange
@@ -520,18 +522,18 @@ let pinRequired = false
 
 export function testOnPinRequired(): string {
   try {
-    let message = $r('app.string.bluetoothtest_str_ot_11')
+    let message = resStr($r('app.string.bluetoothtest_str_ot_11'))
     hilog.info(0x0000, 'BtTest', '%{public}s', 'testOnPinRequired test');
     if ( pinRequired ) {
       bluetooth.off('pinRequired' , () => {
-        promptAction.showToast({ message : $r('app.string.bluetoothtest_str_opjtygb') })
+        promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_opjtygb')) })
       })
-      message = $r('app.string.bluetoothtest_str_gbzcpmbh')
+      message = resStr($r('app.string.bluetoothtest_str_gbzcpmbh'))
     } else {
       bluetooth.on('pinRequired' , (data: bluetooth.PinRequiredParam) => {
         promptAction.showToast({ message : "mac:" + data.deviceId + "pin:" + data.pinCode })
       })
-      message = $r('app.string.bluetoothtest_str_dkzcpmbh')
+      message = resStr($r('app.string.bluetoothtest_str_dkzcpmbh'))
     }
     pinRequired = !pinRequired
     return message
@@ -547,18 +549,18 @@ let bondStateFlag = false
 
 export function testOnBondStateChange(): string {
   try {
-    let message = $r('app.string.bluetoothtest_str_ot_7')
+    let message = resStr($r('app.string.bluetoothtest_str_ot_7'))
     hilog.info(0x0000, 'BtTest', '%{public}s', 'testOnBondStateChange test');
     if ( bondStateFlag ) {
       bluetooth.off('bondStateChange' , () => {
-        promptAction.showToast({ message : $r('app.string.bluetoothtest_str_objtygb') })
+        promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_objtygb')) })
       })
-      message = $r('app.string.bluetoothtest_str_gbzcbdztbh')
+      message = resStr($r('app.string.bluetoothtest_str_gbzcbdztbh'))
     } else {
       bluetooth.on('bondStateChange' , (data: bluetooth.BondStateParam) => {
         promptAction.showToast({ message : "mac:" + data.deviceId + "state:" + data.state })
       })
-      message = $r('app.string.bluetoothtest_str_dkzcbdztbh')
+      message = resStr($r('app.string.bluetoothtest_str_dkzcbdztbh'))
     }
     bondStateFlag = !bondStateFlag
     return message
@@ -572,13 +574,13 @@ export function testOnBondStateChange(): string {
 
 export function subscribeBluetoothDeviceFind(): string {
   try {
-    let message = $r('app.string.bluetoothtest_str_st_1')
+    let message = resStr($r('app.string.bluetoothtest_str_st_1'))
     hilog.info(0x0000, 'BtTest', '%{public}s', "subscribeBluetoothDeviceFind")
     BluetoothModel.subscribeBluetoothDeviceFind((deviceIds: Array<string>) => {
       hilog.info(0x0000, 'BtTest', '%{public}s', 'available bluetooth devices changed.');
       deviceIds?.forEach(async(deviceId) => {
         hilog.info(0x0000, 'BtTest', '%{public}s', 'available bluetooth find [' + deviceId + '] ')
-        let message = ($r('app.string.bluetoothtest_str_abf') + deviceId + $r('app.string.bluetoothtest_str_str'))
+        let message = (resStr($r('app.string.bluetoothtest_str_abf')) + deviceId + resStr($r('app.string.bluetoothtest_str_str')))
         promptAction.showToast({ message : message })
         AppStorage.setOrCreate('bluetoothAvailableDevices' , message);
       })
