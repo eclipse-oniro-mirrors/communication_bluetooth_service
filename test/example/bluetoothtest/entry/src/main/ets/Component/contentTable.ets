@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../Utils/ConfigData';
 import { CaseCategory , TestApi , TestData } from '../MainAbility/model/testData'
 import promptAction from '@ohos.promptAction';
@@ -55,18 +56,18 @@ export struct GetProfileConnSateDialog {
         .height(ConfigData.VP_80)
         .width(ConfigData.WH_90_100)
         .onSelect((index: number) => {
-          console.log("Select:" + index)
+          hilog.info(0x0000, 'BtTest', '%{public}s', "Select:" + index)
           this.currentClick = index
         })
 
       Flex({ justifyContent : FlexAlign.SpaceAround }) {
-        Button('取消')
+        Button($r('app.string.bluetoothtest_str_qx'))
           .onClick(() => {
             this.controller.close()
             this.cancel()
           })
           .backgroundColor(0xffffff).fontColor(Color.Black)
-        Button('确认')
+        Button($r('app.string.bluetoothtest_str_qr'))
           .onClick(() => {
             this.inputValue = this.currentClick.toString()
             this.changeIndex = this.currentIndex
@@ -74,12 +75,12 @@ export struct GetProfileConnSateDialog {
             if ( true ) {
               let message = ""
               message = this.apiItem.api!(this.currentClick , this.pairedMac)
-              this.apiItem.result = this.getProfileList[ this.currentClick ].value + "状态:" + message
-              console.log("this.apiItem.result:" + this.apiItem.result)
+              this.apiItem.result = this.getProfileList[ this.currentClick ].value + $r('app.string.bluetoothtest_str_zt') + message
+              hilog.info(0x0000, 'BtTest', '%{public}s', "this.apiItem.result:" + this.apiItem.result)
             } else {
               let message = ""
               this.apiItem.result = this.getProfileList[ this.currentClick ].value
-              console.log("this.apiItem.result:" + this.apiItem.result)
+              hilog.info(0x0000, 'BtTest', '%{public}s', "this.apiItem.result:" + this.apiItem.result)
             }
             this.controller.close()
             this.confirm(this.inputValue)
@@ -127,11 +128,11 @@ export struct SetScanModeDialog {
         .height(ConfigData.VP_60)
         .width(ConfigData.WH_90_100)
         .onSelect((index: number) => {
-          console.log("Select:" + index)
+          hilog.info(0x0000, 'BtTest', '%{public}s', "Select:" + index)
           this.currentClick = index
         })
       TextInput({
-        placeholder : '请输入延迟时间' ,
+        placeholder : $r('app.string.bluetoothtest_str_qsrycsj') ,
         text : this.duration.toString() ,
       }).type(InputType.Number)
         .height(ConfigData.VP_60).width(ConfigData.WH_90_100)
@@ -143,28 +144,28 @@ export struct SetScanModeDialog {
           }
         })
       Flex({ justifyContent : FlexAlign.SpaceAround }) {
-        Button('取消')
+        Button($r('app.string.bluetoothtest_str_qx'))
           .onClick(() => {
             this.controller.close()
             this.cancel()
           })
           .backgroundColor(0xffffff).fontColor(Color.Black)
-        Button('确认')
+        Button($r('app.string.bluetoothtest_str_qr'))
           .onClick(() => {
             this.inputValue = this.currentClick.toString()
             this.changeIndex = this.currentIndex
             //TODO: 设备调试时候需要打开
             if ( true ) {
               let message: string = this.apiItem.api!(this.currentClick , this.duration)
-              console.log("类型:" +typeof message)
-              // console.log("类型:" + this.scanModeList[ message.mode ].value)
-              console.log("延迟:" + message)
+              hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_lx') +typeof message)
+              // hilog.info(0x0000, 'BtTest', '%{public}s', "类型:" + this.scanModeList[ message.mode ].value)
+              hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_yc') + message)
               // this.apiItem.result = "类型:" + this.scanModeList[ message.mode ].value + ";延迟:" + message.duration.toString()
-              this.apiItem.result = "类型和延迟:" + message
-              console.log("this.apiItem.result:" + this.apiItem.result)
+              this.apiItem.result = $r('app.string.bluetoothtest_str_lxhyc') + message
+              hilog.info(0x0000, 'BtTest', '%{public}s', "this.apiItem.result:" + this.apiItem.result)
             } else {
               this.apiItem.result = this.scanModeList[ this.currentClick ].value
-              console.log("this.apiItem.result:" + this.apiItem.result)
+              hilog.info(0x0000, 'BtTest', '%{public}s', "this.apiItem.result:" + this.apiItem.result)
             }
             this.controller.close()
             this.confirm(this.inputValue)
@@ -202,13 +203,13 @@ export struct InputDialog {
         })
 
       Flex({ justifyContent : FlexAlign.SpaceAround }) {
-        Button('取消')
+        Button($r('app.string.bluetoothtest_str_qx'))
           .onClick(() => {
             this.controller.close()
             this.cancel()
           })
           .backgroundColor(0xffffff).fontColor(Color.Black)
-        Button('确认')
+        Button($r('app.string.bluetoothtest_str_qr'))
           .onClick(() => {
             this.inputValue = this.textValue
             this.changeIndex = this.currentIndex
@@ -216,7 +217,7 @@ export struct InputDialog {
             let message = ""
             if ( true ) {
               message = this.apiItem.api!(this.textValue)
-              console.log("message:" + message)
+              hilog.info(0x0000, 'BtTest', '%{public}s', "message:" + message)
               this.apiItem.result = message
             } else {
               this.apiItem.result = this.textValue
@@ -264,18 +265,18 @@ export struct SetConnectionStrategyDialog {
         .height(ConfigData.VP_80)
         .width(ConfigData.WH_90_100)
         .onSelect((index: number) => {
-          console.log("Select:" + index)
+          hilog.info(0x0000, 'BtTest', '%{public}s', "Select:" + index)
           this.currentClick = index
         })
 
       Flex({ justifyContent : FlexAlign.SpaceAround }) {
-        Button('取消')
+        Button($r('app.string.bluetoothtest_str_qx'))
           .onClick(() => {
             this.controller.close()
             this.cancel()
           })
           .backgroundColor(0xffffff).fontColor(Color.Black)
-        Button('确认')
+        Button($r('app.string.bluetoothtest_str_qr'))
           .onClick(() => {
             this.inputValue = this.currentClick.toString()
             this.changeIndex = this.currentIndex
@@ -284,11 +285,11 @@ export struct SetConnectionStrategyDialog {
               let message = ""
               message = this.apiItem.api!(this.currentClick)
               this.apiItem.result = this.connectionStrategyList[ this.currentClick ].value
-              console.log("this.apiItem.result:" + this.apiItem.result)
+              hilog.info(0x0000, 'BtTest', '%{public}s', "this.apiItem.result:" + this.apiItem.result)
             } else {
               let message = ""
               this.apiItem.result = this.connectionStrategyList[ this.currentClick ].value
-              console.log("this.apiItem.result:" + this.apiItem.result)
+              hilog.info(0x0000, 'BtTest', '%{public}s', "this.apiItem.result:" + this.apiItem.result)
             }
             this.controller.close()
             this.confirm(this.inputValue)
@@ -313,7 +314,7 @@ export struct ContentTable {
   @StorageLink('pairedMac') pairedMac: string = "";
   getProfileConnSateDialog: CustomDialogController = new CustomDialogController({
     builder : GetProfileConnSateDialog({
-      hitText : "设置配置类型" ,
+      hitText : $r('app.string.bluetoothtest_str_szpzlx') ,
       cancel : this.onCancel ,
       confirm : this.onAccept ,
       textValue : $localName ,
@@ -327,7 +328,7 @@ export struct ContentTable {
   })
   setScanModelDialog: CustomDialogController = new CustomDialogController({
     builder : SetScanModeDialog({
-      hitText : "设置扫描模式" ,
+      hitText : $r('app.string.bluetoothtest_str_szsmms') ,
       cancel : this.onCancel ,
       confirm : this.onAccept ,
       textValue : $localName ,
@@ -341,7 +342,7 @@ export struct ContentTable {
   })
   inputDialog: CustomDialogController = new CustomDialogController({
     builder : InputDialog({
-      hitText : "请设置本地名称" ,
+      hitText : $r('app.string.bluetoothtest_str_qszbdmc') ,
       cancel : this.onCancel ,
       confirm : this.onAccept ,
       textValue : $localName ,
@@ -355,7 +356,7 @@ export struct ContentTable {
   })
   setConnectionStrategyDialog: CustomDialogController = new CustomDialogController({
     builder : SetConnectionStrategyDialog({
-      hitText : "设置连接策略" ,
+      hitText : $r('app.string.bluetoothtest_str_szljcl') ,
       cancel : this.onCancel ,
       confirm : this.onAccept ,
       textValue : $localName ,
@@ -369,11 +370,11 @@ export struct ContentTable {
   })
 
   onCancel() {
-    console.log('取消')
+    hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_qx'))
   }
 
   onAccept(text: string) {
-    console.log('input text:' , text)
+    hilog.info(0x0000, 'BtTest', '%{public}s %{public}s', 'input text:', text)
   }
 
   @Builder IngredientItem(apiItem: TestApi , index: number) {
@@ -446,7 +447,7 @@ export struct ContentTable {
         }
           break;
         case "pairDevice": {
-          let message: string = apiItem.api?.(this.pairedMac) || "默认消息";
+          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -454,7 +455,7 @@ export struct ContentTable {
         }
           break;
         case "pairDeviceManager": {
-          let message: string = apiItem.api?.(this.pairedMac) || "默认消息";
+          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -462,7 +463,7 @@ export struct ContentTable {
         }
           break;
         case "unpairDevice": {
-          let message: string = apiItem.api?.(this.pairedMac) || "默认消息";
+          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -470,7 +471,7 @@ export struct ContentTable {
         }
           break;
         case "unpairDeviceManager": {
-          let message: string = apiItem.api?.(this.pairedMac) || "默认消息";
+          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -478,7 +479,7 @@ export struct ContentTable {
         }
           break;
         case "getDeviceName": {
-          let message: string = apiItem.api?.(this.pairedMac) || "默认消息";
+          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -486,7 +487,7 @@ export struct ContentTable {
         }
           break;
         case "getDeviceNameManager": {
-          let message: string = apiItem.api?.(this.pairedMac) || "默认消息";
+          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -494,7 +495,7 @@ export struct ContentTable {
         }
           break;
         case "getDeviceType": {
-          let message: string = apiItem.api?.(this.pairedMac) || "默认消息";
+          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -502,7 +503,7 @@ export struct ContentTable {
         }
           break;
         case "getDeviceTypeManager": {
-          let message: string = apiItem.api?.(this.pairedMac) || "默认消息";
+          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;

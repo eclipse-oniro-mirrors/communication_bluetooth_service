@@ -42,7 +42,8 @@ export struct TestList {
         }
         .height(ConfigData.WH_100_100)
         .backgroundColor($r("app.color.lead"))
-      }.scrollBarWidth(ConfigData.VP_20)
+      }
+        .scrollBarWidth(ConfigData.VP_20)
     }
   }
 }

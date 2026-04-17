@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../Utils/ConfigData';
 import { TestAuto } from '../MainAbility/model/testData'
 
@@ -77,7 +78,7 @@ export struct AutoContentTable {
   }
 
   aboutToAppear(): void {
-    console.log("auto组件构建完毕")
+    hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_azjgjwb'))
   }
 
   build() {
