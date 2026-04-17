@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 /**
  * Gatt Page Of Bluetooth test
  */
@@ -26,11 +27,11 @@ const PAGE_URI_GET_GATT_SERVER = 'pages/subManualApiTest/subGattTest/gattServer'
 export function testGattClient(): string {
   try {
     router.pushUrl({ url : PAGE_URI_GET_GATT_CLIENT })
-    let message = "跳转成功"
+    let message = $r('app.string.bluetoothtest_str_tzcg')
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGattClient. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGattClient. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGattClient. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -40,11 +41,11 @@ export function testGattClient(): string {
 export function testGattServer(): string {
   try {
     router.pushUrl({ url : PAGE_URI_GET_GATT_SERVER })
-    let message = "跳转成功"
+    let message = $r('app.string.bluetoothtest_str_tzcg')
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGattServer. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGattServer. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGattServer. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
