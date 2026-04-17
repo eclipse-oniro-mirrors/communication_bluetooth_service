@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
@@ -128,7 +130,7 @@ struct BrFoundScenarioTest {
           .margin({ top : ConfigData.VP_15 , left : ConfigData.VP_20 })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
-            promptAction.showToast({ message : $r('app.string.bluetoothtest_str_ksblyfxcjcs') })
+            promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_ksblyfxcjcs')) })
             this.forLoop()
           })
 
@@ -200,7 +202,7 @@ struct BrFoundScenarioTest {
   }
 
   subscribeBluetoothDeviceFind(): string {
-    let message = $r('app.string.bluetoothtest_str_st_1')
+    let message = resStr($r('app.string.bluetoothtest_str_st_1'))
     hilog.info(0x0000, 'BtTest', '%{public}s', "subscribeBluetoothDeviceFind")
     BluetoothModel.subscribeBluetoothDeviceFind((deviceIds: Array<string>) => {
       hilog.info(0x0000, 'BtTest', '%{public}s', 'available bluetooth devices changed.');
@@ -209,7 +211,7 @@ struct BrFoundScenarioTest {
         //   return availableDevice.deviceId === deviceId
         // })
         hilog.info(0x0000, 'BtTest', '%{public}s', 'available bluetooth find [' + deviceId + '] ')
-        let message = ($r('app.string.bluetoothtest_str_abf') + deviceId + $r('app.string.bluetoothtest_str_str'))
+        let message = (resStr($r('app.string.bluetoothtest_str_abf')) + deviceId + resStr($r('app.string.bluetoothtest_str_str')))
         promptAction.showToast({ message : message })
         AppStorage.setOrCreate('bluetoothAvailableDevices' , deviceIds);
       })

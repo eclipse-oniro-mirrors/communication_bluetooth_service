@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
@@ -146,7 +148,7 @@ struct oppSendScenarioTest {
                 this.fileName = str;
                 this.fileType = strs[ 1 ];
               }
-              this.oppSendScenarioMessage = $r('app.string.bluetoothtest_str_xyfsdwjwdbl') + str + "\n"
+              this.oppSendScenarioMessage = resStr($r('app.string.bluetoothtest_str_xyfsdwjwdbl')) + str + "\n"
             })
             .width(ConfigData.PCT_70)
             .borderRadius(ConfigData.HEIGHT_1_VP)
@@ -211,14 +213,13 @@ struct oppSendScenarioTest {
                   this.oppProfile.sendFile(this.serverMac , fileHolders).then(() => {
                     let result: boolean = true;
                     if ( result ) {
-                      this.oppSendScenarioMessage += $r('app.string.bluetoothtest_str_ofswjcgr') + JSON.stringify(result)
+                      this.oppSendScenarioMessage += resStr($r('app.string.bluetoothtest_str_ofswjcgr')) + JSON.stringify(result)
                     } else {
-                      this.oppSendScenarioMessage += $r('app.string.bluetoothtest_str_ofswjsbr') + JSON.stringify(result) +
-                        $r('app.string.bluetoothtest_str_qhdwjmchwjljhzsbpdqk')
+                      this.oppSendScenarioMessage += resStr($r('app.string.bluetoothtest_str_ofswjsbr')) + JSON.stringify(result) + resStr($r('app.string.bluetoothtest_str_qhdwjmchwjljhzsbpdqk'))
                     }
                   })
                 } catch( error ) {
-                  this.oppSendScenarioMessage += $r('app.string.bluetoothtest_str_ofswjsbe') + JSON.stringify(error)
+                  this.oppSendScenarioMessage += resStr($r('app.string.bluetoothtest_str_ofswjsbe')) + JSON.stringify(error)
                 }
                 testLog(this.oppSendScenarioMessage);
                 AppStorage.setOrCreate("oppSendScenarioMessage" , this.oppSendScenarioMessage)

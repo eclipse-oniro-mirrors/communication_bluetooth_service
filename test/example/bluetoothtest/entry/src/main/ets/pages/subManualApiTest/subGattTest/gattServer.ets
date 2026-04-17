@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import { TestImageDisplay } from '../../../Component/testImageDisplay';
@@ -769,32 +771,32 @@ struct GattServer {
                 .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_10 })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_100_100)
-              Text($r('app.string.label_gatt_result_colon') + this.message)
+              Text(resStr($r('app.string.label_gatt_result_colon')) + this.message)
                 .fontSize(ConfigData.VP_17)
                 .margin({ top : ConfigData.HEIGHT_1_VP , left : ConfigData.VP_10 })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
-              Text($r('app.string.label_gatt_conn_state_colon') + this.connectStateMsg)
+              Text(resStr($r('app.string.label_gatt_conn_state_colon')) + this.connectStateMsg)
                 .fontSize(ConfigData.VP_17)
                 .margin({ top : ConfigData.HEIGHT_1_VP , left : ConfigData.VP_10 })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
-              Text($r('app.string.label_char_read_colon') + this.characteristicReadMsg)
+              Text(resStr($r('app.string.label_char_read_colon')) + this.characteristicReadMsg)
                 .fontSize(ConfigData.VP_17)
                 .margin({ top : ConfigData.HEIGHT_1_VP , left : ConfigData.VP_10 })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
-              Text($r('app.string.label_char_write_colon') + this.characteristicWriteMsg)
+              Text(resStr($r('app.string.label_char_write_colon')) + this.characteristicWriteMsg)
                 .fontSize(ConfigData.VP_17)
                 .margin({ top : ConfigData.HEIGHT_1_VP , left : ConfigData.VP_10 })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
-              Text($r('app.string.label_desc_read_colon') + this.descriptorReadMsg)
+              Text(resStr($r('app.string.label_desc_read_colon')) + this.descriptorReadMsg)
                 .fontSize(ConfigData.VP_17)
                 .margin({ top : ConfigData.HEIGHT_1_VP , left : ConfigData.VP_10 })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
-              Text($r('app.string.label_desc_write_colon') + this.descriptorWriteMsg)
+              Text(resStr($r('app.string.label_desc_write_colon')) + this.descriptorWriteMsg)
                 .fontSize(ConfigData.VP_17)
                 .margin({ top : ConfigData.HEIGHT_1_VP , left : ConfigData.VP_10 })
                 .textAlign(TextAlign.Start)

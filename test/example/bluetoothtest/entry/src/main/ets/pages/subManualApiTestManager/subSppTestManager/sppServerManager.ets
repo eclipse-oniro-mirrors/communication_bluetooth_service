@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import { testItemFromRouterOrPlaceholder } from '../../../Utils/common'
@@ -143,7 +145,7 @@ struct SppServerManager {
           .alignItems(VerticalAlign.Center)
 
           Column() {
-            Text($r('app.string.label_api_result_tight') + this.message)
+            Text(resStr($r('app.string.label_api_result_tight')) + this.message)
               .fontSize(ConfigData.VP_17)
               .padding(ConfigData.VP_10)
               .textAlign(TextAlign.Start)
@@ -244,9 +246,9 @@ struct SppServerManager {
     const data = new Uint8Array(dataBuffer);
     hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetoothManager read is: ' + data);
     if ( data != null ) {
-      this.dataReadMessage = $r('app.string.bluetoothtest_str_dqcg_2') + JSON.stringify(data);
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
-      this.dataReadMessage = $r('app.string.bluetoothtest_str_dqsb');
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
   }
 }

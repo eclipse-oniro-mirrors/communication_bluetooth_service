@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
+
 import hilog from '@ohos.hilog';
 import ConfigData from '../../../Utils/ConfigData';
 import BluetoothModel from '../../../MainAbility/model/BluetoothModel';
@@ -27,7 +29,7 @@ import { PageTitle } from '../../../Component/pageTitle';
 @Entry
 @Component
 struct setScanMode {
-  @State message: string = $r('app.string.bluetoothtest_str_qdjxzsm');
+  @State message: Resource | string = $r('app.string.bluetoothtest_str_qdjxzsm');
   private duration: string = '0';
   private scanMode: number = 0;
   @State currentClick: number = - 1;
@@ -197,7 +199,7 @@ struct setScanMode {
         Row() {
           ButtonComponent({ text : $r("app.string.confirm") , isOnClick : () => {
             if ( this.currentClick === - 1 ) {
-              this.message = $r('app.string.bluetoothtest_str_qdjxzsm');
+              this.message = resStr($r('app.string.bluetoothtest_str_qdjxzsm'));
               return;
             }
             this.message = '';

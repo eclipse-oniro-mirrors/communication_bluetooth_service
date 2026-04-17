@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
@@ -100,7 +102,7 @@ struct OppRecvScenarioTest {
         this.curProgress = (stateInformation.currentBytes * 100) / stateInformation.totalBytes;
         if ( this.curProgress === 100 ) {
           this.showProgress = false;
-          this.oppRecvScenarioMessage = $r('app.string.bluetoothtest_str_jswjcgwjcflj') + JSON.stringify(stateInformation.filePath) + "\n"
+          this.oppRecvScenarioMessage = resStr($r('app.string.bluetoothtest_str_jswjcgwjcflj')) + JSON.stringify(stateInformation.filePath) + "\n"
           testLog(this.oppRecvScenarioMessage);
         }
       })
@@ -234,16 +236,16 @@ struct OppRecvScenarioTest {
               .onClick(() => {
                 try {
                   this.oppProfile.on("receiveIncomingFile" , ( information) => {
-                    testLog($r('app.string.bluetoothtest_str_okqjswj'))
+                    testLog(resStr($r('app.string.bluetoothtest_str_okqjswj')))
                     this.deviceName = information.remoteDeviceName;
                     this.fileName = information.filePath;
-                    this.oppRecvScenarioMessage = $r('app.string.bluetoothtest_str_fsdw') + this.deviceName + $r('app.string.bluetoothtest_str_wjmw') + this.fileName + "\n"
+                    this.oppRecvScenarioMessage = resStr($r('app.string.bluetoothtest_str_fsdw')) + this.deviceName + resStr($r('app.string.bluetoothtest_str_wjmw')) + this.fileName + "\n"
                     testLog(this.oppRecvScenarioMessage);
                     hilog.info(0x0000, 'BtTest', '%{public}s', JSON.stringify(information));
                     this.receiveDialogController.open();
                   })
                 } catch( error ) {
-                  this.oppRecvScenarioMessage = $r('app.string.bluetoothtest_str_okqjswjsbe') + JSON.stringify(error)
+                  this.oppRecvScenarioMessage = resStr($r('app.string.bluetoothtest_str_okqjswjsbe')) + JSON.stringify(error)
                   testLog(this.oppRecvScenarioMessage);
                 }
               })
@@ -284,7 +286,7 @@ struct ReceiveCustomDialog {
 
   build() {
     Column() {
-      Text($r('app.string.opp_recv_confirm_prefix') + this.deviceName + $r('app.string.opp_recv_confirm_suffix'))
+      Text(resStr($r('app.string.opp_recv_confirm_prefix')) + this.deviceName + resStr($r('app.string.opp_recv_confirm_suffix')))
         .fontSize(ConfigData.VP_20)
         .margin({ top : ConfigData.VP_10 , bottom : ConfigData.VP_10 })
   Text(this.fileName)

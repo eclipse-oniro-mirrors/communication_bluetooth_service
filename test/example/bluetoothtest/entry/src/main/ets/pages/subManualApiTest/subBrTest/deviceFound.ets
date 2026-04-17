@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
+
 
 import ConfigData from '../../../Utils/ConfigData';
 import LogUtil from '../../../Utils/LogUtil';
@@ -424,9 +426,9 @@ export struct PairedItem {
       .onClick(() => {
         let ret = bluetooth.cancelPairedDevice(this.mac)
         if ( ret ) {
-          promptAction.showToast({ message : $r('app.string.bluetoothtest_str_qxpdcg') })
+          promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_qxpdcg')) })
         } else {
-          promptAction.showToast({ message : $r('app.string.bluetoothtest_str_qxpdsb') })
+          promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_qxpdsb')) })
         }
       })
     }
@@ -443,7 +445,7 @@ export struct AvailableDeviceComponent {
   @StorageLink('bluetoothAvailableDevices') availableDevices: BluetoothDevice[] = [];
   @State pairPinCode: string = '';
   private pairingDevice!: BluetoothDevice
-  @State pairDeviceInfo: string = $r('app.string.bluetoothtest_str_wpd');
+  @State pairDeviceInfo: Resource | string = $r('app.string.bluetoothtest_str_wpd');
   controller!: BluetoothDeviceController;
   pairDialog: CustomDialogController = new CustomDialogController({
     builder : PairDialog({

@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
@@ -263,11 +265,11 @@ struct SppClientBandWidthBenchmarkTestManager {
           .onClick(async(event: ClickEvent) => {
             let sppClientBandWidthBenchmarkTestMessage = ""
 
-            sppClientBandWidthBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_13') + testFunc(SppClientManagerInterface.testSppClientReadOffManager) + "\n"
+            sppClientBandWidthBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_13')) + testFunc(SppClientManagerInterface.testSppClientReadOffManager) + "\n"
             AppStorage.setOrCreate("sppClientBandWidthBenchmarkTestMessage" , sppClientBandWidthBenchmarkTestMessage)
             await sleep(1)
 
-            sppClientBandWidthBenchmarkTestMessage += $r('app.string.bluetoothtest_str_tzx_19') + testFunc(SppClientManagerInterface.testSppClientCloseManager) + "\n"
+            sppClientBandWidthBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_19')) + testFunc(SppClientManagerInterface.testSppClientCloseManager) + "\n"
             AppStorage.setOrCreate("sppClientBandWidthBenchmarkTestMessage" , sppClientBandWidthBenchmarkTestMessage)
             await sleep(1)
 
@@ -308,16 +310,16 @@ struct SppClientBandWidthBenchmarkTestManager {
     const data = new Uint8Array(dataBuffer);
     hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetooth read is: ' + data);
     if ( data != null ) {
-      this.dataClientReadMessageBW = $r('app.string.bluetoothtest_str_dqcg_2') + JSON.stringify(data);
+      this.dataClientReadMessageBW = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
-      this.dataClientReadMessageBW = $r('app.string.bluetoothtest_str_dqsb');
+      this.dataClientReadMessageBW = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
   }
 
   sppClientClose() {
     LogUtil.info('sppCloseClientSocket clientNumber: ' + JSON.stringify(this.clientNumber))
     bluetoothManager.sppCloseClientSocket(this.clientNumber);
-    this.message = $r('app.string.bluetoothtest_str_gbcgc') + this.clientNumber;
+    this.message = resStr($r('app.string.bluetoothtest_str_gbcgc')) + this.clientNumber;
   }
 }
 
@@ -339,12 +341,12 @@ export function testFunc(func: Function) {
   }
 
   let end = new Date().getTime()
-  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_ks') + Number(start) + "ms")
-  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_js') + Number(end) + "ms")
-  hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_hf') + Number(end - start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms")
   let message = ""
-  message += $r('app.string.bluetoothtest_str_hf') + Number(end - start) + "ms" + "\n"
-  message += $r('app.string.bluetoothtest_str_ks') + Number(start) + $r('app.string.bluetoothtest_str_m_1') + $r('app.string.bluetoothtest_str_js') + Number(end) + "ms" + "\n"
+  message += resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms" + "\n"
+  message += resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + resStr($r('app.string.bluetoothtest_str_m_1')) + resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms" + "\n"
   return message
 }
 
@@ -359,7 +361,7 @@ async function sleep(time: number): Promise<void> {
 let clientNumber = - 1
 
 function sppClientConnectSafe(): string {
-  let message = $r('app.string.bluetoothtest_str_st_8')
+  let message = resStr($r('app.string.bluetoothtest_str_st_8'))
   hilog.info(0x0000, 'BtTest', '%{public}s', 'testSppClientConnectSafe create! ');
   let uuid: string = AppStorage.get('inputUuid') !
   let deviceId: string = AppStorage.get('inputDeviceId') !
@@ -371,14 +373,14 @@ function sppClientConnectSafe(): string {
   } , (code , socketID) => {
     hilog.info(0x0000, 'BtTest', '%{public}s', "spp client code:" + JSON.stringify(code))
     if ( code.code != 0  ) {
-      message = $r('app.string.bluetoothtest_str_khdljsb');
+      message = resStr($r('app.string.bluetoothtest_str_khdljsb'));
       hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothModelManager sppConnect callback socketNumber(safe mode): ' + JSON.stringify(code));
       promptAction.showToast({ message : message })
       return message;
     }
     acceptClientSocket(socketID);
     hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothModelManager sppConnect callback socketNumber(safe mode): ' + socketID);
-    message = $r('app.string.bluetoothtest_str_khdljcg');
+    message = resStr($r('app.string.bluetoothtest_str_khdljcg'));
     promptAction.showToast({ message : message })
     return message
   })
@@ -394,7 +396,7 @@ function acceptClientSocket(number: number) {
 }
 
 function sppClientWrite(): string {
-  let message = $r('app.string.bluetoothtest_str_st_18')
+  let message = resStr($r('app.string.bluetoothtest_str_st_18'))
   let clientNumber: number = AppStorage.get("clientNumber") !
   hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothModelManager sppClientWrite sppWrite clientNumber: ' + JSON.stringify(clientNumber));
   let writeClientDataBW: string = AppStorage.get("writeClientDataBW") !
@@ -403,12 +405,12 @@ function sppClientWrite(): string {
   const sppWriteSuccess = bluetooth.sppWrite(clientNumber , writeArrayBuffer);
   if ( sppWriteSuccess ) {
     hilog.info(0x0000, 'BtTest', '%{public}s', 'sppClientWrite successfully');
-    message = $r('app.string.bluetoothtest_str_sxrcg');
+    message = resStr($r('app.string.bluetoothtest_str_sxrcg'));
     AppStorage.setOrCreate("writeStartTimeBW" , writeStartTimeBW)
     sppClientReadOn()
   } else {
     hilog.info(0x0000, 'BtTest', '%{public}s', 'sppClientWrite failed');
-    message = $r('app.string.bluetoothtest_str_sxrsb');
+    message = resStr($r('app.string.bluetoothtest_str_sxrsb'));
   }
   promptAction.showToast({ message : message })
   return message
@@ -416,7 +418,7 @@ function sppClientWrite(): string {
 
 
 function sppClientReadOn(): string {
-  let message = $r('app.string.bluetoothtest_str_st_14')
+  let message = resStr($r('app.string.bluetoothtest_str_st_14'))
   let clientReadMessageBW = ""
   hilog.info(0x0000, 'BtTest', '%{public}s', "sppClientReadOn");
   let clientNumber: number = AppStorage.get("clientNumber") !
@@ -424,22 +426,22 @@ function sppClientReadOn(): string {
     const data = new Uint8Array(dataBuffer);
     hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetoothManager read is: ' + data);
     if ( data != null ) {
-      clientReadMessageBW += $r('app.string.bluetoothtest_str_dqcg') + "\n"
-      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_dqcg_1') + JSON.stringify(data));
+      clientReadMessageBW += resStr($r('app.string.bluetoothtest_str_dqcg')) + "\n"
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_dqcg_1')) + JSON.stringify(data));
       AppStorage.setOrCreate("dataClientReadMessageBW" , clientReadMessageBW)
       promptAction.showToast({ message : clientReadMessageBW })
 
       let readEndTimeBW: number = new Date().getTime()
       let writeStartTimeBW: number = AppStorage.get("writeStartTimeBW") !
       let sppRunTime = ""
-      sppRunTime += $r('app.string.bluetoothtest_str_shf') + (readEndTimeBW - writeStartTimeBW) + "ms;" + "\n"
-      sppRunTime += $r('app.string.bluetoothtest_str_ks') + (writeStartTimeBW) + "ms; " + $r('app.string.bluetoothtest_str_js') + (readEndTimeBW) + "ms" + "\n"
+      sppRunTime += resStr($r('app.string.bluetoothtest_str_shf')) + (readEndTimeBW - writeStartTimeBW) + "ms;" + "\n"
+      sppRunTime += resStr($r('app.string.bluetoothtest_str_ks')) + (writeStartTimeBW) + "ms; " + resStr($r('app.string.bluetoothtest_str_js')) + (readEndTimeBW) + "ms" + "\n"
       AppStorage.setOrCreate("sppClientBandWidthBenchmarkTestMessage" , sppRunTime)
-      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_hf') + (readEndTimeBW - writeStartTimeBW) + "ms;" + "\n")
-      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_ks') + (writeStartTimeBW) + "ms; " + $r('app.string.bluetoothtest_str_js') + (readEndTimeBW) + "ms" + "\n")
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_hf')) + (readEndTimeBW - writeStartTimeBW) + "ms;" + "\n")
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_ks')) + (writeStartTimeBW) + "ms; " + resStr($r('app.string.bluetoothtest_str_js')) + (readEndTimeBW) + "ms" + "\n")
       sppClientReadOff()
     } else {
-      message = $r('app.string.bluetoothtest_str_dqsb');
+      message = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
     promptAction.showToast({ message : message })
     return message
@@ -450,16 +452,16 @@ function sppClientReadOn(): string {
 
 
 function sppClientReadOff(): string {
-  let message = $r('app.string.bluetoothtest_str_st_11')
+  let message = resStr($r('app.string.bluetoothtest_str_st_11'))
   let clientNumber: number = AppStorage.get("clientNumber") !
   hilog.info(0x0000, 'BtTest', '%{public}s', "sppClientReadOff");
   bluetoothManager.off('sppRead' , clientNumber , (dataBuffer: ArrayBuffer) => {
     const data = new Uint8Array(dataBuffer);
     hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetoothManager read is: ' + data);
     if ( data != null ) {
-      message = $r('app.string.bluetoothtest_str_dqcg_2') + JSON.stringify(data);
+      message = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
-      message = $r('app.string.bluetoothtest_str_dqsb');
+      message = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
     AppStorage.setOrCreate("dataClientReadMessageBW" , message)
     promptAction.showToast({ message : message })

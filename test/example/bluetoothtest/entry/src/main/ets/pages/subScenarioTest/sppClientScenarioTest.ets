@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
@@ -294,9 +296,9 @@ struct SppClientScenarioTest {
     const data = new Uint8Array(dataBuffer);
     hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetooth read is: ' + data);
     if ( data != null ) {
-      this.dataReadMessage = $r('app.string.bluetoothtest_str_dqcg_2') + JSON.stringify(data);
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
-      this.dataReadMessage = $r('app.string.bluetoothtest_str_dqsb');
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
   }
 }
@@ -320,7 +322,7 @@ export function acceptClientSocket(number: number) {
 export function sppClientClose() {
   hilog.info(0x0000, 'BtTest', '%{public}s', "bluetoothModel:" + 'sppCloseClientSocket clientNumber: ' + JSON.stringify(clientNumber))
   bluetooth.sppCloseClientSocket(clientNumber);
-  let message = $r('app.string.bluetoothtest_str_gbcgc') + clientNumber;
+  let message = resStr($r('app.string.bluetoothtest_str_gbcgc')) + clientNumber;
   promptAction.showToast({ message : message })
   return message
 }

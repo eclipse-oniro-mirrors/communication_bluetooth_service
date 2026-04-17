@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
@@ -94,12 +96,12 @@ struct HandsFreeAudioGatewayProfileTest {
           .alignItems(VerticalAlign.Center)
 
           Column() {
-            Text($r('app.string.label_api_result_space') + this.hfpMessage)
+            Text(resStr($r('app.string.label_api_result_space')) + this.hfpMessage)
               .fontSize(ConfigData.VP_17)
               .textAlign(TextAlign.Start)
               .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_10 })
               .width(ConfigData.WH_100_100)
-            Text($r('app.string.label_connection_state_change') + this.connectionStateInfo)
+            Text(resStr($r('app.string.label_connection_state_change')) + this.connectionStateInfo)
               .fontSize(ConfigData.VP_17)
               .margin({ top : ConfigData.VP_10 , left : ConfigData.VP_10 })
               .textAlign(TextAlign.Start)
@@ -131,7 +133,7 @@ struct HandsFreeAudioGatewayProfileTest {
   onPageShow() {
     this.bluetoothState = btProfileModel.getBluetoothState();
     if ( this.bluetoothState == btProfileModel.BLUETOOTH_STATE_OFF ) {
-      this.profileNotExist = $r('app.string.bluetoothtest_str_lywdkqxkqlyhzsy')
+      this.profileNotExist = resStr($r('app.string.bluetoothtest_str_lywdkqxkqlyhzsy'))
       return;
     }
     this.hasProfile = btProfileModel.hasProfile(btProfileModel.PROFILE_HANDS_FREE_AUDIO_GATEWAY);

@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
@@ -142,7 +144,7 @@ struct BleFoundScenarioTestManager {
           .margin({ top : ConfigData.VP_15 , left : ConfigData.VP_20 })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
-            promptAction.showToast({ message : $r('app.string.bluetoothtest_str_ksbcjcs') })
+            promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_ksbcjcs')) })
             this.forLoop()
           })
 

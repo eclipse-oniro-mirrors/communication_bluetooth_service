@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 import ConfigData from '../../../Utils/ConfigData';
@@ -88,7 +90,7 @@ struct ProfileConnState2 {
                 this.stateProfile = 'FAIL';
                 break;
             }
-            this.message = $r('app.string.bluetoothtest_str_dqadzts') + this.stateProfile;
+            this.message = resStr($r('app.string.bluetoothtest_str_dqadzts')) + this.stateProfile;
           })
 
           ListItem() {
@@ -127,7 +129,7 @@ struct ProfileConnState2 {
                 this.stateProfile = 'FAIL';
                 break;
             }
-            this.message = $r('app.string.bluetoothtest_str_dqhdzts') + this.stateProfile;
+            this.message = resStr($r('app.string.bluetoothtest_str_dqhdzts')) + this.stateProfile;
           })
 
           ListItem() {
@@ -166,13 +168,13 @@ struct ProfileConnState2 {
                 this.stateProfile = 'FAIL';
                 break;
             }
-            this.message = $r('app.string.bluetoothtest_str_dqhdzts_1') + this.stateProfile;
+            this.message = resStr($r('app.string.bluetoothtest_str_dqhdzts_1')) + this.stateProfile;
           })
         }
         .height(ConfigData.VP_300)
         .margin(ConfigData.VP_20);
 
-        Text($r('app.string.label_api_result_tight') + this.message)
+        Text(resStr($r('app.string.label_api_result_tight')) + this.message)
           .textAlign(TextAlign.Start)
           .fontSize(ConfigData.FP_17)
           .backgroundColor($r("app.color.white"))

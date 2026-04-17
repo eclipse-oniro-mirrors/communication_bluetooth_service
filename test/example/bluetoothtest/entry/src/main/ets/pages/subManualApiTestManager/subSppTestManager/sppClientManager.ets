@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
+
 
 import hilog from '@ohos.hilog';
 /**
@@ -159,7 +161,7 @@ struct SppClientManager {
           .alignItems(VerticalAlign.Center)
 
           Column() {
-            Text($r('app.string.label_api_result_space') + this.message)
+            Text(resStr($r('app.string.label_api_result_space')) + this.message)
               .fontSize(ConfigData.VP_17)
               .padding(ConfigData.VP_10)
               .textAlign(TextAlign.Center)
@@ -193,7 +195,7 @@ struct SppClientManager {
   sppClientClose() {
     LogUtil.info(MODEL + 'sppCloseClientSocket clientNumber: ' + JSON.stringify(this.clientNumber))
     bluetoothManager.sppCloseClientSocket(this.clientNumber);
-    this.message = $r('app.string.bluetoothtest_str_gbcgc') + this.clientNumber;
+    this.message = resStr($r('app.string.bluetoothtest_str_gbcgc')) + this.clientNumber;
   }
 
   /**
@@ -210,9 +212,9 @@ struct SppClientManager {
     const data = new Uint8Array(dataBuffer);
     hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetoothManager read is: ' + data);
     if ( data != null ) {
-      this.dataReadMessage = $r('app.string.bluetoothtest_str_dqcg_2') + JSON.stringify(data);
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
-      this.dataReadMessage = $r('app.string.bluetoothtest_str_dqsb');
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
   }
 
