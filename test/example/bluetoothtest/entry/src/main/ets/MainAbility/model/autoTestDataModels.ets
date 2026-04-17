@@ -998,68 +998,67 @@ export const A2dpSourceProfileAutoTestCase: AutoTest[] = [
     method : 'setLocalName' ,
     api : testSetLocalName ,
     result : 'None' ,
-    result : 'None' ,
     category : AutoCategory.A2dpSourceAuto
   },
   {
-    name : '获取本地名称' ,
-    detail : '获取蓝牙本地名称' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
+    detail : $r('app.string.bluetoothtest_str_hqlybdmc') ,
     method : 'getLocalName' ,
     api : testGetLocalName ,
     result : 'None' ,
     category : AutoCategory.A2dpSourceAuto
   },
   {
-    name : '设置扫描模式' ,
-    detail : '设置蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szsmms') ,
+    detail : $r('app.string.bluetoothtest_str_szlysmms') ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
     result : 'None' ,
     category : AutoCategory.A2dpSourceAuto
   },
   {
-    name : '获取扫描模式' ,
-    detail : '获取蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
+    detail : $r('app.string.bluetoothtest_str_hqlysmms') ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
     result : 'None' ,
     category : AutoCategory.A2dpSourceAuto
   },
   {
-    name : '连接' ,
-    detail : 'Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_lj') ,
+    detail : $r('app.string.bluetoothtest_str_plj') ,
     method : 'connect' ,
     api : testProfileConnect ,
     result : 'None' ,
     category : AutoCategory.A2dpSourceAuto
   },
   {
-    name : '获取播放状态' ,
-    detail : '获取Profile播放状态' ,
+    name : $r('app.string.bluetoothtest_str_hqbfzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqpbfzt') ,
     method : 'getPlayingState' ,
     api : testProfileGetPlayingState ,
     result : 'None' ,
     category : AutoCategory.A2dpSourceAuto
   },
   {
-    name : '获取连接设备' ,
-    detail : '获取Profile连接设备' ,
+    name : $r('app.string.bluetoothtest_str_hqljsb') ,
+    detail : $r('app.string.bluetoothtest_str_hqpljsb') ,
     method : 'getConnectionDevices' ,
     api : testProfileGetConnectionDevices ,
     result : 'None' ,
     category : AutoCategory.A2dpSourceAuto
   },
   {
-    name : '获取设备状态' ,
-    detail : '获取Profile设备状态' ,
+    name : $r('app.string.bluetoothtest_str_hqsbzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqpsbzt') ,
     method : 'getDeviceState' ,
     api : testProfileGetDeviceState ,
     result : 'None' ,
     category : AutoCategory.A2dpSourceAuto
   },
   {
-    name : '取消连接' ,
-    detail : '取消Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_qxlj') ,
+    detail : $r('app.string.bluetoothtest_str_qxplj') ,
     method : 'disconnect' ,
     api : testProfileDisConnect ,
     result : 'None' ,
@@ -1069,80 +1068,80 @@ export const A2dpSourceProfileAutoTestCase: AutoTest[] = [
 
 export const HandsFreeAudioGatewayProfileAutoTestCase: AutoTest[] = [
   {
-    name : '开蓝牙' ,
-    detail : '使能蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
+    detail : $r('app.string.bluetoothtest_str_snly') ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
     result : 'None' ,
     category : AutoCategory.HandsFreeAudioGatewayAuto
   },
   {
-    name : '获取状态' ,
-    detail : '获取蓝牙状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqlyzt') ,
     method : 'getState' ,
     api : testGetState ,
     result : 'None' ,
     category : AutoCategory.HandsFreeAudioGatewayAuto
   },
   {
-    name : '设置本地名称' ,
-    detail : '设置蓝牙本地名称' ,
+    name : $r('app.string.bluetoothtest_str_szbdmc') ,
+    detail : $r('app.string.bluetoothtest_str_szlybdmc') ,
     method : 'setLocalName' ,
     api : testSetLocalName ,
     result : 'None' ,
     category : AutoCategory.HandsFreeAudioGatewayAuto
   },
   {
-    name : '获取本地名称' ,
-    detail : '获取蓝牙本地名称' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
+    detail : $r('app.string.bluetoothtest_str_hqlybdmc') ,
     method : 'getLocalName' ,
     api : testGetLocalName ,
     result : 'None' ,
     category : AutoCategory.HandsFreeAudioGatewayAuto
   },
   {
-    name : '设置扫描模式' ,
-    detail : '设置蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szsmms') ,
+    detail : $r('app.string.bluetoothtest_str_szlysmms') ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
     result : 'None' ,
     category : AutoCategory.HandsFreeAudioGatewayAuto
   },
   {
-    name : '获取扫描模式' ,
-    detail : '获取蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
+    detail : $r('app.string.bluetoothtest_str_hqlysmms') ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
     result : 'None' ,
     category : AutoCategory.HandsFreeAudioGatewayAuto
   },
   {
-    name : '连接' ,
-    detail : 'Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_lj') ,
+    detail : $r('app.string.bluetoothtest_str_plj') ,
     method : 'connect' ,
     api : testProfileConnect ,
     result : 'None' ,
     category : AutoCategory.HandsFreeAudioGatewayAuto
   },
   {
-    name : '获取连接设备' ,
-    detail : '获取Profile连接设备' ,
+    name : $r('app.string.bluetoothtest_str_hqljsb') ,
+    detail : $r('app.string.bluetoothtest_str_hqpljsb') ,
     method : 'getConnectionDevices' ,
     api : testProfileGetConnectionDevices ,
     result : 'None' ,
     category : AutoCategory.HandsFreeAudioGatewayAuto ,
   },
   {
-    name : '获取设备状态' ,
-    detail : '获取Profile设备状态' ,
+    name : $r('app.string.bluetoothtest_str_hqsbzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqpsbzt') ,
     method : 'getDeviceState' ,
     api : testProfileGetDeviceState ,
     result : 'None' ,
     category : AutoCategory.HandsFreeAudioGatewayAuto ,
   },
   {
-    name : '取消连接' ,
-    detail : '取消Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_qxlj') ,
+    detail : $r('app.string.bluetoothtest_str_qxplj') ,
     method : 'disconnect' ,
     api : testProfileDisConnect ,
     result : 'None' ,
@@ -1152,80 +1151,80 @@ export const HandsFreeAudioGatewayProfileAutoTestCase: AutoTest[] = [
 
 export const HitHostProfileAutoTestCase: AutoTest[] = [
   {
-    name : '开蓝牙' ,
-    detail : '使能蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
+    detail : $r('app.string.bluetoothtest_str_snly') ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
     result : 'None' ,
     category : AutoCategory.HitHostAuto
   },
   {
-    name : '获取状态' ,
-    detail : '获取蓝牙状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqlyzt') ,
     method : 'getState' ,
     api : testGetState ,
     result : 'None' ,
     category : AutoCategory.HitHostAuto
   },
   {
-    name : '设置本地名称' ,
-    detail : '设置蓝牙本地名称' ,
+    name : $r('app.string.bluetoothtest_str_szbdmc') ,
+    detail : $r('app.string.bluetoothtest_str_szlybdmc') ,
     method : 'setLocalName' ,
     api : testSetLocalName ,
     result : 'None' ,
     category : AutoCategory.HitHostAuto
   },
   {
-    name : '获取本地名称' ,
-    detail : '获取蓝牙本地名称' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
+    detail : $r('app.string.bluetoothtest_str_hqlybdmc') ,
     method : 'getLocalName' ,
     api : testGetLocalName ,
     result : 'None' ,
     category : AutoCategory.HitHostAuto
   },
   {
-    name : '设置扫描模式' ,
-    detail : '设置蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szsmms') ,
+    detail : $r('app.string.bluetoothtest_str_szlysmms') ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
     result : 'None' ,
     category : AutoCategory.HitHostAuto
   },
   {
-    name : '获取扫描模式' ,
-    detail : '获取蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
+    detail : $r('app.string.bluetoothtest_str_hqlysmms') ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
     result : 'None' ,
     category : AutoCategory.HitHostAuto
   },
   {
-    name : '连接' ,
-    detail : 'Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_lj') ,
+    detail : $r('app.string.bluetoothtest_str_plj') ,
     method : 'connect' ,
     api : testProfileConnect ,
     result : 'None' ,
     category : AutoCategory.HitHostAuto
   },
   {
-    name : '获取连接设备' ,
-    detail : '获取Profile连接设备' ,
+    name : $r('app.string.bluetoothtest_str_hqljsb') ,
+    detail : $r('app.string.bluetoothtest_str_hqpljsb') ,
     method : 'getConnectionDevices' ,
     api : testProfileGetConnectionDevices ,
     result : 'None' ,
     category : AutoCategory.HitHostAuto
   },
   {
-    name : '获取设备状态' ,
-    detail : '获取Profile设备状态' ,
+    name : $r('app.string.bluetoothtest_str_hqsbzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqpsbzt') ,
     method : 'getDeviceState' ,
     api : testProfileGetDeviceState ,
     result : 'None' ,
     category : AutoCategory.HitHostAuto
   },
   {
-    name : '取消连接' ,
-    detail : '取消Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_qxlj') ,
+    detail : $r('app.string.bluetoothtest_str_qxplj') ,
     method : 'disconnect' ,
     api : testProfileDisConnect ,
     result : 'None' ,
@@ -1235,72 +1234,72 @@ export const HitHostProfileAutoTestCase: AutoTest[] = [
 
 export const PanNetworkProfileAutoTestCase: AutoTest[] = [
   {
-    name : '开蓝牙' ,
-    detail : '使能蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
+    detail : $r('app.string.bluetoothtest_str_snly') ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
     result : 'None' ,
     category : AutoCategory.PanNetworkAuto
   },
   {
-    name : '获取状态' ,
-    detail : '获取蓝牙状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqlyzt') ,
     method : 'getState' ,
     api : testGetState ,
     result : 'None' ,
     category : AutoCategory.PanNetworkAuto
   },
   {
-    name : '设置本地名称' ,
-    detail : '设置蓝牙本地名称' ,
+    name : $r('app.string.bluetoothtest_str_szbdmc') ,
+    detail : $r('app.string.bluetoothtest_str_szlybdmc') ,
     method : 'setLocalName' ,
     api : testSetLocalName ,
     result : 'None' ,
     category : AutoCategory.PanNetworkAuto
   },
   {
-    name : '获取本地名称' ,
-    detail : '获取蓝牙本地名称' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
+    detail : $r('app.string.bluetoothtest_str_hqlybdmc') ,
     method : 'getLocalName' ,
     api : testGetLocalName ,
     result : 'None' ,
     category : AutoCategory.PanNetworkAuto
   },
   {
-    name : '设置扫描模式' ,
-    detail : '设置蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szsmms') ,
+    detail : $r('app.string.bluetoothtest_str_szlysmms') ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
     result : 'None' ,
     category : AutoCategory.PanNetworkAuto
   },
   {
-    name : '获取扫描模式' ,
-    detail : '获取蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
+    detail : $r('app.string.bluetoothtest_str_hqlysmms') ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
     result : 'None' ,
     category : AutoCategory.PanNetworkAuto
   },
   {
-    name : '获取连接设备' ,
-    detail : '获取Profile连接设备' ,
+    name : $r('app.string.bluetoothtest_str_hqljsb') ,
+    detail : $r('app.string.bluetoothtest_str_hqpljsb') ,
     method : 'getConnectionDevices' ,
     api : testProfileGetConnectionDevices ,
     result : 'None' ,
     category : AutoCategory.PanNetworkAuto
   },
   {
-    name : '获取设备状态' ,
-    detail : '获取Profile设备状态' ,
+    name : $r('app.string.bluetoothtest_str_hqsbzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqpsbzt') ,
     method : 'getDeviceState' ,
     api : testProfileGetDeviceState ,
     result : 'None' ,
     category : AutoCategory.PanNetworkAuto
   },
   {
-    name : '取消连接' ,
-    detail : '取消Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_qxlj') ,
+    detail : $r('app.string.bluetoothtest_str_qxplj') ,
     method : 'disconnect' ,
     api : testProfileDisConnect ,
     result : 'None' ,
