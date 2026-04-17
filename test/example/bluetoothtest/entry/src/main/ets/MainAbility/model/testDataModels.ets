@@ -134,176 +134,176 @@ interface BRTestComposition {
 
 const BRTestCase: BRTest[] = [
   {
-    name : '开蓝牙' ,
-    detail : '使能蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
+    detail : $r('app.string.bluetoothtest_str_snly') ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '关蓝牙' ,
-    detail : '去使能蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_gly') ,
+    detail : $r('app.string.bluetoothtest_str_qsnly') ,
     method : 'disableBluetooth' ,
     api : testDisableBluetooth ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '注册状态变化' ,
-    detail : '注册状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcztbh') ,
+    detail : $r('app.string.bluetoothtest_str_zcztbh') ,
     method : 'on.stateChange' ,
     api : testOnStateChange ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '获取状态' ,
-    detail : '获取蓝牙状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqlyzt') ,
     method : 'getState' ,
     api : testGetState ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '获取当前连接状态' ,
-    detail : '获取当前蓝牙连接状态' ,
+    name : $r('app.string.bluetoothtest_str_hqdqljzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqdqlyljzt') ,
     method : 'getBtConnectionState' ,
     api : testGetBtConnectionState ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '设置本地名称' ,
-    detail : '设置蓝牙本地名称' ,
+    name : $r('app.string.bluetoothtest_str_szbdmc') ,
+    detail : $r('app.string.bluetoothtest_str_szlybdmc') ,
     method : 'setLocalName' ,
     api : testSetLocalName ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '获取本地名称' ,
-    detail : '获取蓝牙本地名称' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
+    detail : $r('app.string.bluetoothtest_str_hqlybdmc') ,
     method : 'getLocalName' ,
     api : testGetLocalName ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '设置扫描模式' ,
-    detail : '设置蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szsmms') ,
+    detail : $r('app.string.bluetoothtest_str_szlysmms') ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '获取扫描模式' ,
-    detail : '获取蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
+    detail : $r('app.string.bluetoothtest_str_hqlysmms') ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '注册pin码变化' ,
-    detail : '注册pin码变化' ,
+    name : $r('app.string.bluetoothtest_str_zcpmbh') ,
+    detail : $r('app.string.bluetoothtest_str_zcpmbh') ,
     method : 'on.pinRequired' ,
     api : testOnPinRequired ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '注册绑定状态变化' ,
-    detail : '注册绑定状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcbdztbh') ,
+    detail : $r('app.string.bluetoothtest_str_zcbdztbh') ,
     method : 'on.bondStateChange' ,
     api : testOnBondStateChange ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '开始蓝牙发现' ,
-    detail : '发现可配对蓝牙设备' ,
+    name : $r('app.string.bluetoothtest_str_kslyfx') ,
+    detail : $r('app.string.bluetoothtest_str_fxkpdlysb') ,
     method : 'startBluetoothDiscovery' ,
     api : testStartBluetoothDiscovery ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '停止蓝牙发现' ,
-    detail : '停止发现' ,
+    name : $r('app.string.bluetoothtest_str_tzlyfx') ,
+    detail : $r('app.string.bluetoothtest_str_tzfx') ,
     method : 'stopBluetoothDiscovery' ,
     api : testStopBluetoothDiscovery ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '配对设备' ,
-    detail : '进行蓝牙设备配对' ,
+    name : $r('app.string.bluetoothtest_str_pdsb') ,
+    detail : $r('app.string.bluetoothtest_str_jxlysbpd') ,
     method : 'pairDevice' ,
     api : testPairDevice ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '取消配对设备' ,
-    detail : '取消蓝牙设备配对' ,
+    name : $r('app.string.bluetoothtest_str_qxpdsb_1') ,
+    detail : $r('app.string.bluetoothtest_str_qxlysbpd') ,
     method : 'unpairDevice' ,
     api : testUnPairedDevice ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '获取远程设备名称' ,
-    detail : '获取配对蓝牙设备的名称' ,
+    name : $r('app.string.bluetoothtest_str_hqycsbmc') ,
+    detail : $r('app.string.bluetoothtest_str_hqpdlysbdmc') ,
     method : 'getDeviceName' ,
     api : testGetRemoteDeviceName ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '获取远程设备类型' ,
-    detail : '获取配对蓝牙设备的类型' ,
+    name : $r('app.string.bluetoothtest_str_hqycsblx') ,
+    detail : $r('app.string.bluetoothtest_str_hqpdlysbdlx') ,
     method : 'getDeviceType' ,
     api : testGetRemoteDeviceClass ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '获取配对设备' ,
-    detail : '获取配对蓝牙设备的信息' ,
+    name : $r('app.string.bluetoothtest_str_hqpdsb') ,
+    detail : $r('app.string.bluetoothtest_str_hqpdlysbdxx') ,
     method : 'getPairedDeviceIds' ,
     api : testGetPairedDevices ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '设置Profile连接策略' ,
-    detail : '设置Profile连接策略' ,
+    name : $r('app.string.bluetoothtest_str_szpljcl') ,
+    detail : $r('app.string.bluetoothtest_str_szpljcl') ,
     method : 'setConnectionStrategy' ,
     api : testSetConnectionStrategy ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '获取Profile连接策略' ,
-    detail : '获取Profile连接策略' ,
+    name : $r('app.string.bluetoothtest_str_hqpljcl') ,
+    detail : $r('app.string.bluetoothtest_str_hqpljcl') ,
     method : 'getConnectionStrategy' ,
     api : testGetConnectionStrategy ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '获取配置文件连接状态1' ,
-    detail : '获取配置文件的连接状态' ,
+    name : $r('app.string.bluetoothtest_str_hqpzwjljzt1') ,
+    detail : $r('app.string.bluetoothtest_str_hqpzwjdljzt') ,
     method : 'getProfileConnState' ,
     api : testGetProfileConnState1 ,
     result : 'None' ,
     category : CaseCategory.BR
   },
   {
-    name : '获取配置文件连接状态2' ,
-    detail : '获取设备的配置文件状态' ,
+    name : $r('app.string.bluetoothtest_str_hqpzwjljzt2') ,
+    detail : $r('app.string.bluetoothtest_str_hqsbdpzwjzt') ,
     method : 'getDeviceState' ,
     api : testGetProfileConnState2 ,
     result : 'None' ,
@@ -313,48 +313,48 @@ const BRTestCase: BRTest[] = [
 
 const BleTestCase: BRTest[] = [
   {
-    name : '创建Gatt服务器' ,
-    detail : '创建Gatt服务器' ,
+    name : $r('app.string.bluetoothtest_str_cjgfwq_1') ,
+    detail : $r('app.string.bluetoothtest_str_cjgfwq_1') ,
     method : 'createGattServer' ,
     api : testCreateGattServerDevice ,
     result : 'None' ,
     category : CaseCategory.BLE
   },
   {
-    name : '创建Gatt客户端' ,
-    detail : '创建Gatt客户端' ,
+    name : $r('app.string.bluetoothtest_str_cjgkhd_1') ,
+    detail : $r('app.string.bluetoothtest_str_cjgkhd_1') ,
     method : 'createGattClient' ,
     api : testCreateGattClientDevice ,
     result : 'None' ,
     category : CaseCategory.BLE
   },
   {
-    name : '获取连接的BLE设备' ,
-    detail : '获取连接的BLE设备信息' ,
+    name : $r('app.string.bluetoothtest_str_hqljdbsb') ,
+    detail : $r('app.string.bluetoothtest_str_hqljdbsbxx') ,
     method : 'getConnectedBLEDevices' ,
     api : testGetConnectedBLEDevices ,
     result : 'None' ,
     category : CaseCategory.BLE
   },
   {
-    name : '开始BLE扫描' ,
-    detail : '开始扫描BLE设备' ,
+    name : $r('app.string.bluetoothtest_str_ksbsm') ,
+    detail : $r('app.string.bluetoothtest_str_kssmbsb_1') ,
     method : 'startBLEScan' ,
     api : testStartBLEScan ,
     result : 'None' ,
     category : CaseCategory.BLE
   },
   {
-    name : '停止BLE扫描' ,
-    detail : '停止扫描' ,
+    name : $r('app.string.bluetoothtest_str_tzbsm') ,
+    detail : $r('app.string.bluetoothtest_str_tzsm') ,
     method : 'stopBLEScan' ,
     api : testStopBLEScan ,
     result : 'None' ,
     category : CaseCategory.BLE
   },
   {
-    name : '注册BLE查找状态变化' ,
-    detail : '注册BLE设备查找状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcbczztbh') ,
+    detail : $r('app.string.bluetoothtest_str_zcbsbczztbh') ,
     method : 'on.BLEDeviceFind' ,
     api : testOnBLEDeviceFind ,
     result : 'None' ,
@@ -365,14 +365,14 @@ const BleTestCase: BRTest[] = [
 const GattTestComposition: BRTestComposition[] = [
   {
     name : 'GattClient' ,
-    detail : 'Gatt客户端测试' ,
+    detail : $r('app.string.bluetoothtest_str_gkhdcs') ,
     url : 'pages/subManualApiTest/subGattTest/gattClient' ,
     image : $r('app.media.Gatt') ,
     category : Category.Gatt
   },
   {
     name : 'GattServer' ,
-    detail : 'Gatt服务器测试' ,
+    detail : $r('app.string.bluetoothtest_str_gfwqcs') ,
     url : 'pages/subManualApiTest/subGattTest/gattServer' ,
     image : $r('app.media.Gatt') ,
     category : Category.Gatt
@@ -382,14 +382,14 @@ const GattTestComposition: BRTestComposition[] = [
 const SppTestComposition: BRTestComposition[] = [
   {
     name : 'SppClient' ,
-    detail : 'Spp客户端测试' ,
+    detail : $r('app.string.bluetoothtest_str_skhdcs') ,
     url : 'pages/subManualApiTest/subSppTest/sppClientTest' ,
     image : $r('app.media.spp') ,
     category : Category.SPP
   },
   {
     name : 'SppServer' ,
-    detail : 'Spp服务器测试' ,
+    detail : $r('app.string.bluetoothtest_str_sfwqcs') ,
     url : 'pages/subManualApiTest/subSppTest/sppServerTest' ,
     image : $r('app.media.spp') ,
     category : Category.SPP
@@ -398,160 +398,160 @@ const SppTestComposition: BRTestComposition[] = [
 
 const GattClientTestCase: BRTest[] = [
   {
-    name : '创造Gatt客户端' ,
-    detail : '创造Gatt客户端' ,
+    name : $r('app.string.bluetoothtest_str_czgkhd') ,
+    detail : $r('app.string.bluetoothtest_str_czgkhd') ,
     method : 'createGattClient' ,
     api : testCreateGattClient ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '连接' ,
-    detail : 'Gatt连接' ,
+    name : $r('app.string.bluetoothtest_str_lj') ,
+    detail : $r('app.string.bluetoothtest_str_glj') ,
     method : 'connect' ,
     api : testConnect ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '取消连接' ,
-    detail : '取消Gatt连接' ,
+    name : $r('app.string.bluetoothtest_str_qxlj') ,
+    detail : $r('app.string.bluetoothtest_str_qxglj') ,
     method : 'disconnect' ,
     api : testDisconnect ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : 'BLE连接状态' ,
-    detail : '查看BLE连接状态' ,
+    name : $r('app.string.bluetoothtest_str_bljzt') ,
+    detail : $r('app.string.bluetoothtest_str_ckbljzt') ,
     method : 'on.BLEConnectionStateChange' ,
     api : testOnBLEConnectionStateChange ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '关闭' ,
-    detail : '关闭Gatt客户端' ,
+    name : $r('app.string.bluetoothtest_str_gb') ,
+    detail : $r('app.string.bluetoothtest_str_gbgkhd') ,
     method : 'close' ,
     api : testGattClientClose ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '获取服务callback' ,
-    detail : '获取服务callback' ,
+    name : $r('app.string.bluetoothtest_str_hqfwc_1') ,
+    detail : $r('app.string.bluetoothtest_str_hqfwc_1') ,
     method : 'getServices(Callback)' ,
     api : testGetServicesCallback ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '获取服务promise' ,
-    detail : '获取服务promise' ,
+    name : $r('app.string.bluetoothtest_str_hqfwp_1') ,
+    detail : $r('app.string.bluetoothtest_str_hqfwp_1') ,
     method : 'getServices(promise)' ,
     api : testGetServicesPromise ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '读取特征值callback' ,
-    detail : '读取特征值callback' ,
+    name : $r('app.string.bluetoothtest_str_dqtzzc_1') ,
+    detail : $r('app.string.bluetoothtest_str_dqtzzc_1') ,
     method : 'readCharacteristicValue(callback)' ,
     api : testReadCharacteristicValueCallback ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '读取特征值promise' ,
-    detail : '读取特征值promise' ,
+    name : $r('app.string.bluetoothtest_str_dqtzzp_1') ,
+    detail : $r('app.string.bluetoothtest_str_dqtzzp_1') ,
     method : 'readCharacteristicValue(promise)' ,
     api : testReadCharacteristicValuePromise ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '读取描述符值callback' ,
-    detail : '读取描述符值callback' ,
+    name : $r('app.string.bluetoothtest_str_dqmsfzc_1') ,
+    detail : $r('app.string.bluetoothtest_str_dqmsfzc_1') ,
     method : 'readDescriptorValue(callback)' ,
     api : testReadDescriptorValueCallback ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '读取描述符值promise' ,
-    detail : '读取描述符值promise' ,
+    name : $r('app.string.bluetoothtest_str_dqmsfzp_1') ,
+    detail : $r('app.string.bluetoothtest_str_dqmsfzp_1') ,
     method : 'readDescriptorValue(promise)' ,
     api : testReadDescriptorValuePromise ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '写入特征值' ,
-    detail : '写入特征值' ,
+    name : $r('app.string.bluetoothtest_str_xrtzz') ,
+    detail : $r('app.string.bluetoothtest_str_xrtzz') ,
     method : 'writeCharacteristicValue' ,
     api : testWriteCharacteristicValue ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '写入描述符值' ,
-    detail : '写入描述符值' ,
+    name : $r('app.string.bluetoothtest_str_xrmsfz') ,
+    detail : $r('app.string.bluetoothtest_str_xrmsfz') ,
     method : 'writeDescriptorValue' ,
     api : testWriteDescriptorValue ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : 'BLE特征值变化' ,
-    detail : '查看BLE特征值变化' ,
+    name : $r('app.string.bluetoothtest_str_btzzbh') ,
+    detail : $r('app.string.bluetoothtest_str_ckbtzzbh') ,
     method : 'on.BLECharacteristicChange' ,
     api : testOnBLECharacteristicChange ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '设定BLEMtu尺寸' ,
-    detail : '设定BLEMtu尺寸' ,
+    name : $r('app.string.bluetoothtest_str_sdbcc') ,
+    detail : $r('app.string.bluetoothtest_str_sdbcc') ,
     method : 'setBLEMtuSize' ,
     api : testSetBLEMtuSize ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '设置通知特性更改' ,
-    detail : '设置通知特性更改' ,
+    name : $r('app.string.bluetoothtest_str_sztztxgg') ,
+    detail : $r('app.string.bluetoothtest_str_sztztxgg') ,
     method : 'setNotifyCharacteristicChanged' ,
     api : testSetNotifyCharacteristicChanged ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '获取设备名称callback' ,
-    detail : '获取设备名称callback' ,
+    name : $r('app.string.bluetoothtest_str_hqsbmcc_1') ,
+    detail : $r('app.string.bluetoothtest_str_hqsbmcc_1') ,
     method : 'getDeviceName(callback)' ,
     api : testGetDeviceNameCallback ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '获取设备名称promise' ,
-    detail : '获取设备名称promise' ,
+    name : $r('app.string.bluetoothtest_str_hqsbmcp_1') ,
+    detail : $r('app.string.bluetoothtest_str_hqsbmcp_1') ,
     method : 'getDeviceName(promise)' ,
     api : testGetDeviceNamePromise ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '获取Rssi值callback' ,
-    detail : '获取Rssi值callback' ,
+    name : $r('app.string.bluetoothtest_str_hqrzc_1') ,
+    detail : $r('app.string.bluetoothtest_str_hqrzc_1') ,
     method : 'getRssiValue(callback)' ,
     api : testGetRssiValueCallback ,
     result : 'None' ,
     category : CaseCategory.GattClient
   },
   {
-    name : '获取Rssi值promise' ,
-    detail : '获取Rssi值promise' ,
+    name : $r('app.string.bluetoothtest_str_hqrzp_1') ,
+    detail : $r('app.string.bluetoothtest_str_hqrzp_1') ,
     method : 'getRssiValue(promise)' ,
     api : testGetRssiValuePromise ,
     result : 'None' ,
@@ -561,88 +561,88 @@ const GattClientTestCase: BRTest[] = [
 
 const GattServerTestCase: BRTest[] = [
   {
-    name : '创建Gatt服务器' ,
-    detail : '创建Gatt服务器' ,
+    name : $r('app.string.bluetoothtest_str_cjgfwq_1') ,
+    detail : $r('app.string.bluetoothtest_str_cjgfwq_1') ,
     method : 'createGattServer' ,
     api : testCreateGattServer ,
     result : 'None' ,
     category : CaseCategory.GattServer
   },
   {
-    name : '添加服务' ,
-    detail : '添加Gatt服务' ,
+    name : $r('app.string.bluetoothtest_str_tjfw') ,
+    detail : $r('app.string.bluetoothtest_str_tjgfw') ,
     method : 'addService' ,
     api : testAddService ,
     result : 'None' ,
     category : CaseCategory.GattServer
   },
   {
-    name : '删除服务' ,
-    detail : '删除Gatt服务' ,
+    name : $r('app.string.bluetoothtest_str_scfw') ,
+    detail : $r('app.string.bluetoothtest_str_scgfw') ,
     method : 'removeService' ,
     api : testRemoveService ,
     result : 'None' ,
     category : CaseCategory.GattServer
   },
   {
-    name : '开始广播' ,
-    detail : '开始广播播报' ,
+    name : $r('app.string.bluetoothtest_str_ksgb') ,
+    detail : $r('app.string.bluetoothtest_str_ksgbbb') ,
     method : 'startAdvertising' ,
     api : testStartAdvertising ,
     result : 'None' ,
     category : CaseCategory.GattServer
   },
   {
-    name : '停止广播' ,
-    detail : '停止广播播报' ,
+    name : $r('app.string.bluetoothtest_str_tzgb') ,
+    detail : $r('app.string.bluetoothtest_str_tzgbbb') ,
     method : 'stopAdvertising' ,
     api : testStopAdvertising ,
     result : 'None' ,
     category : CaseCategory.GattServer
   },
   {
-    name : '关闭' ,
-    detail : '关闭Gatt服务器' ,
+    name : $r('app.string.bluetoothtest_str_gb') ,
+    detail : $r('app.string.bluetoothtest_str_gbgfwq') ,
     method : 'close' ,
     api : testGattServerClose ,
     result : 'None' ,
     category : CaseCategory.GattServer
   },
   {
-    name : '连接状态' ,
-    detail : '查看Gatt连接状态' ,
+    name : $r('app.string.bluetoothtest_str_ljzt') ,
+    detail : $r('app.string.bluetoothtest_str_ckgljzt') ,
     method : 'on.connectStateChange' ,
     api : testOnConnectStateChange ,
     result : 'None' ,
     category : CaseCategory.GattServer
   },
   {
-    name : '读取特征值' ,
-    detail : '读取特征值' ,
+    name : $r('app.string.bluetoothtest_str_dqtzz') ,
+    detail : $r('app.string.bluetoothtest_str_dqtzz') ,
     method : 'on.characteristicRead' ,
     api : testOnCharacteristicRead ,
     result : 'None' ,
     category : CaseCategory.GattServer
   },
   {
-    name : '写入特征值' ,
-    detail : '写入特征值' ,
+    name : $r('app.string.bluetoothtest_str_xrtzz') ,
+    detail : $r('app.string.bluetoothtest_str_xrtzz') ,
     method : 'on.characteristicWrite' ,
     api : testOnCharacteristicWrite ,
     result : 'None' ,
     category : CaseCategory.GattServer
   },
   {
-    name : '读取描述符' ,
-    detail : '读取描述符' ,
+    name : $r('app.string.bluetoothtest_str_dqmsf') ,
+    detail : $r('app.string.bluetoothtest_str_dqmsf') ,
     method : 'on.descriptorRead' ,
     api : testOnDescriptorRead ,
     result : 'None' ,
     category : CaseCategory.GattServer
   },
   {
-    name : '写入描述符' ,
-    detail : '写入描述符' ,
+    name : $r('app.string.bluetoothtest_str_xrmsf') ,
+    detail : $r('app.string.bluetoothtest_str_xrmsf') ,
     method : 'on.descriptorWrite' ,
     api : testOnDescriptorWrite ,
     result : 'None' ,
@@ -652,104 +652,104 @@ const GattServerTestCase: BRTest[] = [
 
 const SppClientTestCase: BRTest[] = [
   {
-    name : '开蓝牙' ,
-    detail : '使能蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
+    detail : $r('app.string.bluetoothtest_str_snly') ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : '关蓝牙' ,
-    detail : '去使能蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_gly') ,
+    detail : $r('app.string.bluetoothtest_str_qsnly') ,
     method : 'disableBluetooth' ,
     api : testDisableBluetooth ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : '设置SPP扫描模式' ,
-    detail : '设置SPP扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szssmms') ,
+    detail : $r('app.string.bluetoothtest_str_szssmms') ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : '获取状态' ,
-    detail : '获取蓝牙状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqlyzt') ,
     method : 'getState' ,
     api : testGetState ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : '获取扫描模式' ,
-    detail : '获取蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
+    detail : $r('app.string.bluetoothtest_str_hqlysmms') ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : '获取当前连接状态' ,
-    detail : '获取当前蓝牙连接状态' ,
+    name : $r('app.string.bluetoothtest_str_hqdqljzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqdqlyljzt') ,
     method : 'getBtConnectionState' ,
     api : testGetBtConnectionState ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : 'Spp客户端连接(安全模式)' ,
-    detail : 'Spp客户端(安全模式)连接' ,
+    name : $r('app.string.bluetoothtest_str_skhdljaqms') ,
+    detail : $r('app.string.bluetoothtest_str_skhdaqmslj') ,
     method : 'sppConnect' ,
     api : testSppClientConnectSafe ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : 'Spp客户端连接(非安全模式)' ,
-    detail : 'Spp客户端(非安全模式)连接' ,
+    name : $r('app.string.bluetoothtest_str_skhdljfaqms') ,
+    detail : $r('app.string.bluetoothtest_str_skhdfaqmslj') ,
     method : 'sppConnect' ,
     api : testSppClientConnectUnSafe ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : '配对设备' ,
-    detail : '进行蓝牙设备配对' ,
+    name : $r('app.string.bluetoothtest_str_pdsb') ,
+    detail : $r('app.string.bluetoothtest_str_jxlysbpd') ,
     method : 'pairDevice' ,
     api : testPairDevice ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : 'Spp客户端写入' ,
-    detail : 'Spp客户端写入' ,
+    name : $r('app.string.bluetoothtest_str_skhdxr') ,
+    detail : $r('app.string.bluetoothtest_str_skhdxr') ,
     method : 'sppWrite' ,
     api : testSppClientWrite ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : 'Spp客户端读取打开' ,
-    detail : 'Spp客户端读取打开' ,
+    name : $r('app.string.bluetoothtest_str_skhddqdk') ,
+    detail : $r('app.string.bluetoothtest_str_skhddqdk') ,
     method : 'on.sppRead' ,
     api : testSppClientReadOn ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : 'Spp客户端读取关闭' ,
-    detail : 'Spp客户端读取关闭' ,
+    name : $r('app.string.bluetoothtest_str_skhddqgb') ,
+    detail : $r('app.string.bluetoothtest_str_skhddqgb') ,
     method : 'off.sppRead' ,
     api : testSppClientReadOff ,
     result : 'None' ,
     category : CaseCategory.SPPClient
   },
   {
-    name : 'Spp客户端关闭' ,
-    detail : 'Spp客户端关闭' ,
+    name : $r('app.string.bluetoothtest_str_skhdgb') ,
+    detail : $r('app.string.bluetoothtest_str_skhdgb') ,
     method : 'sppCloseClientSocket' ,
     api : testSppClientClose ,
     result : 'None' ,
@@ -759,72 +759,72 @@ const SppClientTestCase: BRTest[] = [
 
 const SppServerTestCase: BRTest[] = [
   {
-    name : '开蓝牙' ,
-    detail : '使能蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
+    detail : $r('app.string.bluetoothtest_str_snly') ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : '关蓝牙' ,
-    detail : '去使能蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_gly') ,
+    detail : $r('app.string.bluetoothtest_str_qsnly') ,
     method : 'disableBluetooth' ,
     api : testDisableBluetooth ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : '设置SPP扫描模式' ,
-    detail : '设置SPP扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szssmms') ,
+    detail : $r('app.string.bluetoothtest_str_szssmms') ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : '获取状态' ,
-    detail : '获取蓝牙状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqlyzt') ,
     method : 'getState' ,
     api : testGetState ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : '获取扫描模式' ,
-    detail : '获取蓝牙扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
+    detail : $r('app.string.bluetoothtest_str_hqlysmms') ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : '获取当前连接状态' ,
-    detail : '获取当前蓝牙连接状态' ,
+    name : $r('app.string.bluetoothtest_str_hqdqljzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqdqlyljzt') ,
     method : 'getBtConnectionState' ,
     api : testGetBtConnectionState ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : 'Spp服务器创建(安全模式)' ,
-    detail : 'Spp服务器(安全模式)创建' ,
+    name : $r('app.string.bluetoothtest_str_sfwqcjaqms') ,
+    detail : $r('app.string.bluetoothtest_str_sfwqaqmscj') ,
     method : 'sppListen' ,
     api : testSppServerCreateSafe ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : 'Spp服务器创建(非安全模式)' ,
-    detail : 'Spp服务器(非安全模式)创建' ,
+    name : $r('app.string.bluetoothtest_str_sfwqcjfaqms') ,
+    detail : $r('app.string.bluetoothtest_str_sfwqfaqmscj') ,
     method : 'sppListen' ,
     api : testSppServerCreateUnSafe ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : '注册pin码变化' ,
-    detail : '注册pin码变化' ,
+    name : $r('app.string.bluetoothtest_str_zcpmbh') ,
+    detail : $r('app.string.bluetoothtest_str_zcpmbh') ,
     method : 'on.pinRequired' ,
     api : testOnPinRequired ,
     result : 'None' ,
@@ -832,48 +832,48 @@ const SppServerTestCase: BRTest[] = [
   },
   //  { name: 'SPP客户端写入', detail: '使能蓝牙', method: 'spp_Client_Write', api: testSppClientWrite, result: 'None', category: CaseCategory.SPPServer },
   {
-    name : 'Spp服务器写入' ,
-    detail : 'Spp服务器写入' ,
+    name : $r('app.string.bluetoothtest_str_sfwqxr') ,
+    detail : $r('app.string.bluetoothtest_str_sfwqxr') ,
     method : 'sppWrite' ,
     api : testSppServerWrite ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : 'Spp服务器接受' ,
-    detail : 'Spp服务器接受' ,
+    name : $r('app.string.bluetoothtest_str_sfwqjs') ,
+    detail : $r('app.string.bluetoothtest_str_sfwqjs') ,
     method : 'sppAccept' ,
     api : testSppServerAccept ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : 'Spp服务器读取打开' ,
-    detail : 'Spp服务器读取打开' ,
+    name : $r('app.string.bluetoothtest_str_sfwqdqdk') ,
+    detail : $r('app.string.bluetoothtest_str_sfwqdqdk') ,
     method : 'on.sppRead' ,
     api : testSppServerReadOn ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : 'Spp服务器读取关闭' ,
-    detail : 'Spp服务器读取关闭' ,
+    name : $r('app.string.bluetoothtest_str_sfwqdqgb') ,
+    detail : $r('app.string.bluetoothtest_str_sfwqdqgb') ,
     method : 'off.sppRead' ,
     api : testSppServerReadOff ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : 'Spp服务器关闭' ,
-    detail : 'Spp服务器关闭' ,
+    name : $r('app.string.bluetoothtest_str_sfwqgb') ,
+    detail : $r('app.string.bluetoothtest_str_sfwqgb') ,
     method : 'sppCloseServerSocket' ,
     api : testSppCloseServerSocket ,
     result : 'None' ,
     category : CaseCategory.SPPServer
   },
   {
-    name : 'Spp客户端关闭' ,
-    detail : 'Spp客户端关闭' ,
+    name : $r('app.string.bluetoothtest_str_skhdgb') ,
+    detail : $r('app.string.bluetoothtest_str_skhdgb') ,
     method : 'sppCloseClientSocket' ,
     api : testSppCloseClientSocket ,
     result : 'None' ,
@@ -883,40 +883,40 @@ const SppServerTestCase: BRTest[] = [
 
 const A2dpSourceProfileTestCase: BRTest[] = [
   {
-    name : '连接' ,
-    detail : 'Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_lj') ,
+    detail : $r('app.string.bluetoothtest_str_plj') ,
     method : 'connect' ,
     api : testProfileConnect ,
     result : 'None' ,
     category : CaseCategory.ProfileA2dpSource
   },
   {
-    name : '取消连接' ,
-    detail : '取消Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_qxlj') ,
+    detail : $r('app.string.bluetoothtest_str_qxplj') ,
     method : 'disconnect' ,
     api : testProfileDisConnect ,
     result : 'None' ,
     category : CaseCategory.ProfileA2dpSource
   },
   {
-    name : '获取播放状态' ,
-    detail : '获取Profile播放状态' ,
+    name : $r('app.string.bluetoothtest_str_hqbfzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqpbfzt') ,
     method : 'getPlayingState' ,
     api : testProfileGetPlayingState ,
     result : 'None' ,
     category : CaseCategory.ProfileA2dpSource
   },
   {
-    name : '获取连接设备' ,
-    detail : '获取Profile连接设备' ,
+    name : $r('app.string.bluetoothtest_str_hqljsb') ,
+    detail : $r('app.string.bluetoothtest_str_hqpljsb') ,
     method : 'getConnectionDevices' ,
     api : testProfileGetConnectionDevices ,
     result : 'None' ,
     category : CaseCategory.ProfileA2dpSource
   },
   {
-    name : '获取设备状态' ,
-    detail : '获取Profile设备状态' ,
+    name : $r('app.string.bluetoothtest_str_hqsbzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqpsbzt') ,
     method : 'getDeviceState' ,
     api : testProfileGetDeviceState ,
     result : 'None' ,
@@ -926,32 +926,32 @@ const A2dpSourceProfileTestCase: BRTest[] = [
 
 const HandsFreeAudioGatewayProfileTestCase: BRTest[] = [
   {
-    name : '连接' ,
-    detail : 'Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_lj') ,
+    detail : $r('app.string.bluetoothtest_str_plj') ,
     method : 'connect' ,
     api : testProfileConnect ,
     result : 'None' ,
     category : CaseCategory.ProfileHandsFreeAudioGateway
   },
   {
-    name : '取消连接' ,
-    detail : '取消Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_qxlj') ,
+    detail : $r('app.string.bluetoothtest_str_qxplj') ,
     method : 'disconnect' ,
     api : testProfileDisConnect ,
     result : 'None' ,
     category : CaseCategory.ProfileHandsFreeAudioGateway
   },
   {
-    name : '获取连接设备' ,
-    detail : '获取Profile连接设备' ,
+    name : $r('app.string.bluetoothtest_str_hqljsb') ,
+    detail : $r('app.string.bluetoothtest_str_hqpljsb') ,
     method : 'getConnectionDevices' ,
     api : testProfileGetConnectionDevices ,
     result : 'None' ,
     category : CaseCategory.ProfileHandsFreeAudioGateway ,
   },
   {
-    name : '获取设备状态' ,
-    detail : '获取Profile设备状态' ,
+    name : $r('app.string.bluetoothtest_str_hqsbzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqpsbzt') ,
     method : 'getDeviceState' ,
     api : testProfileGetDeviceState ,
     result : 'None' ,
@@ -961,32 +961,32 @@ const HandsFreeAudioGatewayProfileTestCase: BRTest[] = [
 
 const HitHostProfileTestCase: BRTest[] = [
   {
-    name : '连接' ,
-    detail : 'Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_lj') ,
+    detail : $r('app.string.bluetoothtest_str_plj') ,
     method : 'connect' ,
     api : testProfileConnect ,
     result : 'None' ,
     category : CaseCategory.ProfileHitHost
   },
   {
-    name : '取消连接' ,
-    detail : '取消Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_qxlj') ,
+    detail : $r('app.string.bluetoothtest_str_qxplj') ,
     method : 'disconnect' ,
     api : testProfileDisConnect ,
     result : 'None' ,
     category : CaseCategory.ProfileHitHost
   },
   {
-    name : '获取连接设备' ,
-    detail : '获取Profile连接设备' ,
+    name : $r('app.string.bluetoothtest_str_hqljsb') ,
+    detail : $r('app.string.bluetoothtest_str_hqpljsb') ,
     method : 'getConnectionDevices' ,
     api : testProfileGetConnectionDevices ,
     result : 'None' ,
     category : CaseCategory.ProfileHitHost
   },
   {
-    name : '获取设备状态' ,
-    detail : '获取Profile设备状态' ,
+    name : $r('app.string.bluetoothtest_str_hqsbzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqpsbzt') ,
     method : 'getDeviceState' ,
     api : testProfileGetDeviceState ,
     result : 'None' ,
@@ -996,24 +996,24 @@ const HitHostProfileTestCase: BRTest[] = [
 
 const PanNetworkProfileTestCase: BRTest[] = [
   {
-    name : '取消连接' ,
-    detail : '取消Profile连接' ,
+    name : $r('app.string.bluetoothtest_str_qxlj') ,
+    detail : $r('app.string.bluetoothtest_str_qxplj') ,
     method : 'disconnect' ,
     api : testProfileDisConnect ,
     result : 'None' ,
     category : CaseCategory.ProfilePanNetwork
   },
   {
-    name : '获取连接设备' ,
-    detail : '获取Profile连接设备' ,
+    name : $r('app.string.bluetoothtest_str_hqljsb') ,
+    detail : $r('app.string.bluetoothtest_str_hqpljsb') ,
     method : 'getConnectionDevices' ,
     api : testProfileGetConnectionDevices ,
     result : 'None' ,
     category : CaseCategory.ProfilePanNetwork
   },
   {
-    name : '获取设备状态' ,
-    detail : '获取Profile设备状态' ,
+    name : $r('app.string.bluetoothtest_str_hqsbzt') ,
+    detail : $r('app.string.bluetoothtest_str_hqpsbzt') ,
     method : 'getDeviceState' ,
     api : testProfileGetDeviceState ,
     result : 'None' ,
@@ -1023,16 +1023,16 @@ const PanNetworkProfileTestCase: BRTest[] = [
 
 const OppProfileTestCase: BRTest[] = [
   {
-    name : '传输状态变化打开' ,
-    detail : '传输状态更改打开' ,
+    name : $r('app.string.bluetoothtest_str_csztbhdk') ,
+    detail : $r('app.string.bluetoothtest_str_csztggdk') ,
     method : 'on.transferStateChange' ,
     api : testOnTransferStateChange ,
     result : 'None' ,
     category : CaseCategory.ProfileOpp
   },
   {
-    name : '接收传入文件变化打开' ,
-    detail : '接收传入文件变化打开' ,
+    name : $r('app.string.bluetoothtest_str_jscrwjbhdk') ,
+    detail : $r('app.string.bluetoothtest_str_jscrwjbhdk') ,
     method : 'on.receiveIncomingFile' ,
     api : testOnReceiveIncomingFile ,
     result : 'None' ,
@@ -1047,24 +1047,24 @@ const OppProfileTestCase: BRTest[] = [
   //   category : CaseCategory.ProfileOpp
   // },
   {
-    name : '设置传入文件确认' ,
-    detail : '设置传入文件确认' ,
+    name : $r('app.string.bluetoothtest_str_szcrwjqr') ,
+    detail : $r('app.string.bluetoothtest_str_szcrwjqr') ,
     method : 'setIncomingFileConfirmation' ,
     api : testSetIncomingFileConfirmation ,
     result : 'None' ,
     category : CaseCategory.ProfileOpp
   },
   {
-    name : '获取当前传输信息' ,
-    detail : '获取当前传输信息' ,
+    name : $r('app.string.bluetoothtest_str_hqdqcsxx') ,
+    detail : $r('app.string.bluetoothtest_str_hqdqcsxx') ,
     method : 'getCurrentTransferInformation' ,
     api : testGetCurrentTransferInformation ,
     result : 'None' ,
     category : CaseCategory.ProfileOpp
   },
   {
-    name : '取消传输' ,
-    detail : '取消传输' ,
+    name : $r('app.string.bluetoothtest_str_qxcs_1') ,
+    detail : $r('app.string.bluetoothtest_str_qxcs_1') ,
     method : 'cancelTransfer' ,
     api : testCancelTransfer ,
     result : 'None' ,
@@ -1075,28 +1075,28 @@ const OppProfileTestCase: BRTest[] = [
 const TestComposition: BRTestComposition[] = [
   {
     name : 'Classic' ,
-    detail : '经典蓝牙测试' ,
+    detail : $r('app.string.bluetoothtest_str_jdlycs') ,
     url : 'pages/subManualApiTest/BrInterfaceTest' ,
     image : $r('app.media.Bticon') ,
     category : Category.API
   },
   {
     name : 'BLE' ,
-    detail : '低功耗蓝牙测试' ,
+    detail : $r('app.string.bluetoothtest_str_dghlycs') ,
     url : 'pages/subManualApiTest/bleTest' ,
     image : $r('app.media.ble40') ,
     category : Category.API
   },
   {
     name : 'Gatt' ,
-    detail : 'GATT测试' ,
+    detail : $r('app.string.bluetoothtest_str_gcs_2') ,
     url : 'pages/subManualApiTest/gattTest' ,
     image : $r('app.media.Gatt') ,
     category : Category.API
   },
   {
     name : 'SPP' ,
-    detail : 'SPP测试' ,
+    detail : $r('app.string.bluetoothtest_str_scs_1') ,
     url : 'pages/subManualApiTest/sppTest' ,
     image : $r('app.media.spp') ,
     category : Category.API
@@ -1104,28 +1104,28 @@ const TestComposition: BRTestComposition[] = [
 
   {
     name : 'Classic_M' ,
-    detail : '经典蓝牙Manager测试' ,
+    detail : $r('app.string.bluetoothtest_str_jdlymcs') ,
     url : 'pages/subManualApiTestManager/brTestManager' ,
     image : $r('app.media.Bticon') ,
     category : Category.APIManager
   },
   {
     name : 'BLE_M' ,
-    detail : '低功耗蓝牙Manager测试' ,
+    detail : $r('app.string.bluetoothtest_str_dghlymcs') ,
     url : 'pages/subManualApiTestManager/bleTestManager' ,
     image : $r('app.media.ble40') ,
     category : Category.APIManager
   },
   {
     name : 'Gatt_M' ,
-    detail : 'GATTManager测试' ,
+    detail : $r('app.string.bluetoothtest_str_gcs_1') ,
     url : 'pages/subManualApiTestManager/gattTestManager' ,
     image : $r('app.media.Gatt') ,
     category : Category.APIManager
   },
   {
     name : 'SPP_M' ,
-    detail : 'SPPManager测试' ,
+    detail : $r('app.string.bluetoothtest_str_scs') ,
     url : 'pages/subManualApiTestManager/sppTestManager' ,
     image : $r('app.media.spp') ,
     category : Category.APIManager
@@ -1133,35 +1133,35 @@ const TestComposition: BRTestComposition[] = [
 
   {
     name : 'BrAutoTest' ,
-    detail : 'Br自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_bzdcs_3') ,
     url : 'pages/subAutoTest/brAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.AutoTest
   },
   {
     name : 'BleAutoTest' ,
-    detail : 'Ble自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_bzdcs_2') ,
     url : 'pages/subAutoTest/bleAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.AutoTest
   },
   {
     name : 'GattAutoTest' ,
-    detail : 'Gatt自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_gzdcs_5') ,
     url : 'pages/subAutoTest/gattAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.AutoTest
   },
   {
     name : 'SppAutoTest' ,
-    detail : 'Spp自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_szdcs_4') ,
     url : 'pages/subAutoTest/sppAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.AutoTest
   },
   {
     name : 'ProfileAutoTest' ,
-    detail : 'Profile自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_pzdcs_3') ,
     url : 'pages/subAutoTest/profileAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.AutoTest
@@ -1169,35 +1169,35 @@ const TestComposition: BRTestComposition[] = [
 
   {
     name : 'Br_M_AutoTest' ,
-    detail : 'BrManager自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_bzdcs_1') ,
     url : 'pages/subAutoTestManager/brAutoTestManager' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.AutoTestManager
   },
   {
     name : 'Ble_M_AutoTest' ,
-    detail : 'BleManager自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_bzdcs') ,
     url : 'pages/subAutoTestManager/bleAutoTestManager' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.AutoTestManager
   },
   {
     name : 'Gatt_M_AutoTest' ,
-    detail : 'GattManager自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_gzdcs_2') ,
     url : 'pages/subAutoTestManager/gattAutoTestManager' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.AutoTestManager
   },
   {
     name : 'Spp_M_AutoTest' ,
-    detail : 'SppManager自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_szdcs_1') ,
     url : 'pages/subAutoTestManager/sppAutoTestManager' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.AutoTestManager
   },
   {
     name : 'Profile_M_AutoTest' ,
-    detail : 'ProfileManager自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_pzdcs_1') ,
     url : 'pages/subAutoTestManager/profileAutoTestManager' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.AutoTestManager
@@ -1206,56 +1206,56 @@ const TestComposition: BRTestComposition[] = [
 
   {
     name : 'BrFoundScenarioTest' ,
-    detail : '经典蓝牙发现场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_jdlyfxcjcs') ,
     url : 'pages/subScenarioTest/brFoundScenarioTest' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.Scenario
   },
   {
     name : 'BleFoundScenarioTest' ,
-    detail : 'Ble蓝牙发现场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_blyfxcjcs') ,
     url : 'pages/subScenarioTest/bleFoundScenarioTest' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.Scenario
   },
   {
     name : 'GattClientScenarioTest' ,
-    detail : 'GattClient场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_gcjcs_2') ,
     url : 'pages/subScenarioTest/gattClientScenarioTest' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.Scenario
   },
   {
     name : 'GattServerScenarioTest' ,
-    detail : 'GattServer场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_gcjcs_3') ,
     url : 'pages/subScenarioTest/gattServerScenarioTest' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.Scenario
   },
   {
     name : 'SppClientScenarioTest' ,
-    detail : 'SppClient场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_scjcs_2') ,
     url : 'pages/subScenarioTest/sppClientScenarioTest' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.Scenario
   },
   {
     name : 'SppServerScenarioTest' ,
-    detail : 'SppServer场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_scjcs_3') ,
     url : 'pages/subScenarioTest/sppServerScenarioTest' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.Scenario
   },
   {
     name : 'OppSendScenarioTest' ,
-    detail : 'Opp发送端场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_ofsdcjcs') ,
     url : 'pages/subScenarioTest/oppSendScenarioTest' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.Scenario
   },
   {
     name : 'OppRecvScenarioTest' ,
-    detail : 'Opp接收端场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_ojsdcjcs') ,
     url : 'pages/subScenarioTest/oppRecvScenarioTest' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.Scenario
@@ -1263,42 +1263,42 @@ const TestComposition: BRTestComposition[] = [
 
   {
     name : 'BrFound_M_ScenarioTest' ,
-    detail : '经典蓝牙Manager发现场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_jdlymfxcjcs') ,
     url : 'pages/subScenarioTestManager/brFoundScenarioTestManager' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.ScenarioManager
   },
   {
     name : 'BleFound_M_ScenarioTest' ,
-    detail : 'Ble蓝牙Manager发现场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_blymfxcjcs') ,
     url : 'pages/subScenarioTestManager/bleFoundScenarioTestManager' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.ScenarioManager
   },
   {
     name : 'GattClient_M_ScenarioTest' ,
-    detail : 'GattClientManager场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_gcjcs') ,
     url : 'pages/subScenarioTestManager/gattClientScenarioTestManager' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.ScenarioManager
   },
   {
     name : 'GattServer_M_ScenarioTest' ,
-    detail : 'GattServerManager场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_gcjcs_1') ,
     url : 'pages/subScenarioTestManager/gattServerScenarioTestManager' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.ScenarioManager
   },
   {
     name : 'SppClient_M_ScenarioTest' ,
-    detail : 'SppClientManager场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_scjcs') ,
     url : 'pages/subScenarioTestManager/sppClientScenarioTestManager' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.ScenarioManager
   },
   {
     name : 'SppServer_M_ScenarioTest' ,
-    detail : 'SppServerManager场景测试' ,
+    detail : $r('app.string.bluetoothtest_str_scjcs_1') ,
     url : 'pages/subScenarioTestManager/sppServerScenarioTestManager' ,
     image : $r('app.media.ScenarioTest') ,
     category : Category.ScenarioManager
@@ -1306,35 +1306,35 @@ const TestComposition: BRTestComposition[] = [
 
   {
     name : 'A2dpSource' ,
-    detail : 'A2dpSource配置测试' ,
+    detail : $r('app.string.bluetoothtest_str_apzcs_1') ,
     url : 'pages/subProfileTest/a2dpSourceProfileTest' ,
     image : $r('app.media.profile') ,
     category : Category.Profile
   },
   {
     name : 'HFAudioGateway' ,
-    detail : 'HFAudioGateway配置测试' ,
+    detail : $r('app.string.bluetoothtest_str_hpzcs_1') ,
     url : 'pages/subProfileTest/handsFreeAudioGatewayProfileTest' ,
     image : $r('app.media.profile') ,
     category : Category.Profile
   },
   {
     name : 'HidHost' ,
-    detail : 'HidHost配置测试' ,
+    detail : $r('app.string.bluetoothtest_str_hpzcs_3') ,
     url : 'pages/subProfileTest/hidHostProfileTest' ,
     image : $r('app.media.profile') ,
     category : Category.Profile
   },
   {
     name : 'PanNetwork' ,
-    detail : 'PanNetwork配置测试' ,
+    detail : $r('app.string.bluetoothtest_str_ppzcs_1') ,
     url : 'pages/subProfileTest/panNetworkProfileTest' ,
     image : $r('app.media.profile') ,
     category : Category.Profile
   },
   {
     name : 'Opp' ,
-    detail : 'Opp配置测试' ,
+    detail : $r('app.string.bluetoothtest_str_opzcs') ,
     url : 'pages/subProfileTest/oppProfileTest' ,
     image : $r('app.media.profile') ,
     category : Category.Profile
@@ -1342,28 +1342,28 @@ const TestComposition: BRTestComposition[] = [
 
   {
     name : 'A2dpSource_M' ,
-    detail : 'A2dpSourceManager配置测试' ,
+    detail : $r('app.string.bluetoothtest_str_apzcs') ,
     url : 'pages/subProfileTestManager/a2dpSourceProfileTestManager' ,
     image : $r('app.media.profile') ,
     category : Category.ProfileManager
   },
   {
     name : 'HFAudioGateway_M' ,
-    detail : 'HFAudioGatewayManager配置测试' ,
+    detail : $r('app.string.bluetoothtest_str_hpzcs') ,
     url : 'pages/subProfileTestManager/handsFreeAudioGatewayProfileTestManager' ,
     image : $r('app.media.profile') ,
     category : Category.ProfileManager
   },
   {
     name : 'HidHost_M' ,
-    detail : 'HidHostManager配置测试' ,
+    detail : $r('app.string.bluetoothtest_str_hpzcs_2') ,
     url : 'pages/subProfileTestManager/hidHostProfileTestManager' ,
     image : $r('app.media.profile') ,
     category : Category.ProfileManager
   },
   {
     name : 'PanNetwork_M' ,
-    detail : 'PanNetworkManager配置测试' ,
+    detail : $r('app.string.bluetoothtest_str_ppzcs') ,
     url : 'pages/subProfileTestManager/panNetworkProfileTestManager' ,
     image : $r('app.media.profile') ,
     category : Category.ProfileManager
@@ -1371,56 +1371,56 @@ const TestComposition: BRTestComposition[] = [
 
   {
     name : 'BrBenchmarkTest' ,
-    detail : '经典蓝牙性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_jdlyxncs') ,
     url : 'pages/subBenchmarkTest/brBenchmarkTest' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMark
   },
   {
     name : 'BleBenchmarkTest' ,
-    detail : 'ble蓝牙性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_blyxncs') ,
     url : 'pages/subBenchmarkTest/bleBenchmarkTest' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMark
   },
   {
     name : 'GattClientVelocityBenchmarkTest' ,
-    detail : 'GattClient速率性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_gslxncs') ,
     url : 'pages/subBenchmarkTest/gattClientVelocityBenchmarkTest' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMark
   },
   {
     name : 'GattServerVelocityBenchmarkTest' ,
-    detail : 'GattServer速率性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_gslxncs_1') ,
     url : 'pages/subBenchmarkTest/gattServerVelocityBenchmarkTest' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMark
   },
   {
     name : 'SppClientVelocityBenchmarkTest' ,
-    detail : 'SppClient速率性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_sslxncs') ,
     url : 'pages/subBenchmarkTest/sppClientVelocityBenchmarkTest' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMark
   },
   {
     name : 'SppServerVelocityBenchmarkTest' ,
-    detail : 'SppServer速率性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_sslxncs_1') ,
     url : 'pages/subBenchmarkTest/sppServerVelocityBenchmarkTest' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMark
   },
   {
     name : 'SppClientBandWidthBenchmarkTest' ,
-    detail : 'SppClient带宽性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_sdkxncs') ,
     url : 'pages/subBenchmarkTest/sppClientBandWidthBenchmarkTest' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMark
   },
   {
     name : 'SppServerBandWidthBenchmarkTest' ,
-    detail : 'SppServer带宽性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_sdkxncs_1') ,
     url : 'pages/subBenchmarkTest/sppServerBandWidthBenchmarkTest' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMark
@@ -1428,56 +1428,56 @@ const TestComposition: BRTestComposition[] = [
 
   {
     name : 'Br_M_BenchmarkTest' ,
-    detail : '经典蓝牙性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_jdlyxncs') ,
     url : 'pages/subBenchmarkTestManager/brBenchmarkTestManager' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMarkManager
   },
   {
     name : 'Ble_M_BenchmarkTest' ,
-    detail : 'ble蓝牙性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_blyxncs') ,
     url : 'pages/subBenchmarkTestManager/bleBenchmarkTestManager' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMarkManager
   },
   {
     name : 'GattClient_M_VelocityBenchmarkTest' ,
-    detail : 'GattClient速率性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_gslxncs') ,
     url : 'pages/subBenchmarkTestManager/gattClientVelocityBenchmarkTestManager' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMarkManager
   },
   {
     name : 'GattServer_M_VelocityBenchmarkTest' ,
-    detail : 'GattServer速率性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_gslxncs_1') ,
     url : 'pages/subBenchmarkTestManager/gattServerVelocityBenchmarkTestManager' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMarkManager
   },
   {
     name : 'SppClient_M_VelocityBenchmarkTest' ,
-    detail : 'SppClient速率性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_sslxncs') ,
     url : 'pages/subBenchmarkTestManager/sppClientVelocityBenchmarkTestManager' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMarkManager
   },
   {
     name : 'SppServer_M_VelocityBenchmarkTest' ,
-    detail : 'SppServer速率性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_sslxncs_1') ,
     url : 'pages/subBenchmarkTestManager/sppServerVelocityBenchmarkTestManager' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMarkManager
   },
   {
     name : 'SppClient_M_BandWidthBenchmarkTest' ,
-    detail : 'SppClient带宽性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_sdkxncs') ,
     url : 'pages/subBenchmarkTestManager/sppClientBandWidthBenchmarkTestManager' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMarkManager
   },
   {
     name : 'SppServer_M_BandWidthBenchmarkTest' ,
-    detail : 'SppServer带宽性能测试' ,
+    detail : $r('app.string.bluetoothtest_str_sdkxncs_1') ,
     url : 'pages/subBenchmarkTestManager/sppServerBandWidthBenchmarkTestManager' ,
     image : $r('app.media.Benchmark') ,
     category : Category.BenchMarkManager
@@ -1487,14 +1487,14 @@ const TestComposition: BRTestComposition[] = [
 const GattAutoTestComposition: BRTestComposition[] = [
   {
     name : 'GattClientAutoTest' ,
-    detail : 'GattClient自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_gzdcs_3') ,
     url : 'pages/subAutoTest/subGattAutoTest/gattClientAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.GattAutoTest
   },
   {
     name : 'GattServerAutoTest' ,
-    detail : 'GattServer自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_gzdcs_4') ,
     url : 'pages/subAutoTest/subGattAutoTest/gattServerAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.GattAutoTest
@@ -1504,14 +1504,14 @@ const GattAutoTestComposition: BRTestComposition[] = [
 const SppAutoTestComposition: BRTestComposition[] = [
   {
     name : 'SppClientAutoTest' ,
-    detail : 'SppClient自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_szdcs_2') ,
     url : 'pages/subAutoTest/subSppAutoTest/sppClientAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.SppAutoTest
   },
   {
     name : 'SppServerAutoTest' ,
-    detail : 'SppServer自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_szdcs_3') ,
     url : 'pages/subAutoTest/subSppAutoTest/sppServerAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.SppAutoTest
@@ -1521,28 +1521,28 @@ const SppAutoTestComposition: BRTestComposition[] = [
 const ProfileAutoTestComposition: BRTestComposition[] = [
   {
     name : 'A2dpSourceAutoTest' ,
-    detail : 'A2dpSource自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_azdcs_1') ,
     url : 'pages/subAutoTest/subProfileAutoTest/a2dpSourceAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.ProfileAutoTest
   },
   {
     name : 'HFAudioGatewayAutoTest' ,
-    detail : 'HFAudioGateway自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_hzdcs_1') ,
     url : 'pages/subAutoTest/subProfileAutoTest/handsFreeAudioGatewayAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.ProfileAutoTest
   },
   {
     name : 'HitHostAutoTest' ,
-    detail : 'HitHost自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_hzdcs_3') ,
     url : 'pages/subAutoTest/subProfileAutoTest/hitHostAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.ProfileAutoTest
   },
   {
     name : 'PanNetworkAutoTest' ,
-    detail : 'PanNetwork自动测试' ,
+    detail : $r('app.string.bluetoothtest_str_pzdcs_2') ,
     url : 'pages/subAutoTest/subProfileAutoTest/panNetworkAutoTest' ,
     image : $r("app.media.AutoTestIcon") ,
     category : Category.ProfileAutoTest

@@ -21,14 +21,14 @@ const PAGE_URI_GET_SPP_SERVER_TEST = 'pages/subManualApiTest/subSppTest/sppServe
 
 export function testSppClient(): string {
   router.pushUrl({ url : PAGE_URI_GET_SPP_CLIENT_TEST })
-  let message = "跳转成功"
+  let message = $r('app.string.bluetoothtest_str_tzcg')
   promptAction.showToast({ message : message })
   return message
 }
 
 export function testSppServer(): string {
   router.pushUrl({ url : PAGE_URI_GET_SPP_SERVER_TEST })
-  let message = "跳转成功"
+  let message = $r('app.string.bluetoothtest_str_tzcg')
   promptAction.showToast({ message : message })
   return message
 }
