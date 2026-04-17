@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { PageTitle } from '../../Component/pageTitle';
 import { TestImageDisplay } from '../../Component/testImageDisplay';
@@ -54,7 +55,9 @@ struct BleFoundScenarioTest {
               .id('pages_subScenarioTest_bleFoundScenarioTest__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -76,7 +79,9 @@ struct BleFoundScenarioTest {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
@@ -113,11 +118,16 @@ struct BleFoundScenarioTest {
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Text($r('app.string.bluetoothtest_text_cjcsks')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            Text($r('app.string.bluetoothtest_text_cjcsks'))
+              .fontSize(ConfigData.VP_24)
+              .fontColor(0xffffff)
+              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_bleFoundScenarioTest__btn_0')
@@ -133,8 +143,12 @@ struct BleFoundScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_cjcsjs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_cjcsjs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_bleFoundScenarioTest__btn_1')
@@ -148,20 +162,20 @@ struct BleFoundScenarioTest {
             let bleFoundScenarioMessage = ""
             // 停止BLE扫描
             bleFoundScenarioMessage += BLEInterface.testStopBLEScan() + "\n"
-            console.log("testStopBLEScan success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testStopBLEScan success")
             //            self.changeIndex = arr[6]
             await sleep(1)
             // 关闭注册BLE查找状态变化
             bleFoundScenarioMessage += BLEInterface.testOnBLEDeviceFind() + "\n"
-            console.log("testOffBLEDeviceFind success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffBLEDeviceFind success")
             await sleep(1)
             //关闭注册状态变化
             bleFoundScenarioMessage += BrInterface.testOnStateChange() + "\n"
-            console.log("testOffStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffStateChange success")
             await sleep(1)
             //关蓝牙
             bleFoundScenarioMessage += BrInterface.testDisableBluetooth() + "\n"
-            console.log("testDisableBluetooth success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testDisableBluetooth success")
             //            self.changeIndex = arr[7]
             await sleep(1)
             AppStorage.setOrCreate("bleFoundScenarioMessage" , bleFoundScenarioMessage)
@@ -169,8 +183,12 @@ struct BleFoundScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_qkrz')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_qkrz'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_bleFoundScenarioTest__btn_2')

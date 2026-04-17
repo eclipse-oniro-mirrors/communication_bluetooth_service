@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import { PageTitle } from '../../Component/pageTitle';
@@ -59,7 +60,9 @@ struct SppServerScenarioTest {
               .id('pages_subScenarioTest_sppServerScenarioTest__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -81,7 +84,9 @@ struct SppServerScenarioTest {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
@@ -117,11 +122,16 @@ struct SppServerScenarioTest {
       .width(ConfigData.WH_100_100)
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Text($r('app.string.bluetoothtest_text_cjcsks')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            Text($r('app.string.bluetoothtest_text_cjcsks'))
+              .fontSize(ConfigData.VP_24)
+              .fontColor(0xffffff)
+              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_sppServerScenarioTest__btn_0')
@@ -137,65 +147,65 @@ struct SppServerScenarioTest {
             const arr = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ]
             // 注册状态变化
             sppServerScenarioMessage += BrInterface.testOnStateChange() + "\n"
-            console.log("testOnStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnStateChange success")
             self.changeIndex = arr[ 0 ]
             await sleep(1)
 
             // 开蓝牙
             sppServerScenarioMessage += BrInterface.testEnableBluetooth() + "\n";
-            console.log("testEnableBluetooth success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testEnableBluetooth success")
             self.changeIndex = arr[ 1 ]
             AppStorage.setOrCreate("sppServerScenarioMessage" , sppServerScenarioMessage)
             await sleep(2)
 
             // 获取状态
             sppServerScenarioMessage += BrInterface.testGetState() + "\n";
-            console.log("testGetState success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGetState success")
             self.changeIndex = arr[ 2 ]
             await sleep(1)
 
             // 设置扫描模式
             sppServerScenarioMessage += BrInterface.testSetBluetoothScanMode(4 , 0) + "\n"
-            console.log("testSetBluetoothScanMode success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testSetBluetoothScanMode success")
             self.changeIndex = arr[ 3 ]
             await sleep(1)
 
             // 获取扫描模式
             sppServerScenarioMessage += BrInterface.testGetBluetoothScanMode() + "\n"
-            console.log("testGetBluetoothScanMode success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGetBluetoothScanMode success")
             self.changeIndex = arr[ 4 ]
             await sleep(1)
 
             // 开启注册pin码变化
             sppServerScenarioMessage += BrInterface.testOnPinRequired() + "\n"
-            console.log("testOnPinRequired success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnPinRequired success")
             self.changeIndex = arr[ 5 ]
             await sleep(1)
 
             // Spp服务器创建
             sppServerScenarioMessage += SPPServerInterface.testSppServerCreateSafe() + "\n"
-            console.log("testAddService success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testAddService success")
             self.changeIndex = arr[ 6 ]
             AppStorage.setOrCreate("sppServerScenarioMessage" , sppServerScenarioMessage)
             await sleep(5)
 
             //获取当前连接状态
             sppServerScenarioMessage += BrInterface.testGetBtConnectionState() + "\n"
-            console.log("testGetBtConnectionState success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGetBtConnectionState success")
             self.changeIndex = arr[ 7 ]
             AppStorage.setOrCreate("sppServerScenarioMessage" , sppServerScenarioMessage)
             await sleep(1)
 
             // Spp服务器接受
             sppServerScenarioMessage += SPPServerInterface.testSppServerAccept() + "\n"
-            console.log("testSppServerAccept success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testSppServerAccept success")
             self.changeIndex = arr[ 8 ]
             AppStorage.setOrCreate("sppServerScenarioMessage" , sppServerScenarioMessage)
             await sleep(5)
 
             // Spp服务器读取打开
             sppServerScenarioMessage += SPPServerInterface.testSppServerReadOn() + "\n"
-            console.log("testOnCharacteristicRead success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnCharacteristicRead success")
             self.changeIndex = arr[ 9 ]
             await sleep(3)
             sppServerScenarioMessage += AppStorage.get("dataReadMessage") + "\n"
@@ -203,7 +213,7 @@ struct SppServerScenarioTest {
 
             // Spp服务器写入
             sppServerScenarioMessage += SPPServerInterface.testSppServerWrite() + "\n"
-            console.log("testOnCharacteristicWrite success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnCharacteristicWrite success")
             self.changeIndex = arr[ 10 ]
             await sleep(2)
             AppStorage.setOrCreate("sppServerScenarioMessage" , sppServerScenarioMessage)
@@ -212,8 +222,12 @@ struct SppServerScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_cjcsjs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_cjcsjs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_sppServerScenarioTest__btn_1')
@@ -229,30 +243,30 @@ struct SppServerScenarioTest {
             const arr = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ]
             // Spp服务器读取关闭
             sppServerScenarioMessage += SPPServerInterface.testSppServerReadOff() + "\n"
-            console.log("testOnCharacteristicRead success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnCharacteristicRead success")
             self.changeIndex = arr[ 11 ]
             await sleep(1)
             // Spp服务器关闭
             sppServerScenarioMessage += SPPServerInterface.testSppCloseServerSocket() + "\n"
-            console.log("testSppCloseServerSocket success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testSppCloseServerSocket success")
             self.changeIndex = arr[ 12 ]
             await sleep(1)
             // Spp客户端关闭
             sppServerScenarioMessage += SPPServerInterface.testSppCloseClientSocket() + "\n"
-            console.log("testSppCloseServerSocket success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testSppCloseServerSocket success")
             self.changeIndex = arr[ 13 ]
             await sleep(1)
             // 关闭注册pin码变化
             sppServerScenarioMessage += BrInterface.testOnPinRequired() + "\n"
-            console.log("testOffPinRequired success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffPinRequired success")
             await sleep(1)
             // 关闭注册状态变化
             sppServerScenarioMessage += BrInterface.testOnStateChange() + "\n"
-            console.log("testOffStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffStateChange success")
             await sleep(1)
             // 关蓝牙
             sppServerScenarioMessage += BrInterface.testDisableBluetooth() + "\n"
-            console.log("testDisableBluetooth success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testDisableBluetooth success")
             self.changeIndex = arr[ 14 ]
             AppStorage.setOrCreate("sppServerScenarioMessage" , sppServerScenarioMessage)
             await sleep(1)
@@ -260,8 +274,12 @@ struct SppServerScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_qkrz')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_qkrz'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_sppServerScenarioTest__btn_2')

@@ -83,7 +83,8 @@ struct BluetoothPairedDeviceInfo {
                   router.back();
                 }
               })
-            }.margin({ bottom : ConfigData.VP_24 });
+            }
+              .margin({ bottom : ConfigData.VP_24 });
           }
           .padding({ left : ConfigData.VP_24 , right : ConfigData.VP_24 })
           .height(ConfigData.WH_100_100)

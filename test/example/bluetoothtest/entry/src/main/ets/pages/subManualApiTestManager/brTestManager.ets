@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import { PageTitle } from '../../Component/pageTitle';
 import { TestImageDisplay } from '../../Component/testImageDisplay';
@@ -55,9 +56,9 @@ struct brTestManager {
       deviceName : this.pairingDevice.deviceName ,
       pinCode : this.pairPinCode ,
       action : (accept: boolean) => {
-        console.log("PairDialog start -------")
+        hilog.info(0x0000, 'BtTest', '%{public}s', "PairDialog start -------")
         this.confirmPairing(accept);
-        console.log("PairDialog end -------")
+        hilog.info(0x0000, 'BtTest', '%{public}s', "PairDialog end -------")
       }
     }) ,
     alignment : DialogAlignment.Bottom ,
@@ -77,7 +78,7 @@ struct brTestManager {
   }
 
   init() {
-    console.log("init-----------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "init-----------")
   }
 
   build() {
@@ -89,14 +90,16 @@ struct brTestManager {
           .id('pages_subManualApiTestManager_brTestManager__pt_0')
       }
 
-      Stack().height(ConfigData.VP_0_5).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.VP_0_5)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Text($r('app.string.bluetoothtest_text_mbsbm'))
           .fontSize(ConfigData.VP_20)
           .height(ConfigData.VP_50)
           .width(ConfigData.WH_100_100)
           .padding({ top : ConfigData.VP_10 , left : ConfigData.VP_10 })
-        TextInput({ text : this.pairedMac , placeholder : "请输入即将连接的设备MAC" })
+        TextInput({ text : this.pairedMac , placeholder : $r('app.string.bluetoothtest_str_qsrjjljdsbm') })
           .accessibilityLevel('yes')
           .id('pages_subManualApiTestManager_brTestManager__ti_0')
           .height(ConfigData.VP_50)
@@ -138,11 +141,11 @@ struct brTestManager {
    * Confirm pairing
    */
   confirmPairing(accept: boolean) {
-    console.log("confirmPairing start -----------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "confirmPairing start -----------")
     LogUtil.info(this.TAG_PAGE + 'confirmPairing : pairingDevice + ' + JSON.stringify(this.pairingDevice));
-    console.log("confirmPairing  -----------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "confirmPairing  -----------")
     this.controller.confirmPairing(this.pairingDevice.deviceId , accept);
-    console.log("confirmPairing end -----------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "confirmPairing end -----------")
   }
 
   /**
@@ -271,9 +274,9 @@ struct PairDialog {
           .flexGrow(1)
           .onClick(() => {
             this.dialogController.close();
-            console.log("onClick start --------------")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "onClick start --------------")
             this.action(true);
-            console.log("onClick end --------------")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "onClick end --------------")
           })
         }
         .width(ConfigData.WH_100_100)

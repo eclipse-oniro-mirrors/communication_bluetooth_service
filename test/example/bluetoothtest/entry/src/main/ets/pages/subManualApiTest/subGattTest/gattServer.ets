@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import { TestImageDisplay } from '../../../Component/testImageDisplay';
 import { TestData } from '../../../MainAbility/model/testData'
 import ConfigData from '../../../Utils/ConfigData';
@@ -79,7 +80,10 @@ struct GattServerSetting {
         Scroll() {
           Column() {
             Row() {
-              Text($r('app.string.bluetoothtest_text_fwu_1')).fontSize(ConfigData.VP_15).width(ConfigData.VP_70).padding({ left : ConfigData.VP_10 });
+              Text($r('app.string.bluetoothtest_text_fwu_1'))
+                .fontSize(ConfigData.VP_15)
+                .width(ConfigData.VP_70)
+                .padding({ left : ConfigData.VP_10 });
               TextInput({ text : this.curServiceUUID , placeholder : "input service UUID" })
                 .accessibilityLevel('yes')
                 .id('pages_subManualApiTest_subGattTest_gattServer__ti_0')
@@ -98,7 +102,10 @@ struct GattServerSetting {
 
             Column() {
               Row() {
-                Text($r('app.string.bluetoothtest_text_cu')).fontSize(ConfigData.VP_15).width(ConfigData.VP_70).padding({ left : ConfigData.VP_10 });
+                Text($r('app.string.bluetoothtest_text_cu'))
+                  .fontSize(ConfigData.VP_15)
+                  .width(ConfigData.VP_70)
+                  .padding({ left : ConfigData.VP_10 });
                 TextInput({ text : this.curCharacteristicUUID , placeholder : "input characteristic UUID" })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTest_subGattTest_gattServer__ti_1')
@@ -116,7 +123,10 @@ struct GattServerSetting {
               .alignItems(VerticalAlign.Center)
 
               Row() {
-                Text($r('app.string.bluetoothtest_text_cv')).fontSize(ConfigData.VP_15).width(ConfigData.VP_70).padding({ left : ConfigData.VP_10 });
+                Text($r('app.string.bluetoothtest_text_cv'))
+                  .fontSize(ConfigData.VP_15)
+                  .width(ConfigData.VP_70)
+                  .padding({ left : ConfigData.VP_10 });
                 TextInput({ text : this.curCharacteristicValue , placeholder : "input characteristic Value" })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTest_subGattTest_gattServer__ti_2')
@@ -140,7 +150,9 @@ struct GattServerSetting {
 
             Flex({ direction : FlexDirection.Column }) {
               Row() {
-                Text($r('app.string.bluetoothtest_text_du')).fontSize(ConfigData.VP_15).width(ConfigData.VP_70);
+                Text($r('app.string.bluetoothtest_text_du'))
+                  .fontSize(ConfigData.VP_15)
+                  .width(ConfigData.VP_70);
                 TextInput({ text : this.curDescriptorUUID , placeholder : "input descriptor UUID" })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTest_subGattTest_gattServer__ti_3')
@@ -158,7 +170,9 @@ struct GattServerSetting {
               .alignItems(VerticalAlign.Center)
 
               Row() {
-                Text($r('app.string.bluetoothtest_text_dv')).fontSize(ConfigData.VP_15).width(ConfigData.VP_70);
+                Text($r('app.string.bluetoothtest_text_dv'))
+                  .fontSize(ConfigData.VP_15)
+                  .width(ConfigData.VP_70);
                 TextInput({ text : this.curDescriptorValue , placeholder : "input descriptor Value" })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTest_subGattTest_gattServer__ti_4')
@@ -236,7 +250,9 @@ struct GattServerSetting {
                     }
                     AppStorage.setOrCreate('cbxInterval' , value);
                   })
-                Text($r('app.string.bluetoothtest_text_i_1')).fontSize(ConfigData.VP_17).width(ConfigData.VP_70);
+                    Text($r('app.string.bluetoothtest_text_i_1'))
+                      .fontSize(ConfigData.VP_17)
+                      .width(ConfigData.VP_70);
                 TextInput({ text : this.advSettings_interval , placeholder : "32~1600" })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTest_subGattTest_gattServer__ti_5')
@@ -267,7 +283,9 @@ struct GattServerSetting {
                     }
                     AppStorage.setOrCreate('cbxTxPower' , value);
                   })
-                Text($r('app.string.bluetoothtest_text_t')).fontSize(ConfigData.VP_17).width(ConfigData.VP_70)
+                    Text($r('app.string.bluetoothtest_text_t'))
+                      .fontSize(ConfigData.VP_17)
+                      .width(ConfigData.VP_70)
                 TextInput({ text : this.advSettings_txPower.toString() , placeholder : "input txPower" })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTest_subGattTest_gattServer__ti_6')
@@ -301,7 +319,9 @@ struct GattServerSetting {
                   })
                   .width(ConfigData.VP_30)
                   .margin({ left : ConfigData.HEIGHT_1_VP })
-                Text($r('app.string.bluetoothtest_text_c')).fontSize(ConfigData.VP_17).width(ConfigData.WH_80_100)
+                  Text($r('app.string.bluetoothtest_text_c'))
+                    .fontSize(ConfigData.VP_17)
+                    .width(ConfigData.WH_80_100)
               }
               .height(ConfigData.VP_40)
               .justifyContent(FlexAlign.Start)
@@ -314,7 +334,10 @@ struct GattServerSetting {
 
             Column() {
               Row() {
-                Text($r('app.string.bluetoothtest_text_fwu')).fontSize(ConfigData.VP_17).width(ConfigData.VP_60).padding({ left : ConfigData.VP_10 })
+                Text($r('app.string.bluetoothtest_text_fwu'))
+                  .fontSize(ConfigData.VP_17)
+                  .width(ConfigData.VP_60)
+                  .padding({ left : ConfigData.VP_10 })
                 TextInput({ text : this.advDataServiceUuids_serviceUuid , placeholder : "input serviceUuid" })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTest_subGattTest_gattServer__ti_7')
@@ -328,9 +351,13 @@ struct GattServerSetting {
               .width(ConfigData.WH_100_100)
 
               Column() {
-                Text($r('app.string.bluetoothtest_text_m_2')).fontSize(ConfigData.VP_17).width(ConfigData.WH_100_100)
+                Text($r('app.string.bluetoothtest_text_m_2'))
+                  .fontSize(ConfigData.VP_17)
+                  .width(ConfigData.WH_100_100)
                 Row() {
-                  Text($r('app.string.bluetoothtest_text_i')).fontSize(ConfigData.VP_17).width(ConfigData.VP_30)
+                  Text($r('app.string.bluetoothtest_text_i'))
+                    .fontSize(ConfigData.VP_17)
+                    .width(ConfigData.VP_30)
                   TextInput({
                     text : this.advDataManufactureData_manufactureId ,
                     placeholder : "input manufactureId(less than 8 digi)"
@@ -343,7 +370,10 @@ struct GattServerSetting {
                       AppStorage.setOrCreate('advDataManufactureData_manufactureId' , strInput)
                     })
                     .width(ConfigData.VP_100)
-                  Text($r('app.string.bluetoothtest_text_v')).fontSize(ConfigData.VP_17).width(ConfigData.VP_70).padding({ left : ConfigData.VP_10 })
+                    Text($r('app.string.bluetoothtest_text_v'))
+                      .fontSize(ConfigData.VP_17)
+                      .width(ConfigData.VP_70)
+                      .padding({ left : ConfigData.VP_10 })
                   TextInput({
                     text : this.advDataManufactureData_manufactureValue ,
                     placeholder : "input manufactureValue(less than 8 char)"
@@ -363,10 +393,14 @@ struct GattServerSetting {
               .borderColor($r("app.color.lead"))
 
               Column() {
-                Text($r('app.string.bluetoothtest_text_s')).fontSize(ConfigData.VP_17).width(ConfigData.WH_100_100)
+                Text($r('app.string.bluetoothtest_text_s'))
+                  .fontSize(ConfigData.VP_17)
+                  .width(ConfigData.WH_100_100)
                 Column() {
                   Row() {
-                    Text($r('app.string.bluetoothtest_text_s_1')).fontSize(ConfigData.VP_17).width(ConfigData.VP_70)
+                    Text($r('app.string.bluetoothtest_text_s_1'))
+                      .fontSize(ConfigData.VP_17)
+                      .width(ConfigData.VP_70)
                     TextInput({ text : '' + this.advDataServiceData_serviceUuid , placeholder : "input serviceUuid" })
                       .accessibilityLevel('yes')
                       .id('pages_subManualApiTest_subGattTest_gattServer__ti_10')
@@ -379,7 +413,9 @@ struct GattServerSetting {
                   }
 
                   Row() {
-                    Text($r('app.string.bluetoothtest_text_s_2')).fontSize(ConfigData.VP_17).width(ConfigData.VP_70)
+                    Text($r('app.string.bluetoothtest_text_s_2'))
+                      .fontSize(ConfigData.VP_17)
+                      .width(ConfigData.VP_70)
                     TextInput({
                       text : this.advDataServiceData_serviceValue ,
                       placeholder : "input manufactureValue(less than 8 char)"
@@ -415,7 +451,7 @@ struct GattServerSetting {
                     this.cbxAdvResponse = false;
                   }
                   AppStorage.setOrCreate('cbxAdvResponse' , value)
-                  console.log('cbxAdvResponse' , value)
+                  hilog.info(0x0000, 'BtTest', '%{public}s %{public}s', 'cbxAdvResponse', value)
                   promptAction.showToast({ message : value.toString() })
                 })
                 .width(ConfigData.VP_30)
@@ -430,7 +466,9 @@ struct GattServerSetting {
             .padding(ConfigData.VP_5);
             Column() {
               Row() {
-                Text($r('app.string.bluetoothtest_text_s_1')).fontSize(ConfigData.VP_17).width(ConfigData.VP_70) //.width(ConfigData.VP_40)
+                Text($r('app.string.bluetoothtest_text_s_1'))
+                  .fontSize(ConfigData.VP_17)
+                  .width(ConfigData.VP_70)//.width(ConfigData.VP_40)
                 TextInput({ text : this.advResponseServiceUuids_serviceUuid , placeholder : "input serviceUuid" })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTest_subGattTest_gattServer__ti_12')
@@ -443,11 +481,15 @@ struct GattServerSetting {
               }
 
               Column() {
-                Text($r('app.string.bluetoothtest_text_m_2')).fontSize(ConfigData.VP_17).width(ConfigData.WH_100_100)
+                Text($r('app.string.bluetoothtest_text_m_2'))
+                  .fontSize(ConfigData.VP_17)
+                  .width(ConfigData.WH_100_100)
                   .backgroundColor($r("app.color.lead"))
                 Column() {
                   Row() {
-                    Text($r('app.string.bluetoothtest_text_i')).fontSize(ConfigData.VP_17).width(ConfigData.VP_50)
+                    Text($r('app.string.bluetoothtest_text_i'))
+                      .fontSize(ConfigData.VP_17)
+                      .width(ConfigData.VP_50)
                     TextInput({ text : this.advResponseManufactureData_manufactureId ,
                       placeholder : "input manufactureId(less than 8 char)" })
                       .accessibilityLevel('yes')
@@ -461,7 +503,9 @@ struct GattServerSetting {
                   }
 
                   Row() {
-                    Text($r('app.string.bluetoothtest_text_v')).fontSize(ConfigData.VP_17).width(ConfigData.VP_50)
+                    Text($r('app.string.bluetoothtest_text_v'))
+                      .fontSize(ConfigData.VP_17)
+                      .width(ConfigData.VP_50)
                     TextInput({ text : this.advResponseManufactureData_manufactureValue ,
                       placeholder : "input manufactureValue(less than 8 char)" })
                       .accessibilityLevel('yes')
@@ -480,11 +524,15 @@ struct GattServerSetting {
               .borderColor($r("app.color.lead"))
 
               Column() {
-                Text($r('app.string.bluetoothtest_text_s')).fontSize(ConfigData.VP_17).width(ConfigData.WH_100_100)
+                Text($r('app.string.bluetoothtest_text_s'))
+                  .fontSize(ConfigData.VP_17)
+                  .width(ConfigData.WH_100_100)
                   .backgroundColor($r("app.color.lead"))
                 Column() {
                   Row() {
-                    Text($r('app.string.bluetoothtest_text_s_1')).fontSize(ConfigData.VP_17).width(ConfigData.VP_70)
+                    Text($r('app.string.bluetoothtest_text_s_1'))
+                      .fontSize(ConfigData.VP_17)
+                      .width(ConfigData.VP_70)
                     TextInput({
                       text : '' + this.advResponseServiceData_serviceUuid ,
                       placeholder : "input serviceUuid"
@@ -500,7 +548,9 @@ struct GattServerSetting {
                   }
 
                   Row() {
-                    Text($r('app.string.bluetoothtest_text_s_2')).fontSize(ConfigData.VP_17).width(ConfigData.VP_70)
+                    Text($r('app.string.bluetoothtest_text_s_2'))
+                      .fontSize(ConfigData.VP_17)
+                      .width(ConfigData.VP_70)
                     TextInput({
                       text : this.advResponseServiceData_serviceValue ,
                       placeholder : "input manufactureValue(less than 8 char)"
@@ -687,7 +737,9 @@ struct GattServer {
           .id('pages_subManualApiTest_subGattTest_gattServer__pt_0')
       }
 
-      Stack().height(ConfigData.VP_0_5).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.VP_0_5)
+        .backgroundColor($r('app.color.black'));
       Row() {
         Text($r('app.string.bluetoothtest_text_g_1'))
           .fontSize(ConfigData.VP_20)
@@ -752,7 +804,9 @@ struct GattServer {
             .height(ConfigData.VP_160)
             .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
 
-            Stack().height(ConfigData.VP_0_25).backgroundColor($r('app.color.black'));
+            Stack()
+              .height(ConfigData.VP_0_25)
+              .backgroundColor($r('app.color.black'));
             Column() {
               Text($r('app.string.bluetoothtest_text_gncs'))
                 .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_10 })

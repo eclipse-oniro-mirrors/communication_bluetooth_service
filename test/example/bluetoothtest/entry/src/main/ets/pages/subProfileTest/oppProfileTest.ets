@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import { PairDevices, testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
 import { ContentTable } from '../../Component/contentTable';
@@ -60,13 +61,13 @@ struct OppProfileTest {
 
   getPairDevice() {
     let macs = bluetooth.getPairedDevices();
-    console.log("OppSend getPairDevice macs: " + JSON.stringify(macs));
+    hilog.info(0x0000, 'BtTest', '%{public}s', "OppSend getPairDevice macs: " + JSON.stringify(macs));
     for ( let i = 0 ; i < macs.length ; i ++ ) {
       let name = bluetooth.getRemoteDeviceName(macs[ i ]);
-      console.log("OppSend getPairDevice name: " + JSON.stringify(name));
+      hilog.info(0x0000, 'BtTest', '%{public}s', "OppSend getPairDevice name: " + JSON.stringify(name));
       this.pairDevices.push({ id : macs[ i ] , name : name } as PairDevices);
     }
-    console.log("OppSend getPairDevice pairDevices: " + JSON.stringify(this.pairDevices));
+    hilog.info(0x0000, 'BtTest', '%{public}s', "OppSend getPairDevice pairDevices: " + JSON.stringify(this.pairDevices));
   }
 
   build() {
@@ -79,7 +80,9 @@ struct OppProfileTest {
           .id('pages_subProfileTest_oppProfileTest__pt_0')
         }
 
-        Stack().height(ConfigData.VP_0_5).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.VP_0_5)
+          .backgroundColor($r('app.color.black'));
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
           .margin({ top : ConfigData.VP_10 })
           .fontSize(ConfigData.VP_20)
@@ -148,7 +151,9 @@ struct OppProfileTest {
             .scrollBar(BarState.Auto)
           }
 
-          Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+          Stack()
+            .height(ConfigData.HEIGHT_1_VP)
+            .backgroundColor($r('app.color.black'));
 
           Scroll() {
             Column() {
@@ -197,11 +202,11 @@ struct OppProfileTest {
   onPageShow() {
     this.bluetoothState = btProfileModel.getBluetoothState();
     if ( this.bluetoothState == btProfileModel.BLUETOOTH_STATE_OFF ) {
-      this.profileNotExist = "蓝牙未打开，请先开启蓝牙后再使用！"
+      this.profileNotExist = $r('app.string.bluetoothtest_str_lywdkqxkqlyhzsy')
       return;
     }
     this.hasProfile = btProfileModel.hasProfile(btProfileModel.PROFILE_OPP);
-    console.log("bt_test pageType: " + this.pageType);
+    hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test pageType: " + this.pageType);
     switch ( this.pageType ) {
     //      case 0:
     //        this.title = $r('app.string.a2dp_sink_profile_test_title');
@@ -276,7 +281,7 @@ struct OppProfileTest {
     promptAction.showToast({ message : this.profileType.toString() })
     this.hasProfile = btProfileModel.hasProfile(this.profileType);
     if ( this.hasProfile ) {
-      console.log("bt_test registered connectionStateChange type: " + this.profileType);
+      hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test registered connectionStateChange type: " + this.profileType);
       if (this.profileType === btProfileModel.PROFILE_A2DP_SOURCE ||
         this.profileType === btProfileModel.PROFILE_HANDS_FREE_AUDIO_GATEWAY) {
         (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).on("connectionStateChange" , (date: bluetoothManager.StateChangeParam) => {
@@ -295,6 +300,6 @@ struct OppProfileTest {
         (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).off("connectionStateChange");
       }
     }
-    console.log("bt_test Ability end");
+    hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test Ability end");
   }
 }

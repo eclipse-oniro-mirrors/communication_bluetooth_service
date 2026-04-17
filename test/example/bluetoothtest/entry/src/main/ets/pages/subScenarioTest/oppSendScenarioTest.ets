@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { PairDevices, testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
@@ -50,13 +51,13 @@ struct oppSendScenarioTest {
 
   getPairDevice() {
     let macs = bluetooth.getPairedDevices();
-    console.log("OppSend getPairDevice macs: " + JSON.stringify(macs));
+    hilog.info(0x0000, 'BtTest', '%{public}s', "OppSend getPairDevice macs: " + JSON.stringify(macs));
     for ( let i = 0 ; i < macs.length ; i ++ ) {
       let name = bluetooth.getRemoteDeviceName(macs[ i ]);
-      console.log("OppSend getPairDevice name: " + JSON.stringify(name));
+      hilog.info(0x0000, 'BtTest', '%{public}s', "OppSend getPairDevice name: " + JSON.stringify(name));
       this.pairDevices.push({ id : macs[ i ] , name : name });
     }
-    console.log("OppSend getPairDevice pairDevices: " + JSON.stringify(this.pairDevices));
+    hilog.info(0x0000, 'BtTest', '%{public}s', "OppSend getPairDevice pairDevices: " + JSON.stringify(this.pairDevices));
   }
 
   build() {
@@ -68,7 +69,9 @@ struct oppSendScenarioTest {
               .id('pages_subScenarioTest_oppSendScenarioTest__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -109,7 +112,9 @@ struct oppSendScenarioTest {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
 
         Column() {
           Text($r('app.string.bluetoothtest_text_yxzdsbdlymdz'))
@@ -121,12 +126,17 @@ struct oppSendScenarioTest {
             .width(ConfigData.PCT_70)
             .borderRadius(ConfigData.VP_5)
             .backgroundColor($r("app.color.moon"))
-        }.height(ConfigData.PCT_15)
+        }
+          .height(ConfigData.PCT_15)
 
         Column() {
-          Text($r('app.string.bluetoothtest_text_qsrxyfsdwjmcrtt')).fontSize(ConfigData.VP_18).fontWeight(FontWeight.Bold)
-          Text($r('app.string.bluetoothtest_text_zwjbxzdblmlx')).fontSize(ConfigData.VP_18).fontWeight(FontWeight.Bold)
-          TextInput({ placeholder : "文件名称" })
+          Text($r('app.string.bluetoothtest_text_qsrxyfsdwjmcrtt'))
+            .fontSize(ConfigData.VP_18)
+            .fontWeight(FontWeight.Bold)
+          Text($r('app.string.bluetoothtest_text_zwjbxzdblmlx'))
+            .fontSize(ConfigData.VP_18)
+            .fontWeight(FontWeight.Bold)
+          TextInput({ placeholder : $r('app.string.bluetoothtest_str_wjmc') })
             .accessibilityLevel('yes')
             .id('pages_subScenarioTest_oppSendScenarioTest__ti_0')
             .fontSize(ConfigData.VP_20)
@@ -136,9 +146,12 @@ struct oppSendScenarioTest {
                 this.fileName = str;
                 this.fileType = strs[ 1 ];
               }
-              this.oppSendScenarioMessage = "需要发送的文件为：/data/bluetooth/log/" + str + "\n"
-            }).width(ConfigData.PCT_70).borderRadius(ConfigData.HEIGHT_1_VP)
-        }.height(ConfigData.PCT_20)
+              this.oppSendScenarioMessage = $r('app.string.bluetoothtest_str_xyfsdwjwdbl') + str + "\n"
+            })
+            .width(ConfigData.PCT_70)
+            .borderRadius(ConfigData.HEIGHT_1_VP)
+        }
+          .height(ConfigData.PCT_20)
 
         Scroll() {
           Column() {
@@ -155,8 +168,8 @@ struct oppSendScenarioTest {
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
-            .accessibilityLevel('yes')
-            .id('pages_subScenarioTest_oppSendScenarioTest__li_1')
+              .accessibilityLevel('yes')
+              .id('pages_subScenarioTest_oppSendScenarioTest__li_1')
             }
             .height(ConfigData.WH_80_100)
             .width(ConfigData.WH_90_100)
@@ -174,7 +187,9 @@ struct oppSendScenarioTest {
       .width(ConfigData.WH_100_100)
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
 
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
@@ -196,14 +211,14 @@ struct oppSendScenarioTest {
                   this.oppProfile.sendFile(this.serverMac , fileHolders).then(() => {
                     let result: boolean = true;
                     if ( result ) {
-                      this.oppSendScenarioMessage += "opp发送文件成功！ result: " + JSON.stringify(result)
+                      this.oppSendScenarioMessage += $r('app.string.bluetoothtest_str_ofswjcgr') + JSON.stringify(result)
                     } else {
-                      this.oppSendScenarioMessage += "opp发送文件失败， result: " + JSON.stringify(result) +
-                        "; 请核对文件名称或文件路径或者设备配对情况"
+                      this.oppSendScenarioMessage += $r('app.string.bluetoothtest_str_ofswjsbr') + JSON.stringify(result) +
+                        $r('app.string.bluetoothtest_str_qhdwjmchwjljhzsbpdqk')
                     }
                   })
                 } catch( error ) {
-                  this.oppSendScenarioMessage += "opp发送文件失败，err :" + JSON.stringify(error)
+                  this.oppSendScenarioMessage += $r('app.string.bluetoothtest_str_ofswjsbe') + JSON.stringify(error)
                 }
                 testLog(this.oppSendScenarioMessage);
                 AppStorage.setOrCreate("oppSendScenarioMessage" , this.oppSendScenarioMessage)
@@ -226,5 +241,5 @@ struct oppSendScenarioTest {
 
 export function testLog(logStr: string) {
   promptAction.showToast({ message : logStr })
-  console.log(logStr)
+  hilog.info(0x0000, 'BtTest', '%{public}s', logStr)
 }

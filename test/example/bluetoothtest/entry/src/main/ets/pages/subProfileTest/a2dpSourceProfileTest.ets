@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
 import { ContentTable } from '../../Component/contentTable';
@@ -63,7 +64,9 @@ struct A2dpSourceProfileTest {
           .id('pages_subProfileTest_a2dpSourceProfileTest__pt_0')
         }
 
-        Stack().height(ConfigData.VP_0_5).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.VP_0_5)
+          .backgroundColor($r('app.color.black'));
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
           .margin({ top : ConfigData.VP_10 })
           .fontSize(ConfigData.VP_20)
@@ -77,7 +80,7 @@ struct A2dpSourceProfileTest {
               .fontSize("17")
               .width(ConfigData.VP_110)
               .margin(ConfigData.VP_5)
-            TextInput({ text : JSON.stringify(this.deviceId) , placeholder : "请输入需要连接的deviceId" })
+            TextInput({ text : JSON.stringify(this.deviceId) , placeholder : $r('app.string.bluetoothtest_str_qsrxyljdd') })
               .accessibilityLevel('yes')
               .id('pages_subProfileTest_a2dpSourceProfileTest__ti_0')
               .fontSize(ConfigData.VP_17)
@@ -129,14 +132,14 @@ struct A2dpSourceProfileTest {
 
   onPageShow() {
     this.bluetoothState = btProfileModel.getBluetoothState();
-    console.log("bluetoothState:" + this.bluetoothState)
+    hilog.info(0x0000, 'BtTest', '%{public}s', "bluetoothState:" + this.bluetoothState)
     if ( this.bluetoothState == btProfileModel.BLUETOOTH_STATE_OFF ) {
-      this.profileNotExist = "蓝牙未打开，请先开启蓝牙后再使用！"
+      this.profileNotExist = $r('app.string.bluetoothtest_str_lywdkqxkqlyhzsy')
       return;
     }
     this.hasProfile = btProfileModel.hasProfile(btProfileModel.PROFILE_A2DP_SOURCE);
-    console.log("bt_test pageType: " + this.pageType);
-    console.log("hasProfile2: " + this.hasProfile);
+    hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test pageType: " + this.pageType);
+    hilog.info(0x0000, 'BtTest', '%{public}s', "hasProfile2: " + this.hasProfile);
     switch ( this.pageType ) {
     //      case 0:
     //        this.title = $r('app.string.a2dp_sink_profile_test_title');
@@ -211,7 +214,7 @@ struct A2dpSourceProfileTest {
     promptAction.showToast({ message : this.profileType.toString() })
     this.hasProfile = btProfileModel.hasProfile(this.profileType);
     if ( this.hasProfile ) {
-      console.log("bt_test registered connectionStateChange type: " + this.profileType);
+      hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test registered connectionStateChange type: " + this.profileType);
       (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).on("connectionStateChange" , (date: bluetooth.StateChangeParam) => {
         this.connectionStateInfo = JSON.stringify(date);
         this.btConnectionState = date.state;
@@ -224,6 +227,6 @@ struct A2dpSourceProfileTest {
     if ( this.hasProfile ) {
       (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).off("connectionStateChange");
     }
-    console.log("bt_test Ability end");
+    hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test Ability end");
   }
 }

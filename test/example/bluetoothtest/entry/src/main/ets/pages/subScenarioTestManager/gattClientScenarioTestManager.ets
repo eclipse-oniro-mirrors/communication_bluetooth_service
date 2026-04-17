@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import { PageTitle } from '../../Component/pageTitle';
@@ -62,7 +63,9 @@ struct GattClientScenarioTestManager {
               .id('pages_subScenarioTestManager_gattClientScenarioTestManager__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -84,7 +87,9 @@ struct GattClientScenarioTestManager {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
@@ -121,11 +126,16 @@ struct GattClientScenarioTestManager {
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Text($r('app.string.bluetoothtest_text_cjcsks')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            Text($r('app.string.bluetoothtest_text_cjcsks'))
+              .fontSize(ConfigData.VP_24)
+              .fontColor(0xffffff)
+              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTestManager_gattClientScenarioTestManager__btn_0')
@@ -142,63 +152,63 @@ struct GattClientScenarioTestManager {
 
             // 开启注册状态变化
             gattClientScenarioMessage += BrManagerInterface.testOnStateChangeManager() + "\n"
-            console.log("testOnStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnStateChange success")
             self.changeIndex = arr[ 0 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
 
             // 开蓝牙
             gattClientScenarioMessage += BrManagerInterface.testEnableBluetoothManager() + "\n";
-            console.log("testEnableBluetooth success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testEnableBluetooth success")
             self.changeIndex = arr[ 1 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(2)
 
             // 获取状态
             gattClientScenarioMessage += BrManagerInterface.testGetStateManager() + "\n";
-            console.log("testGetState success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGetState success")
             self.changeIndex = arr[ 2 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
 
             // 创建Gatt客户端
             gattClientScenarioMessage += GattClientManagerInterface.testCreateGattClientManager() + "\n"
-            console.log("testCreateGattClient success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testCreateGattClient success")
             self.changeIndex = arr[ 3 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(2)
 
             //开启Ble连接状态变化
             gattClientScenarioMessage += GattClientManagerInterface.testOnBLEConnectionStateChangeManager() + "\n"
-            console.log("testOnBLEConnectionStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnBLEConnectionStateChange success")
             self.changeIndex = arr[ 4 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
 
             // 连接
             gattClientScenarioMessage += GattClientManagerInterface.testConnectManager() + "\n"
-            console.log("testConnect success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testConnect success")
             self.changeIndex = arr[ 5 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(5)
 
             // 设置通知特性更改
             gattClientScenarioMessage += GattClientManagerInterface.testSetNotifyCharacteristicChangedManager() + "\n"
-            console.log("testSetNotifyCharacteristicChanged success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testSetNotifyCharacteristicChanged success")
             self.changeIndex = arr[ 6 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
 
             // 开启BLE特征值变化
             gattClientScenarioMessage += GattClientManagerInterface.testOnBLECharacteristicChangeManager() + "\n"
-            console.log("testOnBLECharacteristicChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnBLECharacteristicChange success")
             self.changeIndex = arr[ 7 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
 
             // 获取服务callback
             gattClientScenarioMessage += GattClientManagerInterface.testGetServicesCallbackManager() + "\n"
-            console.log("testGetServicesCallback success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGetServicesCallback success")
             self.changeIndex = arr[ 8 ]
             gattClientScenarioMessage += AppStorage.get("getServices") + "\n"
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
@@ -206,7 +216,7 @@ struct GattClientScenarioTestManager {
 
             // 读取特征值callback
             gattClientScenarioMessage += GattClientManagerInterface.testReadCharacteristicValueCallbackManager() + "\n"
-            console.log("testReadCharacteristicValueCallback success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testReadCharacteristicValueCallback success")
             self.changeIndex = arr[ 9 ]
             gattClientScenarioMessage += AppStorage.get("read_CharacteristicValue") + "\n"
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
@@ -214,14 +224,14 @@ struct GattClientScenarioTestManager {
 
             // 读取描述符值callback
             gattClientScenarioMessage += GattClientManagerInterface.testReadDescriptorValueCallbackManager() + "\n"
-            console.log("testReadDescriptorValueCallback success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testReadDescriptorValueCallback success")
             self.changeIndex = arr[ 10 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
 
             // 获取设备名称callback
             gattClientScenarioMessage += GattClientManagerInterface.testGetDeviceNameCallbackManager() + "\n"
-            console.log("testGetDeviceNameCallback success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGetDeviceNameCallback success")
             self.changeIndex = arr[ 11 ]
             gattClientScenarioMessage += AppStorage.get("deviceName") + "\n"
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
@@ -229,7 +239,7 @@ struct GattClientScenarioTestManager {
 
             // 获取Rssi值callback
             gattClientScenarioMessage += GattClientManagerInterface.testGetRssiValueCallbackManager() + "\n"
-            console.log("testGetRssiValueCallback success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGetRssiValueCallback success")
             self.changeIndex = arr[ 12 ]
             gattClientScenarioMessage += AppStorage.get("Rssi") + "\n"
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
@@ -237,8 +247,12 @@ struct GattClientScenarioTestManager {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_cjcsjs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_cjcsjs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTestManager_gattClientScenarioTestManager__btn_1')
@@ -254,39 +268,39 @@ struct GattClientScenarioTestManager {
             let gattClientScenarioMessage = ""
             // 关闭BLE特征值变化
             gattClientScenarioMessage += GattClientManagerInterface.testOnBLECharacteristicChangeManager() + "\n"
-            console.log("testOffBLECharacteristicChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffBLECharacteristicChange success")
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
 
             // 取消连接
             gattClientScenarioMessage += GattClientManagerInterface.testDisconnectManager() + "\n"
-            console.log("testDisconnect success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testDisconnect success")
             self.changeIndex = arr[ 13 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
 
             //关闭Ble连接状态变化
             gattClientScenarioMessage += GattClientManagerInterface.testOnBLEConnectionStateChangeManager() + "\n"
-            console.log("testOffBLEConnectionStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffBLEConnectionStateChange success")
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
 
             //关闭客户端
             gattClientScenarioMessage += GattClientManagerInterface.testGattClientCloseManager() + "\n"
-            console.log("testGattClientClose success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGattClientClose success")
             self.changeIndex = arr[ 14 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
 
             // 关闭注册状态变化
             gattClientScenarioMessage += BrManagerInterface.testOnStateChangeManager() + "\n"
-            console.log("testOffStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffStateChange success")
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
 
             //关蓝牙
             gattClientScenarioMessage += BrManagerInterface.testDisableBluetoothManager() + "\n"
-            console.log("testDisableBluetooth success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testDisableBluetooth success")
             self.changeIndex = arr[ 15 ]
             AppStorage.setOrCreate("gattClientScenarioMessage" , gattClientScenarioMessage)
             await sleep(1)
@@ -295,8 +309,12 @@ struct GattClientScenarioTestManager {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_qkrz')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_qkrz'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTestManager_gattClientScenarioTestManager__btn_2')

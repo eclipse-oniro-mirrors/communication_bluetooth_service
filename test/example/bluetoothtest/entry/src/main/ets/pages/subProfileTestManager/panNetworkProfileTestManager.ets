@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
 import { initPanNetworkProfileManagerApiData } from '../../MainAbility/model/testDataModelsManager'
@@ -64,7 +65,9 @@ struct PanNetWorkManagerTest {
           .id('pages_subProfileTestManager_panNetworkProfileTestManager__pt_0')
         }
 
-        Stack().height(ConfigData.VP_0_5).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.VP_0_5)
+          .backgroundColor($r('app.color.black'));
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
           .margin({ top : ConfigData.VP_10 })
           .fontSize(ConfigData.VP_20)
@@ -76,7 +79,7 @@ struct PanNetWorkManagerTest {
           Row() {
             Text($r('app.string.bluetoothtest_text_xzzzljdsbw'))
               .fontSize("17").width(ConfigData.VP_110).margin(ConfigData.VP_5)
-            TextInput({ text : JSON.stringify(this.deviceId) , placeholder : "请输入需要连接的deviceId" })
+            TextInput({ text : JSON.stringify(this.deviceId) , placeholder : $r('app.string.bluetoothtest_str_qsrxyljdd') })
               .accessibilityLevel('yes')
               .id('pages_subProfileTestManager_panNetworkProfileTestManager__ti_0')
               .fontSize(ConfigData.VP_17)
@@ -129,11 +132,11 @@ struct PanNetWorkManagerTest {
   onPageShow() {
     this.bluetoothState = btmProfileModel.getBluetoothState();
     if ( this.bluetoothState == btmProfileModel.BLUETOOTH_STATE_OFF ) {
-      this.profileNotExist = "蓝牙未打开，请先开启蓝牙后再使用！"
+      this.profileNotExist = $r('app.string.bluetoothtest_str_lywdkqxkqlyhzsy')
       return;
     }
     this.hasProfile = btmProfileModel.hasProfile(btmProfileModel.PROFILE_PAN_NETWORK);
-    console.log("bt_test pageType: " + this.pageType);
+    hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test pageType: " + this.pageType);
     switch ( this.pageType ) {
     //      case 0:
     //        this.title = $r('app.string.a2dp_sink_profile_test_title');
@@ -202,7 +205,7 @@ struct PanNetWorkManagerTest {
     promptAction.showToast({ message : this.profileType.toString() })
     this.hasProfile = btmProfileModel.hasProfile(this.profileType);
     if ( this.hasProfile ) {
-      console.log("bt_test registered connectionStateChange type: " + this.profileType);
+      hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test registered connectionStateChange type: " + this.profileType);
       btmProfileModel.getProfile(this.profileType)!.on("connectionStateChange" , (date: bluetoothManager.StateChangeParam) => {
         this.connectionStateInfo = JSON.stringify(date);
         this.btConnectionState = date.state;
@@ -215,6 +218,6 @@ struct PanNetWorkManagerTest {
     if ( this.hasProfile ) {
       btmProfileModel.getProfile(this.profileType)!.off("connectionStateChange");
     }
-    console.log("bt_test Ability end");
+    hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test Ability end");
   }
 }

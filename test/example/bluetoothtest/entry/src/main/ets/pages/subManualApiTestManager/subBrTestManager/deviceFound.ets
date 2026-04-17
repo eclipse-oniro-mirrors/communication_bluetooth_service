@@ -72,7 +72,7 @@ struct deviceFound {
             md : { span : 0 , offset : 0 } , lg : { span : 2 , offset : 0 }
           });
           Column({ space : ConfigData.VP_12 }) {
-            PageTitle({ detail : '扫描蓝牙设备' })
+            PageTitle({ detail : $r('app.string.bluetoothtest_str_smlysb') })
             Scroll() {
               Column() {
                 if ( this.isOn ) {
@@ -407,9 +407,9 @@ export struct PairedItem {
       .onClick(() => {
         let ret = bluetooth.cancelPairedDevice(this.mac)
         if ( ret ) {
-          promptAction.showToast({ message : "取消配对成功！" })
+          promptAction.showToast({ message : $r('app.string.bluetoothtest_str_qxpdcg') })
         } else {
-          promptAction.showToast({ message : "取消配对失败！" })
+          promptAction.showToast({ message : $r('app.string.bluetoothtest_str_qxpdsb') })
         }
       })
     }
@@ -427,7 +427,7 @@ export struct AvailableDeviceComponent {
   @StorageLink('bluetoothAvailableDevices') availableDevices: BluetoothDevice[] = [];
   @State pairPinCode: string = '';
   private pairingDevice: BluetoothDevice = undefined;
-  @State pairDeviceInfo: string = '未配对';
+  @State pairDeviceInfo: string = $r('app.string.bluetoothtest_str_wpd');
   pairDialog: CustomDialogController = new CustomDialogController({
     builder : PairDialog({
       deviceName : this.pairingDevice.deviceName ,

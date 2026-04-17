@@ -23,14 +23,14 @@ import { TitleComponent } from '../../../Component/titleComponent';
 @Entry
 @Component
 struct profileConnState {
-  @State message: string = "请点击选择PROFILE TYPE";
+  @State message: string = $r('app.string.bluetoothtest_str_qdjxzpt');
   @State currentClick: number = - 1;
   @State profileId: number = - 1;
   @State profileType: string = '';
 
   build() {
     Column() {
-      PageTitle({ detail : '选择PROFILE ID' })
+      PageTitle({ detail : $r('app.string.bluetoothtest_str_xzpi') })
       Column() {
         List() {
           ListItem() {

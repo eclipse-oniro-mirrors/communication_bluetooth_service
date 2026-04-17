@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { PageTitle } from '../../Component/pageTitle';
 import { TestImageDisplay } from '../../Component/testImageDisplay';
@@ -44,7 +45,9 @@ struct BrFoundScenarioTest {
               .id('pages_subScenarioTest_brFoundScenarioTest__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -66,7 +69,9 @@ struct BrFoundScenarioTest {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
@@ -103,11 +108,16 @@ struct BrFoundScenarioTest {
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Text($r('app.string.bluetoothtest_text_cjcsks')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            Text($r('app.string.bluetoothtest_text_cjcsks'))
+              .fontSize(ConfigData.VP_24)
+              .fontColor(0xffffff)
+              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_brFoundScenarioTest__btn_0')
@@ -118,14 +128,18 @@ struct BrFoundScenarioTest {
           .margin({ top : ConfigData.VP_15 , left : ConfigData.VP_20 })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
-            promptAction.showToast({ message : '开始Br蓝牙发现场景测试' })
+            promptAction.showToast({ message : $r('app.string.bluetoothtest_str_ksblyfxcjcs') })
             this.forLoop()
           })
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_cjcsjs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+              Text($r('app.string.bluetoothtest_text_cjcsjs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_brFoundScenarioTest__btn_1')
@@ -139,16 +153,16 @@ struct BrFoundScenarioTest {
             let brFoundScenarioMessage = ""
             // 停止蓝牙发现
             brFoundScenarioMessage += BrInterface.testStopBluetoothDiscovery() + "\n"
-            console.log("testStopBluetoothDiscovery success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testStopBluetoothDiscovery success")
             //            self.changeIndex = arr[8]
             await sleep(1)
             //关闭注册状态变化
             brFoundScenarioMessage += BrInterface.testOnStateChange() + "\n"
-            console.log("testOffStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffStateChange success")
             await sleep(1)
             //关蓝牙
             brFoundScenarioMessage += BrInterface.testDisableBluetooth() + "\n"
-            console.log("testDisableBluetooth success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testDisableBluetooth success")
             //            self.changeIndex = arr[9]
             await sleep(1)
             AppStorage.setOrCreate("brFoundScenarioMessage" , brFoundScenarioMessage)
@@ -156,8 +170,12 @@ struct BrFoundScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_qkrz')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+              Text($r('app.string.bluetoothtest_text_qkrz'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_brFoundScenarioTest__btn_2')
@@ -182,16 +200,16 @@ struct BrFoundScenarioTest {
   }
 
   subscribeBluetoothDeviceFind(): string {
-    let message = "subscribeBluetoothDeviceFind test"
-    console.log("subscribeBluetoothDeviceFind")
+    let message = $r('app.string.bluetoothtest_str_st_1')
+    hilog.info(0x0000, 'BtTest', '%{public}s', "subscribeBluetoothDeviceFind")
     BluetoothModel.subscribeBluetoothDeviceFind((deviceIds: Array<string>) => {
-      console.log('available bluetooth devices changed.');
+      hilog.info(0x0000, 'BtTest', '%{public}s', 'available bluetooth devices changed.');
       deviceIds?.forEach(deviceId => {
         // let device = brFoundDevices.find((availableDevice) => {
         //   return availableDevice.deviceId === deviceId
         // })
-        console.log('available bluetooth find [' + deviceId + '] ')
-        let message = ('available bluetooth find [' + deviceId + ']  ')
+        hilog.info(0x0000, 'BtTest', '%{public}s', 'available bluetooth find [' + deviceId + '] ')
+        let message = ($r('app.string.bluetoothtest_str_abf') + deviceId + $r('app.string.bluetoothtest_str_str'))
         promptAction.showToast({ message : message })
         AppStorage.setOrCreate('bluetoothAvailableDevices' , deviceIds);
       })
