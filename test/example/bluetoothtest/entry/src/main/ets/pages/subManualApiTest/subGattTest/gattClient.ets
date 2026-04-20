@@ -12,16 +12,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../../Utils/resString';
+import { resStr} from '../../../Utils/resString';
 
 
-import { testItemFromRouterOrPlaceholder } from '../../../Utils/common'
-import { TestImageDisplay } from '../../../Component/testImageDisplay';
+import { testItemFromRouterOrPlaceholder} from '../../../Utils/common'
+import { TestImageDisplay} from '../../../Component/testImageDisplay';
 import ConfigData from '../../../Utils/ConfigData';
-import { initGattClientApiData } from '../../../MainAbility/model/testDataModels'
-import { PageTitle } from '../../../Component/pageTitle';
-import { ContentTable } from '../../../Component/contentTable';
-import { TestData } from '../../../MainAbility/model/testData'
+import { initGattClientApiData} from '../../../MainAbility/model/testDataModels'
+import { PageTitle} from '../../../Component/pageTitle';
+import { ContentTable} from '../../../Component/contentTable';
+import { TestData} from '../../../MainAbility/model/testData'
 
 const G_MAC = '6c:96:d7:3d:87:6f'
 
@@ -31,7 +31,7 @@ const G_MAC = '6c:96:d7:3d:87:6f'
 
 @Component
 struct GattClientSetting {
-  private peripheralDeviceId = G_MAC; // '08:FB:EA:1B:3C:63';DaYu200//
+  private peripheralDeviceId = G_MAC;// '08:FB:EA:1B:3C:63';DaYu200//
   @State isOnBLECharacteristicChangeClick: boolean = false;
   @State bleCharacteristicChangeInfo: string = '';
   @State serviceUUID: string = '00001801-0000-1000-8000-00805f9b34fb';
@@ -40,30 +40,30 @@ struct GattClientSetting {
   @State descriptorUUID: string = '00002902-0000-1000-8000-00805f9b34fb';
   @State descriptorValue: string = 'DesValue';
 
-  aboutToAppear() {
-    AppStorage.setOrCreate('peripheralDeviceId' , this.peripheralDeviceId);
-    AppStorage.setOrCreate('serviceUUID' , this.serviceUUID);
-    AppStorage.setOrCreate('characteristicUUID' , this.characteristicUUID);
-    AppStorage.setOrCreate('characteristicValue' , this.characteristicValue);
-    AppStorage.setOrCreate('descriptorUUID' , this.descriptorUUID);
-    AppStorage.setOrCreate('descriptorValue' , this.descriptorValue);
+  aboutToAppear(){
+    AppStorage.setOrCreate('peripheralDeviceId', this.peripheralDeviceId);
+    AppStorage.setOrCreate('serviceUUID', this.serviceUUID);
+    AppStorage.setOrCreate('characteristicUUID', this.characteristicUUID);
+    AppStorage.setOrCreate('characteristicValue', this.characteristicValue);
+    AppStorage.setOrCreate('descriptorUUID', this.descriptorUUID);
+    AppStorage.setOrCreate('descriptorValue', this.descriptorValue);
   }
 
-  build() {
-    Column() {
-      Row() {
+  build(){
+    Column(){
+      Row(){
         Text($r('app.string.bluetoothtest_text_wwsbm'))
           .fontSize(ConfigData.VP_16)
           .width(ConfigData.VP_70)
-        TextInput({ text : this.peripheralDeviceId , placeholder : "input peripheral deviceId." })
+        TextInput({text: this.peripheralDeviceId, placeholder: "input peripheral deviceId."})
           .accessibilityLevel('yes')
           .id('pages_subManualApiTest_subGattTest_gattClient__ti_0')
           .fontSize(ConfigData.VP_15)
           .onChange((strInput) => {
             this.peripheralDeviceId = strInput;
             //判断合法性
-            if ( strInput.length >= 17 ) {
-              AppStorage.setOrCreate('peripheralDeviceId' , strInput);
+            if ( strInput.length >= 17 ){
+              AppStorage.setOrCreate('peripheralDeviceId', strInput);
             }
           })
           .width(ConfigData.WH_80_100)
@@ -74,23 +74,23 @@ struct GattClientSetting {
       .justifyContent(FlexAlign.Start)
       .alignItems(VerticalAlign.Center)
 
-      Column() {
+      Column(){
         Stack()
           .height(ConfigData.VP_0_25)
           .backgroundColor($r('app.color.black'));
-        Column() {
-          Row() {
+        Column(){
+          Row(){
             Text($r('app.string.bluetoothtest_text_fwu_1'))
               .fontSize(ConfigData.VP_15)
               .width(ConfigData.VP_60);
-            TextInput({ text : this.serviceUUID , placeholder : "input Service UUID" })
+            TextInput({text: this.serviceUUID, placeholder: "input Service UUID"})
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subGattTest_gattClient__ti_1')
               .fontSize(ConfigData.VP_15)
               .onChange((strInput) => {
                 this.serviceUUID = strInput;
-                if ( strInput.length >= 36 ) {
-                  AppStorage.setOrCreate('serviceUUID' , strInput);
+                if ( strInput.length >= 36 ){
+                  AppStorage.setOrCreate('serviceUUID', strInput);
                 }
               })
               .width(ConfigData.WH_80_100)
@@ -101,18 +101,18 @@ struct GattClientSetting {
           .alignItems(VerticalAlign.Center)
           .backgroundColor($r("app.color.spring"))
 
-          Row() {
+          Row(){
             Text($r('app.string.bluetoothtest_text_tzzu'))
               .fontSize(ConfigData.VP_15)
               .width(ConfigData.VP_60);
-            TextInput({ text : this.characteristicUUID , placeholder : "input Characteristic UUID" })
+            TextInput({text: this.characteristicUUID, placeholder: "input Characteristic UUID"})
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subGattTest_gattClient__ti_2')
               .fontSize(ConfigData.VP_15)
               .onChange((strInput) => {
                 this.characteristicUUID = strInput;
-                if ( strInput.length >= 36 ) {
-                  AppStorage.setOrCreate('characteristicUUID' , strInput);
+                if ( strInput.length >= 36 ){
+                  AppStorage.setOrCreate('characteristicUUID', strInput);
                 }
               })
               .width(ConfigData.WH_80_100)
@@ -123,18 +123,18 @@ struct GattClientSetting {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Row() {
+          Row(){
             Text($r('app.string.bluetoothtest_text_tzzv'))
               .fontSize(ConfigData.VP_15)
               .width(ConfigData.VP_60);
-            TextInput({ text : this.characteristicUUID , placeholder : "Characteristic Value" })
+            TextInput({text: this.characteristicUUID, placeholder: "Characteristic Value"})
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subGattTest_gattClient__ti_3')
               .fontSize(ConfigData.VP_15)
               .onChange((strInput) => {
                 this.characteristicValue = strInput;
-                if ( strInput.length >= 1 ) {
-                  AppStorage.setOrCreate('characteristicValue' , strInput);
+                if ( strInput.length >= 1 ){
+                  AppStorage.setOrCreate('characteristicValue', strInput);
                 }
               })
               .width(ConfigData.WH_80_100)
@@ -145,18 +145,18 @@ struct GattClientSetting {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Row() {
+          Row(){
             Text($r('app.string.bluetoothtest_text_msfu'))
               .fontSize(ConfigData.VP_15)
               .width(ConfigData.VP_60);
-            TextInput({ text : this.descriptorUUID , placeholder : "input descriptor UUID" })
+            TextInput({text: this.descriptorUUID, placeholder: "input descriptor UUID"})
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subGattTest_gattClient__ti_4')
               .fontSize(ConfigData.VP_15)
               .onChange((strInput) => {
                 this.descriptorUUID = strInput;
-                if ( strInput.length >= 36 ) {
-                  AppStorage.setOrCreate('descriptorUUID' , strInput);
+                if ( strInput.length >= 36 ){
+                  AppStorage.setOrCreate('descriptorUUID', strInput);
                 }
               })
               .width(ConfigData.WH_80_100)
@@ -167,18 +167,18 @@ struct GattClientSetting {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Row() {
+          Row(){
             Text($r('app.string.bluetoothtest_text_msfv'))
               .fontSize(ConfigData.VP_15)
               .width(ConfigData.VP_60);
-            TextInput({ text : this.descriptorUUID , placeholder : "descriptor Value" })
+            TextInput({text: this.descriptorUUID, placeholder: "descriptor Value"})
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subGattTest_gattClient__ti_5')
               .fontSize(ConfigData.VP_15)
               .onChange((strInput) => {
                 this.descriptorValue = strInput;
-                if ( strInput.length >= 1 ) {
-                  AppStorage.setOrCreate('descriptorValue' , strInput);
+                if ( strInput.length >= 1 ){
+                  AppStorage.setOrCreate('descriptorValue', strInput);
                 }
               })
               .width(ConfigData.WH_80_100)
@@ -224,23 +224,23 @@ struct GattClient {
 
   //------------@State->private------------------------------
   // @State  gattClientInstance:bluetooth.GattClientDevice = null;
-  private peripheralDeviceId = G_MAC; // '6c:96:d7:3d:87:6f';PC//
+  private peripheralDeviceId = G_MAC;// '6c:96:d7:3d:87:6f';PC//
   private testItem: TestData = testItemFromRouterOrPlaceholder();
 
-  aboutToAppear() {
-    AppStorage.setOrCreate('peripheralDeviceId' , this.peripheralDeviceId);
-    AppStorage.setOrCreate('serviceUUID' , this.serviceUUID);
-    AppStorage.setOrCreate('characteristicUUID' , this.characteristicUUID);
-    AppStorage.setOrCreate('characteristicValue' , this.characteristicValue);
-    AppStorage.setOrCreate('descriptorUUID' , this.descriptorUUID);
-    AppStorage.setOrCreate('descriptorValue' , this.descriptorValue);
+  aboutToAppear(){
+    AppStorage.setOrCreate('peripheralDeviceId', this.peripheralDeviceId);
+    AppStorage.setOrCreate('serviceUUID', this.serviceUUID);
+    AppStorage.setOrCreate('characteristicUUID', this.characteristicUUID);
+    AppStorage.setOrCreate('characteristicValue', this.characteristicValue);
+    AppStorage.setOrCreate('descriptorUUID', this.descriptorUUID);
+    AppStorage.setOrCreate('descriptorValue', this.descriptorValue);
   }
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
           .accessibilityLevel('yes')
           .id('pages_subManualApiTest_subGattTest_gattClient__pt_0')
       }
@@ -248,74 +248,74 @@ struct GattClient {
       Stack()
         .height(ConfigData.VP_0_5)
         .backgroundColor($r('app.color.black'));
-      Row() {
+      Row(){
         Text($r('app.string.bluetoothtest_text_g'))
           .fontSize(ConfigData.VP_20)
           .height(ConfigData.VP_60)
           .width(ConfigData.WH_80_100)
-          .padding({ left : ConfigData.VP_15 })
+          .padding({left: ConfigData.VP_15})
         Image($r('app.media.Switch'))
           .accessibilityLevel('yes')
           .id('pages_subManualApiTest_subGattTest_gattClient__img_0')
           .height(ConfigData.VP_50)
           .width(ConfigData.VP_50)
-          .padding({ top : ConfigData.VP_5 , bottom : ConfigData.VP_5 , left : ConfigData.VP_10 })
+          .padding({top: ConfigData.VP_5, bottom: ConfigData.VP_5, left: ConfigData.VP_10})
           .onClick(() => {
             this.showList = !this.showList;
           })
       }
         .width(ConfigData.WH_100_100)
 
-      Column() {
-        if ( this.showList ) {
+      Column(){
+        if ( this.showList ){
           GattClientSetting()
         } else {
-          Column() {
-            Scroll() {
-              Column() {
+          Column(){
+            Scroll(){
+              Column(){
                 Text($r('app.string.bluetoothtest_text_jgxs'))
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_10 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_10})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_100_100)
                 Text(resStr($r('app.string.label_gatt_current_config')) + this.message)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_15})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
                 Text(resStr($r('app.string.label_ble_conn_state')) + this.bleConnectionStateInfo)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_15})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
                 Text(resStr($r('app.string.label_ble_char_change')) + this.bleCharacteristicChangeInfo)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_15})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
                 Text(resStr($r('app.string.label_device_name_colon')) + this.deviceName)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_15})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
                 Text(resStr($r('app.string.label_rssi_colon')) + this.Rssi)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_15})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
                 Text(resStr($r('app.string.label_get_service_colon')) + this.getServices)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_15})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
                 Text(resStr($r('app.string.label_read_char_colon')) + this.read_CharacteristicValue)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_15})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
                 Text(resStr($r('app.string.label_read_desc_colon')) + this.read_DescriptorValue)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_15})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -333,21 +333,21 @@ struct GattClient {
           Stack()
             .height(ConfigData.VP_0_5)
             .backgroundColor($r('app.color.black'));
-          Column() {
+          Column(){
             Text($r('app.string.bluetoothtest_text_gncs'))
-              .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_10 })
+              .margin({top: ConfigData.VP_5, left: ConfigData.VP_10})
               .padding(ConfigData.VP_5)
               .fontSize(ConfigData.VP_18)
               .width(ConfigData.WH_100_100)
-            Scroll() {
-              ContentTable({ apiItems : initGattClientApiData() })
+            Scroll(){
+              ContentTable({apiItems: initGattClientApiData()})
             }
             .accessibilityLevel('yes')
             .id('pages_subManualApiTest_subGattTest_gattClient__sc_1')
             .width(ConfigData.WH_100_100)
             .align(Alignment.TopStart)
             .layoutWeight(1)
-            .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
+            .margin({top: $r('sys.float.ohos_id_card_margin_middle')})
             .height(ConfigData.WH_100_100)
           }
           .height(ConfigData.WH_80_100)
@@ -365,9 +365,9 @@ struct GattClient {
  * @param {*} str, the string object to
  * @return: ArrayBuffer
  */
-function string2ArrayBuffer(str: string) {
+function string2ArrayBuffer(str: string){
   let array = new Uint8Array(str.length);
-  for ( let i = 0 ; i < str.length ; i ++ ) {
+  for(let i = 0 ; i<str.length ; i++ ){
     array[ i ] = str.charCodeAt(i);
   }
   return array.buffer

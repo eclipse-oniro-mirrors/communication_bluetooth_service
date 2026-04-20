@@ -12,20 +12,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../../Utils/resString';
+import { resStr} from '../../../Utils/resString';
 
 
-import hilog from '@ohos.hilog';
-import { testItemFromRouterOrPlaceholder } from '../../../Utils/common'
+import { testItemFromRouterOrPlaceholder} from '../../../Utils/common'
 import LogUtil from '../../../Utils/LogUtil';
 import ConfigData from '../../../Utils/ConfigData';
-import BluetoothModel , { BluetoothDevice } from '../../../MainAbility/model/BluetoothModel';
+import BluetoothModel, { BluetoothDevice} from '../../../MainAbility/model/BluetoothModel';
 import BluetoothDeviceController from '../../../MainAbility/controller/BluetoothDeviceController';
-import { TestData } from '../../../MainAbility/model/testData'
-import { PageTitle } from '../../../Component/pageTitle';
-import { ContentTable } from '../../../Component/contentTable';
-import { initSppServerApiData } from '../../../MainAbility/model/testDataModels'
-import { TestImageDisplay } from '../../../Component/testImageDisplay';
+import { TestData} from '../../../MainAbility/model/testData'
+import { PageTitle} from '../../../Component/pageTitle';
+import { ContentTable} from '../../../Component/contentTable';
+import { initSppServerApiData} from '../../../MainAbility/model/testDataModels'
+import { TestImageDisplay} from '../../../Component/testImageDisplay';
 interface PinRequiredData {
   deviceId: string;
   pinCode: string;
@@ -54,18 +53,18 @@ struct SppServer {
   @StorageLink('btDeviceController') controller: BluetoothDeviceController = new BluetoothDeviceController;
   private testItem: TestData = testItemFromRouterOrPlaceholder();
   pairDialog: CustomDialogController = new CustomDialogController({
-    builder : PairDialog({
-      deviceName : this.pairingDevice.deviceName ,
-      pinCode : this.pairPinCode ,
-      action : (accept: boolean) => {
-        BluetoothModel.setDevicePairingConfirmation(this.deviceId , accept);
+    builder: PairDialog({
+      deviceName: this.pairingDevice.deviceName,
+      pinCode: this.pairPinCode,
+      action: (accept: boolean) => {
+        BluetoothModel.setDevicePairingConfirmation(this.deviceId, accept);
       }
-    }) ,
-    alignment : DialogAlignment.Bottom ,
-    autoCancel : true
+    }),
+    alignment: DialogAlignment.Bottom,
+    autoCancel: true
   });
 
-  aboutToAppear() {
+  aboutToAppear(){
     this.btEnable = BluetoothModel.isStateOn();
     BluetoothModel.subscribePinRequired((data: PinRequiredData) => {
       this.pairPinCode = data.pinCode
@@ -73,18 +72,18 @@ struct SppServer {
       this.pairingDevice.deviceName = data.deviceId;
       this.pairDialog.open();
     })
-    AppStorage.setOrCreate('bluetoothIsOn' , this.btEnable);
-    AppStorage.setOrCreate('inputUuid' , this.uuid);
-    AppStorage.setOrCreate("writeServerData" , this.writeServerData);
+    AppStorage.setOrCreate('bluetoothIsOn', this.btEnable);
+    AppStorage.setOrCreate('inputUuid', this.uuid);
+    AppStorage.setOrCreate("writeServerData", this.writeServerData);
   }
 
-  build() {
-    Row() {
-      Column() {
-        Column() {
-          Stack({ alignContent : Alignment.TopStart }) {
-            TestImageDisplay({ testItem : this.testItem })
-            PageTitle({ testItem : this.testItem })
+  build(){
+    Row(){
+      Column(){
+        Column(){
+          Stack({alignContent: Alignment.TopStart}){
+            TestImageDisplay({testItem: this.testItem})
+            PageTitle({testItem: this.testItem})
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subSppTest_sppServerTest__pt_0')
           }
@@ -93,17 +92,17 @@ struct SppServer {
             .height(ConfigData.VP_0_5)
             .backgroundColor($r('app.color.black'));
 
-          Row() {
+          Row(){
             Text($r('app.string.bluetoothtest_text_bjsbu'))
               .fontSize(ConfigData.VP_17)
               .width(ConfigData.VP_85)
-            TextInput({ text : this.uuid , placeholder : $r('app.string.bluetoothtest_str_qsru') })
+            TextInput({text: this.uuid, placeholder: $r('app.string.bluetoothtest_str_qsru')})
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subSppTest_sppServerTest__ti_0')
               .fontSize(ConfigData.VP_17)
               .onChange((str) => {
                 this.uuid = str;
-                AppStorage.setOrCreate('inputUuid' , str)
+                AppStorage.setOrCreate('inputUuid', str)
               })
               .width(ConfigData.WH_80_100)
               .borderRadius(ConfigData.HEIGHT_1_VP)
@@ -113,17 +112,17 @@ struct SppServer {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Row() {
+          Row(){
             Text($r('app.string.bluetoothtest_text_xrmbsbsj'))
               .fontSize(ConfigData.VP_17)
               .width(ConfigData.VP_95)
-            TextInput({ text : this.writeServerData , placeholder : $r('app.string.bluetoothtest_str_qsrxrdsj') })
+            TextInput({text: this.writeServerData, placeholder: $r('app.string.bluetoothtest_str_qsrxrdsj')})
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subSppTest_sppServerTest__ti_1')
               .fontSize(ConfigData.VP_14)
               .onChange((str) => {
                 this.writeServerData = str;
-                AppStorage.setOrCreate("writeServerData" , str);
+                AppStorage.setOrCreate("writeServerData", str);
               })
               .width(ConfigData.WH_80_100)
               .borderRadius(ConfigData.HEIGHT_1_VP)
@@ -133,7 +132,7 @@ struct SppServer {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Row() {
+          Row(){
             Text($r('app.string.bluetoothtest_text_dqdsjw'))
               .fontSize(ConfigData.VP_17)
             Text(this.dataReadMessage)
@@ -145,7 +144,7 @@ struct SppServer {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Column() {
+          Column(){
             Text(resStr($r('app.string.label_api_result_tight')) + this.message)
               .fontSize(ConfigData.VP_17)
               .padding(ConfigData.VP_10)
@@ -153,16 +152,16 @@ struct SppServer {
           }
           .backgroundColor($r("app.color.moon"))
 
-          Column() {
-            Scroll() {
-              ContentTable({ apiItems : initSppServerApiData() }) //子层调用
+          Column(){
+            Scroll(){
+              ContentTable({apiItems: initSppServerApiData()})//子层调用
             }
             .accessibilityLevel('yes')
             .id('pages_subManualApiTest_subSppTest_sppServerTest__sc_0')
             .width(ConfigData.WH_100_100)
             .align(Alignment.TopStart)
             .layoutWeight(1)
-            .margin({ top : $r('sys.float.ohos_id_card_margin_middle') })
+            .margin({top: $r('sys.float.ohos_id_card_margin_middle')})
             .height(ConfigData.WH_100_100)
           }
           .height(ConfigData.PCT_85)
@@ -180,9 +179,9 @@ struct SppServer {
    * @param {*} str 需要转换的字符串
    * @returns 返回 arrayBuffer
    */
-  strToArrayBuffer(str: string) {
+  strToArrayBuffer(str: string){
     let array = new Uint8Array(str.length);
-    for ( let i = 0 ; i < str.length ; i ++ ) {
+    for(let i = 0 ; i<str.length ; i++ ){
       array[ i ] = str.charCodeAt(i);
     }
     return array.buffer
@@ -192,15 +191,15 @@ struct SppServer {
    * Pair device
    * @param device
    */
-  pairDevice(deviceId: string) {
-    this.controller.pair(this.deviceId , (pinCode: string) => {
+  pairDevice(deviceId: string){
+    this.controller.pair(this.deviceId, (pinCode: string) => {
       LogUtil.info(this.TAG_PAGE + 'pairDevice success callback : pinCode = ' + pinCode);
       // show pair pin dialog
       this.pairPinCode = pinCode
       this.pairingDevice.deviceId = this.deviceId;
       this.pairingDevice.deviceName = this.deviceId;
       this.pairDialog.open();
-    } , () => {
+    }, () => {
       LogUtil.info(this.TAG_PAGE + 'pairDevice error callback');
       this.showPairFailedDialog()
     })
@@ -209,25 +208,25 @@ struct SppServer {
   /**
    * Confirm pairing
    */
-  confirmPairing(accept: boolean) {
+  confirmPairing(accept: boolean){
     LogUtil.info(this.TAG_PAGE + 'confirmPairing : pairingDevice + ' + JSON.stringify(this.pairingDevice));
-    this.controller.confirmPairing(this.pairingDevice.deviceId , accept);
+    this.controller.confirmPairing(this.pairingDevice.deviceId, accept);
   }
 
   /**
    * Show pair failed dialog
    */
-  showPairFailedDialog() {
+  showPairFailedDialog(){
     this.showPairingFailedDialog()
   }
 
   /**
    * Show connect Failed Dialog
    */
-  private showConnectFailedDialog() {
+  private showConnectFailedDialog(){
     showDialog(
-      $r("app.string.bluetooth_connect_failed") ,
-      $r("app.string.bluetooth_connect_failed_msg") ,
+      $r("app.string.bluetooth_connect_failed"),
+      $r("app.string.bluetooth_connect_failed_msg"),
       $r("app.string.bluetooth_know_button")
     );
   }
@@ -235,18 +234,18 @@ struct SppServer {
   /**
    * Show pairing failed title Dialog
    */
-  private showPairingFailedDialog() {
+  private showPairingFailedDialog(){
     showDialog(
-      $r("app.string.pairing_failed_title") ,
-      $r("app.string.pairing_failed_message") ,
+      $r("app.string.pairing_failed_title"),
+      $r("app.string.pairing_failed_message"),
       $r("app.string.bluetooth_know_button")
     );
   }
 
-  dataRead(dataBuffer: ArrayBuffer) {
+  dataRead(dataBuffer: ArrayBuffer){
     const data = new Uint8Array(dataBuffer);
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetooth read is: ' + data);
-    if ( data != null ) {
+    LogUtil.info('spp bluetooth read is: ' + data);
+    if ( data != null ){
       this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
       this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
@@ -268,25 +267,25 @@ struct PairDialog {
     LogUtil.log(ConfigData.TAG + `bluetooth PairDialog aboutToAppear pinCode = ${ this.pinCode }`)
   }
 
-  build() {
-    Column() {
+  build(){
+    Column(){
       Text($r('app.string.bluetooth_pairing_request'))
         .fontSize(ConfigData.FP_22)
         .height(ConfigData.VP_60)
         .width(ConfigData.WH_100_100)
         .padding({
-          left : ConfigData.VP_24 ,
-          top : ConfigData.VP_14 ,
-          bottom : ConfigData.VP_14
+          left: ConfigData.VP_24,
+          top: ConfigData.VP_14,
+          bottom: ConfigData.VP_14
         })
-      Column() {
-        if ( this.pinCode ) {
-          Text($r('app.string.bluetooth_pairing_intelligent_device_hit' , this.deviceName , this.deviceName))
+      Column(){
+        if ( this.pinCode ){
+          Text($r('app.string.bluetooth_pairing_intelligent_device_hit', this.deviceName, this.deviceName))
             .fontSize(ConfigData.FP_16)
             .width(ConfigData.WH_100_100)
             .margin({
-              top : ConfigData.VP_14 ,
-              bottom : ConfigData.VP_14
+              top: ConfigData.VP_14,
+              bottom: ConfigData.VP_14
             })
 
           Text(`${ this.pinCode }`)
@@ -295,8 +294,8 @@ struct PairDialog {
             .width(ConfigData.WH_100_100)
             .textAlign(TextAlign.Center)
             .margin({
-              top : ConfigData.VP_24 ,
-              bottom : ConfigData.VP_24
+              top: ConfigData.VP_24,
+              bottom: ConfigData.VP_24
             })
 
         } else {
@@ -304,7 +303,7 @@ struct PairDialog {
             .fontSize(ConfigData.FP_16)
             .width(ConfigData.WH_100_100)
             .margin({
-              bottom : ConfigData.VP_2
+              bottom: ConfigData.VP_2
             })
 
           Text(this.deviceName)
@@ -314,8 +313,8 @@ struct PairDialog {
         }
 
         // button
-        Flex({ justifyContent : FlexAlign.Center , alignItems : ItemAlign.Center }) {
-          Button() {
+        Flex({justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center}){
+          Button(){
             Text($r('app.string.cancel'))
               .fontSize(ConfigData.FP_16)
               .fontColor(Color.Blue)
@@ -332,12 +331,12 @@ struct PairDialog {
           })
 
           Divider()
-            .height(ConfigData.VP_24)
-            .strokeWidth(ConfigData.VP_0_5)
-            .vertical(true)
-            .color(($r("app.color.color_E3E3E3_grey")))
+          .height(ConfigData.VP_24)
+          .strokeWidth(ConfigData.VP_0_5)
+          .vertical(true)
+          .color(($r("app.color.color_E3E3E3_grey")))
 
-          Button() {
+          Button(){
             Text($r('app.string.bluetooth_pair_button'))
               .fontSize(ConfigData.FP_16)
               .fontColor(Color.Blue)
@@ -358,13 +357,13 @@ struct PairDialog {
       }
       .width(ConfigData.WH_100_100)
       .padding({
-        left : ConfigData.VP_24 ,
-        right : ConfigData.VP_24
+        left: ConfigData.VP_24,
+        right: ConfigData.VP_24
       })
     }
     .padding({
-      left : ConfigData.VP_24 ,
-      right : ConfigData.VP_24
+      left: ConfigData.VP_24,
+      right: ConfigData.VP_24
     })
     .width(ConfigData.WH_100_100);
   }
@@ -375,20 +374,19 @@ struct PairDialog {
  * @param dialogMessage Dialog message
  * @param buttonValue Dialog buttonValue
  */
-function showDialog(dialogTitle: string | Resource , dialogMessage: string | Resource , buttonValue: string | Resource) {
+function showDialog(dialogTitle: string | Resource, dialogMessage: string | Resource, buttonValue: string | Resource){
   AlertDialog.show({
-    title : dialogTitle ,
-    message : dialogMessage ,
-    confirm : {
-      value : buttonValue ,
-      action : () => {
+    title: dialogTitle,
+    message: dialogMessage,
+    confirm: {
+      value: buttonValue,
+      action: () => {
         LogUtil.info('Button-clicking callback')
       }
-    } ,
-    cancel : () => {
+    },
+    cancel: () => {
       LogUtil.info('Closed callbacks')
-    } ,
-    alignment : DialogAlignment.Bottom
+    },
+    alignment: DialogAlignment.Bottom
   })
 }
-
