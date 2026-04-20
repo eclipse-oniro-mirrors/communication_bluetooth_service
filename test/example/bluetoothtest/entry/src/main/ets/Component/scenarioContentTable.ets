@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-import hilog from '@ohos.hilog';
+import LogUtil from '../Utils/LogUtil';
 import ConfigData from '../Utils/ConfigData';
-import { TestScenario } from '../MainAbility/model/testData'
+import { TestScenario} from '../MainAbility/model/testData'
 
 /**
  *  Scenario Test ContentTable Component Page Of Bluetooth test
@@ -27,21 +27,21 @@ export struct ScenarioContentTable {
   @Prop changeIndex: number;
   @State localName: string = 'DaYuBlue'
 
-  @Builder IngredientItem(scenarioItem: TestScenario , index: number) {
-    Stack() {
-      Flex() {
-        Flex({ direction : FlexDirection.Column , alignItems : ItemAlign.Start }) {
-          Row() {
+  @Builder IngredientItem(scenarioItem: TestScenario, index: number){
+    Stack(){
+      Flex(){
+        Flex({direction: FlexDirection.Column, alignItems: ItemAlign.Start}){
+          Row(){
             Text(scenarioItem.detail)
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_3 , bottom : ConfigData.VP_3 , left : ConfigData.VP_10 })
+              .margin({top: ConfigData.VP_3, bottom: ConfigData.VP_3, left: ConfigData.VP_10})
               .textAlign(TextAlign.Start)
               .height(ConfigData.VP_40)
               .width(ConfigData.VP_30)
 
             Text(scenarioItem.method)
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_3 , bottom : ConfigData.VP_3 , left : ConfigData.VP_10 })
+              .margin({top: ConfigData.VP_3, bottom: ConfigData.VP_3, left: ConfigData.VP_10})
               .textAlign(TextAlign.Start)
               .height(ConfigData.VP_40)
               .width(ConfigData.VP_240)
@@ -52,48 +52,48 @@ export struct ScenarioContentTable {
         .height(ConfigData.VP_30)
         .layoutWeight(6)
 
-        Flex({ alignItems : ItemAlign.Center }) {
+        Flex({alignItems: ItemAlign.Center}){
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : scenarioItem.result)
-            .margin({ left : ConfigData.VP_10 })
+            .margin({left: ConfigData.VP_10})
             .fontSize(ConfigData.VP_17)
             .flexGrow(1)
         }
         .layoutWeight(3)
-        .padding({ left : ConfigData.VP_10 })
-        .margin({ left : ConfigData.VP_10 })
+        .padding({left: ConfigData.VP_10})
+        .margin({left: ConfigData.VP_10})
       }
     }
     .height(ConfigData.VP_40)
     .borderRadius(ConfigData.VP_10)
-    .margin({ top : ConfigData.VP_3 , bottom : ConfigData.VP_3 })
+    .margin({top: ConfigData.VP_3, bottom: ConfigData.VP_3})
     .backgroundColor($r("app.color.white"))
   }
 
-  getCurrentState(index: number) {
+  getCurrentState(index: number){
     if ( index <= this.changeIndex ) this.scenarioItems[ index ].result = 'pass';
     return this.scenarioItems[ index ].result
   }
 
   aboutToAppear(): void {
-    hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_szjgjwb'))
+    LogUtil.info($r('app.string.bluetoothtest_str_szjgjwb'))
   }
 
-  build() {
-    Column() {
-      Scroll() {
+  build(){
+    Column(){
+      Scroll(){
         Flex({
-          direction : FlexDirection.Column ,
-          justifyContent : FlexAlign.SpaceBetween ,
-          alignItems : ItemAlign.Start
-        }) {
-          ForEach(this.scenarioItems , (item: TestScenario , index: number) => {
-            this.IngredientItem(item , index)
+          direction: FlexDirection.Column,
+          justifyContent: FlexAlign.SpaceBetween,
+          alignItems: ItemAlign.Start
+        }){
+          ForEach(this.scenarioItems, (item: TestScenario, index: number) => {
+            this.IngredientItem(item, index)
           })
         }
       }
       .scrollBarWidth(ConfigData.VP_20)
     }
     .height(ConfigData.WH_80_100)
-    .padding({ top : ConfigData.VP_5 , right : ConfigData.VP_10 , left : ConfigData.VP_10 })
+    .padding({top: ConfigData.VP_5, right: ConfigData.VP_10, left: ConfigData.VP_10})
   }
 }

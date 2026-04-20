@@ -22,7 +22,6 @@
         "signingConfig": "default",
         "compileSdkVersion": 26,
         "compatibleSdkVersion": 26,
-        "arkTSVersion": "1.0",
         "targetSdkVersion": 26,
       }
     ]

@@ -23,53 +23,53 @@ export default struct ImageAnimatorComponent {
   private imageHeight: number | Resource = 0
   private whtl: number | string = ComponentConfig.value_20;
 
-  build() {
-    Column() {
+  build(){
+    Column(){
       ImageAnimator()
         .images([
           {
-            src : '../MainAbility/res/image/hdpi/ic_loading01.png' ,
-            duration : ComponentConfig.DURATION_TIME ,
-            width : this.whtl ,
-            height : this.whtl ,
-            top : this.whtl ,
-            left : this.whtl
-          }, {
-          src : '../MainAbility/res/image/hdpi/ic_loading02.png' ,
-          duration : ComponentConfig.DURATION_TIME ,
-          width : this.whtl ,
-          height : this.whtl ,
-          top : this.whtl ,
-          left : this.whtl
-        }, {
-          src : '../MainAbility/res/image/hdpi/ic_loading03.png' ,
-          duration : ComponentConfig.DURATION_TIME ,
-          width : this.whtl ,
-          height : this.whtl ,
-          top : this.whtl ,
-          left : this.whtl
-        }, {
-          src : '../MainAbility/res/image/hdpi/ic_loading04.png' ,
-          duration : ComponentConfig.DURATION_TIME ,
-          width : this.whtl ,
-          height : this.whtl ,
-          top : this.whtl ,
-          left : this.whtl
-        }, {
-          src : '../MainAbility/res/image/hdpi/ic_loading05.png' ,
-          duration : ComponentConfig.DURATION_TIME ,
-          width : this.whtl ,
-          height : this.whtl ,
-          top : this.whtl ,
-          left : this.whtl
-        }, {
-          src : '../MainAbility/res/image/hdpi/ic_loading06.png' ,
-          duration : ComponentConfig.DURATION_TIME ,
-          width : this.whtl ,
-          height : this.whtl ,
-          top : this.whtl ,
-          left : this.whtl
-        } ])
+            src: '../MainAbility/res/image/hdpi/ic_loading01.png',
+            duration: ComponentConfig.DURATION_TIME,
+            width: this.whtl,
+            height: this.whtl,
+            top: this.whtl,
+            left: this.whtl
+      }, {
+          src: '../MainAbility/res/image/hdpi/ic_loading02.png',
+          duration: ComponentConfig.DURATION_TIME,
+          width: this.whtl,
+          height: this.whtl,
+          top: this.whtl,
+          left: this.whtl
+      }, {
+          src: '../MainAbility/res/image/hdpi/ic_loading03.png',
+          duration: ComponentConfig.DURATION_TIME,
+          width: this.whtl,
+          height: this.whtl,
+          top: this.whtl,
+          left: this.whtl
+      }, {
+          src: '../MainAbility/res/image/hdpi/ic_loading04.png',
+          duration: ComponentConfig.DURATION_TIME,
+          width: this.whtl,
+          height: this.whtl,
+          top: this.whtl,
+          left: this.whtl
+      }, {
+          src: '../MainAbility/res/image/hdpi/ic_loading05.png',
+          duration: ComponentConfig.DURATION_TIME,
+          width: this.whtl,
+          height: this.whtl,
+          top: this.whtl,
+          left: this.whtl
+      }, {
+          src: '../MainAbility/res/image/hdpi/ic_loading06.png',
+          duration: ComponentConfig.DURATION_TIME,
+          width: this.whtl,
+          height: this.whtl,
+          top: this.whtl,
+          left: this.whtl
+      } ])
         .width(this.imageWidth)
         .height(this.imageHeight)
         .iterations(- 1)

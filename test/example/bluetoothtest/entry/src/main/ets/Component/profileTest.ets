@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { TestData } from '../MainAbility/model/testData'
-import { TestList } from './testList';
+import { TestData} from '../MainAbility/model/testData'
+import { TestList} from './testList';
 
 /**
  * Profile-Test Of Bluetooth test
@@ -23,10 +23,10 @@ import { TestList } from './testList';
 export struct ProfileTest {
   private testItems!: TestData[]
 
-  build() {
-    Column() {
+  build(){
+    Column(){
       TestList({
-        testItems : this.testItems
+        testItems: this.testItems
       })
     }
   }
