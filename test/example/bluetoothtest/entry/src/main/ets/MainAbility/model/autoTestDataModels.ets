@@ -846,224 +846,224 @@ export const SppClientAutoTestCase: AutoTest[] = [
 
 export const SppServerAutoTestCase: AutoTest[] = [
   {
-    name : $r('app.string.bluetoothtest_str_kly') ,
-    detail : $r('app.string.bluetoothtest_str_snly') ,
-    method : 'enableBluetooth' ,
-    api : testEnableBluetooth ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_kly'),
+    detail: $r('app.string.bluetoothtest_str_snly'),
+    method: 'enableBluetooth',
+    api: testEnableBluetooth,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_szssmms') ,
-    detail : $r('app.string.bluetoothtest_str_szssmms') ,
-    method : 'setBluetoothScanMode' ,
-    api : testSetBluetoothScanMode ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_szssmms'),
+    detail: $r('app.string.bluetoothtest_str_szssmms'),
+    method: 'setBluetoothScanMode',
+    api: testSetBluetoothScanMode,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_zcpmbh') ,
-    detail : $r('app.string.bluetoothtest_str_zcpmbh') ,
-    method : 'on.pinRequired' ,
-    api : testOnPinRequired ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_zcpmbh'),
+    detail: $r('app.string.bluetoothtest_str_zcpmbh'),
+    method: 'on.pinRequired',
+    api: testOnPinRequired,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_szbdmc') ,
-    detail : $r('app.string.bluetoothtest_str_szlybdmc') ,
-    method : 'setLocalName' ,
-    api : testSetLocalName ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_szbdmc'),
+    detail: $r('app.string.bluetoothtest_str_szlybdmc'),
+    method: 'setLocalName',
+    api: testSetLocalName,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
-    detail : $r('app.string.bluetoothtest_str_hqlybdmc') ,
-    method : 'getLocalName' ,
-    api : testGetLocalName ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_hqbdmc'),
+    detail: $r('app.string.bluetoothtest_str_hqlybdmc'),
+    method: 'getLocalName',
+    api: testGetLocalName,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_hqzt') ,
-    detail : $r('app.string.bluetoothtest_str_hqlyzt') ,
-    method : 'getState' ,
-    api : testGetState ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_hqzt'),
+    detail: $r('app.string.bluetoothtest_str_hqlyzt'),
+    method: 'getState',
+    api: testGetState,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_hqsmms') ,
-    detail : $r('app.string.bluetoothtest_str_hqlysmms') ,
-    method : 'getBluetoothScanMode' ,
-    api : testGetBluetoothScanMode ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_hqsmms'),
+    detail: $r('app.string.bluetoothtest_str_hqlysmms'),
+    method: 'getBluetoothScanMode',
+    api: testGetBluetoothScanMode,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_sfwqcjaqms') ,
-    detail : $r('app.string.bluetoothtest_str_sfwqaqmscj') ,
-    method : 'sppListen' ,
-    api : testSppServerCreateSafe ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_sfwqcjaqms'),
+    detail: $r('app.string.bluetoothtest_str_sfwqaqmscj'),
+    method: 'sppListen',
+    api: testSppServerCreateSafe,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_sfwqcjfaqms') ,
-    detail : $r('app.string.bluetoothtest_str_sfwqfaqmscj') ,
-    method : 'sppListen' ,
-    api : testSppServerCreateUnSafe ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_sfwqcjfaqms'),
+    detail: $r('app.string.bluetoothtest_str_sfwqfaqmscj'),
+    method: 'sppListen',
+    api: testSppServerCreateUnSafe,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_sfwqxr') ,
-    detail : $r('app.string.bluetoothtest_str_sfwqxr') ,
-    method : 'sppWrite' ,
-    api : testSppServerWrite ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_sfwqxr'),
+    detail: $r('app.string.bluetoothtest_str_sfwqxr'),
+    method: 'sppWrite',
+    api: testSppServerWrite,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_sfwqjs') ,
-    detail : $r('app.string.bluetoothtest_str_sfwqjs') ,
-    method : 'sppAccept' ,
-    api : testSppServerAccept ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_sfwqjs'),
+    detail: $r('app.string.bluetoothtest_str_sfwqjs'),
+    method: 'sppAccept',
+    api: testSppServerAccept,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_sfwqdqdk') ,
-    detail : $r('app.string.bluetoothtest_str_sfwqdqdk') ,
-    method : 'on.sppRead' ,
-    api : testSppServerReadOn ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_sfwqdqdk'),
+    detail: $r('app.string.bluetoothtest_str_sfwqdqdk'),
+    method: 'on.sppRead',
+    api: testSppServerReadOn,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_sfwqdqgb') ,
-    detail : $r('app.string.bluetoothtest_str_sfwqdqgb') ,
-    method : 'off.sppRead' ,
-    api : testSppServerReadOff ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_sfwqdqgb'),
+    detail: $r('app.string.bluetoothtest_str_sfwqdqgb'),
+    method: 'off.sppRead',
+    api: testSppServerReadOff,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_sfwqgb') ,
-    detail : $r('app.string.bluetoothtest_str_sfwqgb') ,
-    method : 'sppCloseServerSocket' ,
-    api : testSppCloseServerSocket ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_sfwqgb'),
+    detail: $r('app.string.bluetoothtest_str_sfwqgb'),
+    method: 'sppCloseServerSocket',
+    api: testSppCloseServerSocket,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_skhdgb') ,
-    detail : $r('app.string.bluetoothtest_str_skhdgb') ,
-    method : 'sppCloseClientSocket' ,
-    api : testSppCloseClientSocket ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_skhdgb'),
+    detail: $r('app.string.bluetoothtest_str_skhdgb'),
+    method: 'sppCloseClientSocket',
+    api: testSppCloseClientSocket,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_gly') ,
-    detail : $r('app.string.bluetoothtest_str_qsnly') ,
-    method : 'disableBluetooth' ,
-    api : testDisableBluetooth ,
-    result : 'None' ,
-    category : AutoCategory.SppServerAuto
-  },
+    name: $r('app.string.bluetoothtest_str_gly'),
+    detail: $r('app.string.bluetoothtest_str_qsnly'),
+    method: 'disableBluetooth',
+    api: testDisableBluetooth,
+    result: 'None',
+    category: AutoCategory.SppServerAuto
+},
 ]
 
 export const A2dpSourceProfileAutoTestCase: AutoTest[] = [
   {
-    name : $r('app.string.bluetoothtest_str_kly') ,
-    detail : $r('app.string.bluetoothtest_str_snly') ,
-    method : 'enableBluetooth' ,
-    api : testEnableBluetooth ,
-    result : 'None' ,
-    category : AutoCategory.A2dpSourceAuto
-  },
+    name: $r('app.string.bluetoothtest_str_kly'),
+    detail: $r('app.string.bluetoothtest_str_snly'),
+    method: 'enableBluetooth',
+    api: testEnableBluetooth,
+    result: 'None',
+    category: AutoCategory.A2dpSourceAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_hqzt') ,
-    detail : $r('app.string.bluetoothtest_str_hqlyzt') ,
-    method : 'getState' ,
-    api : testGetState ,
-    result : 'None' ,
-    category : AutoCategory.A2dpSourceAuto
-  },
+    name: $r('app.string.bluetoothtest_str_hqzt'),
+    detail: $r('app.string.bluetoothtest_str_hqlyzt'),
+    method: 'getState',
+    api: testGetState,
+    result: 'None',
+    category: AutoCategory.A2dpSourceAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_szbdmc') ,
-    detail : $r('app.string.bluetoothtest_str_szlybdmc') ,
-    method : 'setLocalName' ,
-    api : testSetLocalName ,
-    result : 'None' ,
-    category : AutoCategory.A2dpSourceAuto
-  },
+    name: $r('app.string.bluetoothtest_str_szbdmc'),
+    detail: $r('app.string.bluetoothtest_str_szlybdmc'),
+    method: 'setLocalName',
+    api: testSetLocalName,
+    result: 'None',
+    category: AutoCategory.A2dpSourceAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
-    detail : $r('app.string.bluetoothtest_str_hqlybdmc') ,
-    method : 'getLocalName' ,
-    api : testGetLocalName ,
-    result : 'None' ,
-    category : AutoCategory.A2dpSourceAuto
-  },
+    name: $r('app.string.bluetoothtest_str_hqbdmc'),
+    detail: $r('app.string.bluetoothtest_str_hqlybdmc'),
+    method: 'getLocalName',
+    api: testGetLocalName,
+    result: 'None',
+    category: AutoCategory.A2dpSourceAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_szsmms') ,
-    detail : $r('app.string.bluetoothtest_str_szlysmms') ,
-    method : 'setBluetoothScanMode' ,
-    api : testSetBluetoothScanMode ,
-    result : 'None' ,
-    category : AutoCategory.A2dpSourceAuto
-  },
+    name: $r('app.string.bluetoothtest_str_szsmms'),
+    detail: $r('app.string.bluetoothtest_str_szlysmms'),
+    method: 'setBluetoothScanMode',
+    api: testSetBluetoothScanMode,
+    result: 'None',
+    category: AutoCategory.A2dpSourceAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_hqsmms') ,
-    detail : $r('app.string.bluetoothtest_str_hqlysmms') ,
-    method : 'getBluetoothScanMode' ,
-    api : testGetBluetoothScanMode ,
-    result : 'None' ,
-    category : AutoCategory.A2dpSourceAuto
-  },
+    name: $r('app.string.bluetoothtest_str_hqsmms'),
+    detail: $r('app.string.bluetoothtest_str_hqlysmms'),
+    method: 'getBluetoothScanMode',
+    api: testGetBluetoothScanMode,
+    result: 'None',
+    category: AutoCategory.A2dpSourceAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_lj') ,
-    detail : $r('app.string.bluetoothtest_str_plj') ,
-    method : 'connect' ,
-    api : testProfileConnect ,
-    result : 'None' ,
-    category : AutoCategory.A2dpSourceAuto
-  },
+    name: $r('app.string.bluetoothtest_str_lj'),
+    detail: $r('app.string.bluetoothtest_str_plj'),
+    method: 'connect',
+    api: testProfileConnect,
+    result: 'None',
+    category: AutoCategory.A2dpSourceAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_hqbfzt') ,
-    detail : $r('app.string.bluetoothtest_str_hqpbfzt') ,
-    method : 'getPlayingState' ,
-    api : testProfileGetPlayingState ,
-    result : 'None' ,
-    category : AutoCategory.A2dpSourceAuto
-  },
+    name: $r('app.string.bluetoothtest_str_hqbfzt'),
+    detail: $r('app.string.bluetoothtest_str_hqpbfzt'),
+    method: 'getPlayingState',
+    api: testProfileGetPlayingState,
+    result: 'None',
+    category: AutoCategory.A2dpSourceAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_hqljsb') ,
-    detail : $r('app.string.bluetoothtest_str_hqpljsb') ,
-    method : 'getConnectionDevices' ,
-    api : testProfileGetConnectionDevices ,
-    result : 'None' ,
-    category : AutoCategory.A2dpSourceAuto
-  },
+    name: $r('app.string.bluetoothtest_str_hqljsb'),
+    detail: $r('app.string.bluetoothtest_str_hqpljsb'),
+    method: 'getConnectionDevices',
+    api: testProfileGetConnectionDevices,
+    result: 'None',
+    category: AutoCategory.A2dpSourceAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_hqsbzt') ,
-    detail : $r('app.string.bluetoothtest_str_hqpsbzt') ,
-    method : 'getDeviceState' ,
-    api : testProfileGetDeviceState ,
-    result : 'None' ,
-    category : AutoCategory.A2dpSourceAuto
-  },
+    name: $r('app.string.bluetoothtest_str_hqsbzt'),
+    detail: $r('app.string.bluetoothtest_str_hqpsbzt'),
+    method: 'getDeviceState',
+    api: testProfileGetDeviceState,
+    result: 'None',
+    category: AutoCategory.A2dpSourceAuto
+},
   {
-    name : $r('app.string.bluetoothtest_str_qxlj') ,
-    detail : $r('app.string.bluetoothtest_str_qxplj') ,
-    method : 'disconnect' ,
-    api : testProfileDisConnect ,
-    result : 'None' ,
-    category : AutoCategory.A2dpSourceAuto
-  },
+    name: $r('app.string.bluetoothtest_str_qxlj'),
+    detail: $r('app.string.bluetoothtest_str_qxplj'),
+    method: 'disconnect',
+    api: testProfileDisConnect,
+    result: 'None',
+    category: AutoCategory.A2dpSourceAuto
+},
 ]
 
 export const HandsFreeAudioGatewayProfileAutoTestCase: AutoTest[] = [
