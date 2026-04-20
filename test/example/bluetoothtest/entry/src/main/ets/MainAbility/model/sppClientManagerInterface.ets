@@ -12,10 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../Utils/resString';
+import LogUtil from '../../Utils/LogUtil';
+import { resStr} from '../../Utils/resString';
 
 
-import hilog from '@ohos.hilog';
 import bluetoothManager from '@ohos.bluetoothManager';
 import promptAction from '@ohos.promptAction';
 
@@ -24,35 +24,35 @@ let clientNumber = - 1
 export function testSppClientConnectSafeManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_st_8'))
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'testSppClientConnectSafe create! ');
+    LogUtil.info('testSppClientConnectSafe create! ');
     let uuid: string = AppStorage.get('inputUuid') !
     let deviceId: string = AppStorage.get('inputDeviceId') !
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothManager sppConnect: ' + deviceId);
-    bluetoothManager.sppConnect(deviceId , {
-      uuid : uuid ,
-      secure : true ,
-      type : 0
-    } , (code , socketID) => {
-      hilog.info(0x0000, 'BtTest', '%{public}s', "spp client code:" + JSON.stringify(code))
-      if ( code.code != 0  ) {
-        message = resStr($r('app.string.bluetoothtest_str_khdljsb'));
-        hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothManager sppConnect callback socketNumber(safe mode): ' + JSON.stringify(code));
-        promptAction.showToast({ message : message })
+    LogUtil.info('bluetoothManager sppConnect: ' + deviceId);
+    bluetoothManager.sppConnect(deviceId, {
+      uuid: uuid,
+      secure: true,
+      type: 0
+    }, (code, socketID) => {
+      LogUtil.info("spp client code:" + JSON.stringify(code))
+      if ( code.code != 0  ){
+        message = resStr($r('app.string.bluetoothtest_str_khdljsb'))
+        LogUtil.info('bluetoothManager sppConnect callback socketNumber(safe mode): ' + JSON.stringify(code));
+        promptAction.showToast({message: message})
         return message;
       }
       acceptClientSocketManager(socketID);
-      hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothManager sppConnect callback socketNumber(safe mode): ' + socketID);
+      LogUtil.info('bluetoothManager sppConnect callback socketNumber(safe mode): ' + socketID);
       message = resStr($r('app.string.bluetoothtest_str_khdljcg'));
-      AppStorage.setOrCreate("clientNumber" , clientNumber)
-      promptAction.showToast({ message : message })
+      AppStorage.setOrCreate("clientNumber", clientNumber)
+      promptAction.showToast({message: message})
       return message
     })
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
-  } catch( e ) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testSppClientConnectSafeManager. message: ${ e.message }, code: ${ e.code }`)
+  } catch( e ){
+    LogUtil.info(`Failed to testSppClientConnectSafeManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testSppClientConnectSafeManager. message: ${ e.message }, code: ${ e.code }`
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 }
@@ -60,33 +60,33 @@ export function testSppClientConnectSafeManager(): string {
 export function testSppClientConnectUnSafeManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_st_4'))
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'testSppClientConnectUnSafe create! ');
+    LogUtil.info('testSppClientConnectUnSafe create! ')
     let uuid: string = AppStorage.get('inputUuid') !
     let deviceId: string = AppStorage.get('inputDeviceId') !
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothManager sppConnect: ' + deviceId);
-    bluetoothManager.sppConnect(deviceId , {
-      uuid : uuid ,
-      secure : false ,
-      type : 0
-    } , (code , socketID) => {
-      if ( code ) {
+    LogUtil.info('bluetoothManager sppConnect: ' + deviceId);
+    bluetoothManager.sppConnect(deviceId, {
+      uuid: uuid,
+      secure: false,
+      type: 0
+    }, (code, socketID) => {
+      if ( code ){
         message = resStr($r('app.string.bluetoothtest_str_khdljsb'));
-        hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothManager sppConnect callback socketNumber(non-safe mode): ' + socketID);
-        promptAction.showToast({ message : message })
+        LogUtil.info('bluetoothManager sppConnect callback socketNumber(non-safe mode): ' + socketID);
+        promptAction.showToast({message: message})
         return message;
       }
       acceptClientSocketManager(socketID);
-      hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothManager sppConnect callback socketNumber(non-safe mode): ' + socketID);
+      LogUtil.info('bluetoothManager sppConnect callback socketNumber(non-safe mode): ' + socketID);
       message = resStr($r('app.string.bluetoothtest_str_khdljcg'));
-      promptAction.showToast({ message : message })
+      promptAction.showToast({message: message})
       return message
     });
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
-  } catch( e ) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testSppClientConnectUnSafeManager. message: ${ e.message }, code: ${ e.code }`)
+  } catch( e ){
+    LogUtil.info(`Failed to testSppClientConnectUnSafeManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testSppClientConnectUnSafeManager. message: ${ e.message }, code: ${ e.code }`
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 }
@@ -94,19 +94,19 @@ export function testSppClientConnectUnSafeManager(): string {
 export function testSppClientWriteManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_st_18'))
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothManager sppWrite clientNumber1: ' + JSON.stringify(clientNumber));
+    LogUtil.info('bluetoothManager sppWrite clientNumber1: ' + JSON.stringify(clientNumber))
     let writeClientData: string = AppStorage.get("writeClientData") !
     let writeArrayBuffer: ArrayBuffer = strToArrayBuffer(writeClientData) as ArrayBuffer;
-    bluetoothManager.sppWrite(clientNumber , writeArrayBuffer);
-    AppStorage.setOrCreate("clientNumber" , clientNumber)
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'sppWrite successfully');
+    bluetoothManager.sppWrite(clientNumber, writeArrayBuffer);
+    AppStorage.setOrCreate("clientNumber", clientNumber)
+    LogUtil.info('sppWrite successfully');
     message = resStr($r('app.string.bluetoothtest_str_xrcg'));
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
-  } catch( e ) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testSppClientWriteManager. message: ${ e.message }, code: ${ e.code }`)
+  } catch( e ){
+    LogUtil.info(`Failed to testSppClientWriteManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testSppClientWriteManager. message: ${ e.message }, code: ${ e.code }`
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 }
@@ -114,24 +114,24 @@ export function testSppClientWriteManager(): string {
 export function testSppClientReadOnManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_st_14'))
-    bluetoothManager.on('sppRead' , clientNumber , (dataBuffer: ArrayBuffer) => {
-      const data = new Uint8Array(dataBuffer);
-      hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetoothManager read is: ' + data);
-      if ( data != null ) {
+    bluetoothManager.on('sppRead', clientNumber, (dataBuffer: ArrayBuffer) => {
+      const data = new Uint8Array(dataBuffer)
+      LogUtil.info('spp bluetoothManager read is: ' + data);
+      if ( data != null ){
         message = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
       } else {
         message = resStr($r('app.string.bluetoothtest_str_dqsb'));
       }
-      AppStorage.setOrCreate("dataReadMessage" , message)
-      promptAction.showToast({ message : message })
+      AppStorage.setOrCreate("dataReadMessage", message)
+      promptAction.showToast({message: message})
       return message
     });
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
-  } catch( e ) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testSppClientReadOnManager. message: ${ e.message }, code: ${ e.code }`)
+  } catch( e ){
+    LogUtil.info(`Failed to testSppClientReadOnManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testSppClientReadOnManager. message: ${ e.message }, code: ${ e.code }`
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 }
@@ -139,24 +139,24 @@ export function testSppClientReadOnManager(): string {
 export function testSppClientReadOffManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_st_11'))
-    bluetoothManager.off('sppRead' , clientNumber , (dataBuffer: ArrayBuffer) => {
-      const data = new Uint8Array(dataBuffer);
-      hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetoothManager read is: ' + data);
-      if ( data != null ) {
+    bluetoothManager.off('sppRead', clientNumber, (dataBuffer: ArrayBuffer) => {
+      const data = new Uint8Array(dataBuffer)
+      LogUtil.info('spp bluetoothManager read is: ' + data);
+      if ( data != null ){
         message = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
       } else {
         message = resStr($r('app.string.bluetoothtest_str_dqsb'));
       }
-      AppStorage.setOrCreate("dataReadMessage" , message)
-      promptAction.showToast({ message : message })
+      AppStorage.setOrCreate("dataReadMessage", message)
+      promptAction.showToast({message: message})
       return message
     });
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
-  } catch( e ) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testSppClientReadOffManager. message: ${ e.message }, code: ${ e.code }`)
+  } catch( e ){
+    LogUtil.info(`Failed to testSppClientReadOffManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testSppClientReadOffManager. message: ${ e.message }, code: ${ e.code }`
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 }
@@ -165,51 +165,51 @@ export function testSppClientCloseManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_st_17'))
     sppClientCloseManager()
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
-  } catch( e ) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testSppClientCloseManager. message: ${ e.message }, code: ${ e.code }`)
+  } catch( e ){
+    LogUtil.info(`Failed to testSppClientCloseManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testSppClientCloseManager. message: ${ e.message }, code: ${ e.code }`
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 }
 
-export function acceptClientSocketManager(number: number) {
-  hilog.info(0x0000, 'BtTest', '%{public}s', 'spp clientSocket socketID: ' + number);
+export function acceptClientSocketManager(number: number){
+  LogUtil.info('spp clientSocket socketID: ' + number)
   // 获取的clientNumber用作服务端后续读/写操作socket的id。
   clientNumber = number;
-  AppStorage.setOrCreate("clientNumber" , clientNumber)
+  AppStorage.setOrCreate("clientNumber", clientNumber)
 }
 
-export function sppClientCloseManager() {
+export function sppClientCloseManager(){
   try {
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetoothModel sppCloseClientSocket clientNumber: ' + JSON.stringify(clientNumber))
-    bluetoothManager.sppCloseClientSocket(clientNumber);
+    LogUtil.info('bluetoothModel sppCloseClientSocket clientNumber: ' + JSON.stringify(clientNumber))
+    bluetoothManager.sppCloseClientSocket(clientNumber)
     let message = resStr($r('app.string.bluetoothtest_str_gbcgc')) + clientNumber;
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
-  } catch( e ) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to sppClientCloseManager. message: ${ e.message }, code: ${ e.code }`)
+  } catch( e ){
+    LogUtil.info(`Failed to sppClientCloseManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to sppClientCloseManager. message: ${ e.message }, code: ${ e.code }`
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 }
 
-export function strToArrayBuffer(str: string) {
-  let array = new Uint8Array(str.length);
-  for ( let i = 0 ; i < str.length ; i ++ ) {
+export function strToArrayBuffer(str: string){
+  let array = new Uint8Array(str.length)
+  for(let i = 0 ; i<str.length ; i++ ){
     array[ i ] = str.charCodeAt(i);
   }
   return array.buffer
 }
 
-export function dataRead(dataBuffer: ArrayBuffer) {
+export function dataRead(dataBuffer: ArrayBuffer){
   let dataReadMessage = ''
   const data = new Uint8Array(dataBuffer);
-  hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetoothManager read is: ' + data);
-  if ( data != null ) {
+  LogUtil.info('spp bluetoothManager read is: ' + data);
+  if ( data != null ){
     dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
   } else {
     dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
