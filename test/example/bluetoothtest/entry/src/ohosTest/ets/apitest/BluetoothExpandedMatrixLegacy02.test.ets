@@ -15,11 +15,11 @@
 /**
  * `@ohos.bluetooth.getProfileConnState` 扫参 **130～259**（展开写法）。与 `BluetoothExpandedMatrixLegacy01.test` 合起来覆盖 0～259。
  */
-import { describe, it, expect } from '@ohos/hypium';
+import { describe, it, expect} from '@ohos/hypium';
 import bluetooth from '@ohos.bluetooth';
-import { matrixTryRun } from './BluetoothExpandedMatrixShared';
+import { matrixTryRun} from './BluetoothExpandedMatrixShared';
 
-export default function bluetoothExpandedMatrixLegacy02Test() {
+export default function bluetoothExpandedMatrixLegacy02Test(){
   describe('ExpandedMatrix_legacy_getProfileConnState_130_259', () => {
     it('expanded_legacy_getProfileConnState_130', 0, () => {
       matrixTryRun(() => {

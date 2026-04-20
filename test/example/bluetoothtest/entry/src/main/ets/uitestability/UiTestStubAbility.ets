@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import UIAbility from '@ohos.app.ability.UIAbility';
-import { AbilityConstant, Want } from '@kit.AbilityKit';
+import { AbilityConstant, Want} from '@kit.AbilityKit';
 import window from '@ohos.window';
 
 export default class UiTestStubAbility extends UIAbility {

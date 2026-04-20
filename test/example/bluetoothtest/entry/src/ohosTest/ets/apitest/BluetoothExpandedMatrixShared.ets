@@ -19,7 +19,7 @@
 export function matrixTryRun(fn: () => void): void {
   try {
     fn();
-  } catch (_e) {
-    // 参数或能力导致抛错时忽略
+  } catch (_e){
+  // 参数或能力导致抛错时忽略
   }
 }

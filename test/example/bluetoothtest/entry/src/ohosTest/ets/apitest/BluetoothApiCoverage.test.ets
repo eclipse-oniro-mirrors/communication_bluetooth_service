@@ -21,13 +21,13 @@
  * 设计补强（对齐 jsapi/26/APITEST_COVERAGE.md）：ProfileId 矩阵、非法参数边界、
  * 可量化性能与压力循环（ApitestCoverageHelpers）。
  */
-import { describe, it, expect } from '@ohos/hypium';
+import { describe, it, expect} from '@ohos/hypium';
 import bluetooth from '@ohos.bluetooth';
 import btm from '@ohos.bluetoothManager';
 import hid from '@ohos.bluetooth.hid';
 import pan from '@ohos.bluetooth.pan';
-import { opp } from '@kit.ConnectivityKit';
-import { assertPerfBudget, assertStressHasSuccess } from './ApitestCoverageHelpers';
+import { opp} from '@kit.ConnectivityKit';
+import { assertPerfBudget, assertStressHasSuccess} from './ApitestCoverageHelpers';
 
 const DUMMY_MAC = '00:11:22:33:44:55';
 /** 与主工程 BluetoothModel 中 getProfile 使用的 profileId 一致 */
@@ -42,12 +42,12 @@ const PROFILE_INVALID = -1;
 const tryInvoke = (tag: string, fn: () => void): void => {
   try {
     fn();
-  } catch (e) {
+  } catch (e){
     console.info(`[BluetoothApiCoverage] ${tag} skip: ${JSON.stringify(e)}`);
   }
 };
 
-export default function bluetoothApiCoverageTest() {
+export default function bluetoothApiCoverageTest(){
   describe('BluetoothClassicDeprecated', () => {
     it('getState', 0, () => {
       tryInvoke('getState', () => {
@@ -104,7 +104,7 @@ export default function bluetoothApiCoverageTest() {
       tryInvoke('getProfileConnState_invalid', () => {
         try {
           bluetooth.getProfileConnState(PROFILE_INVALID);
-        } catch (_e) {
+        } catch (_e){
           expect(true).assertTrue();
         }
       });
@@ -118,7 +118,7 @@ export default function bluetoothApiCoverageTest() {
         expect(p1 !== null && p1 !== undefined).assertTrue();
         expect(p4 !== null && p4 !== undefined).assertTrue();
         // 部分机型/镜像未暴露 OPP，不强制 p10 非空，避免阻塞全量用例
-        if (p10 === null || p10 === undefined) {
+        if (p10 === null || p10 === undefined){
           console.info('[BluetoothApiCoverage] getProfile(PROFILE_OPP) unavailable on device, skip strict assert');
           expect(true).assertTrue();
         } else {

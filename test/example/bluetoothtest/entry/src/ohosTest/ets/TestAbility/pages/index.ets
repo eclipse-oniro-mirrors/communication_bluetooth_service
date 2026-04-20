@@ -1,3 +1,4 @@
+import LogUtil from '../../../../main/ets/Utils/LogUtil';
 ﻿/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import hilog from '@ohos.hilog';
-
 @Entry
 @Component
 struct Index {
-  aboutToAppear() {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'TestAbility index aboutToAppear');
+  aboutToAppear(){
+    LogUtil.info('TestAbility index aboutToAppear');
   }
  @State message: string = 'Hello World'
-   build() {
-         Row() {
-           Column() {
+   build(){
+         Row(){
+           Column(){
             Text(this.message)
               .fontSize('50vp')
               .fontWeight(FontWeight.Bold)
-            Button() {
+            Button(){
               Text('next page')
                 .fontSize('20vp')
                 .fontWeight(FontWeight.Bold)
-            }.type(ButtonType.Capsule)
+        }.type(ButtonType.Capsule)
             .margin({
               top: '20vp'
             })
@@ -45,4 +44,4 @@ struct Index {
          }
              .height('100%')
    }
- }
+}

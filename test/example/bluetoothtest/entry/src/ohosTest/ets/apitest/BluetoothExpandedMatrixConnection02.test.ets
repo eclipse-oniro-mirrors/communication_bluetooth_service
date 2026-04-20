@@ -15,11 +15,11 @@
 /**
  * ConnectivityKit `getProfileConnectionState` 扫参 **130～259**（展开写法）。与 `BluetoothExpandedMatrixConnection01.test` 合起来覆盖 0～259。
  */
-import { describe, it, expect } from '@ohos/hypium';
-import { connection, constant } from '@kit.ConnectivityKit';
-import { matrixTryRun } from './BluetoothExpandedMatrixShared';
+import { describe, it, expect} from '@ohos/hypium';
+import { connection, constant} from '@kit.ConnectivityKit';
+import { matrixTryRun} from './BluetoothExpandedMatrixShared';
 
-export default function bluetoothExpandedMatrixConnection02Test() {
+export default function bluetoothExpandedMatrixConnection02Test(){
   describe('ExpandedMatrix_CK_getProfileConnectionState_130_259', () => {
     it('expanded_ck_getProfileConnectionState_130', 0, () => {
       matrixTryRun(() => {
