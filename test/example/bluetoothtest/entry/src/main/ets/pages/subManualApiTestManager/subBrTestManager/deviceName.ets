@@ -12,12 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import hilog from '@ohos.hilog';
+import LogUtil from '../../../Utils/LogUtil';
 import ConfigData from '../../../Utils/ConfigData';
 import BluetoothModel from '../../../MainAbility/model/BluetoothModel';
 import router from '@ohos.router';
 import InputMethod from '@ohos.inputMethod';
-import { PageTitle } from '../../../Component/pageTitle';
+import { PageTitle} from '../../../Component/pageTitle';
 /**
  * about phone
  */
@@ -27,101 +27,101 @@ struct DeviceNameCard {
   private deviceName: string = BluetoothModel.getLocalName();
   private deviceInfo: any = ''
 
-  build() {
-    Column() {
+  build(){
+    Column(){
       GridContainer({
-        columns : 12 ,
-        sizeType : SizeType.Auto ,
-        gutter : vp2px(1) === 2 ? ConfigData.VP_12 : ConfigData.VP_0 ,
-        margin : vp2px(1) === 2 ? ConfigData.VP_24 : ConfigData.VP_0
-      }) {
-        Row({}) {
-          Column() {
+        columns: 12,
+        sizeType: SizeType.Auto,
+        gutter: vp2px(1) === 2 ? ConfigData.VP_12: ConfigData.VP_0,
+        margin: vp2px(1) === 2 ? ConfigData.VP_24: ConfigData.VP_0
+      }){
+        Row({}){
+          Column(){
           }
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 0 , offset : 0 } , sm : { span : 0 , offset : 0 } ,
-            md : { span : 0 , offset : 0 } , lg : { span : 2 , offset : 0 }
+            xs: { span: 0, offset: 0}, sm: { span: 0, offset: 0},
+            md: { span: 0, offset: 0}, lg: { span: 2, offset: 0}
           });
 
-          Column() {
-            PageTitle({ detail : $r('app.string.bluetoothtest_str_sbmc') })
+          Column(){
+            PageTitle({detail: $r('app.string.bluetoothtest_str_sbmc')})
 
-            TextInput({ text : this.deviceName })
+            TextInput({text: this.deviceName})
               .placeholderFont({
-                size : ConfigData.FP_18 ,
-                weight : FontWeight.Normal ,
-                style : FontStyle.Normal
+                size: ConfigData.FP_18,
+                weight: FontWeight.Normal,
+                style: FontStyle.Normal
               })
               .type(InputType.Normal)
               .enterKeyType(EnterKeyType.Done)
               .caretColor(Color.Blue)
               .padding({
-                left : $r('sys.float.ohos_id_card_margin_start') ,
-                right : $r('sys.float.ohos_id_card_margin_end')
+                left: $r('sys.float.ohos_id_card_margin_start'),
+                right: $r('sys.float.ohos_id_card_margin_end')
               })
               .height(ConfigData.VP_40)
               .borderRadius(ConfigData.VP_0)
               .backgroundColor($r('app.color.color_00000000_transparent'))
               .onChange((value: string) => {
-                hilog.info(0x0000, 'BtTest', '%{public}s', ConfigData.TAG + 'device name changed to: ' + JSON.stringify(value));
+                LogUtil.info(ConfigData.TAG + 'device name changed to: ' + JSON.stringify(value));
                 this.deviceName = value;
               })
               .onSubmit((enterKey) => {
                 InputMethod.getInputMethodController().stopInput().then((ret) => {
-                  hilog.info(0x0000, 'BtTest', '%{public}s', `${ ConfigData.TAG }, enterType: ${ enterKey }, stopInput: ${ ret }`);
-                });
+                  LogUtil.info(`${ ConfigData.TAG }, enterType: ${ enterKey }, stopInput: ${ ret }`);
+              });
               })
             Divider()
               .padding({
-                left : $r('sys.float.ohos_id_card_margin_start') ,
-                right : $r('sys.float.ohos_id_card_margin_end')
+                left: $r('sys.float.ohos_id_card_margin_start'),
+                right: $r('sys.float.ohos_id_card_margin_end')
               })
 
-            Column() {
+            Column(){
               Blank()
             }
               .height(ConfigData.WH_25_100)
 
             Flex({
-              direction : FlexDirection.Row ,
-              justifyContent : FlexAlign.Center ,
-              alignItems : ItemAlign.Center
-            }) {
-              Row() {
-                ButtonComponent({ text : $r("app.string.cancel") , isOnClick : () => {
+              direction: FlexDirection.Row,
+              justifyContent: FlexAlign.Center,
+              alignItems: ItemAlign.Center
+            }){
+              Row(){
+                ButtonComponent({text: $r("app.string.cancel"), isOnClick: () => {
                   router.back();
-                } })
+                }})
               }
               .width(ConfigData.VP_120)
-              .margin({ right : ConfigData.VP_12 })
+              .margin({right: ConfigData.VP_12})
 
-              Row() {
-                ButtonComponent({ text : $r("app.string.confirm") , isOnClick : () => {
+              Row(){
+                ButtonComponent({text: $r("app.string.confirm"), isOnClick: () => {
                   let ret = BluetoothModel.setLocalName(this.deviceName);
-                  AppStorage.setOrCreate('setLocalNameRet' , ret);
+                  AppStorage.setOrCreate('setLocalNameRet', ret);
                   router.back();
-                } })
+                }})
               }
                 .width(ConfigData.VP_120)
             }
           }
-          .padding({ left : ConfigData.VP_24 , right : ConfigData.VP_24 })
+          .padding({left: ConfigData.VP_24, right: ConfigData.VP_24})
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 12 , offset : 0 } , sm : { span : 12 , offset : 0 } ,
-            md : { span : 12 , offset : 0 } , lg : { span : 8 , offset : 2 }
+            xs: { span: 12, offset: 0}, sm: { span: 12, offset: 0},
+            md: { span: 12, offset: 0}, lg: { span: 8, offset: 2}
           });
 
-          Column() {
+          Column(){
           }
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 0 , offset : 12 } , sm : { span : 0 , offset : 12 } ,
-            md : { span : 0 , offset : 12 } , lg : { span : 2 , offset : 10 }
+            xs: { span: 0, offset: 12}, sm: { span: 0, offset: 12},
+            md: { span: 0, offset: 12}, lg: { span: 2, offset: 10}
           })
         }
         .width(ConfigData.WH_100_100)
@@ -144,8 +144,8 @@ struct ButtonComponent {
   private isOnClick = () => {
   };
 
-  build() {
-    Column() {
+  build(){
+    Column(){
       Text(this.text)
         .fontSize(ConfigData.FP_16)
         .fontWeight(FontWeight.Medium)
@@ -157,10 +157,10 @@ struct ButtonComponent {
         .borderRadius(ConfigData.VP_20)
         .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") : $r("sys.color.ohos_id_color_foreground_contrary"))
         .onTouch((event: TouchEvent) => {
-          if ( event.type === TouchType.Down ) {
+          if ( event.type === TouchType.Down ){
             this.isTouched = true;
           }
-          if ( event.type === TouchType.Up ) {
+          if ( event.type === TouchType.Up ){
             this.isTouched = false;
           }
         })
