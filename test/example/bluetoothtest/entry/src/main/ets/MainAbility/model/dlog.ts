@@ -13,26 +13,37 @@
  * limitations under the License.
  */
 
-import hilog from '@ohos.hilog';
+import LogUtil from '../../Utils/LogUtil';
 
-const DOMAIN = 0x0000;
 const TAG = 'bttestTag';
+const PLACEHOLDER = '%{public}s';
 
-export default class dlog {
-  static info(format: string, ...args: any[]) {
-    hilog.info(DOMAIN, TAG, format, ...args);
+function formatMessage(format: string, ...args: any[]): string {
+  let msg = format;
+  for(const a of args){
+    const i = msg.indexOf(PLACEHOLDER);
+    if (i < 0){
+      break;
+    }
+    msg = msg.substring(0, i) + String(a) + msg.substring(i + PLACEHOLDER.length);
   }
-
-  static debug(format: string, ...args: any[]) {
-    hilog.debug(DOMAIN, TAG, format, ...args);
-  }
-
-  static warn(format: string, ...args: any[]) {
-    hilog.warn(DOMAIN, TAG, format, ...args);
-  }
-
-  static err(format: string, ...args: any[]) {
-    hilog.error(DOMAIN, TAG, format, ...args);
-  }
+  return msg;
 }
 
+export default class dlog {
+  static info(format: string, ...args: any[]){
+    LogUtil.info(`[${TAG}] ${formatMessage(format, ...args)}`);
+  }
+
+  static debug(format: string, ...args: any[]){
+    LogUtil.debug(`[${TAG}] ${formatMessage(format, ...args)}`);
+  }
+
+  static warn(format: string, ...args: any[]){
+    LogUtil.warn(`[${TAG}] ${formatMessage(format, ...args)}`);
+  }
+
+  static err(format: string, ...args: any[]){
+    LogUtil.error(`[${TAG}] ${formatMessage(format, ...args)}`);
+  }
+}
