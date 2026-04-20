@@ -12,10 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../Utils/resString';
+import LogUtil from '../../Utils/LogUtil';
+import { resStr} from '../../Utils/resString';
 
 
-import hilog from '@ohos.hilog';
 /**
  * Gatt Page Of Bluetooth test
  */
@@ -28,30 +28,28 @@ const PAGE_URI_GET_GATT_SERVER = 'pages/subManualApiTest/subGattTest/gattServer'
 
 export function testGattClient(): string {
   try {
-    router.pushUrl({ url : PAGE_URI_GET_GATT_CLIENT })
+    router.pushUrl({url: PAGE_URI_GET_GATT_CLIENT})
     let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
-  } catch( e ) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGattClient. message: ${ e.message }, code: ${ e.code }`)
+  } catch( e ){
+    LogUtil.info(`Failed to testGattClient. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGattClient. message: ${ e.message }, code: ${ e.code }`
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 }
 
 export function testGattServer(): string {
   try {
-    router.pushUrl({ url : PAGE_URI_GET_GATT_SERVER })
+    router.pushUrl({url: PAGE_URI_GET_GATT_SERVER})
     let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
-  } catch( e ) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGattServer. message: ${ e.message }, code: ${ e.code }`)
+  } catch( e ){
+    LogUtil.info(`Failed to testGattServer. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGattServer. message: ${ e.message }, code: ${ e.code }`
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 }
-
-
