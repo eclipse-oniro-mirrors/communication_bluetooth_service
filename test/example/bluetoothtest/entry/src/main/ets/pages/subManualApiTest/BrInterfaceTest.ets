@@ -13,16 +13,16 @@
  * limitations under the License.
  */
 import hilog from '@ohos.hilog';
-import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
-import { PageTitle } from '../../Component/pageTitle';
-import { TestImageDisplay } from '../../Component/testImageDisplay';
-import { ContentTable } from '../../Component/contentTable';
-import BluetoothModel , { BluetoothDevice } from '../../MainAbility/model/BluetoothModel';
+import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
+import { PageTitle} from '../../Component/pageTitle';
+import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { ContentTable} from '../../Component/contentTable';
+import BluetoothModel, { BluetoothDevice} from '../../MainAbility/model/BluetoothModel';
 import BluetoothDeviceController from '../../MainAbility/controller/BluetoothDeviceController';
 import ConfigData from '../../Utils/ConfigData';
 import LogUtil from '../../Utils/LogUtil';
-import { initBRApiData } from '../../MainAbility/model/testDataModels'
-import { TestData } from '../../MainAbility/model/testData'
+import { initBRApiData} from '../../MainAbility/model/testDataModels'
+import { TestData} from '../../MainAbility/model/testData'
 
 /**
  * Br Test Page Of Bluetooth test
@@ -52,56 +52,56 @@ struct BrTest {
   @State isPinRequiredClick: boolean = false;
   @State isBondStateChangeClick: boolean = false;
   pairDialog: CustomDialogController = new CustomDialogController({
-    builder : PairDialog({
-      deviceName : this.pairingDevice.deviceName ,
-      pinCode : this.pairPinCode ,
-      action : (accept: boolean) => {
-        hilog.info(0x0000, 'BtTest', '%{public}s', "PairDialog start -------")
-        this.confirmPairing(accept);
-        hilog.info(0x0000, 'BtTest', '%{public}s', "PairDialog end -------")
+    builder: PairDialog({
+      deviceName: this.pairingDevice.deviceName,
+      pinCode: this.pairPinCode,
+      action: (accept: boolean) => {
+        LogUtil.info("PairDialog start -------")
+        this.confirmPairing(accept)
+        LogUtil.info("PairDialog end -------")
       }
-    }) ,
-    alignment : DialogAlignment.Bottom ,
-    autoCancel : true
-  });
+    }),
+    alignment: DialogAlignment.Bottom,
+    autoCancel: true
+  })
 
-  aboutToAppear() {
-    console.info(TAG , "this.testItem:" + JSON.stringify(this.testItem))
+  aboutToAppear(){
+    hilog.info(0x0000, 'BtTest', '%{public}s %{public}s', TAG, "this.testItem:" + JSON.stringify(this.testItem))
     this.btEnable = BluetoothModel.isStateOn();
-    this.controller.subscribePinRequired((deviceId , pinCode) => {
+    this.controller.subscribePinRequired((deviceId, pinCode) => {
       this.pairPinCode = pinCode
       this.pairingDevice.deviceId = deviceId;
       this.pairingDevice.deviceName = deviceId;
       this.pairDialog.open();
     })
-    AppStorage.setOrCreate('bluetoothIsOn' , this.btEnable);
-    AppStorage.setOrCreate('pairedMac' , this.pairedMac);
+    AppStorage.setOrCreate('bluetoothIsOn', this.btEnable);
+    AppStorage.setOrCreate('pairedMac', this.pairedMac);
   }
 
-  init() {
-    hilog.info(0x0000, 'BtTest', '%{public}s', "init-----------")
+  init(){
+    LogUtil.info("init-----------")
   }
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
             .accessibilityLevel('yes')
             .id('pages_subManualApiTest_BrInterfaceTest__pt_0')
       }
 
       Stack()
         .height(ConfigData.VP_0_5)
-        .backgroundColor($r('app.color.black'));
-      Column() {
-        Row() {
+        .backgroundColor($r('app.color.black'))
+      Column(){
+        Row(){
           Text($r('app.string.bluetoothtest_text_mbsbm'))
             .fontSize(ConfigData.VP_18)
             .height(ConfigData.VP_40)
             .width(ConfigData.WH_30_100)
             .align(Alignment.Start)
-          TextInput({ text : this.pairedMac , placeholder : $r('app.string.bluetoothtest_str_qsrjjljdsbm') })
+          TextInput({text: this.pairedMac, placeholder: $r('app.string.bluetoothtest_str_qsrjjljdsbm')})
             .accessibilityLevel('yes')
             .id('pages_subManualApiTest_BrInterfaceTest__ti_0')
             .height(ConfigData.VP_40)
@@ -111,11 +111,11 @@ struct BrTest {
               this.deviceId = str;
             })
             .width(ConfigData.PCT_60)
-            .padding({ top : ConfigData.VP_5 , left : ConfigData.VP_5 })
+            .padding({top: ConfigData.VP_5, left: ConfigData.VP_5})
         }
       }
       .align(Alignment.TopStart)
-      ContentTable({ apiItems : initBRApiData() })
+      ContentTable({apiItems: initBRApiData()})
     }
     .alignItems(HorizontalAlign.Center)
     .backgroundColor($r("app.color.lead"))
@@ -126,15 +126,15 @@ struct BrTest {
    * Pair device
    * @param device
    */
-  pairDevice(deviceId: string) {
-    this.controller.pair(deviceId , (pinCode: string) => {
+  pairDevice(deviceId: string){
+    this.controller.pair(deviceId, (pinCode: string) => {
       LogUtil.info(this.TAG_PAGE + 'pairDevice success callback : pinCode = ' + pinCode);
       // show pair pin dialog
       this.pairPinCode = pinCode
       this.pairingDevice.deviceId = deviceId;
       this.pairingDevice.deviceName = deviceId;
       this.pairDialog.open();
-    } , () => {
+    }, () => {
       LogUtil.info(this.TAG_PAGE + 'pairDevice error callback');
       this.showPairFailedDialog()
     })
@@ -143,38 +143,37 @@ struct BrTest {
   /**
    * Confirm pairing
    */
-  confirmPairing(accept: boolean) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', "confirmPairing start -----------")
-    LogUtil.info(this.TAG_PAGE + 'confirmPairing : pairingDevice + ' + JSON.stringify(this.pairingDevice));
-    this.controller.confirmPairing(this.pairingDevice.deviceId , accept);
-    hilog.info(0x0000, 'BtTest', '%{public}s', "confirmPairing end -----------")
+  confirmPairing(accept: boolean){
+    LogUtil.info("confirmPairing start -----------")
+    LogUtil.info(this.TAG_PAGE + 'confirmPairing : pairingDevice + ' + JSON.stringify(this.pairingDevice))
+    this.controller.confirmPairing(this.pairingDevice.deviceId, accept);
+    LogUtil.info("confirmPairing end -----------")
   }
 
   /**
    * Show pair failed dialog
    */
-  showPairFailedDialog() {
+  showPairFailedDialog(){
     this.showPairingFailedDialog()
   }
 
   /**
    * Show connect Failed Dialog
    */
-  private showConnectFailedDialog() {
+  private showConnectFailedDialog(){
     showDialog(
-      $r("app.string.bluetooth_connect_failed") ,
-      $r("app.string.bluetooth_connect_failed_msg") ,
-      $r("app.string.bluetooth_know_button")
-    );
+      $r("app.string.bluetooth_connect_failed"),
+      $r("app.string.bluetooth_connect_failed_msg"),
+      $r("app.string.bluetooth_know_button"))
   }
 
   /**
    * Show pairing failed title Dialog
    */
-  private showPairingFailedDialog() {
+  private showPairingFailedDialog(){
     showDialog(
-      $r("app.string.pairing_failed_title") ,
-      $r("app.string.pairing_failed_message") ,
+      $r("app.string.pairing_failed_title"),
+      $r("app.string.pairing_failed_message"),
       $r("app.string.bluetooth_know_button")
     );
   }
@@ -194,25 +193,25 @@ struct PairDialog {
     LogUtil.log(ConfigData.TAG + `bluetooth PairDialog aboutToAppear pinCode = ${ this.pinCode }`)
   }
 
-  build() {
-    Column() {
+  build(){
+    Column(){
       Text($r('app.string.bluetooth_pairing_request'))
         .fontSize(ConfigData.FP_22)
         .height(ConfigData.VP_60)
         .width(ConfigData.WH_100_100)
         .padding({
-          left : ConfigData.VP_24 ,
-          top : ConfigData.VP_14 ,
-          bottom : ConfigData.VP_14
+          left: ConfigData.VP_24,
+          top: ConfigData.VP_14,
+          bottom: ConfigData.VP_14
         })
-      Column() {
-        if ( this.pinCode ) {
-          Text($r('app.string.bluetooth_pairing_intelligent_device_hit' , this.deviceName , this.deviceName))
+      Column(){
+        if ( this.pinCode ){
+          Text($r('app.string.bluetooth_pairing_intelligent_device_hit', this.deviceName, this.deviceName))
             .fontSize(ConfigData.FP_16)
             .width(ConfigData.WH_100_100)
             .margin({
-              top : ConfigData.VP_14 ,
-              bottom : ConfigData.VP_14
+              top: ConfigData.VP_14,
+              bottom: ConfigData.VP_14
             })
 
           Text(`${ this.pinCode }`)
@@ -221,8 +220,8 @@ struct PairDialog {
             .width(ConfigData.WH_100_100)
             .textAlign(TextAlign.Center)
             .margin({
-              top : ConfigData.VP_24 ,
-              bottom : ConfigData.VP_24
+              top: ConfigData.VP_24,
+              bottom: ConfigData.VP_24
             })
 
         } else {
@@ -230,7 +229,7 @@ struct PairDialog {
             .fontSize(ConfigData.FP_16)
             .width(ConfigData.WH_100_100)
             .margin({
-              bottom : ConfigData.VP_2
+              bottom: ConfigData.VP_2
             })
 
           Text(this.deviceName)
@@ -240,9 +239,9 @@ struct PairDialog {
         }
 
         // button
-        Flex({ justifyContent : FlexAlign.Center , alignItems : ItemAlign.Center }) {
+        Flex({justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center}){
 
-          Button() {
+          Button(){
             Text($r('app.string.cancel'))
               .fontSize(ConfigData.FP_16)
               .fontColor(Color.Blue)
@@ -259,12 +258,12 @@ struct PairDialog {
           })
 
           Divider()
-            .height(ConfigData.VP_24)
-            .strokeWidth(ConfigData.VP_0_5)
-            .vertical(true)
-            .color(($r("app.color.color_E3E3E3_grey")))
+          .height(ConfigData.VP_24)
+          .strokeWidth(ConfigData.VP_0_5)
+          .vertical(true)
+          .color(($r("app.color.color_E3E3E3_grey")))
 
-          Button() {
+          Button(){
             Text($r('app.string.bluetooth_pair_button'))
               .fontSize(ConfigData.FP_16)
               .fontColor(Color.Blue)
@@ -277,23 +276,23 @@ struct PairDialog {
           .flexGrow(1)
           .onClick(() => {
             this.dialogController.close();
-            hilog.info(0x0000, 'BtTest', '%{public}s', "onClick start --------------")
-            this.action(true);
-            hilog.info(0x0000, 'BtTest', '%{public}s', "onClick end --------------")
+            LogUtil.info("onClick start --------------")
+            this.action(true)
+            LogUtil.info("onClick end --------------")
           })
         }
         .width(ConfigData.WH_100_100)
-        .height(ConfigData.VP_60);
+        .height(ConfigData.VP_60)
       }
       .width(ConfigData.WH_100_100)
       .padding({
-        left : ConfigData.VP_24 ,
-        right : ConfigData.VP_24
+        left: ConfigData.VP_24,
+        right: ConfigData.VP_24
       })
     }
     .padding({
-      left : ConfigData.VP_24 ,
-      right : ConfigData.VP_24
+      left: ConfigData.VP_24,
+      right: ConfigData.VP_24
     })
     .width(ConfigData.WH_100_100);
   }
@@ -305,20 +304,19 @@ struct PairDialog {
  * @param dialogMessage Dialog message
  * @param buttonValue Dialog buttonValue
  */
-function showDialog(dialogTitle: string | Resource , dialogMessage: string | Resource , buttonValue: string | Resource) {
+function showDialog(dialogTitle: string | Resource, dialogMessage: string | Resource, buttonValue: string | Resource){
   AlertDialog.show({
-    title : dialogTitle ,
-    message : dialogMessage ,
-    confirm : {
-      value : buttonValue ,
-      action : () => {
+    title: dialogTitle,
+    message: dialogMessage,
+    confirm: {
+      value: buttonValue,
+      action: () => {
         LogUtil.info('Button-clicking callback')
       }
-    } ,
-    cancel : () => {
+    },
+    cancel: () => {
       LogUtil.info('Closed callbacks')
-    } ,
-    alignment : DialogAlignment.Bottom
+    },
+    alignment: DialogAlignment.Bottom
   })
 }
-
