@@ -13,17 +13,17 @@
  * limitations under the License.
  */
 
-import { getUiAbilityContext } from './uiContextStore';
+import { getUiAbilityContext} from './uiContextStore';
 
 /**
  * 将字符串资源解析为字面量。依赖 EntryAbility 通过 uiContextStore.setUiAbilityContext 注入的上下文。
  */
 export function resStr(res: Resource): string {
   const ctx = getUiAbilityContext();
-  if (ctx?.resourceManager) {
+  if (ctx?.resourceManager){
     try {
       return ctx.resourceManager.getStringSync(res);
-    } catch (_e) {
+    } catch (_e){
       return '';
     }
   }

@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
+import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
 import ConfigData from '../../Utils/ConfigData';
-import { TestData } from '../../MainAbility/model/testData'
-import { PageTitle } from '../../Component/pageTitle';
-import { TestImageDisplay } from '../../Component/testImageDisplay';
-import { initProfileManagerAutoTestData } from '../../MainAbility/model/testDataModelsManager'
-import { TestListItem } from '../../Component/testListItems';
+import { TestData} from '../../MainAbility/model/testData'
+import { PageTitle} from '../../Component/pageTitle';
+import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { initProfileManagerAutoTestData} from '../../MainAbility/model/testDataModelsManager'
+import { TestListItem} from '../../Component/testListItems';
 
 /**
  *  ProfileAutoTest Manager Page Of Bluetooth test
@@ -32,24 +32,24 @@ struct ProfileAutoTestManager {
   private testItem: TestData = testItemFromRouterOrPlaceholder()
   @StorageLink("autoTestMessage") autoTestMessage: string = ""
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
       .accessibilityLevel('yes')
       .id('pages_subAutoTestManager_profileAutoTestManager__pt_0')
       }
 
-      List() {
-        ForEach(this.profileAutoTestItems , (item: TestData, index: number) => {
-          ListItem() {
+      List(){
+        ForEach(this.profileAutoTestItems, (item: TestData, index: number) => {
+          ListItem(){
             TestListItem({
-              testItem : item
+              testItem: item
             })
           }
       .id(index === 0 ? 'pages_subAutoTestManager_profileAutoTestManager__li_0' : `pages_subAutoTestManager_profileAutoTestManager__li_${index}`)
-        } , (item: TestData) => item.id)
+        }, (item: TestData) => item.id)
       }
       .height(ConfigData.WH_80_100)
       .backgroundColor($r("app.color.lead"))
