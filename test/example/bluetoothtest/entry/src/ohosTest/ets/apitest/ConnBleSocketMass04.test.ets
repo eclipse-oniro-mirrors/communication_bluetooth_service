@@ -18,497 +18,497 @@
  * Part: connBleSocketMass04
  * connection / ble / socket: 6 scenarios per overload (n,e,b,e2,r,x).
  */
-import { describe, it, expect } from '@ohos/hypium';
+import { describe, it, expect} from '@ohos/hypium';
 import connection from '@ohos.bluetooth.connection';
 import ble from '@ohos.bluetooth.ble';
 import socket from '@ohos.bluetooth.socket';
 import constant from '@ohos.bluetooth.constant';
 import common from '@ohos.bluetooth.common';
-import { tI, buf0, sppOpt, bleAd, bleAs, bleAp, BADDR } from './ConnBleSocketShared';
+import { tI, buf0, sppOpt, bleAd, bleAs, bleAp, BADDR} from './ConnBleSocketShared';
 
-export default function connBleSocketMass04() {
+export default function connBleSocketMass04(){
   describe('ConnBleSocket_mass_socket', () => {
     describe('sk_00_spp_listen', () => {
     it('sk_00_spp_listen_n', 0, () => {
       tI('sk_00_spp_listen_n', () => {
         socket.sppListen('h',sppOpt(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_00_spp_listen_e', 0, () => {
       tI('sk_00_spp_listen_e', () => {
         try{socket.sppListen('',sppOpt(),()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_00_spp_listen_b', 0, () => {
       tI('sk_00_spp_listen_b', () => {
         socket.sppListen('h2',sppOpt(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_00_spp_listen_e2', 0, () => {
       tI('sk_00_spp_listen_e2', () => {
         try{socket.sppListen('x',sppOpt(),()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_00_spp_listen_r', 0, () => {
       tI('sk_00_spp_listen_r', () => {
         socket.sppListen('h',sppOpt(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_00_spp_listen_x', 0, () => {
       tI('sk_00_spp_listen_x', () => {
         socket.sppListen('h',sppOpt(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('sk_01_get_l2cap_psm', () => {
     it('sk_01_get_l2cap_psm_n', 0, () => {
       tI('sk_01_get_l2cap_psm_n', () => {
         try{socket.getL2capPsm(0);expect(true).assertTrue();}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_01_get_l2cap_psm_e', 0, () => {
       tI('sk_01_get_l2cap_psm_e', () => {
         try{socket.getL2capPsm(-1);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_01_get_l2cap_psm_b', 0, () => {
       tI('sk_01_get_l2cap_psm_b', () => {
         try{socket.getL2capPsm(999);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_01_get_l2cap_psm_e2', 0, () => {
       tI('sk_01_get_l2cap_psm_e2', () => {
         try{socket.getL2capPsm(1);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_01_get_l2cap_psm_r', 0, () => {
       tI('sk_01_get_l2cap_psm_r', () => {
         try{socket.getL2capPsm(0);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_01_get_l2cap_psm_x', 0, () => {
       tI('sk_01_get_l2cap_psm_x', () => {
         try{socket.getL2capPsm(0);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     });
     describe('sk_02_spp_accept', () => {
     it('sk_02_spp_accept_n', 0, () => {
       tI('sk_02_spp_accept_n', () => {
         socket.sppAccept(0,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_02_spp_accept_e', 0, () => {
       tI('sk_02_spp_accept_e', () => {
         try{socket.sppAccept(-1,()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_02_spp_accept_b', 0, () => {
       tI('sk_02_spp_accept_b', () => {
         socket.sppAccept(1,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_02_spp_accept_e2', 0, () => {
       tI('sk_02_spp_accept_e2', () => {
         try{socket.sppAccept(0,()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_02_spp_accept_r', 0, () => {
       tI('sk_02_spp_accept_r', () => {
         socket.sppAccept(0,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_02_spp_accept_x', 0, () => {
       tI('sk_02_spp_accept_x', () => {
         socket.sppAccept(0,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('sk_03_spp_connect', () => {
     it('sk_03_spp_connect_n', 0, () => {
       tI('sk_03_spp_connect_n', () => {
         socket.sppConnect(BADDR,sppOpt(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_03_spp_connect_e', 0, () => {
       tI('sk_03_spp_connect_e', () => {
         try{socket.sppConnect('',sppOpt(),()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_03_spp_connect_b', 0, () => {
       tI('sk_03_spp_connect_b', () => {
         socket.sppConnect(BADDR,sppOpt(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_03_spp_connect_e2', 0, () => {
       tI('sk_03_spp_connect_e2', () => {
         try{socket.sppConnect('',sppOpt(),()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_03_spp_connect_r', 0, () => {
       tI('sk_03_spp_connect_r', () => {
         socket.sppConnect(BADDR,sppOpt(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_03_spp_connect_x', 0, () => {
       tI('sk_03_spp_connect_x', () => {
         socket.sppConnect(BADDR,sppOpt(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('sk_04_get_dev_id', () => {
     it('sk_04_get_dev_id_n', 0, () => {
       tI('sk_04_get_dev_id_n', () => {
         try{socket.getDeviceId(0);expect(true).assertTrue();}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_04_get_dev_id_e', 0, () => {
       tI('sk_04_get_dev_id_e', () => {
         try{socket.getDeviceId(-1);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_04_get_dev_id_b', 0, () => {
       tI('sk_04_get_dev_id_b', () => {
         try{socket.getDeviceId(999999);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_04_get_dev_id_e2', 0, () => {
       tI('sk_04_get_dev_id_e2', () => {
         try{socket.getDeviceId(1);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_04_get_dev_id_r', 0, () => {
       tI('sk_04_get_dev_id_r', () => {
         try{socket.getDeviceId(0);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_04_get_dev_id_x', 0, () => {
       tI('sk_04_get_dev_id_x', () => {
         try{socket.getDeviceId(0);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     });
     describe('sk_05_get_max_rx', () => {
     it('sk_05_get_max_rx_n', 0, () => {
       tI('sk_05_get_max_rx_n', () => {
         try{socket.getMaxReceiveDataSize(0); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
+          }catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_05_get_max_rx_e', 0, () => {
       tI('sk_05_get_max_rx_e', () => {
         try{socket.getMaxReceiveDataSize(-1);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_05_get_max_rx_b', 0, () => {
       tI('sk_05_get_max_rx_b', () => {
         try{socket.getMaxReceiveDataSize(9);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_05_get_max_rx_e2', 0, () => {
       tI('sk_05_get_max_rx_e2', () => {
         try{socket.getMaxReceiveDataSize(1);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_05_get_max_rx_r', 0, () => {
       tI('sk_05_get_max_rx_r', () => {
         try{socket.getMaxReceiveDataSize(0);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_05_get_max_rx_x', 0, () => {
       tI('sk_05_get_max_rx_x', () => {
         try{socket.getMaxReceiveDataSize(0);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     });
     describe('sk_06_get_max_tx', () => {
     it('sk_06_get_max_tx_n', 0, () => {
       tI('sk_06_get_max_tx_n', () => {
         try{socket.getMaxTransmitDataSize(0); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
+          }catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_06_get_max_tx_e', 0, () => {
       tI('sk_06_get_max_tx_e', () => {
         try{socket.getMaxTransmitDataSize(-1);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_06_get_max_tx_b', 0, () => {
       tI('sk_06_get_max_tx_b', () => {
         try{socket.getMaxTransmitDataSize(9);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_06_get_max_tx_e2', 0, () => {
       tI('sk_06_get_max_tx_e2', () => {
         try{socket.getMaxTransmitDataSize(1);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_06_get_max_tx_r', 0, () => {
       tI('sk_06_get_max_tx_r', () => {
         try{socket.getMaxTransmitDataSize(0);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_06_get_max_tx_x', 0, () => {
       tI('sk_06_get_max_tx_x', () => {
         try{socket.getMaxTransmitDataSize(0);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     });
     describe('sk_07_is_connected', () => {
     it('sk_07_is_connected_n', 0, () => {
       tI('sk_07_is_connected_n', () => {
         const ic=socket.isConnected(0);expect(typeof ic==='boolean').assertTrue();
+        });
       });
-    });
     it('sk_07_is_connected_e', 0, () => {
       tI('sk_07_is_connected_e', () => {
         try{socket.isConnected(-1);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_07_is_connected_b', 0, () => {
       tI('sk_07_is_connected_b', () => {
         socket.isConnected(0);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_07_is_connected_e2', 0, () => {
       tI('sk_07_is_connected_e2', () => {
         try{socket.isConnected(999);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_07_is_connected_r', 0, () => {
       tI('sk_07_is_connected_r', () => {
         socket.isConnected(0);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_07_is_connected_x', 0, () => {
       tI('sk_07_is_connected_x', () => {
         socket.isConnected(0);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('sk_08_close_srv', () => {
     it('sk_08_close_srv_n', 0, () => {
       tI('sk_08_close_srv_n', () => {
         socket.sppCloseServerSocket(0);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_08_close_srv_e', 0, () => {
       tI('sk_08_close_srv_e', () => {
         try{socket.sppCloseServerSocket(-1);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_08_close_srv_b', 0, () => {
       tI('sk_08_close_srv_b', () => {
         socket.sppCloseServerSocket(1);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_08_close_srv_e2', 0, () => {
       tI('sk_08_close_srv_e2', () => {
         try{socket.sppCloseServerSocket(0);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_08_close_srv_r', 0, () => {
       tI('sk_08_close_srv_r', () => {
         socket.sppCloseServerSocket(0);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_08_close_srv_x', 0, () => {
       tI('sk_08_close_srv_x', () => {
         socket.sppCloseServerSocket(0);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('sk_09_close_cli', () => {
     it('sk_09_close_cli_n', 0, () => {
       tI('sk_09_close_cli_n', () => {
         socket.sppCloseClientSocket(0);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_09_close_cli_e', 0, () => {
       tI('sk_09_close_cli_e', () => {
         try{socket.sppCloseClientSocket(-1);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_09_close_cli_b', 0, () => {
       tI('sk_09_close_cli_b', () => {
         socket.sppCloseClientSocket(1);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_09_close_cli_e2', 0, () => {
       tI('sk_09_close_cli_e2', () => {
         try{socket.sppCloseClientSocket(0);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_09_close_cli_r', 0, () => {
       tI('sk_09_close_cli_r', () => {
         socket.sppCloseClientSocket(0);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_09_close_cli_x', 0, () => {
       tI('sk_09_close_cli_x', () => {
         socket.sppCloseClientSocket(0);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('sk_10_spp_write', () => {
     it('sk_10_spp_write_n', 0, () => {
       tI('sk_10_spp_write_n', () => {
         socket.sppWrite(0,buf0());expect(true).assertTrue();
+        });
       });
-    });
     it('sk_10_spp_write_e', 0, () => {
       tI('sk_10_spp_write_e', () => {
         try{socket.sppWrite(-1,buf0());}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_10_spp_write_b', 0, () => {
       tI('sk_10_spp_write_b', () => {
         socket.sppWrite(0,buf0());expect(true).assertTrue();
+        });
       });
-    });
     it('sk_10_spp_write_e2', 0, () => {
       tI('sk_10_spp_write_e2', () => {
         try{socket.sppWrite(0,buf0());}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_10_spp_write_r', 0, () => {
       tI('sk_10_spp_write_r', () => {
         socket.sppWrite(0,buf0());expect(true).assertTrue();
+        });
       });
-    });
     it('sk_10_spp_write_x', 0, () => {
       tI('sk_10_spp_write_x', () => {
         socket.sppWrite(0,buf0());expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('sk_11_on_spp_read', () => {
     it('sk_11_on_spp_read_n', 0, () => {
       tI('sk_11_on_spp_read_n', () => {
         socket.on('sppRead',0,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_11_on_spp_read_e', 0, () => {
       tI('sk_11_on_spp_read_e', () => {
         try{socket.on('sppRead',-1,()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_11_on_spp_read_b', 0, () => {
       tI('sk_11_on_spp_read_b', () => {
         socket.on('sppRead',0,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_11_on_spp_read_e2', 0, () => {
       tI('sk_11_on_spp_read_e2', () => {
         try{socket.on('sppRead',1,()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_11_on_spp_read_r', 0, () => {
       tI('sk_11_on_spp_read_r', () => {
         socket.on('sppRead',0,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_11_on_spp_read_x', 0, () => {
       tI('sk_11_on_spp_read_x', () => {
         socket.on('sppRead',0,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('sk_12_off_spp_read', () => {
     it('sk_12_off_spp_read_n', 0, () => {
       tI('sk_12_off_spp_read_n', () => {
         socket.off('sppRead',0);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_12_off_spp_read_e', 0, () => {
       tI('sk_12_off_spp_read_e', () => {
         try{socket.off('sppRead',-1);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_12_off_spp_read_b', 0, () => {
       tI('sk_12_off_spp_read_b', () => {
         socket.off('sppRead',0,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('sk_12_off_spp_read_e2', 0, () => {
       tI('sk_12_off_spp_read_e2', () => {
         try{socket.off('sppRead',1);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_12_off_spp_read_r', 0, () => {
       tI('sk_12_off_spp_read_r', () => {
         socket.off('sppRead',0);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_12_off_spp_read_x', 0, () => {
       tI('sk_12_off_spp_read_x', () => {
         socket.off('sppRead',0);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('sk_13_write_async', () => {
     it('sk_13_write_async_n', 0, () => {
       tI('sk_13_write_async_n', () => {
         socket.sppWriteAsync(0,buf0());expect(true).assertTrue();
+        });
       });
-    });
     it('sk_13_write_async_e', 0, () => {
       tI('sk_13_write_async_e', () => {
         try{socket.sppWriteAsync(-1,buf0());}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_13_write_async_b', 0, () => {
       tI('sk_13_write_async_b', () => {
         socket.sppWriteAsync(0,buf0());expect(true).assertTrue();
+        });
       });
-    });
     it('sk_13_write_async_e2', 0, () => {
       tI('sk_13_write_async_e2', () => {
         try{socket.sppWriteAsync(0,buf0());}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_13_write_async_r', 0, () => {
       tI('sk_13_write_async_r', () => {
         socket.sppWriteAsync(0,buf0());expect(true).assertTrue();
+        });
       });
-    });
     it('sk_13_write_async_x', 0, () => {
       tI('sk_13_write_async_x', () => {
         socket.sppWriteAsync(0,buf0());expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('sk_14_read_async', () => {
     it('sk_14_read_async_n', 0, () => {
       tI('sk_14_read_async_n', () => {
         socket.sppReadAsync(0);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_14_read_async_e', 0, () => {
       tI('sk_14_read_async_e', () => {
         try{socket.sppReadAsync(-1);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_14_read_async_b', 0, () => {
       tI('sk_14_read_async_b', () => {
         socket.sppReadAsync(1);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_14_read_async_e2', 0, () => {
       tI('sk_14_read_async_e2', () => {
         try{socket.sppReadAsync(0);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('sk_14_read_async_r', 0, () => {
       tI('sk_14_read_async_r', () => {
         socket.sppReadAsync(0);expect(true).assertTrue();
+        });
       });
-    });
     it('sk_14_read_async_x', 0, () => {
       tI('sk_14_read_async_x', () => {
         socket.sppReadAsync(0);expect(true).assertTrue();
+        });
       });
-    });
     });
   });
 }

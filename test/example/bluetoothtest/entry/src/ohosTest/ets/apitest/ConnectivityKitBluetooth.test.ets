@@ -27,7 +27,7 @@
  * 设计补强（对齐 APITEST_COVERAGE.md）：枚举与常量取值断言、参数边界、
  * 可量化性能（assertPerfBudget）与压力（assertStressHasSuccess）循环。
  */
-import { describe, it, expect } from '@ohos/hypium';
+import { describe, it, expect} from '@ohos/hypium';
 import {
   a2dp,
   access,
@@ -48,7 +48,7 @@ import {
   bluetoothManager,
   Bluetooth
 } from '@kit.ConnectivityKit';
-import { assertPerfBudget, assertStressHasSuccess } from './ApitestCoverageHelpers';
+import { assertPerfBudget, assertStressHasSuccess} from './ApitestCoverageHelpers';
 
 const DUMMY_MAC = '00:11:22:33:44:55';
 const BAD_MAC_GARBAGE = 'ZZ:ZZ:ZZ:ZZ:ZZ:ZZ';
@@ -57,12 +57,12 @@ const SPP_UUID = '00001101-0000-1000-8000-00805F9B34FB';
 const tryInvoke = (tag: string, fn: () => void): void => {
   try {
     fn();
-  } catch (e) {
+  } catch (e){
     console.info(`[ConnectivityKitBluetooth] ${tag} skip: ${JSON.stringify(e)}`);
   }
 };
 
-export default function connectivityKitBluetoothTest() {
+export default function connectivityKitBluetoothTest(){
   describe('ConnectivityKit_constant', () => {
     it('constant_ProfileId_enum', 0, () => {
       expect(constant.ProfileId.PROFILE_A2DP_SOURCE).assertEqual(1);
@@ -178,7 +178,7 @@ export default function connectivityKitBluetoothTest() {
       tryInvoke('connection.getPairState', () => {
         try {
           connection.getPairState('');
-        } catch (e) {
+        } catch (e){
           expect(true).assertTrue();
         }
       });
@@ -191,7 +191,7 @@ export default function connectivityKitBluetoothTest() {
           constant.ProfileId.PROFILE_HID_HOST,
           constant.ProfileId.PROFILE_PAN_NETWORK
         ];
-        for (let i = 0; i < ids.length; i++) {
+        for(let i = 0; i<ids.length; i++){
           const s = connection.getProfileConnectionState(ids[i]);
           expect(s !== null && s !== undefined).assertTrue();
         }
@@ -201,7 +201,7 @@ export default function connectivityKitBluetoothTest() {
       tryInvoke('connection.getProfileConnectionState_bad', () => {
         try {
           connection.getProfileConnectionState(-1 as constant.ProfileId);
-        } catch (_e) {
+        } catch (_e){
           expect(true).assertTrue();
         }
       });
@@ -300,7 +300,7 @@ export default function connectivityKitBluetoothTest() {
       tryInvoke('socket.getDeviceId', () => {
         try {
           socket.getDeviceId(-1);
-        } catch (e) {
+        } catch (e){
           expect(true).assertTrue();
         }
       });

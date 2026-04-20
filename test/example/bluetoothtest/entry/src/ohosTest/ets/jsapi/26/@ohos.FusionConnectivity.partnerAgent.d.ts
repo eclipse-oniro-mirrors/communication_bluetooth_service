@@ -29,7 +29,7 @@ declare namespace partnerAgent {
     /**
      * Checks whether the current device supports the partner agent feature.
      *
-     * @returns { boolean } Check result for the support of the partner agent feature.
+     * @returns { boolean} Check result for the support of the partner agent feature.
      * @syscap SystemCapability.Communication.FusionConnectivity.Core
      * @stagemodelonly
      * @since 23
@@ -47,17 +47,17 @@ declare namespace partnerAgent {
      * Note: The device must be paired first.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH
-     * @param { PartnerDeviceAddress } deviceAddress - The address of partner device.
-     * @param { DeviceCapability } deviceCapability - The capability of partner device.
-     * @param { BusinessCapability } businessCapability - The business capability of application.
-     * @param { string } partnerAgentExtensionAbilityName - The name of PartnerAgentExtensionAbility.
-     * @returns { Promise<void> } Promise used to return the result.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 34900003 - The device is not paired.
-     * @throws { BusinessError } 34900004 - The device has already been bound to the PartnerAgentExtensionAbility.
-     * @throws { BusinessError } 34900005 - Bluetooth disabled.
-     * @throws { BusinessError } 34900099 - Internal error.
+     * @param { PartnerDeviceAddress} deviceAddress - The address of partner device.
+     * @param { DeviceCapability} deviceCapability - The capability of partner device.
+     * @param { BusinessCapability} businessCapability - The business capability of application.
+     * @param { string} partnerAgentExtensionAbilityName - The name of PartnerAgentExtensionAbility.
+     * @returns { Promise<void>} Promise used to return the result.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 34900003 - The device is not paired.
+     * @throws { BusinessError} 34900004 - The device has already been bound to the PartnerAgentExtensionAbility.
+     * @throws { BusinessError} 34900005 - Bluetooth disabled.
+     * @throws { BusinessError} 34900099 - Internal error.
      * @syscap SystemCapability.Communication.FusionConnectivity.Core
      * @stagemodelonly
      * @since 23
@@ -67,12 +67,12 @@ declare namespace partnerAgent {
      * Unbinds a partner device.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH
-     * @param { PartnerDeviceAddress } deviceAddress - The address of partner device.
-     * @returns { Promise<void> } Promise used to return the result.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 34900001 - The device is not bound.
-     * @throws { BusinessError } 34900099 - Internal error.
+     * @param { PartnerDeviceAddress} deviceAddress - The address of partner device.
+     * @returns { Promise<void>} Promise used to return the result.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 34900001 - The device is not bound.
+     * @throws { BusinessError} 34900099 - Internal error.
      * @syscap SystemCapability.Communication.FusionConnectivity.Core
      * @stagemodelonly
      * @since 23
@@ -82,11 +82,11 @@ declare namespace partnerAgent {
      * Checks whether a device is bound to this application.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH
-     * @param { PartnerDeviceAddress } deviceAddress - The address of partner device.
-     * @returns { boolean } Returns whether the device is bound.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 34900099 - Internal error.
+     * @param { PartnerDeviceAddress} deviceAddress - The address of partner device.
+     * @returns { boolean} Returns whether the device is bound.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 34900099 - Internal error.
      * @syscap SystemCapability.Communication.FusionConnectivity.Core
      * @stagemodelonly
      * @since 23
@@ -96,10 +96,10 @@ declare namespace partnerAgent {
      * Gets the list of addresses of the bound partner device for this application.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH
-     * @returns { PartnerDeviceAddress[] } Returns the list of addresses of partner device.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 34900099 - Internal error.
+     * @returns { PartnerDeviceAddress[]} Returns the list of addresses of partner device.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 34900099 - Internal error.
      * @syscap SystemCapability.Communication.FusionConnectivity.Core
      * @stagemodelonly
      * @since 23
@@ -109,13 +109,13 @@ declare namespace partnerAgent {
      * Enables device control for a bound device.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH
-     * @param { PartnerDeviceAddress } deviceAddress - The address of partner device.
-     * @returns { Promise<void> } Promise used to return the result.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 34900001 - The device is not bound.
-     * @throws { BusinessError } 34900099 - Internal error.
+     * @param { PartnerDeviceAddress} deviceAddress - The address of partner device.
+     * @returns { Promise<void>} Promise used to return the result.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 34900001 - The device is not bound.
+     * @throws { BusinessError} 34900099 - Internal error.
      * @syscap SystemCapability.Communication.FusionConnectivity.Core
      * @systemapi
      * @stagemodelonly
@@ -126,13 +126,13 @@ declare namespace partnerAgent {
      * Disables device control for a bound device.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH
-     * @param { PartnerDeviceAddress } deviceAddress - The address of partner device.
-     * @returns { Promise<void> } Promise used to return the result.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 34900001 - The device is not bound.
-     * @throws { BusinessError } 34900099 - Internal error.
+     * @param { PartnerDeviceAddress} deviceAddress - The address of partner device.
+     * @returns { Promise<void>} Promise used to return the result.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 34900001 - The device is not bound.
+     * @throws { BusinessError} 34900099 - Internal error.
      * @syscap SystemCapability.Communication.FusionConnectivity.Core
      * @systemapi
      * @stagemodelonly
@@ -143,11 +143,11 @@ declare namespace partnerAgent {
      * Checks whether device control is enabled.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH
-     * @param { PartnerDeviceAddress } deviceAddress - The address of partner device.
-     * @returns { boolean } Returns whether the device control is enabled.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 34900099 - Internal error.
+     * @param { PartnerDeviceAddress} deviceAddress - The address of partner device.
+     * @returns { boolean} Returns whether the device control is enabled.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 34900099 - Internal error.
      * @syscap SystemCapability.Communication.FusionConnectivity.Core
      * @stagemodelonly
      * @since 23
@@ -165,7 +165,7 @@ declare namespace partnerAgent {
         /**
          * Whether the partner device supports the Bluetooth Basic Rate (BR) capability.
          *
-         * @type { ?boolean }
+         * @type { ?boolean}
          * @syscap SystemCapability.Communication.FusionConnectivity.Core
          * @stagemodelonly
          * @since 23
@@ -174,7 +174,7 @@ declare namespace partnerAgent {
         /**
          * Whether the partner device supports the Bluetooth Low Energy (BLE) advertiser capability.
          *
-         * @type { ?boolean }
+         * @type { ?boolean}
          * @syscap SystemCapability.Communication.FusionConnectivity.Core
          * @stagemodelonly
          * @since 23
@@ -193,7 +193,7 @@ declare namespace partnerAgent {
         /**
          * Indicates whether the application supports media control capability.
          *
-         * @type { ?boolean }
+         * @type { ?boolean}
          * @syscap SystemCapability.Communication.FusionConnectivity.Core
          * @stagemodelonly
          * @since 23
@@ -202,7 +202,7 @@ declare namespace partnerAgent {
         /**
          * Indicates whether the application supports telephony control capability.
          *
-         * @type { ?boolean }
+         * @type { ?boolean}
          * @syscap SystemCapability.Communication.FusionConnectivity.Core
          * @stagemodelonly
          * @since 23
@@ -221,7 +221,7 @@ declare namespace partnerAgent {
         /**
          * Bluetooth address of the partner device.
          *
-         * @type { ?common.BluetoothAddress }
+         * @type { ?common.BluetoothAddress}
          * @syscap SystemCapability.Communication.FusionConnectivity.Core
          * @stagemodelonly
          * @since 23
@@ -231,7 +231,7 @@ declare namespace partnerAgent {
     /**
      * The enum of reasons for destroying partner agent extension ability.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.FusionConnectivity.Core
      * @stagemodelonly
      * @since 23
