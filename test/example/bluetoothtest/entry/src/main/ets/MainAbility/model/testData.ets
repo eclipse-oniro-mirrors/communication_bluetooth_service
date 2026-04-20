@@ -14,28 +14,28 @@
  */
 
 export enum Category {
-  All ,
+  All,
 
-  API ,
-  APIManager ,
-  Gatt ,
-  GattManager ,
-  SPP ,
-  SPPManager ,
-  AutoTest ,
-  AutoTestManager ,
-  Scenario ,
-  ScenarioManager ,
-  Profile ,
-  ProfileManager ,
-  BenchMark ,
-  BenchMarkManager ,
-  GattAutoTest ,
-  GattAutoTestManager ,
-  SppAutoTest ,
-  SppAutoTestManager ,
-  ProfileAutoTest ,
-  ProfileAutoTestManager ,
+  API,
+  APIManager,
+  Gatt,
+  GattManager,
+  SPP,
+  SPPManager,
+  AutoTest,
+  AutoTestManager,
+  Scenario,
+  ScenarioManager,
+  Profile,
+  ProfileManager,
+  BenchMark,
+  BenchMarkManager,
+  GattAutoTest,
+  GattAutoTestManager,
+  SppAutoTest,
+  SppAutoTestManager,
+  ProfileAutoTest,
+  ProfileAutoTestManager,
 }
 
 let NextId = 0;
@@ -48,7 +48,7 @@ export class TestData {
   image?: Resource
   category?: Category;
 
-  constructor(name: Resource | string , detail: Resource | string , url: string , image: Resource , category: Category) {
+  constructor(name: Resource | string, detail: Resource | string, url: string, image: Resource, category: Category){
     this.id = `${ NextId ++ }`;
     this.name = name;
     this.url = url;
@@ -59,27 +59,27 @@ export class TestData {
 }
 
 export enum CaseCategory {
-  BR ,
-  BRManager ,
-  BLE ,
-  BLEManager ,
-  GattClient ,
-  GattClientManager ,
-  GattServer ,
-  GattServerManager ,
-  SPPClient ,
-  SPPClientManager ,
-  SPPServer ,
-  SPPServerManager ,
-  ProfileA2dpSource ,
-  ProfileHandsFreeAudioGateway ,
-  ProfileHitHost ,
-  ProfilePanNetwork ,
-  ProfileOpp ,
-  ProfileA2dpSourceManager ,
-  ProfileHandsFreeAudioGatewayManager ,
-  ProfileHitHostManager ,
-  ProfilePanNetworkManager ,
+  BR,
+  BRManager,
+  BLE,
+  BLEManager,
+  GattClient,
+  GattClientManager,
+  GattServer,
+  GattServerManager,
+  SPPClient,
+  SPPClientManager,
+  SPPServer,
+  SPPServerManager,
+  ProfileA2dpSource,
+  ProfileHandsFreeAudioGateway,
+  ProfileHitHost,
+  ProfilePanNetwork,
+  ProfileOpp,
+  ProfileA2dpSourceManager,
+  ProfileHandsFreeAudioGatewayManager,
+  ProfileHitHostManager,
+  ProfilePanNetworkManager,
 }
 
 export class TestApi {
@@ -92,7 +92,7 @@ export class TestApi {
   category?: CaseCategory;
 
   constructor(name: Resource | string, detail: Resource | string, method: string, api: Function,
-    result: string, category: CaseCategory) {
+    result: string, category: CaseCategory){
     this.id = `${ NextId ++ }`;
     this.name = name;
     this.detail = detail;
@@ -100,30 +100,30 @@ export class TestApi {
     this.api = api;
     this.result = result;
     this.category = category;
-  }
+    }
 }
 
 export enum AutoCategory {
-  BrAuto ,
-  BleAuto ,
-  GattClientAuto ,
-  GattServerAuto ,
-  SppClientAuto ,
-  SppServerAuto ,
-  A2dpSourceAuto ,
-  HandsFreeAudioGatewayAuto ,
-  HitHostAuto ,
-  PanNetworkAuto ,
+  BrAuto,
+  BleAuto,
+  GattClientAuto,
+  GattServerAuto,
+  SppClientAuto,
+  SppServerAuto,
+  A2dpSourceAuto,
+  HandsFreeAudioGatewayAuto,
+  HitHostAuto,
+  PanNetworkAuto,
 
-  BrAutoManager ,
-  BleAutoManager ,
-  GattClientAutoManager ,
-  GattServerAutoManager ,
-  SppClientAutoManager ,
-  SppServerAutoManager ,
-  A2dpSourceAutoManager ,
-  HandsFreeAudioGatewayAutoManager ,
-  HitHostAutoManager ,
+  BrAutoManager,
+  BleAutoManager,
+  GattClientAutoManager,
+  GattServerAutoManager,
+  SppClientAutoManager,
+  SppServerAutoManager,
+  A2dpSourceAutoManager,
+  HandsFreeAudioGatewayAutoManager,
+  HitHostAutoManager,
   PanNetworkAutoManager
 }
 
@@ -136,7 +136,7 @@ export class TestAuto {
   result?: string;
   category?: AutoCategory;
 
-  constructor(name: Resource | string , detail: Resource | string , method: string , api: Function , result: string , category: AutoCategory) {
+  constructor(name: Resource | string, detail: Resource | string, method: string, api: Function, result: string, category: AutoCategory){
     this.id = `${ NextId ++ }`;
     this.name = name;
     this.detail = detail;
@@ -149,19 +149,19 @@ export class TestAuto {
 
 
 export enum ScenarioCategory {
-  BrFoundScenario ,
-  BleFoundScenario ,
-  GattClientScenario ,
-  GattServerScenario ,
-  SppClientScenario ,
-  SppServerScenario ,
+  BrFoundScenario,
+  BleFoundScenario,
+  GattClientScenario,
+  GattServerScenario,
+  SppClientScenario,
+  SppServerScenario,
 
-  BrFoundScenarioManager ,
-  BleFoundScenarioManager ,
-  GattClientScenarioManager ,
-  GattServerScenarioManager ,
-  SppClientScenarioManager ,
-  SppServerScenarioManager ,
+  BrFoundScenarioManager,
+  BleFoundScenarioManager,
+  GattClientScenarioManager,
+  GattServerScenarioManager,
+  SppClientScenarioManager,
+  SppServerScenarioManager,
 }
 
 export class TestScenario {
@@ -173,7 +173,7 @@ export class TestScenario {
   result: string;
   category: ScenarioCategory;
 
-  constructor(name: Resource | string , detail: Resource | string , method: string , api: Function , result: string , category: ScenarioCategory) {
+  constructor(name: Resource | string, detail: Resource | string, method: string, api: Function, result: string, category: ScenarioCategory){
     this.id = `${ NextId ++ }`;
     this.name = name;
     this.detail = detail;
@@ -185,19 +185,19 @@ export class TestScenario {
 }
 
 export enum BenchmarkCategory {
-  BrBenchmark ,
-  BleBenchmark ,
-  GattClientBenchmark ,
-  GattServerBenchmark ,
-  SppClientBenchmark ,
-  SppServerBenchmark ,
+  BrBenchmark,
+  BleBenchmark,
+  GattClientBenchmark,
+  GattServerBenchmark,
+  SppClientBenchmark,
+  SppServerBenchmark,
 
-  BrBenchmarkManager ,
-  BleBenchmarkManager ,
-  GattClientBenchmarkManager ,
-  GattServerBenchmarkManager ,
-  SppClientBenchmarkManager ,
-  SppServerBenchmarkManager ,
+  BrBenchmarkManager,
+  BleBenchmarkManager,
+  GattClientBenchmarkManager,
+  GattServerBenchmarkManager,
+  SppClientBenchmarkManager,
+  SppServerBenchmarkManager,
 }
 
 export class TestBenchmark {
@@ -209,7 +209,7 @@ export class TestBenchmark {
   result: string;
   category: BenchmarkCategory;
 
-  constructor(name: Resource | string , detail: Resource | string , method: string , api: Function , result: string , category: BenchmarkCategory) {
+  constructor(name: Resource | string, detail: Resource | string, method: string, api: Function, result: string, category: BenchmarkCategory){
     this.id = `${ NextId ++ }`;
     this.name = name;
     this.detail = detail;
