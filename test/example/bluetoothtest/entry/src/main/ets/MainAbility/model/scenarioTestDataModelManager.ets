@@ -83,8 +83,8 @@ import {
 import BluetoothModelManager from './BluetoothModelManager'
 
 interface ScenarioManagerTest {
-  name: string;
-  detail: string;
+  name: Resource | string;
+  detail: Resource | string;
   method: string;
   api: Function;
   result: string;
@@ -93,7 +93,7 @@ interface ScenarioManagerTest {
 
 export const BrFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
   {
-    name : '注册状态变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcztbhm') ,
     detail : '1' ,
     method : 'on.stateChangeManager' ,
     api : testOnStateChangeManager ,
@@ -101,7 +101,7 @@ export const BrFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BrFoundScenarioManager
   },
   {
-    name : '开蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_klym') ,
     detail : '2' ,
     method : 'enableBluetoothManager' ,
     api : testEnableBluetoothManager ,
@@ -109,7 +109,7 @@ export const BrFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BrFoundScenarioManager
   },
   {
-    name : '获取状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqztm') ,
     detail : '3' ,
     method : 'getStateManager' ,
     api : testGetStateManager ,
@@ -117,7 +117,7 @@ export const BrFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BrFoundScenarioManager
   },
   {
-    name : '设置本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_szbdmcm') ,
     detail : '4' ,
     method : 'setLocalNameManager' ,
     api : testSetLocalNameManager ,
@@ -125,7 +125,7 @@ export const BrFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BrFoundScenarioManager
   },
   {
-    name : '获取本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmcm') ,
     detail : '5' ,
     method : 'getLocalNameManager' ,
     api : testGetLocalNameManager ,
@@ -133,7 +133,7 @@ export const BrFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BrFoundScenarioManager
   },
   {
-    name : '设置扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_szsmmsm') ,
     detail : '6' ,
     method : 'setBluetoothScanModeManager' ,
     api : testSetBluetoothScanModeManager ,
@@ -141,7 +141,7 @@ export const BrFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BrFoundScenarioManager
   },
   {
-    name : '获取扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqsmmsm') ,
     detail : '7' ,
     method : 'getBluetoothScanModeManager' ,
     api : testGetBluetoothScanModeManager ,
@@ -149,7 +149,7 @@ export const BrFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BrFoundScenarioManager
   },
   {
-    name : '订阅蓝牙发现Manager' ,
+    name : $r('app.string.bluetoothtest_str_dylyfxm') ,
     detail : '8' ,
     method : 'subscribeBluetoothDeviceFindManager' ,
     api : subscribeBluetoothDeviceFindManager ,
@@ -157,7 +157,7 @@ export const BrFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BrFoundScenarioManager
   },
   {
-    name : '开始蓝牙发现Manager' ,
+    name : $r('app.string.bluetoothtest_str_kslyfxm') ,
     detail : '9' ,
     method : 'startBluetoothDiscoveryManager' ,
     api : BluetoothModelManager.startBluetoothDiscovery ,
@@ -168,7 +168,7 @@ export const BrFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
 
 export const BleFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
   {
-    name : '注册状态变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcztbhm') ,
     detail : '1' ,
     method : 'on.stateChangeManager' ,
     api : testOnStateChangeManager ,
@@ -176,7 +176,7 @@ export const BleFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BleFoundScenarioManager
   },
   {
-    name : '开蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_klym') ,
     detail : '2' ,
     method : 'enableBluetoothManager' ,
     api : testEnableBluetoothManager ,
@@ -184,7 +184,7 @@ export const BleFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BleFoundScenarioManager
   },
   {
-    name : '获取状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqztm') ,
     detail : '3' ,
     method : 'getStateManager' ,
     api : testGetStateManager ,
@@ -192,7 +192,7 @@ export const BleFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BleFoundScenarioManager
   },
   {
-    name : '设置本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_szbdmcm') ,
     detail : '4' ,
     method : 'setLocalNameManager' ,
     api : testSetLocalNameManager ,
@@ -200,7 +200,7 @@ export const BleFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BleFoundScenarioManager
   },
   {
-    name : '获取本地名称Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmcm') ,
     detail : '5' ,
     method : 'getLocalNameManager' ,
     api : testGetLocalNameManager ,
@@ -208,7 +208,7 @@ export const BleFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BleFoundScenarioManager
   },
   {
-    name : '设置扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_szsmmsm') ,
     detail : '6' ,
     method : 'setBluetoothScanModeManager' ,
     api : testSetBluetoothScanModeManager ,
@@ -216,7 +216,7 @@ export const BleFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BleFoundScenarioManager
   },
   {
-    name : '获取扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqsmmsm') ,
     detail : '7' ,
     method : 'getBluetoothScanModeManager' ,
     api : testGetBluetoothScanModeManager ,
@@ -224,7 +224,7 @@ export const BleFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BleFoundScenarioManager
   },
   {
-    name : '注册Ble查找状态变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcbczztbhm_1') ,
     detail : '8' ,
     method : 'on.BleDeviceFindManager' ,
     api : testOnBLEDeviceFindManager ,
@@ -232,7 +232,7 @@ export const BleFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BleFoundScenarioManager
   },
   {
-    name : '开始Ble扫描Manager' ,
+    name : $r('app.string.bluetoothtest_str_ksbsmm_1') ,
     detail : '9' ,
     method : 'startBleScanManager' ,
     api : testStartBLEScanManager ,
@@ -240,7 +240,7 @@ export const BleFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.BleFoundScenarioManager
   },
   {
-    name : '获取连接的Ble设备Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqljdbsbm_1') ,
     detail : '10' ,
     method : 'getConnectedBleDevicesManager' ,
     api : testGetConnectedBLEDevicesManager ,
@@ -251,7 +251,7 @@ export const BleFoundManagerScenarioTestCase: ScenarioManagerTest[] = [
 
 export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
   {
-    name : '注册状态变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcztbhm') ,
     detail : '1' ,
     method : 'on.stateChangeManager' ,
     api : testOnStateChangeManager ,
@@ -259,7 +259,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '开蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_klym') ,
     detail : '2' ,
     method : 'enableBluetoothManager' ,
     api : testEnableBluetoothManager ,
@@ -267,7 +267,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '获取状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqztm') ,
     detail : '3' ,
     method : 'getStateManager' ,
     api : testGetStateManager ,
@@ -275,7 +275,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '创建Gatt客户端Manager' ,
+    name : $r('app.string.bluetoothtest_str_cjgkhdm') ,
     detail : '4' ,
     method : 'createGattClientManager' ,
     api : testCreateGattClientManager ,
@@ -283,7 +283,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : 'Ble连接状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_bljztm_1') ,
     detail : '5' ,
     method : 'on.BleConnectionStateChangeManager' ,
     api : testOnBLEConnectionStateChangeManager ,
@@ -291,7 +291,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '连接Manager' ,
+    name : $r('app.string.bluetoothtest_str_ljm') ,
     detail : '6' ,
     method : 'connectManager' ,
     api : testConnectManager ,
@@ -299,7 +299,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '设置通知特性更改Manager' ,
+    name : $r('app.string.bluetoothtest_str_sztztxggm') ,
     detail : '7' ,
     method : 'setNotifyCharacteristicChangedManager' ,
     api : testSetNotifyCharacteristicChangedManager ,
@@ -307,7 +307,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : 'Ble特征值变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_btzzbhm_1') ,
     detail : '8' ,
     method : 'on.BleCharacteristicChangeManager' ,
     api : testOnBLECharacteristicChangeManager ,
@@ -315,7 +315,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '获取服务callbackManager' ,
+    name : $r('app.string.bluetoothtest_str_hqfwc') ,
     detail : '9' ,
     method : 'getServices(Callback)Manager' ,
     api : testGetServicesCallbackManager ,
@@ -323,7 +323,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '读取特征值callbackManager' ,
+    name : $r('app.string.bluetoothtest_str_dqtzzc') ,
     detail : '10' ,
     method : 'readCharacteristicValue(callback)Manager' ,
     api : testReadCharacteristicValueCallbackManager ,
@@ -331,7 +331,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '读取描述符值callbackManager' ,
+    name : $r('app.string.bluetoothtest_str_dqmsfzc') ,
     detail : '11' ,
     method : 'readDescriptorValue(callback)Manager' ,
     api : testReadDescriptorValueCallbackManager ,
@@ -339,7 +339,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '获取设备名称callbackManager' ,
+    name : $r('app.string.bluetoothtest_str_hqsbmcc') ,
     detail : '12' ,
     method : 'getDeviceName(callback)Manager' ,
     api : testGetDeviceNameCallbackManager ,
@@ -347,7 +347,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '获取Rssi值callbackManager' ,
+    name : $r('app.string.bluetoothtest_str_hqrzc') ,
     detail : '13' ,
     method : 'getRssiValue(Callback)Manager' ,
     api : testGetRssiValueCallbackManager ,
@@ -355,7 +355,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '取消连接Manager' ,
+    name : $r('app.string.bluetoothtest_str_qxljm') ,
     detail : '14' ,
     method : 'disconnectManager' ,
     api : testDisconnectManager ,
@@ -363,7 +363,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '关闭Manager' ,
+    name : $r('app.string.bluetoothtest_str_gbm') ,
     detail : '15' ,
     method : 'closeManager' ,
     api : testGattClientCloseManager ,
@@ -371,7 +371,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattClientScenarioManager
   },
   {
-    name : '关蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_glym') ,
     detail : '16' ,
     method : 'disableBluetoothManager' ,
     api : testDisableBluetoothManager ,
@@ -382,7 +382,7 @@ export const GattClientManagerScenarioTestCase: ScenarioManagerTest[] = [
 
 export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
   {
-    name : '注册状态变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcztbhm') ,
     detail : '1' ,
     method : 'on.stateChangeManager' ,
     api : testOnStateChangeManager ,
@@ -390,7 +390,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '开蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_klym') ,
     detail : '2' ,
     method : 'enableBluetoothManager' ,
     api : testEnableBluetoothManager ,
@@ -398,7 +398,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '获取状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqztm') ,
     detail : '3' ,
     method : 'getStateManager' ,
     api : testGetStateManager ,
@@ -406,7 +406,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '创建Gatt服务器Manager' ,
+    name : $r('app.string.bluetoothtest_str_cjgfwqm') ,
     detail : '4' ,
     method : 'createGattServerManager' ,
     api : testCreateGattServerManager ,
@@ -414,7 +414,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '添加服务Manager' ,
+    name : $r('app.string.bluetoothtest_str_tjfwm') ,
     detail : '5' ,
     method : 'addServiceManager' ,
     api : testAddServiceManager ,
@@ -422,7 +422,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '连接状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_ljztm') ,
     detail : '6' ,
     method : 'on.connectStateChangeManager' ,
     api : testOnConnectStateChangeManager ,
@@ -430,7 +430,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '开始广播Manager' ,
+    name : $r('app.string.bluetoothtest_str_ksgbm') ,
     detail : '7' ,
     method : 'startAdvertisingManager' ,
     api : testStartAdvertisingManager ,
@@ -438,7 +438,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '读取特征值Manager' ,
+    name : $r('app.string.bluetoothtest_str_dqtzzm') ,
     detail : '8' ,
     method : 'on.characteristicReadManager' ,
     api : testOnCharacteristicReadManager ,
@@ -446,7 +446,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '写入特征值Manager' ,
+    name : $r('app.string.bluetoothtest_str_xrtzzm') ,
     detail : '9' ,
     method : 'on.characteristicWriteManager' ,
     api : testOnCharacteristicWriteManager ,
@@ -454,7 +454,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '读取描述符Manager' ,
+    name : $r('app.string.bluetoothtest_str_dqmsfm') ,
     detail : '9' ,
     method : 'on.descriptorReadManager' ,
     api : testOnDescriptorReadManager ,
@@ -462,7 +462,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '写入描述符Manager' ,
+    name : $r('app.string.bluetoothtest_str_xrmsfm') ,
     detail : '11' ,
     method : 'on.descriptorWriteManager' ,
     api : testOnDescriptorWriteManager ,
@@ -470,7 +470,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '停止广播Manager' ,
+    name : $r('app.string.bluetoothtest_str_tzgbm') ,
     detail : '10' ,
     method : 'stopAdvertisingManager' ,
     api : testStopAdvertisingManager ,
@@ -478,7 +478,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '删除服务Manager' ,
+    name : $r('app.string.bluetoothtest_str_scfwm') ,
     detail : '11' ,
     method : 'removeServiceManager' ,
     api : testRemoveServiceManager ,
@@ -486,7 +486,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '关闭Manager' ,
+    name : $r('app.string.bluetoothtest_str_gbm') ,
     detail : '12' ,
     method : 'closeManager' ,
     api : testGattServerCloseManager ,
@@ -494,7 +494,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.GattServerScenarioManager
   },
   {
-    name : '关蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_glym') ,
     detail : '13' ,
     method : 'disableBluetoothManager' ,
     api : testDisableBluetoothManager ,
@@ -505,7 +505,7 @@ export const GattServerManagerScenarioTestCase: ScenarioManagerTest[] = [
 
 export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
   {
-    name : '注册状态变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcztbhm') ,
     detail : '1' ,
     method : 'on.stateChangeManager' ,
     api : testOnStateChangeManager ,
@@ -513,7 +513,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppClientScenarioManager
   },
   {
-    name : '开蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_klym') ,
     detail : '2' ,
     method : 'enableBluetoothManager' ,
     api : testEnableBluetoothManager ,
@@ -521,7 +521,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppClientScenarioManager
   },
   {
-    name : '获取状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqztm') ,
     detail : '3' ,
     method : 'getStateManager' ,
     api : testGetStateManager ,
@@ -529,7 +529,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppClientScenarioManager
   },
   {
-    name : '设置SPP扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_szssmmsm') ,
     detail : '4' ,
     method : 'setBluetoothScanModeManager' ,
     api : testSetBluetoothScanModeManager ,
@@ -537,7 +537,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppClientScenarioManager
   },
   {
-    name : '获取扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqsmmsm') ,
     detail : '5' ,
     method : 'getBluetoothScanModeManager' ,
     api : testGetBluetoothScanModeManager ,
@@ -545,7 +545,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppClientScenarioManager
   },
   {
-    name : 'Spp客户端连接(安全模式)Manager' ,
+    name : $r('app.string.bluetoothtest_str_skhdljaqmsm') ,
     detail : '6' ,
     method : 'sppConnectManager' ,
     api : testSppClientConnectSafeManager ,
@@ -553,7 +553,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppClientScenarioManager
   },
   {
-    name : '获取当前连接状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqdqljztm') ,
     detail : '7' ,
     method : 'getBtConnectionStateManager' ,
     api : testGetBtConnectionStateManager ,
@@ -561,7 +561,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppClientScenarioManager
   },
   {
-    name : 'Spp客户端读取打开Manager' ,
+    name : $r('app.string.bluetoothtest_str_skhddqdkm') ,
     detail : '8' ,
     method : 'on.sppReadManager' ,
     api : testSppClientReadOnManager ,
@@ -569,7 +569,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppClientScenarioManager
   },
   {
-    name : 'Spp客户端写入Manager' ,
+    name : $r('app.string.bluetoothtest_str_skhdxrm') ,
     detail : '9' ,
     method : 'sppWriteManager' ,
     api : testSppClientWriteManager ,
@@ -577,7 +577,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppClientScenarioManager
   },
   {
-    name : 'Spp客户端读取关闭Manager' ,
+    name : $r('app.string.bluetoothtest_str_skhddqgbm') ,
     detail : '10' ,
     method : 'off.sppReadManager' ,
     api : testSppClientReadOffManager ,
@@ -585,7 +585,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppClientScenarioManager
   },
   {
-    name : 'Spp客户端关闭Manager' ,
+    name : $r('app.string.bluetoothtest_str_skhdgbm') ,
     detail : '11' ,
     method : 'sppCloseClientSocketManager' ,
     api : testSppClientCloseManager ,
@@ -593,7 +593,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppClientScenarioManager
   },
   {
-    name : '关蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_glym') ,
     detail : '12' ,
     method : 'disableBluetoothManager' ,
     api : testDisableBluetoothManager ,
@@ -604,7 +604,7 @@ export const SppClientManagerScenarioTestCase: ScenarioManagerTest[] = [
 
 export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
   {
-    name : '注册状态变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcztbhm') ,
     detail : '1' ,
     method : 'on.stateChangeManager' ,
     api : testOnStateChangeManager ,
@@ -612,7 +612,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : '开蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_klym') ,
     detail : '2' ,
     method : 'enableBluetoothManager' ,
     api : testEnableBluetoothManager ,
@@ -620,7 +620,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : '获取状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqztm') ,
     detail : '3' ,
     method : 'getStateManager' ,
     api : testGetStateManager ,
@@ -628,7 +628,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : '设置SPP扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_szssmmsm') ,
     detail : '4' ,
     method : 'setBluetoothScanModeManager' ,
     api : testSetBluetoothScanModeManager ,
@@ -636,7 +636,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : '获取扫描模式Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqsmmsm') ,
     detail : '5' ,
     method : 'getBluetoothScanModeManager' ,
     api : testGetBluetoothScanModeManager ,
@@ -644,7 +644,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : '注册pin码变化Manager' ,
+    name : $r('app.string.bluetoothtest_str_zcpmbhm') ,
     detail : '6' ,
     method : 'on.pinRequiredManager' ,
     api : testOnPinRequiredManager ,
@@ -652,7 +652,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : 'Spp服务器创建(安全模式)Manager' ,
+    name : $r('app.string.bluetoothtest_str_sfwqcjaqmsm') ,
     detail : '7' ,
     method : 'sppListenManager' ,
     api : testSppServerCreateSafeManager ,
@@ -660,7 +660,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : '获取当前连接状态Manager' ,
+    name : $r('app.string.bluetoothtest_str_hqdqljztm') ,
     detail : '8' ,
     method : 'getBtConnectionStateManager' ,
     api : testGetBtConnectionStateManager ,
@@ -668,7 +668,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : 'Spp服务器写入Manager' ,
+    name : $r('app.string.bluetoothtest_str_sfwqxrm') ,
     detail : '9' ,
     method : 'sppWriteManager' ,
     api : testSppServerWriteManager ,
@@ -676,7 +676,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : 'Spp服务器接受Manager' ,
+    name : $r('app.string.bluetoothtest_str_sfwqjsm') ,
     detail : '10' ,
     method : 'sppAcceptManager' ,
     api : testSppServerAcceptManager ,
@@ -684,7 +684,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : 'Spp服务器读取打开Manager' ,
+    name : $r('app.string.bluetoothtest_str_sfwqdqdkm') ,
     detail : '11' ,
     method : 'on.sppReadManager' ,
     api : testSppServerReadOnManager ,
@@ -692,7 +692,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : 'Spp服务器读取关闭Manager' ,
+    name : $r('app.string.bluetoothtest_str_sfwqdqgbm') ,
     detail : '12' ,
     method : 'off.sppReadManager' ,
     api : testSppServerReadOffManager ,
@@ -700,7 +700,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : 'Spp服务器关闭Manager' ,
+    name : $r('app.string.bluetoothtest_str_sfwqgbm') ,
     detail : '13' ,
     method : 'sppCloseServerSocketManager' ,
     api : testSppCloseServerSocketManager ,
@@ -708,7 +708,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : 'Spp客户端关闭Manager' ,
+    name : $r('app.string.bluetoothtest_str_skhdgbm') ,
     detail : '14' ,
     method : 'sppCloseClientSocketManager' ,
     api : testSppCloseClientSocketManager ,
@@ -716,7 +716,7 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
     category : ScenarioCategory.SppServerScenarioManager
   },
   {
-    name : '关蓝牙Manager' ,
+    name : $r('app.string.bluetoothtest_str_glym') ,
     detail : '15' ,
     method : 'disableBluetoothManager' ,
     api : testDisableBluetoothManager ,

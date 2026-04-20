@@ -44,8 +44,8 @@ import {
 import { testSppClientConnectSafe } from './sppClientInterface'
 
 interface BenchmarkTest {
-  name: string;
-  detail: string;
+  name: Resource | string;
+  detail: Resource | string;
   method: string;
   api: Function;
   result: string;
@@ -54,7 +54,7 @@ interface BenchmarkTest {
 
 export const BrBenchmarkTestCase: BenchmarkTest[] = [
   {
-    name : '注册状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcztbh') ,
     detail : '1' ,
     method : 'on.stateChange' ,
     api : testOnStateChange ,
@@ -62,7 +62,7 @@ export const BrBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BrBenchmark
   },
   {
-    name : '开蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
     detail : '2' ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
@@ -70,7 +70,7 @@ export const BrBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BrBenchmark
   },
   {
-    name : '获取状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
     detail : '3' ,
     method : 'getState' ,
     api : testGetState ,
@@ -78,7 +78,7 @@ export const BrBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BrBenchmark
   },
   {
-    name : '设置本地名称' ,
+    name : $r('app.string.bluetoothtest_str_szbdmc') ,
     detail : '4' ,
     method : 'setLocalName' ,
     api : testSetLocalName ,
@@ -86,7 +86,7 @@ export const BrBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BrBenchmark
   },
   {
-    name : '获取本地名称' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
     detail : '5' ,
     method : 'getLocalName' ,
     api : testGetLocalName ,
@@ -94,7 +94,7 @@ export const BrBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BrBenchmark
   },
   {
-    name : '设置扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szsmms') ,
     detail : '6' ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
@@ -102,7 +102,7 @@ export const BrBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BrBenchmark
   },
   {
-    name : '获取扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
     detail : '7' ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
@@ -113,7 +113,7 @@ export const BrBenchmarkTestCase: BenchmarkTest[] = [
 
 export const BleBenchmarkTestCase: BenchmarkTest[] = [
   {
-    name : '注册状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcztbh') ,
     detail : '1' ,
     method : 'on.stateChange' ,
     api : testOnStateChange ,
@@ -121,7 +121,7 @@ export const BleBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BleBenchmark
   },
   {
-    name : '开蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
     detail : '2' ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
@@ -129,7 +129,7 @@ export const BleBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BleBenchmark
   },
   {
-    name : '获取状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
     detail : '3' ,
     method : 'getState' ,
     api : testGetState ,
@@ -137,7 +137,7 @@ export const BleBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BleBenchmark
   },
   {
-    name : '设置本地名称' ,
+    name : $r('app.string.bluetoothtest_str_szbdmc') ,
     detail : '4' ,
     method : 'setLocalName' ,
     api : testSetLocalName ,
@@ -145,7 +145,7 @@ export const BleBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BleBenchmark
   },
   {
-    name : '获取本地名称' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
     detail : '5' ,
     method : 'getLocalName' ,
     api : testGetLocalName ,
@@ -153,7 +153,7 @@ export const BleBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BleBenchmark
   },
   {
-    name : '设置扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szsmms') ,
     detail : '6' ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
@@ -161,7 +161,7 @@ export const BleBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.BleBenchmark
   },
   {
-    name : '获取扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
     detail : '7' ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
@@ -173,7 +173,7 @@ export const BleBenchmarkTestCase: BenchmarkTest[] = [
 
 export const GattClientBenchmarkTestCase: BenchmarkTest[] = [
   {
-    name : '创建Gatt客户端' ,
+    name : $r('app.string.bluetoothtest_str_cjgkhd_1') ,
     detail : '1' ,
     method : 'createGattClient' ,
     api : testCreateGattClient ,
@@ -181,7 +181,7 @@ export const GattClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    name : 'Ble连接状态' ,
+    name : $r('app.string.bluetoothtest_str_bljzt_1') ,
     detail : '2' ,
     method : 'on.BleConnectionStateChange' ,
     api : testOnBLEConnectionStateChange ,
@@ -189,7 +189,7 @@ export const GattClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    name : '连接' ,
+    name : $r('app.string.bluetoothtest_str_lj') ,
     detail : '3' ,
     method : 'connect' ,
     api : testConnect ,
@@ -197,7 +197,7 @@ export const GattClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    name : '设置通知特性更改' ,
+    name : $r('app.string.bluetoothtest_str_sztztxgg') ,
     detail : '4' ,
     method : 'setNotifyCharacteristicChanged' ,
     api : testSetNotifyCharacteristicChanged ,
@@ -205,7 +205,7 @@ export const GattClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    name : 'Ble特征值变化' ,
+    name : $r('app.string.bluetoothtest_str_btzzbh_1') ,
     detail : '5' ,
     method : 'on.BleCharacteristicChange' ,
     api : testOnBLECharacteristicChange ,
@@ -213,7 +213,7 @@ export const GattClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    name : '获取服务callback' ,
+    name : $r('app.string.bluetoothtest_str_hqfwc_1') ,
     detail : '6' ,
     method : 'getServices(Callback)' ,
     api : testGetServicesCallback ,
@@ -221,7 +221,7 @@ export const GattClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    name : '读取特征值callback' ,
+    name : $r('app.string.bluetoothtest_str_dqtzzc_1') ,
     detail : '7' ,
     method : 'readCharacteristicValue(callback)' ,
     api : testReadCharacteristicValueCallback ,
@@ -229,7 +229,7 @@ export const GattClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattClientBenchmark
   },
   {
-    name : '写入特征值' ,
+    name : $r('app.string.bluetoothtest_str_xrtzz') ,
     detail : '8' ,
     method : 'writeCharacteristicValue' ,
     api : testWriteCharacteristicValue ,
@@ -240,7 +240,7 @@ export const GattClientBenchmarkTestCase: BenchmarkTest[] = [
 
 export const GattServerBenchmarkTestCase: BenchmarkTest[] = [
   {
-    name : '创建Gatt服务器' ,
+    name : $r('app.string.bluetoothtest_str_cjgfwq_1') ,
     detail : '1' ,
     method : 'createGattServer' ,
     api : testCreateGattServer ,
@@ -248,7 +248,7 @@ export const GattServerBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattServerBenchmark
   },
   {
-    name : '添加服务' ,
+    name : $r('app.string.bluetoothtest_str_tjfw') ,
     detail : '2' ,
     method : 'addService' ,
     api : testAddService ,
@@ -256,7 +256,7 @@ export const GattServerBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattServerBenchmark
   },
   {
-    name : '连接状态' ,
+    name : $r('app.string.bluetoothtest_str_ljzt') ,
     detail : '3' ,
     method : 'on.connectStateChange' ,
     api : testOnConnectStateChange ,
@@ -264,7 +264,7 @@ export const GattServerBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattServerBenchmark
   },
   {
-    name : '开始广播' ,
+    name : $r('app.string.bluetoothtest_str_ksgb') ,
     detail : '4' ,
     method : 'startAdvertising' ,
     api : testStartAdvertising ,
@@ -272,7 +272,7 @@ export const GattServerBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattServerBenchmark
   },
   {
-    name : '读取特征值' ,
+    name : $r('app.string.bluetoothtest_str_dqtzz') ,
     detail : '5' ,
     method : 'on.characteristicRead' ,
     api : testOnCharacteristicRead ,
@@ -280,7 +280,7 @@ export const GattServerBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.GattServerBenchmark
   },
   {
-    name : '写入特征值' ,
+    name : $r('app.string.bluetoothtest_str_xrtzz') ,
     detail : '6' ,
     method : 'on.characteristicWrite' ,
     api : testOnCharacteristicWrite ,
@@ -291,7 +291,7 @@ export const GattServerBenchmarkTestCase: BenchmarkTest[] = [
 
 export const SppClientBenchmarkTestCase: BenchmarkTest[] = [
   {
-    name : '注册状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcztbh') ,
     detail : '1' ,
     method : 'on.stateChange' ,
     api : testOnStateChange ,
@@ -299,7 +299,7 @@ export const SppClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    name : '开蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
     detail : '2' ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
@@ -307,7 +307,7 @@ export const SppClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    name : '获取状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
     detail : '3' ,
     method : 'getState' ,
     api : testGetState ,
@@ -315,7 +315,7 @@ export const SppClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    name : '设置本地名称' ,
+    name : $r('app.string.bluetoothtest_str_szbdmc') ,
     detail : '4' ,
     method : 'setLocalName' ,
     api : testSetLocalName ,
@@ -323,7 +323,7 @@ export const SppClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    name : '获取本地名称' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
     detail : '5' ,
     method : 'getLocalName' ,
     api : testGetLocalName ,
@@ -331,7 +331,7 @@ export const SppClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    name : '设置SPP扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szssmms') ,
     detail : '6' ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
@@ -339,7 +339,7 @@ export const SppClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    name : '获取扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
     detail : '7' ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
@@ -347,7 +347,7 @@ export const SppClientBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppClientBenchmark
   },
   {
-    name : 'Spp客户端连接(安全模式)' ,
+    name : $r('app.string.bluetoothtest_str_skhdljaqms') ,
     detail : '8' ,
     method : 'sppConnect' ,
     api : testSppClientConnectSafe ,
@@ -358,7 +358,7 @@ export const SppClientBenchmarkTestCase: BenchmarkTest[] = [
 
 export const SppServerBenchmarkTestCase: BenchmarkTest[] = [
   {
-    name : '注册状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcztbh') ,
     detail : '1' ,
     method : 'on.stateChange' ,
     api : testOnStateChange ,
@@ -366,7 +366,7 @@ export const SppServerBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    name : '开蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
     detail : '2' ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
@@ -374,7 +374,7 @@ export const SppServerBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    name : '获取状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
     detail : '3' ,
     method : 'getState' ,
     api : testGetState ,
@@ -382,7 +382,7 @@ export const SppServerBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    name : '设置本地名称' ,
+    name : $r('app.string.bluetoothtest_str_szbdmc') ,
     detail : '4' ,
     method : 'setLocalName' ,
     api : testSetLocalName ,
@@ -390,7 +390,7 @@ export const SppServerBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    name : '获取本地名称' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
     detail : '5' ,
     method : 'getLocalName' ,
     api : testGetLocalName ,
@@ -398,7 +398,7 @@ export const SppServerBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    name : '设置SPP扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szssmms') ,
     detail : '6' ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
@@ -406,7 +406,7 @@ export const SppServerBenchmarkTestCase: BenchmarkTest[] = [
     category : BenchmarkCategory.SppServerBenchmark
   },
   {
-    name : '获取扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
     detail : '7' ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,

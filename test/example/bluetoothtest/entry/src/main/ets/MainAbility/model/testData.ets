@@ -42,13 +42,13 @@ let NextId = 0;
 
 export class TestData {
   id: string;
-  name?: string;
-  detail?: string;
+  name?: Resource | string;
+  detail?: Resource | string;
   url?: string;
   image?: Resource
   category?: Category;
 
-  constructor(name: string , detail: string , url: string , image: Resource , category: Category) {
+  constructor(name: Resource | string , detail: Resource | string , url: string , image: Resource , category: Category) {
     this.id = `${ NextId ++ }`;
     this.name = name;
     this.url = url;
@@ -84,14 +84,14 @@ export enum CaseCategory {
 
 export class TestApi {
   id?: string;
-  name?: string;
-  detail?: string;
+  name?: Resource | string;
+  detail?: Resource | string;
   method?: string;
   api: Function;
   result?: string;
   category?: CaseCategory;
 
-  constructor(name: string, detail: string, method: string, api: Function,
+  constructor(name: Resource | string, detail: Resource | string, method: string, api: Function,
     result: string, category: CaseCategory) {
     this.id = `${ NextId ++ }`;
     this.name = name;
@@ -129,14 +129,14 @@ export enum AutoCategory {
 
 export class TestAuto {
   id?: string;
-  name?: string;
-  detail?: string;
+  name?: Resource | string;
+  detail?: Resource | string;
   method?: string;
   api?: Function;
   result?: string;
   category?: AutoCategory;
 
-  constructor(name: string , detail: string , method: string , api: Function , result: string , category: AutoCategory) {
+  constructor(name: Resource | string , detail: Resource | string , method: string , api: Function , result: string , category: AutoCategory) {
     this.id = `${ NextId ++ }`;
     this.name = name;
     this.detail = detail;
@@ -166,14 +166,14 @@ export enum ScenarioCategory {
 
 export class TestScenario {
   id: string;
-  name: string;
-  detail: string;
+  name: Resource | string;
+  detail: Resource | string;
   method: string;
   api: Function;
   result: string;
   category: ScenarioCategory;
 
-  constructor(name: string , detail: string , method: string , api: Function , result: string , category: ScenarioCategory) {
+  constructor(name: Resource | string , detail: Resource | string , method: string , api: Function , result: string , category: ScenarioCategory) {
     this.id = `${ NextId ++ }`;
     this.name = name;
     this.detail = detail;
@@ -202,14 +202,14 @@ export enum BenchmarkCategory {
 
 export class TestBenchmark {
   id: string;
-  name: string;
-  detail: string;
+  name: Resource | string;
+  detail: Resource | string;
   method: string;
   api: Function;
   result: string;
   category: BenchmarkCategory;
 
-  constructor(name: string , detail: string , method: string , api: Function , result: string , category: BenchmarkCategory) {
+  constructor(name: Resource | string , detail: Resource | string , method: string , api: Function , result: string , category: BenchmarkCategory) {
     this.id = `${ NextId ++ }`;
     this.name = name;
     this.detail = detail;

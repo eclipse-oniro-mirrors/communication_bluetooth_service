@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
 import { ContentTable } from '../../Component/contentTable';
@@ -63,7 +66,9 @@ struct HandsFreeAudioGatewayProfileTest {
           .id('pages_subProfileTest_handsFreeAudioGatewayProfileTest__pt_0')
         }
 
-        Stack().height(ConfigData.VP_0_5).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.VP_0_5)
+          .backgroundColor($r('app.color.black'));
         Text(this.hasProfile ? this.profileExist : this.profileNotExist)
           .margin({ top : ConfigData.VP_10 })
           .fontSize(ConfigData.VP_20)
@@ -75,7 +80,7 @@ struct HandsFreeAudioGatewayProfileTest {
           Row() {
             Text($r('app.string.bluetoothtest_text_xzzzljdsbw'))
               .fontSize("17").width(ConfigData.VP_110).margin(ConfigData.VP_5)
-            TextInput({ text : JSON.stringify(this.deviceId) , placeholder : "请输入需要连接的deviceId" })
+            TextInput({ text : JSON.stringify(this.deviceId) , placeholder : $r('app.string.bluetoothtest_str_qsrxyljdd') })
               .accessibilityLevel('yes')
               .id('pages_subProfileTest_handsFreeAudioGatewayProfileTest__ti_0')
               .fontSize(ConfigData.VP_17)
@@ -91,12 +96,12 @@ struct HandsFreeAudioGatewayProfileTest {
           .alignItems(VerticalAlign.Center)
 
           Column() {
-            Text($r('app.string.label_api_result_space') + this.hfpMessage)
+            Text(resStr($r('app.string.label_api_result_space')) + this.hfpMessage)
               .fontSize(ConfigData.VP_17)
               .textAlign(TextAlign.Start)
               .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_10 })
               .width(ConfigData.WH_100_100)
-            Text($r('app.string.label_connection_state_change') + this.connectionStateInfo)
+            Text(resStr($r('app.string.label_connection_state_change')) + this.connectionStateInfo)
               .fontSize(ConfigData.VP_17)
               .margin({ top : ConfigData.VP_10 , left : ConfigData.VP_10 })
               .textAlign(TextAlign.Start)
@@ -128,11 +133,11 @@ struct HandsFreeAudioGatewayProfileTest {
   onPageShow() {
     this.bluetoothState = btProfileModel.getBluetoothState();
     if ( this.bluetoothState == btProfileModel.BLUETOOTH_STATE_OFF ) {
-      this.profileNotExist = "蓝牙未打开，请先开启蓝牙后再使用！"
+      this.profileNotExist = resStr($r('app.string.bluetoothtest_str_lywdkqxkqlyhzsy'))
       return;
     }
     this.hasProfile = btProfileModel.hasProfile(btProfileModel.PROFILE_HANDS_FREE_AUDIO_GATEWAY);
-    console.log("bt_test pageType: " + this.pageType);
+    hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test pageType: " + this.pageType);
     switch ( this.pageType ) {
     //      case 0:
     //        this.title = $r('app.string.a2dp_sink_profile_test_title');
@@ -207,7 +212,7 @@ struct HandsFreeAudioGatewayProfileTest {
     promptAction.showToast({ message : this.profileType.toString() })
     this.hasProfile = btProfileModel.hasProfile(this.profileType);
     if ( this.hasProfile ) {
-      console.log("bt_test registered connectionStateChange type: " + this.profileType);
+      hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test registered connectionStateChange type: " + this.profileType);
       (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).on("connectionStateChange" , (date: bluetooth.StateChangeParam) => {
         this.connectionStateInfo = JSON.stringify(date);
         this.btConnectionState = date.state;
@@ -220,6 +225,6 @@ struct HandsFreeAudioGatewayProfileTest {
     if ( this.hasProfile ) {
       (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).off("connectionStateChange");
     }
-    console.log("bt_test Ability end");
+    hilog.info(0x0000, 'BtTest', '%{public}s', "bt_test Ability end");
   }
 }

@@ -76,7 +76,9 @@ struct GattServerAutoTest {
               .id('pages_subAutoTest_subGattAutoTest_gattServerAutoTest__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -98,7 +100,9 @@ struct GattServerAutoTest {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
@@ -140,12 +144,18 @@ struct GattServerAutoTest {
       .width(ConfigData.WH_100_100)
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Button({ type : ButtonType.Normal , stateEffect : true }) {
           Row() {
-            Text($r('app.string.autotest')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-          }.alignItems(VerticalAlign.Center)
+            Text($r('app.string.autotest'))
+              .fontSize(ConfigData.VP_24)
+              .fontColor(0xffffff)
+              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+          }
+            .alignItems(VerticalAlign.Center)
         }
         .accessibilityLevel('yes')
         .id('pages_subAutoTest_subGattAutoTest_gattServerAutoTest__btn_0')

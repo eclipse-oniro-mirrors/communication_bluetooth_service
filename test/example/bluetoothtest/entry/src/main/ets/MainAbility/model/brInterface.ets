@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 /**
  *BR Test interface Of Bluetooth test
  */
@@ -42,27 +45,27 @@ let btEnable = false
 
 export function testEnableBluetooth() {
   try {
-    console.log("testEnableBluetooth start-------------")
-    let message = "enableBluetooth test"
+    hilog.info(0x0000, 'BtTest', '%{public}s', "testEnableBluetooth start-------------")
+    let message = resStr($r('app.string.bluetoothtest_str_et'))
     if ( btEnable ) {
-      message = '蓝牙已经使能';
+      message = resStr($r('app.string.bluetoothtest_str_lyyjsn'));
     } else {
       let ret = BluetoothModel.enableBluetooth();
       if ( ret ) {
-        message = "蓝牙使能执行结果：" + ret
+        message = resStr($r('app.string.bluetoothtest_str_lysnzxjg')) + ret
       } else {
-        message = "蓝牙使能执行结果：" + ret + "\n"
-        message += "蓝牙已打开或打开失败,请确认"
+        message = resStr($r('app.string.bluetoothtest_str_lysnzxjg')) + ret + "\n"
+        message += resStr($r('app.string.bluetoothtest_str_lyydkhdksbqqr'))
       }
-      console.log("蓝牙使能执行结果：" + ret);
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_lysnzxjg')) + ret);
       btEnable = true;
       AppStorage.setOrCreate('bluetoothIsOn' , btEnable);
     }
     promptAction.showToast({ message : message })
     return message
-    console.log("testEnableBluetooth end-------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "testEnableBluetooth end-------------")
   } catch( e ) {
-    console.log(`Failed to testEnableBluetooth. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testEnableBluetooth. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testEnableBluetooth. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -71,27 +74,27 @@ export function testEnableBluetooth() {
 
 export function testDisableBluetooth(): string {
   try {
-    console.log("testDisableBluetooth start-------------")
-    let message = "disableBluetooth test"
+    hilog.info(0x0000, 'BtTest', '%{public}s', "testDisableBluetooth start-------------")
+    let message = resStr($r('app.string.bluetoothtest_str_dt'))
     if ( !btEnable ) {
-      message = '蓝牙还未使能';
+      message = resStr($r('app.string.bluetoothtest_str_lyhwsn'));
     } else {
       let ret = BluetoothModel.disableBluetooth();
       if ( ret ) {
-        message = "蓝牙去使能执行结果：" + ret;
+        message = resStr($r('app.string.bluetoothtest_str_lyqsnzxjg')) + ret;
       } else {
-        message = "蓝牙去使能执行结果：" + ret + "\n"
-        message += "蓝牙已关闭或关闭失败,请确认"
+        message = resStr($r('app.string.bluetoothtest_str_lyqsnzxjg')) + ret + "\n"
+        message += $r('app.string.bluetoothtest_str_lyygbhgbsbqqr')
       }
-      console.log("蓝牙去使能执行结果：" + ret);
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_lyqsnzxjg')) + ret);
       btEnable = false;
       AppStorage.setOrCreate('bluetoothIsOn' , btEnable);
     }
     promptAction.showToast({ message : message })
     return message
-    console.log("testDisableBluetooth end-------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "testDisableBluetooth end-------------")
   } catch( e ) {
-    console.log(`Failed to testDisableBluetooth. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testDisableBluetooth. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testDisableBluetooth. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -101,7 +104,7 @@ export function testDisableBluetooth(): string {
 export function testGetState(): string {
   try {
     let ret = BluetoothModel.getState();
-    console.log("ret:" + ret)
+    hilog.info(0x0000, 'BtTest', '%{public}s', "ret:" + ret)
     let stateBT = "getState test"
     switch ( ret ) {
       case 0:
@@ -126,23 +129,23 @@ export function testGetState(): string {
         stateBT = 'STATE_BLE_TURNING_OFF';
         break;
       default:
-        stateBT = '未知状态';
+        stateBT = resStr($r('app.string.bluetoothtest_str_wzzt'));
         break;
     }
-    let message = "当前蓝牙的状态是：" + stateBT;
+    let message = resStr($r('app.string.bluetoothtest_str_dqlydzts')) + stateBT;
     if ( ret == 0 || ret == 3 ) {
       btEnable = false
-      console.log("btEnable = false---------------")
+      hilog.info(0x0000, 'BtTest', '%{public}s', "btEnable = false---------------")
     } else if ( ret == 1 || ret == 2 ) {
       btEnable = true
-      console.log("btEnable = true---------------")
+      hilog.info(0x0000, 'BtTest', '%{public}s', "btEnable = true---------------")
     } else {
-      console.log("查看bt状态")
+      hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_ckbzt'))
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetState. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetState. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetState. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -152,11 +155,11 @@ export function testGetState(): string {
 export function testGetBtConnectionState(): string {
   try {
     let ret = BluetoothModel.getBtConnectionState();
-    let message = "当前连接状态是：" + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_dqljzts')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetBtConnectionState. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetBtConnectionState. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetBtConnectionState. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -166,11 +169,11 @@ export function testGetBtConnectionState(): string {
 export function testSetLocalName(name: string): string {
   try {
     let ret = BluetoothModel.setLocalName(name);
-    let message = "设置：" + ret + "设备名称为：" + name;
+    let message = resStr($r('app.string.bluetoothtest_str_sz')) + ret + resStr($r('app.string.bluetoothtest_str_sbmcw')) + name;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testSetLocalName. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testSetLocalName. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testSetLocalName. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -180,11 +183,11 @@ export function testSetLocalName(name: string): string {
 export function testGetLocalName(): string {
   try {
     let ret = BluetoothModel.getLocalName();
-    let message = "本设备名称是：" + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_bsbmcs')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetLocalName. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetLocalName. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetLocalName. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -201,16 +204,16 @@ export function testSetBluetoothScanMode(mode: number , dur: number): string {
       retObj.mod = mode;
       retObj.duration = dur;
     } else {
-      console.log("BluetoothModel.setBluetoothScanMode failed!")
+      hilog.info(0x0000, 'BtTest', '%{public}s', "BluetoothModel.setBluetoothScanMode failed!")
     }
-    console.log("BluetoothModel.setBluetoothScanMode success!" + JSON.stringify(retObj))
+    hilog.info(0x0000, 'BtTest', '%{public}s', "BluetoothModel.setBluetoothScanMode success!" + JSON.stringify(retObj))
     // let message = ret ? "setBluetoothScanMode执行成功" + JSON.stringify( retObj ) : "setBluetoothScanMode执行失败"
-    let message = ret ? JSON.stringify(retObj) : "setBluetoothScanMode执行失败"
-    let showToastMessage = ret ? "setBluetoothScanMode执行成功;" + JSON.stringify(retObj) : "setBluetoothScanMode执行失败"
+    let message = ret ? JSON.stringify(retObj) : resStr($r('app.string.bluetoothtest_str_szxsb'))
+    let showToastMessage = ret ? resStr($r('app.string.bluetoothtest_str_szxcg')) + JSON.stringify(retObj) : resStr($r('app.string.bluetoothtest_str_szxsb'))
     promptAction.showToast({ message : showToastMessage })
     return message
   } catch( e ) {
-    console.log(`Failed to testSetBluetoothScanMode. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testSetBluetoothScanMode. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testSetBluetoothScanMode. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -220,11 +223,11 @@ export function testSetBluetoothScanMode(mode: number , dur: number): string {
 export function testGetBluetoothScanMode(): string {
   try {
     let ret = BluetoothModel.getBluetoothScanMode();
-    let message = "模式: " + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_ms')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetBluetoothScanMode. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetBluetoothScanMode. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetBluetoothScanMode. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -233,19 +236,19 @@ export function testGetBluetoothScanMode(): string {
 
 export function testStartBluetoothDiscovery() {
   try {
-    let message = "startBluetoothDiscovery test"
+    let message = resStr($r('app.string.bluetoothtest_str_st_3'))
     let btEnable: boolean = AppStorage.get('bluetoothIsOn') !
     if ( !btEnable ) {
-      message = '蓝牙还未使能';
+      message = resStr($r('app.string.bluetoothtest_str_lyhwsn'));
       return message;
     } else {
       router.pushUrl({ url : PAGE_URI_DEVICE_FOUND_MODE });
-      message = "蓝牙发现成功"
+      message = resStr($r('app.string.bluetoothtest_str_lyfxcg'))
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testStartBluetoothDiscovery. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testStartBluetoothDiscovery. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testStartBluetoothDiscovery. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -255,11 +258,11 @@ export function testStartBluetoothDiscovery() {
 export function testStopBluetoothDiscovery(): string {
   try {
     let ret = BluetoothModel.stopBluetoothDiscovery();
-    let message = "stopBluetoothDiscovery 执行：" + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_szx_1')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testStopBluetoothDiscovery. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testStopBluetoothDiscovery. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testStopBluetoothDiscovery. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -277,11 +280,11 @@ export function testPairDevice(deviceId: string): string {
     } , () => {
       promptAction.showToast({ message : "testPairDevice Failed" })
     })
-    message = "配对：" + deviceId + ret ? "成功" : "失败"
+    message = resStr($r('app.string.bluetoothtest_str_pd')) + deviceId + (ret ? resStr($r('app.string.bluetoothtest_str_cg')) : resStr($r('app.string.bluetoothtest_str_sb_1')))
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testPairDevice. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testPairDevice. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testPairDevice. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -292,11 +295,11 @@ export function testUnPairedDevice(deviceId: string): string {
   //  let deviceId = "123123"
   try {
     let ret = BluetoothModel.unpairDevice(deviceId);
-    let message = " 设备 " + deviceId + " 断开：" + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_sb')) + deviceId + resStr($r('app.string.bluetoothtest_str_dk')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testUnPairedDevice. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testUnPairedDevice. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testUnPairedDevice. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -306,11 +309,11 @@ export function testUnPairedDevice(deviceId: string): string {
 export function testGetRemoteDeviceName(deviceId: string): string {
   try {
     let ret = BluetoothModel.getDeviceName(deviceId);
-    let message = '远程设备名:' + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_ycsbm')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetRemoteDeviceName. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetRemoteDeviceName. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetRemoteDeviceName. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -321,11 +324,11 @@ export function testGetRemoteDeviceClass(deviceId: string): string {
   //  let deviceId= "12312fsdf";
   try {
     let ret = BluetoothModel.getDeviceType(deviceId);
-    let message = '远程class名:' + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_yccm')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetRemoteDeviceClass. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetRemoteDeviceClass. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetRemoteDeviceClass. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -335,18 +338,18 @@ export function testGetRemoteDeviceClass(deviceId: string): string {
 export function testGetPairedDevices(): string {
   try {
     let ret = BluetoothModel.getPairedDeviceIds();
-    let message = "getPairedDevices test"
-    console.log("BluetoothModel.getPairedDeviceIds:" + ret)
+    let message = resStr($r('app.string.bluetoothtest_str_gt_8'))
+    hilog.info(0x0000, 'BtTest', '%{public}s', "BluetoothModel.getPairedDeviceIds:" + ret)
     if ( ret.length == 0 ) {
-      message = '当前没有任何配对设备';
+      message = resStr($r('app.string.bluetoothtest_str_dqmyrhpdsb'));
     } else {
-      message = "设备为：" + ret[ 0 ]
+      message = resStr($r('app.string.bluetoothtest_str_sbw')) + ret[ 0 ]
       AppStorage.setOrCreate('pairedMac' , ret[ 0 ]);
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetPairedDevices. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetPairedDevices. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetPairedDevices. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -355,19 +358,19 @@ export function testGetPairedDevices(): string {
 
 export function testSetConnectionStrategy(connectionStrategy: number) {
   try {
-    let message = "setConnectionStrategy test"
+    let message = resStr($r('app.string.bluetoothtest_str_st_6'))
     let a2dpSrc = a2dp.createA2dpSrcProfile();
     let pairedMac: string = AppStorage.get('pairedMac') !
     if ( pairedMac.length == 0 ) {
-      message = '当前Mac值为空，请检查是否已配对';
+      message = resStr($r('app.string.bluetoothtest_str_dqmzwkqjcsfypd'));
     } else {
       //[TODO] 接口改了调用方式，需要重新适配
       // a2dpSrc.getConnectionState(pairedMac , (err , connectionStrategy) => {
       //   if ( !err ) {
       //     message = "获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy
-      //     console.log("获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy)
+      //     hilog.info(0x0000, 'BtTest', '%{public}s', "获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy)
       //   } else {
-      //     console.log('getConnectionStrategy, err: ' + JSON.stringify(err));
+      //     hilog.info(0x0000, 'BtTest', '%{public}s', 'getConnectionStrategy, err: ' + JSON.stringify(err));
       //   }
       //   promptAction.showToast({ message : message })
       //   return message
@@ -375,7 +378,7 @@ export function testSetConnectionStrategy(connectionStrategy: number) {
     }
     return message
   } catch( e ) {
-    console.log(`Failed to testSetConnectionStrategy. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testSetConnectionStrategy. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testSetConnectionStrategy. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -384,19 +387,19 @@ export function testSetConnectionStrategy(connectionStrategy: number) {
 
 export function testGetConnectionStrategy(deviceId: string): string {
   try {
-    let message = "getConnectionStrategy test"
+    let message = resStr($r('app.string.bluetoothtest_str_gt_1'))
     let a2dpSrc = a2dp.createA2dpSrcProfile();
     let pairedMac: string = AppStorage.get('pairedMac') !
     if ( pairedMac.length == 0 ) {
-      message = '当前Mac值为空，请检查是否已配对';
+      message = resStr($r('app.string.bluetoothtest_str_dqmzwkqjcsfypd'));
     } else {
       //[TODO] 接口改了调用方式，需要重新适配
       // a2dpSrc.getConnectionState(pairedMac , (err , connectionStrategy) => {
       //   if ( !err ) {
       //     message = "获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy
-      //     console.log("获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy)
+      //     hilog.info(0x0000, 'BtTest', '%{public}s', "获取连接策略,mac值为: " + pairedMac + ";策略为: " + connectionStrategy)
       //   } else {
-      //     console.log('getConnectionStrategy, err: ' + JSON.stringify(err));
+      //     hilog.info(0x0000, 'BtTest', '%{public}s', 'getConnectionStrategy, err: ' + JSON.stringify(err));
       //   }
       //   promptAction.showToast({ message : message })
       //   return message
@@ -404,7 +407,7 @@ export function testGetConnectionStrategy(deviceId: string): string {
     }
     return message
   } catch( e ) {
-    console.log(`Failed to testGetConnectionStrategy. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetConnectionStrategy. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetConnectionStrategy. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -416,10 +419,10 @@ export function testGetProfileConnState1(profileId: number): string {
     let ret = BluetoothModel.getProfileConnState(profileId);
     let message = ret
     promptAction.showToast({ message : message })
-    console.log("br.testGetProfileConnState1:" + ret)
+    hilog.info(0x0000, 'BtTest', '%{public}s', "br.testGetProfileConnState1:" + ret)
     return message
   } catch( e ) {
-    console.log(`Failed to testGetProfileConnState1. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetProfileConnState1. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetProfileConnState1. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -430,7 +433,7 @@ export function testGetProfileConnState2(profileId: number , deviceId: string): 
   try {
     let ret = bluetooth.getProfile(profileId).getDeviceState(deviceId);
     let stateProfile = ""
-    console.log('testGetProfileConnState2 state is ' + ret);
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'testGetProfileConnState2 state is ' + ret);
     switch ( ret ) {
       case 0:
         stateProfile = 'STATE_DISCONNECTED';
@@ -445,14 +448,14 @@ export function testGetProfileConnState2(profileId: number , deviceId: string): 
         stateProfile = 'STATE_DISCONNECTING';
         break;
       default:
-        stateProfile = '未知';
+        stateProfile = resStr($r('app.string.bluetoothtest_str_wz'));
         break;
     }
     let message = stateProfile;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetProfileConnState2. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetProfileConnState2. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetProfileConnState2. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -463,14 +466,14 @@ let stateChange = false
 
 export function testOnStateChange(): string {
   try {
-    let message = "onStateChange test"
-    console.log('testOnStateChange test');
+    let message = resStr($r('app.string.bluetoothtest_str_ot_12'))
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'testOnStateChange test');
     if ( stateChange ) {
       bluetooth.off('stateChange' , () => {
-        promptAction.showToast({ message : "on.stateChange监听已关闭" })
+        promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_osjtygb')) })
       })
-      message = "关闭注册状态变化"
-      console.log('testOffStateChange test');
+      message = resStr($r('app.string.bluetoothtest_str_gbzcztbh'))
+      hilog.info(0x0000, 'BtTest', '%{public}s', 'testOffStateChange test');
     } else {
       bluetooth.on('stateChange' , (data: bluetooth.BluetoothState) => {
         let btStateMessage = ""
@@ -497,18 +500,18 @@ export function testOnStateChange(): string {
             btStateMessage += 'STATE_BLE_TURNING_OFF';
             break;
           default:
-            btStateMessage += '未知状态';
+            btStateMessage += resStr($r('app.string.bluetoothtest_str_wzzt'));
             break;
         }
-        promptAction.showToast({ message : "状态:" + btStateMessage })
+        promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_zt')) + btStateMessage })
       })
-      message = "打开注册状态变化"
+      message = resStr($r('app.string.bluetoothtest_str_dkzcztbh'))
       promptAction.showToast({ message : message })
     }
     stateChange = !stateChange
     return message
   } catch( e ) {
-    console.log(`Failed to testOnStateChange. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testOnStateChange. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testOnStateChange. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -519,23 +522,23 @@ let pinRequired = false
 
 export function testOnPinRequired(): string {
   try {
-    let message = "onPinRequired test"
-    console.log('testOnPinRequired test');
+    let message = resStr($r('app.string.bluetoothtest_str_ot_11'))
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'testOnPinRequired test');
     if ( pinRequired ) {
       bluetooth.off('pinRequired' , () => {
-        promptAction.showToast({ message : "on.pinRequired监听已关闭" })
+        promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_opjtygb')) })
       })
-      message = "关闭注册pin码变化"
+      message = resStr($r('app.string.bluetoothtest_str_gbzcpmbh'))
     } else {
       bluetooth.on('pinRequired' , (data: bluetooth.PinRequiredParam) => {
         promptAction.showToast({ message : "mac:" + data.deviceId + "pin:" + data.pinCode })
       })
-      message = "打开注册pin码变化"
+      message = resStr($r('app.string.bluetoothtest_str_dkzcpmbh'))
     }
     pinRequired = !pinRequired
     return message
   } catch( e ) {
-    console.log(`Failed to testOnPinRequired. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testOnPinRequired. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testOnPinRequired. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -546,23 +549,23 @@ let bondStateFlag = false
 
 export function testOnBondStateChange(): string {
   try {
-    let message = "onBondStateChange test"
-    console.log('testOnBondStateChange test');
+    let message = resStr($r('app.string.bluetoothtest_str_ot_7'))
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'testOnBondStateChange test');
     if ( bondStateFlag ) {
       bluetooth.off('bondStateChange' , () => {
-        promptAction.showToast({ message : "on.bondStateChange监听已关闭" })
+        promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_objtygb')) })
       })
-      message = "关闭注册绑定状态变化"
+      message = resStr($r('app.string.bluetoothtest_str_gbzcbdztbh'))
     } else {
       bluetooth.on('bondStateChange' , (data: bluetooth.BondStateParam) => {
         promptAction.showToast({ message : "mac:" + data.deviceId + "state:" + data.state })
       })
-      message = "打开注册绑定状态变化"
+      message = resStr($r('app.string.bluetoothtest_str_dkzcbdztbh'))
     }
     bondStateFlag = !bondStateFlag
     return message
   } catch( e ) {
-    console.log(`Failed to testOnBondStateChange. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testOnBondStateChange. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testOnBondStateChange. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -571,13 +574,13 @@ export function testOnBondStateChange(): string {
 
 export function subscribeBluetoothDeviceFind(): string {
   try {
-    let message = "subscribeBluetoothDeviceFind test"
-    console.log("subscribeBluetoothDeviceFind")
+    let message = resStr($r('app.string.bluetoothtest_str_st_1'))
+    hilog.info(0x0000, 'BtTest', '%{public}s', "subscribeBluetoothDeviceFind")
     BluetoothModel.subscribeBluetoothDeviceFind((deviceIds: Array<string>) => {
-      console.log('available bluetooth devices changed.');
+      hilog.info(0x0000, 'BtTest', '%{public}s', 'available bluetooth devices changed.');
       deviceIds?.forEach(async(deviceId) => {
-        console.log('available bluetooth find [' + deviceId + '] ')
-        let message = ('available bluetooth find [' + deviceId + ']  ')
+        hilog.info(0x0000, 'BtTest', '%{public}s', 'available bluetooth find [' + deviceId + '] ')
+        let message = (resStr($r('app.string.bluetoothtest_str_abf')) + deviceId + resStr($r('app.string.bluetoothtest_str_str')))
         promptAction.showToast({ message : message })
         AppStorage.setOrCreate('bluetoothAvailableDevices' , message);
       })
@@ -585,7 +588,7 @@ export function subscribeBluetoothDeviceFind(): string {
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to subscribeBluetoothDeviceFind. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to subscribeBluetoothDeviceFind. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to subscribeBluetoothDeviceFind. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message

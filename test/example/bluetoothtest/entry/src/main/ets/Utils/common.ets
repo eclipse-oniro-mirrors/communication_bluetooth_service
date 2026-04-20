@@ -16,6 +16,9 @@
 import router from '@ohos.router';
 import { Category, TestData } from '../MainAbility/model/testData'
 import bluetooth from '@ohos.bluetooth'
+
+export { resStr } from './resString';
+
 /**
  * GattServer Interface Of Bluetooth test
  */

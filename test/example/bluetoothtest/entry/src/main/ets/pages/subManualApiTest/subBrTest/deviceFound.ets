@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
+
 
 import ConfigData from '../../../Utils/ConfigData';
 import LogUtil from '../../../Utils/LogUtil';
@@ -79,7 +81,7 @@ struct DeviceFound {
             md : { span : 0 , offset : 0 } , lg : { span : 2 , offset : 0 }
           });
           Column({ space : ConfigData.VP_12 }) {
-            PageTitle({ detail : '扫描蓝牙设备' })
+            PageTitle({ detail : $r('app.string.bluetoothtest_str_smlysb') })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subBrTest_deviceFound__pt_0')
             Scroll() {
@@ -424,9 +426,9 @@ export struct PairedItem {
       .onClick(() => {
         let ret = bluetooth.cancelPairedDevice(this.mac)
         if ( ret ) {
-          promptAction.showToast({ message : "取消配对成功！" })
+          promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_qxpdcg')) })
         } else {
-          promptAction.showToast({ message : "取消配对失败！" })
+          promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_qxpdsb')) })
         }
       })
     }
@@ -443,7 +445,7 @@ export struct AvailableDeviceComponent {
   @StorageLink('bluetoothAvailableDevices') availableDevices: BluetoothDevice[] = [];
   @State pairPinCode: string = '';
   private pairingDevice!: BluetoothDevice
-  @State pairDeviceInfo: string = '未配对';
+  @State pairDeviceInfo: Resource | string = $r('app.string.bluetoothtest_str_wpd');
   controller!: BluetoothDeviceController;
   pairDialog: CustomDialogController = new CustomDialogController({
     builder : PairDialog({

@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../Utils/ConfigData';
 import screenshot from '@ohos.screenshot'
 import image from '@ohos.multimedia.image'
@@ -74,7 +75,7 @@ export struct MainPageTitle {
     //    .size({ width: 55, height: 55 })
     .margin({ left : ConfigData.VP_6 , right : ConfigData.VP_6 , top : ConfigData.VP_3 })
     .onClick(() => {
-      console.log('[Screenshot] onClick,screenshot')
+      hilog.info(0x0000, 'BtTest', '%{public}s', '[Screenshot] onClick,screenshot')
       this.getScreen(isFullScreen)
     })
   }
@@ -114,40 +115,40 @@ export struct MainPageTitle {
               }) ,
             PanGesture({ fingers : 1 , direction : PanDirection.All , distance : 5.0 })
               .onActionStart(() => {
-                console.log('Pan start')
+                hilog.info(0x0000, 'BtTest', '%{public}s', 'Pan start')
               })
               .onActionUpdate((event: GestureEvent) => {
                 this.offsetY = event.offsetY;
                 this.offsetX = event.offsetX;
               })
               .onActionEnd(() => {
-                console.log('Pan end')
+                hilog.info(0x0000, 'BtTest', '%{public}s', 'Pan end')
               }) ,
             PinchGesture({ fingers : 2 , distance : 4 })
               .onActionStart(() => {
-                console.log('PinchGesture start')
+                hilog.info(0x0000, 'BtTest', '%{public}s', 'PinchGesture start')
               })
               .onActionUpdate((event: GestureEvent) => {
                 this.myscale = event.scale
                 this.myborderRadius = 10
               })
               .onActionEnd(() => {
-                console.log('PinchGesture end')
+                hilog.info(0x0000, 'BtTest', '%{public}s', 'PinchGesture end')
                 this.getScreen(true);
               }) ,
             RotationGesture({ fingers : 2 , angle : 2 })
               .onActionStart(() => {
-                console.log('RotationGesture start')
+                hilog.info(0x0000, 'BtTest', '%{public}s', 'RotationGesture start')
               })
               .onActionUpdate((event: GestureEvent) => {
                 this.angle = event.angle
               })
               .onActionEnd(() => {
-                console.log('RotationGesture end')
+                hilog.info(0x0000, 'BtTest', '%{public}s', 'RotationGesture end')
               })
           )
             .onCancel(() => {
-              console.log('Parallel gesture canceled')
+              hilog.info(0x0000, 'BtTest', '%{public}s', 'Parallel gesture canceled')
             })
         )
       }

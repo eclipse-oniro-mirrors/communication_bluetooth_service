@@ -735,6 +735,2646 @@
     {
       "name": "version",
       "value": "1.1.1"
+    },
+    {
+      "name": "bluetoothtest_str_bincanntdi",
+      "value": " BLE is not connected and no need to disconnect it "
+    },
+    {
+      "name": "bluetoothtest_str_rcis",
+      "value": "readCharacteristicValue(callback):invoke succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_rpis",
+      "value": "readCharacteristicValue(promise):invoke succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_rcis_1",
+      "value": "readDescriptorValue(callback):invoke succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_sts",
+      "value": "setNotifyCharacteristicChanged(true):succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_rpis_1",
+      "value": "readDescriptorValue(promise):invoke succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_sff",
+      "value": "setNotifyCharacteristicChanged(false):false!"
+    },
+    {
+      "name": "bluetoothtest_str_stf",
+      "value": "setNotifyCharacteristicChanged(true):failed!"
+    },
+    {
+      "name": "bluetoothtest_str_sft",
+      "value": "setNotifyCharacteristicChanged(false):true!"
+    },
+    {
+      "name": "bluetoothtest_str_sbipo",
+      "value": "startAdvertising:build input parameter Out!"
+    },
+    {
+      "name": "bluetoothtest_str_sbipi",
+      "value": "startAdvertising:build input parameter In!"
+    },
+    {
+      "name": "bluetoothtest_str_ns",
+      "value": "notifyCharacteristicChanged successfully!"
+    },
+    {
+      "name": "bluetoothtest_str_gcis",
+      "value": "getServices(Callback):invoke succeeds! "
+    },
+    {
+      "name": "bluetoothtest_str_tzx",
+      "value": "testReadCharacteristicValueCallback 执行："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_1",
+      "value": "testSetNotifyCharacteristicChanged 执行："
+    },
+    {
+      "name": "bluetoothtest_str_gpis",
+      "value": "getServices(promise):invoke succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_rt",
+      "value": "readCharacteristicValueCallback test"
+    },
+    {
+      "name": "bluetoothtest_str_nf",
+      "value": "notifyCharacteristicChanged failed!"
+    },
+    {
+      "name": "bluetoothtest_str_rec",
+      "value": "readCharacteristicValue error code:"
+    },
+    {
+      "name": "bluetoothtest_str_rt_1",
+      "value": "readCharacteristicValuePromise test"
+    },
+    {
+      "name": "bluetoothtest_str_st",
+      "value": "setNotifyCharacteristicChanged test"
+    },
+    {
+      "name": "bluetoothtest_str_bssi",
+      "value": "bluetoothManager services size is "
+    },
+    {
+      "name": "bluetoothtest_str_gt",
+      "value": "getCurrentTransferInformation test"
+    },
+    {
+      "name": "bluetoothtest_str_gcbec",
+      "value": "getServices(call back) error code:"
+    },
+    {
+      "name": "bluetoothtest_str_gsn",
+      "value": "getServicesPromise successfully:\\n"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_2",
+      "value": "testOnBLEConnectionStateChange 执行："
+    },
+    {
+      "name": "bluetoothtest_str_uzx",
+      "value": "unsubscribeBluetoothDeviceFind 执行："
+    },
+    {
+      "name": "bluetoothtest_str_ws",
+      "value": "writeCharacteristicValue succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_cs",
+      "value": "characteristicWrite sendResponse:"
+    },
+    {
+      "name": "bluetoothtest_str_rc",
+      "value": "readCharacteristicValue callback:"
+    },
+    {
+      "name": "bluetoothtest_str_st_1",
+      "value": "subscribeBluetoothDeviceFind test"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_3",
+      "value": "testOnBLECharacteristicChange 执行："
+    },
+    {
+      "name": "bluetoothtest_str_bcv",
+      "value": "bluetooth characteristic value: "
+    },
+    {
+      "name": "bluetoothtest_str_cs_1",
+      "value": "characteristicRead sendResponse:"
+    },
+    {
+      "name": "bluetoothtest_str_pt",
+      "value": "profileGetConnectionDevices test"
+    },
+    {
+      "name": "bluetoothtest_str_rt_2",
+      "value": "readDescriptorValueCallback test"
+    },
+    {
+      "name": "bluetoothtest_str_rt_3",
+      "value": "readDescriptorValuePromise test "
+    },
+    {
+      "name": "bluetoothtest_str_st_2",
+      "value": "setIncomingFileConfirmation test"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_4",
+      "value": "testWriteCharacteristicValue 执行："
+    },
+    {
+      "name": "bluetoothtest_str_tdind",
+      "value": "this device is not disconnected!"
+    },
+    {
+      "name": "bluetoothtest_str_wf",
+      "value": "writeCharacteristicValue failed!"
+    },
+    {
+      "name": "bluetoothtest_str_ot",
+      "value": "onBLEConnectionStateChange test"
+    },
+    {
+      "name": "bluetoothtest_str_bcu",
+      "value": "bluetooth characteristic uuid:"
+    },
+    {
+      "name": "bluetoothtest_str_ot_1",
+      "value": "onBLECharacteristicChange test"
+    },
+    {
+      "name": "bluetoothtest_str_ws_1",
+      "value": "writeDescriptorValue succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_d1css",
+      "value": "第1次sppClientWrite successfully"
+    },
+    {
+      "name": "bluetoothtest_str_ds",
+      "value": "descriptorWrite sendResponse:"
+    },
+    {
+      "name": "bluetoothtest_str_s",
+      "value": "subscribeBluetoothDeviceFind:"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_5",
+      "value": "testOnCharacteristicWrite 执行:"
+    },
+    {
+      "name": "bluetoothtest_str_wt",
+      "value": "writeCharacteristicValue test"
+    },
+    {
+      "name": "bluetoothtest_str_xyfsdwjwdbl",
+      "value": "需要发送的文件为：/data/bluetooth/log/"
+    },
+    {
+      "name": "bluetoothtest_str_ds_1",
+      "value": "descriptorRead sendResponse:"
+    },
+    {
+      "name": "bluetoothtest_str_pi",
+      "value": "peripheralDeviceId invalid! "
+    },
+    {
+      "name": "bluetoothtest_str_st_3",
+      "value": "startBluetoothDiscovery test"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_6",
+      "value": "testOnCharacteristicRead 执行:"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_7",
+      "value": "testOnConnectStateChange 执行:"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_8",
+      "value": "testSppCloseServerSocket 执行："
+    },
+    {
+      "name": "bluetoothtest_str_uzx_1",
+      "value": "unsubscribeBLEDeviceFind 执行："
+    },
+    {
+      "name": "bluetoothtest_str_wf_1",
+      "value": "writeDescriptorValue,failed!"
+    },
+    {
+      "name": "bluetoothtest_str_gcs",
+      "value": "GattServer closed: succeeds"
+    },
+    {
+      "name": "bluetoothtest_str_bssi_1",
+      "value": "bluetooth services size is "
+    },
+    {
+      "name": "bluetoothtest_str_cs_2",
+      "value": "createGattServer: succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_ct",
+      "value": "createGattServerDevice test"
+    },
+    {
+      "name": "bluetoothtest_str_ob",
+      "value": "off BLECharacteristicChange"
+    },
+    {
+      "name": "bluetoothtest_str_orjtygb",
+      "value": "on.receiveIncomingFile监听已关闭"
+    },
+    {
+      "name": "bluetoothtest_str_otjtygb",
+      "value": "on.transferStateChange监听已关闭"
+    },
+    {
+      "name": "bluetoothtest_str_pt_1",
+      "value": "profileGetPlayingState test"
+    },
+    {
+      "name": "bluetoothtest_str_st_4",
+      "value": "sppClientConnectUnSafe test"
+    },
+    {
+      "name": "bluetoothtest_str_szx",
+      "value": "startBluetoothDiscovery 执行："
+    },
+    {
+      "name": "bluetoothtest_str_st_5",
+      "value": "subscribeBLEDeviceFind test"
+    },
+    {
+      "name": "bluetoothtest_str_tc",
+      "value": "test createGattClientDevice"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_9",
+      "value": "testGetServicesCallback 执行："
+    },
+    {
+      "name": "bluetoothtest_str_ts",
+      "value": "transferStateChange success"
+    },
+    {
+      "name": "bluetoothtest_str_cs_3",
+      "value": "CreateGattServer:succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_ob_1",
+      "value": "On BLECharacteristicChange"
+    },
+    {
+      "name": "bluetoothtest_str_ot_2",
+      "value": "OnReceiveIncomingFile test"
+    },
+    {
+      "name": "bluetoothtest_str_ot_3",
+      "value": "OnTransferStateChange test"
+    },
+    {
+      "name": "bluetoothtest_str_pt_2",
+      "value": "ProfileGetDeviceState test"
+    },
+    {
+      "name": "bluetoothtest_str_abf",
+      "value": "available bluetooth find ["
+    },
+    {
+      "name": "bluetoothtest_str_cs_4",
+      "value": "createGattClient succeeds "
+    },
+    {
+      "name": "bluetoothtest_str_cs_5",
+      "value": "createGattClient:succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_gr",
+      "value": "getConnectionDevices ret: "
+    },
+    {
+      "name": "bluetoothtest_str_gt_1",
+      "value": "getConnectionStrategy test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_2",
+      "value": "getDeviceNameCallback test"
+    },
+    {
+      "name": "bluetoothtest_str_gps",
+      "value": "getServices promise:starts"
+    },
+    {
+      "name": "bluetoothtest_str_ot_4",
+      "value": "onCharacteristicWrite test"
+    },
+    {
+      "name": "bluetoothtest_str_re",
+      "value": "readDescriptorValue error:"
+    },
+    {
+      "name": "bluetoothtest_str_st_6",
+      "value": "setConnectionStrategy test"
+    },
+    {
+      "name": "bluetoothtest_str_st_7",
+      "value": "sppServerCreateUnSafe test"
+    },
+    {
+      "name": "bluetoothtest_str_ss",
+      "value": "startAdvertising succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_szx_1",
+      "value": "stopBluetoothDiscovery 执行："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_10",
+      "value": "testStopBLEScanManager 执行："
+    },
+    {
+      "name": "bluetoothtest_str_hzdcs",
+      "value": "HFAudioGatewayManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_hpzcs",
+      "value": "HFAudioGatewayManager配置测试"
+    },
+    {
+      "name": "bluetoothtest_str_cdu",
+      "value": "callback:descriptor uuid="
+    },
+    {
+      "name": "bluetoothtest_str_gt_3",
+      "value": "getDeviceNamePromise test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_4",
+      "value": "getRssiValueCallback test"
+    },
+    {
+      "name": "bluetoothtest_str_ot_5",
+      "value": "onCharacteristicRead test"
+    },
+    {
+      "name": "bluetoothtest_str_ot_6",
+      "value": "onConnectStateChange test"
+    },
+    {
+      "name": "bluetoothtest_str_szxcg",
+      "value": "setBluetoothScanMode执行成功;"
+    },
+    {
+      "name": "bluetoothtest_str_st_8",
+      "value": "sppClientConnectSafe test"
+    },
+    {
+      "name": "bluetoothtest_str_st_9",
+      "value": "sppCloseClientSocket test"
+    },
+    {
+      "name": "bluetoothtest_str_ss_1",
+      "value": "stopAdvertising succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_wt_1",
+      "value": "writeDescriptorValue test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_5",
+      "value": "getRssiValuePromise test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_6",
+      "value": "getServicesCallback test"
+    },
+    {
+      "name": "bluetoothtest_str_pdu",
+      "value": "promise:descriptor uuid="
+    },
+    {
+      "name": "bluetoothtest_str_szxsb",
+      "value": "setBluetoothScanMode执行失败"
+    },
+    {
+      "name": "bluetoothtest_str_szxcg_1",
+      "value": "setBluetoothScanMode执行成功"
+    },
+    {
+      "name": "bluetoothtest_str_szx_2",
+      "value": "sppCloseClientSocket 执行："
+    },
+    {
+      "name": "bluetoothtest_str_st_10",
+      "value": "sppServerCreateSafe test"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_11",
+      "value": "testCreateGattClient 执行："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_12",
+      "value": "testCreateGattServer 执行:"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_13",
+      "value": "testSppClientReadOff 执行："
+    },
+    {
+      "name": "bluetoothtest_str_tt",
+      "value": "testSppServerAccept test"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_14",
+      "value": "testSppServerReadOff 执行："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_15",
+      "value": "testStartAdvertising 执行:"
+    },
+    {
+      "name": "bluetoothtest_str_d1csf",
+      "value": "第1次sppClientWrite failed"
+    },
+    {
+      "name": "bluetoothtest_str_gd",
+      "value": "GattClient.disconnect: "
+    },
+    {
+      "name": "bluetoothtest_str_cs_6",
+      "value": "createGattServer starts"
+    },
+    {
+      "name": "bluetoothtest_str_gp",
+      "value": "getDeviceName()Promise:"
+    },
+    {
+      "name": "bluetoothtest_str_gt_7",
+      "value": "getServicesPromise test"
+    },
+    {
+      "name": "bluetoothtest_str_objtygb",
+      "value": "on.bondStateChange监听已关闭"
+    },
+    {
+      "name": "bluetoothtest_str_s_1",
+      "value": "subscribeBLEDeviceFind:"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_16",
+      "value": "testGattClientClose 执行："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_17",
+      "value": "testGattServerClose 执行："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_18",
+      "value": "testStopAdvertising 执行："
+    },
+    {
+      "name": "bluetoothtest_str_qhdwjmchwjljhzsbpdqk",
+      "value": "; 请核对文件名称或文件路径或者设备配对情况"
+    },
+    {
+      "name": "bluetoothtest_str_skhdljfaqmsm",
+      "value": "Spp客户端连接(非安全模式)Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqcjfaqmsm",
+      "value": "Spp服务器创建(非安全模式)Manager"
+    },
+    {
+      "name": "bluetoothtest_str_cv",
+      "value": "characteristic value: "
+    },
+    {
+      "name": "bluetoothtest_str_cs_7",
+      "value": "createGattClient start"
+    },
+    {
+      "name": "bluetoothtest_str_ct_1",
+      "value": "createGattClient test "
+    },
+    {
+      "name": "bluetoothtest_str_cf",
+      "value": "createGattClient:fail "
+    },
+    {
+      "name": "bluetoothtest_str_ot_7",
+      "value": "onBondStateChange test"
+    },
+    {
+      "name": "bluetoothtest_str_ot_8",
+      "value": "onDescriptorWrite test"
+    },
+    {
+      "name": "bluetoothtest_str_pt_3",
+      "value": "profileDisConnect test"
+    },
+    {
+      "name": "bluetoothtest_str_rr",
+      "value": "result: removeService "
+    },
+    {
+      "name": "bluetoothtest_str_spw",
+      "value": "switching,please wait!"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_19",
+      "value": "testSppClientClose 执行："
+    },
+    {
+      "name": "bluetoothtest_str_d1csxrcg",
+      "value": "第1次sppClientWrite写入成功 "
+    },
+    {
+      "name": "bluetoothtest_str_hqrzc",
+      "value": "获取Rssi值callbackManager"
+    },
+    {
+      "name": "bluetoothtest_str_azdcs",
+      "value": "A2dpSourceManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_apzcs",
+      "value": "A2dpSourceManager配置测试"
+    },
+    {
+      "name": "bluetoothtest_str_gcjcs",
+      "value": "GattClientManager场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs",
+      "value": "GattClientManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_gcjcs_1",
+      "value": "GattServerManager场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs_1",
+      "value": "GattServerManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_pzdcs",
+      "value": "PanNetworkManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_ppzcs",
+      "value": "PanNetworkManager配置测试"
+    },
+    {
+      "name": "bluetoothtest_str_skhdljaqmsm",
+      "value": "Spp客户端连接(安全模式)Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqcjaqmsm",
+      "value": "Spp服务器创建(安全模式)Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ct_2",
+      "value": "createGattServer test"
+    },
+    {
+      "name": "bluetoothtest_str_dt",
+      "value": "disableBluetooth test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_8",
+      "value": "getPairedDevices test"
+    },
+    {
+      "name": "bluetoothtest_str_gr_1",
+      "value": "getPlayingState ret: "
+    },
+    {
+      "name": "bluetoothtest_str_gc",
+      "value": "getRssiValue callback"
+    },
+    {
+      "name": "bluetoothtest_str_gp_1",
+      "value": "getRssiValue promise:"
+    },
+    {
+      "name": "bluetoothtest_str_ot_9",
+      "value": "onDescriptorRead test"
+    },
+    {
+      "name": "bluetoothtest_str_st_11",
+      "value": "sppClientReadOff test"
+    },
+    {
+      "name": "bluetoothtest_str_st_12",
+      "value": "sppServerReadOff test"
+    },
+    {
+      "name": "bluetoothtest_str_st_13",
+      "value": "startAdvertising test"
+    },
+    {
+      "name": "bluetoothtest_str_sf",
+      "value": "startBLEScan Filters:"
+    },
+    {
+      "name": "bluetoothtest_str_spw_1",
+      "value": "switching,please wait"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_20",
+      "value": "testRemoveService 执行："
+    },
+    {
+      "name": "bluetoothtest_str_zcvsbczztbhm",
+      "value": "注册vBLE设备查找状态变化Manager"
+    },
+    {
+      "name": "bluetoothtest_str_d1csxrsb",
+      "value": "第1次sppClientWrite写入失败"
+    },
+    {
+      "name": "bluetoothtest_str_hqrzp",
+      "value": "获取Rssi值promiseManager"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbmcc",
+      "value": "获取设备名称callbackManager"
+    },
+    {
+      "name": "bluetoothtest_str_dqmsfzc",
+      "value": "读取描述符值callbackManager"
+    },
+    {
+      "name": "bluetoothtest_str_adi",
+      "value": ",and DeviceName is: "
+    },
+    {
+      "name": "bluetoothtest_str_gc_1",
+      "value": "GattClient.connect: "
+    },
+    {
+      "name": "bluetoothtest_str_scjcs",
+      "value": "SppClientManager场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_szdcs",
+      "value": "SppClientManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_scjcs_1",
+      "value": "SppServerManager场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_abf_1",
+      "value": "available ble find ["
+    },
+    {
+      "name": "bluetoothtest_str_cu",
+      "value": "characteristic uuid:"
+    },
+    {
+      "name": "bluetoothtest_str_et",
+      "value": "enableBluetooth test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_9",
+      "value": "gattClientClose test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_10",
+      "value": "gattServerClose test"
+    },
+    {
+      "name": "bluetoothtest_str_gr_2",
+      "value": "getDeviceState ret: "
+    },
+    {
+      "name": "bluetoothtest_str_ot_10",
+      "value": "onBLEDeviceFind test"
+    },
+    {
+      "name": "bluetoothtest_str_st_14",
+      "value": "sppClientReadOn test"
+    },
+    {
+      "name": "bluetoothtest_str_st_15",
+      "value": "sppServerReadOn test"
+    },
+    {
+      "name": "bluetoothtest_str_st_16",
+      "value": "stopAdvertising test"
+    },
+    {
+      "name": "bluetoothtest_str_hqpbfztm",
+      "value": "获取Profile播放状态Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqpsbztm",
+      "value": "获取Profile设备状态Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqpljsbm",
+      "value": "获取Profile连接设备Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbmcp",
+      "value": "获取设备名称promiseManager"
+    },
+    {
+      "name": "bluetoothtest_str_dqmsfzp",
+      "value": "读取描述符值promiseManager"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzzc",
+      "value": "读取特征值callbackManager"
+    },
+    {
+      "name": "bluetoothtest_str_gc_2",
+      "value": "GattClient.connect "
+    },
+    {
+      "name": "bluetoothtest_str_ge",
+      "value": "GattServer existed!"
+    },
+    {
+      "name": "bluetoothtest_str_pt_4",
+      "value": "ProfileConnect test"
+    },
+    {
+      "name": "bluetoothtest_str_ct_3",
+      "value": "cancelTransfer test"
+    },
+    {
+      "name": "bluetoothtest_str_ge_1",
+      "value": "gattClient existed!"
+    },
+    {
+      "name": "bluetoothtest_str_opjtygb",
+      "value": "on.pinRequired监听已关闭"
+    },
+    {
+      "name": "bluetoothtest_str_osjtygb",
+      "value": "on.stateChange监听已关闭"
+    },
+    {
+      "name": "bluetoothtest_str_ofswjsbr",
+      "value": "opp发送文件失败， result: "
+    },
+    {
+      "name": "bluetoothtest_str_ofswjcgr",
+      "value": "opp发送文件成功！ result: "
+    },
+    {
+      "name": "bluetoothtest_str_psn",
+      "value": "promise success!:\\n"
+    },
+    {
+      "name": "bluetoothtest_str_ra",
+      "value": "result: addService,"
+    },
+    {
+      "name": "bluetoothtest_str_st_17",
+      "value": "sppClientClose test"
+    },
+    {
+      "name": "bluetoothtest_str_st_18",
+      "value": "sppClientWrite test"
+    },
+    {
+      "name": "bluetoothtest_str_sxrcg",
+      "value": "sppClientWrite写入成功 "
+    },
+    {
+      "name": "bluetoothtest_str_st_19",
+      "value": "sppServerClose test"
+    },
+    {
+      "name": "bluetoothtest_str_st_20",
+      "value": "sppServerWrite test"
+    },
+    {
+      "name": "bluetoothtest_str_t",
+      "value": "testOffStateChange:"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_21",
+      "value": "testStopBLEScan 执行："
+    },
+    {
+      "name": "bluetoothtest_str_hqfwc",
+      "value": "获取服务callbackManager"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsbmxx",
+      "value": "获取连接的BLE设备Manager信息"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzzp",
+      "value": "读取特征值promiseManager"
+    },
+    {
+      "name": "bluetoothtest_str_bine",
+      "value": "BT is not enabled!"
+    },
+    {
+      "name": "bluetoothtest_str_blymfxcjcs",
+      "value": "Ble蓝牙Manager发现场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_ge_2",
+      "value": "GattClient exists!"
+    },
+    {
+      "name": "bluetoothtest_str_ge_3",
+      "value": "GattServer exists!"
+    },
+    {
+      "name": "bluetoothtest_str_hzdcs_1",
+      "value": "HFAudioGateway自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_hpzcs_1",
+      "value": "HFAudioGateway配置测试"
+    },
+    {
+      "name": "bluetoothtest_str_hpzcs_2",
+      "value": "HidHostManager配置测试"
+    },
+    {
+      "name": "bluetoothtest_str_hzdcs_2",
+      "value": "HitHostManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_pzdcs_1",
+      "value": "ProfileManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_cs_8",
+      "value": "callback success!:"
+    },
+    {
+      "name": "bluetoothtest_str_c",
+      "value": "createGattClient: "
+    },
+    {
+      "name": "bluetoothtest_str_dv",
+      "value": "descriptor value: "
+    },
+    {
+      "name": "bluetoothtest_str_ot_11",
+      "value": "onPinRequired test"
+    },
+    {
+      "name": "bluetoothtest_str_ot_12",
+      "value": "onStateChange test"
+    },
+    {
+      "name": "bluetoothtest_str_r",
+      "value": "remoteDeviceName: "
+    },
+    {
+      "name": "bluetoothtest_str_rt_4",
+      "value": "removeService test"
+    },
+    {
+      "name": "bluetoothtest_str_st_21",
+      "value": "setBLEMtuSize test"
+    },
+    {
+      "name": "bluetoothtest_str_sxrsb",
+      "value": "sppClientWrite写入失败"
+    },
+    {
+      "name": "bluetoothtest_str_sn",
+      "value": "startBLEScan(null)"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_22",
+      "value": "testAddService 执行:"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_23",
+      "value": "testDisconnect 执行："
+    },
+    {
+      "name": "bluetoothtest_str_tr",
+      "value": "testSendFile ret: "
+    },
+    {
+      "name": "bluetoothtest_str_qxpljm",
+      "value": "取消Profile连接Manager"
+    },
+    {
+      "name": "bluetoothtest_str_zcbczztbhm",
+      "value": "注册BLE查找状态变化Manager"
+    },
+    {
+      "name": "bluetoothtest_str_zcbczztbhm_1",
+      "value": "注册Ble查找状态变化Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqfwp",
+      "value": "获取服务promiseManager"
+    },
+    {
+      "name": "bluetoothtest_str_hqpzwjljztm",
+      "value": "获取配置文件连接状态Manager1"
+    },
+    {
+      "name": "bluetoothtest_str_hqpzwjljztm_1",
+      "value": "获取配置文件连接状态Manager2"
+    },
+    {
+      "name": "bluetoothtest_str_gc_3",
+      "value": "GattClient.close:"
+    },
+    {
+      "name": "bluetoothtest_str_skhddqgbm",
+      "value": "Spp客户端读取关闭Manager"
+    },
+    {
+      "name": "bluetoothtest_str_skhddqdkm",
+      "value": "Spp客户端读取打开Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqdqgbm",
+      "value": "Spp服务器读取关闭Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqdqdkm",
+      "value": "Spp服务器读取打开Manager"
+    },
+    {
+      "name": "bluetoothtest_str_okqjswjsbe",
+      "value": "opp开启接收文件失败，err: "
+    },
+    {
+      "name": "bluetoothtest_str_sn_1",
+      "value": "setBLEMtuSize: \\n"
+    },
+    {
+      "name": "bluetoothtest_str_ts_1",
+      "value": "test startBLEScan"
+    },
+    {
+      "name": "bluetoothtest_str_gbcgc",
+      "value": "关闭成功 clientNumber"
+    },
+    {
+      "name": "bluetoothtest_str_dqmzwkqjcsfypd",
+      "value": "当前Mac值为空，请检查是否已配对"
+    },
+    {
+      "name": "bluetoothtest_str_jdlymfxcjcs",
+      "value": "经典蓝牙Manager发现场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsbm",
+      "value": "获取连接的BLE设备Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsbm_1",
+      "value": "获取连接的Ble设备Manager"
+    },
+    {
+      "name": "bluetoothtest_str_lywdkqxkqlyhzsy",
+      "value": "蓝牙未打开，请先开启蓝牙后再使用！"
+    },
+    {
+      "name": "bluetoothtest_str_sdbccm",
+      "value": "设定BLEMtu尺寸Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sdbccm_1",
+      "value": "设定BleMtu尺寸Manager"
+    },
+    {
+      "name": "bluetoothtest_str_qdjxzpt",
+      "value": "请点击选择PROFILE TYPE"
+    },
+    {
+      "name": "bluetoothtest_str_gslxncs",
+      "value": "GattClient速率性能测试"
+    },
+    {
+      "name": "bluetoothtest_str_gslxncs_1",
+      "value": "GattServer速率性能测试"
+    },
+    {
+      "name": "bluetoothtest_str_gkhdmcs",
+      "value": "Gatt客户端Manager测试"
+    },
+    {
+      "name": "bluetoothtest_str_gfwqmcs",
+      "value": "Gatt服务器Manager测试"
+    },
+    {
+      "name": "bluetoothtest_str_pljm",
+      "value": "Profile连接Manager"
+    },
+    {
+      "name": "bluetoothtest_str_cjgkhd",
+      "value": "创建GattManager客户端"
+    },
+    {
+      "name": "bluetoothtest_str_cjgfwq",
+      "value": "创建GattManager服务器"
+    },
+    {
+      "name": "bluetoothtest_str_cjgkhdm",
+      "value": "创建Gatt客户端Manager"
+    },
+    {
+      "name": "bluetoothtest_str_cjgfwqm",
+      "value": "创建Gatt服务器Manager"
+    },
+    {
+      "name": "bluetoothtest_str_czgkhdm",
+      "value": "创造Gatt客户端Manager"
+    },
+    {
+      "name": "bluetoothtest_str_kssmbsb",
+      "value": "开始扫描BLEManager设备"
+    },
+    {
+      "name": "bluetoothtest_str_szssmmsm",
+      "value": "设置SPP扫描模式Manager"
+    },
+    {
+      "name": "bluetoothtest_str_qsrxyljdd",
+      "value": "请输入需要连接的deviceId"
+    },
+    {
+      "name": "bluetoothtest_str_btzzbhm",
+      "value": "BLE特征值变化Manager"
+    },
+    {
+      "name": "bluetoothtest_str_btzzbhm_1",
+      "value": "Ble特征值变化Manager"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs_2",
+      "value": "GattManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_sdkxncs",
+      "value": "SppClient带宽性能测试"
+    },
+    {
+      "name": "bluetoothtest_str_sslxncs",
+      "value": "SppClient速率性能测试"
+    },
+    {
+      "name": "bluetoothtest_str_sdkxncs_1",
+      "value": "SppServer带宽性能测试"
+    },
+    {
+      "name": "bluetoothtest_str_sslxncs_1",
+      "value": "SppServer速率性能测试"
+    },
+    {
+      "name": "bluetoothtest_str_skhdfaqmslj",
+      "value": "Spp客户端(非安全模式)连接"
+    },
+    {
+      "name": "bluetoothtest_str_skhdmcs",
+      "value": "Spp客户端Manager测试"
+    },
+    {
+      "name": "bluetoothtest_str_skhdgbm",
+      "value": "Spp客户端关闭Manager"
+    },
+    {
+      "name": "bluetoothtest_str_skhdxrm",
+      "value": "Spp客户端写入Manager"
+    },
+    {
+      "name": "bluetoothtest_str_skhdljfaqms",
+      "value": "Spp客户端连接(非安全模式)"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqfaqmscj",
+      "value": "Spp服务器(非安全模式)创建"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqmcs",
+      "value": "Spp服务器Manager测试"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqgbm",
+      "value": "Spp服务器关闭Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqxrm",
+      "value": "Spp服务器写入Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqcjfaqms",
+      "value": "Spp服务器创建(非安全模式)"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqjsm",
+      "value": "Spp服务器接受Manager"
+    },
+    {
+      "name": "bluetoothtest_str_at",
+      "value": "addService test"
+    },
+    {
+      "name": "bluetoothtest_str_dr",
+      "value": "disconnect ret："
+    },
+    {
+      "name": "bluetoothtest_str_ofswjsbe",
+      "value": "opp发送文件失败，err :"
+    },
+    {
+      "name": "bluetoothtest_str_si",
+      "value": "serviceUuid is "
+    },
+    {
+      "name": "bluetoothtest_str_sd",
+      "value": "sppClientWrite第"
+    },
+    {
+      "name": "bluetoothtest_str_sd_1",
+      "value": "sppServerWrite第"
+    },
+    {
+      "name": "bluetoothtest_str_so",
+      "value": "stopBLEScan OK!"
+    },
+    {
+      "name": "bluetoothtest_str_sw",
+      "value": "switching,wait!"
+    },
+    {
+      "name": "bluetoothtest_str_td",
+      "value": "test disconnect"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_24",
+      "value": "testConnect 执行："
+    },
+    {
+      "name": "bluetoothtest_str_zcpmbhm",
+      "value": "注册pin码变化Manager"
+    },
+    {
+      "name": "bluetoothtest_str_zcbdztbhm",
+      "value": "注册绑定状态变化Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqrzc_1",
+      "value": "获取Rssi值callback"
+    },
+    {
+      "name": "bluetoothtest_str_hqdqljztm",
+      "value": "获取当前连接状态Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqycsbmcm",
+      "value": "获取远程设备名称Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqycsblxm",
+      "value": "获取远程设备类型Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sztztxggm",
+      "value": "设置通知特性更改Manager"
+    },
+    {
+      "name": "bluetoothtest_str_azdcs_1",
+      "value": "A2dpSource自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_apzcs_1",
+      "value": "A2dpSource配置测试"
+    },
+    {
+      "name": "bluetoothtest_str_bljztm",
+      "value": "BLE连接状态Manager"
+    },
+    {
+      "name": "bluetoothtest_str_bzdcs",
+      "value": "BleManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_bljztm_1",
+      "value": "Ble连接状态Manager"
+    },
+    {
+      "name": "bluetoothtest_str_gcjcs_2",
+      "value": "GattClient场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs_3",
+      "value": "GattClient自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_gcjcs_3",
+      "value": "GattServer场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs_4",
+      "value": "GattServer自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_pzdcs_2",
+      "value": "PanNetwork自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_ppzcs_1",
+      "value": "PanNetwork配置测试"
+    },
+    {
+      "name": "bluetoothtest_str_szdcs_1",
+      "value": "SppManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_skhdaqmslj",
+      "value": "Spp客户端(安全模式)连接"
+    },
+    {
+      "name": "bluetoothtest_str_skhdljaqms",
+      "value": "Spp客户端连接(安全模式)"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqaqmscj",
+      "value": "Spp服务器(安全模式)创建"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqcjaqms",
+      "value": "Spp服务器创建(安全模式)"
+    },
+    {
+      "name": "bluetoothtest_str_szjgjwb",
+      "value": "scenario组件构建完毕"
+    },
+    {
+      "name": "bluetoothtest_str_shf",
+      "value": "sppRunTime,花费:"
+    },
+    {
+      "name": "bluetoothtest_str_dghlymcs",
+      "value": "低功耗蓝牙Manager测试"
+    },
+    {
+      "name": "bluetoothtest_str_tzbsmm",
+      "value": "停止BLE扫描Manager"
+    },
+    {
+      "name": "bluetoothtest_str_tzbsmm_1",
+      "value": "停止Ble扫描Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ksbsmm",
+      "value": "开始BLE扫描Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ksbcjcs",
+      "value": "开始BleFound场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_ksbsmm_1",
+      "value": "开始Ble扫描Manager"
+    },
+    {
+      "name": "bluetoothtest_str_jswjcgwjcflj",
+      "value": "接收文件成功，文件存放路径："
+    },
+    {
+      "name": "bluetoothtest_str_hqrzp_1",
+      "value": "获取Rssi值promise"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbmcc_1",
+      "value": "获取设备名称callback"
+    },
+    {
+      "name": "bluetoothtest_str_lyygbhgbsbqqr",
+      "value": "蓝牙已关闭或关闭失败,请确认"
+    },
+    {
+      "name": "bluetoothtest_str_lyydkhdksbqqr",
+      "value": "蓝牙已打开或打开失败,请确认"
+    },
+    {
+      "name": "bluetoothtest_str_qdjxzsm",
+      "value": "请点击选择SCAN MODE"
+    },
+    {
+      "name": "bluetoothtest_str_dqmsfzc_1",
+      "value": "读取描述符值callback"
+    },
+    {
+      "name": "bluetoothtest_str_bzdcs_1",
+      "value": "BrManager自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_gcs_1",
+      "value": "GATTManager测试"
+    },
+    {
+      "name": "bluetoothtest_str_scjcs_2",
+      "value": "SppClient场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_szdcs_2",
+      "value": "SppClient自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_scjcs_3",
+      "value": "SppServer场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_szdcs_3",
+      "value": "SppServer自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_st_22",
+      "value": "sendFile test"
+    },
+    {
+      "name": "bluetoothtest_str_tzlyfxm",
+      "value": "停止蓝牙发现Manager"
+    },
+    {
+      "name": "bluetoothtest_str_xrmsfzm",
+      "value": "写入描述符值Manager"
+    },
+    {
+      "name": "bluetoothtest_str_qxpdsbm",
+      "value": "取消配对设备Manager"
+    },
+    {
+      "name": "bluetoothtest_str_kslyfxm",
+      "value": "开始蓝牙发现Manager"
+    },
+    {
+      "name": "bluetoothtest_str_zcbsbczztbh",
+      "value": "注册BLE设备查找状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_zcbsbczztbh_1",
+      "value": "注册Ble设备查找状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_zcztbhm",
+      "value": "注册状态变化Manager"
+    },
+    {
+      "name": "bluetoothtest_str_jdlymcs",
+      "value": "经典蓝牙Manager测试"
+    },
+    {
+      "name": "bluetoothtest_str_hqpbfzt",
+      "value": "获取Profile播放状态"
+    },
+    {
+      "name": "bluetoothtest_str_hqpsbzt",
+      "value": "获取Profile设备状态"
+    },
+    {
+      "name": "bluetoothtest_str_hqpljcl",
+      "value": "获取Profile连接策略"
+    },
+    {
+      "name": "bluetoothtest_str_hqpljsb",
+      "value": "获取Profile连接设备"
+    },
+    {
+      "name": "bluetoothtest_str_hqsmmsm",
+      "value": "获取扫描模式Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqbfztm",
+      "value": "获取播放状态Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqbdmcm",
+      "value": "获取本地名称Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbmcp_1",
+      "value": "获取设备名称promise"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbztm",
+      "value": "获取设备状态Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqljsbm",
+      "value": "获取连接设备Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqpdsbm",
+      "value": "获取配对设备Manager"
+    },
+    {
+      "name": "bluetoothtest_str_dylyfxm",
+      "value": "订阅蓝牙发现Manager"
+    },
+    {
+      "name": "bluetoothtest_str_szpljcl",
+      "value": "设置Profile连接策略"
+    },
+    {
+      "name": "bluetoothtest_str_szsmmsm",
+      "value": "设置扫描模式Manager"
+    },
+    {
+      "name": "bluetoothtest_str_szbdmcm",
+      "value": "设置本地名称Manager"
+    },
+    {
+      "name": "bluetoothtest_str_qsrjjljdsbm",
+      "value": "请输入即将连接的设备MAC"
+    },
+    {
+      "name": "bluetoothtest_str_dqmsfzp_1",
+      "value": "读取描述符值promise"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzzc_1",
+      "value": "读取特征值callback"
+    },
+    {
+      "name": "bluetoothtest_str_scs",
+      "value": "SPPManager测试"
+    },
+    {
+      "name": "bluetoothtest_str_cr",
+      "value": "connect ret："
+    },
+    {
+      "name": "bluetoothtest_str_ct_4",
+      "value": "connect test"
+    },
+    {
+      "name": "bluetoothtest_str_rc_1",
+      "value": "return code:"
+    },
+    {
+      "name": "bluetoothtest_str_gbjswjztgbsj",
+      "value": "关闭接受文件状态改变事件"
+    },
+    {
+      "name": "bluetoothtest_str_xrmsfm",
+      "value": "写入描述符Manager"
+    },
+    {
+      "name": "bluetoothtest_str_xrtzzm",
+      "value": "写入特征值Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ksblyfxcjcs",
+      "value": "开始Br蓝牙发现场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_hqfwc_1",
+      "value": "获取服务callback"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsbxx",
+      "value": "获取连接的BLE设备信息"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsbxx_1",
+      "value": "获取连接的Ble设备信息"
+    },
+    {
+      "name": "bluetoothtest_str_dqmsfm",
+      "value": "读取描述符Manager"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzzm",
+      "value": "读取特征值Manager"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzzp_1",
+      "value": "读取特征值promise"
+    },
+    {
+      "name": "bluetoothtest_str_xzpi",
+      "value": "选择PROFILE ID"
+    },
+    {
+      "name": "bluetoothtest_str_f",
+      "value": " filePath: "
+    },
+    {
+      "name": "bluetoothtest_str_s_2",
+      "value": ",services :"
+    },
+    {
+      "name": "bluetoothtest_str_blyfxcjcs",
+      "value": "Ble蓝牙发现场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_hpzcs_3",
+      "value": "HidHost配置测试"
+    },
+    {
+      "name": "bluetoothtest_str_hzdcs_3",
+      "value": "HitHost自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_pzdcs_3",
+      "value": "Profile自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_tzmsm",
+      "value": "停止Manager扫描"
+    },
+    {
+      "name": "bluetoothtest_str_tzgbm",
+      "value": "停止广播Manager"
+    },
+    {
+      "name": "bluetoothtest_str_gbbczztbh",
+      "value": "关闭BLE查找状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_gbbljztbh",
+      "value": "关闭BLE连接状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_scfwm",
+      "value": "删除服务Manager"
+    },
+    {
+      "name": "bluetoothtest_str_qxplj",
+      "value": "取消Profile连接"
+    },
+    {
+      "name": "bluetoothtest_str_qxljm",
+      "value": "取消连接Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ksgbm",
+      "value": "开始广播Manager"
+    },
+    {
+      "name": "bluetoothtest_str_dqadzts",
+      "value": "当前A2DP的状态是："
+    },
+    {
+      "name": "bluetoothtest_str_dkbczztbh",
+      "value": "打开BLE查找状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_dkbljztbh",
+      "value": "打开BLE连接状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_zcbczztbh",
+      "value": "注册BLE查找状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_zcbczztbh_1",
+      "value": "注册Ble查找状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_tjfwm",
+      "value": "添加服务Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqfwp_1",
+      "value": "获取服务promise"
+    },
+    {
+      "name": "bluetoothtest_str_hqztm",
+      "value": "获取状态Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbdpzwjzt",
+      "value": "获取设备的配置文件状态"
+    },
+    {
+      "name": "bluetoothtest_str_hqpdlysbdxx",
+      "value": "获取配对蓝牙设备的信息"
+    },
+    {
+      "name": "bluetoothtest_str_hqpdlysbdmc",
+      "value": "获取配对蓝牙设备的名称"
+    },
+    {
+      "name": "bluetoothtest_str_hqpdlysbdlx",
+      "value": "获取配对蓝牙设备的类型"
+    },
+    {
+      "name": "bluetoothtest_str_hqpzwjdljzt",
+      "value": "获取配置文件的连接状态"
+    },
+    {
+      "name": "bluetoothtest_str_hqpzwjljzt1",
+      "value": "获取配置文件连接状态1"
+    },
+    {
+      "name": "bluetoothtest_str_hqpzwjljzt2",
+      "value": "获取配置文件连接状态2"
+    },
+    {
+      "name": "bluetoothtest_str_ljztm",
+      "value": "连接状态Manager"
+    },
+    {
+      "name": "bluetoothtest_str_pdsbm",
+      "value": "配对设备Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ar",
+      "value": ",and RSSI="
+    },
+    {
+      "name": "bluetoothtest_str_ofsdcjcs",
+      "value": "Opp发送端场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_ojsdcjcs",
+      "value": "Opp接收端场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_skhddqgb",
+      "value": "Spp客户端读取关闭"
+    },
+    {
+      "name": "bluetoothtest_str_skhddqdk",
+      "value": "Spp客户端读取打开"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqdqgb",
+      "value": "Spp服务器读取关闭"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqdqdk",
+      "value": "Spp服务器读取打开"
+    },
+    {
+      "name": "bluetoothtest_str_azjgjwb",
+      "value": "auto组件构建完毕"
+    },
+    {
+      "name": "bluetoothtest_str_sd_2",
+      "value": "sppClient第"
+    },
+    {
+      "name": "bluetoothtest_str_sd_3",
+      "value": "sppServer第"
+    },
+    {
+      "name": "bluetoothtest_str_glym",
+      "value": "关蓝牙Manager"
+    },
+    {
+      "name": "bluetoothtest_str_gbcsztgbsj",
+      "value": "关闭传输状态改变事件"
+    },
+    {
+      "name": "bluetoothtest_str_gbzcpmbh",
+      "value": "关闭注册pin码变化"
+    },
+    {
+      "name": "bluetoothtest_str_gbzcbdztbh",
+      "value": "关闭注册绑定状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_cjscg",
+      "value": "创建server成功"
+    },
+    {
+      "name": "bluetoothtest_str_klym",
+      "value": "开蓝牙Manager"
+    },
+    {
+      "name": "bluetoothtest_str_dqhdzts",
+      "value": "当前HFP的状态是："
+    },
+    {
+      "name": "bluetoothtest_str_dqhdzts_1",
+      "value": "当前HID的状态是："
+    },
+    {
+      "name": "bluetoothtest_str_dqmyrhpdsb",
+      "value": "当前没有任何配对设备"
+    },
+    {
+      "name": "bluetoothtest_str_dkzcpmbh",
+      "value": "打开注册pin码变化"
+    },
+    {
+      "name": "bluetoothtest_str_dkzcbdztbh",
+      "value": "打开注册绑定状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_jscrwjbhdk",
+      "value": "接收传入文件变化打开"
+    },
+    {
+      "name": "bluetoothtest_str_ckbtzzbh",
+      "value": "查看BLE特征值变化"
+    },
+    {
+      "name": "bluetoothtest_str_ckbtzzbh_1",
+      "value": "查看Ble特征值变化"
+    },
+    {
+      "name": "bluetoothtest_str_ckgljzt",
+      "value": "查看Gatt连接状态"
+    },
+    {
+      "name": "bluetoothtest_str_jdlyfxcjcs",
+      "value": "经典蓝牙发现场景测试"
+    },
+    {
+      "name": "bluetoothtest_str_hqdqlyljzt",
+      "value": "获取当前蓝牙连接状态"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsb",
+      "value": "获取连接的BLE设备"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsb_1",
+      "value": "获取连接的Ble设备"
+    },
+    {
+      "name": "bluetoothtest_str_lyqsnzxjg",
+      "value": "蓝牙去使能执行结果："
+    },
+    {
+      "name": "bluetoothtest_str_sdbcc",
+      "value": "设定BLEMtu尺寸"
+    },
+    {
+      "name": "bluetoothtest_str_sdbcc_1",
+      "value": "设定BleMtu尺寸"
+    },
+    {
+      "name": "bluetoothtest_str_gkhdcs",
+      "value": "Gatt客户端测试"
+    },
+    {
+      "name": "bluetoothtest_str_gfwqcs",
+      "value": "Gatt服务器测试"
+    },
+    {
+      "name": "bluetoothtest_str_plj",
+      "value": "Profile连接"
+    },
+    {
+      "name": "bluetoothtest_str_blyxncs",
+      "value": "ble蓝牙性能测试"
+    },
+    {
+      "name": "bluetoothtest_str_okqjswj",
+      "value": "opp开启接收文件"
+    },
+    {
+      "name": "bluetoothtest_str_r_1",
+      "value": "result : "
+    },
+    {
+      "name": "bluetoothtest_str_gbgkhd",
+      "value": "关闭Gatt客户端"
+    },
+    {
+      "name": "bluetoothtest_str_gbgfwq",
+      "value": "关闭Gatt服务器"
+    },
+    {
+      "name": "bluetoothtest_str_gbm",
+      "value": "关闭Manager"
+    },
+    {
+      "name": "bluetoothtest_str_gbljztbh",
+      "value": "关闭连接状态变化 "
+    },
+    {
+      "name": "bluetoothtest_str_cjgkhd_1",
+      "value": "创建Gatt客户端"
+    },
+    {
+      "name": "bluetoothtest_str_cjgfwq_1",
+      "value": "创建Gatt服务器"
+    },
+    {
+      "name": "bluetoothtest_str_czgkhd",
+      "value": "创造Gatt客户端"
+    },
+    {
+      "name": "bluetoothtest_str_fxkpdlysb",
+      "value": "发现可配对蓝牙设备"
+    },
+    {
+      "name": "bluetoothtest_str_kssmbsb_1",
+      "value": "开始扫描BLE设备"
+    },
+    {
+      "name": "bluetoothtest_str_kssmbsb_2",
+      "value": "开始扫描Ble设备"
+    },
+    {
+      "name": "bluetoothtest_str_dqlydzts",
+      "value": "当前蓝牙的状态是："
+    },
+    {
+      "name": "bluetoothtest_str_ckbljzt",
+      "value": "查看BLE连接状态"
+    },
+    {
+      "name": "bluetoothtest_str_ckbljzt_1",
+      "value": "查看Ble连接状态"
+    },
+    {
+      "name": "bluetoothtest_str_lysnzxjg",
+      "value": "蓝牙使能执行结果："
+    },
+    {
+      "name": "bluetoothtest_str_szssmms",
+      "value": "设置SPP扫描模式"
+    },
+    {
+      "name": "bluetoothtest_str_gsbzzdklj",
+      "value": "该设备正在断开连接"
+    },
+    {
+      "name": "bluetoothtest_str_yccm",
+      "value": "远程class名:"
+    },
+    {
+      "name": "bluetoothtest_str_ljm",
+      "value": "连接Manager"
+    },
+    {
+      "name": "bluetoothtest_str_btzzbh",
+      "value": "BLE特征值变化"
+    },
+    {
+      "name": "bluetoothtest_str_btzzbh_1",
+      "value": "Ble特征值变化"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs_5",
+      "value": "Gatt自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_o",
+      "value": "Options:"
+    },
+    {
+      "name": "bluetoothtest_str_skhdgb",
+      "value": "Spp客户端关闭"
+    },
+    {
+      "name": "bluetoothtest_str_skhdxr",
+      "value": "Spp客户端写入"
+    },
+    {
+      "name": "bluetoothtest_str_skhdcs",
+      "value": "Spp客户端测试"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqgb",
+      "value": "Spp服务器关闭"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqxr",
+      "value": "Spp服务器写入"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqjs",
+      "value": "Spp服务器接受"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqcs",
+      "value": "Spp服务器测试"
+    },
+    {
+      "name": "bluetoothtest_str_r_2",
+      "value": "result: "
+    },
+    {
+      "name": "bluetoothtest_str_csztbhdk",
+      "value": "传输状态变化打开"
+    },
+    {
+      "name": "bluetoothtest_str_csztggdk",
+      "value": "传输状态更改打开"
+    },
+    {
+      "name": "bluetoothtest_str_gbzcztbh",
+      "value": "关闭注册状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_scgfw",
+      "value": "删除Gatt服务"
+    },
+    {
+      "name": "bluetoothtest_str_qxglj",
+      "value": "取消Gatt连接"
+    },
+    {
+      "name": "bluetoothtest_str_qxlysbpd",
+      "value": "取消蓝牙设备配对"
+    },
+    {
+      "name": "bluetoothtest_str_khdljsb",
+      "value": "客户端连接失败!"
+    },
+    {
+      "name": "bluetoothtest_str_khdljcg",
+      "value": "客户端连接成功!"
+    },
+    {
+      "name": "bluetoothtest_str_dqljzts",
+      "value": "当前连接状态是："
+    },
+    {
+      "name": "bluetoothtest_str_dkzcztbh",
+      "value": "打开注册状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_dkljztbh",
+      "value": "打开连接状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_msfxrgb",
+      "value": "描述符写入 关闭"
+    },
+    {
+      "name": "bluetoothtest_str_msfxrdk",
+      "value": "描述符写入 打开"
+    },
+    {
+      "name": "bluetoothtest_str_msfdqgb",
+      "value": "描述符读取 关闭"
+    },
+    {
+      "name": "bluetoothtest_str_msfdqdk",
+      "value": "描述符读取 打开"
+    },
+    {
+      "name": "bluetoothtest_str_zcpmbh",
+      "value": "注册pin码变化"
+    },
+    {
+      "name": "bluetoothtest_str_zcbdztbh",
+      "value": "注册绑定状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_tjgfw",
+      "value": "添加Gatt服务"
+    },
+    {
+      "name": "bluetoothtest_str_tzzxrgb",
+      "value": "特征值写入 关闭"
+    },
+    {
+      "name": "bluetoothtest_str_tzzxrdk",
+      "value": "特征值写入 打开"
+    },
+    {
+      "name": "bluetoothtest_str_tzzdqgb",
+      "value": "特征值读取 关闭"
+    },
+    {
+      "name": "bluetoothtest_str_tzzdqdk",
+      "value": "特征值读取 打开"
+    },
+    {
+      "name": "bluetoothtest_str_jdlyxncs",
+      "value": "经典蓝牙性能测试"
+    },
+    {
+      "name": "bluetoothtest_str_hqdqcsxx",
+      "value": "获取当前传输信息"
+    },
+    {
+      "name": "bluetoothtest_str_hqdqljzt",
+      "value": "获取当前连接状态"
+    },
+    {
+      "name": "bluetoothtest_str_hqlysmms",
+      "value": "获取蓝牙扫描模式"
+    },
+    {
+      "name": "bluetoothtest_str_hqlybdmc",
+      "value": "获取蓝牙本地名称"
+    },
+    {
+      "name": "bluetoothtest_str_hqycsbmc",
+      "value": "获取远程设备名称"
+    },
+    {
+      "name": "bluetoothtest_str_hqycsblx",
+      "value": "获取远程设备类型"
+    },
+    {
+      "name": "bluetoothtest_str_dyfxlysb",
+      "value": "订阅发现蓝牙设备"
+    },
+    {
+      "name": "bluetoothtest_str_szcrwjqr",
+      "value": "设置传入文件确认"
+    },
+    {
+      "name": "bluetoothtest_str_szlysmms",
+      "value": "设置蓝牙扫描模式"
+    },
+    {
+      "name": "bluetoothtest_str_szlybdmc",
+      "value": "设置蓝牙本地名称"
+    },
+    {
+      "name": "bluetoothtest_str_sztztxgg",
+      "value": "设置通知特性更改"
+    },
+    {
+      "name": "bluetoothtest_str_gsbzzljz",
+      "value": "该设备正在连接中"
+    },
+    {
+      "name": "bluetoothtest_str_qsrmdz",
+      "value": "请输入mac地址"
+    },
+    {
+      "name": "bluetoothtest_str_qsrxrdsj",
+      "value": "请输入写入的数据"
+    },
+    {
+      "name": "bluetoothtest_str_jxlysbpd",
+      "value": "进行蓝牙设备配对"
+    },
+    {
+      "name": "bluetoothtest_str_bljzt",
+      "value": "BLE连接状态"
+    },
+    {
+      "name": "bluetoothtest_str_bzdcs_2",
+      "value": "Ble自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_bljzt_1",
+      "value": "Ble连接状态"
+    },
+    {
+      "name": "bluetoothtest_str_opzcs",
+      "value": "Opp配置测试"
+    },
+    {
+      "name": "bluetoothtest_str_szdcs_4",
+      "value": "Spp自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_dghlycs",
+      "value": "低功耗蓝牙测试"
+    },
+    {
+      "name": "bluetoothtest_str_tzbsm",
+      "value": "停止BLE扫描"
+    },
+    {
+      "name": "bluetoothtest_str_tzbsm_1",
+      "value": "停止Ble扫描"
+    },
+    {
+      "name": "bluetoothtest_str_qxpdsb",
+      "value": "取消配对失败！"
+    },
+    {
+      "name": "bluetoothtest_str_qxpdcg",
+      "value": "取消配对成功！"
+    },
+    {
+      "name": "bluetoothtest_str_ksbsm",
+      "value": "开始BLE扫描"
+    },
+    {
+      "name": "bluetoothtest_str_ksbsm_1",
+      "value": "开始Ble扫描"
+    },
+    {
+      "name": "bluetoothtest_str_jskhdsb",
+      "value": "接受客户端失败"
+    },
+    {
+      "name": "bluetoothtest_str_jskhdcg",
+      "value": "接受客户端成功"
+    },
+    {
+      "name": "bluetoothtest_str_fwdcsw",
+      "value": "服务的参数为："
+    },
+    {
+      "name": "bluetoothtest_str_bsbmcs",
+      "value": "本设备名称是："
+    },
+    {
+      "name": "bluetoothtest_str_cxrcg",
+      "value": "次,写入成功 "
+    },
+    {
+      "name": "bluetoothtest_str_cdqcg",
+      "value": "次,读取成功！"
+    },
+    {
+      "name": "bluetoothtest_str_cdqcg_1",
+      "value": "次,读取成功："
+    },
+    {
+      "name": "bluetoothtest_str_cwdxcs",
+      "value": "次稳定性测试："
+    },
+    {
+      "name": "bluetoothtest_str_qszbdmc",
+      "value": "请设置本地名称"
+    },
+    {
+      "name": "bluetoothtest_str_qsru",
+      "value": "请输入uuid"
+    },
+    {
+      "name": "bluetoothtest_str_qsrycsj",
+      "value": "请输入延迟时间"
+    },
+    {
+      "name": "bluetoothtest_str_d",
+      "value": ",{dis："
+    },
+    {
+      "name": "bluetoothtest_str_wjmw",
+      "value": ";文件名为："
+    },
+    {
+      "name": "bluetoothtest_str_bzdcs_3",
+      "value": "Br自动测试"
+    },
+    {
+      "name": "bluetoothtest_str_gcs_2",
+      "value": "GATT测试"
+    },
+    {
+      "name": "bluetoothtest_str_glj",
+      "value": "Gatt连接"
+    },
+    {
+      "name": "bluetoothtest_str_mw",
+      "value": "Mac为：["
+    },
+    {
+      "name": "bluetoothtest_str_uwk",
+      "value": "uuid为空"
+    },
+    {
+      "name": "bluetoothtest_str_tzgbbb",
+      "value": "停止广播播报"
+    },
+    {
+      "name": "bluetoothtest_str_tzlyfx",
+      "value": "停止蓝牙发现"
+    },
+    {
+      "name": "bluetoothtest_str_xrmsfz",
+      "value": "写入描述符值"
+    },
+    {
+      "name": "bluetoothtest_str_qxcs",
+      "value": "取消传输: "
+    },
+    {
+      "name": "bluetoothtest_str_qxpdsb_1",
+      "value": "取消配对设备"
+    },
+    {
+      "name": "bluetoothtest_str_ksgbbb",
+      "value": "开始广播播报"
+    },
+    {
+      "name": "bluetoothtest_str_kslyfx",
+      "value": "开始蓝牙发现"
+    },
+    {
+      "name": "bluetoothtest_str_dqxx",
+      "value": "当前信息: "
+    },
+    {
+      "name": "bluetoothtest_str_xhcsdg",
+      "value": "循环次数到咯"
+    },
+    {
+      "name": "bluetoothtest_str_smlysb",
+      "value": "扫描蓝牙设备"
+    },
+    {
+      "name": "bluetoothtest_str_ckbzt",
+      "value": "查看bt状态"
+    },
+    {
+      "name": "bluetoothtest_str_cxrsb",
+      "value": "次,写入失败"
+    },
+    {
+      "name": "bluetoothtest_str_cxrcg_1",
+      "value": "次,写入成功"
+    },
+    {
+      "name": "bluetoothtest_str_cxrcg_2",
+      "value": "次写入成功 "
+    },
+    {
+      "name": "bluetoothtest_str_zcztbh",
+      "value": "注册状态变化"
+    },
+    {
+      "name": "bluetoothtest_str_lxhyc",
+      "value": "类型和延迟:"
+    },
+    {
+      "name": "bluetoothtest_str_jdlycs",
+      "value": "经典蓝牙测试"
+    },
+    {
+      "name": "bluetoothtest_str_hqsmms",
+      "value": "获取扫描模式"
+    },
+    {
+      "name": "bluetoothtest_str_hqbfzt",
+      "value": "获取播放状态"
+    },
+    {
+      "name": "bluetoothtest_str_hqbdmc",
+      "value": "获取本地名称"
+    },
+    {
+      "name": "bluetoothtest_str_hqlyzt",
+      "value": "获取蓝牙状态"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbzt",
+      "value": "获取设备状态"
+    },
+    {
+      "name": "bluetoothtest_str_hqljsb",
+      "value": "获取连接设备"
+    },
+    {
+      "name": "bluetoothtest_str_hqpdsb",
+      "value": "获取配对设备"
+    },
+    {
+      "name": "bluetoothtest_str_lyfxcg",
+      "value": "蓝牙发现成功"
+    },
+    {
+      "name": "bluetoothtest_str_lyyjsn",
+      "value": "蓝牙已经使能"
+    },
+    {
+      "name": "bluetoothtest_str_lyhwsn",
+      "value": "蓝牙还未使能"
+    },
+    {
+      "name": "bluetoothtest_str_dylyfx",
+      "value": "订阅蓝牙发现"
+    },
+    {
+      "name": "bluetoothtest_str_sbmcw",
+      "value": "设备名称为："
+    },
+    {
+      "name": "bluetoothtest_str_szsmms",
+      "value": "设置扫描模式"
+    },
+    {
+      "name": "bluetoothtest_str_szsmlx",
+      "value": "设置扫描类型"
+    },
+    {
+      "name": "bluetoothtest_str_szbdmc",
+      "value": "设置本地名称"
+    },
+    {
+      "name": "bluetoothtest_str_szljcl",
+      "value": "设置连接策略"
+    },
+    {
+      "name": "bluetoothtest_str_szpzlx",
+      "value": "设置配置类型"
+    },
+    {
+      "name": "bluetoothtest_str_gsbydk",
+      "value": "该设备已断开"
+    },
+    {
+      "name": "bluetoothtest_str_gsbylj",
+      "value": "该设备已连接"
+    },
+    {
+      "name": "bluetoothtest_str_ycsbm",
+      "value": "远程设备名:"
+    },
+    {
+      "name": "bluetoothtest_str_scs_1",
+      "value": "SPP测试"
+    },
+    {
+      "name": "bluetoothtest_str_s_3",
+      "value": "scan:"
+    },
+    {
+      "name": "bluetoothtest_str_gbkhd",
+      "value": "关闭客户端"
+    },
+    {
+      "name": "bluetoothtest_str_gbfwd",
+      "value": "关闭服务端"
+    },
+    {
+      "name": "bluetoothtest_str_xrcg",
+      "value": "写入成功 "
+    },
+    {
+      "name": "bluetoothtest_str_xrmsf",
+      "value": "写入描述符"
+    },
+    {
+      "name": "bluetoothtest_str_xrtzz",
+      "value": "写入特征值"
+    },
+    {
+      "name": "bluetoothtest_str_qsnly",
+      "value": "去使能蓝牙"
+    },
+    {
+      "name": "bluetoothtest_str_fsdw",
+      "value": "发送端为："
+    },
+    {
+      "name": "bluetoothtest_str_ypdsb",
+      "value": "已配对设备"
+    },
+    {
+      "name": "bluetoothtest_str_xhsw",
+      "value": "循环数为:"
+    },
+    {
+      "name": "bluetoothtest_str_cxrsb_1",
+      "value": "次写入失败"
+    },
+    {
+      "name": "bluetoothtest_str_dqcg",
+      "value": "读取成功！"
+    },
+    {
+      "name": "bluetoothtest_str_dqcg_1",
+      "value": "读取成功："
+    },
+    {
+      "name": "bluetoothtest_str_dqmsf",
+      "value": "读取描述符"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzz",
+      "value": "读取特征值"
+    },
+    {
+      "name": "bluetoothtest_str_dk",
+      "value": " 断开："
+    },
+    {
+      "name": "bluetoothtest_str_sb",
+      "value": " 设备 "
+    },
+    {
+      "name": "bluetoothtest_str_i",
+      "value": ",id:"
+    },
+    {
+      "name": "bluetoothtest_str_m",
+      "value": "mac:"
+    },
+    {
+      "name": "bluetoothtest_str_m_1",
+      "value": "ms; "
+    },
+    {
+      "name": "bluetoothtest_str_snly",
+      "value": "使能蓝牙"
+    },
+    {
+      "name": "bluetoothtest_str_tzfx",
+      "value": "停止发现"
+    },
+    {
+      "name": "bluetoothtest_str_tzgb",
+      "value": "停止广播"
+    },
+    {
+      "name": "bluetoothtest_str_tzsm",
+      "value": "停止扫描"
+    },
+    {
+      "name": "bluetoothtest_str_xrsb",
+      "value": "写入失败"
+    },
+    {
+      "name": "bluetoothtest_str_xrcg_1",
+      "value": "写入成功"
+    },
+    {
+      "name": "bluetoothtest_str_scfw",
+      "value": "删除服务"
+    },
+    {
+      "name": "bluetoothtest_str_qxcs_1",
+      "value": "取消传输"
+    },
+    {
+      "name": "bluetoothtest_str_qxlj",
+      "value": "取消连接"
+    },
+    {
+      "name": "bluetoothtest_str_ksfx",
+      "value": "开始发现"
+    },
+    {
+      "name": "bluetoothtest_str_ksgb",
+      "value": "开始广播"
+    },
+    {
+      "name": "bluetoothtest_str_xhcs",
+      "value": "循环次数"
+    },
+    {
+      "name": "bluetoothtest_str_wjmc",
+      "value": "文件名称"
+    },
+    {
+      "name": "bluetoothtest_str_wzzt",
+      "value": "未知状态"
+    },
+    {
+      "name": "bluetoothtest_str_ms",
+      "value": "模式: "
+    },
+    {
+      "name": "bluetoothtest_str_tjfw",
+      "value": "添加服务"
+    },
+    {
+      "name": "bluetoothtest_str_hqzt",
+      "value": "获取状态"
+    },
+    {
+      "name": "bluetoothtest_str_sbw",
+      "value": "设备为："
+    },
+    {
+      "name": "bluetoothtest_str_sbmc",
+      "value": "设备名称"
+    },
+    {
+      "name": "bluetoothtest_str_dqsb",
+      "value": "读取失败"
+    },
+    {
+      "name": "bluetoothtest_str_dqcg_2",
+      "value": "读取成功"
+    },
+    {
+      "name": "bluetoothtest_str_tzcg",
+      "value": "跳转成功"
+    },
+    {
+      "name": "bluetoothtest_str_ljzt",
+      "value": "连接状态"
+    },
+    {
+      "name": "bluetoothtest_str_pdsb",
+      "value": "配对设备"
+    },
+    {
+      "name": "bluetoothtest_str_mrxx",
+      "value": "默认消息"
+    },
+    {
+      "name": "bluetoothtest_str_str",
+      "value": "]  "
+    },
+    {
+      "name": "bluetoothtest_str_m_2",
+      "value": "ms;"
+    },
+    {
+      "name": "bluetoothtest_str_str_1",
+      "value": "}.]"
+    },
+    {
+      "name": "bluetoothtest_str_gly",
+      "value": "关蓝牙"
+    },
+    {
+      "name": "bluetoothtest_str_yc",
+      "value": "延迟:"
+    },
+    {
+      "name": "bluetoothtest_str_ks",
+      "value": "开始:"
+    },
+    {
+      "name": "bluetoothtest_str_kly",
+      "value": "开蓝牙"
+    },
+    {
+      "name": "bluetoothtest_str_wpd",
+      "value": "未配对"
+    },
+    {
+      "name": "bluetoothtest_str_cxr",
+      "value": "次写入"
+    },
+    {
+      "name": "bluetoothtest_str_zt",
+      "value": "状态:"
+    },
+    {
+      "name": "bluetoothtest_str_lx",
+      "value": "类型:"
+    },
+    {
+      "name": "bluetoothtest_str_js",
+      "value": "结束:"
+    },
+    {
+      "name": "bluetoothtest_str_hf",
+      "value": "花费:"
+    },
+    {
+      "name": "bluetoothtest_str_sz",
+      "value": "设置："
+    },
+    {
+      "name": "bluetoothtest_str_pd",
+      "value": "配对："
+    },
+    {
+      "name": "bluetoothtest_str_gb",
+      "value": "关闭"
+    },
+    {
+      "name": "bluetoothtest_str_qx",
+      "value": "取消"
+    },
+    {
+      "name": "bluetoothtest_str_sb_1",
+      "value": "失败"
+    },
+    {
+      "name": "bluetoothtest_str_cg",
+      "value": "成功"
+    },
+    {
+      "name": "bluetoothtest_str_jj",
+      "value": "拒接"
+    },
+    {
+      "name": "bluetoothtest_str_js_1",
+      "value": "接收"
+    },
+    {
+      "name": "bluetoothtest_str_wz",
+      "value": "未知"
+    },
+    {
+      "name": "bluetoothtest_str_qr",
+      "value": "确认"
+    },
+    {
+      "name": "bluetoothtest_str_lj",
+      "value": "连接"
+    },
+    {
+      "name": "bluetoothtest_str_str_2",
+      "value": "]"
+    },
+    {
+      "name": "bluetoothtest_str_d_1",
+      "value": "第"
     }
   ]
 }

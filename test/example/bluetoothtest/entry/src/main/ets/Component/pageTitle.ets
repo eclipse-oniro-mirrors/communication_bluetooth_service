@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../Utils/ConfigData';
 import { TestData } from '../MainAbility/model/testData'
 import router from '@ohos.router';
@@ -30,7 +31,7 @@ const TAG = '[Screenshot]'
 @Component
 export struct PageTitle {
   private testItem!: TestData
-  private detail!: string
+  private detail!: Resource | string
   @State colOpacity: number = 1
   @State count: number = 0
   @State myborderWidth: number = 0
@@ -78,7 +79,7 @@ export struct PageTitle {
     .width(ConfigData.WH_100_100)
     .margin({ left : ConfigData.VP_3 , right : ConfigData.VP_3 , top : ConfigData.VP_2 })
     .onClick(() => {
-      console.log('[Screenshot] onClick,screenshot')
+      hilog.info(0x0000, 'BtTest', '%{public}s', '[Screenshot] onClick,screenshot')
       this.getScreen(isFullScreen)
     })
   }
@@ -133,40 +134,40 @@ export struct PageTitle {
                 }) ,
               PanGesture({ fingers : 1 , direction : PanDirection.All , distance : 5.0 })
                 .onActionStart(() => {
-                  console.log('Pan start')
+                  hilog.info(0x0000, 'BtTest', '%{public}s', 'Pan start')
                 })
                 .onActionUpdate((event: GestureEvent) => {
                   this.offsetY = event.offsetY;
                   this.offsetX = event.offsetX;
                 })
                 .onActionEnd(() => {
-                  console.log('Pan end')
+                  hilog.info(0x0000, 'BtTest', '%{public}s', 'Pan end')
                 }) ,
               PinchGesture({ fingers : 2 , distance : 4 })
                 .onActionStart(() => {
-                  console.log('PinchGesture start')
+                  hilog.info(0x0000, 'BtTest', '%{public}s', 'PinchGesture start')
                 })
                 .onActionUpdate((event: GestureEvent) => {
                   this.myscale = event.scale
                   this.myborderRadius = 10
                 })
                 .onActionEnd(() => {
-                  console.log('PinchGesture end')
+                  hilog.info(0x0000, 'BtTest', '%{public}s', 'PinchGesture end')
                   this.getScreen(true);
                 }) ,
               RotationGesture({ fingers : 2 , angle : 2 })
                 .onActionStart(() => {
-                  console.log('RotationGesture start')
+                  hilog.info(0x0000, 'BtTest', '%{public}s', 'RotationGesture start')
                 })
                 .onActionUpdate((event: GestureEvent) => {
                   this.angle = event.angle
                 })
                 .onActionEnd(() => {
-                  console.log('RotationGesture end')
+                  hilog.info(0x0000, 'BtTest', '%{public}s', 'RotationGesture end')
                 })
             )
               .onCancel(() => {
-                console.log('Parallel gesture canceled')
+                hilog.info(0x0000, 'BtTest', '%{public}s', 'Parallel gesture canceled')
               })
           )
         }

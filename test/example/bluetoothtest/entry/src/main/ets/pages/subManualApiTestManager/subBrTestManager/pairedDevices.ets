@@ -46,7 +46,7 @@ struct pairedDevices {
           });
 
           Column() {
-            PageTitle({ detail : '已配对设备' })
+            PageTitle({ detail : $r('app.string.bluetoothtest_str_ypdsb') })
 
 
             Divider()
@@ -60,7 +60,8 @@ struct pairedDevices {
                 ForEach(this.pairedDevices , (item: string, index: number) => {
                   ListItem() {
                     TitleComponent({ title : item });
-                  }.padding({ top : ConfigData.VP_2 , bottom : ConfigData.VP_2 })
+                  }
+                    .padding({ top : ConfigData.VP_2 , bottom : ConfigData.VP_2 })
                 } , item => JSON.stringify(item));
               }
 
@@ -84,7 +85,8 @@ struct pairedDevices {
                 ButtonComponent({ text : $r("app.string.confirm") , isOnClick : () => {
                   router.back();
                 } })
-              }.width(ConfigData.VP_120)
+              }
+                .width(ConfigData.VP_120)
             }
           }
           .padding({ left : ConfigData.VP_24 , right : ConfigData.VP_24 })

@@ -34,6 +34,7 @@ export struct ManualApiTest {
       TestList({
         testItems : this.testItems
       })
-    }.height(ConfigData.WH_100_100)
+    }
+      .height(ConfigData.WH_100_100)
   }
 }

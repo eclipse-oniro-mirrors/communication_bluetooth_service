@@ -12,8 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
 
 
+
+import hilog from '@ohos.hilog';
 /**
  * GattClient Test Of Bluetooth test
  */
@@ -29,12 +32,12 @@ let gattClientInstance: bluetoothManager.GattClientDevice
 
 export function testCreateGattClientManager(): string {
   try {
-    let message = "createGattClient test "
+    let message = resStr($r('app.string.bluetoothtest_str_ct_1'))
     let peripheralDeviceId: string = AppStorage.get('peripheralDeviceId') !;
     let btState = bluetoothManager.getState();
     if ( btState === bluetoothManager.BluetoothState.STATE_ON ) {
       if ( gattClientInstance ) {
-        message = "GattClient exists!";
+        message = resStr($r('app.string.bluetoothtest_str_ge_2'));
         promptAction.showToast({ message : message })
         return message;
       }
@@ -50,8 +53,8 @@ export function testCreateGattClientManager(): string {
             // create ble client instance
             if ( !gattClientInstance ) {
               gattClientInstance = BluetoothModelManager.createGattClient(devId);
-              message = "createGattClient succeeds ";
-              console.log("createGattClient succeeds----------")
+              message = resStr($r('app.string.bluetoothtest_str_cs_4'));
+              hilog.info(0x0000, 'BtTest', '%{public}s', "createGattClient succeeds----------")
             }
           }
         })
@@ -59,25 +62,25 @@ export function testCreateGattClientManager(): string {
       if ( peripheralDeviceId && peripheralDeviceId.length > 15 ) {
         gattClientInstance = BluetoothModelManager.createGattClient(peripheralDeviceId.toUpperCase());
         if ( gattClientInstance ) {
-          message = "createGattClient: " + peripheralDeviceId;
-          console.log("createGattClient peripheralDeviceId succeeds----------")
+          message = resStr($r('app.string.bluetoothtest_str_c')) + peripheralDeviceId;
+          hilog.info(0x0000, 'BtTest', '%{public}s', "createGattClient peripheralDeviceId succeeds----------")
         } else {
-          message = "createGattClient:fail ";
+          message = resStr($r('app.string.bluetoothtest_str_cf'));
         }
       } else {
-        message = "peripheralDeviceId invalid! ";
+        message = resStr($r('app.string.bluetoothtest_str_pi'));
       }
       promptAction.showToast({ message : message })
     } else if ( btState === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
     } else {
-      message = "switching,please wait"
+      message = resStr($r('app.string.bluetoothtest_str_spw_1'))
       promptAction.showToast({ message : message })
     }
     return message
   } catch( e ) {
-    console.log(`Failed to testCreateGattClientManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testCreateGattClientManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testCreateGattClientManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -88,31 +91,31 @@ let bleConnectionState = 0;
 
 export function testConnectManager(): string {
   try {
-    let message = "connect test";
+    let message = resStr($r('app.string.bluetoothtest_str_ct_4'));
     let btState = bluetoothManager.getState();
     if ( btState === bluetoothManager.BluetoothState.STATE_ON ) {
       if ( gattClientInstance ) {
         if ( bleConnectionState == 0 ) {
-          console.log("GattClient.connect: start----------------")
+          hilog.info(0x0000, 'BtTest', '%{public}s', "GattClient.connect: start----------------")
           gattClientInstance.connect();
-          message = "GattClient.connect ";
-          console.log("GattClient.connect: end----------------")
+          message = resStr($r('app.string.bluetoothtest_str_gc_2'));
+          hilog.info(0x0000, 'BtTest', '%{public}s', "GattClient.connect: end----------------")
           bleConnectionState = 2
         } else {
-          message = "this device is not disconnected!";
+          message = resStr($r('app.string.bluetoothtest_str_tdind'));
         }
       } else {
         message = "NO_GATT_CLIENT_OBJECT";
       }
     } else if ( btState === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,please wait!";
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testConnectManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testConnectManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testConnectManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -121,7 +124,7 @@ export function testConnectManager(): string {
 
 export function testDisconnectManager(): string {
   try {
-    let message = "test disconnect";
+    let message = resStr($r('app.string.bluetoothtest_str_td'));
     let btState = bluetoothManager.getState();
     if ( btState == bluetoothManager.BluetoothState.STATE_ON ) {
       if ( !gattClientInstance ) {
@@ -131,19 +134,19 @@ export function testDisconnectManager(): string {
       }
       if ( bleConnectionState == 2 ) {
         gattClientInstance.disconnect();
-        message = "GattClient.disconnect: ";
+        message = resStr($r('app.string.bluetoothtest_str_gd'));
       } else {
-        message = " BLE is not connected and no need to disconnect it ";
+        message = resStr($r('app.string.bluetoothtest_str_bincanntdi'));
       }
     } else if ( btState == bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,please wait!";
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testDisconnectManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testDisconnectManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testDisconnectManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -154,10 +157,10 @@ let BLEConnectionStateChange = false
 
 export function testOnBLEConnectionStateChangeManager(): string {
   try {
-    let message = "onBLEConnectionStateChange test";
+    let message = resStr($r('app.string.bluetoothtest_str_ot'));
     let btStatus = bluetoothManager.getState();
     if ( btStatus === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message;
     }
@@ -171,7 +174,7 @@ export function testOnBLEConnectionStateChangeManager(): string {
       gattClientInstance.off('BLEConnectionStateChange' , () => {
         promptAction.showToast({ message : "off:BLEConnectionStateChange" })
       })
-      message = "关闭BLE连接状态变化"
+      message = resStr($r('app.string.bluetoothtest_str_gbbljztbh'))
     } else {
       let bleConnectionStateInfo = "xxxx"
       gattClientInstance.on('BLEConnectionStateChange' , (bleConnectionState: bluetooth.BLEConnectChangedState) => {
@@ -192,17 +195,17 @@ export function testOnBLEConnectionStateChangeManager(): string {
             bleConnectionStateInfo = "UNDEFINED!";
             break;
         }
-        console.log("gattClientInstance.onBLEConnectionStateChange is ------- " + JSON.stringify(bleConnectionState))
+        hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.onBLEConnectionStateChange is ------- " + JSON.stringify(bleConnectionState))
         AppStorage.setOrCreate('bleConnectionStateInfo' , bleConnectionStateInfo);
-        promptAction.showToast({ message : "状态:" + bleConnectionStateInfo })
+        promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_zt')) + bleConnectionStateInfo })
       })
-      message = "打开BLE连接状态变化"
+      message = resStr($r('app.string.bluetoothtest_str_dkbljztbh'))
     }
     BLEConnectionStateChange = !BLEConnectionStateChange
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testOnBLEConnectionStateChangeManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testOnBLEConnectionStateChangeManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testOnBLEConnectionStateChangeManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -211,7 +214,7 @@ export function testOnBLEConnectionStateChangeManager(): string {
 
 export function testGattClientCloseManager(): string {
   try {
-    let message = "gattClientClose test"
+    let message = resStr($r('app.string.bluetoothtest_str_gt_9'))
     let btState = bluetoothManager.getState();
     if ( btState == bluetoothManager.BluetoothState.STATE_ON ) {
       if ( !gattClientInstance ) {
@@ -220,16 +223,16 @@ export function testGattClientCloseManager(): string {
         return message;
       }
       gattClientInstance.close();
-      message = "GattClient.close:";
+      message = resStr($r('app.string.bluetoothtest_str_gc_3'));
     } else if ( btState == bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,please wait!";
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGattClientCloseManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGattClientCloseManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGattClientCloseManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -238,7 +241,7 @@ export function testGattClientCloseManager(): string {
 
 export function testGetServicesCallbackManager(): string {
   try {
-    let message = "getServicesCallback test"
+    let message = resStr($r('app.string.bluetoothtest_str_gt_6'))
     let btState = bluetoothManager.getState();
     if ( btState == bluetoothManager.BluetoothState.STATE_ON ) {
       if ( !gattClientInstance ) {
@@ -246,35 +249,35 @@ export function testGetServicesCallbackManager(): string {
         promptAction.showToast({ message : message })
         return message;
       }
-      console.log("connectState ")
-      console.log("getServices(call back) start-----------------")
+      hilog.info(0x0000, 'BtTest', '%{public}s', "connectState ")
+      hilog.info(0x0000, 'BtTest', '%{public}s', "getServices(call back) start-----------------")
       gattClientInstance.getServices((err , gattServices) => {
         if ( err.code != 0 ) {
-          message = "getServices(call back) error code:" + err.code + ",services :" + gattServices;
-          console.log("getServices(call back) error code:-----------------" + err.code + ",services :" + gattServices)
+          message = resStr($r('app.string.bluetoothtest_str_gcbec')) + err.code + resStr($r('app.string.bluetoothtest_str_s_2')) + gattServices;
+          hilog.info(0x0000, 'BtTest', '%{public}s', "getServices(call back) error code:-----------------" + err.code + ",services :" + gattServices)
           promptAction.showToast({ message : message })
           //        return message;
         } else {
-          message = "getServices(Callback):invoke succeeds! " + "\n"
-          message += "bluetoothManager services size is " + gattServices.length + '\n';
+          message = resStr($r('app.string.bluetoothtest_str_gcis')) + "\n"
+          message += resStr($r('app.string.bluetoothtest_str_bssi')) + gattServices.length + '\n';
           for ( let i = 0 ; i < gattServices.length ; i ++ ) {
-            message += 'serviceUuid is ' + gattServices[ i ].serviceUuid + '\n';
+            message += resStr($r('app.string.bluetoothtest_str_si')) + gattServices[ i ].serviceUuid + '\n';
           }
           promptAction.showToast({ message : message })
           AppStorage.setOrCreate("getServices" , message)
-          console.log("getServices(Callback)----------" + message)
+          hilog.info(0x0000, 'BtTest', '%{public}s', "getServices(Callback)----------" + message)
         }
       })
-      console.log("getServices(call back) end-----------------")
+      hilog.info(0x0000, 'BtTest', '%{public}s', "getServices(call back) end-----------------")
     } else if ( btState == bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,please wait!";
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetServicesCallbackManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetServicesCallbackManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetServicesCallbackManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -283,40 +286,40 @@ export function testGetServicesCallbackManager(): string {
 
 export function testGetServicesPromiseManager(): string {
   try {
-    let message = "getServicesPromise test"
+    let message = resStr($r('app.string.bluetoothtest_str_gt_7'))
     if ( !gattClientInstance ) {
       message = "NO_GATT_CLIENT_OBJECT";
       promptAction.showToast({ message : message })
       return message;
     }
-    message = "getServices promise:starts";
+    message = resStr($r('app.string.bluetoothtest_str_gps'));
     let btState = bluetoothManager.getState();
     if ( btState == bluetoothManager.BluetoothState.STATE_ON ) {
-      console.log("gattClientInstance.getServices,promise start----------")
+      hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.getServices,promise start----------")
       gattClientInstance.getServices().then(gattServices => {
-        console.log("getServices(): Promise<Array<GattService>> start --------------")
-        message = "getServicesPromise successfully:\n"
-        message = "bluetoothManager services size is " + gattServices.length + "\n";
-        console.log("bluetoothManager services size is " + gattServices.length)
+        hilog.info(0x0000, 'BtTest', '%{public}s', "getServices(): Promise<Array<GattService>> start --------------")
+        message = resStr($r('app.string.bluetoothtest_str_gsn'))
+        message = resStr($r('app.string.bluetoothtest_str_bssi')) + gattServices.length + "\n";
+        hilog.info(0x0000, 'BtTest', '%{public}s', "bluetoothManager services size is " + gattServices.length)
         for ( let i = 0 ; i < gattServices.length ; i ++ ) {
-          message += 'serviceUuid is ' + gattServices[ i ].serviceUuid + '\n';
+          message += resStr($r('app.string.bluetoothtest_str_si')) + gattServices[ i ].serviceUuid + '\n';
         }
-        console.log("getServices(): Promise<Array<GattService>> end --------------")
+        hilog.info(0x0000, 'BtTest', '%{public}s', "getServices(): Promise<Array<GattService>> end --------------")
         promptAction.showToast({ message : message })
       }).catch((err: BusinessError) => {
-        console.log("testGetServicesPromiseManager err:" + err)
+        hilog.info(0x0000, 'BtTest', '%{public}s', "testGetServicesPromiseManager err:" + err)
       })
-      console.log("gattClientInstance.getServices,promise end----------")
-      message = "getServices(promise):invoke succeeds!";
+      hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.getServices,promise end----------")
+      message = resStr($r('app.string.bluetoothtest_str_gpis'));
     } else if ( btState == bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,please wait!";
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetServicesPromiseManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetServicesPromiseManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetServicesPromiseManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -329,10 +332,10 @@ export function testReadCharacteristicValueCallbackManager(): string {
     let characteristicUUID: string = AppStorage.get('characteristicUUID') !;
     let descriptorUUID: string = AppStorage.get('descriptorUUID') !;
     let descriptorValue: string = AppStorage.get('descriptorValue') !;
-    let message = "readCharacteristicValueCallback test"
+    let message = resStr($r('app.string.bluetoothtest_str_rt'))
     let btState = bluetoothManager.getState();
     if ( btState === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message;
     }
@@ -358,30 +361,30 @@ export function testReadCharacteristicValueCallbackManager(): string {
       characteristicValue : bufferCCC ,
       descriptors : descriptors
     };
-    console.log("gattClientInstance.readCharacteristicValue ,callback start--------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.readCharacteristicValue ,callback start--------------")
     gattClientInstance.readCharacteristicValue(bleCharacteristicDataIn , (err , bleCharacteristicDataOut) => {
       if ( err.code != 0 ) {
-        message = "readCharacteristicValue error code:" + err.code + ",id:" + serviceUUID;
-        console.log(message)
+        message = resStr($r('app.string.bluetoothtest_str_rec')) + err.code + resStr($r('app.string.bluetoothtest_str_i')) + serviceUUID;
+        hilog.info(0x0000, 'BtTest', '%{public}s', message)
         promptAction.showToast({ message : message })
       }
-      message = "callback success!:" + "\n";
-      message += 'characteristic uuid:' + bleCharacteristicDataOut.characteristicUuid + "\n";
-      console.log(message)
+      message = resStr($r('app.string.bluetoothtest_str_cs_8')) + "\n";
+      message += resStr($r('app.string.bluetoothtest_str_cu')) + bleCharacteristicDataOut.characteristicUuid + "\n";
+      hilog.info(0x0000, 'BtTest', '%{public}s', message)
       let value = new Uint8Array(bleCharacteristicDataOut.characteristicValue);
       for ( let i = 0 ; i < bleCharacteristicDataOut.characteristicValue.byteLength ; i ++ ) {
-        message += 'characteristic value: ' + value[ i ] + "\n";
+        message += resStr($r('app.string.bluetoothtest_str_cv')) + value[ i ] + "\n";
       }
       AppStorage.setOrCreate("read_CharacteristicValue" , message)
       promptAction.showToast({ message : message })
     });
-    console.log("gattClientInstance.readCharacteristicValue ,callback end--------------")
-    message = 'readCharacteristicValue(callback):invoke succeeds!';
-    console.log(message)
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.readCharacteristicValue ,callback end--------------")
+    message = resStr($r('app.string.bluetoothtest_str_rcis'));
+    hilog.info(0x0000, 'BtTest', '%{public}s', message)
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testReadCharacteristicValueCallbackManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testReadCharacteristicValueCallbackManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testReadCharacteristicValueCallbackManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -394,10 +397,10 @@ export function testReadCharacteristicValuePromiseManager(): string {
     let characteristicUUID: string = AppStorage.get('characteristicUUID') !;
     let descriptorUUID: string = AppStorage.get('descriptorUUID') !;
     let descriptorValue: string = AppStorage.get('descriptorValue') !;
-    let message = "readCharacteristicValuePromise test"
+    let message = resStr($r('app.string.bluetoothtest_str_rt_1'))
     let btState = bluetoothManager.getState();
     if ( btState === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message;
     }
@@ -423,26 +426,26 @@ export function testReadCharacteristicValuePromiseManager(): string {
       characteristicValue : bufferCCC ,
       descriptors : descriptors
     };
-    console.log("gattClientInstance.readCharacteristicValue ,promise start--------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.readCharacteristicValue ,promise start--------------")
     gattClientInstance.readCharacteristicValue(bleCharacteristicDataIn).then((bleCharacteristicDataOut) => {
-      message = "promise success!:\n"
-      message += 'characteristic uuid:' + bleCharacteristicDataOut.characteristicUuid + "\n";
-      console.log(message)
+      message = resStr($r('app.string.bluetoothtest_str_psn'))
+      message += resStr($r('app.string.bluetoothtest_str_cu')) + bleCharacteristicDataOut.characteristicUuid + "\n";
+      hilog.info(0x0000, 'BtTest', '%{public}s', message)
       let value = new Uint8Array(bleCharacteristicDataOut.characteristicValue);
       for ( let i = 0 ; i < bleCharacteristicDataOut.characteristicValue.byteLength ; i ++ ) {
-        message += 'characteristic value: ' + value[ i ] + "\n";
+        message += resStr($r('app.string.bluetoothtest_str_cv')) + value[ i ] + "\n";
       }
       promptAction.showToast({ message : message })
     }).catch((err: BusinessError) => {
-      console.log("testReadCharacteristicValuePromiseManager err:" + err)
+      hilog.info(0x0000, 'BtTest', '%{public}s', "testReadCharacteristicValuePromiseManager err:" + err)
     });
-    console.log("gattClientInstance.readCharacteristicValue ,promise end--------------")
-    message = 'readCharacteristicValue(promise):invoke succeeds!';
-    console.log(message)
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.readCharacteristicValue ,promise end--------------")
+    message = resStr($r('app.string.bluetoothtest_str_rpis'));
+    hilog.info(0x0000, 'BtTest', '%{public}s', message)
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testReadCharacteristicValuePromiseManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testReadCharacteristicValuePromiseManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testReadCharacteristicValuePromiseManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -455,10 +458,10 @@ export function testReadDescriptorValueCallbackManager(): string {
     let characteristicUUID: string = AppStorage.get('characteristicUUID') !;
     let descriptorUUID: string = AppStorage.get('descriptorUUID') !;
     let descriptorValue: string = AppStorage.get('descriptorValue') !;
-    let message = "readDescriptorValueCallback test"
+    let message = resStr($r('app.string.bluetoothtest_str_rt_2'))
     let btState = bluetoothManager.getState();
     if ( btState === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message;
     }
@@ -477,29 +480,29 @@ export function testReadDescriptorValueCallbackManager(): string {
       //    descriptorValue: bufferDesc
       descriptorValue : string2ArrayBuffer(descriptorValue)
     };
-    console.log("gattClientInstance.readDescriptorValue,callback start--------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.readDescriptorValue,callback start--------------")
     gattClientInstance.readDescriptorValue(descriptorIn , (err: BusinessError , descriptorOut: bluetooth.BLEDescriptor) => {
       let message = ""
       if ( err.code != 0 ) {
-        message = "readDescriptorValue error:" + err.code.toString()
-        console.log(message)
+        message = resStr($r('app.string.bluetoothtest_str_re')) + err.code.toString()
+        hilog.info(0x0000, 'BtTest', '%{public}s', message)
         promptAction.showToast({ message : message })
       }
-      message = "\n" + "callback:descriptor uuid=" + descriptorOut.descriptorUuid + "\n";
+      message = "\n" + resStr($r('app.string.bluetoothtest_str_cdu')) + descriptorOut.descriptorUuid + "\n";
       let value = new Uint8Array(descriptorOut.descriptorValue);
       for ( let i = 0 ; i < descriptorOut.descriptorValue.byteLength ; i ++ ) {
-        message += 'descriptor value: ' + value[ i ] + "\n";
+        message += resStr($r('app.string.bluetoothtest_str_dv')) + value[ i ] + "\n";
       }
       AppStorage.setOrCreate("read_DescriptorValue" , message)
       promptAction.showToast({ message : message })
     });
-    console.log("gattClientInstance.readDescriptorValue ,callback end--------------")
-    message = 'readDescriptorValue(callback):invoke succeeds!';
-    console.log(message)
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.readDescriptorValue ,callback end--------------")
+    message = resStr($r('app.string.bluetoothtest_str_rcis_1'));
+    hilog.info(0x0000, 'BtTest', '%{public}s', message)
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testReadDescriptorValueCallbackManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testReadDescriptorValueCallbackManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testReadDescriptorValueCallbackManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -512,10 +515,10 @@ export function testReadDescriptorValuePromiseManager(): string {
     let characteristicUUID: string = AppStorage.get('characteristicUUID') !;
     let descriptorUUID: string = AppStorage.get('descriptorUUID') !;
     let descriptorValue: string = AppStorage.get('descriptorValue') !;
-    let message = "readDescriptorValuePromise test "
+    let message = resStr($r('app.string.bluetoothtest_str_rt_3'))
     let btState = bluetoothManager.getState();
     if ( btState === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message;
     }
@@ -533,24 +536,24 @@ export function testReadDescriptorValuePromiseManager(): string {
       descriptorUuid : descriptorUUID ,
       descriptorValue : string2ArrayBuffer(descriptorValue)
     };
-    console.log("gattClientInstance.readDescriptorValue,promise start--------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.readDescriptorValue,promise start--------------")
     gattClientInstance.readDescriptorValue(descriptorIn).then((descriptorOut) => {
-      message = "\n" + 'promise:descriptor uuid=' + descriptorOut.descriptorUuid + "\n";
+      message = "\n" + resStr($r('app.string.bluetoothtest_str_pdu')) + descriptorOut.descriptorUuid + "\n";
       let value = new Uint8Array(descriptorOut.descriptorValue);
       for ( let i = 0 ; i < descriptorOut.descriptorValue.byteLength ; i ++ ) {
-        message += 'descriptor value: ' + value[ i ] + "\n";
+        message += resStr($r('app.string.bluetoothtest_str_dv')) + value[ i ] + "\n";
       }
       AppStorage.setOrCreate("read_DescriptorValue" , message)
       promptAction.showToast({ message : message })
     }).catch((err: BusinessError) => {
-      console.log("testReadDescriptorValuePromiseManager err:" + err)
+      hilog.info(0x0000, 'BtTest', '%{public}s', "testReadDescriptorValuePromiseManager err:" + err)
     });
-    console.log("gattClientInstance.readDescriptorValue,promise end--------------")
-    message = 'readDescriptorValue(promise):invoke succeeds!';
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.readDescriptorValue,promise end--------------")
+    message = resStr($r('app.string.bluetoothtest_str_rpis_1'));
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testReadDescriptorValuePromiseManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testReadDescriptorValuePromiseManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testReadDescriptorValuePromiseManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -563,10 +566,10 @@ export function testWriteCharacteristicValueManager(): string {
     let characteristicUUID: string = AppStorage.get('characteristicUUID') !;
     let descriptorUUID: string = AppStorage.get('descriptorUUID') !;
     let descriptorValue: string = AppStorage.get('descriptorValue') !;
-    let message = "writeCharacteristicValue test"
+    let message = resStr($r('app.string.bluetoothtest_str_wt'))
     let btState = bluetoothManager.getState();
     if ( btState === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message;
     }
@@ -593,11 +596,11 @@ export function testWriteCharacteristicValueManager(): string {
       descriptors : descriptors
     };
     gattClientInstance.writeCharacteristicValue(bleCharacteristicDataIn)
-    message = 'writeCharacteristicValue succeeds.';
+    message = resStr($r('app.string.bluetoothtest_str_ws'));
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testWriteCharacteristicValueManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testWriteCharacteristicValueManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testWriteCharacteristicValueManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -621,7 +624,7 @@ export function testWriteDescriptorValueManager(): string {
     let message: string = "writeDescriptorValue test"
     let btState = bluetoothManager.getState();
     if ( btState === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message;
     }
@@ -638,11 +641,11 @@ export function testWriteDescriptorValueManager(): string {
       descriptorValue : bufferDesc
     };
     gattClientInstance.writeDescriptorValue(descriptor)
-    message = 'writeDescriptorValue succeeds.';
+    message = resStr($r('app.string.bluetoothtest_str_ws_1'));
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testWriteDescriptorValueManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testWriteDescriptorValueManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testWriteDescriptorValueManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -654,10 +657,10 @@ let BLECharacteristicChange = false
 
 export function testOnBLECharacteristicChangeManager(): string {
   try {
-    let message = "onBLECharacteristicChange test"
+    let message = resStr($r('app.string.bluetoothtest_str_ot_1'))
     let btStatus = bluetoothManager.getState();
     if ( btStatus === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message;
     }
@@ -669,7 +672,7 @@ export function testOnBLECharacteristicChangeManager(): string {
 
     if ( BLECharacteristicChange ) {
       gattClientInstance.off('BLECharacteristicChange' , () => {
-        message = "off BLECharacteristicChange"
+        message = resStr($r('app.string.bluetoothtest_str_ob'))
         promptAction.showToast({ message : message })
       })
     } else {
@@ -685,13 +688,13 @@ export function testOnBLECharacteristicChangeManager(): string {
         AppStorage.setOrCreate("bleCharacteristicChangeInfo" , bleCharacteristicChangeInfo)
         promptAction.showToast({ message : "on:BLECharacteristicChange" })
       })
-      message = "On BLECharacteristicChange"
+      message = resStr($r('app.string.bluetoothtest_str_ob_1'))
     }
     BLECharacteristicChange = !BLECharacteristicChange
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testOnBLECharacteristicChangeManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testOnBLECharacteristicChangeManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testOnBLECharacteristicChangeManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -700,10 +703,10 @@ export function testOnBLECharacteristicChangeManager(): string {
 
 export function testSetBLEMtuSizeManager(): string {
   try {
-    let message = "setBLEMtuSize test"
+    let message = resStr($r('app.string.bluetoothtest_str_st_21'))
     let btStatus = bluetoothManager.getState();
     if ( btStatus === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message;
     }
@@ -713,14 +716,14 @@ export function testSetBLEMtuSizeManager(): string {
       return message;
     }
 
-    message = 'setBLEMtuSize: \n';
+    message = resStr($r('app.string.bluetoothtest_str_sn_1'));
     let mtuSize = 256;
     let ret = gattClientInstance.setBLEMtuSize(mtuSize);
-    message += "result : " + ret;
+    message += resStr($r('app.string.bluetoothtest_str_r_1')) + ret;
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testSetBLEMtuSizeManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testSetBLEMtuSizeManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testSetBLEMtuSizeManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -733,10 +736,10 @@ export function testSetNotifyCharacteristicChangedManager(): string {
     let characteristicUUID: string = AppStorage.get('characteristicUUID') !;
     let descriptorUUID: string = AppStorage.get('descriptorUUID') !;
     let descriptorValue: string = AppStorage.get('descriptorValue') !;
-    let message = "setNotifyCharacteristicChanged test"
+    let message = resStr($r('app.string.bluetoothtest_str_st'))
     let btStatus = bluetoothManager.getState();
     if ( btStatus === bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message;
     }
@@ -765,20 +768,20 @@ export function testSetNotifyCharacteristicChangedManager(): string {
     };
     if ( true ) {
       gattClientInstance.setNotifyCharacteristicChanged(characteristicIn , true)
-      message = "setNotifyCharacteristicChanged(true):succeeds."
+      message = resStr($r('app.string.bluetoothtest_str_sts'))
     } else {
-      message = "setNotifyCharacteristicChanged(true):failed!"
+      message = resStr($r('app.string.bluetoothtest_str_stf'))
       if ( false ) {
         gattClientInstance.setNotifyCharacteristicChanged(characteristicIn , false)
-        message = "setNotifyCharacteristicChanged(false):true!"
+        message = resStr($r('app.string.bluetoothtest_str_sft'))
       } else {
-        message = "setNotifyCharacteristicChanged(false):false!"
+        message = resStr($r('app.string.bluetoothtest_str_sff'))
       }
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testSetNotifyCharacteristicChangedManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testSetNotifyCharacteristicChangedManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testSetNotifyCharacteristicChangedManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -788,28 +791,28 @@ export function testSetNotifyCharacteristicChangedManager(): string {
 export function testGetDeviceNameCallbackManager(): String {
   try {
     let deviceName = ""
-    let message = "getDeviceNameCallback test"
+    let message = resStr($r('app.string.bluetoothtest_str_gt_2'))
     if ( !gattClientInstance ) {
       message = "NO_GATT_CLIENT_OBJECT";
       promptAction.showToast({ message : message })
       return message;
     }
     //currentClick = 15;
-    console.log("gattClientInstance.getDeviceName,callback start-----------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.getDeviceName,callback start-----------------")
     gattClientInstance.getDeviceName((err: BusinessError , asyncRemoteDeviceName) => {
-      message = "return code:"
+      message = resStr($r('app.string.bluetoothtest_str_rc_1'))
       message += JSON.stringify(err);
-      message += ",and DeviceName is: "
+      message += $r('app.string.bluetoothtest_str_adi')
       message += JSON.stringify(asyncRemoteDeviceName);
       deviceName = JSON.stringify(asyncRemoteDeviceName)
       AppStorage.setOrCreate("deviceName" , deviceName)
       promptAction.showToast({ message : message })
     });
-    console.log("gattClientInstance.getDeviceName,callback end-----------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.getDeviceName,callback end-----------------")
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetDeviceNameCallbackManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetDeviceNameCallbackManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetDeviceNameCallbackManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -819,26 +822,26 @@ export function testGetDeviceNameCallbackManager(): String {
 export function testGetDeviceNamePromiseManager(): String {
   try {
     let deviceName = ""
-    let message = "getDeviceNamePromise test"
+    let message = resStr($r('app.string.bluetoothtest_str_gt_3'))
     if ( !gattClientInstance ) {
       message = "NO_GATT_CLIENT_OBJECT";
       promptAction.showToast({ message : message })
       return message;
     }
-    console.log("gattClientInstance.getDeviceName,promise start-----------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.getDeviceName,promise start-----------------")
     gattClientInstance.getDeviceName().then((peripheralDeviceName) => {
-      message = "getDeviceName()Promise:" + peripheralDeviceName;
+      message = resStr($r('app.string.bluetoothtest_str_gp')) + peripheralDeviceName;
       deviceName = peripheralDeviceName
       AppStorage.setOrCreate("deviceName" , deviceName)
       promptAction.showToast({ message : message })
     }).catch((err: BusinessError) => {
-      console.log("testGetDeviceNamePromiseManager err:" + err)
+      hilog.info(0x0000, 'BtTest', '%{public}s', "testGetDeviceNamePromiseManager err:" + err)
     });
-    console.log("gattClientInstance.getDeviceName,promise end-----------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.getDeviceName,promise end-----------------")
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetDeviceNamePromiseManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetDeviceNamePromiseManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetDeviceNamePromiseManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -848,29 +851,29 @@ export function testGetDeviceNamePromiseManager(): String {
 export function testGetRssiValueCallbackManager(): String {
   try {
     let Rssi = ""
-    let message = "getRssiValueCallback test"
+    let message = resStr($r('app.string.bluetoothtest_str_gt_4'))
     if ( !gattClientInstance ) {
       message = "NO_GATT_CLIENT_OBJECT";
       promptAction.showToast({ message : message })
       return message;
     }
 
-    message = "getRssiValue callback";
-    console.log("gattClientInstance.getRssiValue,callback start-----------------")
+    message = resStr($r('app.string.bluetoothtest_str_gc'));
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.getRssiValue,callback start-----------------")
     gattClientInstance.getRssiValue((err , cbRssi) => {
-      message = "return code:"
+      message = resStr($r('app.string.bluetoothtest_str_rc_1'))
       message += JSON.stringify(err);
-      message += ",and RSSI="
+      message += $r('app.string.bluetoothtest_str_ar')
       message += JSON.stringify(cbRssi);
       Rssi = JSON.stringify(cbRssi);
       AppStorage.setOrCreate("Rssi" , Rssi)
       promptAction.showToast({ message : message })
     });
-    console.log("gattClientInstance.getRssiValue,callback end-----------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.getRssiValue,callback end-----------------")
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetRssiValueCallbackManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetRssiValueCallbackManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetRssiValueCallbackManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -880,27 +883,27 @@ export function testGetRssiValueCallbackManager(): String {
 export function testGetRssiValuePromiseManager(): String {
   try {
     let Rssi = ""
-    let message = "getRssiValuePromise test"
+    let message = resStr($r('app.string.bluetoothtest_str_gt_5'))
     if ( !gattClientInstance ) {
       message = "NO_GATT_CLIENT_OBJECT";
       promptAction.showToast({ message : message })
       return message;
     }
-    message = "getRssiValue promise:";
-    console.log("gattClientInstance.getRssiValue,promise start-----------------")
+    message = resStr($r('app.string.bluetoothtest_str_gp_1'));
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.getRssiValue,promise start-----------------")
     gattClientInstance.getRssiValue().then((rssiValue) => {
       message += 'rssi' + JSON.stringify(rssiValue)
       Rssi = JSON.stringify(rssiValue)
       AppStorage.setOrCreate("Rssi" , Rssi)
       promptAction.showToast({ message : message })
     }).catch((err: BusinessError) => {
-      console.log("testGetRssiValuePromiseManager err:" + err)
+      hilog.info(0x0000, 'BtTest', '%{public}s', "testGetRssiValuePromiseManager err:" + err)
     });
-    console.log("gattClientInstance.getRssiValue,promise  end-----------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattClientInstance.getRssiValue,promise  end-----------------")
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetRssiValuePromiseManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetRssiValuePromiseManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetRssiValuePromiseManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message

@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import ConfigData from '../../Utils/ConfigData';
 import { TestData } from '../../MainAbility/model/testData'
@@ -52,7 +54,9 @@ struct BleAutoTestManager {
               .id('pages_subAutoTestManager_bleAutoTestManager__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -74,7 +78,9 @@ struct BleAutoTestManager {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
@@ -85,7 +91,7 @@ struct BleAutoTestManager {
               .width(ConfigData.WH_100_100)
             List() {
               ListItem() {
-                Text($r('app.string.autotest_log_prefix') + "\n" + this.bleAutoTestMessage)
+                Text(resStr($r('app.string.autotest_log_prefix')) + "\n" + this.bleAutoTestMessage)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_30 , right : ConfigData.VP_10 })
                   .textAlign(TextAlign.Start)
@@ -111,12 +117,18 @@ struct BleAutoTestManager {
       .width(ConfigData.WH_100_100)
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Button({ type : ButtonType.Normal , stateEffect : true }) {
           Row() {
-            Text($r('app.string.autotest')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-          }.alignItems(VerticalAlign.Center)
+            Text($r('app.string.autotest'))
+              .fontSize(ConfigData.VP_24)
+              .fontColor(0xffffff)
+              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+          }
+            .alignItems(VerticalAlign.Center)
         }
         .accessibilityLevel('yes')
         .id('pages_subAutoTestManager_bleAutoTestManager__btn_0')

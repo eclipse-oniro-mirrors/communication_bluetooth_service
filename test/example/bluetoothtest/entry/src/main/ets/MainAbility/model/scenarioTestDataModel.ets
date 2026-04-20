@@ -78,8 +78,8 @@ import {
 import BluetoothModel from './BluetoothModel'
 
 interface ScenarioTest {
-  name: string;
-  detail: string;
+  name: Resource | string;
+  detail: Resource | string;
   method: string;
   api: Function;
   result: string;
@@ -88,7 +88,7 @@ interface ScenarioTest {
 
 export const BrFoundScenarioTestCase: ScenarioTest[] = [
   {
-    name : '注册状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcztbh') ,
     detail : '1' ,
     method : 'on.stateChange' ,
     api : testOnStateChange ,
@@ -96,7 +96,7 @@ export const BrFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BrFoundScenario
   },
   {
-    name : '开蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
     detail : '2' ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
@@ -104,7 +104,7 @@ export const BrFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BrFoundScenario
   },
   {
-    name : '获取状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
     detail : '3' ,
     method : 'getState' ,
     api : testGetState ,
@@ -112,7 +112,7 @@ export const BrFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BrFoundScenario
   },
   {
-    name : '设置本地名称' ,
+    name : $r('app.string.bluetoothtest_str_szbdmc') ,
     detail : '4' ,
     method : 'setLocalName' ,
     api : testSetLocalName ,
@@ -120,7 +120,7 @@ export const BrFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BrFoundScenario
   },
   {
-    name : '获取本地名称' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
     detail : '5' ,
     method : 'getLocalName' ,
     api : testGetLocalName ,
@@ -128,7 +128,7 @@ export const BrFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BrFoundScenario
   },
   {
-    name : '设置扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szsmms') ,
     detail : '6' ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
@@ -136,7 +136,7 @@ export const BrFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BrFoundScenario
   },
   {
-    name : '获取扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
     detail : '7' ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
@@ -144,7 +144,7 @@ export const BrFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BrFoundScenario
   },
   {
-    name : '订阅蓝牙发现' ,
+    name : $r('app.string.bluetoothtest_str_dylyfx') ,
     detail : '8' ,
     method : 'subscribeBluetoothDeviceFind' ,
     api : subscribeBluetoothDeviceFind ,
@@ -152,7 +152,7 @@ export const BrFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BrFoundScenario
   },
   {
-    name : '开始蓝牙发现' ,
+    name : $r('app.string.bluetoothtest_str_kslyfx') ,
     detail : '9' ,
     method : 'startBluetoothDiscovery' ,
     api : BluetoothModel.startBluetoothDiscovery ,
@@ -163,7 +163,7 @@ export const BrFoundScenarioTestCase: ScenarioTest[] = [
 
 export const BleFoundScenarioTestCase: ScenarioTest[] = [
   {
-    name : '注册状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcztbh') ,
     detail : '1' ,
     method : 'on.stateChange' ,
     api : testOnStateChange ,
@@ -171,7 +171,7 @@ export const BleFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BleFoundScenario
   },
   {
-    name : '开蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
     detail : '2' ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
@@ -179,7 +179,7 @@ export const BleFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BleFoundScenario
   },
   {
-    name : '获取状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
     detail : '3' ,
     method : 'getState' ,
     api : testGetState ,
@@ -187,7 +187,7 @@ export const BleFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BleFoundScenario
   },
   {
-    name : '设置本地名称' ,
+    name : $r('app.string.bluetoothtest_str_szbdmc') ,
     detail : '4' ,
     method : 'setLocalName' ,
     api : testSetLocalName ,
@@ -195,7 +195,7 @@ export const BleFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BleFoundScenario
   },
   {
-    name : '获取本地名称' ,
+    name : $r('app.string.bluetoothtest_str_hqbdmc') ,
     detail : '5' ,
     method : 'getLocalName' ,
     api : testGetLocalName ,
@@ -203,7 +203,7 @@ export const BleFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BleFoundScenario
   },
   {
-    name : '设置扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szsmms') ,
     detail : '6' ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
@@ -211,7 +211,7 @@ export const BleFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BleFoundScenario
   },
   {
-    name : '获取扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
     detail : '7' ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
@@ -219,7 +219,7 @@ export const BleFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BleFoundScenario
   },
   {
-    name : '注册Ble查找状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcbczztbh_1') ,
     detail : '8' ,
     method : 'on.BleDeviceFind' ,
     api : testOnBLEDeviceFind ,
@@ -227,7 +227,7 @@ export const BleFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BleFoundScenario
   },
   {
-    name : '开始Ble扫描' ,
+    name : $r('app.string.bluetoothtest_str_ksbsm_1') ,
     detail : '9' ,
     method : 'startBleScan' ,
     api : testStartBLEScan ,
@@ -235,7 +235,7 @@ export const BleFoundScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.BleFoundScenario
   },
   {
-    name : '获取连接的Ble设备' ,
+    name : $r('app.string.bluetoothtest_str_hqljdbsb_1') ,
     detail : '10' ,
     method : 'getConnectedBleDevices' ,
     api : testGetConnectedBLEDevices ,
@@ -246,7 +246,7 @@ export const BleFoundScenarioTestCase: ScenarioTest[] = [
 
 export const GattClientScenarioTestCase: ScenarioTest[] = [
   {
-    name : '注册状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcztbh') ,
     detail : '1' ,
     method : 'on.stateChange' ,
     api : testOnStateChange ,
@@ -254,7 +254,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '开蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
     detail : '2' ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
@@ -262,7 +262,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '获取状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
     detail : '3' ,
     method : 'getState' ,
     api : testGetState ,
@@ -270,7 +270,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '创建Gatt客户端' ,
+    name : $r('app.string.bluetoothtest_str_cjgkhd_1') ,
     detail : '4' ,
     method : 'createGattClient' ,
     api : testCreateGattClient ,
@@ -278,7 +278,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : 'Ble连接状态' ,
+    name : $r('app.string.bluetoothtest_str_bljzt_1') ,
     detail : '5' ,
     method : 'on.BleConnectionStateChange' ,
     api : testOnBLEConnectionStateChange ,
@@ -286,7 +286,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '连接' ,
+    name : $r('app.string.bluetoothtest_str_lj') ,
     detail : '6' ,
     method : 'connect' ,
     api : testConnect ,
@@ -294,7 +294,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '设置通知特性更改' ,
+    name : $r('app.string.bluetoothtest_str_sztztxgg') ,
     detail : '7' ,
     method : 'setNotifyCharacteristicChanged' ,
     api : testSetNotifyCharacteristicChanged ,
@@ -302,7 +302,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : 'Ble特征值变化' ,
+    name : $r('app.string.bluetoothtest_str_btzzbh_1') ,
     detail : '8' ,
     method : 'on.BleCharacteristicChange' ,
     api : testOnBLECharacteristicChange ,
@@ -310,7 +310,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '获取服务callback' ,
+    name : $r('app.string.bluetoothtest_str_hqfwc_1') ,
     detail : '9' ,
     method : 'getServices(Callback)' ,
     api : testGetServicesCallback ,
@@ -318,7 +318,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '读取特征值callback' ,
+    name : $r('app.string.bluetoothtest_str_dqtzzc_1') ,
     detail : '10' ,
     method : 'readCharacteristicValue(callback)' ,
     api : testReadCharacteristicValueCallback ,
@@ -326,7 +326,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '读取描述符值callback' ,
+    name : $r('app.string.bluetoothtest_str_dqmsfzc_1') ,
     detail : '11' ,
     method : 'readDescriptorValue(callback)' ,
     api : testReadDescriptorValueCallback ,
@@ -334,7 +334,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '获取设备名称callback' ,
+    name : $r('app.string.bluetoothtest_str_hqsbmcc_1') ,
     detail : '12' ,
     method : 'getDeviceName()callback' ,
     api : testGetDeviceNameCallback ,
@@ -342,7 +342,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '获取Rssi值callback' ,
+    name : $r('app.string.bluetoothtest_str_hqrzc_1') ,
     detail : '13' ,
     method : 'getRssiValue()Callback' ,
     api : testGetRssiValueCallback ,
@@ -350,7 +350,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '取消连接' ,
+    name : $r('app.string.bluetoothtest_str_qxlj') ,
     detail : '14' ,
     method : 'disconnect' ,
     api : testDisconnect ,
@@ -358,7 +358,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '关闭' ,
+    name : $r('app.string.bluetoothtest_str_gb') ,
     detail : '15' ,
     method : 'close' ,
     api : testGattClientClose ,
@@ -366,7 +366,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattClientScenario
   },
   {
-    name : '关蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_gly') ,
     detail : '16' ,
     method : 'disableBluetooth' ,
     api : testDisableBluetooth ,
@@ -377,7 +377,7 @@ export const GattClientScenarioTestCase: ScenarioTest[] = [
 
 export const GattServerScenarioTestCase: ScenarioTest[] = [
   {
-    name : '注册状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcztbh') ,
     detail : '1' ,
     method : 'on.stateChange' ,
     api : testOnStateChange ,
@@ -385,7 +385,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '开蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
     detail : '2' ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
@@ -393,7 +393,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '获取状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
     detail : '3' ,
     method : 'getState' ,
     api : testGetState ,
@@ -401,7 +401,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '创建Gatt服务器' ,
+    name : $r('app.string.bluetoothtest_str_cjgfwq_1') ,
     detail : '4' ,
     method : 'createGattServer' ,
     api : testCreateGattServer ,
@@ -409,7 +409,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '添加服务' ,
+    name : $r('app.string.bluetoothtest_str_tjfw') ,
     detail : '5' ,
     method : 'addService' ,
     api : testAddService ,
@@ -417,7 +417,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '连接状态' ,
+    name : $r('app.string.bluetoothtest_str_ljzt') ,
     detail : '6' ,
     method : 'on.connectStateChange' ,
     api : testOnConnectStateChange ,
@@ -425,7 +425,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '开始广播' ,
+    name : $r('app.string.bluetoothtest_str_ksgb') ,
     detail : '7' ,
     method : 'startAdvertising' ,
     api : testStartAdvertising ,
@@ -433,7 +433,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '读取特征值' ,
+    name : $r('app.string.bluetoothtest_str_dqtzz') ,
     detail : '8' ,
     method : 'on.characteristicRead' ,
     api : testOnCharacteristicRead ,
@@ -441,7 +441,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '写入特征值' ,
+    name : $r('app.string.bluetoothtest_str_xrtzz') ,
     detail : '9' ,
     method : 'on.characteristicWrite' ,
     api : testOnCharacteristicWrite ,
@@ -449,7 +449,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '读取描述符' ,
+    name : $r('app.string.bluetoothtest_str_dqmsf') ,
     detail : '9' ,
     method : 'on.descriptorRead' ,
     api : testOnDescriptorRead ,
@@ -457,7 +457,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '写入描述符' ,
+    name : $r('app.string.bluetoothtest_str_xrmsf') ,
     detail : '11' ,
     method : 'on.descriptorWrite' ,
     api : testOnDescriptorWrite ,
@@ -465,7 +465,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '停止广播' ,
+    name : $r('app.string.bluetoothtest_str_tzgb') ,
     detail : '10' ,
     method : 'stopAdvertising' ,
     api : testStopAdvertising ,
@@ -473,7 +473,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '删除服务' ,
+    name : $r('app.string.bluetoothtest_str_scfw') ,
     detail : '11' ,
     method : 'removeService' ,
     api : testRemoveService ,
@@ -481,7 +481,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '关闭' ,
+    name : $r('app.string.bluetoothtest_str_gb') ,
     detail : '12' ,
     method : 'close' ,
     api : testGattServerClose ,
@@ -489,7 +489,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.GattServerScenario
   },
   {
-    name : '关蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_gly') ,
     detail : '13' ,
     method : 'disableBluetooth' ,
     api : testDisableBluetooth ,
@@ -500,7 +500,7 @@ export const GattServerScenarioTestCase: ScenarioTest[] = [
 
 export const SppClientScenarioTestCase: ScenarioTest[] = [
   {
-    name : '注册状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcztbh') ,
     detail : '1' ,
     method : 'on.stateChange' ,
     api : testOnStateChange ,
@@ -508,7 +508,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppClientScenario
   },
   {
-    name : '开蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
     detail : '2' ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
@@ -516,7 +516,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppClientScenario
   },
   {
-    name : '获取状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
     detail : '3' ,
     method : 'getState' ,
     api : testGetState ,
@@ -524,7 +524,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppClientScenario
   },
   {
-    name : '设置SPP扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szssmms') ,
     detail : '4' ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
@@ -532,7 +532,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppClientScenario
   },
   {
-    name : '获取扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
     detail : '5' ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
@@ -540,7 +540,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppClientScenario
   },
   {
-    name : 'Spp客户端连接(安全模式)' ,
+    name : $r('app.string.bluetoothtest_str_skhdljaqms') ,
     detail : '6' ,
     method : 'sppConnect' ,
     api : testSppClientConnectSafe ,
@@ -548,7 +548,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppClientScenario
   },
   {
-    name : '获取当前连接状态' ,
+    name : $r('app.string.bluetoothtest_str_hqdqljzt') ,
     detail : '7' ,
     method : 'getBtConnectionState' ,
     api : testGetBtConnectionState ,
@@ -556,7 +556,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppClientScenario
   },
   {
-    name : 'Spp客户端读取打开' ,
+    name : $r('app.string.bluetoothtest_str_skhddqdk') ,
     detail : '8' ,
     method : 'on.sppRead' ,
     api : testSppClientReadOn ,
@@ -564,7 +564,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppClientScenario
   },
   {
-    name : 'Spp客户端写入' ,
+    name : $r('app.string.bluetoothtest_str_skhdxr') ,
     detail : '9' ,
     method : 'sppWrite' ,
     api : testSppClientWrite ,
@@ -572,7 +572,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppClientScenario
   },
   {
-    name : 'Spp客户端读取关闭' ,
+    name : $r('app.string.bluetoothtest_str_skhddqgb') ,
     detail : '10' ,
     method : 'off.sppRead' ,
     api : testSppClientReadOff ,
@@ -580,7 +580,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppClientScenario
   },
   {
-    name : 'Spp客户端关闭' ,
+    name : $r('app.string.bluetoothtest_str_skhdgb') ,
     detail : '11' ,
     method : 'sppCloseClientSocket' ,
     api : testSppClientClose ,
@@ -588,7 +588,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppClientScenario
   },
   {
-    name : '关蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_gly') ,
     detail : '12' ,
     method : 'disableBluetooth' ,
     api : testDisableBluetooth ,
@@ -599,7 +599,7 @@ export const SppClientScenarioTestCase: ScenarioTest[] = [
 
 export const SppServerScenarioTestCase: ScenarioTest[] = [
   {
-    name : '注册状态变化' ,
+    name : $r('app.string.bluetoothtest_str_zcztbh') ,
     detail : '1' ,
     method : 'on.stateChange' ,
     api : testOnStateChange ,
@@ -607,7 +607,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : '开蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_kly') ,
     detail : '2' ,
     method : 'enableBluetooth' ,
     api : testEnableBluetooth ,
@@ -615,7 +615,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : '获取状态' ,
+    name : $r('app.string.bluetoothtest_str_hqzt') ,
     detail : '3' ,
     method : 'getState' ,
     api : testGetState ,
@@ -623,7 +623,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : '设置SPP扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_szssmms') ,
     detail : '4' ,
     method : 'setBluetoothScanMode' ,
     api : testSetBluetoothScanMode ,
@@ -631,7 +631,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : '获取扫描模式' ,
+    name : $r('app.string.bluetoothtest_str_hqsmms') ,
     detail : '5' ,
     method : 'getBluetoothScanMode' ,
     api : testGetBluetoothScanMode ,
@@ -639,7 +639,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : '注册pin码变化' ,
+    name : $r('app.string.bluetoothtest_str_zcpmbh') ,
     detail : '6' ,
     method : 'on.pinRequired' ,
     api : testOnPinRequired ,
@@ -647,7 +647,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : 'Spp服务器创建(安全模式)' ,
+    name : $r('app.string.bluetoothtest_str_sfwqcjaqms') ,
     detail : '7' ,
     method : 'sppListen' ,
     api : testSppServerCreateSafe ,
@@ -655,7 +655,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : '获取当前连接状态' ,
+    name : $r('app.string.bluetoothtest_str_hqdqljzt') ,
     detail : '8' ,
     method : 'getBtConnectionState' ,
     api : testGetBtConnectionState ,
@@ -663,7 +663,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : 'Spp服务器写入' ,
+    name : $r('app.string.bluetoothtest_str_sfwqxr') ,
     detail : '9' ,
     method : 'sppWrite' ,
     api : testSppServerWrite ,
@@ -671,7 +671,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : 'Spp服务器接受' ,
+    name : $r('app.string.bluetoothtest_str_sfwqjs') ,
     detail : '10' ,
     method : 'sppAccept' ,
     api : testSppServerAccept ,
@@ -679,7 +679,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : 'Spp服务器读取打开' ,
+    name : $r('app.string.bluetoothtest_str_sfwqdqdk') ,
     detail : '11' ,
     method : 'on.sppRead' ,
     api : testSppServerReadOn ,
@@ -687,7 +687,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : 'Spp服务器读取关闭' ,
+    name : $r('app.string.bluetoothtest_str_sfwqdqgb') ,
     detail : '12' ,
     method : 'off.sppRead' ,
     api : testSppServerReadOff ,
@@ -695,7 +695,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : 'Spp服务器关闭' ,
+    name : $r('app.string.bluetoothtest_str_sfwqgb') ,
     detail : '13' ,
     method : 'sppCloseServerSocket' ,
     api : testSppCloseServerSocket ,
@@ -703,7 +703,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : 'Spp客户端关闭' ,
+    name : $r('app.string.bluetoothtest_str_skhdgb') ,
     detail : '14' ,
     method : 'sppCloseClientSocket' ,
     api : testSppCloseClientSocket ,
@@ -711,7 +711,7 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
     category : ScenarioCategory.SppServerScenario
   },
   {
-    name : '关蓝牙' ,
+    name : $r('app.string.bluetoothtest_str_gly') ,
     detail : '15' ,
     method : 'disableBluetooth' ,
     api : testDisableBluetooth ,

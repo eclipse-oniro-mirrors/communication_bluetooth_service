@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import BluetoothModel from '../../MainAbility/model/BluetoothModel';
@@ -84,7 +85,9 @@ struct BleTestManager {
             .id('pages_subManualApiTestManager_bleTestManager__pt_0')
       }
 
-      Stack().height(ConfigData.VP_0_5).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.VP_0_5)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Row() {
           Text($r('app.string.bluetoothtest_text_wsm'))
@@ -136,16 +139,16 @@ struct BleTestManager {
   private subscribeBLEDeviceFind() {
     //回调函数里的动作是过滤，已经过滤好了就不用再考虑了。
     BluetoothModel.subscribeBLEDeviceFind((deviceItems: Array<bluetoothManager.ScanResult>) => {
-      console.log("BLE Test:" + 'available ble devices changed.');
+      hilog.info(0x0000, 'BtTest', '%{public}s', "BLE Test:" + 'available ble devices changed.');
       deviceItems?.forEach(deviceItem => {
         let device = this.availBleDeviceIds.find((availableBleDevice) => {
           return availableBleDevice === deviceItem.deviceId
         })
         if ( !device ) {
           let newDevice = deviceItem.deviceId;
-          console.log("BLE Test:" + 'available bluetooth new device : ' + newDevice);
+          hilog.info(0x0000, 'BtTest', '%{public}s', "BLE Test:" + 'available bluetooth new device : ' + newDevice);
           this.availBleDeviceIds.push(newDevice);
-          console.log("BLE Test:" + 'available bluetooth new device pushed. availableDevices length = ' + this.availBleDeviceIds.length);
+          hilog.info(0x0000, 'BtTest', '%{public}s', "BLE Test:" + 'available bluetooth new device pushed. availableDevices length = ' + this.availBleDeviceIds.length);
         }
       })
       AppStorage.setOrCreate('bluetoothAvailableDevices' , this.availBleDeviceIds);

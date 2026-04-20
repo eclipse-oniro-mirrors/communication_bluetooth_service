@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import { PageTitle } from '../../Component/pageTitle';
@@ -65,7 +68,9 @@ struct SppClientScenarioTest {
               .id('pages_subScenarioTest_sppClientScenarioTest__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -87,7 +92,9 @@ struct SppClientScenarioTest {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
@@ -124,11 +131,16 @@ struct SppClientScenarioTest {
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Text($r('app.string.bluetoothtest_text_cjcsks')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            Text($r('app.string.bluetoothtest_text_cjcsks'))
+              .fontSize(ConfigData.VP_24)
+              .fontColor(0xffffff)
+              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_sppClientScenarioTest__btn_0')
@@ -144,52 +156,52 @@ struct SppClientScenarioTest {
             let sppClientScenarioMessage = ""
             // 注册状态变化
             sppClientScenarioMessage += BrInterface.testOnStateChange() + "\n"
-            console.log("testOnStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnStateChange success")
             self.changeIndex = arr[ 0 ]
             await sleep(1)
 
             // 开蓝牙
             sppClientScenarioMessage += BrInterface.testEnableBluetooth() + "\n";
-            console.log("testEnableBluetooth success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testEnableBluetooth success")
             self.changeIndex = arr[ 1 ]
             await sleep(2)
             AppStorage.setOrCreate("sppClientScenarioMessage" , sppClientScenarioMessage)
 
             // 获取状态
             sppClientScenarioMessage += BrInterface.testGetState() + "\n";
-            console.log("testGetState success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGetState success")
             self.changeIndex = arr[ 2 ]
             await sleep(1)
 
             // 设置扫描模式
             sppClientScenarioMessage += BrInterface.testSetBluetoothScanMode(4 , 0) + "\n"
-            console.log("testSetBluetoothScanMode success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testSetBluetoothScanMode success")
             self.changeIndex = arr[ 3 ]
             await sleep(1)
 
             // 获取扫描模式
             sppClientScenarioMessage += BrInterface.testGetBluetoothScanMode() + "\n"
-            console.log("testGetBluetoothScanMode success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGetBluetoothScanMode success")
             self.changeIndex = arr[ 4 ]
             await sleep(1)
 
             // Spp客户端连接
             sppClientScenarioMessage += SPPClientInterface.testSppClientConnectSafe() + "\n"
-            console.log("testSppClientConnectSafe success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testSppClientConnectSafe success")
             self.changeIndex = arr[ 5 ]
             AppStorage.setOrCreate("sppClientScenarioMessage" , sppClientScenarioMessage)
             await sleep(10)
 
             //获取当前连接状态
             sppClientScenarioMessage += BrInterface.testGetBtConnectionState() + "\n"
-            console.log("testGetBtConnectionState success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGetBtConnectionState success")
             self.changeIndex = arr[ 6 ]
             AppStorage.setOrCreate("sppClientScenarioMessage" , sppClientScenarioMessage)
             await sleep(2)
 
             //spp客户端读取打开
             sppClientScenarioMessage += SPPClientInterface.testSppClientReadOn() + "\n"
-            console.log("testSppClientReadOn success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testSppClientReadOn success")
             self.changeIndex = arr[ 7 ]
             sppClientScenarioMessage += AppStorage.get("dataReadMessage") + "\n"
             AppStorage.setOrCreate("sppClientScenarioMessage" , sppClientScenarioMessage)
@@ -197,7 +209,7 @@ struct SppClientScenarioTest {
 
             // SPP客户端写入
             sppClientScenarioMessage += SPPClientInterface.testSppClientWrite() + "\n"
-            console.log("testSppClientWrite success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testSppClientWrite success")
             self.changeIndex = arr[ 8 ]
             AppStorage.setOrCreate("sppClientScenarioMessage" , sppClientScenarioMessage)
             await sleep(2)
@@ -205,8 +217,12 @@ struct SppClientScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_cjcsjs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_cjcsjs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_sppClientScenarioTest__btn_1')
@@ -222,24 +238,24 @@ struct SppClientScenarioTest {
             let sppClientScenarioMessage = ""
             // spp客户端读取关闭
             sppClientScenarioMessage += SPPClientInterface.testSppClientReadOff() + "\n"
-            console.log("testSppClientReadOff success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testSppClientReadOff success")
             self.changeIndex = arr[ 9 ]
             await sleep(1)
 
             // spp客户端关闭
             sppClientScenarioMessage += SPPClientInterface.testSppClientClose() + "\n"
-            console.log("testSppClientClose success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testSppClientClose success")
             self.changeIndex = arr[ 10 ]
             await sleep(1)
 
             //关闭注册状态变化
             sppClientScenarioMessage += BrInterface.testOnStateChange() + "\n"
-            console.log("testOffStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffStateChange success")
             await sleep(1)
 
             //关蓝牙
             sppClientScenarioMessage += BrInterface.testDisableBluetooth() + "\n"
-            console.log("testDisableBluetooth success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testDisableBluetooth success")
             self.changeIndex = arr[ 11 ]
             await sleep(1)
             AppStorage.setOrCreate("sppClientScenarioMessage" , sppClientScenarioMessage)
@@ -247,8 +263,12 @@ struct SppClientScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_qkrz')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_qkrz'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_sppClientScenarioTest__btn_2')
@@ -274,11 +294,11 @@ struct SppClientScenarioTest {
 
   dataRead(dataBuffer: ArrayBuffer) {
     const data = new Uint8Array(dataBuffer);
-    console.log('spp bluetooth read is: ' + data);
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetooth read is: ' + data);
     if ( data != null ) {
-      this.dataReadMessage = "读取成功" + JSON.stringify(data);
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
-      this.dataReadMessage = "读取失败";
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
   }
 }
@@ -294,15 +314,15 @@ async function sleep(time: number): Promise<void> {
 let clientNumber = - 1
 
 export function acceptClientSocket(number: number) {
-  console.log('spp clientSocket socketID: ' + number);
+  hilog.info(0x0000, 'BtTest', '%{public}s', 'spp clientSocket socketID: ' + number);
   // 获取的clientNumber用作服务端后续读/写操作socket的id。
   clientNumber = number;
 }
 
 export function sppClientClose() {
-  console.log("bluetoothModel:" + 'sppCloseClientSocket clientNumber: ' + JSON.stringify(clientNumber))
+  hilog.info(0x0000, 'BtTest', '%{public}s', "bluetoothModel:" + 'sppCloseClientSocket clientNumber: ' + JSON.stringify(clientNumber))
   bluetooth.sppCloseClientSocket(clientNumber);
-  let message = '关闭成功 clientNumber' + clientNumber;
+  let message = resStr($r('app.string.bluetoothtest_str_gbcgc')) + clientNumber;
   promptAction.showToast({ message : message })
   return message
 }

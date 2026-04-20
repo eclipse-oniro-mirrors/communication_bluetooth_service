@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 import ConfigData from '../../../Utils/ConfigData';
 import { TitleComponent } from '../../../Component/titleComponent';
 import bt from '@ohos.bluetooth';
@@ -34,8 +37,9 @@ struct ProfileConnState2 {
     Row() {
       Column() {
         Row() {
-          Text($r('app.string.bluetoothtest_text_mbsbm')).fontSize(ConfigData.VP_20)
-          TextInput({ text : this.deviceId , placeholder : "请输入mac地址" })
+          Text($r('app.string.bluetoothtest_text_mbsbm'))
+            .fontSize(ConfigData.VP_20)
+          TextInput({ text : this.deviceId , placeholder : $r('app.string.bluetoothtest_str_qsrmdz') })
             .accessibilityLevel('yes')
             .id('pages_subManualApiTest_subBrTest_searchProfileConnStateById__ti_0')
             .fontSize(ConfigData.VP_20)
@@ -68,7 +72,7 @@ struct ProfileConnState2 {
             this.currentClick = 0;
             this.profileId = 1;
             let ret = bt.getProfile(this.profileId).getDeviceState(this.deviceId);
-            console.log('A2DP state is -' + ret);
+            hilog.info(0x0000, 'BtTest', '%{public}s', 'A2DP state is -' + ret);
             switch ( ret ) {
               case 0:
                 this.stateProfile = 'STATE_DISCONNECTED';
@@ -86,7 +90,7 @@ struct ProfileConnState2 {
                 this.stateProfile = 'FAIL';
                 break;
             }
-            this.message = "当前A2DP的状态是：" + this.stateProfile;
+            this.message = resStr($r('app.string.bluetoothtest_str_dqadzts')) + this.stateProfile;
           })
 
           ListItem() {
@@ -107,7 +111,7 @@ struct ProfileConnState2 {
             this.currentClick = 1;
             this.profileId = 4;
             let ret = bt.getProfile(this.profileId).getDeviceState(this.deviceId);
-            console.log('HFP state is -' + ret);
+            hilog.info(0x0000, 'BtTest', '%{public}s', 'HFP state is -' + ret);
             switch ( ret ) {
               case 0:
                 this.stateProfile = 'STATE_DISCONNECTED';
@@ -125,7 +129,7 @@ struct ProfileConnState2 {
                 this.stateProfile = 'FAIL';
                 break;
             }
-            this.message = "当前HFP的状态是：" + this.stateProfile;
+            this.message = resStr($r('app.string.bluetoothtest_str_dqhdzts')) + this.stateProfile;
           })
 
           ListItem() {
@@ -146,7 +150,7 @@ struct ProfileConnState2 {
             this.currentClick = 2;
             this.profileId = 6;
             let ret = bt.getProfile(this.profileId).getDeviceState(this.deviceId);
-            console.log('HID state is -' + ret);
+            hilog.info(0x0000, 'BtTest', '%{public}s', 'HID state is -' + ret);
             switch ( ret ) {
               case 0:
                 this.stateProfile = 'STATE_DISCONNECTED';
@@ -164,17 +168,18 @@ struct ProfileConnState2 {
                 this.stateProfile = 'FAIL';
                 break;
             }
-            this.message = "当前HID的状态是：" + this.stateProfile;
+            this.message = resStr($r('app.string.bluetoothtest_str_dqhdzts_1')) + this.stateProfile;
           })
         }
         .height(ConfigData.VP_300)
         .margin(ConfigData.VP_20);
 
-        Text($r('app.string.label_api_result_tight') + this.message)
+        Text(resStr($r('app.string.label_api_result_tight')) + this.message)
           .textAlign(TextAlign.Start)
           .fontSize(ConfigData.FP_17)
           .backgroundColor($r("app.color.white"))
-      }.width(ConfigData.WH_100_100)
+      }
+        .width(ConfigData.WH_100_100)
     }
     .height(ConfigData.WH_100_100)
     .alignItems(VerticalAlign.Top)

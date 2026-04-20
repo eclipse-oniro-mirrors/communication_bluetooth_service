@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { BTAutoArrayItem, ScanResult, testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import { PageTitle } from '../../Component/pageTitle';
@@ -47,7 +50,9 @@ struct BleBenchmarkTestManager {
               .id('pages_subBenchmarkTestManager_bleBenchmarkTestManager__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
 
       Column() {
         Scroll() {
@@ -69,7 +74,9 @@ struct BleBenchmarkTestManager {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'))
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'))
 
         Scroll() {
           Column() {
@@ -107,7 +114,10 @@ struct BleBenchmarkTestManager {
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Text($r('app.string.bluetoothtest_text_xncszb')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            Text($r('app.string.bluetoothtest_text_xncszb'))
+              .fontSize(ConfigData.VP_24)
+              .fontColor(0xffffff)
+              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
           }
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTestManager_bleBenchmarkTestManager__btn_0')
@@ -123,8 +133,12 @@ struct BleBenchmarkTestManager {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_sjxncs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+              Text($r('app.string.bluetoothtest_text_sjxncs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTestManager_bleBenchmarkTestManager__btn_1')
@@ -136,24 +150,28 @@ struct BleBenchmarkTestManager {
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let bleBenchmarkTestMessage = ""
-            bleBenchmarkTestMessage += "subscribeBLEDeviceFind:" + testFunc(subscribeBLEDeviceFind) + "\n"
+            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_s_1')) + testFunc(subscribeBLEDeviceFind) + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
             await sleep(1)
             bleBenchmarkTestMessage += "startBleScan" + testFunc(BluetoothModelManager.startBLEScan) + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
             await sleep(10)
-            bleBenchmarkTestMessage += "testStopBLEScanManager 执行：" + testFunc(BleManagerInterface.testStopBLEScanManager) + "\n"
+            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_10')) + testFunc(BleManagerInterface.testStopBLEScanManager) + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
             await sleep(1)
-            bleBenchmarkTestMessage += "testOffStateChange:" + testFunc(brManagerInterface.testOnStateChangeManager) + "\n"
+            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_t')) + testFunc(brManagerInterface.testOnStateChangeManager) + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
             await sleep(1)
           })
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_wdxncs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+              Text($r('app.string.bluetoothtest_text_wdxncs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTestManager_bleBenchmarkTestManager__btn_2')
@@ -167,11 +185,11 @@ struct BleBenchmarkTestManager {
             let bleBenchmarkTestMessage = ""
             let i = 0
             for ( i ; i < 10 ; i ++ ) {
-              bleBenchmarkTestMessage = "第" + (i + 1) + "次稳定性测试：" + "\n"
+              bleBenchmarkTestMessage = resStr($r('app.string.bluetoothtest_str_d_1')) + (i + 1) + resStr($r('app.string.bluetoothtest_str_cwdxcs')) + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
               await sleep(1)
 
-              bleBenchmarkTestMessage += "subscribeBLEDeviceFind:" + testFunc(subscribeBLEDeviceFind) + "\n"
+              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_s_1')) + testFunc(subscribeBLEDeviceFind) + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
               await sleep(1)
 
@@ -179,11 +197,11 @@ struct BleBenchmarkTestManager {
               AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
               await sleep(10)
 
-              bleBenchmarkTestMessage += "testStopBLEScanManager 执行：" + testFunc(testStopBLEScanManager) + "\n"
+              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_10')) + testFunc(testStopBLEScanManager) + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
               await sleep(1)
 
-              bleBenchmarkTestMessage += "unsubscribeBLEDeviceFind 执行：" + testFunc(BluetoothModelManager.unsubscribeBLEDeviceFind) + "\n"
+              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_uzx_1')) + testFunc(BluetoothModelManager.unsubscribeBLEDeviceFind) + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage" , bleBenchmarkTestMessage)
               await sleep(1)
 
@@ -198,7 +216,8 @@ struct BleBenchmarkTestManager {
               Image($r('app.media.ic_public_delete_filled'))
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTestManager_bleBenchmarkTestManager__img_0').width(ConfigData.VP_30).height(ConfigData.VP_40).margin({ left : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTestManager_bleBenchmarkTestManager__btn_3')
@@ -274,12 +293,12 @@ export function testFunc(func: Function) {
   }
 
   let end = new Date().getTime()
-  console.log("开始:" + Number(start) + "ms")
-  console.log("结束:" + Number(end) + "ms")
-  console.log("花费:" + Number(end - start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms")
+  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms")
   let message = ""
-  message += "花费:" + Number(end - start) + "ms" + "\n"
-  message += "开始:" + Number(start) + "ms; " + "结束:" + Number(end) + "ms" + "\n"
+  message += resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms" + "\n"
+  message += resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + resStr($r('app.string.bluetoothtest_str_m_1')) + resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms" + "\n"
   return message
 }
 
@@ -293,12 +312,12 @@ async function sleep(time: number): Promise<void> {
 
 function subscribeBLEDeviceFind() {
   let start2 = new Date().getTime()
-  let bleRunMessage = "scan:"
-  let message = "subscribeBLEDeviceFind test"
-  console.log("subscribeBLEDeviceFind test")
+  let bleRunMessage = resStr($r('app.string.bluetoothtest_str_s_3'))
+  let message = resStr($r('app.string.bluetoothtest_str_st_5'))
+  hilog.info(0x0000, 'BtTest', '%{public}s', "subscribeBLEDeviceFind test")
   BluetoothModelManager.subscribeBLEDeviceFind((deviceIds: Array<bluetooth.ScanResult>) => {
     let end2 = new Date().getTime()
-    console.log('available ble devices changed.');
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'available ble devices changed.');
     deviceIds?.forEach(async(deviceId) => {
       let data = deviceId.data;
       let obj2: ScanResult = {}
@@ -307,15 +326,15 @@ function subscribeBLEDeviceFind() {
         obj2.rssi = deviceId.rssi
       }); //从deviceId变量解构出data属性，并将剩余的属性收集到obj2对象中
       let btRssi = 10**(((- Number(JSON.stringify(obj2.rssi))) - 59.0) / (10.0 * 2.0))
-      console.log("btRssi:" , btRssi)
-      console.log("DeviceFound Start222 ------------------------")
-      console.log('available ble find [' + JSON.stringify(obj2) + '] ')
-      let message = ('available ble find [' + JSON.stringify(obj2) + ']  ')
+      hilog.info(0x0000, 'BtTest', '%{public}s %{public}s', "btRssi:", btRssi)
+      hilog.info(0x0000, 'BtTest', '%{public}s', "DeviceFound Start222 ------------------------")
+      hilog.info(0x0000, 'BtTest', '%{public}s', 'available ble find [' + JSON.stringify(obj2) + '] ')
+      let message = (resStr($r('app.string.bluetoothtest_str_abf_1')) + JSON.stringify(obj2) + resStr($r('app.string.bluetoothtest_str_str')))
       promptAction.showToast({ message : message })
-      bleRunMessage += "\n" + "花费:" + Number(end2 - start2) + "ms;" + "Mac为：[" + JSON.stringify(obj2) + ",{dis：" + btRssi.toFixed(2) + "}.]" + "\n"
-      bleRunMessage += "开始:" + Number(start2) + "ms; " + "结束:" + Number(end2) + "ms" + "\n"
-      console.log("花费:" + Number(end2 - start2) + "ms;" + "Mac为：[" + JSON.stringify(obj2) + "]" + "\n")
-      console.log("开始:" + Number(start2) + "ms; " + "结束:" + Number(end2) + "ms" + "\n")
+      bleRunMessage += "\n" + resStr($r('app.string.bluetoothtest_str_hf')) + Number(end2 - start2) + resStr($r('app.string.bluetoothtest_str_m_2')) + resStr($r('app.string.bluetoothtest_str_mw')) + JSON.stringify(obj2) + resStr($r('app.string.bluetoothtest_str_d')) + btRssi.toFixed(2) + resStr($r('app.string.bluetoothtest_str_str_1')) + "\n"
+      bleRunMessage += resStr($r('app.string.bluetoothtest_str_ks')) + Number(start2) + resStr($r('app.string.bluetoothtest_str_m_1')) + resStr($r('app.string.bluetoothtest_str_js')) + Number(end2) + "ms" + "\n"
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_hf')) + Number(end2 - start2) + "ms;" + resStr($r('app.string.bluetoothtest_str_mw')) + JSON.stringify(obj2) + "]" + "\n")
+      hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_ks')) + Number(start2) + "ms; " + resStr($r('app.string.bluetoothtest_str_js')) + Number(end2) + "ms" + "\n")
       await sleep(1)
       AppStorage.setOrCreate('bleRunMessage' , bleRunMessage);
       await sleep(1)

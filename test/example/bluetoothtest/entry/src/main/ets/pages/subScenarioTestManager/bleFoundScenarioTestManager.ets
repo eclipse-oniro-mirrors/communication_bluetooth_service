@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { BTAutoArrayItem, testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
@@ -58,7 +61,9 @@ struct BleFoundScenarioTestManager {
               .id('pages_subScenarioTestManager_bleFoundScenarioTestManager__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -80,7 +85,9 @@ struct BleFoundScenarioTestManager {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
@@ -117,11 +124,16 @@ struct BleFoundScenarioTestManager {
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Text($r('app.string.bluetoothtest_text_cjcsks')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            Text($r('app.string.bluetoothtest_text_cjcsks'))
+              .fontSize(ConfigData.VP_24)
+              .fontColor(0xffffff)
+              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTestManager_bleFoundScenarioTestManager__btn_0')
@@ -132,14 +144,18 @@ struct BleFoundScenarioTestManager {
           .margin({ top : ConfigData.VP_15 , left : ConfigData.VP_20 })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
-            promptAction.showToast({ message : '开始BleFound场景测试' })
+            promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_ksbcjcs')) })
             this.forLoop()
           })
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_cjcsjs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_cjcsjs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTestManager_bleFoundScenarioTestManager__btn_1')
@@ -155,20 +171,20 @@ struct BleFoundScenarioTestManager {
             let bleFoundScenarioMessage = ""
             // 停止BLE扫描
             bleFoundScenarioMessage += BLEManagerInterface.testStopBLEScanManager() + "\n"
-            console.log("testStopBLEScan success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testStopBLEScan success")
             //            self.changeIndex = arr[6]
             await sleep(1)
             // 关闭注册BLE查找状态变化
             bleFoundScenarioMessage += BLEManagerInterface.testOnBLEDeviceFindManager() + "\n"
-            console.log("testOffBLEDeviceFind success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffBLEDeviceFind success")
             await sleep(1)
             //关闭注册状态变化
             bleFoundScenarioMessage += BrManagerInterface.testOnStateChangeManager() + "\n"
-            console.log("testOffStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffStateChange success")
             await sleep(1)
             //关蓝牙
             bleFoundScenarioMessage += BrManagerInterface.testDisableBluetoothManager() + "\n"
-            console.log("testDisableBluetooth success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testDisableBluetooth success")
             //            self.changeIndex = arr[7]
             await sleep(1)
             AppStorage.setOrCreate("bleFoundScenarioMessage" , bleFoundScenarioMessage)
@@ -176,8 +192,12 @@ struct BleFoundScenarioTestManager {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_qkrz')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_qkrz'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTestManager_bleFoundScenarioTestManager__btn_2')

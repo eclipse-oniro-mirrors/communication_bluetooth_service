@@ -29,7 +29,8 @@ export struct TestGridItem {
           .objectFit(ImageFit.Contain)
           .height(ConfigData.VP_152)
           .width(ConfigData.WH_100_100)
-      }.backgroundColor($r('app.color.color_FFF1F3F5_bg'))
+      }
+        .backgroundColor($r('app.color.color_FFF1F3F5_bg'))
 
       Flex({ justifyContent : FlexAlign.Start , alignItems : ItemAlign.Center }) {
         Text(this.testItem.name)

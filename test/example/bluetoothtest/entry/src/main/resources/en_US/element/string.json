@@ -735,6 +735,2646 @@
     {
       "name": "version",
       "value": "1.1.1"
+    },
+    {
+      "name": "bluetoothtest_str_bincanntdi",
+      "value": " BLE is not connected and no need to disconnect it "
+    },
+    {
+      "name": "bluetoothtest_str_rcis",
+      "value": "readCharacteristicValue(callback):invoke succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_rpis",
+      "value": "readCharacteristicValue(promise):invoke succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_rcis_1",
+      "value": "readDescriptorValue(callback):invoke succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_sts",
+      "value": "setNotifyCharacteristicChanged(true):succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_rpis_1",
+      "value": "readDescriptorValue(promise):invoke succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_sff",
+      "value": "setNotifyCharacteristicChanged(false):false!"
+    },
+    {
+      "name": "bluetoothtest_str_stf",
+      "value": "setNotifyCharacteristicChanged(true):failed!"
+    },
+    {
+      "name": "bluetoothtest_str_sft",
+      "value": "setNotifyCharacteristicChanged(false):true!"
+    },
+    {
+      "name": "bluetoothtest_str_sbipo",
+      "value": "startAdvertising:build input parameter Out!"
+    },
+    {
+      "name": "bluetoothtest_str_sbipi",
+      "value": "startAdvertising:build input parameter In!"
+    },
+    {
+      "name": "bluetoothtest_str_ns",
+      "value": "notifyCharacteristicChanged successfully!"
+    },
+    {
+      "name": "bluetoothtest_str_gcis",
+      "value": "getServices(Callback):invoke succeeds! "
+    },
+    {
+      "name": "bluetoothtest_str_tzx",
+      "value": "testReadCharacteristicValueCallback  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_1",
+      "value": "testSetNotifyCharacteristicChanged  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_gpis",
+      "value": "getServices(promise):invoke succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_rt",
+      "value": "readCharacteristicValueCallback test"
+    },
+    {
+      "name": "bluetoothtest_str_nf",
+      "value": "notifyCharacteristicChanged failed!"
+    },
+    {
+      "name": "bluetoothtest_str_rec",
+      "value": "readCharacteristicValue error code:"
+    },
+    {
+      "name": "bluetoothtest_str_rt_1",
+      "value": "readCharacteristicValuePromise test"
+    },
+    {
+      "name": "bluetoothtest_str_st",
+      "value": "setNotifyCharacteristicChanged test"
+    },
+    {
+      "name": "bluetoothtest_str_bssi",
+      "value": "bluetoothManager services size is "
+    },
+    {
+      "name": "bluetoothtest_str_gt",
+      "value": "getCurrentTransferInformation test"
+    },
+    {
+      "name": "bluetoothtest_str_gcbec",
+      "value": "getServices(call back) error code:"
+    },
+    {
+      "name": "bluetoothtest_str_gsn",
+      "value": "getServicesPromise successfully:\\n"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_2",
+      "value": "testOnBLEConnectionStateChange  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_uzx",
+      "value": "unsubscribeBluetoothDeviceFind  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_ws",
+      "value": "writeCharacteristicValue succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_cs",
+      "value": "characteristicWrite sendResponse:"
+    },
+    {
+      "name": "bluetoothtest_str_rc",
+      "value": "readCharacteristicValue callback:"
+    },
+    {
+      "name": "bluetoothtest_str_st_1",
+      "value": "subscribeBluetoothDeviceFind test"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_3",
+      "value": "testOnBLECharacteristicChange  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_bcv",
+      "value": "bluetooth characteristic value: "
+    },
+    {
+      "name": "bluetoothtest_str_cs_1",
+      "value": "characteristicRead sendResponse:"
+    },
+    {
+      "name": "bluetoothtest_str_pt",
+      "value": "profileGetConnectionDevices test"
+    },
+    {
+      "name": "bluetoothtest_str_rt_2",
+      "value": "readDescriptorValueCallback test"
+    },
+    {
+      "name": "bluetoothtest_str_rt_3",
+      "value": "readDescriptorValuePromise test "
+    },
+    {
+      "name": "bluetoothtest_str_st_2",
+      "value": "setIncomingFileConfirmation test"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_4",
+      "value": "testWriteCharacteristicValue  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_tdind",
+      "value": "this device is not disconnected!"
+    },
+    {
+      "name": "bluetoothtest_str_wf",
+      "value": "writeCharacteristicValue failed!"
+    },
+    {
+      "name": "bluetoothtest_str_ot",
+      "value": "onBLEConnectionStateChange test"
+    },
+    {
+      "name": "bluetoothtest_str_bcu",
+      "value": "bluetooth characteristic uuid:"
+    },
+    {
+      "name": "bluetoothtest_str_ot_1",
+      "value": "onBLECharacteristicChange test"
+    },
+    {
+      "name": "bluetoothtest_str_ws_1",
+      "value": "writeDescriptorValue succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_d1css",
+      "value": "di 1 ci sppClientWrite successfully"
+    },
+    {
+      "name": "bluetoothtest_str_ds",
+      "value": "descriptorWrite sendResponse:"
+    },
+    {
+      "name": "bluetoothtest_str_s",
+      "value": "subscribeBluetoothDeviceFind:"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_5",
+      "value": "testOnCharacteristicWrite  zhi xing :"
+    },
+    {
+      "name": "bluetoothtest_str_wt",
+      "value": "writeCharacteristicValue test"
+    },
+    {
+      "name": "bluetoothtest_str_xyfsdwjwdbl",
+      "value": "xu yao fa song de wen jian wei ：/data/bluetooth/log/"
+    },
+    {
+      "name": "bluetoothtest_str_ds_1",
+      "value": "descriptorRead sendResponse:"
+    },
+    {
+      "name": "bluetoothtest_str_pi",
+      "value": "peripheralDeviceId invalid! "
+    },
+    {
+      "name": "bluetoothtest_str_st_3",
+      "value": "startBluetoothDiscovery test"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_6",
+      "value": "testOnCharacteristicRead  zhi xing :"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_7",
+      "value": "testOnConnectStateChange  zhi xing :"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_8",
+      "value": "testSppCloseServerSocket  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_uzx_1",
+      "value": "unsubscribeBLEDeviceFind  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_wf_1",
+      "value": "writeDescriptorValue,failed!"
+    },
+    {
+      "name": "bluetoothtest_str_gcs",
+      "value": "GattServer closed: succeeds"
+    },
+    {
+      "name": "bluetoothtest_str_bssi_1",
+      "value": "bluetooth services size is "
+    },
+    {
+      "name": "bluetoothtest_str_cs_2",
+      "value": "createGattServer: succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_ct",
+      "value": "createGattServerDevice test"
+    },
+    {
+      "name": "bluetoothtest_str_ob",
+      "value": "off BLECharacteristicChange"
+    },
+    {
+      "name": "bluetoothtest_str_orjtygb",
+      "value": "on.receiveIncomingFile jian ting yi guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_otjtygb",
+      "value": "on.transferStateChange jian ting yi guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_pt_1",
+      "value": "profileGetPlayingState test"
+    },
+    {
+      "name": "bluetoothtest_str_st_4",
+      "value": "sppClientConnectUnSafe test"
+    },
+    {
+      "name": "bluetoothtest_str_szx",
+      "value": "startBluetoothDiscovery  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_st_5",
+      "value": "subscribeBLEDeviceFind test"
+    },
+    {
+      "name": "bluetoothtest_str_tc",
+      "value": "test createGattClientDevice"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_9",
+      "value": "testGetServicesCallback  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_ts",
+      "value": "transferStateChange success"
+    },
+    {
+      "name": "bluetoothtest_str_cs_3",
+      "value": "CreateGattServer:succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_ob_1",
+      "value": "On BLECharacteristicChange"
+    },
+    {
+      "name": "bluetoothtest_str_ot_2",
+      "value": "OnReceiveIncomingFile test"
+    },
+    {
+      "name": "bluetoothtest_str_ot_3",
+      "value": "OnTransferStateChange test"
+    },
+    {
+      "name": "bluetoothtest_str_pt_2",
+      "value": "ProfileGetDeviceState test"
+    },
+    {
+      "name": "bluetoothtest_str_abf",
+      "value": "available bluetooth find ["
+    },
+    {
+      "name": "bluetoothtest_str_cs_4",
+      "value": "createGattClient succeeds "
+    },
+    {
+      "name": "bluetoothtest_str_cs_5",
+      "value": "createGattClient:succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_gr",
+      "value": "getConnectionDevices ret: "
+    },
+    {
+      "name": "bluetoothtest_str_gt_1",
+      "value": "getConnectionStrategy test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_2",
+      "value": "getDeviceNameCallback test"
+    },
+    {
+      "name": "bluetoothtest_str_gps",
+      "value": "getServices promise:starts"
+    },
+    {
+      "name": "bluetoothtest_str_ot_4",
+      "value": "onCharacteristicWrite test"
+    },
+    {
+      "name": "bluetoothtest_str_re",
+      "value": "readDescriptorValue error:"
+    },
+    {
+      "name": "bluetoothtest_str_st_6",
+      "value": "setConnectionStrategy test"
+    },
+    {
+      "name": "bluetoothtest_str_st_7",
+      "value": "sppServerCreateUnSafe test"
+    },
+    {
+      "name": "bluetoothtest_str_ss",
+      "value": "startAdvertising succeeds!"
+    },
+    {
+      "name": "bluetoothtest_str_szx_1",
+      "value": "stopBluetoothDiscovery  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_10",
+      "value": "testStopBLEScanManager  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_hzdcs",
+      "value": "HFAudioGatewayManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hpzcs",
+      "value": "HFAudioGatewayManager pei zhi ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_cdu",
+      "value": "callback:descriptor uuid="
+    },
+    {
+      "name": "bluetoothtest_str_gt_3",
+      "value": "getDeviceNamePromise test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_4",
+      "value": "getRssiValueCallback test"
+    },
+    {
+      "name": "bluetoothtest_str_ot_5",
+      "value": "onCharacteristicRead test"
+    },
+    {
+      "name": "bluetoothtest_str_ot_6",
+      "value": "onConnectStateChange test"
+    },
+    {
+      "name": "bluetoothtest_str_szxcg",
+      "value": "setBluetoothScanMode zhi xing cheng gong ;"
+    },
+    {
+      "name": "bluetoothtest_str_st_8",
+      "value": "sppClientConnectSafe test"
+    },
+    {
+      "name": "bluetoothtest_str_st_9",
+      "value": "sppCloseClientSocket test"
+    },
+    {
+      "name": "bluetoothtest_str_ss_1",
+      "value": "stopAdvertising succeeds."
+    },
+    {
+      "name": "bluetoothtest_str_wt_1",
+      "value": "writeDescriptorValue test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_5",
+      "value": "getRssiValuePromise test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_6",
+      "value": "getServicesCallback test"
+    },
+    {
+      "name": "bluetoothtest_str_pdu",
+      "value": "promise:descriptor uuid="
+    },
+    {
+      "name": "bluetoothtest_str_szxsb",
+      "value": "setBluetoothScanMode zhi xing shi bai"
+    },
+    {
+      "name": "bluetoothtest_str_szxcg_1",
+      "value": "setBluetoothScanMode zhi xing cheng gong"
+    },
+    {
+      "name": "bluetoothtest_str_szx_2",
+      "value": "sppCloseClientSocket  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_st_10",
+      "value": "sppServerCreateSafe test"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_11",
+      "value": "testCreateGattClient  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_12",
+      "value": "testCreateGattServer  zhi xing :"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_13",
+      "value": "testSppClientReadOff  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_tt",
+      "value": "testSppServerAccept test"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_14",
+      "value": "testSppServerReadOff  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_15",
+      "value": "testStartAdvertising  zhi xing :"
+    },
+    {
+      "name": "bluetoothtest_str_d1csf",
+      "value": "di 1 ci sppClientWrite failed"
+    },
+    {
+      "name": "bluetoothtest_str_gd",
+      "value": "GattClient.disconnect: "
+    },
+    {
+      "name": "bluetoothtest_str_cs_6",
+      "value": "createGattServer starts"
+    },
+    {
+      "name": "bluetoothtest_str_gp",
+      "value": "getDeviceName()Promise:"
+    },
+    {
+      "name": "bluetoothtest_str_gt_7",
+      "value": "getServicesPromise test"
+    },
+    {
+      "name": "bluetoothtest_str_objtygb",
+      "value": "on.bondStateChange jian ting yi guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_s_1",
+      "value": "subscribeBLEDeviceFind:"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_16",
+      "value": "testGattClientClose  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_17",
+      "value": "testGattServerClose  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_tzx_18",
+      "value": "testStopAdvertising  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_qhdwjmchwjljhzsbpdqk",
+      "value": ";  qing he dui wen jian ming cheng huo wen jian lu jing huo zhe she bei pei dui qing kuang"
+    },
+    {
+      "name": "bluetoothtest_str_skhdljfaqmsm",
+      "value": "Spp ke hu duan lian jie ( fei an quan mo shi )Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqcjfaqmsm",
+      "value": "Spp fu wu qi chuang jian ( fei an quan mo shi )Manager"
+    },
+    {
+      "name": "bluetoothtest_str_cv",
+      "value": "characteristic value: "
+    },
+    {
+      "name": "bluetoothtest_str_cs_7",
+      "value": "createGattClient start"
+    },
+    {
+      "name": "bluetoothtest_str_ct_1",
+      "value": "createGattClient test "
+    },
+    {
+      "name": "bluetoothtest_str_cf",
+      "value": "createGattClient:fail "
+    },
+    {
+      "name": "bluetoothtest_str_ot_7",
+      "value": "onBondStateChange test"
+    },
+    {
+      "name": "bluetoothtest_str_ot_8",
+      "value": "onDescriptorWrite test"
+    },
+    {
+      "name": "bluetoothtest_str_pt_3",
+      "value": "profileDisConnect test"
+    },
+    {
+      "name": "bluetoothtest_str_rr",
+      "value": "result: removeService "
+    },
+    {
+      "name": "bluetoothtest_str_spw",
+      "value": "switching,please wait!"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_19",
+      "value": "testSppClientClose  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_d1csxrcg",
+      "value": "di 1 ci sppClientWrite xie ru cheng gong  "
+    },
+    {
+      "name": "bluetoothtest_str_hqrzc",
+      "value": "huo qu Rssi zhi callbackManager"
+    },
+    {
+      "name": "bluetoothtest_str_azdcs",
+      "value": "A2dpSourceManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_apzcs",
+      "value": "A2dpSourceManager pei zhi ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gcjcs",
+      "value": "GattClientManager chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs",
+      "value": "GattClientManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gcjcs_1",
+      "value": "GattServerManager chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs_1",
+      "value": "GattServerManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_pzdcs",
+      "value": "PanNetworkManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_ppzcs",
+      "value": "PanNetworkManager pei zhi ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_skhdljaqmsm",
+      "value": "Spp ke hu duan lian jie ( an quan mo shi )Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqcjaqmsm",
+      "value": "Spp fu wu qi chuang jian ( an quan mo shi )Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ct_2",
+      "value": "createGattServer test"
+    },
+    {
+      "name": "bluetoothtest_str_dt",
+      "value": "disableBluetooth test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_8",
+      "value": "getPairedDevices test"
+    },
+    {
+      "name": "bluetoothtest_str_gr_1",
+      "value": "getPlayingState ret: "
+    },
+    {
+      "name": "bluetoothtest_str_gc",
+      "value": "getRssiValue callback"
+    },
+    {
+      "name": "bluetoothtest_str_gp_1",
+      "value": "getRssiValue promise:"
+    },
+    {
+      "name": "bluetoothtest_str_ot_9",
+      "value": "onDescriptorRead test"
+    },
+    {
+      "name": "bluetoothtest_str_st_11",
+      "value": "sppClientReadOff test"
+    },
+    {
+      "name": "bluetoothtest_str_st_12",
+      "value": "sppServerReadOff test"
+    },
+    {
+      "name": "bluetoothtest_str_st_13",
+      "value": "startAdvertising test"
+    },
+    {
+      "name": "bluetoothtest_str_sf",
+      "value": "startBLEScan Filters:"
+    },
+    {
+      "name": "bluetoothtest_str_spw_1",
+      "value": "switching,please wait"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_20",
+      "value": "testRemoveService  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_zcvsbczztbhm",
+      "value": "zhu ce vBLE she bei cha zhao zhuang tai bian hua Manager"
+    },
+    {
+      "name": "bluetoothtest_str_d1csxrsb",
+      "value": "di 1 ci sppClientWrite xie ru shi bai"
+    },
+    {
+      "name": "bluetoothtest_str_hqrzp",
+      "value": "huo qu Rssi zhi promiseManager"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbmcc",
+      "value": "huo qu she bei ming cheng callbackManager"
+    },
+    {
+      "name": "bluetoothtest_str_dqmsfzc",
+      "value": "du qu miao shu fu zhi callbackManager"
+    },
+    {
+      "name": "bluetoothtest_str_adi",
+      "value": ",and DeviceName is: "
+    },
+    {
+      "name": "bluetoothtest_str_gc_1",
+      "value": "GattClient.connect: "
+    },
+    {
+      "name": "bluetoothtest_str_scjcs",
+      "value": "SppClientManager chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_szdcs",
+      "value": "SppClientManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_scjcs_1",
+      "value": "SppServerManager chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_abf_1",
+      "value": "available ble find ["
+    },
+    {
+      "name": "bluetoothtest_str_cu",
+      "value": "characteristic uuid:"
+    },
+    {
+      "name": "bluetoothtest_str_et",
+      "value": "enableBluetooth test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_9",
+      "value": "gattClientClose test"
+    },
+    {
+      "name": "bluetoothtest_str_gt_10",
+      "value": "gattServerClose test"
+    },
+    {
+      "name": "bluetoothtest_str_gr_2",
+      "value": "getDeviceState ret: "
+    },
+    {
+      "name": "bluetoothtest_str_ot_10",
+      "value": "onBLEDeviceFind test"
+    },
+    {
+      "name": "bluetoothtest_str_st_14",
+      "value": "sppClientReadOn test"
+    },
+    {
+      "name": "bluetoothtest_str_st_15",
+      "value": "sppServerReadOn test"
+    },
+    {
+      "name": "bluetoothtest_str_st_16",
+      "value": "stopAdvertising test"
+    },
+    {
+      "name": "bluetoothtest_str_hqpbfztm",
+      "value": "huo qu Profile bo fang zhuang tai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqpsbztm",
+      "value": "huo qu Profile she bei zhuang tai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqpljsbm",
+      "value": "huo qu Profile lian jie she bei Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbmcp",
+      "value": "huo qu she bei ming cheng promiseManager"
+    },
+    {
+      "name": "bluetoothtest_str_dqmsfzp",
+      "value": "du qu miao shu fu zhi promiseManager"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzzc",
+      "value": "du qu te zheng zhi callbackManager"
+    },
+    {
+      "name": "bluetoothtest_str_gc_2",
+      "value": "GattClient.connect "
+    },
+    {
+      "name": "bluetoothtest_str_ge",
+      "value": "GattServer existed!"
+    },
+    {
+      "name": "bluetoothtest_str_pt_4",
+      "value": "ProfileConnect test"
+    },
+    {
+      "name": "bluetoothtest_str_ct_3",
+      "value": "cancelTransfer test"
+    },
+    {
+      "name": "bluetoothtest_str_ge_1",
+      "value": "gattClient existed!"
+    },
+    {
+      "name": "bluetoothtest_str_opjtygb",
+      "value": "on.pinRequired jian ting yi guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_osjtygb",
+      "value": "on.stateChange jian ting yi guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_ofswjsbr",
+      "value": "opp fa song wen jian shi bai ， result: "
+    },
+    {
+      "name": "bluetoothtest_str_ofswjcgr",
+      "value": "opp fa song wen jian cheng gong ！ result: "
+    },
+    {
+      "name": "bluetoothtest_str_psn",
+      "value": "promise success!:\\n"
+    },
+    {
+      "name": "bluetoothtest_str_ra",
+      "value": "result: addService,"
+    },
+    {
+      "name": "bluetoothtest_str_st_17",
+      "value": "sppClientClose test"
+    },
+    {
+      "name": "bluetoothtest_str_st_18",
+      "value": "sppClientWrite test"
+    },
+    {
+      "name": "bluetoothtest_str_sxrcg",
+      "value": "sppClientWrite xie ru cheng gong  "
+    },
+    {
+      "name": "bluetoothtest_str_st_19",
+      "value": "sppServerClose test"
+    },
+    {
+      "name": "bluetoothtest_str_st_20",
+      "value": "sppServerWrite test"
+    },
+    {
+      "name": "bluetoothtest_str_t",
+      "value": "testOffStateChange:"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_21",
+      "value": "testStopBLEScan  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_hqfwc",
+      "value": "huo qu fu wu callbackManager"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsbmxx",
+      "value": "huo qu lian jie de BLE she bei Manager xin xi"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzzp",
+      "value": "du qu te zheng zhi promiseManager"
+    },
+    {
+      "name": "bluetoothtest_str_bine",
+      "value": "BT is not enabled!"
+    },
+    {
+      "name": "bluetoothtest_str_blymfxcjcs",
+      "value": "Ble lan ya Manager fa xian chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_ge_2",
+      "value": "GattClient exists!"
+    },
+    {
+      "name": "bluetoothtest_str_ge_3",
+      "value": "GattServer exists!"
+    },
+    {
+      "name": "bluetoothtest_str_hzdcs_1",
+      "value": "HFAudioGateway zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hpzcs_1",
+      "value": "HFAudioGateway pei zhi ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hpzcs_2",
+      "value": "HidHostManager pei zhi ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hzdcs_2",
+      "value": "HitHostManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_pzdcs_1",
+      "value": "ProfileManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_cs_8",
+      "value": "callback success!:"
+    },
+    {
+      "name": "bluetoothtest_str_c",
+      "value": "createGattClient: "
+    },
+    {
+      "name": "bluetoothtest_str_dv",
+      "value": "descriptor value: "
+    },
+    {
+      "name": "bluetoothtest_str_ot_11",
+      "value": "onPinRequired test"
+    },
+    {
+      "name": "bluetoothtest_str_ot_12",
+      "value": "onStateChange test"
+    },
+    {
+      "name": "bluetoothtest_str_r",
+      "value": "remoteDeviceName: "
+    },
+    {
+      "name": "bluetoothtest_str_rt_4",
+      "value": "removeService test"
+    },
+    {
+      "name": "bluetoothtest_str_st_21",
+      "value": "setBLEMtuSize test"
+    },
+    {
+      "name": "bluetoothtest_str_sxrsb",
+      "value": "sppClientWrite xie ru shi bai"
+    },
+    {
+      "name": "bluetoothtest_str_sn",
+      "value": "startBLEScan(null)"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_22",
+      "value": "testAddService  zhi xing :"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_23",
+      "value": "testDisconnect  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_tr",
+      "value": "testSendFile ret: "
+    },
+    {
+      "name": "bluetoothtest_str_qxpljm",
+      "value": "qu xiao Profile lian jie Manager"
+    },
+    {
+      "name": "bluetoothtest_str_zcbczztbhm",
+      "value": "zhu ce BLE cha zhao zhuang tai bian hua Manager"
+    },
+    {
+      "name": "bluetoothtest_str_zcbczztbhm_1",
+      "value": "zhu ce Ble cha zhao zhuang tai bian hua Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqfwp",
+      "value": "huo qu fu wu promiseManager"
+    },
+    {
+      "name": "bluetoothtest_str_hqpzwjljztm",
+      "value": "huo qu pei zhi wen jian lian jie zhuang tai Manager1"
+    },
+    {
+      "name": "bluetoothtest_str_hqpzwjljztm_1",
+      "value": "huo qu pei zhi wen jian lian jie zhuang tai Manager2"
+    },
+    {
+      "name": "bluetoothtest_str_gc_3",
+      "value": "GattClient.close:"
+    },
+    {
+      "name": "bluetoothtest_str_skhddqgbm",
+      "value": "Spp ke hu duan du qu guan bi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_skhddqdkm",
+      "value": "Spp ke hu duan du qu da kai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqdqgbm",
+      "value": "Spp fu wu qi du qu guan bi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqdqdkm",
+      "value": "Spp fu wu qi du qu da kai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_okqjswjsbe",
+      "value": "opp kai qi jie shou wen jian shi bai ，err: "
+    },
+    {
+      "name": "bluetoothtest_str_sn_1",
+      "value": "setBLEMtuSize: \\n"
+    },
+    {
+      "name": "bluetoothtest_str_ts_1",
+      "value": "test startBLEScan"
+    },
+    {
+      "name": "bluetoothtest_str_gbcgc",
+      "value": "guan bi cheng gong  clientNumber"
+    },
+    {
+      "name": "bluetoothtest_str_dqmzwkqjcsfypd",
+      "value": "dang qian Mac zhi wei kong ， qing jian cha shi fou yi pei dui"
+    },
+    {
+      "name": "bluetoothtest_str_jdlymfxcjcs",
+      "value": "jing dian lan ya Manager fa xian chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsbm",
+      "value": "huo qu lian jie de BLE she bei Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsbm_1",
+      "value": "huo qu lian jie de Ble she bei Manager"
+    },
+    {
+      "name": "bluetoothtest_str_lywdkqxkqlyhzsy",
+      "value": "lan ya wei da kai ， qing xian kai qi lan ya hou zai shi yong ！"
+    },
+    {
+      "name": "bluetoothtest_str_sdbccm",
+      "value": "she ding BLEMtu chi cun Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sdbccm_1",
+      "value": "she ding BleMtu chi cun Manager"
+    },
+    {
+      "name": "bluetoothtest_str_qdjxzpt",
+      "value": "qing dian ji xuan ze PROFILE TYPE"
+    },
+    {
+      "name": "bluetoothtest_str_gslxncs",
+      "value": "GattClient su lv xing neng ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gslxncs_1",
+      "value": "GattServer su lv xing neng ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gkhdmcs",
+      "value": "Gatt ke hu duan Manager ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gfwqmcs",
+      "value": "Gatt fu wu qi Manager ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_pljm",
+      "value": "Profile lian jie Manager"
+    },
+    {
+      "name": "bluetoothtest_str_cjgkhd",
+      "value": "chuang jian GattManager ke hu duan"
+    },
+    {
+      "name": "bluetoothtest_str_cjgfwq",
+      "value": "chuang jian GattManager fu wu qi"
+    },
+    {
+      "name": "bluetoothtest_str_cjgkhdm",
+      "value": "chuang jian Gatt ke hu duan Manager"
+    },
+    {
+      "name": "bluetoothtest_str_cjgfwqm",
+      "value": "chuang jian Gatt fu wu qi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_czgkhdm",
+      "value": "chuang zao Gatt ke hu duan Manager"
+    },
+    {
+      "name": "bluetoothtest_str_kssmbsb",
+      "value": "kai shi sao miao BLEManager she bei"
+    },
+    {
+      "name": "bluetoothtest_str_szssmmsm",
+      "value": "she zhi SPP sao miao mo shi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_qsrxyljdd",
+      "value": "qing shu ru xu yao lian jie de deviceId"
+    },
+    {
+      "name": "bluetoothtest_str_btzzbhm",
+      "value": "BLE te zheng zhi bian hua Manager"
+    },
+    {
+      "name": "bluetoothtest_str_btzzbhm_1",
+      "value": "Ble te zheng zhi bian hua Manager"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs_2",
+      "value": "GattManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_sdkxncs",
+      "value": "SppClient dai kuan xing neng ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_sslxncs",
+      "value": "SppClient su lv xing neng ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_sdkxncs_1",
+      "value": "SppServer dai kuan xing neng ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_sslxncs_1",
+      "value": "SppServer su lv xing neng ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_skhdfaqmslj",
+      "value": "Spp ke hu duan ( fei an quan mo shi ) lian jie"
+    },
+    {
+      "name": "bluetoothtest_str_skhdmcs",
+      "value": "Spp ke hu duan Manager ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_skhdgbm",
+      "value": "Spp ke hu duan guan bi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_skhdxrm",
+      "value": "Spp ke hu duan xie ru Manager"
+    },
+    {
+      "name": "bluetoothtest_str_skhdljfaqms",
+      "value": "Spp ke hu duan lian jie ( fei an quan mo shi )"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqfaqmscj",
+      "value": "Spp fu wu qi ( fei an quan mo shi ) chuang jian"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqmcs",
+      "value": "Spp fu wu qi Manager ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqgbm",
+      "value": "Spp fu wu qi guan bi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqxrm",
+      "value": "Spp fu wu qi xie ru Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqcjfaqms",
+      "value": "Spp fu wu qi chuang jian ( fei an quan mo shi )"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqjsm",
+      "value": "Spp fu wu qi jie shou Manager"
+    },
+    {
+      "name": "bluetoothtest_str_at",
+      "value": "addService test"
+    },
+    {
+      "name": "bluetoothtest_str_dr",
+      "value": "disconnect ret："
+    },
+    {
+      "name": "bluetoothtest_str_ofswjsbe",
+      "value": "opp fa song wen jian shi bai ，err :"
+    },
+    {
+      "name": "bluetoothtest_str_si",
+      "value": "serviceUuid is "
+    },
+    {
+      "name": "bluetoothtest_str_sd",
+      "value": "sppClientWrite di"
+    },
+    {
+      "name": "bluetoothtest_str_sd_1",
+      "value": "sppServerWrite di"
+    },
+    {
+      "name": "bluetoothtest_str_so",
+      "value": "stopBLEScan OK!"
+    },
+    {
+      "name": "bluetoothtest_str_sw",
+      "value": "switching,wait!"
+    },
+    {
+      "name": "bluetoothtest_str_td",
+      "value": "test disconnect"
+    },
+    {
+      "name": "bluetoothtest_str_tzx_24",
+      "value": "testConnect  zhi xing ："
+    },
+    {
+      "name": "bluetoothtest_str_zcpmbhm",
+      "value": "zhu ce pin ma bian hua Manager"
+    },
+    {
+      "name": "bluetoothtest_str_zcbdztbhm",
+      "value": "zhu ce bang ding zhuang tai bian hua Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqrzc_1",
+      "value": "huo qu Rssi zhi callback"
+    },
+    {
+      "name": "bluetoothtest_str_hqdqljztm",
+      "value": "huo qu dang qian lian jie zhuang tai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqycsbmcm",
+      "value": "huo qu yuan cheng she bei ming cheng Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqycsblxm",
+      "value": "huo qu yuan cheng she bei lei xing Manager"
+    },
+    {
+      "name": "bluetoothtest_str_sztztxggm",
+      "value": "she zhi tong zhi te xing geng gai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_azdcs_1",
+      "value": "A2dpSource zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_apzcs_1",
+      "value": "A2dpSource pei zhi ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_bljztm",
+      "value": "BLE lian jie zhuang tai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_bzdcs",
+      "value": "BleManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_bljztm_1",
+      "value": "Ble lian jie zhuang tai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_gcjcs_2",
+      "value": "GattClient chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs_3",
+      "value": "GattClient zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gcjcs_3",
+      "value": "GattServer chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs_4",
+      "value": "GattServer zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_pzdcs_2",
+      "value": "PanNetwork zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_ppzcs_1",
+      "value": "PanNetwork pei zhi ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_szdcs_1",
+      "value": "SppManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_skhdaqmslj",
+      "value": "Spp ke hu duan ( an quan mo shi ) lian jie"
+    },
+    {
+      "name": "bluetoothtest_str_skhdljaqms",
+      "value": "Spp ke hu duan lian jie ( an quan mo shi )"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqaqmscj",
+      "value": "Spp fu wu qi ( an quan mo shi ) chuang jian"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqcjaqms",
+      "value": "Spp fu wu qi chuang jian ( an quan mo shi )"
+    },
+    {
+      "name": "bluetoothtest_str_szjgjwb",
+      "value": "scenario zu jian gou jian wan bi"
+    },
+    {
+      "name": "bluetoothtest_str_shf",
+      "value": "sppRunTime, hua fei :"
+    },
+    {
+      "name": "bluetoothtest_str_dghlymcs",
+      "value": "di gong hao lan ya Manager ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_tzbsmm",
+      "value": "ting zhi BLE sao miao Manager"
+    },
+    {
+      "name": "bluetoothtest_str_tzbsmm_1",
+      "value": "ting zhi Ble sao miao Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ksbsmm",
+      "value": "kai shi BLE sao miao Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ksbcjcs",
+      "value": "kai shi BleFound chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_ksbsmm_1",
+      "value": "kai shi Ble sao miao Manager"
+    },
+    {
+      "name": "bluetoothtest_str_jswjcgwjcflj",
+      "value": "jie shou wen jian cheng gong ， wen jian cun fang lu jing ："
+    },
+    {
+      "name": "bluetoothtest_str_hqrzp_1",
+      "value": "huo qu Rssi zhi promise"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbmcc_1",
+      "value": "huo qu she bei ming cheng callback"
+    },
+    {
+      "name": "bluetoothtest_str_lyygbhgbsbqqr",
+      "value": "lan ya yi guan bi huo guan bi shi bai , qing que ren"
+    },
+    {
+      "name": "bluetoothtest_str_lyydkhdksbqqr",
+      "value": "lan ya yi da kai huo da kai shi bai , qing que ren"
+    },
+    {
+      "name": "bluetoothtest_str_qdjxzsm",
+      "value": "qing dian ji xuan ze SCAN MODE"
+    },
+    {
+      "name": "bluetoothtest_str_dqmsfzc_1",
+      "value": "du qu miao shu fu zhi callback"
+    },
+    {
+      "name": "bluetoothtest_str_bzdcs_1",
+      "value": "BrManager zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gcs_1",
+      "value": "GATTManager ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_scjcs_2",
+      "value": "SppClient chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_szdcs_2",
+      "value": "SppClient zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_scjcs_3",
+      "value": "SppServer chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_szdcs_3",
+      "value": "SppServer zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_st_22",
+      "value": "sendFile test"
+    },
+    {
+      "name": "bluetoothtest_str_tzlyfxm",
+      "value": "ting zhi lan ya fa xian Manager"
+    },
+    {
+      "name": "bluetoothtest_str_xrmsfzm",
+      "value": "xie ru miao shu fu zhi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_qxpdsbm",
+      "value": "qu xiao pei dui she bei Manager"
+    },
+    {
+      "name": "bluetoothtest_str_kslyfxm",
+      "value": "kai shi lan ya fa xian Manager"
+    },
+    {
+      "name": "bluetoothtest_str_zcbsbczztbh",
+      "value": "zhu ce BLE she bei cha zhao zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_zcbsbczztbh_1",
+      "value": "zhu ce Ble she bei cha zhao zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_zcztbhm",
+      "value": "zhu ce zhuang tai bian hua Manager"
+    },
+    {
+      "name": "bluetoothtest_str_jdlymcs",
+      "value": "jing dian lan ya Manager ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hqpbfzt",
+      "value": "huo qu Profile bo fang zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_hqpsbzt",
+      "value": "huo qu Profile she bei zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_hqpljcl",
+      "value": "huo qu Profile lian jie ce lve"
+    },
+    {
+      "name": "bluetoothtest_str_hqpljsb",
+      "value": "huo qu Profile lian jie she bei"
+    },
+    {
+      "name": "bluetoothtest_str_hqsmmsm",
+      "value": "huo qu sao miao mo shi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqbfztm",
+      "value": "huo qu bo fang zhuang tai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqbdmcm",
+      "value": "huo qu ben di ming cheng Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbmcp_1",
+      "value": "huo qu she bei ming cheng promise"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbztm",
+      "value": "huo qu she bei zhuang tai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqljsbm",
+      "value": "huo qu lian jie she bei Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqpdsbm",
+      "value": "huo qu pei dui she bei Manager"
+    },
+    {
+      "name": "bluetoothtest_str_dylyfxm",
+      "value": "ding yue lan ya fa xian Manager"
+    },
+    {
+      "name": "bluetoothtest_str_szpljcl",
+      "value": "she zhi Profile lian jie ce lve"
+    },
+    {
+      "name": "bluetoothtest_str_szsmmsm",
+      "value": "she zhi sao miao mo shi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_szbdmcm",
+      "value": "she zhi ben di ming cheng Manager"
+    },
+    {
+      "name": "bluetoothtest_str_qsrjjljdsbm",
+      "value": "qing shu ru ji jiang lian jie de she bei MAC"
+    },
+    {
+      "name": "bluetoothtest_str_dqmsfzp_1",
+      "value": "du qu miao shu fu zhi promise"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzzc_1",
+      "value": "du qu te zheng zhi callback"
+    },
+    {
+      "name": "bluetoothtest_str_scs",
+      "value": "SPPManager ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_cr",
+      "value": "connect ret："
+    },
+    {
+      "name": "bluetoothtest_str_ct_4",
+      "value": "connect test"
+    },
+    {
+      "name": "bluetoothtest_str_rc_1",
+      "value": "return code:"
+    },
+    {
+      "name": "bluetoothtest_str_gbjswjztgbsj",
+      "value": "guan bi jie shou wen jian zhuang tai gai bian shi jian"
+    },
+    {
+      "name": "bluetoothtest_str_xrmsfm",
+      "value": "xie ru miao shu fu Manager"
+    },
+    {
+      "name": "bluetoothtest_str_xrtzzm",
+      "value": "xie ru te zheng zhi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ksblyfxcjcs",
+      "value": "kai shi Br lan ya fa xian chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hqfwc_1",
+      "value": "huo qu fu wu callback"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsbxx",
+      "value": "huo qu lian jie de BLE she bei xin xi"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsbxx_1",
+      "value": "huo qu lian jie de Ble she bei xin xi"
+    },
+    {
+      "name": "bluetoothtest_str_dqmsfm",
+      "value": "du qu miao shu fu Manager"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzzm",
+      "value": "du qu te zheng zhi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzzp_1",
+      "value": "du qu te zheng zhi promise"
+    },
+    {
+      "name": "bluetoothtest_str_xzpi",
+      "value": "xuan ze PROFILE ID"
+    },
+    {
+      "name": "bluetoothtest_str_f",
+      "value": " filePath: "
+    },
+    {
+      "name": "bluetoothtest_str_s_2",
+      "value": ",services :"
+    },
+    {
+      "name": "bluetoothtest_str_blyfxcjcs",
+      "value": "Ble lan ya fa xian chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hpzcs_3",
+      "value": "HidHost pei zhi ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hzdcs_3",
+      "value": "HitHost zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_pzdcs_3",
+      "value": "Profile zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_tzmsm",
+      "value": "ting zhi Manager sao miao"
+    },
+    {
+      "name": "bluetoothtest_str_tzgbm",
+      "value": "ting zhi guang bo Manager"
+    },
+    {
+      "name": "bluetoothtest_str_gbbczztbh",
+      "value": "guan bi BLE cha zhao zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_gbbljztbh",
+      "value": "guan bi BLE lian jie zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_scfwm",
+      "value": "shan chu fu wu Manager"
+    },
+    {
+      "name": "bluetoothtest_str_qxplj",
+      "value": "qu xiao Profile lian jie"
+    },
+    {
+      "name": "bluetoothtest_str_qxljm",
+      "value": "qu xiao lian jie Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ksgbm",
+      "value": "kai shi guang bo Manager"
+    },
+    {
+      "name": "bluetoothtest_str_dqadzts",
+      "value": "dang qian A2DP de zhuang tai shi ："
+    },
+    {
+      "name": "bluetoothtest_str_dkbczztbh",
+      "value": "da kai BLE cha zhao zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_dkbljztbh",
+      "value": "da kai BLE lian jie zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_zcbczztbh",
+      "value": "zhu ce BLE cha zhao zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_zcbczztbh_1",
+      "value": "zhu ce Ble cha zhao zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_tjfwm",
+      "value": "tian jia fu wu Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqfwp_1",
+      "value": "huo qu fu wu promise"
+    },
+    {
+      "name": "bluetoothtest_str_hqztm",
+      "value": "huo qu zhuang tai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbdpzwjzt",
+      "value": "huo qu she bei de pei zhi wen jian zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_hqpdlysbdxx",
+      "value": "huo qu pei dui lan ya she bei de xin xi"
+    },
+    {
+      "name": "bluetoothtest_str_hqpdlysbdmc",
+      "value": "huo qu pei dui lan ya she bei de ming cheng"
+    },
+    {
+      "name": "bluetoothtest_str_hqpdlysbdlx",
+      "value": "huo qu pei dui lan ya she bei de lei xing"
+    },
+    {
+      "name": "bluetoothtest_str_hqpzwjdljzt",
+      "value": "huo qu pei zhi wen jian de lian jie zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_hqpzwjljzt1",
+      "value": "huo qu pei zhi wen jian lian jie zhuang tai 1"
+    },
+    {
+      "name": "bluetoothtest_str_hqpzwjljzt2",
+      "value": "huo qu pei zhi wen jian lian jie zhuang tai 2"
+    },
+    {
+      "name": "bluetoothtest_str_ljztm",
+      "value": "lian jie zhuang tai Manager"
+    },
+    {
+      "name": "bluetoothtest_str_pdsbm",
+      "value": "pei dui she bei Manager"
+    },
+    {
+      "name": "bluetoothtest_str_ar",
+      "value": ",and RSSI="
+    },
+    {
+      "name": "bluetoothtest_str_ofsdcjcs",
+      "value": "Opp fa song duan chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_ojsdcjcs",
+      "value": "Opp jie shou duan chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_skhddqgb",
+      "value": "Spp ke hu duan du qu guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_skhddqdk",
+      "value": "Spp ke hu duan du qu da kai"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqdqgb",
+      "value": "Spp fu wu qi du qu guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqdqdk",
+      "value": "Spp fu wu qi du qu da kai"
+    },
+    {
+      "name": "bluetoothtest_str_azjgjwb",
+      "value": "auto zu jian gou jian wan bi"
+    },
+    {
+      "name": "bluetoothtest_str_sd_2",
+      "value": "sppClient di"
+    },
+    {
+      "name": "bluetoothtest_str_sd_3",
+      "value": "sppServer di"
+    },
+    {
+      "name": "bluetoothtest_str_glym",
+      "value": "guan lan ya Manager"
+    },
+    {
+      "name": "bluetoothtest_str_gbcsztgbsj",
+      "value": "guan bi chuan shu zhuang tai gai bian shi jian"
+    },
+    {
+      "name": "bluetoothtest_str_gbzcpmbh",
+      "value": "guan bi zhu ce pin ma bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_gbzcbdztbh",
+      "value": "guan bi zhu ce bang ding zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_cjscg",
+      "value": "chuang jian server cheng gong"
+    },
+    {
+      "name": "bluetoothtest_str_klym",
+      "value": "kai lan ya Manager"
+    },
+    {
+      "name": "bluetoothtest_str_dqhdzts",
+      "value": "dang qian HFP de zhuang tai shi ："
+    },
+    {
+      "name": "bluetoothtest_str_dqhdzts_1",
+      "value": "dang qian HID de zhuang tai shi ："
+    },
+    {
+      "name": "bluetoothtest_str_dqmyrhpdsb",
+      "value": "dang qian mei you ren he pei dui she bei"
+    },
+    {
+      "name": "bluetoothtest_str_dkzcpmbh",
+      "value": "da kai zhu ce pin ma bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_dkzcbdztbh",
+      "value": "da kai zhu ce bang ding zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_jscrwjbhdk",
+      "value": "jie shou chuan ru wen jian bian hua da kai"
+    },
+    {
+      "name": "bluetoothtest_str_ckbtzzbh",
+      "value": "cha kan BLE te zheng zhi bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_ckbtzzbh_1",
+      "value": "cha kan Ble te zheng zhi bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_ckgljzt",
+      "value": "cha kan Gatt lian jie zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_jdlyfxcjcs",
+      "value": "jing dian lan ya fa xian chang jing ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hqdqlyljzt",
+      "value": "huo qu dang qian lan ya lian jie zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsb",
+      "value": "huo qu lian jie de BLE she bei"
+    },
+    {
+      "name": "bluetoothtest_str_hqljdbsb_1",
+      "value": "huo qu lian jie de Ble she bei"
+    },
+    {
+      "name": "bluetoothtest_str_lyqsnzxjg",
+      "value": "lan ya qu shi neng zhi xing jie guo ："
+    },
+    {
+      "name": "bluetoothtest_str_sdbcc",
+      "value": "she ding BLEMtu chi cun"
+    },
+    {
+      "name": "bluetoothtest_str_sdbcc_1",
+      "value": "she ding BleMtu chi cun"
+    },
+    {
+      "name": "bluetoothtest_str_gkhdcs",
+      "value": "Gatt ke hu duan ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gfwqcs",
+      "value": "Gatt fu wu qi ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_plj",
+      "value": "Profile lian jie"
+    },
+    {
+      "name": "bluetoothtest_str_blyxncs",
+      "value": "ble lan ya xing neng ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_okqjswj",
+      "value": "opp kai qi jie shou wen jian"
+    },
+    {
+      "name": "bluetoothtest_str_r_1",
+      "value": "result : "
+    },
+    {
+      "name": "bluetoothtest_str_gbgkhd",
+      "value": "guan bi Gatt ke hu duan"
+    },
+    {
+      "name": "bluetoothtest_str_gbgfwq",
+      "value": "guan bi Gatt fu wu qi"
+    },
+    {
+      "name": "bluetoothtest_str_gbm",
+      "value": "guan bi Manager"
+    },
+    {
+      "name": "bluetoothtest_str_gbljztbh",
+      "value": "guan bi lian jie zhuang tai bian hua  "
+    },
+    {
+      "name": "bluetoothtest_str_cjgkhd_1",
+      "value": "chuang jian Gatt ke hu duan"
+    },
+    {
+      "name": "bluetoothtest_str_cjgfwq_1",
+      "value": "chuang jian Gatt fu wu qi"
+    },
+    {
+      "name": "bluetoothtest_str_czgkhd",
+      "value": "chuang zao Gatt ke hu duan"
+    },
+    {
+      "name": "bluetoothtest_str_fxkpdlysb",
+      "value": "fa xian ke pei dui lan ya she bei"
+    },
+    {
+      "name": "bluetoothtest_str_kssmbsb_1",
+      "value": "kai shi sao miao BLE she bei"
+    },
+    {
+      "name": "bluetoothtest_str_kssmbsb_2",
+      "value": "kai shi sao miao Ble she bei"
+    },
+    {
+      "name": "bluetoothtest_str_dqlydzts",
+      "value": "dang qian lan ya de zhuang tai shi ："
+    },
+    {
+      "name": "bluetoothtest_str_ckbljzt",
+      "value": "cha kan BLE lian jie zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_ckbljzt_1",
+      "value": "cha kan Ble lian jie zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_lysnzxjg",
+      "value": "lan ya shi neng zhi xing jie guo ："
+    },
+    {
+      "name": "bluetoothtest_str_szssmms",
+      "value": "she zhi SPP sao miao mo shi"
+    },
+    {
+      "name": "bluetoothtest_str_gsbzzdklj",
+      "value": "gai she bei zheng zai duan kai lian jie"
+    },
+    {
+      "name": "bluetoothtest_str_yccm",
+      "value": "yuan cheng class ming :"
+    },
+    {
+      "name": "bluetoothtest_str_ljm",
+      "value": "lian jie Manager"
+    },
+    {
+      "name": "bluetoothtest_str_btzzbh",
+      "value": "BLE te zheng zhi bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_btzzbh_1",
+      "value": "Ble te zheng zhi bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_gzdcs_5",
+      "value": "Gatt zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_o",
+      "value": "Options:"
+    },
+    {
+      "name": "bluetoothtest_str_skhdgb",
+      "value": "Spp ke hu duan guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_skhdxr",
+      "value": "Spp ke hu duan xie ru"
+    },
+    {
+      "name": "bluetoothtest_str_skhdcs",
+      "value": "Spp ke hu duan ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqgb",
+      "value": "Spp fu wu qi guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqxr",
+      "value": "Spp fu wu qi xie ru"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqjs",
+      "value": "Spp fu wu qi jie shou"
+    },
+    {
+      "name": "bluetoothtest_str_sfwqcs",
+      "value": "Spp fu wu qi ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_r_2",
+      "value": "result: "
+    },
+    {
+      "name": "bluetoothtest_str_csztbhdk",
+      "value": "chuan shu zhuang tai bian hua da kai"
+    },
+    {
+      "name": "bluetoothtest_str_csztggdk",
+      "value": "chuan shu zhuang tai geng gai da kai"
+    },
+    {
+      "name": "bluetoothtest_str_gbzcztbh",
+      "value": "guan bi zhu ce zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_scgfw",
+      "value": "shan chu Gatt fu wu"
+    },
+    {
+      "name": "bluetoothtest_str_qxglj",
+      "value": "qu xiao Gatt lian jie"
+    },
+    {
+      "name": "bluetoothtest_str_qxlysbpd",
+      "value": "qu xiao lan ya she bei pei dui"
+    },
+    {
+      "name": "bluetoothtest_str_khdljsb",
+      "value": "ke hu duan lian jie shi bai !"
+    },
+    {
+      "name": "bluetoothtest_str_khdljcg",
+      "value": "ke hu duan lian jie cheng gong !"
+    },
+    {
+      "name": "bluetoothtest_str_dqljzts",
+      "value": "dang qian lian jie zhuang tai shi ："
+    },
+    {
+      "name": "bluetoothtest_str_dkzcztbh",
+      "value": "da kai zhu ce zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_dkljztbh",
+      "value": "da kai lian jie zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_msfxrgb",
+      "value": "miao shu fu xie ru   guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_msfxrdk",
+      "value": "miao shu fu xie ru   da kai"
+    },
+    {
+      "name": "bluetoothtest_str_msfdqgb",
+      "value": "miao shu fu du qu   guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_msfdqdk",
+      "value": "miao shu fu du qu   da kai"
+    },
+    {
+      "name": "bluetoothtest_str_zcpmbh",
+      "value": "zhu ce pin ma bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_zcbdztbh",
+      "value": "zhu ce bang ding zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_tjgfw",
+      "value": "tian jia Gatt fu wu"
+    },
+    {
+      "name": "bluetoothtest_str_tzzxrgb",
+      "value": "te zheng zhi xie ru   guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_tzzxrdk",
+      "value": "te zheng zhi xie ru   da kai"
+    },
+    {
+      "name": "bluetoothtest_str_tzzdqgb",
+      "value": "te zheng zhi du qu   guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_tzzdqdk",
+      "value": "te zheng zhi du qu   da kai"
+    },
+    {
+      "name": "bluetoothtest_str_jdlyxncs",
+      "value": "jing dian lan ya xing neng ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hqdqcsxx",
+      "value": "huo qu dang qian chuan shu xin xi"
+    },
+    {
+      "name": "bluetoothtest_str_hqdqljzt",
+      "value": "huo qu dang qian lian jie zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_hqlysmms",
+      "value": "huo qu lan ya sao miao mo shi"
+    },
+    {
+      "name": "bluetoothtest_str_hqlybdmc",
+      "value": "huo qu lan ya ben di ming cheng"
+    },
+    {
+      "name": "bluetoothtest_str_hqycsbmc",
+      "value": "huo qu yuan cheng she bei ming cheng"
+    },
+    {
+      "name": "bluetoothtest_str_hqycsblx",
+      "value": "huo qu yuan cheng she bei lei xing"
+    },
+    {
+      "name": "bluetoothtest_str_dyfxlysb",
+      "value": "ding yue fa xian lan ya she bei"
+    },
+    {
+      "name": "bluetoothtest_str_szcrwjqr",
+      "value": "she zhi chuan ru wen jian que ren"
+    },
+    {
+      "name": "bluetoothtest_str_szlysmms",
+      "value": "she zhi lan ya sao miao mo shi"
+    },
+    {
+      "name": "bluetoothtest_str_szlybdmc",
+      "value": "she zhi lan ya ben di ming cheng"
+    },
+    {
+      "name": "bluetoothtest_str_sztztxgg",
+      "value": "she zhi tong zhi te xing geng gai"
+    },
+    {
+      "name": "bluetoothtest_str_gsbzzljz",
+      "value": "gai she bei zheng zai lian jie zhong"
+    },
+    {
+      "name": "bluetoothtest_str_qsrmdz",
+      "value": "qing shu ru mac di zhi"
+    },
+    {
+      "name": "bluetoothtest_str_qsrxrdsj",
+      "value": "qing shu ru xie ru de shu ju"
+    },
+    {
+      "name": "bluetoothtest_str_jxlysbpd",
+      "value": "jin xing lan ya she bei pei dui"
+    },
+    {
+      "name": "bluetoothtest_str_bljzt",
+      "value": "BLE lian jie zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_bzdcs_2",
+      "value": "Ble zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_bljzt_1",
+      "value": "Ble lian jie zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_opzcs",
+      "value": "Opp pei zhi ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_szdcs_4",
+      "value": "Spp zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_dghlycs",
+      "value": "di gong hao lan ya ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_tzbsm",
+      "value": "ting zhi BLE sao miao"
+    },
+    {
+      "name": "bluetoothtest_str_tzbsm_1",
+      "value": "ting zhi Ble sao miao"
+    },
+    {
+      "name": "bluetoothtest_str_qxpdsb",
+      "value": "qu xiao pei dui shi bai ！"
+    },
+    {
+      "name": "bluetoothtest_str_qxpdcg",
+      "value": "qu xiao pei dui cheng gong ！"
+    },
+    {
+      "name": "bluetoothtest_str_ksbsm",
+      "value": "kai shi BLE sao miao"
+    },
+    {
+      "name": "bluetoothtest_str_ksbsm_1",
+      "value": "kai shi Ble sao miao"
+    },
+    {
+      "name": "bluetoothtest_str_jskhdsb",
+      "value": "jie shou ke hu duan shi bai"
+    },
+    {
+      "name": "bluetoothtest_str_jskhdcg",
+      "value": "jie shou ke hu duan cheng gong"
+    },
+    {
+      "name": "bluetoothtest_str_fwdcsw",
+      "value": "fu wu de can shu wei ："
+    },
+    {
+      "name": "bluetoothtest_str_bsbmcs",
+      "value": "ben she bei ming cheng shi ："
+    },
+    {
+      "name": "bluetoothtest_str_cxrcg",
+      "value": "ci , xie ru cheng gong  "
+    },
+    {
+      "name": "bluetoothtest_str_cdqcg",
+      "value": "ci , du qu cheng gong ！"
+    },
+    {
+      "name": "bluetoothtest_str_cdqcg_1",
+      "value": "ci , du qu cheng gong ："
+    },
+    {
+      "name": "bluetoothtest_str_cwdxcs",
+      "value": "ci wen ding xing ce shi ："
+    },
+    {
+      "name": "bluetoothtest_str_qszbdmc",
+      "value": "qing she zhi ben di ming cheng"
+    },
+    {
+      "name": "bluetoothtest_str_qsru",
+      "value": "qing shu ru uuid"
+    },
+    {
+      "name": "bluetoothtest_str_qsrycsj",
+      "value": "qing shu ru yan chi shi jian"
+    },
+    {
+      "name": "bluetoothtest_str_d",
+      "value": ",{dis："
+    },
+    {
+      "name": "bluetoothtest_str_wjmw",
+      "value": "; wen jian ming wei ："
+    },
+    {
+      "name": "bluetoothtest_str_bzdcs_3",
+      "value": "Br zi dong ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_gcs_2",
+      "value": "GATT Test"
+    },
+    {
+      "name": "bluetoothtest_str_glj",
+      "value": "Gatt lian jie"
+    },
+    {
+      "name": "bluetoothtest_str_mw",
+      "value": "Mac wei ：["
+    },
+    {
+      "name": "bluetoothtest_str_uwk",
+      "value": "uuid wei kong"
+    },
+    {
+      "name": "bluetoothtest_str_tzgbbb",
+      "value": "ting zhi guang bo bo bao"
+    },
+    {
+      "name": "bluetoothtest_str_tzlyfx",
+      "value": "ting zhi lan ya fa xian"
+    },
+    {
+      "name": "bluetoothtest_str_xrmsfz",
+      "value": "xie ru miao shu fu zhi"
+    },
+    {
+      "name": "bluetoothtest_str_qxcs",
+      "value": "qu xiao chuan shu : "
+    },
+    {
+      "name": "bluetoothtest_str_qxpdsb_1",
+      "value": "qu xiao pei dui she bei"
+    },
+    {
+      "name": "bluetoothtest_str_ksgbbb",
+      "value": "kai shi guang bo bo bao"
+    },
+    {
+      "name": "bluetoothtest_str_kslyfx",
+      "value": "kai shi lan ya fa xian"
+    },
+    {
+      "name": "bluetoothtest_str_dqxx",
+      "value": "dang qian xin xi : "
+    },
+    {
+      "name": "bluetoothtest_str_xhcsdg",
+      "value": "xun huan ci shu dao ge"
+    },
+    {
+      "name": "bluetoothtest_str_smlysb",
+      "value": "sao miao lan ya she bei"
+    },
+    {
+      "name": "bluetoothtest_str_ckbzt",
+      "value": "cha kan bt zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_cxrsb",
+      "value": "ci , xie ru shi bai"
+    },
+    {
+      "name": "bluetoothtest_str_cxrcg_1",
+      "value": "ci , xie ru cheng gong"
+    },
+    {
+      "name": "bluetoothtest_str_cxrcg_2",
+      "value": "ci xie ru cheng gong  "
+    },
+    {
+      "name": "bluetoothtest_str_zcztbh",
+      "value": "zhu ce zhuang tai bian hua"
+    },
+    {
+      "name": "bluetoothtest_str_lxhyc",
+      "value": "lei xing he yan chi :"
+    },
+    {
+      "name": "bluetoothtest_str_jdlycs",
+      "value": "jing dian lan ya ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_hqsmms",
+      "value": "huo qu sao miao mo shi"
+    },
+    {
+      "name": "bluetoothtest_str_hqbfzt",
+      "value": "huo qu bo fang zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_hqbdmc",
+      "value": "huo qu ben di ming cheng"
+    },
+    {
+      "name": "bluetoothtest_str_hqlyzt",
+      "value": "huo qu lan ya zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_hqsbzt",
+      "value": "huo qu she bei zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_hqljsb",
+      "value": "huo qu lian jie she bei"
+    },
+    {
+      "name": "bluetoothtest_str_hqpdsb",
+      "value": "huo qu pei dui she bei"
+    },
+    {
+      "name": "bluetoothtest_str_lyfxcg",
+      "value": "lan ya fa xian cheng gong"
+    },
+    {
+      "name": "bluetoothtest_str_lyyjsn",
+      "value": "lan ya yi jing shi neng"
+    },
+    {
+      "name": "bluetoothtest_str_lyhwsn",
+      "value": "lan ya hai wei shi neng"
+    },
+    {
+      "name": "bluetoothtest_str_dylyfx",
+      "value": "ding yue lan ya fa xian"
+    },
+    {
+      "name": "bluetoothtest_str_sbmcw",
+      "value": "she bei ming cheng wei ："
+    },
+    {
+      "name": "bluetoothtest_str_szsmms",
+      "value": "she zhi sao miao mo shi"
+    },
+    {
+      "name": "bluetoothtest_str_szsmlx",
+      "value": "Set scan mode"
+    },
+    {
+      "name": "bluetoothtest_str_szbdmc",
+      "value": "she zhi ben di ming cheng"
+    },
+    {
+      "name": "bluetoothtest_str_szljcl",
+      "value": "she zhi lian jie ce lve"
+    },
+    {
+      "name": "bluetoothtest_str_szpzlx",
+      "value": "she zhi pei zhi lei xing"
+    },
+    {
+      "name": "bluetoothtest_str_gsbydk",
+      "value": "gai she bei yi duan kai"
+    },
+    {
+      "name": "bluetoothtest_str_gsbylj",
+      "value": "gai she bei yi lian jie"
+    },
+    {
+      "name": "bluetoothtest_str_ycsbm",
+      "value": "yuan cheng she bei ming :"
+    },
+    {
+      "name": "bluetoothtest_str_scs_1",
+      "value": "SPP ce shi"
+    },
+    {
+      "name": "bluetoothtest_str_s_3",
+      "value": "scan:"
+    },
+    {
+      "name": "bluetoothtest_str_gbkhd",
+      "value": "guan bi ke hu duan"
+    },
+    {
+      "name": "bluetoothtest_str_gbfwd",
+      "value": "guan bi fu wu duan"
+    },
+    {
+      "name": "bluetoothtest_str_xrcg",
+      "value": "xie ru cheng gong  "
+    },
+    {
+      "name": "bluetoothtest_str_xrmsf",
+      "value": "xie ru miao shu fu"
+    },
+    {
+      "name": "bluetoothtest_str_xrtzz",
+      "value": "xie ru te zheng zhi"
+    },
+    {
+      "name": "bluetoothtest_str_qsnly",
+      "value": "qu shi neng lan ya"
+    },
+    {
+      "name": "bluetoothtest_str_fsdw",
+      "value": "fa song duan wei ："
+    },
+    {
+      "name": "bluetoothtest_str_ypdsb",
+      "value": "yi pei dui she bei"
+    },
+    {
+      "name": "bluetoothtest_str_xhsw",
+      "value": "xun huan shu wei :"
+    },
+    {
+      "name": "bluetoothtest_str_cxrsb_1",
+      "value": "ci xie ru shi bai"
+    },
+    {
+      "name": "bluetoothtest_str_dqcg",
+      "value": "du qu cheng gong ！"
+    },
+    {
+      "name": "bluetoothtest_str_dqcg_1",
+      "value": "du qu cheng gong ："
+    },
+    {
+      "name": "bluetoothtest_str_dqmsf",
+      "value": "du qu miao shu fu"
+    },
+    {
+      "name": "bluetoothtest_str_dqtzz",
+      "value": "du qu te zheng zhi"
+    },
+    {
+      "name": "bluetoothtest_str_dk",
+      "value": "  duan kai ："
+    },
+    {
+      "name": "bluetoothtest_str_sb",
+      "value": "  she bei  "
+    },
+    {
+      "name": "bluetoothtest_str_i",
+      "value": ",id:"
+    },
+    {
+      "name": "bluetoothtest_str_m",
+      "value": "mac:"
+    },
+    {
+      "name": "bluetoothtest_str_m_1",
+      "value": "ms; "
+    },
+    {
+      "name": "bluetoothtest_str_snly",
+      "value": "shi neng lan ya"
+    },
+    {
+      "name": "bluetoothtest_str_tzfx",
+      "value": "ting zhi fa xian"
+    },
+    {
+      "name": "bluetoothtest_str_tzgb",
+      "value": "ting zhi guang bo"
+    },
+    {
+      "name": "bluetoothtest_str_tzsm",
+      "value": "ting zhi sao miao"
+    },
+    {
+      "name": "bluetoothtest_str_xrsb",
+      "value": "xie ru shi bai"
+    },
+    {
+      "name": "bluetoothtest_str_xrcg_1",
+      "value": "xie ru cheng gong"
+    },
+    {
+      "name": "bluetoothtest_str_scfw",
+      "value": "shan chu fu wu"
+    },
+    {
+      "name": "bluetoothtest_str_qxcs_1",
+      "value": "qu xiao chuan shu"
+    },
+    {
+      "name": "bluetoothtest_str_qxlj",
+      "value": "qu xiao lian jie"
+    },
+    {
+      "name": "bluetoothtest_str_ksfx",
+      "value": "kai shi fa xian"
+    },
+    {
+      "name": "bluetoothtest_str_ksgb",
+      "value": "kai shi guang bo"
+    },
+    {
+      "name": "bluetoothtest_str_xhcs",
+      "value": "xun huan ci shu"
+    },
+    {
+      "name": "bluetoothtest_str_wjmc",
+      "value": "wen jian ming cheng"
+    },
+    {
+      "name": "bluetoothtest_str_wzzt",
+      "value": "Unknown"
+    },
+    {
+      "name": "bluetoothtest_str_ms",
+      "value": "mo shi : "
+    },
+    {
+      "name": "bluetoothtest_str_tjfw",
+      "value": "tian jia fu wu"
+    },
+    {
+      "name": "bluetoothtest_str_hqzt",
+      "value": "huo qu zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_sbw",
+      "value": "she bei wei ："
+    },
+    {
+      "name": "bluetoothtest_str_sbmc",
+      "value": "Device name"
+    },
+    {
+      "name": "bluetoothtest_str_dqsb",
+      "value": "du qu shi bai"
+    },
+    {
+      "name": "bluetoothtest_str_dqcg_2",
+      "value": "du qu cheng gong"
+    },
+    {
+      "name": "bluetoothtest_str_tzcg",
+      "value": "tiao zhuan cheng gong"
+    },
+    {
+      "name": "bluetoothtest_str_ljzt",
+      "value": "lian jie zhuang tai"
+    },
+    {
+      "name": "bluetoothtest_str_pdsb",
+      "value": "pei dui she bei"
+    },
+    {
+      "name": "bluetoothtest_str_mrxx",
+      "value": "mo ren xiao xi"
+    },
+    {
+      "name": "bluetoothtest_str_str",
+      "value": "]  "
+    },
+    {
+      "name": "bluetoothtest_str_m_2",
+      "value": "ms;"
+    },
+    {
+      "name": "bluetoothtest_str_str_1",
+      "value": "}.]"
+    },
+    {
+      "name": "bluetoothtest_str_gly",
+      "value": "guan lan ya"
+    },
+    {
+      "name": "bluetoothtest_str_yc",
+      "value": "yan chi :"
+    },
+    {
+      "name": "bluetoothtest_str_ks",
+      "value": "kai shi :"
+    },
+    {
+      "name": "bluetoothtest_str_kly",
+      "value": "kai lan ya"
+    },
+    {
+      "name": "bluetoothtest_str_wpd",
+      "value": "wei pei dui"
+    },
+    {
+      "name": "bluetoothtest_str_cxr",
+      "value": "ci xie ru"
+    },
+    {
+      "name": "bluetoothtest_str_zt",
+      "value": "zhuang tai :"
+    },
+    {
+      "name": "bluetoothtest_str_lx",
+      "value": "lei xing :"
+    },
+    {
+      "name": "bluetoothtest_str_js",
+      "value": "jie shu :"
+    },
+    {
+      "name": "bluetoothtest_str_hf",
+      "value": "hua fei :"
+    },
+    {
+      "name": "bluetoothtest_str_sz",
+      "value": "she zhi ："
+    },
+    {
+      "name": "bluetoothtest_str_pd",
+      "value": "pei dui ："
+    },
+    {
+      "name": "bluetoothtest_str_gb",
+      "value": "guan bi"
+    },
+    {
+      "name": "bluetoothtest_str_qx",
+      "value": "Cancel"
+    },
+    {
+      "name": "bluetoothtest_str_sb_1",
+      "value": "shi bai"
+    },
+    {
+      "name": "bluetoothtest_str_cg",
+      "value": "cheng gong"
+    },
+    {
+      "name": "bluetoothtest_str_jj",
+      "value": "ju jie"
+    },
+    {
+      "name": "bluetoothtest_str_js_1",
+      "value": "jie shou"
+    },
+    {
+      "name": "bluetoothtest_str_wz",
+      "value": "wei zhi"
+    },
+    {
+      "name": "bluetoothtest_str_qr",
+      "value": "Confirm"
+    },
+    {
+      "name": "bluetoothtest_str_lj",
+      "value": "lian jie"
+    },
+    {
+      "name": "bluetoothtest_str_str_2",
+      "value": "]"
+    },
+    {
+      "name": "bluetoothtest_str_d_1",
+      "value": "di"
     }
   ]
 }

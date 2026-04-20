@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 /**
  * BLE Test Page Of Bluetooth test
  */
@@ -28,25 +31,25 @@ let gattClientDeviceInstance: bluetoothManager.GattClientDevice
 
 export function testCreateGattServerDeviceManager(): string {
   try {
-    let message = "createGattServerDevice test"
+    let message = resStr($r('app.string.bluetoothtest_str_ct'))
     let btState = bluetoothManager.getState();
     if ( btState == bluetoothManager.BluetoothState.STATE_ON ) {
-      message = "createGattServer starts";
+      message = resStr($r('app.string.bluetoothtest_str_cs_6'));
       if ( !gattServerInstance ) {
         gattServerInstance = BluetoothModelManager.createGattServer();
-        message = "createGattServer: succeeds.";
+        message = resStr($r('app.string.bluetoothtest_str_cs_2'));
       } else {
-        message = "GattServer existed!";
+        message = resStr($r('app.string.bluetoothtest_str_ge'));
       }
     } else if ( btState == bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,please wait!";
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testCreateGattServerDeviceManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testCreateGattServerDeviceManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testCreateGattServerDeviceManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -55,26 +58,26 @@ export function testCreateGattServerDeviceManager(): string {
 
 export function testCreateGattClientDeviceManager(): string {
   try {
-    let message = "test createGattClientDevice"
+    let message = resStr($r('app.string.bluetoothtest_str_tc'))
     let btState = bluetoothManager.getState();
     let peripheralDeviceId: string = AppStorage.get('peripheralDeviceId') !;
     if ( btState == bluetoothManager.BluetoothState.STATE_ON ) {
-      message = "createGattClient start"
+      message = resStr($r('app.string.bluetoothtest_str_cs_7'))
       if ( !gattClientDeviceInstance ) {
         gattClientDeviceInstance = BluetoothModelManager.createGattClient(peripheralDeviceId);
-        message = "createGattClient:succeeds.";
+        message = resStr($r('app.string.bluetoothtest_str_cs_5'));
       } else {
-        message = "gattClient existed!";
+        message = resStr($r('app.string.bluetoothtest_str_ge_1'));
       }
     } else if ( btState == bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,please wait!";
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testCreateGattClientDeviceManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testCreateGattClientDeviceManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testCreateGattClientDeviceManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -85,11 +88,11 @@ export function testGetConnectedBLEDevicesManager(): string {
   try {
     let connectedBleDevices = BluetoothModelManager.getConnectedBLEDevices();
     let message = "getConnectedBLEDevices" + JSON.stringify(connectedBleDevices);
-    console.log("getConnectedBLEDevices" + JSON.stringify(connectedBleDevices))
+    hilog.info(0x0000, 'BtTest', '%{public}s', "getConnectedBLEDevices" + JSON.stringify(connectedBleDevices))
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGetConnectedBLEDevicesManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGetConnectedBLEDevicesManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGetConnectedBLEDevicesManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -98,12 +101,12 @@ export function testGetConnectedBLEDevicesManager(): string {
 
 export function testStartBLEScanManager(): string {
   try {
-    console.log("StartBLEScan -------------------------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "StartBLEScan -------------------------------")
 
     let btState = bluetoothManager.getState();
-    let message = "test startBLEScan"
+    let message = resStr($r('app.string.bluetoothtest_str_ts_1'))
     if ( btState == bluetoothManager.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       return message;
     }
     let txtScanFilter_deviceId: string = AppStorage.get('txtScanFilterDeviceId') !;
@@ -132,20 +135,20 @@ export function testStartBLEScanManager(): string {
     if ( !cbxBleScanOptions ) {
       if ( cbxBleScanFilter ) {
         BluetoothModelManager.startBLEScan(curScanFilters);
-        message = "startBLEScan Filters:" + JSON.stringify(curScanFilters);
+        message = resStr($r('app.string.bluetoothtest_str_sf')) + JSON.stringify(curScanFilters);
       } else {
         BluetoothModelManager.startBLEScan(null);
-        message = "startBLEScan(null)";
+        message = resStr($r('app.string.bluetoothtest_str_sn'));
       }
     } else {
       BluetoothModelManager.startBLEScan(curScanFilters , curScanOptions);
-      message = "startBLEScan Filters:" + JSON.stringify(curScanFilters) + "\n" + "Options:" + JSON.stringify(curScanOptions);
+      message = resStr($r('app.string.bluetoothtest_str_sf')) + JSON.stringify(curScanFilters) + "\n" + resStr($r('app.string.bluetoothtest_str_o')) + JSON.stringify(curScanOptions);
     }
-    console.log("StartBLEScan end-------------------------------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "StartBLEScan end-------------------------------")
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testStartBLEScanManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testStartBLEScanManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testStartBLEScanManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -155,11 +158,11 @@ export function testStartBLEScanManager(): string {
 export function testStopBLEScanManager(): string {
   try {
     BluetoothModelManager.stopBLEScan();
-    let message = "stopBLEScan OK!";
+    let message = resStr($r('app.string.bluetoothtest_str_so'));
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testStopBLEScanManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testStopBLEScanManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testStopBLEScanManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -170,32 +173,32 @@ let bleDeviceFindManager = false
 
 export function testOnBLEDeviceFindManager(): string {
   try {
-    let message = "onBLEDeviceFind test"
+    let message = resStr($r('app.string.bluetoothtest_str_ot_10'))
     if ( bleDeviceFindManager ) {
       BluetoothModelManager.unsubscribeBLEDeviceFind();
-      message = '关闭BLE查找状态变化'
+      message = resStr($r('app.string.bluetoothtest_str_gbbczztbh'))
       promptAction.showToast({ message : message })
     } else {
       BluetoothModelManager.subscribeBLEDeviceFind((deviceItems: Array<bluetoothManager.ScanResult>) => {
-        console.log("BLE Test:" + 'available ble devices changed.');
+        hilog.info(0x0000, 'BtTest', '%{public}s', "BLE Test:" + 'available ble devices changed.');
         let message = ""
         let availBleDeviceIds: Array<string> = []
         deviceItems?.forEach(deviceItem => {
           let newDevice = deviceItem.deviceId;
-          message += "mac:" + newDevice;
-          console.log("BLE Test,available bluetooth new device : " + newDevice);
+          message += resStr($r('app.string.bluetoothtest_str_m')) + newDevice;
+          hilog.info(0x0000, 'BtTest', '%{public}s', "BLE Test,available bluetooth new device : " + newDevice);
           availBleDeviceIds.push(newDevice);
         })
         AppStorage.setOrCreate('bluetoothAvailableDevices' , availBleDeviceIds);
         promptAction.showToast({ message : message })
       })
-      message = "打开BLE查找状态变化"
+      message = resStr($r('app.string.bluetoothtest_str_dkbczztbh'))
       promptAction.showToast({ message : message })
     }
     bleDeviceFindManager = !bleDeviceFindManager
     return message
   } catch( e ) {
-    console.log(`Failed to testOnBLEDeviceFindManager. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testOnBLEDeviceFindManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testOnBLEDeviceFindManager. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message

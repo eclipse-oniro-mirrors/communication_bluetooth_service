@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import BaseModel from '../../Utils/BaseModel';
 import btm from '@ohos.bluetoothManager';
@@ -36,7 +37,7 @@ export class BTMProfileModel extends BaseModel {
   }
 
   initProfile(): void {
-    console.log('btm_test BTProfileModel start');
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'btm_test BTProfileModel start');
 
     this.profiles[ this.PROFILE_A2DP_SOURCE ] = btm.getProfileInstance(this.PROFILE_A2DP_SOURCE) as btm.A2dpSourceProfile;
 
@@ -46,7 +47,7 @@ export class BTMProfileModel extends BaseModel {
 
     this.profiles[ this.PROFILE_PAN_NETWORK ] = btm.getProfileInstance(this.PROFILE_PAN_NETWORK) as btm.PanProfile;
 
-    console.log('bt_test BTProfileModel end');
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'bt_test BTProfileModel end');
   }
 
   hasProfile(type: number): boolean {
@@ -94,7 +95,7 @@ export class BTMProfileModel extends BaseModel {
     if ( this.profiles[ type ] != null ) {
       return this.profiles[ type ];
     } else {
-      console.log("This.profiles[ type ] = null")
+      hilog.info(0x0000, 'BtTest', '%{public}s', "This.profiles[ type ] = null")
       return null
     }
   }

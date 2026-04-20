@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import hilog from '@ohos.hilog';
 import ConfigData from '../../../Utils/ConfigData';
 import BluetoothModel from '../../../MainAbility/model/BluetoothModel';
 import router from '@ohos.router';
@@ -45,7 +46,7 @@ struct DeviceNameCard {
           });
 
           Column() {
-            PageTitle({ detail : '设备名称' })
+            PageTitle({ detail : $r('app.string.bluetoothtest_str_sbmc') })
 
             TextInput({ text : this.deviceName })
               .placeholderFont({
@@ -64,12 +65,12 @@ struct DeviceNameCard {
               .borderRadius(ConfigData.VP_0)
               .backgroundColor($r('app.color.color_00000000_transparent'))
               .onChange((value: string) => {
-                console.log(ConfigData.TAG + 'device name changed to: ' + JSON.stringify(value));
+                hilog.info(0x0000, 'BtTest', '%{public}s', ConfigData.TAG + 'device name changed to: ' + JSON.stringify(value));
                 this.deviceName = value;
               })
               .onSubmit((enterKey) => {
                 InputMethod.getInputMethodController().stopInput().then((ret) => {
-                  console.log(`${ ConfigData.TAG }, enterType: ${ enterKey }, stopInput: ${ ret }`);
+                  hilog.info(0x0000, 'BtTest', '%{public}s', `${ ConfigData.TAG }, enterType: ${ enterKey }, stopInput: ${ ret }`);
                 });
               })
             Divider()
@@ -80,7 +81,8 @@ struct DeviceNameCard {
 
             Column() {
               Blank()
-            }.height(ConfigData.WH_25_100)
+            }
+              .height(ConfigData.WH_25_100)
 
             Flex({
               direction : FlexDirection.Row ,
@@ -101,7 +103,8 @@ struct DeviceNameCard {
                   AppStorage.setOrCreate('setLocalNameRet' , ret);
                   router.back();
                 } })
-              }.width(ConfigData.VP_120)
+              }
+                .width(ConfigData.VP_120)
             }
           }
           .padding({ left : ConfigData.VP_24 , right : ConfigData.VP_24 })

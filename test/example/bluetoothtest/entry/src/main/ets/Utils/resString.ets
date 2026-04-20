@@ -12,22 +12,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ConfigData from '../../Utils/ConfigData';
 
-/** 与 UitestStubSmoke.test 中 text('uitest stub') 一致；勿改为 $r，否则 zh_CN 等语言下文案不同会导致用例失败。 */
-const UITEST_STUB_TITLE: string = 'uitest stub';
+import { getUiAbilityContext } from './uiContextStore';
 
-@Entry
-@Component
-struct Index {
-  build() {
-    Column() {
-      Text(UITEST_STUB_TITLE)
-        .id('uitest_stub_title')
-        .accessibilityLevel('yes')
-        .fontSize(16)
+/**
+ * 将字符串资源解析为字面量。依赖 EntryAbility 通过 uiContextStore.setUiAbilityContext 注入的上下文。
+ */
+export function resStr(res: Resource): string {
+  const ctx = getUiAbilityContext();
+  if (ctx?.resourceManager) {
+    try {
+      return ctx.resourceManager.getStringSync(res);
+    } catch (_e) {
+      return '';
     }
-    .width(ConfigData.WH_100_100)
-    .height(ConfigData.WH_100_100)
   }
+  return '';
 }

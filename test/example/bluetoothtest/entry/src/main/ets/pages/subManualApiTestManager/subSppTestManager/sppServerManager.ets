@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 import { testItemFromRouterOrPlaceholder } from '../../../Utils/common'
 import { TestData } from '../../../MainAbility/model/testData'
 import LogUtil from '../../../Utils/LogUtil';
@@ -85,11 +88,15 @@ struct SppServerManager {
               .id('pages_subManualApiTestManager_subSppTestManager_sppServerManager__pt_0')
           }
 
-          Stack().height(ConfigData.VP_0_5).backgroundColor($r('app.color.black'));
+          Stack()
+            .height(ConfigData.VP_0_5)
+            .backgroundColor($r('app.color.black'));
 
           Row() {
-            Text($r('app.string.bluetoothtest_text_bjsbu')).fontSize(ConfigData.VP_17).width(ConfigData.VP_85)
-            TextInput({ text : this.uuid , placeholder : "请输入uuid" })
+            Text($r('app.string.bluetoothtest_text_bjsbu'))
+              .fontSize(ConfigData.VP_17)
+              .width(ConfigData.VP_85)
+            TextInput({ text : this.uuid , placeholder : $r('app.string.bluetoothtest_str_qsru') })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subSppTestManager_sppServerManager__ti_0')
               .fontSize(ConfigData.VP_17)
@@ -106,8 +113,10 @@ struct SppServerManager {
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text($r('app.string.bluetoothtest_text_xrmbsbsj')).fontSize(ConfigData.VP_17).width(ConfigData.VP_95)
-            TextInput({ text : this.writeServerData , placeholder : "请输入写入的数据" })
+            Text($r('app.string.bluetoothtest_text_xrmbsbsj'))
+              .fontSize(ConfigData.VP_17)
+              .width(ConfigData.VP_95)
+            TextInput({ text : this.writeServerData , placeholder : $r('app.string.bluetoothtest_str_qsrxrdsj') })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subSppTestManager_sppServerManager__ti_1')
               .fontSize(ConfigData.VP_14)
@@ -124,7 +133,8 @@ struct SppServerManager {
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text($r('app.string.bluetoothtest_text_dqdsjw')).fontSize(ConfigData.VP_17)
+            Text($r('app.string.bluetoothtest_text_dqdsjw'))
+              .fontSize(ConfigData.VP_17)
             Text(this.dataReadMessage)
               .fontSize(ConfigData.VP_14)
               .width(ConfigData.WH_80_100)
@@ -135,7 +145,8 @@ struct SppServerManager {
           .alignItems(VerticalAlign.Center)
 
           Column() {
-            Text($r('app.string.label_api_result_tight') + this.message).fontSize(ConfigData.VP_17)
+            Text(resStr($r('app.string.label_api_result_tight')) + this.message)
+              .fontSize(ConfigData.VP_17)
               .padding(ConfigData.VP_10)
               .textAlign(TextAlign.Start)
           }
@@ -233,11 +244,11 @@ struct SppServerManager {
 
   dataRead(dataBuffer: ArrayBuffer) {
     const data = new Uint8Array(dataBuffer);
-    console.log('spp bluetoothManager read is: ' + data);
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetoothManager read is: ' + data);
     if ( data != null ) {
-      this.dataReadMessage = "读取成功" + JSON.stringify(data);
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
-      this.dataReadMessage = "读取失败";
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
   }
 }

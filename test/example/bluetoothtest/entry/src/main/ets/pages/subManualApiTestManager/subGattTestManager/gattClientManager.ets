@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
+
 
 import { testItemFromRouterOrPlaceholder } from '../../../Utils/common'
 import { TestImageDisplay } from '../../../Component/testImageDisplay';
@@ -47,7 +49,9 @@ struct GattClientSetting {
   build() {
     Column() {
       Row() {
-        Text($r('app.string.bluetoothtest_text_wwsbm')).fontSize(ConfigData.VP_16).width(ConfigData.VP_70)
+        Text($r('app.string.bluetoothtest_text_wwsbm'))
+          .fontSize(ConfigData.VP_16)
+          .width(ConfigData.VP_70)
         TextInput({ text : this.peripheralDeviceId , placeholder : "input peripheral deviceId." })
           .accessibilityLevel('yes')
           .id('pages_subManualApiTestManager_subGattTestManager_gattClientManager__ti_0')
@@ -68,10 +72,14 @@ struct GattClientSetting {
       .alignItems(VerticalAlign.Center)
 
       Column() {
-        Stack().height(ConfigData.VP_0_25).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.VP_0_25)
+          .backgroundColor($r('app.color.black'));
         Column() {
           Row() {
-            Text($r('app.string.bluetoothtest_text_fwu_1')).fontSize(ConfigData.VP_15).width(ConfigData.VP_60);
+            Text($r('app.string.bluetoothtest_text_fwu_1'))
+              .fontSize(ConfigData.VP_15)
+              .width(ConfigData.VP_60);
             TextInput({ text : this.serviceUUID , placeholder : "input Service UUID" })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subGattTestManager_gattClientManager__ti_1')
@@ -91,7 +99,9 @@ struct GattClientSetting {
           .backgroundColor($r("app.color.spring"))
 
           Row() {
-            Text($r('app.string.bluetoothtest_text_tzzu')).fontSize(ConfigData.VP_15).width(ConfigData.VP_60);
+            Text($r('app.string.bluetoothtest_text_tzzu'))
+              .fontSize(ConfigData.VP_15)
+              .width(ConfigData.VP_60);
             TextInput({ text : this.characteristicUUID , placeholder : "input Characteristic UUID" })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subGattTestManager_gattClientManager__ti_2')
@@ -111,7 +121,9 @@ struct GattClientSetting {
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text($r('app.string.bluetoothtest_text_tzzv')).fontSize(ConfigData.VP_15).width(ConfigData.VP_60);
+            Text($r('app.string.bluetoothtest_text_tzzv'))
+              .fontSize(ConfigData.VP_15)
+              .width(ConfigData.VP_60);
             TextInput({ text : this.characteristicUUID , placeholder : "Characteristic Value" })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subGattTestManager_gattClientManager__ti_3')
@@ -131,7 +143,9 @@ struct GattClientSetting {
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text($r('app.string.bluetoothtest_text_msfu')).fontSize(ConfigData.VP_15).width(ConfigData.VP_60);
+            Text($r('app.string.bluetoothtest_text_msfu'))
+              .fontSize(ConfigData.VP_15)
+              .width(ConfigData.VP_60);
             TextInput({ text : this.descriptorUUID , placeholder : "input descriptor UUID" })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subGattTestManager_gattClientManager__ti_4')
@@ -151,7 +165,9 @@ struct GattClientSetting {
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text($r('app.string.bluetoothtest_text_msfv')).fontSize(ConfigData.VP_15).width(ConfigData.VP_60);
+            Text($r('app.string.bluetoothtest_text_msfv'))
+              .fontSize(ConfigData.VP_15)
+              .width(ConfigData.VP_60);
             TextInput({ text : this.descriptorUUID , placeholder : "descriptor Value" })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subGattTestManager_gattClientManager__ti_5')
@@ -171,7 +187,9 @@ struct GattClientSetting {
           .alignItems(VerticalAlign.Center)
         }
 
-        Stack().height(ConfigData.VP_0_25).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.VP_0_25)
+          .backgroundColor($r('app.color.black'));
       }
     }
   }
@@ -226,7 +244,9 @@ struct GattClientManager {
           .id('pages_subManualApiTestManager_subGattTestManager_gattClientManager__pt_0')
       }
 
-      Stack().height(ConfigData.VP_0_5).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.VP_0_5)
+        .backgroundColor($r('app.color.black'));
       Row() {
         Text($r('app.string.bluetoothtest_text_g'))
           .fontSize(ConfigData.VP_20)
@@ -257,42 +277,42 @@ struct GattClientManager {
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_10 })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_100_100)
-                Text($r('app.string.label_gatt_current_config') + this.message)
+                Text(resStr($r('app.string.label_gatt_current_config')) + this.message)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
-                Text($r('app.string.label_ble_conn_state') + this.bleConnectionStateInfo)
+                Text(resStr($r('app.string.label_ble_conn_state')) + this.bleConnectionStateInfo)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
-                Text($r('app.string.label_ble_char_change') + this.bleCharacteristicChangeInfo)
+                Text(resStr($r('app.string.label_ble_char_change')) + this.bleCharacteristicChangeInfo)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
-                Text($r('app.string.label_device_name_colon') + this.deviceName)
+                Text(resStr($r('app.string.label_device_name_colon')) + this.deviceName)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
-                Text($r('app.string.label_rssi_colon') + this.Rssi)
+                Text(resStr($r('app.string.label_rssi_colon')) + this.Rssi)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
-                Text($r('app.string.label_get_service_colon') + this.getServices)
+                Text(resStr($r('app.string.label_get_service_colon')) + this.getServices)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
-                Text($r('app.string.label_read_char_colon') + this.read_CharacteristicValue)
+                Text(resStr($r('app.string.label_read_char_colon')) + this.read_CharacteristicValue)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
-                Text($r('app.string.label_read_desc_colon') + this.read_DescriptorValue)
+                Text(resStr($r('app.string.label_read_desc_colon')) + this.read_DescriptorValue)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_15 })
                   .textAlign(TextAlign.Start)
@@ -309,7 +329,9 @@ struct GattClientManager {
           .width(ConfigData.PCT_95)
           .backgroundColor($r("sys.color.ohos_id_color_foreground_contrary"))
 
-          Stack().height(ConfigData.VP_0_5).backgroundColor($r('app.color.black'));
+          Stack()
+            .height(ConfigData.VP_0_5)
+            .backgroundColor($r('app.color.black'));
           Column() {
             Text($r('app.string.bluetoothtest_text_gncs'))
               .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_10 })

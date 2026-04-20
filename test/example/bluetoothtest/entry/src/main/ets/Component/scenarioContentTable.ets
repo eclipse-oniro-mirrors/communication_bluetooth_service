@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../Utils/ConfigData';
 import { TestScenario } from '../MainAbility/model/testData'
 
@@ -74,7 +75,7 @@ export struct ScenarioContentTable {
   }
 
   aboutToAppear(): void {
-    console.log("scenario组件构建完毕")
+    hilog.info(0x0000, 'BtTest', '%{public}s', $r('app.string.bluetoothtest_str_szjgjwb'))
   }
 
   build() {

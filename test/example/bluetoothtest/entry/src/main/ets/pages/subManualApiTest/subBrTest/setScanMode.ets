@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 import ConfigData from '../../../Utils/ConfigData';
 import BluetoothModel from '../../../MainAbility/model/BluetoothModel';
 import router from '@ohos.router'
@@ -28,7 +31,7 @@ import { PageTitle } from '../../../Component/pageTitle';
 @Entry
 @Component
 struct etScanMode {
-  @State message: string = "请点击选择SCAN MODE";
+  @State message: Resource | string = $r('app.string.bluetoothtest_str_qdjxzsm');
   private duration: string = '0';
   private scanMode: number = 0;
   @State currentClick: number = - 1;
@@ -39,7 +42,7 @@ struct etScanMode {
 
   build() {
     Column() {
-      PageTitle({ detail : '设置扫描类型' })
+      PageTitle({ detail : $r('app.string.bluetoothtest_str_szsmlx') })
             .accessibilityLevel('yes')
             .id('pages_subManualApiTest_subBrTest_setScanMode__pt_0')
       Scroll() {
@@ -200,12 +203,12 @@ struct etScanMode {
           .borderRadius(ConfigData.VP_0)
           .backgroundColor($r('app.color.color_00000000_transparent'))
           .onChange((value: string) => {
-            console.log(ConfigData.TAG + 'device name changed to: ' + JSON.stringify(value));
+            hilog.info(0x0000, 'BtTest', '%{public}s', ConfigData.TAG + 'device name changed to: ' + JSON.stringify(value));
             this.duration = value;
           })
           .onSubmit((enterKey) => {
             InputMethod.getInputMethodController().stopInput().then((ret) => {
-              console.log(`${ ConfigData.TAG }, enterType: ${ enterKey }, stopInput: ${ ret }`);
+              hilog.info(0x0000, 'BtTest', '%{public}s', `${ ConfigData.TAG }, enterType: ${ enterKey }, stopInput: ${ ret }`);
             });
           })
       }
@@ -234,7 +237,7 @@ struct etScanMode {
         Row() {
           ButtonComponent({ text : $r("app.string.confirm") , isOnClick : () => {
             if ( this.currentClick === - 1 ) {
-              this.message = '请点击选择SCAN MODE';
+              this.message = resStr($r('app.string.bluetoothtest_str_qdjxzsm'));
               return;
             }
             this.message = '';
@@ -246,7 +249,8 @@ struct etScanMode {
           } })
     .accessibilityLevel('yes')
     .id('pages_subManualApiTest_subBrTest_setScanMode__bcomp_1')
-        }.width(ConfigData.VP_120)
+        }
+          .width(ConfigData.VP_120)
 
       }
     }

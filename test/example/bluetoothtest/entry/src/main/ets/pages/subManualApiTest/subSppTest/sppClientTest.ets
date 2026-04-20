@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 import { testItemFromRouterOrPlaceholder } from '../../../Utils/common'
 import ConfigData from '../../../Utils/ConfigData';
 import LogUtil from '../../../Utils/LogUtil';
@@ -81,10 +84,14 @@ struct SppClient {
               .id('pages_subManualApiTest_subSppTest_sppClientTest__pt_0')
           }
 
-          Stack().height(ConfigData.VP_0_5).backgroundColor($r('app.color.black'));
+          Stack()
+            .height(ConfigData.VP_0_5)
+            .backgroundColor($r('app.color.black'));
           Row() {
-            Text($r('app.string.bluetoothtest_text_mbsbm')).fontSize(ConfigData.VP_17).width(ConfigData.VP_70);
-            TextInput({ text : this.deviceId , placeholder : "请输入mac地址" })
+            Text($r('app.string.bluetoothtest_text_mbsbm'))
+              .fontSize(ConfigData.VP_17)
+              .width(ConfigData.VP_70);
+            TextInput({ text : this.deviceId , placeholder : $r('app.string.bluetoothtest_str_qsrmdz') })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subSppTest_sppClientTest__ti_0')
               .fontSize(ConfigData.VP_15)
@@ -101,8 +108,10 @@ struct SppClient {
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text($r('app.string.bluetoothtest_text_mbsbu')).fontSize(ConfigData.VP_17).width(ConfigData.VP_70);
-            TextInput({ text : this.uuid , placeholder : "请输入uuid" })
+            Text($r('app.string.bluetoothtest_text_mbsbu'))
+              .fontSize(ConfigData.VP_17)
+              .width(ConfigData.VP_70);
+            TextInput({ text : this.uuid , placeholder : $r('app.string.bluetoothtest_str_qsru') })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subSppTest_sppClientTest__ti_1')
               .fontSize(ConfigData.VP_15)
@@ -119,8 +128,10 @@ struct SppClient {
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text($r('app.string.bluetoothtest_text_xrmbsbsj')).fontSize(ConfigData.VP_17).width(ConfigData.VP_95);
-            TextInput({ text : this.writeClientData , placeholder : "请输入写入的数据" })
+            Text($r('app.string.bluetoothtest_text_xrmbsbsj'))
+              .fontSize(ConfigData.VP_17)
+              .width(ConfigData.VP_95);
+            TextInput({ text : this.writeClientData , placeholder : $r('app.string.bluetoothtest_str_qsrxrdsj') })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subSppTest_sppClientTest__ti_2')
               .fontSize(ConfigData.VP_15)
@@ -137,7 +148,8 @@ struct SppClient {
           .alignItems(VerticalAlign.Center)
 
           Row() {
-            Text($r('app.string.bluetoothtest_text_dqdsjw')).fontSize(ConfigData.VP_17)
+            Text($r('app.string.bluetoothtest_text_dqdsjw'))
+              .fontSize(ConfigData.VP_17)
             Text(this.dataReadMessage)
               .fontSize(ConfigData.VP_15)
               .width(ConfigData.WH_80_100)
@@ -148,7 +160,8 @@ struct SppClient {
           .alignItems(VerticalAlign.Center)
 
           Column() {
-            Text($r('app.string.label_api_result_space') + this.message).fontSize(ConfigData.VP_17)
+            Text(resStr($r('app.string.label_api_result_space')) + this.message)
+              .fontSize(ConfigData.VP_17)
               .padding(ConfigData.VP_10)
               .textAlign(TextAlign.Center)
           }
@@ -179,7 +192,7 @@ struct SppClient {
   sppClientClose() {
     LogUtil.info(MODEL + 'sppCloseClientSocket clientNumber: ' + JSON.stringify(this.clientNumber))
     bluetooth.sppCloseClientSocket(this.clientNumber);
-    this.message = '关闭成功 clientNumber' + this.clientNumber;
+    this.message = resStr($r('app.string.bluetoothtest_str_gbcgc')) + this.clientNumber;
   }
 
   /**
@@ -187,18 +200,18 @@ struct SppClient {
    * @param number
    */
   acceptClientSocket(number: number) {
-    console.log('spp clientSocket socketID: ' + number);
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'spp clientSocket socketID: ' + number);
     // 获取的clientNumber用作服务端后续读/写操作socket的id。
     this.clientNumber = number;
   }
 
   dataRead(dataBuffer: ArrayBuffer) {
     const data = new Uint8Array(dataBuffer);
-    console.log('spp bluetooth read is: ' + data);
+    hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetooth read is: ' + data);
     if ( data != null ) {
-      this.dataReadMessage = "读取成功" + JSON.stringify(data);
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
-      this.dataReadMessage = "读取失败";
+      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
   }
 

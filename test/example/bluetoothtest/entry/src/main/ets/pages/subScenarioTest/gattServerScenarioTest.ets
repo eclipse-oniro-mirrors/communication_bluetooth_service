@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import { PageTitle } from '../../Component/pageTitle';
@@ -82,7 +83,9 @@ struct GattServerScenarioTest {
               .id('pages_subScenarioTest_gattServerScenarioTest__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -104,7 +107,9 @@ struct GattServerScenarioTest {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
@@ -141,13 +146,19 @@ struct GattServerScenarioTest {
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_cjcsks')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Center)
+              Text($r('app.string.bluetoothtest_text_cjcsks'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Center)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_gattServerScenarioTest__btn_0')
@@ -164,50 +175,50 @@ struct GattServerScenarioTest {
             let gattServerScenarioMessage = ""
             // 注册状态变化
             gattServerScenarioMessage += BrInterface.testOnStateChange() + "\n"
-            console.log("testOnStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnStateChange success")
             self.changeIndex = arr[ 0 ]
             await sleep(1)
 
             // 开蓝牙
             gattServerScenarioMessage += BrInterface.testEnableBluetooth() + "\n";
-            console.log("testEnableBluetooth success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testEnableBluetooth success")
             self.changeIndex = arr[ 1 ]
             AppStorage.setOrCreate("gattServerScenarioMessage" , gattServerScenarioMessage)
             await sleep(2)
 
             // 获取状态
             gattServerScenarioMessage += BrInterface.testGetState() + "\n";
-            console.log("testGetState success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGetState success")
             self.changeIndex = arr[ 2 ]
             await sleep(1)
 
             //创建Gatt服务器
             gattServerScenarioMessage += GattServerInterface.testCreateGattServer() + "\n"
-            console.log("testCreateGattServer success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testCreateGattServer success")
             self.changeIndex = arr[ 3 ]
             await sleep(1)
 
             // 添加服务
             gattServerScenarioMessage += GattServerInterface.testAddService() + "\n"
-            console.log("testAddService success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testAddService success")
             self.changeIndex = arr[ 4 ]
 
             // 开启连接状态变化
             gattServerScenarioMessage += GattServerInterface.testOnConnectStateChange() + "\n"
-            console.log("testOnConnectStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnConnectStateChange success")
             self.changeIndex = arr[ 5 ]
             await sleep(1)
 
             // 开始广播
             gattServerScenarioMessage += GattServerInterface.testStartAdvertising() + "\n"
-            console.log("testStartAdvertising success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testStartAdvertising success")
             self.changeIndex = arr[ 6 ]
             AppStorage.setOrCreate("gattServerScenarioMessage" , gattServerScenarioMessage)
             await sleep(10)
 
             // 读取特征值
             gattServerScenarioMessage += GattServerInterface.testOnCharacteristicRead() + "\n"
-            console.log("testOnCharacteristicRead success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnCharacteristicRead success")
             self.changeIndex = arr[ 7 ]
             gattServerScenarioMessage += AppStorage.get("characteristicReadMsg") + "\n"
             AppStorage.setOrCreate("gattServerScenarioMessage" , gattServerScenarioMessage)
@@ -215,7 +226,7 @@ struct GattServerScenarioTest {
 
             // 写入特征值
             gattServerScenarioMessage += GattServerInterface.testOnCharacteristicWrite() + "\n"
-            console.log("testOnCharacteristicWrite success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnCharacteristicWrite success")
             self.changeIndex = arr[ 8 ]
             gattServerScenarioMessage += AppStorage.get("characteristicWriteMsg") + "\n"
             AppStorage.setOrCreate("gattServerScenarioMessage" , gattServerScenarioMessage)
@@ -223,7 +234,7 @@ struct GattServerScenarioTest {
 
             // 读取描述符值
             gattServerScenarioMessage += GattServerInterface.testOnDescriptorRead() + "\n"
-            console.log("testOnDescriptorRead success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnDescriptorRead success")
             self.changeIndex = arr[ 9 ]
             gattServerScenarioMessage += AppStorage.get("descriptorReadMsg") + "\n"
             AppStorage.setOrCreate("gattServerScenarioMessage" , gattServerScenarioMessage)
@@ -231,7 +242,7 @@ struct GattServerScenarioTest {
 
             // 写入描述符值
             gattServerScenarioMessage += GattServerInterface.testOnDescriptorWrite() + "\n"
-            console.log("testOnDescriptorWrite success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOnDescriptorWrite success")
             self.changeIndex = arr[ 10 ]
             gattServerScenarioMessage += AppStorage.get("descriptorWriteMsg") + "\n"
             AppStorage.setOrCreate("gattServerScenarioMessage" , gattServerScenarioMessage)
@@ -240,8 +251,12 @@ struct GattServerScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_cjcsjs')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_cjcsjs'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_gattServerScenarioTest__btn_1')
@@ -257,30 +272,30 @@ struct GattServerScenarioTest {
             let gattServerScenarioMessage = ""
             // 停止广播
             gattServerScenarioMessage += GattServerInterface.testStopAdvertising() + "\n"
-            console.log("testStopAdvertising success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testStopAdvertising success")
             self.changeIndex = arr[ 11 ]
             await sleep(1)
             // 关闭连接状态变化
             gattServerScenarioMessage += GattServerInterface.testOnConnectStateChange() + "\n"
-            console.log("testOffConnectStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffConnectStateChange success")
             await sleep(1)
             // 删除服务
             gattServerScenarioMessage += GattServerInterface.testRemoveService() + "\n"
-            console.log("testRemoveService success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testRemoveService success")
             self.changeIndex = arr[ 12 ]
             await sleep(1)
             // 关闭服务端
             gattServerScenarioMessage += GattServerInterface.testGattServerClose() + "\n"
-            console.log("testGattServerClose success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testGattServerClose success")
             self.changeIndex = arr[ 13 ]
             await sleep(1)
             // 关闭注册状态变化
             gattServerScenarioMessage += BrInterface.testOnStateChange() + "\n"
-            console.log("testOffStateChange success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffStateChange success")
             await sleep(1)
             // 关蓝牙
             gattServerScenarioMessage += BrInterface.testDisableBluetooth() + "\n"
-            console.log("testDisableBluetooth success")
+            hilog.info(0x0000, 'BtTest', '%{public}s', "testDisableBluetooth success")
             self.changeIndex = arr[ 14 ]
             await sleep(1)
             AppStorage.setOrCreate("gattServerScenarioMessage" , gattServerScenarioMessage)
@@ -288,8 +303,12 @@ struct GattServerScenarioTest {
 
           Button({ type : ButtonType.Normal , stateEffect : true }) {
             Row() {
-              Text($r('app.string.bluetoothtest_text_qkrz')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-            }.alignItems(VerticalAlign.Top)
+              Text($r('app.string.bluetoothtest_text_qkrz'))
+                .fontSize(ConfigData.VP_24)
+                .fontColor(0xffffff)
+                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+            }
+              .alignItems(VerticalAlign.Top)
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_gattServerScenarioTest__btn_2')

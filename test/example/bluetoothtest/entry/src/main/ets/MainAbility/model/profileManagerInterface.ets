@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
+
 
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction'
@@ -24,28 +26,28 @@ const PAGE_URI_GET_Pan_NETWORK_PROFILE_MANAGER = 'pages/subProfileTestManager/pa
 
 export function testA2dpSourceProfileManager(): string {
   router.pushUrl({ url : PAGE_URI_GET_A2DP_SOURCE_PROFILE_MANAGER })
-  let message = "跳转成功"
+  let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
   promptAction.showToast({ message : message })
   return message
 }
 
 export function testHandsFreeAudioGatewayProfileManager(): string {
   router.pushUrl({ url : PAGE_URI_GET_HANDS_FREE_AUDIO_GATEWAY_PROFILE_MANAGER })
-  let message = "跳转成功"
+  let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
   promptAction.showToast({ message : message })
   return message
 }
 
 export function testHidHostProfileManager(): string {
   router.pushUrl({ url : PAGE_URI_GET_HID_HOST_PROFILE_MANAGER })
-  let message = "跳转成功"
+  let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
   promptAction.showToast({ message : message })
   return message
 }
 
 export function testPanNetworkProfileManager(): string {
   router.pushUrl({ url : PAGE_URI_GET_Pan_NETWORK_PROFILE_MANAGER })
-  let message = "跳转成功"
+  let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
   promptAction.showToast({ message : message })
   return message
 }

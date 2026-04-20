@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,14 @@ import { TitleComponent } from '../../../Component/titleComponent';
 @Entry
 @Component
 struct ProfileConnState {
-  @State message: string = "请点击选择PROFILE TYPE";
+  @State message: Resource | string = $r('app.string.bluetoothtest_str_qdjxzpt');
   @State currentClick: number = - 1;
   @State profileId: number = - 1;
   @State profileType: string = '';
 
   build() {
     Column() {
-      PageTitle({ detail : '选择PROFILE ID' })
+      PageTitle({ detail : $r('app.string.bluetoothtest_str_xzpi') })
           .accessibilityLevel('yes')
           .id('pages_subManualApiTest_subBrTest_profileConnState__pt_0')
       Column() {

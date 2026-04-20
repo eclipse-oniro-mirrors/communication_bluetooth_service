@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../../Utils/resString';
+
 
 import ConfigData from '../../../Utils/ConfigData';
 import { TestData } from '../../../MainAbility/model/testData'
@@ -53,7 +55,9 @@ struct HitHostAutoTest {
               .id('pages_subAutoTest_subProfileAutoTest_hitHostAutoTest__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -76,7 +80,9 @@ struct HitHostAutoTest {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.Auto)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Scroll() {
           Column() {
@@ -87,7 +93,7 @@ struct HitHostAutoTest {
               .width(ConfigData.WH_100_100)
             List() {
               ListItem() {
-                Text($r('app.string.autotest_log_prefix') + "\n" + this.hidHostProfileAutoTestMessage)
+                Text(resStr($r('app.string.autotest_log_prefix')) + "\n" + this.hidHostProfileAutoTestMessage)
                   .fontSize(ConfigData.VP_17)
                   .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_30 , right : ConfigData.VP_10 })
                   .textAlign(TextAlign.Start)
@@ -114,12 +120,18 @@ struct HitHostAutoTest {
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Button({ type : ButtonType.Normal , stateEffect : true }) {
           Row() {
-            Text($r('app.string.autotest')).fontSize(ConfigData.VP_24).fontColor(0xffffff).margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
-          }.alignItems(VerticalAlign.Center)
+            Text($r('app.string.autotest'))
+              .fontSize(ConfigData.VP_24)
+              .fontColor(0xffffff)
+              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+          }
+            .alignItems(VerticalAlign.Center)
         }
         .accessibilityLevel('yes')
         .id('pages_subAutoTest_subProfileAutoTest_hitHostAutoTest__btn_0')

@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 /**
  * GattServer Interface Of Bluetooth test
  */
@@ -40,28 +43,28 @@ let gattServerInstance :bluetooth.GattServer
 export function testCreateGattServer(): string {
   try {
     let btState = bluetooth.getState();
-    let message = "createGattServer test"
+    let message = resStr($r('app.string.bluetoothtest_str_ct_2'))
     if ( btState === bluetooth.BluetoothState.STATE_ON || btState === bluetooth.BluetoothState.STATE_BLE_ON ) {
       if ( gattServerInstance ) {
-        message = "GattServer exists!";
+        message = resStr($r('app.string.bluetoothtest_str_ge_3'));
         promptAction.showToast({ message : message })
         return message
       }
-      console.log("CreateGattServer start -----------")
+      hilog.info(0x0000, 'BtTest', '%{public}s', "CreateGattServer start -----------")
       gattServerInstance = BluetoothModel.createGattServer();
-      message = "CreateGattServer:succeeds!";
-      console.log("CreateGattServer:succeeds!-----------")
+      message = resStr($r('app.string.bluetoothtest_str_cs_3'));
+      hilog.info(0x0000, 'BtTest', '%{public}s', "CreateGattServer:succeeds!-----------")
       promptAction.showToast({ message : message })
       return message
     } else if ( btState === bluetooth.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,wait!";
+      message = resStr($r('app.string.bluetoothtest_str_sw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testCreateGattServer. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testCreateGattServer. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testCreateGattServer. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -70,10 +73,10 @@ export function testCreateGattServer(): string {
 
 export function testAddService(): string {
   try {
-    let message = "addService test"
+    let message = resStr($r('app.string.bluetoothtest_str_at'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message
     }
@@ -114,15 +117,15 @@ export function testAddService(): string {
       characteristics : characteristics ,
       includeServices : []
     }
-    console.log("gattServerInstance.addService start -----------")
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattServerInstance.addService start -----------")
     let ret: boolean = gattServerInstance!.addService(curGattService);
-    message = "result: addService," + ret;
-    console.log("服务的参数为：" + JSON.stringify(curGattService))
-    console.log("gattServerInstance.addService succeeds!-----------" + message)
+    message = resStr($r('app.string.bluetoothtest_str_ra')) + ret;
+    hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_fwdcsw')) + JSON.stringify(curGattService))
+    hilog.info(0x0000, 'BtTest', '%{public}s', "gattServerInstance.addService succeeds!-----------" + message)
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testAddService. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testAddService. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testAddService. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -131,7 +134,7 @@ export function testAddService(): string {
 
 export function testRemoveService(): string {
   try {
-    let message = "removeService test"
+    let message = resStr($r('app.string.bluetoothtest_str_rt_4'))
     let curServiceUUID: string = AppStorage.get("curServiceUUID") !
     let btState = bluetooth.getState();
     if ( btState == bluetooth.BluetoothState.STATE_ON || btState == bluetooth.BluetoothState.STATE_BLE_ON ) {
@@ -140,21 +143,21 @@ export function testRemoveService(): string {
         promptAction.showToast({ message : message })
         return message
       }
-      message = "result: removeService ";
+      message = resStr($r('app.string.bluetoothtest_str_rr'));
       if ( gattServerInstance!.removeService(curServiceUUID) ) {
         message += 'true';
       } else {
         message += 'false';
       }
     } else if ( btState == bluetooth.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,please wait!";
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testRemoveService. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testRemoveService. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testRemoveService. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -199,7 +202,7 @@ let curAdvResponse: bluetooth.AdvertiseData = {
 
 export function testStartAdvertising(): string {
   try {
-    let message = "startAdvertising test"
+    let message = resStr($r('app.string.bluetoothtest_str_st_13'))
     let btState = bluetooth.getState();
     if ( btState === bluetooth.BluetoothState.STATE_ON || btState === bluetooth.BluetoothState.STATE_BLE_ON ) {
       if ( !gattServerInstance ) {
@@ -207,7 +210,7 @@ export function testStartAdvertising(): string {
         promptAction.showToast({ message : message })
         return message
       }
-      message = "startAdvertising:build input parameter In!";
+      message = resStr($r('app.string.bluetoothtest_str_sbipi'));
       // 调三个本地函数
       // buildAdvSettings();
       let cbxAdvSettings: boolean = AppStorage.get("cbxAdvSettings") !
@@ -291,33 +294,33 @@ export function testStartAdvertising(): string {
       let advData = curAdvData;
       let advResponse = curAdvResponse;
       let cbxAdvResponse: boolean = AppStorage.get("cbxAdvResponse") !
-      message = "startAdvertising:build input parameter Out!";
+      message = resStr($r('app.string.bluetoothtest_str_sbipo'));
 
       if ( !cbxAdvResponse ) {
-        console.log("advData.serviceUuids:" + advData.serviceUuids + "\n")
-        console.log("advData.manufactureData:" + advData.manufactureData + (typeof advData.manufactureData) + "\n")
-        console.log("advData.serviceData:" + advData.serviceData + "\n")
+        hilog.info(0x0000, 'BtTest', '%{public}s', "advData.serviceUuids:" + advData.serviceUuids + "\n")
+        hilog.info(0x0000, 'BtTest', '%{public}s', "advData.manufactureData:" + advData.manufactureData + (typeof advData.manufactureData) + "\n")
+        hilog.info(0x0000, 'BtTest', '%{public}s', "advData.serviceData:" + advData.serviceData + "\n")
         gattServerInstance!.startAdvertising(setting , advData);
-        console.log("startAdvertising(setting,advData)-----------")
+        hilog.info(0x0000, 'BtTest', '%{public}s', "startAdvertising(setting,advData)-----------")
       } else {
-        console.log("advResponse.serviceUuids:" + advResponse.serviceUuids + "\n")
-        console.log("advResponse.manufactureData:" + advResponse.manufactureData + "\n")
-        console.log("advResponse.serviceData:" + advResponse.serviceData + "\n")
+        hilog.info(0x0000, 'BtTest', '%{public}s', "advResponse.serviceUuids:" + advResponse.serviceUuids + "\n")
+        hilog.info(0x0000, 'BtTest', '%{public}s', "advResponse.manufactureData:" + advResponse.manufactureData + "\n")
+        hilog.info(0x0000, 'BtTest', '%{public}s', "advResponse.serviceData:" + advResponse.serviceData + "\n")
         gattServerInstance!.startAdvertising(setting , advData , advResponse);
-        console.log("startAdvertising(setting,advData,advResponse)-----------")
+        hilog.info(0x0000, 'BtTest', '%{public}s', "startAdvertising(setting,advData,advResponse)-----------")
       }
-      console.log("cbxAdvSettings:" + cbxAdvSettings + "\n")
-      console.log("cbxAdvResponse:" + cbxAdvResponse + "\n")
-      message = "startAdvertising succeeds!" + cbxAdvSettings + "," + cbxAdvResponse;
+      hilog.info(0x0000, 'BtTest', '%{public}s', "cbxAdvSettings:" + cbxAdvSettings + "\n")
+      hilog.info(0x0000, 'BtTest', '%{public}s', "cbxAdvResponse:" + cbxAdvResponse + "\n")
+      message = resStr($r('app.string.bluetoothtest_str_ss')) + cbxAdvSettings + "," + cbxAdvResponse;
     } else if ( btState === bluetooth.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,please wait!";
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testStartAdvertising. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testStartAdvertising. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testStartAdvertising. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -326,7 +329,7 @@ export function testStartAdvertising(): string {
 
 export function testStopAdvertising(): String {
   try {
-    let message = "stopAdvertising test"
+    let message = resStr($r('app.string.bluetoothtest_str_st_16'))
     let btState = bluetooth.getState();
     if ( btState == bluetooth.BluetoothState.STATE_ON || btState == bluetooth.BluetoothState.STATE_BLE_ON ) {
       if ( !gattServerInstance ) {
@@ -335,16 +338,16 @@ export function testStopAdvertising(): String {
         return message
       }
       gattServerInstance!.stopAdvertising();
-      message = "stopAdvertising succeeds.";
+      message = resStr($r('app.string.bluetoothtest_str_ss_1'));
     } else if ( btState == bluetooth.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,please wait!";
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testStopAdvertising. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testStopAdvertising. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testStopAdvertising. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -353,7 +356,7 @@ export function testStopAdvertising(): String {
 
 export function testGattServerClose(): String {
   try {
-    let message = "gattServerClose test"
+    let message = resStr($r('app.string.bluetoothtest_str_gt_10'))
     let btState = bluetooth.getState();
     if ( btState == bluetooth.BluetoothState.STATE_ON || btState == bluetooth.BluetoothState.STATE_BLE_ON ) {
       if ( !gattServerInstance ) {
@@ -362,16 +365,16 @@ export function testGattServerClose(): String {
         return message
       }
       gattServerInstance!.close();
-      message = "GattServer closed: succeeds";
+      message = resStr($r('app.string.bluetoothtest_str_gcs'));
     } else if ( btState == bluetooth.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
-      message = "switching,please wait!";
+      message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testGattServerClose. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGattServerClose. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGattServerClose. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -383,17 +386,17 @@ let connectStateChange = false
 
 export function testOnConnectStateChange(): String {
   try {
-    let message = "onConnectStateChange test"
+    let message = resStr($r('app.string.bluetoothtest_str_ot_6'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message
     }
     if ( connectStateChange ) {
       gattServerInstance!.off("connectStateChange" , () => {
       })
-      message = "关闭连接状态变化 "
+      message = resStr($r('app.string.bluetoothtest_str_gbljztbh'))
       promptAction.showToast({ message : message })
       return message
     } else {
@@ -410,16 +413,16 @@ export function testOnConnectStateChange(): String {
           connect_StateMsg = "STATE_DISCONNECTING"
         }
         AppStorage.setOrCreate("connect_StateMsg" , connect_StateMsg)
-        console.log("connectStateChange:" + JSON.stringify(data))
+        hilog.info(0x0000, 'BtTest', '%{public}s', "connectStateChange:" + JSON.stringify(data))
         promptAction.showToast({ message : connectStateMsg })
       })
-      message = '打开连接状态变化'
+      message = resStr($r('app.string.bluetoothtest_str_dkljztbh'))
     }
     connectStateChange = !connectStateChange
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testOnConnectStateChange. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testOnConnectStateChange. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testOnConnectStateChange. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -431,17 +434,17 @@ let characteristicRead = false
 
 export function testOnCharacteristicRead(): String {
   try {
-    let message = "onCharacteristicRead test"
+    let message = resStr($r('app.string.bluetoothtest_str_ot_5'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message
     }
     if ( characteristicRead ) {
       gattServerInstance!.off("characteristicRead" , () => {
       })
-      message = "特征值读取 关闭"
+      message = resStr($r('app.string.bluetoothtest_str_tzzdqgb'))
       promptAction.showToast({ message : message })
       return message
     } else {
@@ -474,16 +477,16 @@ export function testOnCharacteristicRead(): String {
         }
 
         let ret: boolean = gattServerInstance!.sendResponse(serverResponse)
-        message = 'characteristicRead sendResponse:' + ret
+        message = resStr($r('app.string.bluetoothtest_str_cs_1')) + ret
         promptAction.showToast({ message : message })
       })
-      message = '特征值读取 打开'
+      message = resStr($r('app.string.bluetoothtest_str_tzzdqdk'))
     }
     characteristicRead = !characteristicRead
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testOnCharacteristicRead. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testOnCharacteristicRead. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testOnCharacteristicRead. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -495,17 +498,17 @@ let characteristicWrite = false
 
 export function testOnCharacteristicWrite(): String {
   try {
-    let message = "onCharacteristicWrite test"
+    let message = resStr($r('app.string.bluetoothtest_str_ot_4'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message
     }
     if ( characteristicWrite ) {
       gattServerInstance!.off("characteristicWrite" , () => {
       });
-      message = "特征值写入 关闭"
+      message = resStr($r('app.string.bluetoothtest_str_tzzxrgb'))
       promptAction.showToast({ message : message })
       return message
     } else {
@@ -548,7 +551,7 @@ export function testOnCharacteristicWrite(): String {
         // sendResponse
         if ( needRsp ) {
           let ret: boolean = gattServerInstance!.sendResponse(serverResponse);
-          message = 'characteristicWrite sendResponse:' + ret;
+          message = resStr($r('app.string.bluetoothtest_str_cs')) + ret;
           promptAction.showToast({ message : message })
         }
         let notifyCharacteristic_notifyCharacteristic: NotifyCharacteristic = {
@@ -559,18 +562,18 @@ export function testOnCharacteristicWrite(): String {
         }
         let notifyCharacteristic = notifyCharacteristic_notifyCharacteristic;
         if ( gattServerInstance!.notifyCharacteristicChanged(deviceId , notifyCharacteristic) ) {
-          message = "notifyCharacteristicChanged successfully!";
+          message = resStr($r('app.string.bluetoothtest_str_ns'));
         } else {
-          message = "notifyCharacteristicChanged failed!";
+          message = resStr($r('app.string.bluetoothtest_str_nf'));
         }
       })
-      message = '特征值写入 打开';
+      message = resStr($r('app.string.bluetoothtest_str_tzzxrdk'));
     }
     characteristicWrite = !characteristicWrite
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testOnCharacteristicWrite. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testOnCharacteristicWrite. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testOnCharacteristicWrite. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -582,16 +585,16 @@ let descriptorRead = false
 
 export function testOnDescriptorRead(): String {
   try {
-    let message = "onDescriptorRead test"
+    let message = resStr($r('app.string.bluetoothtest_str_ot_9'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       return message;
     }
     if ( descriptorRead ) {
       gattServerInstance!.off("descriptorRead" , () => {
       });
-      message = '描述符读取 关闭';
+      message = resStr($r('app.string.bluetoothtest_str_msfdqgb'));
       promptAction.showToast({ message : message })
       return message
     } else {
@@ -614,18 +617,18 @@ export function testOnDescriptorRead(): String {
           value : arrayBufferDesc
         }
         let ret: boolean = gattServerInstance!.sendResponse(serverResponse);
-        message = 'descriptorRead sendResponse:' + ret;
+        message = resStr($r('app.string.bluetoothtest_str_ds_1')) + ret;
         descriptorReadMsg += message
         AppStorage.setOrCreate("descriptorReadMsg" , descriptorReadMsg)
         promptAction.showToast({ message : message })
       })
-      message = '描述符读取 打开';
+      message = resStr($r('app.string.bluetoothtest_str_msfdqdk'));
     }
     descriptorRead = !descriptorRead
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testOnDescriptorRead. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testOnDescriptorRead. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testOnDescriptorRead. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message
@@ -637,17 +640,17 @@ let descriptorWrite = false
 
 export function testOnDescriptorWrite(): String {
   try {
-    let message = "onDescriptorWrite test"
+    let message = resStr($r('app.string.bluetoothtest_str_ot_8'))
     let btStatus = bluetooth.getState();
     if ( btStatus === bluetooth.BluetoothState.STATE_OFF ) {
-      message = "BT is not enabled!";
+      message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({ message : message })
       return message
     }
     if ( descriptorWrite ) {
       gattServerInstance!.off("descriptorWrite" , () => {
       });
-      message = '描述符写入 关闭';
+      message = resStr($r('app.string.bluetoothtest_str_msfxrgb'));
       promptAction.showToast({ message : message })
       return message
     } else {
@@ -682,18 +685,18 @@ export function testOnDescriptorWrite(): String {
 
         if ( needRsp ) {
           let ret: boolean = gattServerInstance!.sendResponse(serverResponse);
-          message = 'descriptorWrite sendResponse:' + ret;
+          message = resStr($r('app.string.bluetoothtest_str_ds')) + ret;
           promptAction.showToast({ message : message })
         }
         descriptorWriteMsg += 'descriptorWrite Callback finished!';
       })
-      message = '描述符写入 打开';
+      message = resStr($r('app.string.bluetoothtest_str_msfxrdk'));
     }
     descriptorWrite = !descriptorWrite
     promptAction.showToast({ message : message })
     return message
   } catch( e ) {
-    console.log(`Failed to testOnDescriptorWrite. message: ${ e.message }, code: ${ e.code }`)
+    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testOnDescriptorWrite. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testOnDescriptorWrite. message: ${ e.message }, code: ${ e.code }`
     promptAction.showToast({ message : message })
     return message

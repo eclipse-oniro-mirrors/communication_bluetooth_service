@@ -50,7 +50,7 @@ struct PairedDevices {
           });
 
           Column() {
-            PageTitle({ detail : '已配对设备' })
+            PageTitle({ detail : $r('app.string.bluetoothtest_str_ypdsb') })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTest_subBrTest_pairedDevices__pt_0')
 
@@ -96,7 +96,8 @@ struct PairedDevices {
                 } })
           .accessibilityLevel('yes')
           .id('pages_subManualApiTest_subBrTest_pairedDevices__bcomp_1')
-              }.width(ConfigData.VP_120)
+              }
+                .width(ConfigData.VP_120)
             }
           }
           .padding({ left : ConfigData.VP_24 , right : ConfigData.VP_24 })

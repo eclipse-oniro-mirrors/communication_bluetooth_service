@@ -12,7 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { resStr } from '../../Utils/resString';
 
+
+import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
 import { PairDevices, testItemFromRouterOrPlaceholder } from '../../Utils/common'
 import { PageTitle } from '../../Component/pageTitle';
@@ -51,9 +54,9 @@ struct OppRecvScenarioTest {
           this.oppProfile.setIncomingFileConfirmation(true, file.fd);
           this.receiveDialogController.close();
           this.onTransferStateChange();
-          console.log("receive success");
+          hilog.info(0x0000, 'BtTest', '%{public}s', "receive success");
         } catch( error ) {
-          console.log("receive fail, err: " + JSON.stringify(error));
+          hilog.info(0x0000, 'BtTest', '%{public}s', "receive fail, err: " + JSON.stringify(error));
         }
       } ,
       cancel : () => {
@@ -62,9 +65,9 @@ struct OppRecvScenarioTest {
           let file = fs.openSync(pathDir, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
           this.oppProfile.setIncomingFileConfirmation(false, file.fd);
           this.receiveDialogController.close();
-          console.log("reject receive success");
+          hilog.info(0x0000, 'BtTest', '%{public}s', "reject receive success");
         } catch( error ) {
-          console.log("reject receive fail, err: " + JSON.stringify(error));
+          hilog.info(0x0000, 'BtTest', '%{public}s', "reject receive fail, err: " + JSON.stringify(error));
         }
       }
     })
@@ -82,29 +85,29 @@ struct OppRecvScenarioTest {
 
   getPairDevice() {
     let macs = bluetooth.getPairedDevices();
-    console.log("OppRecv getPairDevice macs: " + JSON.stringify(macs));
+    hilog.info(0x0000, 'BtTest', '%{public}s', "OppRecv getPairDevice macs: " + JSON.stringify(macs));
     for ( let i = 0 ; i < macs.length ; i ++ ) {
       let name = bluetooth.getRemoteDeviceName(macs[ i ]);
-      console.log("OppRecv getPairDevice name: " + JSON.stringify(name));
+      hilog.info(0x0000, 'BtTest', '%{public}s', "OppRecv getPairDevice name: " + JSON.stringify(name));
       this.pairedDevices.push({ id : macs[ i ] , name : name });
     }
-    console.log("OppRecv getPairDevice pairedDevices: " + JSON.stringify(this.pairedDevices));
+    hilog.info(0x0000, 'BtTest', '%{public}s', "OppRecv getPairDevice pairedDevices: " + JSON.stringify(this.pairedDevices));
   }
 
   onTransferStateChange() {
     try {
       this.oppProfile.on("transferStateChange" , (stateInformation) => {
-        console.log("transferStateChange enter");
+        hilog.info(0x0000, 'BtTest', '%{public}s', "transferStateChange enter");
         this.showProgress = true;
         this.curProgress = (stateInformation.currentBytes * 100) / stateInformation.totalBytes;
         if ( this.curProgress === 100 ) {
           this.showProgress = false;
-          this.oppRecvScenarioMessage = "接收文件成功，文件存放路径：" + JSON.stringify(stateInformation.filePath) + "\n"
+          this.oppRecvScenarioMessage = resStr($r('app.string.bluetoothtest_str_jswjcgwjcflj')) + JSON.stringify(stateInformation.filePath) + "\n"
           testLog(this.oppRecvScenarioMessage);
         }
       })
     } catch( error ) {
-      console.log("on transferStateChange fail, err: " + JSON.stringify(error));
+      hilog.info(0x0000, 'BtTest', '%{public}s', "on transferStateChange fail, err: " + JSON.stringify(error));
     }
   }
 
@@ -117,7 +120,9 @@ struct OppRecvScenarioTest {
               .id('pages_subScenarioTest_oppRecvScenarioTest__pt_0')
       }
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
       Column() {
         Scroll() {
           Column() {
@@ -159,7 +164,9 @@ struct OppRecvScenarioTest {
         .scrollBarWidth(ConfigData.VP_10)
         .scrollBar(BarState.On)
 
-        Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+        Stack()
+          .height(ConfigData.HEIGHT_1_VP)
+          .backgroundColor($r('app.color.black'));
 
         Column() {
           Text($r('app.string.bluetoothtest_text_yxzdsbdlymdz'))
@@ -171,7 +178,8 @@ struct OppRecvScenarioTest {
             .width(ConfigData.PCT_70)
             .borderRadius(ConfigData.VP_5)
             .backgroundColor($r("app.color.moon"))
-        }.height(ConfigData.PCT_20)
+        }
+          .height(ConfigData.PCT_20)
 
         Scroll() {
           Column() {
@@ -207,12 +215,14 @@ struct OppRecvScenarioTest {
       .width(ConfigData.WH_100_100)
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Stack().height(ConfigData.HEIGHT_1_VP).backgroundColor($r('app.color.black'));
+      Stack()
+        .height(ConfigData.HEIGHT_1_VP)
+        .backgroundColor($r('app.color.black'));
 
       Column() {
         Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
           Column() {
-            Button('opp开启接收文件')
+            Button($r('app.string.bluetoothtest_str_okqjswj'))
               .accessibilityLevel('yes')
               .id('pages_subScenarioTest_oppRecvScenarioTest__btn_0')
               .fontSize(ConfigData.VP_20)
@@ -226,16 +236,16 @@ struct OppRecvScenarioTest {
               .onClick(() => {
                 try {
                   this.oppProfile.on("receiveIncomingFile" , ( information) => {
-                    testLog("opp开启接收文件")
+                    testLog(resStr($r('app.string.bluetoothtest_str_okqjswj')))
                     this.deviceName = information.remoteDeviceName;
                     this.fileName = information.filePath;
-                    this.oppRecvScenarioMessage = "发送端为：" + this.deviceName + ";文件名为：" + this.fileName + "\n"
+                    this.oppRecvScenarioMessage = resStr($r('app.string.bluetoothtest_str_fsdw')) + this.deviceName + resStr($r('app.string.bluetoothtest_str_wjmw')) + this.fileName + "\n"
                     testLog(this.oppRecvScenarioMessage);
-                    console.log(JSON.stringify(information));
+                    hilog.info(0x0000, 'BtTest', '%{public}s', JSON.stringify(information));
                     this.receiveDialogController.open();
                   })
                 } catch( error ) {
-                  this.oppRecvScenarioMessage = "opp开启接收文件失败，err: " + JSON.stringify(error)
+                  this.oppRecvScenarioMessage = resStr($r('app.string.bluetoothtest_str_okqjswjsbe')) + JSON.stringify(error)
                   testLog(this.oppRecvScenarioMessage);
                 }
               })
@@ -276,27 +286,32 @@ struct ReceiveCustomDialog {
 
   build() {
     Column() {
-      Text($r('app.string.opp_recv_confirm_prefix') + this.deviceName + $r('app.string.opp_recv_confirm_suffix')).fontSize(ConfigData.VP_20).margin({ top : ConfigData.VP_10 , bottom : ConfigData.VP_10 })
-      Text(this.fileName).fontSize(ConfigData.VP_18).margin({ bottom : ConfigData.VP_10 })
+      Text(resStr($r('app.string.opp_recv_confirm_prefix')) + this.deviceName + resStr($r('app.string.opp_recv_confirm_suffix')))
+        .fontSize(ConfigData.VP_20)
+        .margin({ top : ConfigData.VP_10 , bottom : ConfigData.VP_10 })
+  Text(this.fileName)
+    .fontSize(ConfigData.VP_18)
+    .margin({ bottom : ConfigData.VP_10 })
       Flex({ justifyContent : FlexAlign.SpaceAround }) {
-        Button('拒接')
+        Button($r('app.string.bluetoothtest_str_jj'))
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_oppRecvScenarioTest__btn_1')
           .onClick(() => {
             this.cancel()
           })
-        Button('接收')
+        Button($r('app.string.bluetoothtest_str_js_1'))
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_oppRecvScenarioTest__btn_2')
           .onClick(() => {
             this.confirm()
           })
-      }.margin({ bottom : ConfigData.VP_10 })
+      }
+        .margin({ bottom : ConfigData.VP_10 })
     }
   }
 }
 
 export function testLog(logStr: string) {
   promptAction.showToast({ message : logStr })
-  console.log(logStr)
+  hilog.info(0x0000, 'BtTest', '%{public}s', logStr)
 }
