@@ -44,14 +44,14 @@ declare namespace constant {
     /**
      * The enum of profile id.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 10
      */
     /**
      * The enum of profile id.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @crossplatform
      * @since 13
@@ -103,7 +103,7 @@ declare namespace constant {
     /**
      * Enum for the profile's uuid
      *
-     * @enum { string }
+     * @enum { string}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi
      * @since 10
@@ -111,14 +111,14 @@ declare namespace constant {
     /**
      * Enum for the profile's uuid
      *
-     * @enum { string }
+     * @enum { string}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 12
      */
     /**
      * Enum for the profile's uuid
      *
-     * @enum { string }
+     * @enum { string}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @crossplatform
      * @since 13
@@ -338,14 +338,14 @@ declare namespace constant {
     /**
      * The enum of profile connection state.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 10
      */
     /**
      * The enum of profile connection state.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @atomicservice
      * @since 12
@@ -353,7 +353,7 @@ declare namespace constant {
     /**
      * The enum of profile connection state.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @crossplatform
      * @atomicservice
@@ -452,14 +452,14 @@ declare namespace constant {
     /**
      * The enum of major class of a bluetooth device.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 10
      */
     /**
      * The enum of major class of a bluetooth device.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @crossplatform
      * @since 13
@@ -560,14 +560,14 @@ declare namespace constant {
     /**
      * The enum of major minor class of a bluetooth device.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 10
      */
     /**
      * The enum of major minor class of a bluetooth device.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @crossplatform
      * @since 13
@@ -1545,7 +1545,7 @@ declare namespace constant {
     /**
      * Enum for the PBAP or MAP access authorization.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi
      * @since 11

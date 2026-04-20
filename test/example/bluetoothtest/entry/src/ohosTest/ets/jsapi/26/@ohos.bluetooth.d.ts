@@ -16,7 +16,7 @@
  * @file
  * @kit ConnectivityKit
  */
-import type { AsyncCallback, Callback } from './@ohos.base';
+import type { AsyncCallback, Callback} from './@ohos.base';
 /**
  * Provides methods to operate or manage Bluetooth.
  *
@@ -31,7 +31,7 @@ declare namespace bluetooth {
      * Obtains the Bluetooth status of a device.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @returns { BluetoothState } Returns the Bluetooth status, which can be {@link BluetoothState#STATE_OFF},
+     * @returns { BluetoothState} Returns the Bluetooth status, which can be {@link BluetoothState#STATE_OFF},
      * {@link BluetoothState#STATE_TURNING_ON}, {@link BluetoothState#STATE_ON}, {@link BluetoothState#STATE_TURNING_OFF},
      * {@link BluetoothState#STATE_BLE_TURNING_ON}, {@link BluetoothState#STATE_BLE_ON},
      * or {@link BluetoothState#STATE_BLE_TURNING_OFF}.
@@ -45,7 +45,7 @@ declare namespace bluetooth {
      * Get the local device connection state to any profile of any remote device.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @returns { ProfileConnectionState } One of {@link ProfileConnectionState#STATE_DISCONNECTED},
+     * @returns { ProfileConnectionState} One of {@link ProfileConnectionState#STATE_DISCONNECTED},
      * {@link ProfileConnectionState#STATE_CONNECTING}, {@link ProfileConnectionState#STATE_CONNECTED},
      * {@link ProfileConnectionState#STATE_DISCONNECTING}.
      * @syscap SystemCapability.Communication.Bluetooth.Core
@@ -58,8 +58,8 @@ declare namespace bluetooth {
      * Starts pairing with a remote Bluetooth device.
      *
      * @permission ohos.permission.DISCOVER_BLUETOOTH
-     * @param { string } deviceId - The address of the remote device to pair.
-     * @returns { boolean } Returns {@code true} if the pairing process is started; returns {@code false} otherwise.
+     * @param { string} deviceId - The address of the remote device to pair.
+     * @returns { boolean} Returns {@code true} if the pairing process is started; returns {@code false} otherwise.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 7
      * @deprecated since 9
@@ -70,8 +70,8 @@ declare namespace bluetooth {
      * Remove a paired remote device.
      *
      * @permission ohos.permission.DISCOVER_BLUETOOTH
-     * @param { string } deviceId - The address of the remote device to be removed.
-     * @returns { boolean } Returns {@code true} if the cancel process is started; returns {@code false} otherwise.
+     * @param { string} deviceId - The address of the remote device to be removed.
+     * @returns { boolean} Returns {@code true} if the cancel process is started; returns {@code false} otherwise.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi Hide this for inner system use
      * @since 8
@@ -83,8 +83,8 @@ declare namespace bluetooth {
      * Obtains the name of a peer Bluetooth device.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { string } deviceId - The address of the remote device.
-     * @returns { string } Returns the device name in character string format.
+     * @param { string} deviceId - The address of the remote device.
+     * @returns { string} Returns the device name in character string format.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -95,8 +95,8 @@ declare namespace bluetooth {
      * Obtains the class of a peer Bluetooth device.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { string } deviceId - The address of the remote device.
-     * @returns { DeviceClass } The class of the remote device, {@link DeviceClass}.
+     * @param { string} deviceId - The address of the remote device.
+     * @returns { DeviceClass} The class of the remote device, {@link DeviceClass}.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -107,7 +107,7 @@ declare namespace bluetooth {
      * Enables Bluetooth on a device.
      *
      * @permission ohos.permission.DISCOVER_BLUETOOTH
-     * @returns { boolean } Returns {@code true} if Bluetooth is being enabled; returns {@code false} if an error occurs.
+     * @returns { boolean} Returns {@code true} if Bluetooth is being enabled; returns {@code false} if an error occurs.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -118,7 +118,7 @@ declare namespace bluetooth {
      * Disables Bluetooth on a device.
      *
      * @permission ohos.permission.DISCOVER_BLUETOOTH
-     * @returns { boolean } Returns {@code true} if Bluetooth is being disabled; returns {@code false} if an error occurs.
+     * @returns { boolean} Returns {@code true} if Bluetooth is being disabled; returns {@code false} if an error occurs.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -129,7 +129,7 @@ declare namespace bluetooth {
      * Obtains the Bluetooth local name of a device.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @returns { string } Returns the name the device.
+     * @returns { string} Returns the name the device.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -140,7 +140,7 @@ declare namespace bluetooth {
      * Obtains the list of Bluetooth devices that have been paired with the current device.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @returns { Array<string> } Returns a list of paired Bluetooth devices's address.
+     * @returns { Array<string>} Returns a list of paired Bluetooth devices's address.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -151,8 +151,8 @@ declare namespace bluetooth {
      * Obtains the connection state of profile.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { ProfileId } profileId - The profile id.
-     * @returns { ProfileConnectionState } Returns the connection state.
+     * @param { ProfileId} profileId - The profile id.
+     * @returns { ProfileConnectionState} Returns the connection state.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -163,9 +163,9 @@ declare namespace bluetooth {
      * Sets the confirmation of pairing with a certain device.
      *
      * @permission ohos.permission.MANAGE_BLUETOOTH
-     * @param { string } device - The address of the remote device.
-     * @param { boolean } accept - Indicates whether to accept the pairing request, {@code true} indicates accept or {@code false} otherwise.
-     * @returns { boolean } Returns {@code true} if the pairing confirmation is set; returns {@code false} otherwise.
+     * @param { string} device - The address of the remote device.
+     * @param { boolean} accept - Indicates whether to accept the pairing request, {@code true} indicates accept or {@code false} otherwise.
+     * @returns { boolean} Returns {@code true} if the pairing confirmation is set; returns {@code false} otherwise.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -176,8 +176,8 @@ declare namespace bluetooth {
      * Sets the Bluetooth friendly name of a device.
      *
      * @permission ohos.permission.DISCOVER_BLUETOOTH
-     * @param { string } name - Indicates a valid Bluetooth name.
-     * @returns { boolean } Returns {@code true} if the Bluetooth name is set successfully; returns {@code false} otherwise.
+     * @param { string} name - Indicates a valid Bluetooth name.
+     * @returns { boolean} Returns {@code true} if the Bluetooth name is set successfully; returns {@code false} otherwise.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -188,9 +188,9 @@ declare namespace bluetooth {
      * Sets the Bluetooth scan mode for a device.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { ScanMode } mode - Indicates the Bluetooth scan mode to set, {@link ScanMode}.
-     * @param { number } duration - Indicates the duration in seconds, in which the host is discoverable.
-     * @returns { boolean } Returns {@code true} if the Bluetooth scan mode is set; returns {@code false} otherwise.
+     * @param { ScanMode} mode - Indicates the Bluetooth scan mode to set, {@link ScanMode}.
+     * @param { number} duration - Indicates the duration in seconds, in which the host is discoverable.
+     * @returns { boolean} Returns {@code true} if the Bluetooth scan mode is set; returns {@code false} otherwise.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -201,7 +201,7 @@ declare namespace bluetooth {
      * Obtains the Bluetooth scanning mode of a device.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @returns { ScanMode } Returns the Bluetooth scanning mode, {@link ScanMode}.
+     * @returns { ScanMode} Returns the Bluetooth scanning mode, {@link ScanMode}.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -212,7 +212,7 @@ declare namespace bluetooth {
      * Starts scanning Bluetooth devices.
      *
      * @permission ohos.permission.DISCOVER_BLUETOOTH and ohos.permission.LOCATION
-     * @returns { boolean } Returns {@code true} if the scan is started successfully; returns {@code false} otherwise.
+     * @returns { boolean} Returns {@code true} if the scan is started successfully; returns {@code false} otherwise.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -223,7 +223,7 @@ declare namespace bluetooth {
      * Stops Bluetooth device scanning.
      *
      * @permission ohos.permission.DISCOVER_BLUETOOTH
-     * @returns { boolean } Returns {@code true} if scanning is stopped successfully; returns {@code false} otherwise.
+     * @returns { boolean} Returns {@code true} if scanning is stopped successfully; returns {@code false} otherwise.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -234,8 +234,8 @@ declare namespace bluetooth {
      * Subscribe the event reported when a remote Bluetooth device is discovered.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { 'bluetoothDeviceFind' } type - Type of the discovering event to listen for.
-     * @param { Callback<Array<string>> } callback - Callback used to listen for the discovering event.
+     * @param { 'bluetoothDeviceFind'} type - Type of the discovering event to listen for.
+     * @param { Callback<Array<string>>} callback - Callback used to listen for the discovering event.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -246,8 +246,8 @@ declare namespace bluetooth {
      * Unsubscribe the event reported when a remote Bluetooth device is discovered.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { 'bluetoothDeviceFind' } type - Type of the discovering event to listen for.
-     * @param { Callback<Array<string>> } callback - Callback used to listen for the discovering event.
+     * @param { 'bluetoothDeviceFind'} type - Type of the discovering event to listen for.
+     * @param { Callback<Array<string>>} callback - Callback used to listen for the discovering event.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -258,8 +258,8 @@ declare namespace bluetooth {
      * Subscribe the event reported when a remote Bluetooth device is bonded.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { 'bondStateChange' } type - Type of the bond state event to listen for.
-     * @param { Callback<BondStateParam> } callback - Callback used to listen for the bond state event, {@link BondStateParam}.
+     * @param { 'bondStateChange'} type - Type of the bond state event to listen for.
+     * @param { Callback<BondStateParam>} callback - Callback used to listen for the bond state event, {@link BondStateParam}.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -270,8 +270,8 @@ declare namespace bluetooth {
      * Unsubscribe the event reported when a remote Bluetooth device is bonded.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { 'bondStateChange' } type - Type of the bond state event to listen for.
-     * @param { Callback<BondStateParam> } callback - Callback used to listen for the bond state event.
+     * @param { 'bondStateChange'} type - Type of the bond state event to listen for.
+     * @param { Callback<BondStateParam>} callback - Callback used to listen for the bond state event.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -282,8 +282,8 @@ declare namespace bluetooth {
      * Subscribe the event of a pairing request from a remote Bluetooth device.
      *
      * @permission ohos.permission.DISCOVER_BLUETOOTH
-     * @param { 'pinRequired' } type - Type of the pairing request event to listen for.
-     * @param { Callback<PinRequiredParam> } callback - Callback used to listen for the pairing request event.
+     * @param { 'pinRequired'} type - Type of the pairing request event to listen for.
+     * @param { Callback<PinRequiredParam>} callback - Callback used to listen for the pairing request event.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -294,8 +294,8 @@ declare namespace bluetooth {
      * Unsubscribe the event of a pairing request from a remote Bluetooth device.
      *
      * @permission ohos.permission.DISCOVER_BLUETOOTH
-     * @param { 'pinRequired' } type - Type of the pairing request event to listen for.
-     * @param { Callback<PinRequiredParam> } callback - Callback used to listen for the pairing request event.
+     * @param { 'pinRequired'} type - Type of the pairing request event to listen for.
+     * @param { Callback<PinRequiredParam>} callback - Callback used to listen for the pairing request event.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -306,8 +306,8 @@ declare namespace bluetooth {
      * Subscribe the event reported when the Bluetooth state changes.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { 'stateChange' } type - Type of the Bluetooth state changes event to listen for.
-     * @param { Callback<BluetoothState> } callback - Callback used to listen for the Bluetooth state event.
+     * @param { 'stateChange'} type - Type of the Bluetooth state changes event to listen for.
+     * @param { Callback<BluetoothState>} callback - Callback used to listen for the Bluetooth state event.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -318,8 +318,8 @@ declare namespace bluetooth {
      * Unsubscribe the event reported when the Bluetooth state changes.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { 'stateChange' } type - Type of the Bluetooth state changes event to listen for.
-     * @param { Callback<BluetoothState> } callback - Callback used to listen for the Bluetooth state event.
+     * @param { 'stateChange'} type - Type of the Bluetooth state changes event to listen for.
+     * @param { Callback<BluetoothState>} callback - Callback used to listen for the Bluetooth state event.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -330,9 +330,9 @@ declare namespace bluetooth {
      * Creates a Bluetooth server listening socket.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { string } name - Indicates the service name.
-     * @param { SppOption } option - Indicates the listen parameters {@link SppOption}.
-     * @param { AsyncCallback<number> } callback - Callback used to return a server socket ID.
+     * @param { string} name - Indicates the service name.
+     * @param { SppOption} option - Indicates the listen parameters {@link SppOption}.
+     * @param { AsyncCallback<number>} callback - Callback used to return a server socket ID.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -342,8 +342,8 @@ declare namespace bluetooth {
     /**
      * Waits for a remote device to connect.
      *
-     * @param { number } serverSocket - Indicates the server socket ID, returned by {@link sppListen}.
-     * @param { AsyncCallback<number> } callback - Callback used to return a client socket ID.
+     * @param { number} serverSocket - Indicates the server socket ID, returned by {@link sppListen}.
+     * @param { AsyncCallback<number>} callback - Callback used to return a client socket ID.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -354,9 +354,9 @@ declare namespace bluetooth {
      * Connects to a remote device over the socket.
      *
      * @permission ohos.permission.USE_BLUETOOTH
-     * @param { string } device - The address of the remote device to connect.
-     * @param { SppOption } option - Indicates the connect parameters {@link SppOption}.
-     * @param { AsyncCallback<number> } callback - Callback used to return a client socket ID.
+     * @param { string} device - The address of the remote device to connect.
+     * @param { SppOption} option - Indicates the connect parameters {@link SppOption}.
+     * @param { AsyncCallback<number>} callback - Callback used to return a client socket ID.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -366,7 +366,7 @@ declare namespace bluetooth {
     /**
      * Disables an spp server socket and releases related resources.
      *
-     * @param { number } socket - Indicates the server socket ID, returned by {@link sppListen}.
+     * @param { number} socket - Indicates the server socket ID, returned by {@link sppListen}.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -376,7 +376,7 @@ declare namespace bluetooth {
     /**
      * Disables an spp client socket and releases related resources.
      *
-     * @param { number } socket - Indicates the client socket ID, returned by {@link sppAccept} or {@link sppConnect}.
+     * @param { number} socket - Indicates the client socket ID, returned by {@link sppAccept} or {@link sppConnect}.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -386,9 +386,9 @@ declare namespace bluetooth {
     /**
      * Write data through the socket.
      *
-     * @param { number } clientSocket - Indicates the client socket ID, returned by {@link sppAccept} or {@link sppConnect}.
-     * @param { ArrayBuffer } data - Indicates the data to write.
-     * @returns { boolean } Returns {@code true} if the data is write successfully; returns {@code false} otherwise.
+     * @param { number} clientSocket - Indicates the client socket ID, returned by {@link sppAccept} or {@link sppConnect}.
+     * @param { ArrayBuffer} data - Indicates the data to write.
+     * @returns { boolean} Returns {@code true} if the data is write successfully; returns {@code false} otherwise.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -398,9 +398,9 @@ declare namespace bluetooth {
     /**
      * Subscribe the event reported when data is read from the socket.
      *
-     * @param { 'sppRead' } type - Type of the spp read event to listen for.
-     * @param { number } clientSocket - Client socket ID, which is obtained by sppAccept or sppConnect.
-     * @param { Callback<ArrayBuffer> } callback - Callback used to listen for the spp read event.
+     * @param { 'sppRead'} type - Type of the spp read event to listen for.
+     * @param { number} clientSocket - Client socket ID, which is obtained by sppAccept or sppConnect.
+     * @param { Callback<ArrayBuffer>} callback - Callback used to listen for the spp read event.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -410,9 +410,9 @@ declare namespace bluetooth {
     /**
      * Unsubscribe the event reported when data is read from the socket.
      *
-     * @param { 'sppRead' } type - Type of the spp read event to listen for.
-     * @param { number } clientSocket - Client socket ID, which is obtained by sppAccept or sppConnect.
-     * @param { Callback<ArrayBuffer> } callback - Callback used to listen for the spp read event.
+     * @param { 'sppRead'} type - Type of the spp read event to listen for.
+     * @param { number} clientSocket - Client socket ID, which is obtained by sppAccept or sppConnect.
+     * @param { Callback<ArrayBuffer>} callback - Callback used to listen for the spp read event.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -422,8 +422,8 @@ declare namespace bluetooth {
     /**
      * Obtains the instance of profile.
      *
-     * @param { ProfileId } profileId - The profile id..
-     * @returns { A2dpSourceProfile | HandsFreeAudioGatewayProfile } Returns instance of profile.
+     * @param { ProfileId} profileId - The profile id..
+     * @returns { A2dpSourceProfile | HandsFreeAudioGatewayProfile} Returns instance of profile.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -444,7 +444,7 @@ declare namespace bluetooth {
          * Obtains the connected devices list of profile.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @returns { Array<string> } Returns the address of connected devices list.
+         * @returns { Array<string>} Returns the address of connected devices list.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 8
          * @deprecated since 9
@@ -455,8 +455,8 @@ declare namespace bluetooth {
          * Obtains the profile state of device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { string } device - The address of bluetooth device.
-         * @returns { ProfileConnectionState } Returns {@link ProfileConnectionState} of device.
+         * @param { string} device - The address of bluetooth device.
+         * @returns { ProfileConnectionState} Returns {@link ProfileConnectionState} of device.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 8
          * @deprecated since 9
@@ -478,8 +478,8 @@ declare namespace bluetooth {
          * Connect to device with a2dp.
          *
          * @permission ohos.permission.DISCOVER_BLUETOOTH
-         * @param { string } device - The address of the remote device to connect.
-         * @returns { boolean } Returns {@code true} if the connect is in process; returns {@code false} otherwise.
+         * @param { string} device - The address of the remote device to connect.
+         * @returns { boolean} Returns {@code true} if the connect is in process; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 8
          * @deprecated since 9
@@ -490,8 +490,8 @@ declare namespace bluetooth {
          * Disconnect to device with a2dp.
          *
          * @permission ohos.permission.DISCOVER_BLUETOOTH
-         * @param { string } device - The address of the remote device to disconnect.
-         * @returns { boolean } Returns {@code true} if the disconnect is in process; returns {@code false} otherwise.
+         * @param { string} device - The address of the remote device to disconnect.
+         * @returns { boolean} Returns {@code true} if the disconnect is in process; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 8
          * @deprecated since 9
@@ -501,8 +501,8 @@ declare namespace bluetooth {
         /**
          * Subscribe the event reported when the profile connection state changes .
          *
-         * @param { 'connectionStateChange' } type - Type of the profile connection state changes event to listen for .
-         * @param { Callback<StateChangeParam> } callback - Callback used to listen for event.
+         * @param { 'connectionStateChange'} type - Type of the profile connection state changes event to listen for .
+         * @param { Callback<StateChangeParam>} callback - Callback used to listen for event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 8
          * @deprecated since 9
@@ -512,8 +512,8 @@ declare namespace bluetooth {
         /**
          * Unsubscribe the event reported when the profile connection state changes .
          *
-         * @param { 'connectionStateChange' } type - Type of the profile connection state changes event to listen for .
-         * @param { Callback<StateChangeParam> } callback - Callback used to listen for event.
+         * @param { 'connectionStateChange'} type - Type of the profile connection state changes event to listen for .
+         * @param { Callback<StateChangeParam>} callback - Callback used to listen for event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 8
          * @deprecated since 9
@@ -523,8 +523,8 @@ declare namespace bluetooth {
         /**
          * Obtains the playing state of device.
          *
-         * @param { string } device - The address of the remote device.
-         * @returns { PlayingState } Returns {@link PlayingState} of the remote device.
+         * @param { string} device - The address of the remote device.
+         * @returns { PlayingState} Returns {@link PlayingState} of the remote device.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 8
          * @deprecated since 9
@@ -546,8 +546,8 @@ declare namespace bluetooth {
          * Connect to device with hfp.
          *
          * @permission ohos.permission.DISCOVER_BLUETOOTH
-         * @param { string } device - The address of the remote device to connect.
-         * @returns { boolean } Returns {@code true} if the connect is in process; returns {@code false} otherwise.
+         * @param { string} device - The address of the remote device to connect.
+         * @returns { boolean} Returns {@code true} if the connect is in process; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 8
          * @deprecated since 9
@@ -558,8 +558,8 @@ declare namespace bluetooth {
          * Disconnect to device with hfp.
          *
          * @permission ohos.permission.DISCOVER_BLUETOOTH
-         * @param { string } device - The address of the remote device to disconnect.
-         * @returns { boolean } Returns {@code true} if the disconnect is in process; returns {@code false} otherwise.
+         * @param { string} device - The address of the remote device to disconnect.
+         * @returns { boolean} Returns {@code true} if the disconnect is in process; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 8
          * @deprecated since 9
@@ -569,8 +569,8 @@ declare namespace bluetooth {
         /**
          * Subscribe the event reported when the profile connection state changes .
          *
-         * @param { 'connectionStateChange' } type - Type of the profile connection state changes event to listen for .
-         * @param { Callback<StateChangeParam> } callback - Callback used to listen for event.
+         * @param { 'connectionStateChange'} type - Type of the profile connection state changes event to listen for .
+         * @param { Callback<StateChangeParam>} callback - Callback used to listen for event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 8
          * @deprecated since 9
@@ -580,8 +580,8 @@ declare namespace bluetooth {
         /**
          * Unsubscribe the event reported when the profile connection state changes .
          *
-         * @param { 'connectionStateChange' } type - Type of the profile connection state changes event to listen for .
-         * @param { Callback<StateChangeParam> } callback - Callback used to listen for event.
+         * @param { 'connectionStateChange'} type - Type of the profile connection state changes event to listen for .
+         * @param { Callback<StateChangeParam>} callback - Callback used to listen for event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 8
          * @deprecated since 9
@@ -602,7 +602,7 @@ declare namespace bluetooth {
         /**
          * create a JavaScript Gatt server instance.
          *
-         * @returns { GattServer } Returns a JavaScript Gatt server instance {@code GattServer}.
+         * @returns { GattServer} Returns a JavaScript Gatt server instance {@code GattServer}.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -612,8 +612,8 @@ declare namespace bluetooth {
         /**
          * create a JavaScript Gatt client device instance.
          *
-         * @param { string } deviceId - The address of the remote device.
-         * @returns { GattClientDevice } Returns a JavaScript Gatt client device instance {@code GattClientDevice}.
+         * @param { string} deviceId - The address of the remote device.
+         * @returns { GattClientDevice} Returns a JavaScript Gatt client device instance {@code GattClientDevice}.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -624,7 +624,7 @@ declare namespace bluetooth {
          * Obtains the list of devices in the connected status.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @returns { Array<string> } Returns the list of device address.
+         * @returns { Array<string>} Returns the list of device address.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -635,9 +635,9 @@ declare namespace bluetooth {
          * Starts scanning for specified BLE devices with filters.
          *
          * @permission ohos.permission.DISCOVER_BLUETOOTH and ohos.permission.MANAGE_BLUETOOTH and ohos.permission.LOCATION
-         * @param { Array<ScanFilter> } filters - Indicates the list of filters used to filter out specified devices.
+         * @param { Array<ScanFilter>} filters - Indicates the list of filters used to filter out specified devices.
          * If you do not want to use filter, set this parameter to {@code null}.
-         * @param { ScanOptions } options - Indicates the parameters for scanning and if the user does not assign a value, the default value will be used.
+         * @param { ScanOptions} options - Indicates the parameters for scanning and if the user does not assign a value, the default value will be used.
          * {@link ScanOptions#interval} set to 0, {@link ScanOptions#dutyMode} set to {@link SCAN_MODE_LOW_POWER}
          * and {@link ScanOptions#matchMode} set to {@link MATCH_MODE_AGGRESSIVE}.
          * @syscap SystemCapability.Communication.Bluetooth.Core
@@ -660,8 +660,8 @@ declare namespace bluetooth {
          * Subscribe BLE scan result.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'BLEDeviceFind' } type - Type of the scan result event to listen for.
-         * @param { Callback<Array<ScanResult>> } callback - Callback used to listen for the scan result event.
+         * @param { 'BLEDeviceFind'} type - Type of the scan result event to listen for.
+         * @param { Callback<Array<ScanResult>>} callback - Callback used to listen for the scan result event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -672,8 +672,8 @@ declare namespace bluetooth {
          * Unsubscribe BLE scan result.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'BLEDeviceFind' } type - Type of the scan result event to listen for.
-         * @param { Callback<Array<ScanResult>> } callback - Callback used to listen for the scan result event.
+         * @param { 'BLEDeviceFind'} type - Type of the scan result event to listen for.
+         * @param { Callback<Array<ScanResult>>} callback - Callback used to listen for the scan result event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -695,10 +695,10 @@ declare namespace bluetooth {
          * Starts BLE advertising.
          *
          * @permission ohos.permission.DISCOVER_BLUETOOTH
-         * @param { AdvertiseSetting } setting - Indicates the settings for BLE advertising.
+         * @param { AdvertiseSetting} setting - Indicates the settings for BLE advertising.
          * If you need to use the default value, set this parameter to {@code null}.
-         * @param { AdvertiseData } advData - Indicates the advertising data.
-         * @param { AdvertiseData } advResponse - Indicates the scan response associated with the advertising data.
+         * @param { AdvertiseData} advData - Indicates the advertising data.
+         * @param { AdvertiseData} advResponse - Indicates the scan response associated with the advertising data.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -720,8 +720,8 @@ declare namespace bluetooth {
          * <p>The added service and its characteristics are provided by the local device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { GattService } service - Indicates the service to add.
-         * @returns { boolean } Returns {@code true} if the service is added; returns {@code false} otherwise.
+         * @param { GattService} service - Indicates the service to add.
+         * @returns { boolean} Returns {@code true} if the service is added; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -732,8 +732,8 @@ declare namespace bluetooth {
          * Removes a specified service from the list of GATT services provided by this device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { string } serviceUuid - Indicates the UUID of the service to remove.
-         * @returns { boolean } Returns {@code true} if the service is removed; returns {@code false} otherwise.
+         * @param { string} serviceUuid - Indicates the UUID of the service to remove.
+         * @returns { boolean} Returns {@code true} if the service is removed; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -755,9 +755,9 @@ declare namespace bluetooth {
          * <p>This method should be called for every BLE peripheral device that has requested notifications.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { string } deviceId - Indicates the address of the BLE peripheral device to receive the notification.
-         * @param { NotifyCharacteristic } notifyCharacteristic - Indicates the local characteristic that has changed.
-         * @returns { boolean } Returns {@code true} if the notification is sent successfully; returns {@code false} otherwise.
+         * @param { string} deviceId - Indicates the address of the BLE peripheral device to receive the notification.
+         * @param { NotifyCharacteristic} notifyCharacteristic - Indicates the local characteristic that has changed.
+         * @returns { boolean} Returns {@code true} if the notification is sent successfully; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -768,8 +768,8 @@ declare namespace bluetooth {
          * Sends a response to a specified read or write request to a given BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { ServerResponse } serverResponse - Indicates the response parameters {@link ServerResponse}.
-         * @returns { boolean } Returns {@code true} if the response is sent successfully; returns {@code false} otherwise.
+         * @param { ServerResponse} serverResponse - Indicates the response parameters {@link ServerResponse}.
+         * @returns { boolean} Returns {@code true} if the response is sent successfully; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -780,8 +780,8 @@ declare namespace bluetooth {
          * Subscribe characteristic read event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'characteristicRead' } type - Type of the characteristic read event to listen for.
-         * @param { Callback<CharacteristicReadReq> } callback - Callback used to listen for the characteristic read event.
+         * @param { 'characteristicRead'} type - Type of the characteristic read event to listen for.
+         * @param { Callback<CharacteristicReadReq>} callback - Callback used to listen for the characteristic read event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -792,8 +792,8 @@ declare namespace bluetooth {
          * Unsubscribe characteristic read event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'characteristicRead' } type - Type of the characteristic read event to listen for.
-         * @param { Callback<CharacteristicReadReq> } callback - Callback used to listen for the characteristic read event.
+         * @param { 'characteristicRead'} type - Type of the characteristic read event to listen for.
+         * @param { Callback<CharacteristicReadReq>} callback - Callback used to listen for the characteristic read event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -804,8 +804,8 @@ declare namespace bluetooth {
          * Subscribe characteristic write event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'characteristicWrite' } type - Type of the characteristic write event to listen for.
-         * @param { Callback<CharacteristicWriteReq> } callback - Callback used to listen for the characteristic write event.
+         * @param { 'characteristicWrite'} type - Type of the characteristic write event to listen for.
+         * @param { Callback<CharacteristicWriteReq>} callback - Callback used to listen for the characteristic write event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -816,8 +816,8 @@ declare namespace bluetooth {
          * Unsubscribe characteristic write event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'characteristicWrite' } type - Type of the characteristic write event to listen for.
-         * @param { Callback<CharacteristicWriteReq> } callback - Callback used to listen for the characteristic write event.
+         * @param { 'characteristicWrite'} type - Type of the characteristic write event to listen for.
+         * @param { Callback<CharacteristicWriteReq>} callback - Callback used to listen for the characteristic write event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -828,8 +828,8 @@ declare namespace bluetooth {
          * Subscribe descriptor read event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'descriptorRead' } type - Type of the descriptor read event to listen for.
-         * @param { Callback<DescriptorReadReq> } callback - Callback used to listen for the descriptor read event.
+         * @param { 'descriptorRead'} type - Type of the descriptor read event to listen for.
+         * @param { Callback<DescriptorReadReq>} callback - Callback used to listen for the descriptor read event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -840,8 +840,8 @@ declare namespace bluetooth {
          * Unsubscribe descriptor read event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'descriptorRead' } type - Type of the descriptor read event to listen for.
-         * @param { Callback<DescriptorReadReq> } callback - Callback used to listen for the descriptor read event.
+         * @param { 'descriptorRead'} type - Type of the descriptor read event to listen for.
+         * @param { Callback<DescriptorReadReq>} callback - Callback used to listen for the descriptor read event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -852,8 +852,8 @@ declare namespace bluetooth {
          * Subscribe descriptor write event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'descriptorWrite' } type - Type of the descriptor write event to listen for.
-         * @param { Callback<DescriptorWriteReq> } callback - Callback used to listen for the descriptor write event.
+         * @param { 'descriptorWrite'} type - Type of the descriptor write event to listen for.
+         * @param { Callback<DescriptorWriteReq>} callback - Callback used to listen for the descriptor write event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -864,8 +864,8 @@ declare namespace bluetooth {
          * Unsubscribe descriptor write event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'descriptorWrite' } type - Type of the descriptor write event to listen for.
-         * @param { Callback<DescriptorWriteReq> } callback - Callback used to listen for the descriptor write event.
+         * @param { 'descriptorWrite'} type - Type of the descriptor write event to listen for.
+         * @param { Callback<DescriptorWriteReq>} callback - Callback used to listen for the descriptor write event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -876,8 +876,8 @@ declare namespace bluetooth {
          * Subscribe server connection state changed event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'connectStateChange' } type - Type of the connection state changed event to listen for.
-         * @param { Callback<BLEConnectChangedState> } callback - Callback used to listen for the connection state changed event.
+         * @param { 'connectStateChange'} type - Type of the connection state changed event to listen for.
+         * @param { Callback<BLEConnectChangedState>} callback - Callback used to listen for the connection state changed event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -888,8 +888,8 @@ declare namespace bluetooth {
          * Unsubscribe server connection state changed event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'connectStateChange' } type - Type of the connection state changed event to listen for.
-         * @param { Callback<BLEConnectChangedState> } callback - Callback used to listen for the connection state changed event.
+         * @param { 'connectStateChange'} type - Type of the connection state changed event to listen for.
+         * @param { Callback<BLEConnectChangedState>} callback - Callback used to listen for the connection state changed event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -912,7 +912,7 @@ declare namespace bluetooth {
          * <p>The 'BLEConnectionStateChange' event is subscribed to return the connection state.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @returns { boolean } Returns {@code true} if the connection process starts; returns {@code false} otherwise.
+         * @returns { boolean} Returns {@code true} if the connection process starts; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -923,7 +923,7 @@ declare namespace bluetooth {
          * Disconnects from or stops an ongoing connection to a BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @returns { boolean } Returns {@code true} if the disconnection process starts; returns {@code false} otherwise.
+         * @returns { boolean} Returns {@code true} if the disconnection process starts; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -935,7 +935,7 @@ declare namespace bluetooth {
          * <p> This method unregisters the device and clears the registered callbacks and handles.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @returns { boolean } Returns {@code true} if the the device is disabled; returns {@code false} otherwise.
+         * @returns { boolean} Returns {@code true} if the the device is disabled; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -946,7 +946,7 @@ declare namespace bluetooth {
          * Obtains the name of BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { AsyncCallback<string> } callback - Callback used to obtain the device name.
+         * @param { AsyncCallback<string>} callback - Callback used to obtain the device name.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -957,7 +957,7 @@ declare namespace bluetooth {
          * Obtains the name of BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @returns { Promise<string> } Returns a string representation of the name if obtained;
+         * @returns { Promise<string>} Returns a string representation of the name if obtained;
          * returns {@code null} if the name fails to be obtained or the name does not exist.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
@@ -969,7 +969,7 @@ declare namespace bluetooth {
          * Starts discovering services.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { AsyncCallback<Array<GattService>> } callback - Callback used to catch the services.
+         * @param { AsyncCallback<Array<GattService>>} callback - Callback used to catch the services.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -980,7 +980,7 @@ declare namespace bluetooth {
          * Starts discovering services.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @returns { Promise<Array<GattService>> } Returns the list of services {@link GattService} of the BLE peripheral device.
+         * @returns { Promise<Array<GattService>>} Returns the list of services {@link GattService} of the BLE peripheral device.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -991,8 +991,8 @@ declare namespace bluetooth {
          * Reads the characteristic of a BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { BLECharacteristic } characteristic - Indicates the characteristic to read.
-         * @param { AsyncCallback<BLECharacteristic> } callback - Callback invoked to return the characteristic value read.
+         * @param { BLECharacteristic} characteristic - Indicates the characteristic to read.
+         * @param { AsyncCallback<BLECharacteristic>} callback - Callback invoked to return the characteristic value read.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1003,8 +1003,8 @@ declare namespace bluetooth {
          * Reads the characteristic of a BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { BLECharacteristic } characteristic - Indicates the characteristic to read.
-         * @returns { Promise<BLECharacteristic> } - Promise used to return the characteristic value read.
+         * @param { BLECharacteristic} characteristic - Indicates the characteristic to read.
+         * @returns { Promise<BLECharacteristic>} - Promise used to return the characteristic value read.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1015,8 +1015,8 @@ declare namespace bluetooth {
          * Reads the descriptor of a BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { BLEDescriptor } descriptor - Indicates the descriptor to read.
-         * @param { AsyncCallback<BLEDescriptor> } callback - Callback invoked to return the descriptor read.
+         * @param { BLEDescriptor} descriptor - Indicates the descriptor to read.
+         * @param { AsyncCallback<BLEDescriptor>} callback - Callback invoked to return the descriptor read.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1027,8 +1027,8 @@ declare namespace bluetooth {
          * Reads the descriptor of a BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { BLEDescriptor } descriptor - Indicates the descriptor to read.
-         * @returns { Promise<BLEDescriptor> } - Promise used to return the descriptor read.
+         * @param { BLEDescriptor} descriptor - Indicates the descriptor to read.
+         * @returns { Promise<BLEDescriptor>} - Promise used to return the descriptor read.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1039,8 +1039,8 @@ declare namespace bluetooth {
          * Writes the characteristic of a BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { BLECharacteristic } characteristic - Indicates the characteristic to write.
-         * @returns { boolean } Returns {@code true} if the characteristic is written successfully; returns {@code false} otherwise.
+         * @param { BLECharacteristic} characteristic - Indicates the characteristic to write.
+         * @returns { boolean} Returns {@code true} if the characteristic is written successfully; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1051,8 +1051,8 @@ declare namespace bluetooth {
          * Writes the descriptor of a BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { BLEDescriptor } descriptor - Indicates the descriptor to write.
-         * @returns { boolean } Returns {@code true} if the descriptor is written successfully; returns {@code false} otherwise.
+         * @param { BLEDescriptor} descriptor - Indicates the descriptor to write.
+         * @returns { boolean} Returns {@code true} if the descriptor is written successfully; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1063,7 +1063,7 @@ declare namespace bluetooth {
          * Get the RSSI value of this BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { AsyncCallback<number> } callback - Callback invoked to return the RSSI, in dBm.
+         * @param { AsyncCallback<number>} callback - Callback invoked to return the RSSI, in dBm.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1074,7 +1074,7 @@ declare namespace bluetooth {
          * Get the RSSI value of this BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @returns { Promise<number> } Returns the RSSI value.
+         * @returns { Promise<number>} Returns the RSSI value.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1085,8 +1085,8 @@ declare namespace bluetooth {
          * Set the mtu size of a BLE peripheral device.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { number } mtu - The maximum transmission unit.
-         * @returns { boolean } Returns {@code true} if the set mtu is successfully; returns {@code false} otherwise.
+         * @param { number} mtu - The maximum transmission unit.
+         * @returns { boolean} Returns {@code true} if the set mtu is successfully; returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1097,10 +1097,10 @@ declare namespace bluetooth {
          * Enables or disables notification of a characteristic when value changed.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { BLECharacteristic } characteristic - BLE characteristic to listen for.
-         * @param { boolean } enable - Specifies whether to enable notification of the characteristic. The value {@code true} indicates
+         * @param { BLECharacteristic} characteristic - BLE characteristic to listen for.
+         * @param { boolean} enable - Specifies whether to enable notification of the characteristic. The value {@code true} indicates
          * that notification is enabled, and the value {@code false} indicates that notification is disabled.
-         * @returns { boolean } Returns {@code true} if notification of the characteristic is enabled or disabled;
+         * @returns { boolean} Returns {@code true} if notification of the characteristic is enabled or disabled;
          * returns {@code false} otherwise.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
@@ -1112,8 +1112,8 @@ declare namespace bluetooth {
          * Subscribe characteristic value changed event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'BLECharacteristicChange' } type - Type of the characteristic value changed event to listen for.
-         * @param { Callback<BLECharacteristic> } callback - Callback used to listen for the characteristic value changed event.
+         * @param { 'BLECharacteristicChange'} type - Type of the characteristic value changed event to listen for.
+         * @param { Callback<BLECharacteristic>} callback - Callback used to listen for the characteristic value changed event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1124,8 +1124,8 @@ declare namespace bluetooth {
          * Unsubscribe characteristic value changed event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'BLECharacteristicChange' } type - Type of the characteristic value changed event to listen for.
-         * @param { Callback<BLECharacteristic> } callback - Callback used to listen for the characteristic value changed event.
+         * @param { 'BLECharacteristicChange'} type - Type of the characteristic value changed event to listen for.
+         * @param { Callback<BLECharacteristic>} callback - Callback used to listen for the characteristic value changed event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1136,8 +1136,8 @@ declare namespace bluetooth {
          * Subscribe client connection state changed event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'BLEConnectionStateChange' } type - Type of the connection state changed event to listen for.
-         * @param { Callback<BLEConnectChangedState> } callback - Callback used to listen for the connection state changed event.
+         * @param { 'BLEConnectionStateChange'} type - Type of the connection state changed event to listen for.
+         * @param { Callback<BLEConnectChangedState>} callback - Callback used to listen for the connection state changed event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -1148,8 +1148,8 @@ declare namespace bluetooth {
          * Unsubscribe client connection state changed event.
          *
          * @permission ohos.permission.USE_BLUETOOTH
-         * @param { 'BLEConnectionStateChange' } type - Type of the connection state changed event to listen for.
-         * @param { Callback<BLEConnectChangedState> } callback - Callback used to listen for the connection state changed event.
+         * @param { 'BLEConnectionStateChange'} type - Type of the connection state changed event to listen for.
+         * @param { Callback<BLEConnectChangedState>} callback - Callback used to listen for the connection state changed event.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 7
          * @deprecated since 9
@@ -2116,7 +2116,7 @@ declare namespace bluetooth {
     /**
      * The enum of scan duty.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 7
      * @deprecated since 9
@@ -2154,7 +2154,7 @@ declare namespace bluetooth {
     /**
      * The enum of BLE match mode.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 7
      * @deprecated since 9
@@ -2183,7 +2183,7 @@ declare namespace bluetooth {
     /**
      * The enum of profile connection state.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 7
      * @deprecated since 9
@@ -2230,7 +2230,7 @@ declare namespace bluetooth {
     /**
      * The enum of bluetooth state.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 7
      * @deprecated since 9
@@ -2304,7 +2304,7 @@ declare namespace bluetooth {
     /**
      * The enum of SPP type.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -2324,7 +2324,7 @@ declare namespace bluetooth {
     /**
      * The enum of BR scan mode.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -2389,7 +2389,7 @@ declare namespace bluetooth {
     /**
      * The enum of bond state.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -2427,7 +2427,7 @@ declare namespace bluetooth {
     /**
      * The enum of major class of a bluetooth device.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -2537,7 +2537,7 @@ declare namespace bluetooth {
     /**
      * The enum of major minor class of a bluetooth device.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -3352,7 +3352,7 @@ declare namespace bluetooth {
     /**
      * The enum of a2dp playing state.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 8
      * @deprecated since 9
@@ -3381,7 +3381,7 @@ declare namespace bluetooth {
     /**
      * The enum of profile id.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 7
      * @deprecated since 9
