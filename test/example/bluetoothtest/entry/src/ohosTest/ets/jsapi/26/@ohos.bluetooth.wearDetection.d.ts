@@ -16,7 +16,7 @@
  * @file
  * @kit ConnectivityKit
  */
-import type { AsyncCallback, Callback } from './@ohos.base';
+import type { AsyncCallback, Callback} from './@ohos.base';
 /**
  * Provides methods to manage the wearing detection function.
  *
@@ -29,16 +29,16 @@ declare namespace wearDetection {
      * Turn on the wearing detection switch.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH and ohos.permission.MANAGE_BLUETOOTH
-     * @param { string } deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
-     * @param { AsyncCallback<void> } callback - the Callback result.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-     * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+     * @param { string} deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
+     * @param { AsyncCallback<void>} callback - the Callback result.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+     * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
      * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 2900001 - Service stopped.
-     * @throws { BusinessError } 2900003 - Bluetooth disabled.
-     * @throws { BusinessError } 2900099 - Operation failed.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 2900001 - Service stopped.
+     * @throws { BusinessError} 2900003 - Bluetooth disabled.
+     * @throws { BusinessError} 2900099 - Operation failed.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi
      * @since 11
@@ -48,16 +48,16 @@ declare namespace wearDetection {
      * Turn on the wearing detection switch.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH and ohos.permission.MANAGE_BLUETOOTH
-     * @param { string } deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
-     * @returns { Promise<void> } Returns the promise object.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-     * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+     * @param { string} deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
+     * @returns { Promise<void>} Returns the promise object.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+     * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
      * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 2900001 - Service stopped.
-     * @throws { BusinessError } 2900003 - Bluetooth disabled.
-     * @throws { BusinessError } 2900099 - Operation failed.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 2900001 - Service stopped.
+     * @throws { BusinessError} 2900003 - Bluetooth disabled.
+     * @throws { BusinessError} 2900099 - Operation failed.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi
      * @since 11
@@ -67,16 +67,16 @@ declare namespace wearDetection {
      * Turn off the wearing detection switch.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH and ohos.permission.MANAGE_BLUETOOTH
-     * @param { string } deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
-     * @param { AsyncCallback<void> } callback - the Callback result.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-     * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+     * @param { string} deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
+     * @param { AsyncCallback<void>} callback - the Callback result.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+     * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
      * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 2900001 - Service stopped.
-     * @throws { BusinessError } 2900003 - Bluetooth disabled.
-     * @throws { BusinessError } 2900099 - Operation failed.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 2900001 - Service stopped.
+     * @throws { BusinessError} 2900003 - Bluetooth disabled.
+     * @throws { BusinessError} 2900099 - Operation failed.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi
      * @since 11
@@ -86,16 +86,16 @@ declare namespace wearDetection {
      * Turn off the wearing detection switch.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH and ohos.permission.MANAGE_BLUETOOTH
-     * @param { string } deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
-     * @returns { Promise<void> } Returns the promise object.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-     * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+     * @param { string} deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
+     * @returns { Promise<void>} Returns the promise object.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+     * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
      * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 2900001 - Service stopped.
-     * @throws { BusinessError } 2900003 - Bluetooth disabled.
-     * @throws { BusinessError } 2900099 - Operation failed.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 2900001 - Service stopped.
+     * @throws { BusinessError} 2900003 - Bluetooth disabled.
+     * @throws { BusinessError} 2900099 - Operation failed.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi
      * @since 11
@@ -105,16 +105,16 @@ declare namespace wearDetection {
      * Checks whether the device supports wear detection.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH
-     * @param { string } deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
-     * @param { AsyncCallback<boolean> } callback - the Callback result.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-     * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+     * @param { string} deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
+     * @param { AsyncCallback<boolean>} callback - the Callback result.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+     * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
      * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 2900001 - Service stopped.
-     * @throws { BusinessError } 2900003 - Bluetooth disabled.
-     * @throws { BusinessError } 2900099 - Operation failed.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 2900001 - Service stopped.
+     * @throws { BusinessError} 2900003 - Bluetooth disabled.
+     * @throws { BusinessError} 2900099 - Operation failed.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi
      * @since 11
@@ -124,16 +124,16 @@ declare namespace wearDetection {
      * Checks whether the device supports wear detection.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH
-     * @param { string } deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
-     * @returns { Promise<boolean> } Returns the promise object.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-     * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+     * @param { string} deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
+     * @returns { Promise<boolean>} Returns the promise object.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+     * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
      * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 2900001 - Service stopped.
-     * @throws { BusinessError } 2900003 - Bluetooth disabled.
-     * @throws { BusinessError } 2900099 - Operation failed.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 2900001 - Service stopped.
+     * @throws { BusinessError} 2900003 - Bluetooth disabled.
+     * @throws { BusinessError} 2900099 - Operation failed.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi
      * @since 11
@@ -143,16 +143,16 @@ declare namespace wearDetection {
      * Check whether the wearing detection is enabled.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH
-     * @param { string } deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
-     * @param { AsyncCallback<boolean> } callback - the Callback result.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-     * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+     * @param { string} deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
+     * @param { AsyncCallback<boolean>} callback - the Callback result.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+     * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
      * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 2900001 - Service stopped.
-     * @throws { BusinessError } 2900003 - Bluetooth disabled.
-     * @throws { BusinessError } 2900099 - Operation failed.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 2900001 - Service stopped.
+     * @throws { BusinessError} 2900003 - Bluetooth disabled.
+     * @throws { BusinessError} 2900099 - Operation failed.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi
      * @since 11
@@ -162,16 +162,16 @@ declare namespace wearDetection {
      * Check whether the wearing detection is enabled.
      *
      * @permission ohos.permission.ACCESS_BLUETOOTH
-     * @param { string } deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
-     * @returns { Promise<boolean> } Returns the promise object.
-     * @throws { BusinessError } 201 - Permission denied.
-     * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-     * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+     * @param { string} deviceId - Indicates device ID.For example, "11:22:33:AA:BB:FF",
+     * @returns { Promise<boolean>} Returns the promise object.
+     * @throws { BusinessError} 201 - Permission denied.
+     * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+     * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
      * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-     * @throws { BusinessError } 801 - Capability not supported.
-     * @throws { BusinessError } 2900001 - Service stopped.
-     * @throws { BusinessError } 2900003 - Bluetooth disabled.
-     * @throws { BusinessError } 2900099 - Operation failed.
+     * @throws { BusinessError} 801 - Capability not supported.
+     * @throws { BusinessError} 2900001 - Service stopped.
+     * @throws { BusinessError} 2900003 - Bluetooth disabled.
+     * @throws { BusinessError} 2900099 - Operation failed.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi
      * @since 11
