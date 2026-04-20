@@ -17,11 +17,11 @@
  * 默认 UiTest 套件：拉起同 bundle 的 UiTestStubAbility，验证 Driver 可见 stub 控件。
  * 跨模块枚举 entry 主界面控件在部分 ROM 上不可用，见 entry/src/ohosTest/ets/uitest/DEPLOY.txt。
  */
-import { describe, beforeAll, it } from '@ohos/hypium';
-import { Driver, ON } from '@ohos.UiTest';
-import { assertStubTitleVisible, MAIN_BUNDLE, startUiTestStubAbility } from './MainPageControlUiShared';
+import { describe, beforeAll, it} from '@ohos/hypium';
+import { Driver, ON} from '@ohos.UiTest';
+import { assertStubTitleVisible, MAIN_BUNDLE, startUiTestStubAbility} from './MainPageControlUiShared';
 
-export default function uitestStubSmoke() {
+export default function uitestStubSmoke(){
   describe('UitestStubSmoke', () => {
     beforeAll(async () => {
       await startUiTestStubAbility();

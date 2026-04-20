@@ -40,7 +40,7 @@ declare namespace bluetoothManager {
         /**
          * The name of bluetooth.
          *
-         * @type { string }
+         * @type { string}
          * @syscap SystemCapability.Customization.EnterpriseDeviceManager
          * @stagemodelonly
          * @since 12
@@ -49,7 +49,7 @@ declare namespace bluetoothManager {
         /**
          * The state of bluetooth.
          *
-         * @type { access.BluetoothState }
+         * @type { access.BluetoothState}
          * @syscap SystemCapability.Customization.EnterpriseDeviceManager
          * @stagemodelonly
          * @since 12
@@ -58,7 +58,7 @@ declare namespace bluetoothManager {
         /**
          * The state of bluetooth connection
          *
-         * @type { constant.ProfileConnectionState }
+         * @type { constant.ProfileConnectionState}
          * @syscap SystemCapability.Customization.EnterpriseDeviceManager
          * @stagemodelonly
          * @since 12
@@ -68,7 +68,7 @@ declare namespace bluetoothManager {
     /**
      * Bluetooth protocol
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
      * @since 20
@@ -104,13 +104,13 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         The admin must have the corresponding permission.
-     * @returns { BluetoothInfo } the bluetooth information.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
+     * @returns { BluetoothInfo} the bluetooth information.
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @throws { BusinessError} 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
      *                                 2. Incorrect parameter types; 3. Parameter verification failed.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
@@ -122,14 +122,14 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         The admin must have the corresponding permission.
-     * @param { boolean } disabled - true if disable the bluetooth, otherwise false.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
-     * @throws { BusinessError } 202 - Permission verification failed. A non-system application calls a system API.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
+     * @param { boolean} disabled - true if disable the bluetooth, otherwise false.
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @throws { BusinessError} 202 - Permission verification failed. A non-system application calls a system API.
+     * @throws { BusinessError} 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
      *                                 2. Incorrect parameter types; 3. Parameter verification failed.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @systemapi
@@ -142,14 +142,14 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         If the admin is not empty, it must have the corresponding permission.
-     * @returns { boolean } true if the bluetooth is disabled, otherwise false.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
-     * @throws { BusinessError } 202 - Permission verification failed. A non-system application calls a system API.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
+     * @returns { boolean} true if the bluetooth is disabled, otherwise false.
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @throws { BusinessError} 202 - Permission verification failed. A non-system application calls a system API.
+     * @throws { BusinessError} 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
      *                                 2. Incorrect parameter types; 3. Parameter verification failed.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @systemapi
@@ -162,15 +162,15 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         The admin must have the corresponding permission.
-     * @param { Array<string> } deviceIds - IDs of the bluetooth devices to be added to the list.
+     * @param { Array<string>} deviceIds - IDs of the bluetooth devices to be added to the list.
      *                                      The size of the array after setting cannot be greater than 1000.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 9200010 - A conflict policy has been configured.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 9200010 - A conflict policy has been configured.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @throws { BusinessError} 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
      *                                 2. Incorrect parameter types; 3. Parameter verification failed.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
@@ -182,14 +182,14 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         The admin must have the corresponding permission.
-     * @param { Array<string> } deviceIds - IDs of the bluetooth devices to be removed from the list.
+     * @param { Array<string>} deviceIds - IDs of the bluetooth devices to be removed from the list.
      *                                      The size of the array after setting cannot be greater than 1000.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @throws { BusinessError} 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
      *                                 2. Incorrect parameter types; 3. Parameter verification failed.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
@@ -201,13 +201,13 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         If the admin is not empty, it must have the corresponding permission.
-     * @returns { Array<string> } IDs of the bluetooth devices in the list.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
-     * @throws { BusinessError } 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
+     * @returns { Array<string>} IDs of the bluetooth devices in the list.
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @throws { BusinessError} 401 - Parameter error. Possible causes: 1. Mandatory parameters are left unspecified;
      *                                 2. Incorrect parameter types; 3. Parameter verification failed.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
@@ -219,12 +219,12 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         If the admin is not empty, it must have the corresponding permission.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
-     * @throws { BusinessError } 203 - This function is prohibited by enterprise management policies.
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @throws { BusinessError} 203 - This function is prohibited by enterprise management policies.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
      * @since 20
@@ -235,12 +235,12 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         If the admin is not empty, it must have the corresponding permission.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
-     * @throws { BusinessError } 203 - This function is prohibited by enterprise management policies.
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @throws { BusinessError} 203 - This function is prohibited by enterprise management policies.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
      * @since 20
@@ -251,14 +251,14 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         The admin must have the corresponding permission.
-     * @param { Array<string> } deviceIds - IDs of the bluetooth devices to be added to the list.
+     * @param { Array<string>} deviceIds - IDs of the bluetooth devices to be added to the list.
      *                                      The size of the array after setting cannot be greater than 1000.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 9200010 - A conflict policy has been configured.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 9200010 - A conflict policy has been configured.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
      * @since 20
@@ -269,13 +269,13 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         The admin must have the corresponding permission.
-     * @param { Array<string> } deviceIds - IDs of the bluetooth devices to be removed from the list.
+     * @param { Array<string>} deviceIds - IDs of the bluetooth devices to be removed from the list.
      *                                      The size of the array after setting cannot be greater than 1000.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
      * @since 20
@@ -286,12 +286,12 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         If the admin is not empty, it must have the corresponding permission.
-     * @returns { Array<string> } IDs of the bluetooth devices in the list.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @returns { Array<string>} IDs of the bluetooth devices in the list.
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
      * @since 20
@@ -302,13 +302,13 @@ declare namespace bluetoothManager {
    * This function can be called by a super administrator.
    *
    * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-   * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+   * @param { Want} admin - admin indicates the enterprise admin extension ability information.
    *                         The admin must have the corresponding permission.
-   * @param { number } accountId - accountId indicates the local ID of the OS account.
-   * @param { Array<Protocol> } protocols - protocol of the bluetooth to be added to the list.
-   * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-   * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-   * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
+   * @param { number} accountId - accountId indicates the local ID of the OS account.
+   * @param { Array<Protocol>} protocols - protocol of the bluetooth to be added to the list.
+   * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+   * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+   * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
    * @syscap SystemCapability.Customization.EnterpriseDeviceManager
    * @stagemodelonly
    * @since 20
@@ -319,13 +319,13 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         The admin must have the corresponding permission.
-     * @param { number } accountId - accountId indicates the local ID of the OS account.
-     * @param { Array<Protocol> } protocols - protocol of the bluetooth to be removed from the list.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @param { number} accountId - accountId indicates the local ID of the OS account.
+     * @param { Array<Protocol>} protocols - protocol of the bluetooth to be removed from the list.
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
      * @since 20
@@ -336,13 +336,13 @@ declare namespace bluetoothManager {
      * This function can be called by a super administrator.
      *
      * @permission ohos.permission.ENTERPRISE_MANAGE_BLUETOOTH
-     * @param { Want } admin - admin indicates the enterprise admin extension ability information.
+     * @param { Want} admin - admin indicates the enterprise admin extension ability information.
      *                         If the admin is not empty, it must have the corresponding permission.
-     * @param { number } accountId - accountId indicates the local ID of the OS account.
-     * @returns { Array<Protocol> } protocol of the bluetooth list.
-     * @throws { BusinessError } 9200001 - The application is not an administrator application of the device.
-     * @throws { BusinessError } 9200002 - The administrator application does not have permission to manage the device.
-     * @throws { BusinessError } 201 - Permission verification failed. The application does not have the permission required to call the API.
+     * @param { number} accountId - accountId indicates the local ID of the OS account.
+     * @returns { Array<Protocol>} protocol of the bluetooth list.
+     * @throws { BusinessError} 9200001 - The application is not an administrator application of the device.
+     * @throws { BusinessError} 9200002 - The administrator application does not have permission to manage the device.
+     * @throws { BusinessError} 201 - Permission verification failed. The application does not have the permission required to call the API.
      * @syscap SystemCapability.Customization.EnterpriseDeviceManager
      * @stagemodelonly
      * @since 20
