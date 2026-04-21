@@ -12,17 +12,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../../Utils/resString';
+import hilog from '@ohos.hilog';
+import { resStr} from '../../../Utils/resString';
 
 
-import { BTAutoArrayItem, testItemFromRouterOrPlaceholder } from '../../../Utils/common'
+import { BTAutoArrayItem, testItemFromRouterOrPlaceholder} from '../../../Utils/common'
 import ConfigData from '../../../Utils/ConfigData';
-import { TestData } from '../../../MainAbility/model/testData'
-import { PageTitle } from '../../../Component/pageTitle';
-import { TestImageDisplay } from '../../../Component/testImageDisplay';
-import { AutoContentTable } from '../../../Component/autoContentTable';
+import { TestData} from '../../../MainAbility/model/testData'
+import { PageTitle} from '../../../Component/pageTitle';
+import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { AutoContentTable} from '../../../Component/autoContentTable';
 import {
-  HitHostProfileManagerAutoTestCase ,
+  HitHostProfileManagerAutoTestCase,
   initHitHostProfileManagerAutoData
 } from '../../../MainAbility/model/autoTestDataModelsManager';
 import btmProfileModel from '../../../MainAbility/model/btmProfileModel'
@@ -41,19 +42,19 @@ struct HitHostAutoTestManager {
   private deviceId = "8C:5A:F8:25:FB:E9";
   @StorageLink("hidHostProfileAutoTestMessage") hidHostProfileAutoTestMessage: string = ""
 
-  aboutToAppear() {
-    AppStorage.setOrCreate("deviceId" , this.deviceId)
+  aboutToAppear(){
+    AppStorage.setOrCreate("deviceId", this.deviceId)
     this.profileType = btmProfileModel.PROFILE_A2DP_SOURCE;
-    AppStorage.setOrCreate("profileType" , this.profileType)
-    AppStorage.setOrCreate("btConnectionState" , this.btConnectionState)
+    AppStorage.setOrCreate("profileType", this.profileType)
+    AppStorage.setOrCreate("btConnectionState", this.btConnectionState)
     btmProfileModel.initProfile()
   }
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
               .accessibilityLevel('yes')
               .id('pages_subAutoTestManager_subProfileAutoTestManager_hitHostAutoTestManager__pt_0')
       }
@@ -61,17 +62,17 @@ struct HitHostAutoTestManager {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Scroll() {
-          Column() {
+      Column(){
+        Scroll(){
+          Column(){
             Text($r('app.string.autotest_api_verify_label'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_10 , bottom : ConfigData.VP_10 , left : ConfigData.VP_15 })
+              .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10, left: ConfigData.VP_15})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             AutoContentTable({
-              autoItems : initHitHostProfileManagerAutoData() ,
-              changeIndex : this.changeIndex
+              autoItems: initHitHostProfileManagerAutoData(),
+              changeIndex: this.changeIndex
             })
 
           }
@@ -87,18 +88,18 @@ struct HitHostAutoTestManager {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'));
 
-        Scroll() {
-          Column() {
+        Scroll(){
+          Column(){
             Text($r('app.string.autotest_debug_log_label'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_8 , bottom : ConfigData.VP_8 , left : ConfigData.VP_15 })
+              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_15})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List() {
-              ListItem() {
+            List(){
+              ListItem(){
                 Text(resStr($r('app.string.autotest_log_prefix')) + "\n" + this.hidHostProfileAutoTestMessage)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_30 , right : ConfigData.VP_10 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_30, right: ConfigData.VP_10})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -126,13 +127,13 @@ struct HitHostAutoTestManager {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Button({ type : ButtonType.Normal , stateEffect : true }) {
-          Row() {
+      Column(){
+        Button({type: ButtonType.Normal, stateEffect: true}){
+          Row(){
             Text($r('app.string.autotest'))
               .fontSize(ConfigData.VP_24)
               .fontColor(0xffffff)
-              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+              .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
           }
             .alignItems(VerticalAlign.Center)
         }
@@ -142,7 +143,7 @@ struct HitHostAutoTestManager {
         .backgroundColor($r("app.color.blue"))
         .width(ConfigData.VP_180)
         .height(ConfigData.VP_50)
-        .margin({ top : ConfigData.VP_15 })
+        .margin({top: ConfigData.VP_15})
         .onClick(async(event: ClickEvent) => {
           this.forLoop()
         })
@@ -154,38 +155,38 @@ struct HitHostAutoTestManager {
   }
 
   //循环调用
-  async forLoop() {
+  async forLoop(){
     let hidHostProfileAutoTestMessage = ""
 
     //拼装数组
     let hitHostAutoArray: Array<BTAutoArrayItem> = [
-      { name : "testSetLocalNameManager" , para : [ "DaYuBlue" ] },
-      { name : "testSetBluetoothScanModeManager" , para : [ 4, 0 ] }
+      { name: "testSetLocalNameManager", para: [ "DaYuBlue" ]},
+      { name: "testSetBluetoothScanModeManager", para: [ 4, 0 ]}
     ]
     let interfaces = HitHostProfileManagerAutoTestCase.map(i => {
       let item = hitHostAutoArray.find(itm => itm.name === i.api.name);
-      let para = item ? item.para : []; // 确保 para 总是一个数组
-      return { name : i.api.name , para } as BTAutoArrayItem;
+      let para = item ? item.para: [];// 确保 para 总是一个数组
+      return { name: i.api.name, para} as BTAutoArrayItem;
     });
-    for ( let m = 0 ; m < interfaces.length ; m ++ ) {
+    for(let m = 0 ; m<interfaces.length ; m++ ){
       // 检查 HitHostProfileManagerAutoTestCase 中对应的 api 是否是一个函数
-      if ( typeof HitHostProfileManagerAutoTestCase[ m ].api === "function" ) {
+      if ( typeof HitHostProfileManagerAutoTestCase[ m ].api === "function" ){
         // 使用 TypeScript 的类型断言确保 para 是一个数组
         hidHostProfileAutoTestMessage += HitHostProfileManagerAutoTestCase[ m ].api(... interfaces[ m ].para) + "\n";
       } else {
-        console.error(`在 BrAutoTestCase 中找不到方法: ${ HitHostProfileManagerAutoTestCase[ m ] }`);
+        hilog.error(0x0000, 'BtTest', '%{public}s', `在 BrAutoTestCase 中找不到方法: ${ HitHostProfileManagerAutoTestCase[ m ] }`);
       }
       this.changeIndex = m
       await sleep(1)
-      AppStorage.setOrCreate("hidHostProfileAutoTestMessage" , hidHostProfileAutoTestMessage)
+      AppStorage.setOrCreate("hidHostProfileAutoTestMessage", hidHostProfileAutoTestMessage)
     }
   }
 }
 
 async function sleep(time: number): Promise<void> {
-  return new Promise<void>((resolve , reject) => {
+  return new Promise<void>((resolve, reject) => {
     setTimeout(() => {
       resolve();
-    } , time * 1000);
+    }, time * 1000);
   });
 }

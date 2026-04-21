@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../Utils/resString';
+import { resStr} from '../../Utils/resString';
 
 
 import router from '@ohos.router';
@@ -22,15 +22,15 @@ const PAGE_URI_GET_SPP_CLIENT_TEST_MANAGER = 'pages/subManualApiTestManager/subS
 const PAGE_URI_GET_SPP_SERVER_TEST_MANAGER = 'pages/subManualApiTestManager/subSppTestManager/sppServerManager';
 
 export function testSppClient(): string {
-  router.pushUrl({ url : PAGE_URI_GET_SPP_CLIENT_TEST_MANAGER })
+  router.pushUrl({url: PAGE_URI_GET_SPP_CLIENT_TEST_MANAGER})
   let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
-  promptAction.showToast({ message : message })
+  promptAction.showToast({message: message})
   return message
 }
 
 export function testSppServer(): string {
-  router.pushUrl({ url : PAGE_URI_GET_SPP_SERVER_TEST_MANAGER })
+  router.pushUrl({url: PAGE_URI_GET_SPP_SERVER_TEST_MANAGER})
   let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
-  promptAction.showToast({ message : message })
+  promptAction.showToast({message: message})
   return message
 }

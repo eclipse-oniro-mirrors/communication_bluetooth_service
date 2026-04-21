@@ -35,7 +35,7 @@ declare namespace common {
         /**
          * The string of the Bluetooth address.
          *
-         * @type { string }
+         * @type { string}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 21
          */
@@ -43,7 +43,7 @@ declare namespace common {
         /**
          * The type of the Bluetooth address.
          *
-         * @type { BluetoothAddressType }
+         * @type { BluetoothAddressType}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 21
          */
@@ -52,7 +52,7 @@ declare namespace common {
          * Address type defined by the Bluetooth Core Specification.
          * It is used only when the {@link BluetoothAddress#addressType} is {@link BluetoothAddressType#REAL}.
          *
-         * @type { ?BluetoothRawAddressType }
+         * @type { ?BluetoothRawAddressType}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @since 23
          */
@@ -61,7 +61,7 @@ declare namespace common {
     /**
      * Enum for the type of Bluetooth address.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 21
      */
@@ -85,7 +85,7 @@ declare namespace common {
      * Enum for the type of Bluetooth raw address.
      * The enum is used only when the {@link BluetoothAddress#addressType} is {@link BluetoothAddressType#REAL}.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 23
      */

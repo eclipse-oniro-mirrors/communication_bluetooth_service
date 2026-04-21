@@ -14,8 +14,8 @@
  */
 
 import ConfigData from '../../../Utils/ConfigData';
-import { PageTitle } from '../../../Component/pageTitle';
-import { TitleComponent } from '../../../Component/titleComponent';
+import { PageTitle} from '../../../Component/pageTitle';
+import { TitleComponent} from '../../../Component/titleComponent';
 
 /**
  * about phone
@@ -28,29 +28,29 @@ struct profileConnState {
   @State profileId: number = - 1;
   @State profileType: string = '';
 
-  build() {
-    Column() {
-      PageTitle({ detail : $r('app.string.bluetoothtest_str_xzpi') })
-      Column() {
-        List() {
-          ListItem() {
+  build(){
+    Column(){
+      PageTitle({detail: $r('app.string.bluetoothtest_str_xzpi')})
+      Column(){
+        List(){
+          ListItem(){
             TitleComponent({
-              title : "SELECT_PROFILE_ID" ,
-              bgColor : $r("app.color.moon") ,
-              fontSize : ConfigData.VP_17 ,
+              title: "SELECT_PROFILE_ID",
+              bgColor: $r("app.color.moon"),
+              fontSize: ConfigData.VP_17,
             })
           }
           .height(ConfigData.VP_80)
           .borderRadius(ConfigData.VP_10)
 
-          ListItem() {
+          ListItem(){
             TitleComponent({
-              title : "A2DP_SOURCE" ,
-              fontSize : ConfigData.VP_15 ,
-              bgColor : this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+              title: "A2DP_SOURCE",
+              fontSize: ConfigData.VP_15,
+              bgColor: this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : ConfigData.VP_10 })
+          .padding({top: ConfigData.VP_10})
           .height(ConfigData.VP_80)
           .borderRadius(ConfigData.VP_10)
           .onClick(() => {
@@ -58,14 +58,14 @@ struct profileConnState {
             this.profileId = 1;
           })
 
-          ListItem() {
+          ListItem(){
             TitleComponent({
-              title : "HANDS_FREE_AUDIO_GATEWAY" ,
-              fontSize : ConfigData.VP_15 ,
-              bgColor : this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+              title: "HANDS_FREE_AUDIO_GATEWAY",
+              fontSize: ConfigData.VP_15,
+              bgColor: this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             })
           }
-          .padding({ top : ConfigData.VP_20 })
+          .padding({top: ConfigData.VP_20})
           .height(ConfigData.VP_80)
           .borderRadius(ConfigData.VP_10)
           .onClick(() => {
@@ -73,14 +73,14 @@ struct profileConnState {
             this.profileId = 4;
           })
 
-          ListItem() {
+          ListItem(){
             TitleComponent({
-              title : "HID_HOST" ,
-              fontSize : ConfigData.VP_15 ,
-              bgColor : this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+              title: "HID_HOST",
+              fontSize: ConfigData.VP_15,
+              bgColor: this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
             });
           }
-          .padding({ top : ConfigData.VP_20 })
+          .padding({top: ConfigData.VP_20})
           .height(ConfigData.VP_80)
           .borderRadius(ConfigData.VP_10)
           .onClick(() => {
@@ -98,8 +98,8 @@ struct profileConnState {
         .width(ConfigData.WH_100_100)
         .backgroundColor($r("app.color.moon"))
 
-      Row() {
-        Column() {
+      Row(){
+        Column(){
           Text($r('app.string.cancel'))
             .textAlign(TextAlign.Center)
             .fontSize(ConfigData.FP_17)
@@ -109,9 +109,9 @@ struct profileConnState {
             .borderColor($r("app.color.moon"))
             .backgroundColor($r("app.color.white"))
         }
-        .padding({ right : ConfigData.VP_10 })
+        .padding({right: ConfigData.VP_10})
 
-        Column() {
+        Column(){
           Text($r('app.string.confirm'))
             .textAlign(TextAlign.Center)
             .fontSize(ConfigData.FP_17)
@@ -121,11 +121,11 @@ struct profileConnState {
             .borderColor($r("app.color.moon"))
             .backgroundColor($r("app.color.white"))
         }
-        .padding({ left : ConfigData.VP_50 })
+        .padding({left: ConfigData.VP_50})
       }
       .width(ConfigData.WH_80_100)
     }
-    .padding({ left : ConfigData.VP_24 , right : ConfigData.VP_24 })
+    .padding({left: ConfigData.VP_24, right: ConfigData.VP_24})
     .width(ConfigData.WH_100_100)
     .height(ConfigData.WH_100_100)
     .backgroundColor($r("app.color.lead"))
@@ -139,8 +139,8 @@ struct ButtonComponent {
   private text;
   private isOnClick = () => {};
 
-  build() {
-    Column() {
+  build(){
+    Column(){
       Text(this.text)
         .fontSize(ConfigData.FP_16)
         .fontWeight(FontWeight.Medium)
@@ -152,10 +152,10 @@ struct ButtonComponent {
         .borderRadius(ConfigData.VP_20)
         .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") : $r("sys.color.ohos_id_color_foreground_contrary"))
         .onTouch((event: TouchEvent) => {
-          if ( event.type === TouchType.Down ) {
+          if ( event.type === TouchType.Down ){
             this.isTouched = true;
           }
-          if ( event.type === TouchType.Up ) {
+          if ( event.type === TouchType.Up ){
             this.isTouched = false;
           }
         })

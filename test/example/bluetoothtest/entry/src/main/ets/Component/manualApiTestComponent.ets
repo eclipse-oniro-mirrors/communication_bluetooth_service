@@ -13,9 +13,10 @@
  * limitations under the License.
  */
 
+import hilog from '@ohos.hilog';
 import ConfigData from '../Utils/ConfigData';
-import { TestData } from '../MainAbility/model/testData'
-import { TestList } from './testList';
+import { TestData} from '../MainAbility/model/testData'
+import { TestList} from './testList';
 
 /**
  * Manual-Api Test Of Bluetooth test
@@ -25,14 +26,14 @@ import { TestList } from './testList';
 export struct ManualApiTest {
   private testItems!: TestData[]
 
-  aboutToAppear() {
-    console.info("ManualApiTest testItems:" + JSON.stringify(this.testItems))
+  aboutToAppear(){
+    hilog.info(0x0000, 'BtTest', '%{public}s', "ManualApiTest testItems:" + JSON.stringify(this.testItems))
   }
 
-  build() {
-    Column() {
+  build(){
+    Column(){
       TestList({
-        testItems : this.testItems
+        testItems: this.testItems
       })
     }
       .height(ConfigData.WH_100_100)

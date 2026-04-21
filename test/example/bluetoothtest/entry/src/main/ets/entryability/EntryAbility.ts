@@ -13,12 +13,12 @@
  * limitations under the License.
  */
 
+import LogUtil from '../Utils/LogUtil';
 import UIAbility from '@ohos.app.ability.UIAbility';
-import hilog from '@ohos.hilog';
 import window from '@ohos.window';
-import type { Want } from '@kit.AbilityKit';
-import { setSkipBluetoothPermissionForAutomatedTest } from '../bluetoothTestNav';
-import { setUiAbilityContext } from '../Utils/uiContextStore';
+import type { Want} from '@kit.AbilityKit';
+import { setSkipBluetoothPermissionForAutomatedTest} from '../bluetoothTestNav';
+import { setUiAbilityContext} from '../Utils/uiContextStore';
 
 const DEFAULT_PAGE = 'pages/homePage';
 const TEST_PAGE_KEY = 'testTargetPage';
@@ -28,72 +28,71 @@ export default class EntryAbility extends UIAbility {
   private initialPage: string = DEFAULT_PAGE;
 
   private extractTestTargetPage(w: Want | undefined): string | undefined {
-    if (!w?.parameters) {
+    if (!w?.parameters){
       return undefined;
     }
     const v = w.parameters[TEST_PAGE_KEY];
-    return typeof v === 'string' && v.length > 0 ? v : undefined;
+    return typeof v === 'string' && v.length > 0 ? v: undefined;
   }
 
-  onCreate(want, launchParam) {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+  onCreate(want, launchParam){
+    LogUtil.info('Ability onCreate');
     setUiAbilityContext(this.context);
     const p = this.extractTestTargetPage(want);
     const fromAutomatedTest = p !== undefined;
     setSkipBluetoothPermissionForAutomatedTest(fromAutomatedTest);
-    if (fromAutomatedTest && p) {
+    if (fromAutomatedTest && p){
       this.initialPage = p;
     }
   }
 
-  onNewWant(want, launchParam) {
+  onNewWant(want, launchParam){
     const p = want?.parameters?.[TEST_PAGE_KEY];
-    if (typeof p !== 'string' || p.length === 0 || !this.windowStageRef) {
+    if (typeof p !== 'string' || p.length === 0 || !this.windowStageRef){
       return;
     }
     setSkipBluetoothPermissionForAutomatedTest(true);
     this.windowStageRef.loadContent(p, (err, data) => {
-      if (err.code) {
-        hilog.error(0x0000, 'testTag', 'loadContent onNewWant failed: %{public}s', JSON.stringify(err) ?? '');
+      if (err.code){
+        LogUtil.error('loadContent onNewWant failed: ' + (JSON.stringify(err) ?? ''));
         return;
       }
-      hilog.info(0x0000, 'testTag', 'onNewWant loadContent ok: %{public}s', JSON.stringify(data) ?? '');
+      LogUtil.info('onNewWant loadContent ok: ' + (JSON.stringify(data) ?? ''));
     });
   }
 
-  onDestroy() {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');
+  onDestroy(){
+    LogUtil.info('Ability onDestroy');
   }
 
-  onWindowStageCreate(windowStage: window.WindowStage) {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+  onWindowStageCreate(windowStage: window.WindowStage){
+    LogUtil.info('Ability onWindowStageCreate');
     this.windowStageRef = windowStage;
     const fromLaunch = this.extractTestTargetPage(this.launchWant);
-    if (fromLaunch) {
+    if (fromLaunch){
       setSkipBluetoothPermissionForAutomatedTest(true);
       this.initialPage = fromLaunch;
     }
     const page = this.initialPage;
     windowStage.loadContent(page, (err, data) => {
-      if (err.code) {
-        hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
+      if (err.code){
+        LogUtil.error('Failed to load the content. Cause: ' + (JSON.stringify(err) ?? ''));
         return;
       }
-      hilog.info(0x0000, 'testTag', 'Succeeded in loading the content. Data: %{public}s',
-        JSON.stringify(data) ?? '');
+      LogUtil.info('Succeeded in loading the content. Data: ' + (JSON.stringify(data) ?? ''))
     });
   }
 
-  onWindowStageDestroy() {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageDestroy');
+  onWindowStageDestroy(){
+    LogUtil.info('Ability onWindowStageDestroy');
     this.windowStageRef = null;
   }
 
-  onForeground() {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onForeground');
+  onForeground(){
+    LogUtil.info('Ability onForeground');
   }
 
-  onBackground() {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
+  onBackground(){
+    LogUtil.info('Ability onBackground');
   }
 }

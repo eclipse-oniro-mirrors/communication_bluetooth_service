@@ -15,11 +15,11 @@
 /**
  * Kit 幂等入口轮换（20 条），按序号固定分支。
  */
-import { describe, it, expect } from '@ohos/hypium';
-import { access, ble, bluetoothManager, connection } from '@kit.ConnectivityKit';
-import { matrixTryRun } from './BluetoothExpandedMatrixShared';
+import { describe, it, expect} from '@ohos/hypium';
+import { access, ble, bluetoothManager, connection} from '@kit.ConnectivityKit';
+import { matrixTryRun} from './BluetoothExpandedMatrixShared';
 
-export default function bluetoothExpandedMatrixRotateTest() {
+export default function bluetoothExpandedMatrixRotateTest(){
   describe('ExpandedMatrix_kit_idempotent_rotate', () => {
     it('expanded_kit_rotate_0', 0, () => {
       matrixTryRun(() => {

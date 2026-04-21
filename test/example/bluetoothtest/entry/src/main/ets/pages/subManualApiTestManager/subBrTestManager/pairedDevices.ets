@@ -14,8 +14,8 @@
  */
 import ConfigData from '../../../Utils/ConfigData';
 import router from '@ohos.router'
-import { TitleComponent } from '../../../Component/titleComponent';
-import { PageTitle } from '../../../Component/pageTitle';
+import { TitleComponent} from '../../../Component/titleComponent';
+import { PageTitle} from '../../../Component/pageTitle';
 /**
  * about phone
  */
@@ -27,74 +27,74 @@ struct pairedDevices {
   private scanMode: number = 0;
   @StorageLink('pairedDevices') pairedDevices: string[] = [];
 
-  build() {
-    Column() {
+  build(){
+    Column(){
       GridContainer({
-        columns : 12 ,
-        sizeType : SizeType.Auto ,
-        gutter : vp2px(1) === 2 ? ConfigData.VP_12 : ConfigData.VP_0 ,
-        margin : vp2px(1) === 2 ? ConfigData.VP_24 : ConfigData.VP_0
-      }) {
-        Row({}) {
-          Column() {
+        columns: 12,
+        sizeType: SizeType.Auto,
+        gutter: vp2px(1) === 2 ? ConfigData.VP_12: ConfigData.VP_0,
+        margin: vp2px(1) === 2 ? ConfigData.VP_24: ConfigData.VP_0
+      }){
+        Row({}){
+          Column(){
           }
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 0 , offset : 0 } , sm : { span : 0 , offset : 0 } ,
-            md : { span : 0 , offset : 0 } , lg : { span : 2 , offset : 0 }
+            xs: { span: 0, offset: 0}, sm: { span: 0, offset: 0},
+            md: { span: 0, offset: 0}, lg: { span: 2, offset: 0}
           });
 
-          Column() {
-            PageTitle({ detail : $r('app.string.bluetoothtest_str_ypdsb') })
+          Column(){
+            PageTitle({detail: $r('app.string.bluetoothtest_str_ypdsb')})
 
 
             Divider()
               .padding({
-                left : $r('sys.float.ohos_id_card_margin_start') ,
-                right : $r('sys.float.ohos_id_card_margin_end')
+                left: $r('sys.float.ohos_id_card_margin_start'),
+                right: $r('sys.float.ohos_id_card_margin_end')
               })
 
-            Column() {
-              List() {
-                ForEach(this.pairedDevices , (item: string, index: number) => {
-                  ListItem() {
-                    TitleComponent({ title : item });
+            Column(){
+              List(){
+                ForEach(this.pairedDevices, (item: string, index: number) => {
+                  ListItem(){
+                    TitleComponent({title: item});
                   }
-                    .padding({ top : ConfigData.VP_2 , bottom : ConfigData.VP_2 })
-                } , item => JSON.stringify(item));
+                    .padding({top: ConfigData.VP_2, bottom: ConfigData.VP_2})
+                }, item => JSON.stringify(item));
               }
 
               Blank()
             }
 
             Flex({
-              direction : FlexDirection.Row ,
-              justifyContent : FlexAlign.Center ,
-              alignItems : ItemAlign.Center
-            }) {
-              Row() {
-                ButtonComponent({ text : $r("app.string.cancel") , isOnClick : () => {
+              direction: FlexDirection.Row,
+              justifyContent: FlexAlign.Center,
+              alignItems: ItemAlign.Center
+            }){
+              Row(){
+                ButtonComponent({text: $r("app.string.cancel"), isOnClick: () => {
                   router.back();
-                } })
+                }})
               }
               .width(ConfigData.VP_120)
-              .margin({ right : ConfigData.VP_12 })
+              .margin({right: ConfigData.VP_12})
 
-              Row() {
-                ButtonComponent({ text : $r("app.string.confirm") , isOnClick : () => {
+              Row(){
+                ButtonComponent({text: $r("app.string.confirm"), isOnClick: () => {
                   router.back();
-                } })
+                }})
               }
                 .width(ConfigData.VP_120)
             }
           }
-          .padding({ left : ConfigData.VP_24 , right : ConfigData.VP_24 })
+          .padding({left: ConfigData.VP_24, right: ConfigData.VP_24})
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs : { span : 12 , offset : 0 } , sm : { span : 12 , offset : 0 } ,
-            md : { span : 12 , offset : 0 } , lg : { span : 8 , offset : 2 }
+            xs: { span: 12, offset: 0}, sm: { span: 12, offset: 0},
+            md: { span: 12, offset: 0}, lg: { span: 8, offset: 2}
           });
         }
         .width(ConfigData.WH_100_100)
@@ -117,8 +117,8 @@ struct ButtonComponent {
   private isOnClick = () => {
   };
 
-  build() {
-    Column() {
+  build(){
+    Column(){
       Text(this.text)
         .fontSize(ConfigData.FP_16)
         .fontWeight(FontWeight.Medium)
@@ -130,10 +130,10 @@ struct ButtonComponent {
         .borderRadius(ConfigData.VP_20)
         .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") : $r("sys.color.ohos_id_color_foreground_contrary"))
         .onTouch((event: TouchEvent) => {
-          if ( event.type === TouchType.Down ) {
+          if ( event.type === TouchType.Down ){
             this.isTouched = true;
           }
-          if ( event.type === TouchType.Up ) {
+          if ( event.type === TouchType.Up ){
             this.isTouched = false;
           }
         })

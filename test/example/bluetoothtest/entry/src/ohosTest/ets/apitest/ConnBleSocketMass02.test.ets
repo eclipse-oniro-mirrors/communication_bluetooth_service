@@ -18,336 +18,336 @@
  * Part: connBleSocketMass02
  * connection / ble / socket: 6 scenarios per overload (n,e,b,e2,r,x).
  */
-import { describe, it, expect } from '@ohos/hypium';
+import { describe, it, expect} from '@ohos/hypium';
 import connection from '@ohos.bluetooth.connection';
 import ble from '@ohos.bluetooth.ble';
 import socket from '@ohos.bluetooth.socket';
 import constant from '@ohos.bluetooth.constant';
 import common from '@ohos.bluetooth.common';
-import { tI, buf0, sppOpt, bleAd, bleAs, bleAp, BADDR } from './ConnBleSocketShared';
+import { tI, buf0, sppOpt, bleAd, bleAs, bleAp, BADDR} from './ConnBleSocketShared';
 
-export default function connBleSocketMass02() {
+export default function connBleSocketMass02(){
   describe('ConnBleSocket_mass_cn_30_58', () => {
     describe('cn_30_remote_uuids_p', () => {
     it('cn_30_remote_uuids_p_n', 0, () => {
       tI('cn_30_remote_uuids_p_n', () => {
         connection.getRemoteProfileUuids(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_30_remote_uuids_p_e', 0, () => {
       tI('cn_30_remote_uuids_p_e', () => {
         try{connection.getRemoteProfileUuids('');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_30_remote_uuids_p_b', 0, () => {
       tI('cn_30_remote_uuids_p_b', () => {
         connection.getRemoteProfileUuids(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_30_remote_uuids_p_e2', 0, () => {
       tI('cn_30_remote_uuids_p_e2', () => {
         try{connection.getRemoteProfileUuids('');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_30_remote_uuids_p_r', 0, () => {
       tI('cn_30_remote_uuids_p_r', () => {
         connection.getRemoteProfileUuids(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_30_remote_uuids_p_x', 0, () => {
       tI('cn_30_remote_uuids_p_x', () => {
         connection.getRemoteProfileUuids(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_31_conn_allowed_cb', () => {
     it('cn_31_conn_allowed_cb_n', 0, () => {
       tI('cn_31_conn_allowed_cb_n', () => {
         connection.connectAllowedProfiles(BADDR,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_31_conn_allowed_cb_e', 0, () => {
       tI('cn_31_conn_allowed_cb_e', () => {
         try{connection.connectAllowedProfiles('',()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_31_conn_allowed_cb_b', 0, () => {
       tI('cn_31_conn_allowed_cb_b', () => {
         connection.connectAllowedProfiles(BADDR,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_31_conn_allowed_cb_e2', 0, () => {
       tI('cn_31_conn_allowed_cb_e2', () => {
         try{connection.connectAllowedProfiles('',()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_31_conn_allowed_cb_r', 0, () => {
       tI('cn_31_conn_allowed_cb_r', () => {
         connection.connectAllowedProfiles(BADDR,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_31_conn_allowed_cb_x', 0, () => {
       tI('cn_31_conn_allowed_cb_x', () => {
         connection.connectAllowedProfiles(BADDR,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_32_conn_allowed_p', () => {
     it('cn_32_conn_allowed_p_n', 0, () => {
       tI('cn_32_conn_allowed_p_n', () => {
         connection.connectAllowedProfiles(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_32_conn_allowed_p_e', 0, () => {
       tI('cn_32_conn_allowed_p_e', () => {
         try{connection.connectAllowedProfiles('');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_32_conn_allowed_p_b', 0, () => {
       tI('cn_32_conn_allowed_p_b', () => {
         connection.connectAllowedProfiles(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_32_conn_allowed_p_e2', 0, () => {
       tI('cn_32_conn_allowed_p_e2', () => {
         try{connection.connectAllowedProfiles('');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_32_conn_allowed_p_r', 0, () => {
       tI('cn_32_conn_allowed_p_r', () => {
         connection.connectAllowedProfiles(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_32_conn_allowed_p_x', 0, () => {
       tI('cn_32_conn_allowed_p_x', () => {
         connection.connectAllowedProfiles(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_33_disc_allowed_cb', () => {
     it('cn_33_disc_allowed_cb_n', 0, () => {
       tI('cn_33_disc_allowed_cb_n', () => {
         connection.disconnectAllowedProfiles(BADDR,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_33_disc_allowed_cb_e', 0, () => {
       tI('cn_33_disc_allowed_cb_e', () => {
         try{connection.disconnectAllowedProfiles('',()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_33_disc_allowed_cb_b', 0, () => {
       tI('cn_33_disc_allowed_cb_b', () => {
         connection.disconnectAllowedProfiles(BADDR,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_33_disc_allowed_cb_e2', 0, () => {
       tI('cn_33_disc_allowed_cb_e2', () => {
         try{connection.disconnectAllowedProfiles('',()=>{});
-        }catch(_e2){expect(true).assertTrue(); }
+          }catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_33_disc_allowed_cb_r', 0, () => {
       tI('cn_33_disc_allowed_cb_r', () => {
         connection.disconnectAllowedProfiles(BADDR,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_33_disc_allowed_cb_x', 0, () => {
       tI('cn_33_disc_allowed_cb_x', () => {
         connection.disconnectAllowedProfiles(BADDR,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_34_battery_p', () => {
     it('cn_34_battery_p_n', 0, () => {
       tI('cn_34_battery_p_n', () => {
         connection.getRemoteDeviceBatteryInfo(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_34_battery_p_e', 0, () => {
       tI('cn_34_battery_p_e', () => {
         try{connection.getRemoteDeviceBatteryInfo('');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_34_battery_p_b', 0, () => {
       tI('cn_34_battery_p_b', () => {
         connection.getRemoteDeviceBatteryInfo(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_34_battery_p_e2', 0, () => {
       tI('cn_34_battery_p_e2', () => {
         try{connection.getRemoteDeviceBatteryInfo('');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_34_battery_p_r', 0, () => {
       tI('cn_34_battery_p_r', () => {
         connection.getRemoteDeviceBatteryInfo(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_34_battery_p_x', 0, () => {
       tI('cn_34_battery_p_x', () => {
         connection.getRemoteDeviceBatteryInfo(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_35_remote_product', () => {
     it('cn_35_remote_product_n', 0, () => {
       tI('cn_35_remote_product_n', () => {
         const p=connection.getRemoteProductId(BADDR);expect(typeof p==='string').assertTrue();
+        });
       });
-    });
     it('cn_35_remote_product_e', 0, () => {
       tI('cn_35_remote_product_e', () => {
         try{connection.getRemoteProductId('');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_35_remote_product_b', 0, () => {
       tI('cn_35_remote_product_b', () => {
         connection.getRemoteProductId(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_35_remote_product_e2', 0, () => {
       tI('cn_35_remote_product_e2', () => {
         try{connection.getRemoteProductId('');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_35_remote_product_r', 0, () => {
       tI('cn_35_remote_product_r', () => {
         connection.getRemoteProductId(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_35_remote_product_x', 0, () => {
       tI('cn_35_remote_product_x', () => {
         connection.getRemoteProductId(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_36_disc_allowed_p', () => {
     it('cn_36_disc_allowed_p_n', 0, () => {
       tI('cn_36_disc_allowed_p_n', () => {
         connection.disconnectAllowedProfiles(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_36_disc_allowed_p_e', 0, () => {
       tI('cn_36_disc_allowed_p_e', () => {
         try{connection.disconnectAllowedProfiles('');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_36_disc_allowed_p_b', 0, () => {
       tI('cn_36_disc_allowed_p_b', () => {
         connection.disconnectAllowedProfiles(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_36_disc_allowed_p_e2', 0, () => {
       tI('cn_36_disc_allowed_p_e2', () => {
         try{connection.disconnectAllowedProfiles('');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_36_disc_allowed_p_r', 0, () => {
       tI('cn_36_disc_allowed_p_r', () => {
         connection.disconnectAllowedProfiles(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_36_disc_allowed_p_x', 0, () => {
       tI('cn_36_disc_allowed_p_x', () => {
         connection.disconnectAllowedProfiles(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_37_set_remote_name_p', () => {
     it('cn_37_set_remote_name_p_n', 0, () => {
       tI('cn_37_set_remote_name_p_n', () => {
         connection.setRemoteDeviceName(BADDR,'n');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_37_set_remote_name_p_e', 0, () => {
       tI('cn_37_set_remote_name_p_e', () => {
         try{connection.setRemoteDeviceName('','');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_37_set_remote_name_p_b', 0, () => {
       tI('cn_37_set_remote_name_p_b', () => {
         connection.setRemoteDeviceName(BADDR,'nm');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_37_set_remote_name_p_e2', 0, () => {
       tI('cn_37_set_remote_name_p_e2', () => {
         try{connection.setRemoteDeviceName('','x');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_37_set_remote_name_p_r', 0, () => {
       tI('cn_37_set_remote_name_p_r', () => {
         connection.setRemoteDeviceName(BADDR,'n');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_37_set_remote_name_p_x', 0, () => {
       tI('cn_37_set_remote_name_p_x', () => {
         connection.setRemoteDeviceName(BADDR,'n2');expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_38_set_remote_type_p', () => {
     it('cn_38_set_remote_type_p_n', 0, () => {
       tI('cn_38_set_remote_type_p_n', () => {
         connection.setRemoteDeviceType(BADDR,0);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_38_set_remote_type_p_e', 0, () => {
       tI('cn_38_set_remote_type_p_e', () => {
         try{connection.setRemoteDeviceType('',0);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_38_set_remote_type_p_b', 0, () => {
       tI('cn_38_set_remote_type_p_b', () => {
         connection.setRemoteDeviceType(BADDR,1);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_38_set_remote_type_p_e2', 0, () => {
       tI('cn_38_set_remote_type_p_e2', () => {
         try{connection.setRemoteDeviceType('',0);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_38_set_remote_type_p_r', 0, () => {
       tI('cn_38_set_remote_type_p_r', () => {
         connection.setRemoteDeviceType(BADDR,0);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_38_set_remote_type_p_x', 0, () => {
       tI('cn_38_set_remote_type_p_x', () => {
         connection.setRemoteDeviceType(BADDR,0);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_39_get_remote_type_p', () => {
     it('cn_39_get_remote_type_p_n', 0, () => {
       tI('cn_39_get_remote_type_p_n', () => {
         connection.getRemoteDeviceType(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_39_get_remote_type_p_e', 0, () => {
       tI('cn_39_get_remote_type_p_e', () => {
         try{connection.getRemoteDeviceType('');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_39_get_remote_type_p_b', 0, () => {
       tI('cn_39_get_remote_type_p_b', () => {
         connection.getRemoteDeviceType(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_39_get_remote_type_p_e2', 0, () => {
       tI('cn_39_get_remote_type_p_e2', () => {
         try{connection.getRemoteDeviceType('');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_39_get_remote_type_p_r', 0, () => {
       tI('cn_39_get_remote_type_p_r', () => {
         connection.getRemoteDeviceType(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_39_get_remote_type_p_x', 0, () => {
       tI('cn_39_get_remote_type_p_x', () => {
         connection.getRemoteDeviceType(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_40_control_action_p', () => {
     it('cn_40_control_action_p_n', 0, () => {
@@ -357,8 +357,8 @@ export default function connBleSocketMass02() {
         typeValue:connection.ControlTypeValue.ENABLE,
         controlObject:connection.ControlObject.LEFT_EAR};
         connection.controlDeviceAction(p);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_40_control_action_p_e', 0, () => {
       tI('cn_40_control_action_p_e', () => {
         try{const q:connection.ControlDeviceActionParams={
@@ -366,8 +366,8 @@ export default function connBleSocketMass02() {
         typeValue:connection.ControlTypeValue.ENABLE,
         controlObject:connection.ControlObject.LEFT_EAR};
         connection.controlDeviceAction(q);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_40_control_action_p_b', 0, () => {
       tI('cn_40_control_action_p_b', () => {
         const r:connection.ControlDeviceActionParams={
@@ -375,8 +375,8 @@ export default function connBleSocketMass02() {
         typeValue:connection.ControlTypeValue.DISABLE,
         controlObject:connection.ControlObject.RIGHT_EAR};
         connection.controlDeviceAction(r);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_40_control_action_p_e2', 0, () => {
       tI('cn_40_control_action_p_e2', () => {
         try{const s:connection.ControlDeviceActionParams={
@@ -384,8 +384,8 @@ export default function connBleSocketMass02() {
         typeValue:connection.ControlTypeValue.ENABLE,
         controlObject:connection.ControlObject.LEFT_EAR};
         connection.controlDeviceAction(s);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_40_control_action_p_r', 0, () => {
       tI('cn_40_control_action_p_r', () => {
         const t:connection.ControlDeviceActionParams={
@@ -393,8 +393,8 @@ export default function connBleSocketMass02() {
         typeValue:connection.ControlTypeValue.ENABLE,
         controlObject:connection.ControlObject.LEFT_EAR};
         connection.controlDeviceAction(t);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_40_control_action_p_x', 0, () => {
       tI('cn_40_control_action_p_x', () => {
         const u:connection.ControlDeviceActionParams={
@@ -402,116 +402,116 @@ export default function connBleSocketMass02() {
         typeValue:connection.ControlTypeValue.ENABLE,
         controlObject:connection.ControlObject.LEFT_RIGHT_EAR};
         connection.controlDeviceAction(u);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_41_last_conn_p', () => {
     it('cn_41_last_conn_p_n', 0, () => {
       tI('cn_41_last_conn_p_n', () => {
         connection.getLastConnectionTime(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_41_last_conn_p_e', 0, () => {
       tI('cn_41_last_conn_p_e', () => {
         try{connection.getLastConnectionTime('');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_41_last_conn_p_b', 0, () => {
       tI('cn_41_last_conn_p_b', () => {
         connection.getLastConnectionTime(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_41_last_conn_p_e2', 0, () => {
       tI('cn_41_last_conn_p_e2', () => {
         try{connection.getLastConnectionTime('');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_41_last_conn_p_r', 0, () => {
       tI('cn_41_last_conn_p_r', () => {
         connection.getLastConnectionTime(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_41_last_conn_p_x', 0, () => {
       tI('cn_41_last_conn_p_x', () => {
         connection.getLastConnectionTime(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_42_update_cloud_p', () => {
     it('cn_42_update_cloud_p_n', 0, () => {
       tI('cn_42_update_cloud_p_n', () => {
         const c:connection.TrustedPairedDevices={trustedPairedDevices:[]};
         connection.updateCloudBluetoothDevice(c); expect(true).assertTrue();
+        });
       });
-    });
     it('cn_42_update_cloud_p_e', 0, () => {
       tI('cn_42_update_cloud_p_e', () => {
         try{const c2:connection.TrustedPairedDevices={trustedPairedDevices:[]};
-        connection.updateCloudBluetoothDevice(c2); }catch(_e){expect(true).assertTrue(); }
+        connection.updateCloudBluetoothDevice(c2);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_42_update_cloud_p_b', 0, () => {
       tI('cn_42_update_cloud_p_b', () => {
         const c3:connection.TrustedPairedDevices={trustedPairedDevices:[]};
         connection.updateCloudBluetoothDevice(c3); expect(true).assertTrue();
+        });
       });
-    });
     it('cn_42_update_cloud_p_e2', 0, () => {
       tI('cn_42_update_cloud_p_e2', () => {
         try{const c4:connection.TrustedPairedDevices={trustedPairedDevices:[]};
-        connection.updateCloudBluetoothDevice(c4); }catch(_e2){expect(true).assertTrue(); }
+        connection.updateCloudBluetoothDevice(c4);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_42_update_cloud_p_r', 0, () => {
       tI('cn_42_update_cloud_p_r', () => {
         const c5:connection.TrustedPairedDevices={trustedPairedDevices:[]};
         connection.updateCloudBluetoothDevice(c5); expect(true).assertTrue();
+        });
       });
-    });
     it('cn_42_update_cloud_p_x', 0, () => {
       tI('cn_42_update_cloud_p_x', () => {
         const c6:connection.TrustedPairedDevices={trustedPairedDevices:[]};
         connection.updateCloudBluetoothDevice(c6); expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_43_gen_oob_p', () => {
     it('cn_43_gen_oob_p_n', 0, () => {
       tI('cn_43_gen_oob_p_n', () => {
         connection.generateLocalOobData(connection.BluetoothTransport.TRANSPORT_BR_EDR);
         expect(true).assertTrue();
+        });
       });
-    });
     it('cn_43_gen_oob_p_e', 0, () => {
       tI('cn_43_gen_oob_p_e', () => {
         try{connection.generateLocalOobData(connection.BluetoothTransport.TRANSPORT_LE);
-        }catch(_e){expect(true).assertTrue(); }
+          }catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_43_gen_oob_p_b', 0, () => {
       tI('cn_43_gen_oob_p_b', () => {
         connection.generateLocalOobData(connection.BluetoothTransport.TRANSPORT_BR_EDR);
         expect(true).assertTrue();
+        });
       });
-    });
     it('cn_43_gen_oob_p_e2', 0, () => {
       tI('cn_43_gen_oob_p_e2', () => {
         try{connection.generateLocalOobData(connection.BluetoothTransport.TRANSPORT_BR_EDR);
-        }catch(_e2){expect(true).assertTrue(); }
+          }catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_43_gen_oob_p_r', 0, () => {
       tI('cn_43_gen_oob_p_r', () => {
         connection.generateLocalOobData(connection.BluetoothTransport.TRANSPORT_BR_EDR);
         expect(true).assertTrue();
+        });
       });
-    });
     it('cn_43_gen_oob_p_x', 0, () => {
       tI('cn_43_gen_oob_p_x', () => {
         connection.generateLocalOobData(connection.BluetoothTransport.TRANSPORT_LE);
         expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_44_virt_hash', () => {
     it('cn_44_virt_hash_n', 0, () => {
@@ -519,487 +519,487 @@ export default function connBleSocketMass02() {
         const
 v=connection.getVirtualAddressByHash(connection.HashAlgorithmType.HASH_ALGORITHM_SHA256,'00');
         expect(typeof v==='string').assertTrue();
+        });
       });
-    });
     it('cn_44_virt_hash_e', 0, () => {
       tI('cn_44_virt_hash_e', () => {
 try{connection.getVirtualAddressByHash(connection.HashAlgorithmType.HASH_ALGORITHM_SHA256,'');
-        }catch(_e){expect(true).assertTrue(); }
+          }catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_44_virt_hash_b', 0, () => {
       tI('cn_44_virt_hash_b', () => {
         connection.getVirtualAddressByHash(connection.HashAlgorithmType.HASH_ALGORITHM_SHA256,'ff');
         expect(true).assertTrue();
+        });
       });
-    });
     it('cn_44_virt_hash_e2', 0, () => {
       tI('cn_44_virt_hash_e2', () => {
 try{connection.getVirtualAddressByHash(connection.HashAlgorithmType.HASH_ALGORITHM_SHA256,'aa');
-        }catch(_e2){expect(true).assertTrue(); }
+          }catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_44_virt_hash_r', 0, () => {
       tI('cn_44_virt_hash_r', () => {
         connection.getVirtualAddressByHash(connection.HashAlgorithmType.HASH_ALGORITHM_SHA256,'00');
         expect(true).assertTrue();
+        });
       });
-    });
     it('cn_44_virt_hash_x', 0, () => {
       tI('cn_44_virt_hash_x', () => {
         connection.getVirtualAddressByHash(connection.HashAlgorithmType.HASH_ALGORITHM_SHA256,'11');
         expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_45_car_key_set', () => {
     it('cn_45_car_key_set_n', 0, () => {
       tI('cn_45_car_key_set_n', () => {
         connection.setCarKeyDfxData(BADDR,0);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_45_car_key_set_e', 0, () => {
       tI('cn_45_car_key_set_e', () => {
         try{connection.setCarKeyDfxData('',0);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_45_car_key_set_b', 0, () => {
       tI('cn_45_car_key_set_b', () => {
         connection.setCarKeyDfxData(BADDR,1);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_45_car_key_set_e2', 0, () => {
       tI('cn_45_car_key_set_e2', () => {
         try{connection.setCarKeyDfxData('',0);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_45_car_key_set_r', 0, () => {
       tI('cn_45_car_key_set_r', () => {
         connection.setCarKeyDfxData(BADDR,0);expect(true).assertTrue();
+        });
       });
-    });
     it('cn_45_car_key_set_x', 0, () => {
       tI('cn_45_car_key_set_x', () => {
         connection.setCarKeyDfxData(BADDR,1);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_46_car_key_get', () => {
     it('cn_46_car_key_get_n', 0, () => {
       tI('cn_46_car_key_get_n', () => {
         const k=connection.getCarKeyDfxData();expect(typeof k==='string').assertTrue();
+        });
       });
-    });
     it('cn_46_car_key_get_e', 0, () => {
       tI('cn_46_car_key_get_e', () => {
         try{connection.getCarKeyDfxData();}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_46_car_key_get_b', 0, () => {
       tI('cn_46_car_key_get_b', () => {
         connection.getCarKeyDfxData();expect(true).assertTrue();
+        });
       });
-    });
     it('cn_46_car_key_get_e2', 0, () => {
       tI('cn_46_car_key_get_e2', () => {
         try{const z=connection.getCarKeyDfxData(); expect(z.length>=0).assertTrue();
-        }catch(_e2){expect(true).assertTrue(); }
+          }catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_46_car_key_get_r', 0, () => {
       tI('cn_46_car_key_get_r', () => {
         connection.getCarKeyDfxData();expect(true).assertTrue();
+        });
       });
-    });
     it('cn_46_car_key_get_x', 0, () => {
       tI('cn_46_car_key_get_x', () => {
         connection.getCarKeyDfxData();expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_47_on_dev_find', () => {
     it('cn_47_on_dev_find_n', 0, () => {
       tI('cn_47_on_dev_find_n', () => {
         connection.on('bluetoothDeviceFind',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_47_on_dev_find_e', 0, () => {
       tI('cn_47_on_dev_find_e', () => {
         try{connection.on('bluetoothDeviceFind',()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_47_on_dev_find_b', 0, () => {
       tI('cn_47_on_dev_find_b', () => {
         connection.on('bluetoothDeviceFind',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_47_on_dev_find_e2', 0, () => {
       tI('cn_47_on_dev_find_e2', () => {
         try{connection.on('bluetoothDeviceFind',()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_47_on_dev_find_r', 0, () => {
       tI('cn_47_on_dev_find_r', () => {
         connection.on('bluetoothDeviceFind',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_47_on_dev_find_x', 0, () => {
       tI('cn_47_on_dev_find_x', () => {
         connection.on('bluetoothDeviceFind',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_48_off_dev_find', () => {
     it('cn_48_off_dev_find_n', 0, () => {
       tI('cn_48_off_dev_find_n', () => {
         connection.off('bluetoothDeviceFind');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_48_off_dev_find_e', 0, () => {
       tI('cn_48_off_dev_find_e', () => {
         try{connection.off('bluetoothDeviceFind');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_48_off_dev_find_b', 0, () => {
       tI('cn_48_off_dev_find_b', () => {
         connection.off('bluetoothDeviceFind',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_48_off_dev_find_e2', 0, () => {
       tI('cn_48_off_dev_find_e2', () => {
         try{connection.off('bluetoothDeviceFind');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_48_off_dev_find_r', 0, () => {
       tI('cn_48_off_dev_find_r', () => {
         connection.off('bluetoothDeviceFind');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_48_off_dev_find_x', 0, () => {
       tI('cn_48_off_dev_find_x', () => {
         connection.off('bluetoothDeviceFind');expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_49_on_disc_res', () => {
     it('cn_49_on_disc_res_n', 0, () => {
       tI('cn_49_on_disc_res_n', () => {
         connection.on('discoveryResult',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_49_on_disc_res_e', 0, () => {
       tI('cn_49_on_disc_res_e', () => {
         try{connection.on('discoveryResult',()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_49_on_disc_res_b', 0, () => {
       tI('cn_49_on_disc_res_b', () => {
         connection.on('discoveryResult',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_49_on_disc_res_e2', 0, () => {
       tI('cn_49_on_disc_res_e2', () => {
         try{connection.on('discoveryResult',()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_49_on_disc_res_r', 0, () => {
       tI('cn_49_on_disc_res_r', () => {
         connection.on('discoveryResult',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_49_on_disc_res_x', 0, () => {
       tI('cn_49_on_disc_res_x', () => {
         connection.on('discoveryResult',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_50_off_disc_res', () => {
     it('cn_50_off_disc_res_n', 0, () => {
       tI('cn_50_off_disc_res_n', () => {
         connection.off('discoveryResult');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_50_off_disc_res_e', 0, () => {
       tI('cn_50_off_disc_res_e', () => {
         try{connection.off('discoveryResult');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_50_off_disc_res_b', 0, () => {
       tI('cn_50_off_disc_res_b', () => {
         connection.off('discoveryResult',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_50_off_disc_res_e2', 0, () => {
       tI('cn_50_off_disc_res_e2', () => {
         try{connection.off('discoveryResult');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_50_off_disc_res_r', 0, () => {
       tI('cn_50_off_disc_res_r', () => {
         connection.off('discoveryResult');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_50_off_disc_res_x', 0, () => {
       tI('cn_50_off_disc_res_x', () => {
         connection.off('discoveryResult');expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_51_on_bond', () => {
     it('cn_51_on_bond_n', 0, () => {
       tI('cn_51_on_bond_n', () => {
         connection.on('bondStateChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_51_on_bond_e', 0, () => {
       tI('cn_51_on_bond_e', () => {
         try{connection.on('bondStateChange',()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_51_on_bond_b', 0, () => {
       tI('cn_51_on_bond_b', () => {
         connection.on('bondStateChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_51_on_bond_e2', 0, () => {
       tI('cn_51_on_bond_e2', () => {
         try{connection.on('bondStateChange',()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_51_on_bond_r', 0, () => {
       tI('cn_51_on_bond_r', () => {
         connection.on('bondStateChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_51_on_bond_x', 0, () => {
       tI('cn_51_on_bond_x', () => {
         connection.on('bondStateChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_52_off_bond', () => {
     it('cn_52_off_bond_n', 0, () => {
       tI('cn_52_off_bond_n', () => {
         connection.off('bondStateChange');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_52_off_bond_e', 0, () => {
       tI('cn_52_off_bond_e', () => {
         try{connection.off('bondStateChange');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_52_off_bond_b', 0, () => {
       tI('cn_52_off_bond_b', () => {
         connection.off('bondStateChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_52_off_bond_e2', 0, () => {
       tI('cn_52_off_bond_e2', () => {
         try{connection.off('bondStateChange');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_52_off_bond_r', 0, () => {
       tI('cn_52_off_bond_r', () => {
         connection.off('bondStateChange');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_52_off_bond_x', 0, () => {
       tI('cn_52_off_bond_x', () => {
         connection.off('bondStateChange');expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_53_on_pin', () => {
     it('cn_53_on_pin_n', 0, () => {
       tI('cn_53_on_pin_n', () => {
         connection.on('pinRequired',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_53_on_pin_e', 0, () => {
       tI('cn_53_on_pin_e', () => {
         try{connection.on('pinRequired',()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_53_on_pin_b', 0, () => {
       tI('cn_53_on_pin_b', () => {
         connection.on('pinRequired',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_53_on_pin_e2', 0, () => {
       tI('cn_53_on_pin_e2', () => {
         try{connection.on('pinRequired',()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_53_on_pin_r', 0, () => {
       tI('cn_53_on_pin_r', () => {
         connection.on('pinRequired',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_53_on_pin_x', 0, () => {
       tI('cn_53_on_pin_x', () => {
         connection.on('pinRequired',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_54_off_pin', () => {
     it('cn_54_off_pin_n', 0, () => {
       tI('cn_54_off_pin_n', () => {
         connection.off('pinRequired');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_54_off_pin_e', 0, () => {
       tI('cn_54_off_pin_e', () => {
         try{connection.off('pinRequired');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_54_off_pin_b', 0, () => {
       tI('cn_54_off_pin_b', () => {
         connection.off('pinRequired',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_54_off_pin_e2', 0, () => {
       tI('cn_54_off_pin_e2', () => {
         try{connection.off('pinRequired');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_54_off_pin_r', 0, () => {
       tI('cn_54_off_pin_r', () => {
         connection.off('pinRequired');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_54_off_pin_x', 0, () => {
       tI('cn_54_off_pin_x', () => {
         connection.off('pinRequired');expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_55_on_batt', () => {
     it('cn_55_on_batt_n', 0, () => {
       tI('cn_55_on_batt_n', () => {
         connection.on('batteryChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_55_on_batt_e', 0, () => {
       tI('cn_55_on_batt_e', () => {
         try{connection.on('batteryChange',()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_55_on_batt_b', 0, () => {
       tI('cn_55_on_batt_b', () => {
         connection.on('batteryChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_55_on_batt_e2', 0, () => {
       tI('cn_55_on_batt_e2', () => {
         try{connection.on('batteryChange',()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_55_on_batt_r', 0, () => {
       tI('cn_55_on_batt_r', () => {
         connection.on('batteryChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_55_on_batt_x', 0, () => {
       tI('cn_55_on_batt_x', () => {
         connection.on('batteryChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_56_off_batt', () => {
     it('cn_56_off_batt_n', 0, () => {
       tI('cn_56_off_batt_n', () => {
         connection.off('batteryChange');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_56_off_batt_e', 0, () => {
       tI('cn_56_off_batt_e', () => {
         try{connection.off('batteryChange');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_56_off_batt_b', 0, () => {
       tI('cn_56_off_batt_b', () => {
         connection.off('batteryChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_56_off_batt_e2', 0, () => {
       tI('cn_56_off_batt_e2', () => {
         try{connection.off('batteryChange');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_56_off_batt_r', 0, () => {
       tI('cn_56_off_batt_r', () => {
         connection.off('batteryChange');expect(true).assertTrue();
+        });
       });
-    });
     it('cn_56_off_batt_x', 0, () => {
       tI('cn_56_off_batt_x', () => {
         connection.off('batteryChange');expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_57_on_scan_mode', () => {
     it('cn_57_on_scan_mode_n', 0, () => {
       tI('cn_57_on_scan_mode_n', () => {
         connection.onScanModeChange(()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_57_on_scan_mode_e', 0, () => {
       tI('cn_57_on_scan_mode_e', () => {
         try{connection.onScanModeChange(()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_57_on_scan_mode_b', 0, () => {
       tI('cn_57_on_scan_mode_b', () => {
         connection.onScanModeChange(()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_57_on_scan_mode_e2', 0, () => {
       tI('cn_57_on_scan_mode_e2', () => {
         try{connection.onScanModeChange(()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_57_on_scan_mode_r', 0, () => {
       tI('cn_57_on_scan_mode_r', () => {
         connection.onScanModeChange(()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_57_on_scan_mode_x', 0, () => {
       tI('cn_57_on_scan_mode_x', () => {
         connection.onScanModeChange(()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('cn_58_off_scan_mode', () => {
     it('cn_58_off_scan_mode_n', 0, () => {
       tI('cn_58_off_scan_mode_n', () => {
         connection.offScanModeChange();expect(true).assertTrue();
+        });
       });
-    });
     it('cn_58_off_scan_mode_e', 0, () => {
       tI('cn_58_off_scan_mode_e', () => {
         try{connection.offScanModeChange();}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_58_off_scan_mode_b', 0, () => {
       tI('cn_58_off_scan_mode_b', () => {
         connection.offScanModeChange(()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('cn_58_off_scan_mode_e2', 0, () => {
       tI('cn_58_off_scan_mode_e2', () => {
         try{connection.offScanModeChange();}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('cn_58_off_scan_mode_r', 0, () => {
       tI('cn_58_off_scan_mode_r', () => {
         connection.offScanModeChange();expect(true).assertTrue();
+        });
       });
-    });
     it('cn_58_off_scan_mode_x', 0, () => {
       tI('cn_58_off_scan_mode_x', () => {
         connection.offScanModeChange();expect(true).assertTrue();
+        });
       });
-    });
     });
   });
 }

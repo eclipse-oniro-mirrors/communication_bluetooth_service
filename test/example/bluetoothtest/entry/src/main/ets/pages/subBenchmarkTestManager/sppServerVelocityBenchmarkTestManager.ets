@@ -12,19 +12,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../Utils/resString';
+import LogUtil from '../../Utils/LogUtil';
+import { resStr} from '../../Utils/resString';
 
 
-import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
-import { PageTitle } from '../../Component/pageTitle';
-import { TestImageDisplay } from '../../Component/testImageDisplay';
-import { TestData } from '../../MainAbility/model/testData'
+import { PageTitle} from '../../Component/pageTitle';
+import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { TestData} from '../../MainAbility/model/testData'
 import * as SppServerManagerInterface from '../../MainAbility/model/sppServerManagerInterface'
 import bluetoothManager from '@ohos.bluetoothManager';
-import { testSetBluetoothScanModeManager , testSetLocalNameManager } from '../../MainAbility/model/brManagerInterface'
+import { testSetBluetoothScanModeManager, testSetLocalNameManager} from '../../MainAbility/model/brManagerInterface'
 import promptAction from '@ohos.promptAction';
-import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
+import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
 
 /**
  *  Bluetooth SppServer Velocity Benchmark Test Page Of Bluetooth test
@@ -40,17 +40,17 @@ struct SppServerVelocityBenchmarkTestManager {
   @StorageLink('dataServerReadMessage') dataServerReadMessage: string = "00";
   @State writeServerData: string = '1';
 
-  aboutToAppear() {
-    AppStorage.setOrCreate('serverV_Cycle_index' , '1');
-    AppStorage.setOrCreate('inputUuid' , this.uuid);
-    AppStorage.setOrCreate("writeServerData" , this.writeServerData);
+  aboutToAppear(){
+    AppStorage.setOrCreate('serverV_Cycle_index', '1');
+    AppStorage.setOrCreate('inputUuid', this.uuid);
+    AppStorage.setOrCreate("writeServerData", this.writeServerData);
   }
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
               .accessibilityLevel('yes')
               .id('pages_subBenchmarkTestManager_sppServerVelocityBenchmarkTestManager__pt_0')
       }
@@ -59,66 +59,66 @@ struct SppServerVelocityBenchmarkTestManager {
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
 
-      Column() {
-        Scroll() {
-          Column() {
+      Column(){
+        Scroll(){
+          Column(){
             Text($r('app.string.bluetoothtest_text_xncs'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_5 , bottom : ConfigData.VP_5 , left : ConfigData.VP_20 })
+              .margin({top: ConfigData.VP_5, bottom: ConfigData.VP_5, left: ConfigData.VP_20})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             Text($r('app.string.bluetoothtest_text_sdxncsscssldsfxxdslhdkxn'))
               .fontSize(ConfigData.VP_17)
-              .margin({ left : ConfigData.VP_15 })
+              .margin({left: ConfigData.VP_15})
               .backgroundColor($r("app.color.spring"))
               Stack()
                 .height(ConfigData.HEIGHT_1_VP)
                 .backgroundColor($r('app.color.black'))
 
-            Row() {
+              Row(){
               Text($r('app.string.bluetoothtest_text_sci'))
                 .fontSize(ConfigData.VP_17)
                 .width(ConfigData.VP_180)
-                .padding({ left : ConfigData.VP_15 })
-              Column() {
+                .padding({left: ConfigData.VP_15})
+              Column(){
                 Select([
-                  { value : "100" },
-                  { value : "1000" },
-                  { value : "10000" }
+                  { value: "100"},
+                  { value: "1000"},
+                  { value: "10000"}
                 ])
                   .borderRadius(ConfigData.VP_10)
                   .backgroundColor($r("app.color.white"))
                   .selected(0)
                   .value($r('app.string.bluetoothtest_str_xhcs'))
-                  .font({ size : 17 })
-                  .margin({ right : ConfigData.VP_160 })
-                  .selectedOptionFont({ size : 17 })
-                  .optionFont({ size : ConfigData.VP_15 })
+                  .font({size: 17})
+                  .margin({right: ConfigData.VP_160})
+                  .selectedOptionFont({size: 17})
+                  .optionFont({size: ConfigData.VP_15})
                   .height(ConfigData.VP_36)
                   .width(ConfigData.WH_80_100)
                   .onSelect((index: number) => {
-                    hilog.info(0x0000, 'BtTest', '%{public}s', "index Select:" + index)
-                    AppStorage.setOrCreate('serverV_Cycle_index' , index);
+                    LogUtil.info("index Select:" + index)
+                    AppStorage.setOrCreate('serverV_Cycle_index', index)
                   })
               }
               .width(ConfigData.WH_90_100)
-            }
+              }
             .padding(ConfigData.VP_3)
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
-            Row() {
+            Row(){
               Text($r('app.string.bluetoothtest_text_xrmbsbsj'))
                 .fontSize(ConfigData.VP_17)
                 .width(ConfigData.VP_160)
-              TextInput({ text : this.writeServerData , placeholder : $r('app.string.bluetoothtest_str_qsrxrdsj') })
+              TextInput({text: this.writeServerData, placeholder: $r('app.string.bluetoothtest_str_qsrxrdsj')})
                 .accessibilityLevel('yes')
                 .id('pages_subBenchmarkTestManager_sppServerVelocityBenchmarkTestManager__ti_0')
                 .fontSize(ConfigData.VP_14)
                 .backgroundColor($r("app.color.white"))
                 .onChange((str) => {
                   this.writeServerData = str;
-                  AppStorage.setOrCreate("writeServerData" , str);
+                  AppStorage.setOrCreate("writeServerData", str);
                 })
                 .width(ConfigData.WH_50_100)
                 .borderRadius(ConfigData.VP_10)
@@ -128,16 +128,16 @@ struct SppServerVelocityBenchmarkTestManager {
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
-            Scroll() {
-              Column() {
+            Scroll(){
+              Column(){
                 Text($r('app.string.bluetoothtest_text_dqdsjw'))
                   .fontSize(ConfigData.VP_17)
-                  .margin({ left : ConfigData.VP_10 })
+                  .margin({left: ConfigData.VP_10})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_100_100)
-                Scroll() {
-                  List() {
-                    ListItem() {
+                Scroll(){
+                  List(){
+                    ListItem(){
                       Text(this.dataServerReadMessage)
                         .align(Alignment.TopStart)
                         .fontSize(ConfigData.VP_14)
@@ -179,19 +179,19 @@ struct SppServerVelocityBenchmarkTestManager {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'))
 
-        Scroll() {
-          Column() {
+        Scroll(){
+          Column(){
             Text($r('app.string.bluetoothtest_text_rz'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_5 , bottom : ConfigData.VP_5 , left : ConfigData.VP_10 })
+              .margin({top: ConfigData.VP_5, bottom: ConfigData.VP_5, left: ConfigData.VP_10})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
               .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-            List() {
-              ListItem() {
+            List(){
+              ListItem(){
                 Text(this.sppServerVelocityBenchmarkTestMessage)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_10 , right : ConfigData.VP_10 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_10, right: ConfigData.VP_10})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -214,14 +214,14 @@ struct SppServerVelocityBenchmarkTestManager {
       .width(ConfigData.WH_100_100)
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Column() {
-        Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
-          Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Row() {
+      Column(){
+        Flex({alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceBetween}){
+          Button({type: ButtonType.Normal, stateEffect: true}){
+            Row(){
               Text($r('app.string.bluetoothtest_text_slxncs'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -231,31 +231,31 @@ struct SppServerVelocityBenchmarkTestManager {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({ top : ConfigData.VP_15 , left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+          .margin({top: ConfigData.VP_15, left: ConfigData.VP_5, right: ConfigData.VP_5})
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppServerVelocityBenchmarkTestMessage = ""
 
             let writeServerData = loopWriteDate()
-            AppStorage.setOrCreate("writeServerData" , writeServerData)
+            AppStorage.setOrCreate("writeServerData", writeServerData)
             await sleep(2)
 
             sppServerVelocityBenchmarkTestMessage += "sppServerCreateSafe" + testFunc(sppServerCreateSafe)
-            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage" , sppServerVelocityBenchmarkTestMessage)
+            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage", sppServerVelocityBenchmarkTestMessage)
             await sleep(8)
 
             sppServerVelocityBenchmarkTestMessage += "sppServerAccept" + testFunc(sppServerAccept)
-            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage" , sppServerVelocityBenchmarkTestMessage)
+            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage", sppServerVelocityBenchmarkTestMessage)
             await sleep(5)
 
           })
 
-          Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Row() {
+          Button({type: ButtonType.Normal, stateEffect: true}){
+            Row(){
               Text($r('app.string.bluetoothtest_text_jscs'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -265,29 +265,29 @@ struct SppServerVelocityBenchmarkTestManager {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_80)
           .height(ConfigData.VP_66)
-          .margin({ top : ConfigData.VP_15 , left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+          .margin({top: ConfigData.VP_15, left: ConfigData.VP_5, right: ConfigData.VP_5})
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppServerVelocityBenchmarkTestMessage = ""
 
             sppServerVelocityBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_14')) + testFunc(SppServerManagerInterface.testSppServerReadOffManager) + "\n"
-            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage" , sppServerVelocityBenchmarkTestMessage)
+            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage", sppServerVelocityBenchmarkTestMessage)
             await sleep(1)
 
             sppServerVelocityBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_8')) + testFunc(SppServerManagerInterface.testSppCloseServerSocketManager) + "\n"
-            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage" , sppServerVelocityBenchmarkTestMessage)
+            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage", sppServerVelocityBenchmarkTestMessage)
             await sleep(1)
 
             sppServerVelocityBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_szx_2')) + testFunc(SppServerManagerInterface.testSppCloseClientSocketManager) + "\n"
-            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage" , sppServerVelocityBenchmarkTestMessage)
+            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage", sppServerVelocityBenchmarkTestMessage)
             await sleep(1)
           })
 
-          Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Row() {
+          Button({type: ButtonType.Normal, stateEffect: true}){
+            Row(){
               Image($r('app.media.ic_public_delete_filled'))
           .accessibilityLevel('yes')
-          .id('pages_subBenchmarkTestManager_sppServerVelocityBenchmarkTestManager__img_0').width(ConfigData.VP_30).height(ConfigData.VP_40).margin({ left : ConfigData.VP_5 })
+          .id('pages_subBenchmarkTestManager_sppServerVelocityBenchmarkTestManager__img_0').width(ConfigData.VP_30).height(ConfigData.VP_40).margin({left: ConfigData.VP_5})
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -297,11 +297,11 @@ struct SppServerVelocityBenchmarkTestManager {
           .backgroundColor($r("app.color.moon"))
           .width(ConfigData.VP_50)
           .height(ConfigData.VP_66)
-          .margin({ top : ConfigData.VP_15 , right : ConfigData.VP_40 })
+          .margin({top: ConfigData.VP_15, right: ConfigData.VP_40})
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let sppServerVelocityBenchmarkTestMessage = ""
-            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage" , sppServerVelocityBenchmarkTestMessage)
+            AppStorage.setOrCreate("sppServerVelocityBenchmarkTestMessage", sppServerVelocityBenchmarkTestMessage)
           })
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
@@ -313,10 +313,10 @@ struct SppServerVelocityBenchmarkTestManager {
     }
   }
 
-  dataRead(dataBuffer: ArrayBuffer) {
+  dataRead(dataBuffer: ArrayBuffer){
     const data = new Uint8Array(dataBuffer);
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetooth read is: ' + data);
-    if ( data != null ) {
+    LogUtil.info('spp bluetooth read is: ' + data);
+    if ( data != null ){
       this.dataServerReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
       this.dataServerReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
@@ -324,15 +324,15 @@ struct SppServerVelocityBenchmarkTestManager {
   }
 }
 
-export function testFunc(func: Function) {
+export function testFunc(func: Function){
   let start = new Date().getTime()
-  switch ( func ) {
+  switch ( func ){
     case testSetLocalNameManager: {
       func("DaYuBlue")
     }
       break;
     case testSetBluetoothScanModeManager: {
-      func(4 , 0)
+      func(4, 0)
     }
       break;
     default: {
@@ -342,9 +342,9 @@ export function testFunc(func: Function) {
   }
 
   let end = new Date().getTime()
-  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + "ms")
-  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms")
-  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms")
+  LogUtil.info(resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + "ms")
+  LogUtil.info(resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms")
+  LogUtil.info(resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms")
   let message = ""
   message += resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms" + "\n"
   message += resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + resStr($r('app.string.bluetoothtest_str_m_1')) + resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms" + "\n"
@@ -352,16 +352,16 @@ export function testFunc(func: Function) {
 }
 
 async function sleep(time: number): Promise<void> {
-  return new Promise<void>((resolve , reject) => {
+  return new Promise<void>((resolve, reject) => {
     setTimeout(() => {
-      resolve();
-    } , time * 1000);
+      resolve()
+    }, time * 1000);
   });
 }
 
-function choose(index: number) {
+function choose(index: number){
   let indexNumber: number = 0
-  switch ( index ) {
+  switch ( index ){
     case 0: {
       indexNumber = 100;
     }
@@ -388,30 +388,30 @@ let clientNumber: number = - 1;
 
 function sppServerCreateSafe(): string {
   let message = resStr($r('app.string.bluetoothtest_str_st_10'))
-  hilog.info(0x0000, 'BtTest', '%{public}s', 'spp server socketId(safe mode) create! ');
+  LogUtil.info('spp server socketId(safe mode) create! ');
   let uuid: string = AppStorage.get('inputUuid') !
-  if ( uuid == '' ) {
+  if ( uuid == '' ){
     message = resStr($r('app.string.bluetoothtest_str_uwk'));
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
   // 创建蓝牙服务器侦听套接字, 返回服务端ID
-  bluetoothManager.sppListen('BluetoothDevice' , {
-    uuid : uuid ,
-    secure : true ,
-    type : 0
-  } , (code , serverSocketID) => {
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'bluetooth error code: ' + JSON.stringify(code));
-    if ( !code || code.code == 0 ) {
-      hilog.info(0x0000, 'BtTest', '%{public}s', 'spp server: serverSocketID(safe mode) - ' + serverSocketID);
+  bluetoothManager.sppListen('BluetoothDevice', {
+    uuid: uuid,
+    secure: true,
+    type: 0
+  }, (code, serverSocketID) => {
+    LogUtil.info('bluetooth error code: ' + JSON.stringify(code));
+    if ( !code || code.code == 0 ){
+      LogUtil.info('spp server: serverSocketID(safe mode) - ' + serverSocketID);
       serverNumber = serverSocketID;
       message = resStr($r('app.string.bluetoothtest_str_cjscg'));
-      promptAction.showToast({ message : message })
-      hilog.info(0x0000, 'BtTest', '%{public}s', 'testSppServerAccept test')
-      hilog.info(0x0000, 'BtTest', '%{public}s', 'testSppServerAccept serverNumber ' + serverNumber)
+      promptAction.showToast({message: message})
+      LogUtil.info('testSppServerAccept test')
+      LogUtil.info('testSppServerAccept serverNumber ' + serverNumber)
     }
-  });
-  promptAction.showToast({ message : message })
+  })
+  promptAction.showToast({message: message})
   return message
 }
 
@@ -420,59 +420,59 @@ function sppServerAccept(): string {
   let message: string = "testSppServerAccept test"
   let serverReadMessage = ""
   //  serverNumber = AppStorage.get("serverNumber")
-  hilog.info(0x0000, 'BtTest', '%{public}s', 'testSppServerAccept test')
-  hilog.info(0x0000, 'BtTest', '%{public}s', 'testSppServerAccept serverNumber ' + serverNumber)
+  LogUtil.info('testSppServerAccept test')
+  LogUtil.info('testSppServerAccept serverNumber ' + serverNumber)
   let i = 1
   let index: number = AppStorage.get('serverV_Cycle_index') !;
   let indexNumber = choose(index)
   let cycleNumber = indexNumber + 1
-  hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_xhsw')) + indexNumber)
+  LogUtil.info(resStr($r('app.string.bluetoothtest_str_xhsw')) + indexNumber)
 
-  bluetoothManager.sppAccept(serverNumber , (code , clientSocketID) => {
-    if ( !code || code.code == 0 ) {
-      hilog.info(0x0000, 'BtTest', '%{public}s', 'spp server: clientSocketID - ' + clientSocketID);
-      hilog.info(0x0000, 'BtTest', '%{public}s', 'test serverNumber ' + serverNumber);
+  bluetoothManager.sppAccept(serverNumber, (code, clientSocketID) => {
+    if ( !code || code.code == 0 ){
+      LogUtil.info('spp server: clientSocketID - ' + clientSocketID)
+      LogUtil.info('test serverNumber ' + serverNumber);
       clientNumber = clientSocketID;
-      AppStorage.setOrCreate("clientNumber" , clientNumber)
+      AppStorage.setOrCreate("clientNumber", clientNumber)
       message = resStr($r('app.string.bluetoothtest_str_jskhdcg'))
-      promptAction.showToast({ message : message })
-      bluetoothManager.on('sppRead' , clientNumber , (dataBuffer: ArrayBuffer) => {
+      promptAction.showToast({message: message})
+      bluetoothManager.on('sppRead', clientNumber, (dataBuffer: ArrayBuffer) => {
         const data = new Uint8Array(dataBuffer);
-        hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetooth read is: ' + data);
-        if ( data != null ) {
-          if ( i < cycleNumber ) {
+        LogUtil.info('spp bluetooth read is: ' + data);
+        if ( data != null ){
+          if ( i < cycleNumber ){
             serverReadMessage = resStr($r('app.string.bluetoothtest_str_d_1')) + i + resStr($r('app.string.bluetoothtest_str_cdqcg')) + "\n" + serverReadMessage
-            hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_d_1')) + i + resStr($r('app.string.bluetoothtest_str_cdqcg_1')) + JSON.stringify(data));
-            AppStorage.setOrCreate("dataServerReadMessage" , serverReadMessage)
-            promptAction.showToast({ message : serverReadMessage })
+            LogUtil.info(resStr($r('app.string.bluetoothtest_str_d_1')) + i + resStr($r('app.string.bluetoothtest_str_cdqcg_1')) + JSON.stringify(data));
+            AppStorage.setOrCreate("dataServerReadMessage", serverReadMessage)
+            promptAction.showToast({message: serverReadMessage})
             //          sppServerWrite();
-            hilog.info(0x0000, 'BtTest', '%{public}s', 'sppServerWrite sppWrite clientNumber: ' + clientNumber);
+            LogUtil.info('sppServerWrite sppWrite clientNumber: ' + clientNumber);
             //            let writeServerData = AppStorage.get("writeServerData") 值为1
             let writeServerData: string = AppStorage.get("writeServerData") !
             let writeArrayBuffer: ArrayBuffer = strToArrayBuffer(writeServerData) as ArrayBuffer;
-            hilog.info(0x0000, 'BtTest', '%{public}s', 'sppServerWrite  writeServerData: ' + writeServerData);
-            const sppWriteSuccess = bluetoothManager.sppWrite(clientNumber , writeArrayBuffer);
-            hilog.info(0x0000, 'BtTest', '%{public}s', resStr($r('app.string.bluetoothtest_str_sd_1')) + i + resStr($r('app.string.bluetoothtest_str_cxr')));
+            LogUtil.info('sppServerWrite  writeServerData: ' + writeServerData);
+            const sppWriteSuccess = bluetoothManager.sppWrite(clientNumber, writeArrayBuffer);
+            LogUtil.info(resStr($r('app.string.bluetoothtest_str_sd_1')) + i + resStr($r('app.string.bluetoothtest_str_cxr')));
             message = resStr($r('app.string.bluetoothtest_str_sd_3')) + i + resStr($r('app.string.bluetoothtest_str_cxr'))
-            promptAction.showToast({ message : message })
+            promptAction.showToast({message: message})
           } else {
-            promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_xhcsdg')) })
+            promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_xhcsdg'))})
             sppServerReadOff()
           }
         } else {
           message = resStr($r('app.string.bluetoothtest_str_dqsb'));
         }
         //        AppStorage.setOrCreate("dataServerReadMessage", message)
-        promptAction.showToast({ message : message })
+        promptAction.showToast({message: message})
       })
-      promptAction.showToast({ message : message })
+      promptAction.showToast({message: message})
     } else {
       message = resStr($r('app.string.bluetoothtest_str_jskhdsb'));
-      hilog.info(0x0000, 'BtTest', '%{public}s', "code.code:" + JSON.stringify(code))
-      promptAction.showToast({ message : message })
+      LogUtil.info("code.code:" + JSON.stringify(code))
+      promptAction.showToast({message: message})
     }
   })
-  promptAction.showToast({ message : message })
+  promptAction.showToast({message: message})
   return message
 }
 
@@ -480,49 +480,49 @@ function sppServerAccept(): string {
 function sppServerWrite(): string {
   let message = resStr($r('app.string.bluetoothtest_str_st_20'))
   let clientNumber: number = AppStorage.get("clientNumber") !
-  hilog.info(0x0000, 'BtTest', '%{public}s', 'sppServerWrite sppWrite clientNumber: ' + clientNumber);
+  LogUtil.info('sppServerWrite sppWrite clientNumber: ' + clientNumber)
   let writeServerData: string = AppStorage.get("writeServerData") !
   let writeArrayBuffer: ArrayBuffer = strToArrayBuffer(writeServerData) as ArrayBuffer;
-  bluetoothManager.sppWrite(clientNumber , writeArrayBuffer);
-  hilog.info(0x0000, 'BtTest', '%{public}s', 'sppWrite successfully');
+  bluetoothManager.sppWrite(clientNumber, writeArrayBuffer);
+  LogUtil.info('sppWrite successfully');
   message = resStr($r('app.string.bluetoothtest_str_xrcg'));
-  promptAction.showToast({ message : message })
+  promptAction.showToast({message: message})
   return message
 }
 
 function sppServerReadOff(): string {
   let message = resStr($r('app.string.bluetoothtest_str_st_12'))
-  hilog.info(0x0000, 'BtTest', '%{public}s', 'sppServerReadOff');
+  LogUtil.info('sppServerReadOff');
   let clientNumber: number = AppStorage.get("clientNumber") !
-  bluetoothManager.off('sppRead' , clientNumber ,
+  bluetoothManager.off('sppRead', clientNumber,
     (dataBuffer: ArrayBuffer) => {
       const data = new Uint8Array(dataBuffer);
-      hilog.info(0x0000, 'BtTest', '%{public}s', 'spp bluetooth read is: ' + data);
-      if ( data != null ) {
+      LogUtil.info('spp bluetooth read is: ' + data);
+      if ( data != null ){
         message = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
       } else {
         message = resStr($r('app.string.bluetoothtest_str_dqsb'));
       }
-      AppStorage.setOrCreate("dataServerReadMessage" , message)
-      promptAction.showToast({ message : message })
+      AppStorage.setOrCreate("dataServerReadMessage", message)
+      promptAction.showToast({message: message})
       return message
     }
   );
-  promptAction.showToast({ message : message })
+  promptAction.showToast({message: message})
   return message
 }
 
-function strToArrayBuffer(str: string) {
+function strToArrayBuffer(str: string){
   let array = new Uint8Array(str.length);
-  for ( let i = 0 ; i < str.length ; i ++ ) {
+  for(let i = 0 ; i<str.length ; i++ ){
     array[ i ] = str.charCodeAt(i);
   }
   return array.buffer
 }
 
-function loopWriteDate() {
+function loopWriteDate(){
   let a = "1";
-  for ( let i = 0 ;i < 100 ; i ++ ) {
+  for(let i = 0 ;i<100 ; i++ ){
     a += "1";
   }
   return a

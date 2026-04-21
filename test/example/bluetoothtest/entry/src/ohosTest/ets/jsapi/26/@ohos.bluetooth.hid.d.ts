@@ -17,7 +17,7 @@
  * @kit ConnectivityKit
  */
 import type baseProfile from './@ohos.bluetooth.baseProfile';
-import { Callback } from './@ohos.base';
+import { Callback} from './@ohos.base';
 import type common from './@ohos.bluetooth.common';
 /**
  * Provides methods to accessing bluetooth HID(Human Interface Device)-related capabilities.
@@ -30,7 +30,7 @@ declare namespace hid {
     /**
      * Base interface of profile.
      *
-     * @typedef { baseProfile.BaseProfile } BaseProfile
+     * @typedef { baseProfile.BaseProfile} BaseProfile
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 10
      */
@@ -38,7 +38,7 @@ declare namespace hid {
     /**
      * Bluetooth device address.
      *
-     * @typedef { common.BluetoothAddress } BluetoothAddress
+     * @typedef { common.BluetoothAddress} BluetoothAddress
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @stagemodelonly
      * @since 23
@@ -47,10 +47,10 @@ declare namespace hid {
     /**
      * create the instance of hid profile.
      *
-     * @returns { HidHostProfile } Returns the instance of hid profile.
-     * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+     * @returns { HidHostProfile} Returns the instance of hid profile.
+     * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
      * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-     * @throws { BusinessError } 801 - Capability not supported.
+     * @throws { BusinessError} 801 - Capability not supported.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 10
      */
@@ -68,16 +68,16 @@ declare namespace hid {
          * Initiate an HID connection to a remote device.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH and ohos.permission.MANAGE_BLUETOOTH
-         * @param { string } deviceId - Indicates device ID. For example, "11:22:33:AA:BB:FF".
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-         * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+         * @param { string} deviceId - Indicates device ID. For example, "11:22:33:AA:BB:FF".
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+         * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
          * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900001 - Service stopped.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900004 - Profile not supported.
-         * @throws { BusinessError } 2900099 - Operation failed.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900001 - Service stopped.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900004 - Profile not supported.
+         * @throws { BusinessError} 2900099 - Operation failed.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @systemapi
          * @since 10
@@ -87,16 +87,16 @@ declare namespace hid {
          * Disconnect the HID connection with the remote device.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH and ohos.permission.MANAGE_BLUETOOTH
-         * @param { string } deviceId - Indicates device ID. For example, "11:22:33:AA:BB:FF".
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-         * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+         * @param { string} deviceId - Indicates device ID. For example, "11:22:33:AA:BB:FF".
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+         * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
          * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900001 - Service stopped.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900004 - Profile not supported.
-         * @throws { BusinessError } 2900099 - Operation failed.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900001 - Service stopped.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900004 - Profile not supported.
+         * @throws { BusinessError} 2900099 - Operation failed.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @systemapi
          * @since 10
@@ -106,8 +106,8 @@ declare namespace hid {
     /**
      * Creates the instance of HID device profile.
      *
-     * @returns { HidDeviceProfile } Returns the instance of HID device profile.
-     * @throws { BusinessError } 801 - Capability not supported.
+     * @returns { HidDeviceProfile} Returns the instance of HID device profile.
+     * @throws { BusinessError} 801 - Capability not supported.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @stagemodelonly
      * @since 23
@@ -131,19 +131,19 @@ declare namespace hid {
          * callback to detect the status change.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { HidDeviceSdp } sdp - Describe the hid device capability fields of this endpoint being queried.
-         * @param { HidDeviceQos } inQos - Describe the In Quality of Service (QoS) settings
+         * @param { HidDeviceSdp} sdp - Describe the hid device capability fields of this endpoint being queried.
+         * @param { HidDeviceQos} inQos - Describe the In Quality of Service (QoS) settings
          *     for the Bluetooth HID device application.
-         * @param { HidDeviceQos } outQos - Describe the Out Quality of Service (QoS) settings
+         * @param { HidDeviceQos} outQos - Describe the Out Quality of Service (QoS) settings
          *     for the Bluetooth HID device application.
-         * @param { Callback<boolean> } callback - Callback for HID device registration status changes,
+         * @param { Callback<boolean>} callback - Callback for HID device registration status changes,
          *     {@code true} indicates register success or {@code false} otherwise.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900099 - Operation failed.
-         * @throws { BusinessError } 2903050 - Application is not in the foreground.
-         * @throws { BusinessError } 2903051 - Any app has been registered.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900099 - Operation failed.
+         * @throws { BusinessError} 2903050 - Application is not in the foreground.
+         * @throws { BusinessError} 2903051 - Any app has been registered.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -153,10 +153,10 @@ declare namespace hid {
          * Application unregisters the HID Device capability.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900099 - Operation failed.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900099 - Operation failed.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -166,13 +166,13 @@ declare namespace hid {
          * Initiate an HID connection to a remote HID host device.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { BluetoothAddress } deviceId -  Indicates the address of the remote Bluetooth device.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900004 - Remote Device profile not supported.
-         * @throws { BusinessError } 2900099 - Operation failed.
-         * @throws { BusinessError } 2903052 - App not register.
+         * @param { BluetoothAddress} deviceId -  Indicates the address of the remote Bluetooth device.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900004 - Remote Device profile not supported.
+         * @throws { BusinessError} 2900099 - Operation failed.
+         * @throws { BusinessError} 2903052 - App not register.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -182,11 +182,11 @@ declare namespace hid {
          * Disconnect the HID connection with the remote device.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900099 - Operation failed.
-         * @throws { BusinessError } 2903052 - App not register.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900099 - Operation failed.
+         * @throws { BusinessError} 2903052 - App not register.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -196,14 +196,14 @@ declare namespace hid {
          * Send report to a remote HID host device.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { number } id  - Report ID defined in the descriptor.
-         * @param { Uint8Array } reportData  - Report data sent to the host device.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900099 - Operation failed.
-         * @throws { BusinessError } 2903052 - App not register.
-         * @throws { BusinessError } 2903053 - Device not connected.
+         * @param { number} id  - Report ID defined in the descriptor.
+         * @param { Uint8Array} reportData  - Report data sent to the host device.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900099 - Operation failed.
+         * @throws { BusinessError} 2903052 - App not register.
+         * @throws { BusinessError} 2903053 - Device not connected.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -213,16 +213,16 @@ declare namespace hid {
          * Reply report to a remote HID host device.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { ReportType } type - Report type for reply
-         * @param { number } id - Report Id, as defined in descriptor.
+         * @param { ReportType} type - Report type for reply
+         * @param { number} id - Report Id, as defined in descriptor.
          *     It can be 0 in case Report Id are not defined in descriptor.
-         * @param { Uint8Array } reportData - Report Data send to host.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900099 - Operation failed.
-         * @throws { BusinessError } 2903052 - App not register.
-         * @throws { BusinessError } 2903053 - Device not connected.
+         * @param { Uint8Array} reportData - Report Data send to host.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900099 - Operation failed.
+         * @throws { BusinessError} 2903052 - App not register.
+         * @throws { BusinessError} 2903053 - Device not connected.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -232,13 +232,13 @@ declare namespace hid {
          * Report error to a remote HID host device.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { ErrorReason } error - error reason to send.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900099 - Operation failed.
-         * @throws { BusinessError } 2903052 - App not register.
-         * @throws { BusinessError } 2903053 - Device not connected.
+         * @param { ErrorReason} error - error reason to send.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900099 - Operation failed.
+         * @throws { BusinessError} 2903052 - App not register.
+         * @throws { BusinessError} 2903053 - Device not connected.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -248,9 +248,9 @@ declare namespace hid {
          * Subscribe to the event reported when GET_REPORT message is received from the remote.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { Callback<GetReportData> } callback - Callback used to listen for event.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
+         * @param { Callback<GetReportData>} callback - Callback used to listen for event.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -260,9 +260,9 @@ declare namespace hid {
          * Unsubscribe from the event that a GET_REPORT message is received from the peer device.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { Callback<GetReportData> } [callback] - Callback used to listen for event.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
+         * @param { Callback<GetReportData>} [callback] - Callback used to listen for event.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -272,9 +272,9 @@ declare namespace hid {
          * Subscribe to the event reported when SET_REPORT message is received from the remote.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { Callback<SetReportData> } callback - Callback used to listen for event.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
+         * @param { Callback<SetReportData>} callback - Callback used to listen for event.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -284,9 +284,9 @@ declare namespace hid {
          * Unsubscribe from the event that a SET_REPORT message is received from the peer device.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { Callback<SetReportData> } [callback] - Callback used to listen for event.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
+         * @param { Callback<SetReportData>} [callback] - Callback used to listen for event.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -296,9 +296,9 @@ declare namespace hid {
          * Subscribe to the event reported when InterruptData is received from the remote.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { Callback<InterruptData> } callback - Callback used to listen for event.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
+         * @param { Callback<InterruptData>} callback - Callback used to listen for event.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -308,9 +308,9 @@ declare namespace hid {
          * Unsubscribe from the event reported when InterruptData is received from the remote.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { Callback<InterruptData> } [callback] - Callback used to listen for event.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
+         * @param { Callback<InterruptData>} [callback] - Callback used to listen for event.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -320,9 +320,9 @@ declare namespace hid {
          * Subscribe to the event reported when SET_PROTOCOL message is received from the remote.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { Callback<ProtocolData> } callback - Callback used to listen for event.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
+         * @param { Callback<ProtocolData>} callback - Callback used to listen for event.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -332,9 +332,9 @@ declare namespace hid {
          * Unsubscribe from the event that a SET_PROTOCOL message is received from the peer device.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { Callback<ProtocolData> } [callback] - Callback used to listen for event.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
+         * @param { Callback<ProtocolData>} [callback] - Callback used to listen for event.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -344,9 +344,9 @@ declare namespace hid {
          * Subscribe to the event reported when virtual Cable is removed.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { Callback<void> } callback - Callback used to listen for event.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
+         * @param { Callback<void>} callback - Callback used to listen for event.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -356,9 +356,9 @@ declare namespace hid {
          * Unsubscribe from the event reported when virtual Cable is removed.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { Callback<void> } [callback] - Callback used to listen for event.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 801 - Capability not supported.
+         * @param { Callback<void>} [callback] - Callback used to listen for event.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 801 - Capability not supported.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -377,7 +377,7 @@ declare namespace hid {
         /**
          * name of this Bluetooth hid device. Maximum length is 50 bytes.
          *
-         * @type { string }
+         * @type { string}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -386,7 +386,7 @@ declare namespace hid {
         /**
          * description for this Bluetooth hid device. Maximum length is 50 bytes.
          *
-         * @type { string }
+         * @type { string}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -395,7 +395,7 @@ declare namespace hid {
         /**
          * provider of this Bluetooth hid device. Maximum length is 50 bytes.
          *
-         * @type { string }
+         * @type { string}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -405,7 +405,7 @@ declare namespace hid {
          * Subclass of this Bluetooth HID device. Subclass represents the specific HID device type.
          *
          *
-         * @type { Subclass }
+         * @type { Subclass}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -414,7 +414,7 @@ declare namespace hid {
         /**
          * descriptors identifies the descriptors associated with the bluetooth hid device.
          *
-         * @type { Uint8Array }
+         * @type { Uint8Array}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -433,7 +433,7 @@ declare namespace hid {
         /**
          * L2CAP service type, default = SERVICE_BEST_EFFORT.
          *
-         * @type { ?ServiceType }
+         * @type { ?ServiceType}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -442,7 +442,7 @@ declare namespace hid {
         /**
          * L2CAP tokenRate, means transmission rate, default = 0.
          *
-         * @type { ?number }
+         * @type { ?number}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -451,7 +451,7 @@ declare namespace hid {
         /**
          * L2CAP token bucket size, default = 0.
          *
-         * @type { ?number }
+         * @type { ?number}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -460,7 +460,7 @@ declare namespace hid {
         /**
          * L2CAP peak bandwidth, default = 0.
          *
-         * @type { ?number }
+         * @type { ?number}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -469,7 +469,7 @@ declare namespace hid {
         /**
          * L2CAP latency, default = -1.
          *
-         * @type { ?number }
+         * @type { ?number}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -478,7 +478,7 @@ declare namespace hid {
         /**
          * L2CAP delay variation, default = -1.
          *
-         * @type { ?number }
+         * @type { ?number}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -497,7 +497,7 @@ declare namespace hid {
         /**
          * reportType of GET_REPORT data.
          *
-         * @type { ReportType }
+         * @type { ReportType}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -506,7 +506,7 @@ declare namespace hid {
         /**
          * id of GET_REPORT data.
          *
-         * @type { number }
+         * @type { number}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -515,7 +515,7 @@ declare namespace hid {
         /**
          * bufferSize of GET_REPORT data, maximum number of octets to transfer during data phase.
          *
-         * @type { number }
+         * @type { number}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -534,7 +534,7 @@ declare namespace hid {
         /**
          * reportType of SET_REPORT data.
          *
-         * @type { ReportType }
+         * @type { ReportType}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -543,7 +543,7 @@ declare namespace hid {
         /**
          * id of SET_REPORT data.
          *
-         * @type { number }
+         * @type { number}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -552,7 +552,7 @@ declare namespace hid {
         /**
          * data of SET_REPORT data.
          *
-         * @type { Uint8Array }
+         * @type { Uint8Array}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -571,7 +571,7 @@ declare namespace hid {
         /**
          * id of interrupt data.
          *
-         * @type { number }
+         * @type { number}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -580,7 +580,7 @@ declare namespace hid {
         /**
          * data of interrupt data.
          *
-         * @type { Uint8Array }
+         * @type { Uint8Array}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -599,7 +599,7 @@ declare namespace hid {
         /**
          * protocol of protocol data.
          *
-         * @type { ProtocolType }
+         * @type { ProtocolType}
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @stagemodelonly
          * @since 23
@@ -609,7 +609,7 @@ declare namespace hid {
     /**
      * Describe the subclass.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @stagemodelonly
      * @since 23
@@ -699,7 +699,7 @@ declare namespace hid {
     /**
      * Describe the report type.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @stagemodelonly
      * @since 23
@@ -733,7 +733,7 @@ declare namespace hid {
     /**
      * Describe the l2cap service type.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @stagemodelonly
      * @since 23
@@ -767,7 +767,7 @@ declare namespace hid {
     /**
      * Describe the error reason.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @stagemodelonly
      * @since 23
@@ -825,7 +825,7 @@ declare namespace hid {
     /**
      * Describe the protocol type.
      *
-     * @enum { number }
+     * @enum { number}
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @stagemodelonly
      * @since 23

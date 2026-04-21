@@ -12,16 +12,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../Utils/resString';
+import hilog from '@ohos.hilog';
+import { resStr} from '../../Utils/resString';
 
 
 import ConfigData from '../../Utils/ConfigData';
-import { TestData } from '../../MainAbility/model/testData'
-import { PageTitle } from '../../Component/pageTitle';
-import { TestImageDisplay } from '../../Component/testImageDisplay';
-import { BleManagerAutoTestCase , initBleManagerAutoData } from '../../MainAbility/model/autoTestDataModelsManager'
-import { AutoContentTable } from '../../Component/autoContentTable'
-import { BTAutoArrayItem, testItemFromRouterOrPlaceholder } from '../../Utils/common'
+import { TestData} from '../../MainAbility/model/testData'
+import { PageTitle} from '../../Component/pageTitle';
+import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { BleManagerAutoTestCase, initBleManagerAutoData} from '../../MainAbility/model/autoTestDataModelsManager'
+import { AutoContentTable} from '../../Component/autoContentTable'
+import { BTAutoArrayItem, testItemFromRouterOrPlaceholder} from '../../Utils/common'
 
 /**
  *  BleAutoTest Manager Page Of Bluetooth test
@@ -34,22 +35,22 @@ struct BleAutoTestManager {
   @State changeIndex: number = - 1
   @StorageLink("bleAutoTestMessage") bleAutoTestMessage: string = ""
 
-  aboutToAppear() {
-    AppStorage.setOrCreate('txtScanFilterDeviceId' , "08:FB:EA:1B:3C:63"); // 6c:96:d7:3d:87:6f
-    AppStorage.setOrCreate('txtScanFilterName' , "dudu-tiger");
-    AppStorage.setOrCreate('txtScanFilterServiceUuid' , "0000180A-0000-1000-8000-00805f9b34fb");
-    AppStorage.setOrCreate('txtScanOptions_interval' , "0");
-    AppStorage.setOrCreate('txtScanOptionsDutyMode' , '0');
-    AppStorage.setOrCreate('txtScanOptionsMatchMode' , '0');
-    AppStorage.setOrCreate('cbxBleScanFilter' , true);
-    AppStorage.setOrCreate('cbxBleScanOptions' , true);
+  aboutToAppear(){
+    AppStorage.setOrCreate('txtScanFilterDeviceId', "08:FB:EA:1B:3C:63");// 6c:96:d7:3d:87:6f
+    AppStorage.setOrCreate('txtScanFilterName', "dudu-tiger");
+    AppStorage.setOrCreate('txtScanFilterServiceUuid', "0000180A-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('txtScanOptions_interval', "0");
+    AppStorage.setOrCreate('txtScanOptionsDutyMode', '0');
+    AppStorage.setOrCreate('txtScanOptionsMatchMode', '0');
+    AppStorage.setOrCreate('cbxBleScanFilter', true);
+    AppStorage.setOrCreate('cbxBleScanOptions', true);
   }
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
               .accessibilityLevel('yes')
               .id('pages_subAutoTestManager_bleAutoTestManager__pt_0')
       }
@@ -57,17 +58,17 @@ struct BleAutoTestManager {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Scroll() {
-          Column() {
+      Column(){
+        Scroll(){
+          Column(){
             Text($r('app.string.autotest_api_verify_label'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_10 , bottom : ConfigData.VP_10 , left : ConfigData.VP_15 })
+              .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10, left: ConfigData.VP_15})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             AutoContentTable({
-              autoItems : initBleManagerAutoData() ,
-              changeIndex : this.changeIndex
+              autoItems: initBleManagerAutoData(),
+              changeIndex: this.changeIndex
             })
           }
           .width(ConfigData.WH_100_100)
@@ -82,18 +83,18 @@ struct BleAutoTestManager {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'));
 
-        Scroll() {
-          Column() {
+        Scroll(){
+          Column(){
             Text($r('app.string.autotest_debug_log_label'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_8 , bottom : ConfigData.VP_8 , left : ConfigData.VP_15 })
+              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_15})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List() {
-              ListItem() {
+            List(){
+              ListItem(){
                 Text(resStr($r('app.string.autotest_log_prefix')) + "\n" + this.bleAutoTestMessage)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_30 , right : ConfigData.VP_10 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_30, right: ConfigData.VP_10})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -120,13 +121,13 @@ struct BleAutoTestManager {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Button({ type : ButtonType.Normal , stateEffect : true }) {
-          Row() {
+      Column(){
+        Button({type: ButtonType.Normal, stateEffect: true}){
+          Row(){
             Text($r('app.string.autotest'))
               .fontSize(ConfigData.VP_24)
               .fontColor(0xffffff)
-              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+              .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
           }
             .alignItems(VerticalAlign.Center)
         }
@@ -136,7 +137,7 @@ struct BleAutoTestManager {
         .backgroundColor($r("app.color.blue"))
         .width(ConfigData.VP_180)
         .height(ConfigData.VP_50)
-        .margin({ top : ConfigData.VP_15 })
+        .margin({top: ConfigData.VP_15})
         .onClick(async(event: ClickEvent) => {
           this.forLoop()
         })
@@ -148,38 +149,38 @@ struct BleAutoTestManager {
   }
 
   //循环调用
-  async forLoop() {
+  async forLoop(){
     let bleAutoTestMessage = ""
     //拼装数组
     let bleAutoArray: Array<BTAutoArrayItem> = [
-      { name : "testSetLocalNameManager" , para : [ "DaYuBlue" ] },
-      { name : "testSetBluetoothScanModeManager" , para : [ 4, 0 ] }
+      { name: "testSetLocalNameManager", para: [ "DaYuBlue" ]},
+      { name: "testSetBluetoothScanModeManager", para: [ 4, 0 ]}
     ]
     let interfaces = BleManagerAutoTestCase.map(i => {
       let item = bleAutoArray.find(itm => itm.name === i.api.name);
-      let para = item ? item.para : [];
-      return { name : i.api.name , para } as BTAutoArrayItem
+      let para = item ? item.para: [];
+      return { name: i.api.name, para} as BTAutoArrayItem
     })
 
-    for ( let m = 0 ; m < interfaces.length ; m ++ ) {
+    for(let m = 0 ; m<interfaces.length ; m++ ){
       // 检查 BleManagerAutoTestCase 中对应的 api 是否是一个函数
-      if ( typeof BleManagerAutoTestCase[ m ].api === "function" ) {
+      if ( typeof BleManagerAutoTestCase[ m ].api === "function" ){
         // 使用 TypeScript 的类型断言确保 para 是一个数组
         bleAutoTestMessage += BleManagerAutoTestCase[ m ].api(... interfaces[ m ].para) + "\n";
       } else {
-        console.error(`在 BleManagerAutoTestCase  中找不到方法: ${ BleManagerAutoTestCase[ m ] }`);
+        hilog.error(0x0000, 'BtTest', '%{public}s', `在 BleManagerAutoTestCase  中找不到方法: ${ BleManagerAutoTestCase[ m ] }`);
       }
       this.changeIndex = m
       await sleep(1)
-      AppStorage.setOrCreate("bleAutoTestMessage" , bleAutoTestMessage)
+      AppStorage.setOrCreate("bleAutoTestMessage", bleAutoTestMessage)
     }
   }
 }
 
 async function sleep(time: number): Promise<void> {
-  return new Promise<void>((resolve , reject) => {
+  return new Promise<void>((resolve, reject) => {
     setTimeout(() => {
       resolve();
-    } , time * 1000);
+    }, time * 1000);
   });
 }

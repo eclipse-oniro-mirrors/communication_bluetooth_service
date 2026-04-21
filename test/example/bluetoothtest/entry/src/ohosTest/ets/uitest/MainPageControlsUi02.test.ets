@@ -17,10 +17,10 @@
  * Auto-generated: one UI existence check per main-page control (.id).
  * Regenerate: python3 scripts/gen_main_page_control_ui_tests.py
  */
-import { describe, it } from '@ohos/hypium';
-import { assertControlVisible, startMainPage } from './MainPageControlUiShared';
+import { describe, it} from '@ohos/hypium';
+import { assertControlVisible, startMainPage} from './MainPageControlUiShared';
 
-export default function mainPageControlsUi02() {
+export default function mainPageControlsUi02(){
   describe('MainPageControlsUi02', () => {
     it('pages_subBenchmarkTestManager_sppServerBandWidthBenchmarkTestManager__ti_0', 0, async () => {
       await startMainPage('pages/subBenchmarkTestManager/sppServerBandWidthBenchmarkTestManager');

@@ -12,10 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../Utils/resString';
+import LogUtil from '../../Utils/LogUtil';
+import { resStr} from '../../Utils/resString';
 
 
-import hilog from '@ohos.hilog';
 /**
  * Gatt Page Of Bluetooth test
  */
@@ -28,30 +28,28 @@ const PAGE_URI_GET_GATT_SERVER_MANAGER = 'pages/subManualApiTestManager/subGattT
 
 export function testGattClientManager(): string {
   try {
-    router.pushUrl({ url : PAGE_URI_GET_GATT_CLIENT_MANAGER })
+    router.pushUrl({url: PAGE_URI_GET_GATT_CLIENT_MANAGER})
     let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
-  } catch( e ) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGattClientManager. message: ${ e.message }, code: ${ e.code }`)
+  } catch( e ){
+    LogUtil.info(`Failed to testGattClientManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGattClientManager. message: ${ e.message }, code: ${ e.code }`
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 }
 
 export function testGattServerManager(): string {
   try {
-    router.pushUrl({ url : PAGE_URI_GET_GATT_SERVER_MANAGER })
+    router.pushUrl({url: PAGE_URI_GET_GATT_SERVER_MANAGER})
     let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
-  } catch( e ) {
-    hilog.info(0x0000, 'BtTest', '%{public}s', `Failed to testGattServerManager. message: ${ e.message }, code: ${ e.code }`)
+  } catch( e ){
+    LogUtil.info(`Failed to testGattServerManager. message: ${ e.message }, code: ${ e.code }`)
     let message = `Failed to testGattServerManager. message: ${ e.message }, code: ${ e.code }`
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 }
-
-

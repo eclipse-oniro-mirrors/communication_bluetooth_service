@@ -40,34 +40,34 @@ export default struct EntryComponentTable {
   private fontSize ? = $r('sys.float.ohos_id_text_size_body1');
   private valueFontSize ? = $r('sys.float.ohos_id_text_size_body2');
 
-  build() {
-    Row() {
-      Row() {
-        Column() {
+  build(){
+    Row(){
+      Row(){
+        Column(){
           Text(this.settingTitle)
-            .fontColor(this.enabled ? this.titleFontColor : $r('sys.color.ohos_fa_text_primary'))
+            .fontColor(this.enabled ? this.titleFontColor: $r('sys.color.ohos_fa_text_primary'))
             .fontSize(this.fontSize)
             .textAlign(TextAlign.Start)
             .maxLines(ComponentConfig.MAX_LINES_3)
-            .textOverflow({ overflow : TextOverflow.Ellipsis })
-          Row() {
+            .textOverflow({overflow: TextOverflow.Ellipsis})
+          Row(){
             Text($r('app.string.version'))
               .fontColor($r('sys.color.ohos_id_color_text_secondary'))
               .fontSize($r('sys.float.ohos_id_text_size_body2'))
               .textAlign(TextAlign.Start)
               .maxLines(ComponentConfig.MAX_LINES_1)
-              .textOverflow({ overflow : TextOverflow.Ellipsis })
-              .visibility('MainAbility/pagesapplicationInfo' === this.settingUri ? Visibility.Visible : Visibility.None)
-              .margin({ top : $r('sys.float.ohos_id_text_margin_vertical') });
+              .textOverflow({overflow: TextOverflow.Ellipsis})
+              .visibility('MainAbility/pagesapplicationInfo' === this.settingUri ? Visibility.Visible: Visibility.None)
+              .margin({top: $r('sys.float.ohos_id_text_margin_vertical')});
             Text(this.settingSummary)
               .fontColor($r('sys.color.ohos_id_color_text_secondary'))
               .fontSize($r('sys.float.ohos_id_text_size_body2'))
               .fontWeight('sans-serif')
               .textAlign(TextAlign.Start)
               .maxLines(ComponentConfig.MAX_LINES_1)
-              .textOverflow({ overflow : TextOverflow.Ellipsis })
-              .visibility(null === this.settingSummary || undefined === this.settingSummary ? Visibility.None : Visibility.Visible)
-              .margin({ top : $r('sys.float.ohos_id_text_margin_vertical') });
+              .textOverflow({overflow: TextOverflow.Ellipsis})
+              .visibility(null === this.settingSummary || undefined === this.settingSummary ? Visibility.None: Visibility.Visible)
+              .margin({top: $r('sys.float.ohos_id_text_margin_vertical')});
           }
         }
         .alignItems(HorizontalAlign.Start);
@@ -77,29 +77,29 @@ export default struct EntryComponentTable {
       .align(Alignment.Start)
       .layoutWeight(1)
 
-      Row() {
+      Row(){
         Text(this.settingValue)
           .fontSize(this.valueFontSize)
           .fontColor($r('sys.color.ohos_id_color_text_secondary'))
           .fontWeight('sans-serif')
           .height(ConfigData.VP_40)
-          .margin({ left : $r('sys.float.ohos_id_elements_margin_horizontal_l') })
+          .margin({left: $r('sys.float.ohos_id_elements_margin_horizontal_l')})
           .align(Alignment.End);
 
-        if ( !this.settingArrowStyle && this.settingArrow ) {
+        if ( !this.settingArrowStyle && this.settingArrow ){
           Image(this.settingArrow)
-            .visibility(null === this.settingArrow ? Visibility.None : Visibility.Visible)
+            .visibility(null === this.settingArrow ? Visibility.None: Visibility.Visible)
             .width(ConfigData.VP_12)
             .height(ConfigData.VP_24)
-            .margin({ left : ConfigData.VP_4 , right : ConfigData.VP_8 })
+            .margin({left: ConfigData.VP_4, right: ConfigData.VP_8})
 
-        } else if ( this.settingArrow ) {
+        } else if ( this.settingArrow ){
           Image(this.settingArrow)
-            .visibility(null === this.settingArrow ? Visibility.None : Visibility.Visible)
+            .visibility(null === this.settingArrow ? Visibility.None: Visibility.Visible)
             .width(ConfigData.VP_48)
             .height(ConfigData.VP_48)
             .padding(ConfigData.VP_4)
-            .margin({ left : ConfigData.VP_4 , right : ConfigData.VP_4 })
+            .margin({left: ConfigData.VP_4, right: ConfigData.VP_4})
             .borderRadius($r("sys.float.ohos_id_corner_radius_default_l"))
             .onClick(this.onArrowClick);
         }
@@ -109,23 +109,23 @@ export default struct EntryComponentTable {
     }
     .height(this.height)
     .width(ComponentConfig.WH_100_100)
-    .padding({ left : $r('sys.float.ohos_id_default_padding_start') })
+    .padding({left: $r('sys.float.ohos_id_default_padding_start')})
     .borderRadius($r("sys.float.ohos_id_corner_radius_default_l"))
     .linearGradient((this.enabled && this.isTouched) ? {
-                                                         angle : 90 ,
-                                                         direction : GradientDirection.Right ,
-                                                         colors : [ [ $r("app.color.DCEAF9"), 0.0 ], [ $r("app.color.FAFAFA"), 1.0 ] ]
-                                                       } : {
-                                                             angle : 90 ,
-                                                             direction : GradientDirection.Right ,
-                                                             colors : [ [ $r("sys.color.ohos_id_color_foreground_contrary"), 1 ], [ $r("sys.color.ohos_id_color_foreground_contrary"), 1 ] ]
+                                                         angle: 90,
+                                                         direction: GradientDirection.Right,
+                                                         colors: [ [ $r("app.color.DCEAF9"), 0.0 ], [ $r("app.color.FAFAFA"), 1.0 ] ]
+    } : {
+                                                             angle: 90,
+                                                             direction: GradientDirection.Right,
+                                                             colors: [ [ $r("sys.color.ohos_id_color_foreground_contrary"), 1 ], [ $r("sys.color.ohos_id_color_foreground_contrary"), 1 ] ]
                                                            })
-    .alignItems(VerticalAlign.Center)
-    .onTouch((event: TouchEvent) => {
-      if ( event.type === TouchType.Down ) {
+                                                           .alignItems(VerticalAlign.Center)
+                                                           .onTouch((event: TouchEvent) => {
+      if ( event.type === TouchType.Down ){
         this.isTouched = true;
       }
-      if ( event.type === TouchType.Up ) {
+      if ( event.type === TouchType.Up ){
         this.isTouched = false;
       }
     })

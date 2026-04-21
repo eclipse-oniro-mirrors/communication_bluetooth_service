@@ -20,8 +20,8 @@ const UITEST_STUB_TITLE: string = 'uitest stub';
 @Entry
 @Component
 struct Index {
-  build() {
-    Column() {
+  build(){
+    Column(){
       Text(UITEST_STUB_TITLE)
         .id('uitest_stub_title')
         .accessibilityLevel('yes')

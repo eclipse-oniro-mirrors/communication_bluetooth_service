@@ -18,8 +18,8 @@
  * EntryAbility loads route from want.parameters.testTargetPage (see entry EntryAbility.ts).
  */
 import abilityDelegatorRegistry from '@ohos.app.ability.abilityDelegatorRegistry';
-import { Want } from '@kit.AbilityKit';
-import { Component, Driver, ON, On } from '@ohos.UiTest';
+import { Want} from '@kit.AbilityKit';
+import { Component, Driver, ON, On} from '@ohos.UiTest';
 
 export const MAIN_BUNDLE: string = 'com.example.myapplicationbt';
 /** 与 entry/module.json5 中 module.name 一致；多模块工程下 startAbility 需指定，否则无法正确拉起含页面路由的 entry UIAbility */
@@ -40,7 +40,7 @@ async function tryWaitForControl(driver: Driver, on: On, timeoutMs: number): Pro
   try {
     const c: Component = await driver.waitForComponent(on, timeoutMs);
     return c !== undefined;
-  } catch (_e) {
+  } catch (_e){
     return false;
   }
 }
@@ -49,20 +49,20 @@ async function tryWaitForControl(driver: Driver, on: On, timeoutMs: number): Pro
 async function tryScrollSearchInScrollables(driver: Driver, controlId: string): Promise<boolean> {
   const targetOn = ON.id(controlId);
   const kinds: string[] = ['Scroll', 'List'];
-  for (let k = 0; k < kinds.length; k++) {
+  for(let k = 0; k<kinds.length; k++){
     try {
       const containerOn = ON.inWindow(MAIN_BUNDLE).type(kinds[k]);
       const containers: Array<Component> = await driver.findComponents(containerOn);
-      for (let i = 0; i < containers.length; i++) {
+      for(let i = 0; i<containers.length; i++){
         try {
           const found: Component = await containers[i].scrollSearch(targetOn);
-          if (found !== undefined) {
+          if (found !== undefined){
             return true;
           }
-        } catch (_e) {
+        } catch (_e){
         }
       }
-    } catch (_e) {
+    } catch (_e){
     }
   }
   return false;
@@ -74,7 +74,7 @@ export async function startMainPage(route: string): Promise<void> {
   const cmd =
     `aa start -b ${MAIN_BUNDLE} -a ${ENTRY_ABILITY} -m ${ENTRY_MODULE} --ps testTargetPage ${route}`;
   const shellRet = await delegator.executeShellCommand(cmd, 60);
-  if (shellRet.exitCode !== 0) {
+  if (shellRet.exitCode !== 0){
     const want: Want = {
       bundleName: MAIN_BUNDLE,
       moduleName: ENTRY_MODULE,
@@ -86,16 +86,16 @@ export async function startMainPage(route: string): Promise<void> {
     await delegator.startAbility(want);
   }
   const driver = Driver.create();
-  for (let i = 0; i < 40; i++) {
+  for(let i = 0; i<40; i++){
     await delayMs(300);
     try {
-      const win = await driver.findWindow({ bundleName: MAIN_BUNDLE });
-      if (win) {
+      const win = await driver.findWindow({bundleName: MAIN_BUNDLE});
+      if (win){
         await win.focus();
         await delayMs(600);
         break;
       }
-    } catch (_e) {
+    } catch (_e){
     }
   }
   await delayMs(400);
@@ -107,7 +107,7 @@ export async function startUiTestStubAbility(): Promise<void> {
   const cmd =
     `aa start -b ${MAIN_BUNDLE} -a ${UITEST_STUB_ABILITY} -m ${ENTRY_MODULE}`;
   const shellRet = await delegator.executeShellCommand(cmd, 60);
-  if (shellRet.exitCode !== 0) {
+  if (shellRet.exitCode !== 0){
     const want: Want = {
       bundleName: MAIN_BUNDLE,
       moduleName: ENTRY_MODULE,
@@ -116,16 +116,16 @@ export async function startUiTestStubAbility(): Promise<void> {
     await delegator.startAbility(want);
   }
   const driver = Driver.create();
-  for (let i = 0; i < 40; i++) {
+  for(let i = 0; i<40; i++){
     await delayMs(300);
     try {
-      const win = await driver.findWindow({ bundleName: MAIN_BUNDLE });
-      if (win) {
+      const win = await driver.findWindow({bundleName: MAIN_BUNDLE});
+      if (win){
         await win.focus();
         await delayMs(600);
         break;
       }
-    } catch (_e) {
+    } catch (_e){
     }
   }
   await delayMs(400);
@@ -134,12 +134,12 @@ export async function startUiTestStubAbility(): Promise<void> {
 export async function assertStubTitleVisible(): Promise<void> {
   const driver = Driver.create();
   try {
-    const win = await driver.findWindow({ bundleName: MAIN_BUNDLE });
-    if (win) {
+    const win = await driver.findWindow({bundleName: MAIN_BUNDLE});
+    if (win){
       await win.focus();
       await delayMs(200);
     }
-  } catch (_e) {
+  } catch (_e){
   }
   const on = ON.inWindow(MAIN_BUNDLE).id('uitest_stub_title');
   await driver.waitForIdle(200, 8000);
@@ -149,35 +149,35 @@ export async function assertStubTitleVisible(): Promise<void> {
 export async function assertControlVisible(controlId: string): Promise<void> {
   const driver = Driver.create();
   try {
-    const win = await driver.findWindow({ bundleName: MAIN_BUNDLE });
-    if (win) {
+    const win = await driver.findWindow({bundleName: MAIN_BUNDLE});
+    if (win){
       await win.focus();
       await delayMs(300);
     }
-  } catch (_e) {
+  } catch (_e){
   }
   const onScoped = ON.inWindow(MAIN_BUNDLE).id(controlId);
   const onPlain = ON.id(controlId);
   await driver.waitForIdle(200, 15000);
-  if (await tryWaitForControl(driver, onScoped, 10000)) {
+  if (await tryWaitForControl(driver, onScoped, 10000)){
     return;
   }
-  if (await tryWaitForControl(driver, onPlain, 6000)) {
+  if (await tryWaitForControl(driver, onPlain, 6000)){
     return;
   }
   const mayNeedScroll: boolean =
     controlId.indexOf('__sc_') >= 0 || controlId.indexOf('__li_') >= 0;
-  if (mayNeedScroll) {
-    if (await tryScrollSearchInScrollables(driver, controlId)) {
+  if (mayNeedScroll){
+    if (await tryScrollSearchInScrollables(driver, controlId)){
       return;
     }
     await driver.waitForIdle(200, 4000);
-    if (await tryWaitForControl(driver, onScoped, 6000)) {
+    if (await tryWaitForControl(driver, onScoped, 6000)){
       return;
     }
   }
   await delayMs(400);
-  if (await tryWaitForControl(driver, onScoped, 5000)) {
+  if (await tryWaitForControl(driver, onScoped, 5000)){
     return;
   }
   await driver.assertComponentExist(onScoped);

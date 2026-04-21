@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import hilog from '@ohos.hilog';
+import LogUtil from '../../Utils/LogUtil';
 import ConfigData from '../../Utils/ConfigData';
 import BaseModel from '../../Utils/BaseModel';
 import btm from '@ohos.bluetoothManager';
@@ -32,12 +32,12 @@ export class BTMProfileModel extends BaseModel {
   public PROFILE_PAN_NETWORK = 7;
   public BLUETOOTH_STATE_OFF = 0;
 
-  constructor() {
+  constructor(){
     super();
   }
 
   initProfile(): void {
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'btm_test BTProfileModel start');
+    LogUtil.info('btm_test BTProfileModel start');
 
     this.profiles[ this.PROFILE_A2DP_SOURCE ] = btm.getProfileInstance(this.PROFILE_A2DP_SOURCE) as btm.A2dpSourceProfile;
 
@@ -47,11 +47,11 @@ export class BTMProfileModel extends BaseModel {
 
     this.profiles[ this.PROFILE_PAN_NETWORK ] = btm.getProfileInstance(this.PROFILE_PAN_NETWORK) as btm.PanProfile;
 
-    hilog.info(0x0000, 'BtTest', '%{public}s', 'bt_test BTProfileModel end');
+    LogUtil.info('bt_test BTProfileModel end');
   }
 
   hasProfile(type: number): boolean {
-    if ( !this.profiles[ type ] ) {
+    if ( !this.profiles[ type ] ){
       return false;
     } else {
       return true;
@@ -59,7 +59,7 @@ export class BTMProfileModel extends BaseModel {
   }
 
   getA2DPSourceProfile(): btm.A2dpSourceProfile | null {
-    if ( this.profiles[ this.PROFILE_A2DP_SOURCE ] != null ) {
+    if ( this.profiles[ this.PROFILE_A2DP_SOURCE ] != null ){
       return this.profiles[ this.PROFILE_A2DP_SOURCE ]
     } else {
       return null
@@ -68,7 +68,7 @@ export class BTMProfileModel extends BaseModel {
   }
 
   getHandsFreeAudioGatewayProfile(): btm.HandsFreeAudioGatewayProfile | null {
-    if ( this.profiles[ this.PROFILE_HANDS_FREE_AUDIO_GATEWAY ] != null ) {
+    if ( this.profiles[ this.PROFILE_HANDS_FREE_AUDIO_GATEWAY ] != null ){
       return this.profiles[ this.PROFILE_HANDS_FREE_AUDIO_GATEWAY ];
     } else {
       return null
@@ -76,7 +76,7 @@ export class BTMProfileModel extends BaseModel {
   }
 
   getHidHostProfile(): btm.HidHostProfile | null {
-    if ( this.profiles[ this.PROFILE_HID_HOST ] != null ) {
+    if ( this.profiles[ this.PROFILE_HID_HOST ] != null ){
       return this.profiles[ this.PROFILE_HID_HOST ];
     } else {
       return null
@@ -84,7 +84,7 @@ export class BTMProfileModel extends BaseModel {
   }
 
   getPanNetworkProfile(): btm.PanProfile | null {
-    if ( this.profiles[ this.PROFILE_PAN_NETWORK ] != null ) {
+    if ( this.profiles[ this.PROFILE_PAN_NETWORK ] != null ){
       return this.profiles[ this.PROFILE_PAN_NETWORK ];
     } else {
       return null
@@ -92,16 +92,16 @@ export class BTMProfileModel extends BaseModel {
   }
 
   getProfile(type: number): btm.A2dpSourceProfile | btm.HandsFreeAudioGatewayProfile | btm.HidHostProfile | btm.PanProfile | null {
-    if ( this.profiles[ type ] != null ) {
+    if ( this.profiles[ type ] != null ){
       return this.profiles[ type ];
     } else {
-      hilog.info(0x0000, 'BtTest', '%{public}s', "This.profiles[ type ] = null")
+      LogUtil.info("This.profiles[ type ] = null")
       return null
     }
   }
 
   getBluetoothState(): number {
-    return btm.getState();
+    return btm.getState()
   }
 }
 

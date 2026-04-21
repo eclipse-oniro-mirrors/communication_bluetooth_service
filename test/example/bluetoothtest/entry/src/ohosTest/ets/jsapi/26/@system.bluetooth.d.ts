@@ -25,7 +25,7 @@ export interface StartBLEScanOptions {
     /**
      * Time of delay for reporting the scan result
      *
-     * @type { number }
+     * @type { number}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -33,7 +33,7 @@ export interface StartBLEScanOptions {
     /**
      * StartBLEScanOptions success
      *
-     * @type { function }
+     * @type { function}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -41,7 +41,7 @@ export interface StartBLEScanOptions {
     /**
      * StartBLEScanOptions failed
      *
-     * @type { function }
+     * @type { function}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -49,7 +49,7 @@ export interface StartBLEScanOptions {
     /**
      * StartBLEScanOptions completed
      *
-     * @type { function }
+     * @type { function}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -64,7 +64,7 @@ export interface StopBLEScanOptions {
     /**
      * StopBLEScanOptions success
      *
-     * @type { function }
+     * @type { function}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -72,7 +72,7 @@ export interface StopBLEScanOptions {
     /**
      * StopBLEScanOptions failed
      *
-     * @type { function }
+     * @type { function}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -80,7 +80,7 @@ export interface StopBLEScanOptions {
     /**
      * StopBLEScanOptions completed
      *
-     * @type { function }
+     * @type { function}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -95,7 +95,7 @@ export interface BluetoothDevice {
     /**
      * The addrType of address, may be public or random
      *
-     * @type { 'public' | 'random' }
+     * @type { 'public' | 'random'}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -103,7 +103,7 @@ export interface BluetoothDevice {
     /**
      * Address of BluetoothDevice
      *
-     * @type { string }
+     * @type { string}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -111,7 +111,7 @@ export interface BluetoothDevice {
     /**
      * RSSI of the remote device
      *
-     * @type { number }
+     * @type { number}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -119,7 +119,7 @@ export interface BluetoothDevice {
     /**
      * Transmission power level for advertising
      *
-     * @type { string }
+     * @type { string}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -127,7 +127,7 @@ export interface BluetoothDevice {
     /**
      * The data of BluetoothDevice
      *
-     * @type { string }
+     * @type { string}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -142,7 +142,7 @@ export interface BLEFoundResponse {
     /**
      * The devices of BLEFoundResponse
      *
-     * @type { Array<BluetoothDevice> }
+     * @type { Array<BluetoothDevice>}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -157,7 +157,7 @@ export interface SubscribeBLEFoundOptions {
     /**
      * SubscribeBLEFoundOptions success
      *
-     * @type { function }
+     * @type { function}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -165,7 +165,7 @@ export interface SubscribeBLEFoundOptions {
     /**
      * SubscribeBLEFoundOptions failed
      *
-     * @type { function }
+     * @type { function}
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -181,7 +181,7 @@ export default class Bluetooth {
     /**
      * Start BLE scan
      *
-     * @param { StartBLEScanOptions } options - Options
+     * @param { StartBLEScanOptions} options - Options
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -189,7 +189,7 @@ export default class Bluetooth {
     /**
      * Stop BLE scan
      *
-     * @param { StopBLEScanOptions } options - Options
+     * @param { StopBLEScanOptions} options - Options
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */
@@ -197,7 +197,7 @@ export default class Bluetooth {
     /**
      * Subscribe BLE found
      *
-     * @param { SubscribeBLEFoundOptions } options - Options
+     * @param { SubscribeBLEFoundOptions} options - Options
      * @syscap SystemCapability.Communication.Bluetooth.Lite
      * @since 6
      */

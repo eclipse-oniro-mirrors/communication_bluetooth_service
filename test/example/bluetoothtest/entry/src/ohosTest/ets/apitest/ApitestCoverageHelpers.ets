@@ -17,16 +17,16 @@
  * 与 `jsapi/26/APITEST_COVERAGE.md` 中「性能 / 压力」可量化要求对齐的辅助方法。
  * 阈值偏宽松，避免低配设备或高负载下误杀；日志便于 CI 溯源。
  */
-import { expect } from '@ohos/hypium';
+import { expect} from '@ohos/hypium';
 
 /** 性能：单次批量调用的总耗时上限（毫秒），含异常路径吞错开销 */
 export function assertPerfBudget(tag: string, iterations: number, maxTotalMs: number, fn: () => void): void {
   const t0 = Date.now();
-  for (let i = 0; i < iterations; i++) {
+  for(let i = 0; i<iterations; i++){
     try {
       fn();
-    } catch (_e) {
-      // 单机偶发错误仍计入迭代，贴近真实压力场景
+    } catch (_e){
+    // 单机偶发错误仍计入迭代，贴近真实压力场景
     }
   }
   const elapsed = Date.now() - t0;
@@ -40,16 +40,16 @@ export function assertPerfBudget(tag: string, iterations: number, maxTotalMs: nu
  */
 export function assertStressHasSuccess(tag: string, iterations: number, fn: () => void): void {
   let ok = 0;
-  for (let i = 0; i < iterations; i++) {
+  for(let i = 0; i<iterations; i++){
     try {
       fn();
       ok++;
-    } catch (_e) {
-      // continue
+    } catch (_e){
+    // continue
     }
   }
   console.info(`[ApitestStress] ${tag} iterations=${iterations} successCount=${ok}`);
-  if (ok === 0) {
+  if (ok === 0){
     console.info(`[ApitestStress] ${tag} note: zero successes (e.g. BT off); stress path still executed`);
   }
   expect(iterations > 0).assertTrue();

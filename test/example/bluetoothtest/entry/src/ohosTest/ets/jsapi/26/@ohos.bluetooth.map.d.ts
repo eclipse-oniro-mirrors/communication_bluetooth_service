@@ -29,7 +29,7 @@ declare namespace map {
     /**
      * Base interface of profile.
      *
-     * @typedef { baseProfile.BaseProfile } BaseProfile
+     * @typedef { baseProfile.BaseProfile} BaseProfile
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 11
      */
@@ -37,7 +37,7 @@ declare namespace map {
     /**
      * Indicate the phone book access authorization.
      *
-     * @typedef { constant.AccessAuthorization } AccessAuthorization
+     * @typedef { constant.AccessAuthorization} AccessAuthorization
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @systemapi
      * @since 11
@@ -46,10 +46,10 @@ declare namespace map {
     /**
      * create the instance of MAP MSE profile.
      *
-     * @returns { MapMseProfile } Returns the instance of map mse profile.
-     * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+     * @returns { MapMseProfile} Returns the instance of map mse profile.
+     * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
      * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-     * @throws { BusinessError } 801 - Capability not supported.
+     * @throws { BusinessError} 801 - Capability not supported.
      * @syscap SystemCapability.Communication.Bluetooth.Core
      * @since 11
      */
@@ -67,16 +67,16 @@ declare namespace map {
          * Disconnect the map connection with the remote device.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH
-         * @param { string } deviceId - Indicates device ID. For example, "11:22:33:AA:BB:FF".
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-         * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+         * @param { string} deviceId - Indicates device ID. For example, "11:22:33:AA:BB:FF".
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+         * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
          * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900001 - Service stopped.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900004 - Profile not supported.
-         * @throws { BusinessError } 2900099 - Operation failed.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900001 - Service stopped.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900004 - Profile not supported.
+         * @throws { BusinessError} 2900099 - Operation failed.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @systemapi
          * @since 11
@@ -86,18 +86,18 @@ declare namespace map {
          * Set the message access authorization.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH and ohos.permission.MANAGE_BLUETOOTH
-         * @param { string } deviceId - Indicates device ID. For example, "11:22:33:AA:BB:FF".
-         * @param { AccessAuthorization } authorization - Indicates the permission.
-         * @returns { Promise<void> } Returns the promise object.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-         * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+         * @param { string} deviceId - Indicates device ID. For example, "11:22:33:AA:BB:FF".
+         * @param { AccessAuthorization} authorization - Indicates the permission.
+         * @returns { Promise<void>} Returns the promise object.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+         * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
          * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900001 - Service stopped.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900004 - Profile not supported.
-         * @throws { BusinessError } 2900099 - Operation failed.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900001 - Service stopped.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900004 - Profile not supported.
+         * @throws { BusinessError} 2900099 - Operation failed.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @systemapi
          * @since 11
@@ -107,17 +107,17 @@ declare namespace map {
          * Get the message access authorization.
          *
          * @permission ohos.permission.ACCESS_BLUETOOTH and ohos.permission.MANAGE_BLUETOOTH
-         * @param { string } deviceId - Indicates device ID. For example, "11:22:33:AA:BB:FF".
-         * @returns { Promise<AccessAuthorization> } Returns the promise object.
-         * @throws { BusinessError } 201 - Permission denied.
-         * @throws { BusinessError } 202 - Non-system applications are not allowed to use system APIs.
-         * @throws { BusinessError } 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
+         * @param { string} deviceId - Indicates device ID. For example, "11:22:33:AA:BB:FF".
+         * @returns { Promise<AccessAuthorization>} Returns the promise object.
+         * @throws { BusinessError} 201 - Permission denied.
+         * @throws { BusinessError} 202 - Non-system applications are not allowed to use system APIs.
+         * @throws { BusinessError} 401 - Invalid parameter. Possible causes: 1. Mandatory parameters are left unspecified.
          * <br>2. Incorrect parameter types. 3. Parameter verification failed.
-         * @throws { BusinessError } 801 - Capability not supported.
-         * @throws { BusinessError } 2900001 - Service stopped.
-         * @throws { BusinessError } 2900003 - Bluetooth disabled.
-         * @throws { BusinessError } 2900004 - Profile not supported.
-         * @throws { BusinessError } 2900099 - Operation failed.
+         * @throws { BusinessError} 801 - Capability not supported.
+         * @throws { BusinessError} 2900001 - Service stopped.
+         * @throws { BusinessError} 2900003 - Bluetooth disabled.
+         * @throws { BusinessError} 2900004 - Profile not supported.
+         * @throws { BusinessError} 2900099 - Operation failed.
          * @syscap SystemCapability.Communication.Bluetooth.Core
          * @systemapi
          * @since 11

@@ -12,17 +12,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../../Utils/resString';
+import hilog from '@ohos.hilog';
+import { resStr} from '../../../Utils/resString';
 
 
-import { BTAutoArrayItem, testItemFromRouterOrPlaceholder } from '../../../Utils/common'
+import { BTAutoArrayItem, testItemFromRouterOrPlaceholder} from '../../../Utils/common'
 import ConfigData from '../../../Utils/ConfigData';
-import { TestData } from '../../../MainAbility/model/testData'
-import { PageTitle } from '../../../Component/pageTitle';
-import { TestImageDisplay } from '../../../Component/testImageDisplay';
-import { AutoContentTable } from '../../../Component/autoContentTable';
+import { TestData} from '../../../MainAbility/model/testData'
+import { PageTitle} from '../../../Component/pageTitle';
+import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { AutoContentTable} from '../../../Component/autoContentTable';
 import {
-  initSppServerManagerAutoData ,
+  initSppServerManagerAutoData,
   SppServerManagerAutoTestCase
 } from '../../../MainAbility/model/autoTestDataModelsManager';
 
@@ -39,26 +40,26 @@ struct SppServerAutoTestManager {
   private testItem: TestData = testItemFromRouterOrPlaceholder()
   @StorageLink("sppServerAutoTestMessage") sppServerAutoTestMessage: string = ""
 
-  aboutToAppear() {
+  aboutToAppear(){
 
-    AppStorage.setOrCreate('txtScanFilterDeviceId' , "08:FB:EA:1B:3C:63");
-    AppStorage.setOrCreate('txtScanFilterName' , "dudu-tiger");
-    AppStorage.setOrCreate('txtScanFilterServiceUuid' , "0000180A-0000-1000-8000-00805f9b34fb");
-    AppStorage.setOrCreate('txtScanOptions_interval' , "0");
-    AppStorage.setOrCreate('txtScanOptionsDutyMode' , '0');
-    AppStorage.setOrCreate('txtScanOptionsMatchMode' , '0');
-    AppStorage.setOrCreate('cbxBleScanFilter' , true);
-    AppStorage.setOrCreate('cbxBleScanOptions' , true);
+    AppStorage.setOrCreate('txtScanFilterDeviceId', "08:FB:EA:1B:3C:63");
+    AppStorage.setOrCreate('txtScanFilterName', "dudu-tiger");
+    AppStorage.setOrCreate('txtScanFilterServiceUuid', "0000180A-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('txtScanOptions_interval', "0");
+    AppStorage.setOrCreate('txtScanOptionsDutyMode', '0');
+    AppStorage.setOrCreate('txtScanOptionsMatchMode', '0');
+    AppStorage.setOrCreate('cbxBleScanFilter', true);
+    AppStorage.setOrCreate('cbxBleScanOptions', true);
 
-    AppStorage.setOrCreate('inputUuid' , "00001101-0000-1000-8000-00805f9b34fb");
-    AppStorage.setOrCreate('writeServerData' , "111111");
+    AppStorage.setOrCreate('inputUuid', "00001101-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('writeServerData', "111111");
   }
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
               .accessibilityLevel('yes')
               .id('pages_subAutoTestManager_subSppAutoTestManager_sppServerAutoTestManager__pt_0')
       }
@@ -66,17 +67,17 @@ struct SppServerAutoTestManager {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Scroll() {
-          Column() {
+      Column(){
+        Scroll(){
+          Column(){
             Text($r('app.string.autotest_api_verify_label'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_10 , bottom : ConfigData.VP_10 , left : ConfigData.VP_15 })
+              .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10, left: ConfigData.VP_15})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             AutoContentTable({
-              autoItems : initSppServerManagerAutoData() ,
-              changeIndex : this.changeIndex
+              autoItems: initSppServerManagerAutoData(),
+              changeIndex: this.changeIndex
             })
           }
           .width(ConfigData.WH_100_100)
@@ -91,18 +92,18 @@ struct SppServerAutoTestManager {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'));
 
-        Scroll() {
-          Column() {
+        Scroll(){
+          Column(){
             Text($r('app.string.autotest_debug_log_label'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_8 , bottom : ConfigData.VP_8 , left : ConfigData.VP_15 })
+              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_15})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List() {
-              ListItem() {
+            List(){
+              ListItem(){
                 Text(resStr($r('app.string.autotest_log_prefix')) + "\n" + this.sppServerAutoTestMessage)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_30 , right : ConfigData.VP_10 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_30, right: ConfigData.VP_10})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -130,13 +131,13 @@ struct SppServerAutoTestManager {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Button({ type : ButtonType.Normal , stateEffect : true }) {
-          Row() {
+      Column(){
+        Button({type: ButtonType.Normal, stateEffect: true}){
+          Row(){
             Text($r('app.string.autotest'))
               .fontSize(ConfigData.VP_24)
               .fontColor(0xffffff)
-              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+              .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
           }
             .alignItems(VerticalAlign.Center)
         }
@@ -146,7 +147,7 @@ struct SppServerAutoTestManager {
         .backgroundColor($r("app.color.blue"))
         .width(ConfigData.VP_180)
         .height(ConfigData.VP_50)
-        .margin({ top : ConfigData.VP_15 })
+        .margin({top: ConfigData.VP_15})
         .onClick(async(event: ClickEvent) => {
           this.forLoop()
         })
@@ -158,47 +159,47 @@ struct SppServerAutoTestManager {
   }
 
   //循环调用
-  async forLoop() {
+  async forLoop(){
     let sppServerAutoTestMessage = ""
 
     //拼装数组
     let sppServerAutoArray: Array<BTAutoArrayItem> = [
-      { name : "testSetLocalNameManager" , para : [ "DaYuBlue" ] },
-      { name : "testSetBluetoothScanModeManager" , para : [ 4, 0 ] }
+      { name: "testSetLocalNameManager", para: [ "DaYuBlue" ]},
+      { name: "testSetBluetoothScanModeManager", para: [ 4, 0 ]}
     ]
     let interfaces = SppServerManagerAutoTestCase.map(i => {
       let item = sppServerAutoArray.find(itm => itm.name === i.api.name);
-      let para = item ? item.para : []; // 确保 para 总是一个数组
-      return { name : i.api.name , para } as BTAutoArrayItem;
+      let para = item ? item.para: [];// 确保 para 总是一个数组
+      return { name: i.api.name, para} as BTAutoArrayItem;
     });
 
-    for ( let m = 0 ; m < interfaces.length ; m ++ ) {
+    for(let m = 0 ; m<interfaces.length ; m++ ){
       // 检查 SppServerManagerAutoTestCase 中对应的 api 是否是一个函数
-      if ( typeof SppServerManagerAutoTestCase[ m ].api === "function" ) {
+      if ( typeof SppServerManagerAutoTestCase[ m ].api === "function" ){
         // 使用 TypeScript 的类型断言确保 para 是一个数组
         sppServerAutoTestMessage += SppServerManagerAutoTestCase[ m ].api(... interfaces[ m ].para) + "\n";
       } else {
-        console.error(`在 BrAutoTestCase 中找不到方法: ${ SppServerManagerAutoTestCase[ m ] }`);
+        hilog.error(0x0000, 'BtTest', '%{public}s', `在 BrAutoTestCase 中找不到方法: ${ SppServerManagerAutoTestCase[ m ] }`);
       }
       this.changeIndex = m
       await sleep(1)
-      AppStorage.setOrCreate("sppServerAutoTestMessage" , sppServerAutoTestMessage)
+      AppStorage.setOrCreate("sppServerAutoTestMessage", sppServerAutoTestMessage)
     }
   }
 }
 
-export function strToArrayBuffer(str: string) {
+export function strToArrayBuffer(str: string){
   let array = new Uint8Array(str.length);
-  for ( let i = 0 ; i < str.length ; i ++ ) {
+  for(let i = 0 ; i<str.length ; i++ ){
     array[ i ] = str.charCodeAt(i);
   }
   return array.buffer
 }
 
 async function sleep(time: number): Promise<void> {
-  return new Promise<void>((resolve , reject) => {
+  return new Promise<void>((resolve, reject) => {
     setTimeout(() => {
       resolve();
-    } , time * 1000);
+    }, time * 1000);
   });
 }

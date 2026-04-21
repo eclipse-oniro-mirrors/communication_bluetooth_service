@@ -12,20 +12,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../Utils/resString';
-
-
 import hilog from '@ohos.hilog';
+import LogUtil from '../../Utils/LogUtil';
+import { resStr} from '../../Utils/resString';
+
+
 import ConfigData from '../../Utils/ConfigData';
-import { PageTitle } from '../../Component/pageTitle';
-import { TestImageDisplay } from '../../Component/testImageDisplay';
-import { TestData } from '../../MainAbility/model/testData'
-import { ScenarioContentTable } from '../../Component/scenarioContentTable'
-import { BrFoundScenarioTestCase , initBRFoundScenarioData } from '../../MainAbility/model/scenarioTestDataModel'
+import { PageTitle} from '../../Component/pageTitle';
+import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { TestData} from '../../MainAbility/model/testData'
+import { ScenarioContentTable} from '../../Component/scenarioContentTable'
+import { BrFoundScenarioTestCase, initBRFoundScenarioData} from '../../MainAbility/model/scenarioTestDataModel'
 import * as BrInterface from '../../MainAbility/model/brInterface'
 import BluetoothModel from '../../MainAbility/model/BluetoothModel'
 import promptAction from '@ohos.promptAction';
-import { BTAutoArrayItem, testItemFromRouterOrPlaceholder } from '../../Utils/common'
+import { BTAutoArrayItem, testItemFromRouterOrPlaceholder} from '../../Utils/common'
 
 /**
  * Classic Bluetooth Found Scenario Test Page Of Bluetooth test
@@ -38,11 +39,11 @@ struct BrFoundScenarioTest {
   @State changeIndex: number = - 1
   @StorageLink("brFoundScenarioMessage") brFoundScenarioMessage: string = ""
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
               .accessibilityLevel('yes')
               .id('pages_subScenarioTest_brFoundScenarioTest__pt_0')
       }
@@ -50,17 +51,17 @@ struct BrFoundScenarioTest {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Scroll() {
-          Column() {
+      Column(){
+        Scroll(){
+          Column(){
             Text($r('app.string.bluetoothtest_text_cjlcyz'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_10 , bottom : ConfigData.VP_10 , left : ConfigData.VP_20 })
+              .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10, left: ConfigData.VP_20})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             ScenarioContentTable({
-              scenarioItems : initBRFoundScenarioData() ,
-              changeIndex : this.changeIndex
+              scenarioItems: initBRFoundScenarioData(),
+              changeIndex: this.changeIndex
             })
           }
           .width(ConfigData.WH_100_100)
@@ -75,18 +76,18 @@ struct BrFoundScenarioTest {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'));
 
-        Scroll() {
-          Column() {
+        Scroll(){
+          Column(){
             Text($r('app.string.bluetoothtest_text_lcrz'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_8 , bottom : ConfigData.VP_8 , left : ConfigData.VP_20 })
+              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_20})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List() {
-              ListItem() {
+            List(){
+              ListItem(){
                 Text(this.brFoundScenarioMessage)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_30 , right : ConfigData.VP_10 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_30, right: ConfigData.VP_10})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -113,13 +114,13 @@ struct BrFoundScenarioTest {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
-          Button({ type : ButtonType.Normal , stateEffect : true }) {
+      Column(){
+        Flex({alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceBetween}){
+          Button({type: ButtonType.Normal, stateEffect: true}){
             Text($r('app.string.bluetoothtest_text_cjcsks'))
               .fontSize(ConfigData.VP_24)
               .fontColor(0xffffff)
-              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+              .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_brFoundScenarioTest__btn_0')
@@ -127,19 +128,19 @@ struct BrFoundScenarioTest {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({ top : ConfigData.VP_15 , left : ConfigData.VP_20 })
+          .margin({top: ConfigData.VP_15, left: ConfigData.VP_20})
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
-            promptAction.showToast({ message : resStr($r('app.string.bluetoothtest_str_ksblyfxcjcs')) })
+            promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_ksblyfxcjcs'))})
             this.forLoop()
           })
 
-          Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Row() {
+          Button({type: ButtonType.Normal, stateEffect: true}){
+            Row(){
               Text($r('app.string.bluetoothtest_text_cjcsjs'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -149,33 +150,33 @@ struct BrFoundScenarioTest {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({ top : ConfigData.VP_15 , left : ConfigData.VP_10 , right : ConfigData.VP_10 })
+          .margin({top: ConfigData.VP_15, left: ConfigData.VP_10, right: ConfigData.VP_10})
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let brFoundScenarioMessage = ""
             // 停止蓝牙发现
             brFoundScenarioMessage += BrInterface.testStopBluetoothDiscovery() + "\n"
-            hilog.info(0x0000, 'BtTest', '%{public}s', "testStopBluetoothDiscovery success")
+            LogUtil.info("testStopBluetoothDiscovery success")
             //            self.changeIndex = arr[8]
             await sleep(1)
             //关闭注册状态变化
             brFoundScenarioMessage += BrInterface.testOnStateChange() + "\n"
-            hilog.info(0x0000, 'BtTest', '%{public}s', "testOffStateChange success")
+            LogUtil.info("testOffStateChange success")
             await sleep(1)
             //关蓝牙
             brFoundScenarioMessage += BrInterface.testDisableBluetooth() + "\n"
-            hilog.info(0x0000, 'BtTest', '%{public}s', "testDisableBluetooth success")
+            LogUtil.info("testDisableBluetooth success")
             //            self.changeIndex = arr[9]
             await sleep(1)
-            AppStorage.setOrCreate("brFoundScenarioMessage" , brFoundScenarioMessage)
+            AppStorage.setOrCreate("brFoundScenarioMessage", brFoundScenarioMessage)
           })
 
-          Button({ type : ButtonType.Normal , stateEffect : true }) {
-            Row() {
+          Button({type: ButtonType.Normal, stateEffect: true}){
+            Row(){
               Text($r('app.string.bluetoothtest_text_qkrz'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -185,11 +186,11 @@ struct BrFoundScenarioTest {
           .backgroundColor($r("app.color.moon"))
           .width(ConfigData.VP_80)
           .height(ConfigData.VP_66)
-          .margin({ top : ConfigData.VP_15 , right : ConfigData.VP_20 })
+          .margin({top: ConfigData.VP_15, right: ConfigData.VP_20})
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let brFoundScenarioMessage = ""
-            AppStorage.setOrCreate("brFoundScenarioMessage" , brFoundScenarioMessage)
+            AppStorage.setOrCreate("brFoundScenarioMessage", brFoundScenarioMessage)
           })
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
@@ -197,61 +198,61 @@ struct BrFoundScenarioTest {
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
       .width(ConfigData.WH_100_100)
-      .height(ConfigData.WH_100_100);
+      .height(ConfigData.WH_100_100)
     }
   }
 
   subscribeBluetoothDeviceFind(): string {
     let message = resStr($r('app.string.bluetoothtest_str_st_1'))
-    hilog.info(0x0000, 'BtTest', '%{public}s', "subscribeBluetoothDeviceFind")
+    LogUtil.info("subscribeBluetoothDeviceFind")
     BluetoothModel.subscribeBluetoothDeviceFind((deviceIds: Array<string>) => {
-      hilog.info(0x0000, 'BtTest', '%{public}s', 'available bluetooth devices changed.');
+      LogUtil.info('available bluetooth devices changed.')
       deviceIds?.forEach(deviceId => {
         // let device = brFoundDevices.find((availableDevice) => {
         //   return availableDevice.deviceId === deviceId
         // })
-        hilog.info(0x0000, 'BtTest', '%{public}s', 'available bluetooth find [' + deviceId + '] ')
+        LogUtil.info('available bluetooth find [' + deviceId + '] ')
         let message = (resStr($r('app.string.bluetoothtest_str_abf')) + deviceId + resStr($r('app.string.bluetoothtest_str_str')))
-        promptAction.showToast({ message : message })
-        AppStorage.setOrCreate('bluetoothAvailableDevices' , deviceIds);
+        promptAction.showToast({message: message})
+        AppStorage.setOrCreate('bluetoothAvailableDevices', deviceIds)
       })
     });
-    promptAction.showToast({ message : message })
+    promptAction.showToast({message: message})
     return message
   }
 
   //循环调用
-  async forLoop() {
+  async forLoop(){
     let brFoundScenarioMessage = ""
     //拼装数组
     let brScenarioArray: Array<BTAutoArrayItem> = [
-      { name : "testSetLocalName" , para : [ "DaYuBlue" ] },
-      { name : "testSetBluetoothScanMode" , para : [ 4, 0 ] }
+      { name: "testSetLocalName", para: [ "DaYuBlue" ]},
+      { name: "testSetBluetoothScanMode", para: [ 4, 0 ]}
     ]
     let interfaces = BrFoundScenarioTestCase.map(i => {
       let item = brScenarioArray.find(itm => itm.name === i.api.name);
-      let para = item ? item.para : [];
-      return { name : i.api.name , para } as BTAutoArrayItem
+      let para = item ? item.para: [];
+      return { name: i.api.name, para} as BTAutoArrayItem
     })
-    for ( let m = 0 ; m < interfaces.length ; m ++ ) {
+    for(let m = 0 ; m<interfaces.length ; m++ ){
       // 检查 BrFoundScenarioTestCase 中对应的 api 是否是一个函数
-      if ( typeof BrFoundScenarioTestCase[ m ].api === "function" ) {
+      if ( typeof BrFoundScenarioTestCase[ m ].api === "function" ){
         // 使用 TypeScript 的类型断言确保 para 是一个数组
         brFoundScenarioMessage += BrFoundScenarioTestCase[ m ].api(... interfaces[ m ].para) + "\n";
       } else {
-        console.error(`在 BrAutoTestCase 中找不到方法: ${ BrFoundScenarioTestCase[ m ] }`);
+        hilog.error(0x0000, 'BtTest', '%{public}s', `在 BrAutoTestCase 中找不到方法: ${ BrFoundScenarioTestCase[ m ] }`);
       }
       this.changeIndex = m
       await sleep(1)
-      AppStorage.setOrCreate("brFoundScenarioMessage" , brFoundScenarioMessage)
+      AppStorage.setOrCreate("brFoundScenarioMessage", brFoundScenarioMessage)
     }
   }
 }
 
 async function sleep(time: number): Promise<void> {
-  return new Promise<void>((resolve , reject) => {
+  return new Promise<void>((resolve, reject) => {
     setTimeout(() => {
       resolve();
-    } , time * 1000);
+    }, time * 1000);
   });
 }

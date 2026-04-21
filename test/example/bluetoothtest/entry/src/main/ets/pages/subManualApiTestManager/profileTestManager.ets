@@ -14,12 +14,12 @@
  */
 
 import ConfigData from '../../Utils/ConfigData';
-import { testItemFromRouterOrPlaceholder } from '../../Utils/common'
-import { TestData } from '../../MainAbility/model/testData'
-import { initA2dpSourceProfileManagerApiData } from '../../MainAbility/model/testDataModelsManager'
-import { PageTitle } from '../../Component/pageTitle';
-import { TestImageDisplay } from '../../Component/testImageDisplay';
-import { ContentTable } from '../../Component/contentTable';
+import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
+import { TestData} from '../../MainAbility/model/testData'
+import { initA2dpSourceProfileManagerApiData} from '../../MainAbility/model/testDataModelsManager'
+import { PageTitle} from '../../Component/pageTitle';
+import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { ContentTable} from '../../Component/contentTable';
 import btmProfileModel from '../../MainAbility/model/btmProfileModel';
 
 /**
@@ -31,19 +31,19 @@ import btmProfileModel from '../../MainAbility/model/btmProfileModel';
 struct ProfileTestManager {
   private testItem: TestData = testItemFromRouterOrPlaceholder()
 
-  aboutToAppear() {
-    // btmProfileModel.initProfile()
+  aboutToAppear(){
+  // btmProfileModel.initProfile()
   }
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
     .accessibilityLevel('yes')
     .id('pages_subManualApiTestManager_profileTestManager__pt_0')
       }
-      ContentTable({ apiItems : initA2dpSourceProfileManagerApiData() })
+      ContentTable({apiItems: initA2dpSourceProfileManagerApiData()})
     }
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
     .height(ConfigData.WH_100_100)

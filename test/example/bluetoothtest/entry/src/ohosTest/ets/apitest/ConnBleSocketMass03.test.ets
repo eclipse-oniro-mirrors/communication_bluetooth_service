@@ -18,698 +18,698 @@
  * Part: connBleSocketMass03
  * connection / ble / socket: 6 scenarios per overload (n,e,b,e2,r,x).
  */
-import { describe, it, expect } from '@ohos/hypium';
+import { describe, it, expect} from '@ohos/hypium';
 import connection from '@ohos.bluetooth.connection';
 import ble from '@ohos.bluetooth.ble';
 import socket from '@ohos.bluetooth.socket';
 import constant from '@ohos.bluetooth.constant';
 import common from '@ohos.bluetooth.common';
-import { tI, buf0, sppOpt, bleAd, bleAs, bleAp, BADDR } from './ConnBleSocketShared';
+import { tI, buf0, sppOpt, bleAd, bleAs, bleAp, BADDR} from './ConnBleSocketShared';
 
-export default function connBleSocketMass03() {
+export default function connBleSocketMass03(){
   describe('ConnBleSocket_mass_ble', () => {
     describe('bl_00_create_gatt_srv', () => {
     it('bl_00_create_gatt_srv_n', 0, () => {
       tI('bl_00_create_gatt_srv_n', () => {
         const g=ble.createGattServer();expect(g!==undefined).assertTrue();
+        });
       });
-    });
     it('bl_00_create_gatt_srv_e', 0, () => {
       tI('bl_00_create_gatt_srv_e', () => {
         try{ble.createGattServer();}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_00_create_gatt_srv_b', 0, () => {
       tI('bl_00_create_gatt_srv_b', () => {
         ble.createGattServer();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_00_create_gatt_srv_e2', 0, () => {
       tI('bl_00_create_gatt_srv_e2', () => {
         try{const x=ble.createGattServer(); expect(x!==null).assertTrue();
-        }catch(_e2){expect(true).assertTrue(); }
+          }catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_00_create_gatt_srv_r', 0, () => {
       tI('bl_00_create_gatt_srv_r', () => {
         ble.createGattServer();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_00_create_gatt_srv_x', 0, () => {
       tI('bl_00_create_gatt_srv_x', () => {
         ble.createGattServer();expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_01_create_gatt_cli', () => {
     it('bl_01_create_gatt_cli_n', 0, () => {
       tI('bl_01_create_gatt_cli_n', () => {
         const c=ble.createGattClientDevice(BADDR);expect(c!==undefined).assertTrue();
+        });
       });
-    });
     it('bl_01_create_gatt_cli_e', 0, () => {
       tI('bl_01_create_gatt_cli_e', () => {
         try{ble.createGattClientDevice('');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_01_create_gatt_cli_b', 0, () => {
       tI('bl_01_create_gatt_cli_b', () => {
         ble.createGattClientDevice(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('bl_01_create_gatt_cli_e2', 0, () => {
       tI('bl_01_create_gatt_cli_e2', () => {
         try{ble.createGattClientDevice('');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_01_create_gatt_cli_r', 0, () => {
       tI('bl_01_create_gatt_cli_r', () => {
         ble.createGattClientDevice(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     it('bl_01_create_gatt_cli_x', 0, () => {
       tI('bl_01_create_gatt_cli_x', () => {
         ble.createGattClientDevice(BADDR);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_02_create_scanner', () => {
     it('bl_02_create_scanner_n', 0, () => {
       tI('bl_02_create_scanner_n', () => {
         const s=ble.createBleScanner();expect(s!==undefined).assertTrue();
+        });
       });
-    });
     it('bl_02_create_scanner_e', 0, () => {
       tI('bl_02_create_scanner_e', () => {
         try{ble.createBleScanner();}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_02_create_scanner_b', 0, () => {
       tI('bl_02_create_scanner_b', () => {
         ble.createBleScanner();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_02_create_scanner_e2', 0, () => {
       tI('bl_02_create_scanner_e2', () => {
         try{const y=ble.createBleScanner(); expect(y!==null).assertTrue();
-        }catch(_e2){expect(true).assertTrue(); }
+          }catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_02_create_scanner_r', 0, () => {
       tI('bl_02_create_scanner_r', () => {
         ble.createBleScanner();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_02_create_scanner_x', 0, () => {
       tI('bl_02_create_scanner_x', () => {
         ble.createBleScanner();expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_03_ble_devs_0', () => {
     it('bl_03_ble_devs_0_n', 0, () => {
       tI('bl_03_ble_devs_0_n', () => {
         const a=ble.getConnectedBLEDevices();expect(Array.isArray(a)).assertTrue();
+        });
       });
-    });
     it('bl_03_ble_devs_0_e', 0, () => {
       tI('bl_03_ble_devs_0_e', () => {
         try{ble.getConnectedBLEDevices();}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_03_ble_devs_0_b', 0, () => {
       tI('bl_03_ble_devs_0_b', () => {
         ble.getConnectedBLEDevices();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_03_ble_devs_0_e2', 0, () => {
       tI('bl_03_ble_devs_0_e2', () => {
         try{const z=ble.getConnectedBLEDevices(); expect(z!==null).assertTrue();
-        }catch(_e2){expect(true).assertTrue(); }
+          }catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_03_ble_devs_0_r', 0, () => {
       tI('bl_03_ble_devs_0_r', () => {
         ble.getConnectedBLEDevices();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_03_ble_devs_0_x', 0, () => {
       tI('bl_03_ble_devs_0_x', () => {
         ble.getConnectedBLEDevices();expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_04_ble_devs_prof', () => {
     it('bl_04_ble_devs_prof_n', 0, () => {
       tI('bl_04_ble_devs_prof_n', () => {
         const b=ble.getConnectedBLEDevices(ble.BleProfile.GATT);
         expect(Array.isArray(b)).assertTrue();
+        });
       });
-    });
     it('bl_04_ble_devs_prof_e', 0, () => {
       tI('bl_04_ble_devs_prof_e', () => {
         try{ble.getConnectedBLEDevices(ble.BleProfile.GATT);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_04_ble_devs_prof_b', 0, () => {
       tI('bl_04_ble_devs_prof_b', () => {
         ble.getConnectedBLEDevices(ble.BleProfile.GATT);expect(true).assertTrue();
+        });
       });
-    });
     it('bl_04_ble_devs_prof_e2', 0, () => {
       tI('bl_04_ble_devs_prof_e2', () => {
         try{ble.getConnectedBLEDevices(ble.BleProfile.GATT);
-        }catch(_e2){expect(true).assertTrue(); }
+          }catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_04_ble_devs_prof_r', 0, () => {
       tI('bl_04_ble_devs_prof_r', () => {
         ble.getConnectedBLEDevices(ble.BleProfile.GATT);expect(true).assertTrue();
+        });
       });
-    });
     it('bl_04_ble_devs_prof_x', 0, () => {
       tI('bl_04_ble_devs_prof_x', () => {
         ble.getConnectedBLEDevices(ble.BleProfile.GATT);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_05_start_scan', () => {
     it('bl_05_start_scan_n', 0, () => {
       tI('bl_05_start_scan_n', () => {
         ble.startBLEScan([]);expect(true).assertTrue();
+        });
       });
-    });
     it('bl_05_start_scan_e', 0, () => {
       tI('bl_05_start_scan_e', () => {
         try{ble.startBLEScan([]);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_05_start_scan_b', 0, () => {
       tI('bl_05_start_scan_b', () => {
         ble.startBLEScan([],{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_05_start_scan_e2', 0, () => {
       tI('bl_05_start_scan_e2', () => {
         try{ble.startBLEScan([]);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_05_start_scan_r', 0, () => {
       tI('bl_05_start_scan_r', () => {
         ble.startBLEScan([]);expect(true).assertTrue();
+        });
       });
-    });
     it('bl_05_start_scan_x', 0, () => {
       tI('bl_05_start_scan_x', () => {
         ble.startBLEScan([]);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_06_stop_scan', () => {
     it('bl_06_stop_scan_n', 0, () => {
       tI('bl_06_stop_scan_n', () => {
         ble.stopBLEScan();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_06_stop_scan_e', 0, () => {
       tI('bl_06_stop_scan_e', () => {
         try{ble.stopBLEScan();}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_06_stop_scan_b', 0, () => {
       tI('bl_06_stop_scan_b', () => {
         ble.stopBLEScan();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_06_stop_scan_e2', 0, () => {
       tI('bl_06_stop_scan_e2', () => {
         try{ble.stopBLEScan();}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_06_stop_scan_r', 0, () => {
       tI('bl_06_stop_scan_r', () => {
         ble.stopBLEScan();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_06_stop_scan_x', 0, () => {
       tI('bl_06_stop_scan_x', () => {
         ble.stopBLEScan();expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_07_start_adv_legacy', () => {
     it('bl_07_start_adv_legacy_n', 0, () => {
       tI('bl_07_start_adv_legacy_n', () => {
         ble.startAdvertising(bleAs(),bleAd());expect(true).assertTrue();
+        });
       });
-    });
     it('bl_07_start_adv_legacy_e', 0, () => {
       tI('bl_07_start_adv_legacy_e', () => {
         try{ble.startAdvertising(bleAs(),bleAd());}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_07_start_adv_legacy_b', 0, () => {
       tI('bl_07_start_adv_legacy_b', () => {
         ble.startAdvertising(bleAs(),bleAd(),bleAd());expect(true).assertTrue();
+        });
       });
-    });
     it('bl_07_start_adv_legacy_e2', 0, () => {
       tI('bl_07_start_adv_legacy_e2', () => {
         try{ble.startAdvertising(bleAs(),bleAd());}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_07_start_adv_legacy_r', 0, () => {
       tI('bl_07_start_adv_legacy_r', () => {
         ble.startAdvertising(bleAs(),bleAd());expect(true).assertTrue();
+        });
       });
-    });
     it('bl_07_start_adv_legacy_x', 0, () => {
       tI('bl_07_start_adv_legacy_x', () => {
         ble.startAdvertising(bleAs(),bleAd());expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_08_stop_adv_legacy', () => {
     it('bl_08_stop_adv_legacy_n', 0, () => {
       tI('bl_08_stop_adv_legacy_n', () => {
         ble.stopAdvertising();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_08_stop_adv_legacy_e', 0, () => {
       tI('bl_08_stop_adv_legacy_e', () => {
         try{ble.stopAdvertising();}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_08_stop_adv_legacy_b', 0, () => {
       tI('bl_08_stop_adv_legacy_b', () => {
         ble.stopAdvertising();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_08_stop_adv_legacy_e2', 0, () => {
       tI('bl_08_stop_adv_legacy_e2', () => {
         try{ble.stopAdvertising();}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_08_stop_adv_legacy_r', 0, () => {
       tI('bl_08_stop_adv_legacy_r', () => {
         ble.stopAdvertising();expect(true).assertTrue();
+        });
       });
-    });
     it('bl_08_stop_adv_legacy_x', 0, () => {
       tI('bl_08_stop_adv_legacy_x', () => {
         ble.stopAdvertising();expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_09_start_adv_cb', () => {
     it('bl_09_start_adv_cb_n', 0, () => {
       tI('bl_09_start_adv_cb_n', () => {
         ble.startAdvertising(bleAp(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_09_start_adv_cb_e', 0, () => {
       tI('bl_09_start_adv_cb_e', () => {
         try{ble.startAdvertising(bleAp(),()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_09_start_adv_cb_b', 0, () => {
       tI('bl_09_start_adv_cb_b', () => {
         ble.startAdvertising(bleAp(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_09_start_adv_cb_e2', 0, () => {
       tI('bl_09_start_adv_cb_e2', () => {
         try{ble.startAdvertising(bleAp(),()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_09_start_adv_cb_r', 0, () => {
       tI('bl_09_start_adv_cb_r', () => {
         ble.startAdvertising(bleAp(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_09_start_adv_cb_x', 0, () => {
       tI('bl_09_start_adv_cb_x', () => {
         ble.startAdvertising(bleAp(),()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_10_start_adv_p', () => {
     it('bl_10_start_adv_p_n', 0, () => {
       tI('bl_10_start_adv_p_n', () => {
         ble.startAdvertising(bleAp());expect(true).assertTrue();
+        });
       });
-    });
     it('bl_10_start_adv_p_e', 0, () => {
       tI('bl_10_start_adv_p_e', () => {
         try{ble.startAdvertising(bleAp());}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_10_start_adv_p_b', 0, () => {
       tI('bl_10_start_adv_p_b', () => {
         ble.startAdvertising(bleAp());expect(true).assertTrue();
+        });
       });
-    });
     it('bl_10_start_adv_p_e2', 0, () => {
       tI('bl_10_start_adv_p_e2', () => {
         try{ble.startAdvertising(bleAp());}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_10_start_adv_p_r', 0, () => {
       tI('bl_10_start_adv_p_r', () => {
         ble.startAdvertising(bleAp());expect(true).assertTrue();
+        });
       });
-    });
     it('bl_10_start_adv_p_x', 0, () => {
       tI('bl_10_start_adv_p_x', () => {
         ble.startAdvertising(bleAp());expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_11_en_adv_cb', () => {
     it('bl_11_en_adv_cb_n', 0, () => {
       tI('bl_11_en_adv_cb_n', () => {
-        ble.enableAdvertising({ advertisingId: 0, duration: 1 },()=>{});expect(true).assertTrue();
+        ble.enableAdvertising({advertisingId: 0, duration: 1},()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_11_en_adv_cb_e', 0, () => {
       tI('bl_11_en_adv_cb_e', () => {
-        try{ble.enableAdvertising({ advertisingId: 0, duration: 1 },()=>{});
-        }catch(_e){expect(true).assertTrue(); }
+        try{ble.enableAdvertising({advertisingId: 0, duration: 1},()=>{});
+          }catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_11_en_adv_cb_b', 0, () => {
       tI('bl_11_en_adv_cb_b', () => {
-        ble.enableAdvertising({ advertisingId: 0, duration: 1 },()=>{});expect(true).assertTrue();
+        ble.enableAdvertising({advertisingId: 0, duration: 1},()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_11_en_adv_cb_e2', 0, () => {
       tI('bl_11_en_adv_cb_e2', () => {
-        try{ble.enableAdvertising({ advertisingId: 0, duration: 1 },()=>{});
-        }catch(_e2){expect(true).assertTrue(); }
+        try{ble.enableAdvertising({advertisingId: 0, duration: 1},()=>{});
+          }catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_11_en_adv_cb_r', 0, () => {
       tI('bl_11_en_adv_cb_r', () => {
-        ble.enableAdvertising({ advertisingId: 0, duration: 1 },()=>{});expect(true).assertTrue();
+        ble.enableAdvertising({advertisingId: 0, duration: 1},()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_11_en_adv_cb_x', 0, () => {
       tI('bl_11_en_adv_cb_x', () => {
-        ble.enableAdvertising({ advertisingId: 0, duration: 1 },()=>{});expect(true).assertTrue();
+        ble.enableAdvertising({advertisingId: 0, duration: 1},()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_12_en_adv_p', () => {
     it('bl_12_en_adv_p_n', 0, () => {
       tI('bl_12_en_adv_p_n', () => {
-        ble.enableAdvertising({ advertisingId: 0, duration: 1 });expect(true).assertTrue();
+        ble.enableAdvertising({advertisingId: 0, duration: 1});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_12_en_adv_p_e', 0, () => {
       tI('bl_12_en_adv_p_e', () => {
-        try{ble.enableAdvertising({ advertisingId: 0, duration: 1 });
-        }catch(_e){expect(true).assertTrue(); }
+        try{ble.enableAdvertising({advertisingId: 0, duration: 1});
+          }catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_12_en_adv_p_b', 0, () => {
       tI('bl_12_en_adv_p_b', () => {
-        ble.enableAdvertising({ advertisingId: 0, duration: 1 });expect(true).assertTrue();
+        ble.enableAdvertising({advertisingId: 0, duration: 1});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_12_en_adv_p_e2', 0, () => {
       tI('bl_12_en_adv_p_e2', () => {
-        try{ble.enableAdvertising({ advertisingId: 0, duration: 1 });
-        }catch(_e2){expect(true).assertTrue(); }
+        try{ble.enableAdvertising({advertisingId: 0, duration: 1});
+          }catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_12_en_adv_p_r', 0, () => {
       tI('bl_12_en_adv_p_r', () => {
-        ble.enableAdvertising({ advertisingId: 0, duration: 1 });expect(true).assertTrue();
+        ble.enableAdvertising({advertisingId: 0, duration: 1});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_12_en_adv_p_x', 0, () => {
       tI('bl_12_en_adv_p_x', () => {
-        ble.enableAdvertising({ advertisingId: 0, duration: 1 });expect(true).assertTrue();
+        ble.enableAdvertising({advertisingId: 0, duration: 1});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_13_dis_adv_cb', () => {
     it('bl_13_dis_adv_cb_n', 0, () => {
       tI('bl_13_dis_adv_cb_n', () => {
-        ble.disableAdvertising({ advertisingId: 0 },()=>{});expect(true).assertTrue();
+        ble.disableAdvertising({advertisingId: 0},()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_13_dis_adv_cb_e', 0, () => {
       tI('bl_13_dis_adv_cb_e', () => {
-        try{ble.disableAdvertising({ advertisingId: 0 },()=>{});
-        }catch(_e){expect(true).assertTrue(); }
+        try{ble.disableAdvertising({advertisingId: 0},()=>{});
+          }catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_13_dis_adv_cb_b', 0, () => {
       tI('bl_13_dis_adv_cb_b', () => {
-        ble.disableAdvertising({ advertisingId: 0 },()=>{});expect(true).assertTrue();
+        ble.disableAdvertising({advertisingId: 0},()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_13_dis_adv_cb_e2', 0, () => {
       tI('bl_13_dis_adv_cb_e2', () => {
-        try{ble.disableAdvertising({ advertisingId: 0 },()=>{});
-        }catch(_e2){expect(true).assertTrue(); }
+        try{ble.disableAdvertising({advertisingId: 0},()=>{});
+          }catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_13_dis_adv_cb_r', 0, () => {
       tI('bl_13_dis_adv_cb_r', () => {
-        ble.disableAdvertising({ advertisingId: 0 },()=>{});expect(true).assertTrue();
+        ble.disableAdvertising({advertisingId: 0},()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_13_dis_adv_cb_x', 0, () => {
       tI('bl_13_dis_adv_cb_x', () => {
-        ble.disableAdvertising({ advertisingId: 0 },()=>{});expect(true).assertTrue();
+        ble.disableAdvertising({advertisingId: 0},()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_14_dis_adv_p', () => {
     it('bl_14_dis_adv_p_n', 0, () => {
       tI('bl_14_dis_adv_p_n', () => {
-        ble.disableAdvertising({ advertisingId: 0 });expect(true).assertTrue();
+        ble.disableAdvertising({advertisingId: 0});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_14_dis_adv_p_e', 0, () => {
       tI('bl_14_dis_adv_p_e', () => {
-        try{ble.disableAdvertising({ advertisingId: 0 });}catch(_e){expect(true).assertTrue();}
+        try{ble.disableAdvertising({advertisingId: 0});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_14_dis_adv_p_b', 0, () => {
       tI('bl_14_dis_adv_p_b', () => {
-        ble.disableAdvertising({ advertisingId: 0 });expect(true).assertTrue();
+        ble.disableAdvertising({advertisingId: 0});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_14_dis_adv_p_e2', 0, () => {
       tI('bl_14_dis_adv_p_e2', () => {
-        try{ble.disableAdvertising({ advertisingId: 0 });}catch(_e2){expect(true).assertTrue();}
+        try{ble.disableAdvertising({advertisingId: 0});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_14_dis_adv_p_r', 0, () => {
       tI('bl_14_dis_adv_p_r', () => {
-        ble.disableAdvertising({ advertisingId: 0 });expect(true).assertTrue();
+        ble.disableAdvertising({advertisingId: 0});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_14_dis_adv_p_x', 0, () => {
       tI('bl_14_dis_adv_p_x', () => {
-        ble.disableAdvertising({ advertisingId: 0 });expect(true).assertTrue();
+        ble.disableAdvertising({advertisingId: 0});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_15_stop_adv_id_cb', () => {
     it('bl_15_stop_adv_id_cb_n', 0, () => {
       tI('bl_15_stop_adv_id_cb_n', () => {
         ble.stopAdvertising(0,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_15_stop_adv_id_cb_e', 0, () => {
       tI('bl_15_stop_adv_id_cb_e', () => {
         try{ble.stopAdvertising(-1,()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_15_stop_adv_id_cb_b', 0, () => {
       tI('bl_15_stop_adv_id_cb_b', () => {
         ble.stopAdvertising(1,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_15_stop_adv_id_cb_e2', 0, () => {
       tI('bl_15_stop_adv_id_cb_e2', () => {
         try{ble.stopAdvertising(0,()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_15_stop_adv_id_cb_r', 0, () => {
       tI('bl_15_stop_adv_id_cb_r', () => {
         ble.stopAdvertising(0,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_15_stop_adv_id_cb_x', 0, () => {
       tI('bl_15_stop_adv_id_cb_x', () => {
         ble.stopAdvertising(0,()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_16_stop_adv_id_p', () => {
     it('bl_16_stop_adv_id_p_n', 0, () => {
       tI('bl_16_stop_adv_id_p_n', () => {
         ble.stopAdvertising(0);expect(true).assertTrue();
+        });
       });
-    });
     it('bl_16_stop_adv_id_p_e', 0, () => {
       tI('bl_16_stop_adv_id_p_e', () => {
         try{ble.stopAdvertising(-1);}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_16_stop_adv_id_p_b', 0, () => {
       tI('bl_16_stop_adv_id_p_b', () => {
         ble.stopAdvertising(1);expect(true).assertTrue();
+        });
       });
-    });
     it('bl_16_stop_adv_id_p_e2', 0, () => {
       tI('bl_16_stop_adv_id_p_e2', () => {
         try{ble.stopAdvertising(0);}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_16_stop_adv_id_p_r', 0, () => {
       tI('bl_16_stop_adv_id_p_r', () => {
         ble.stopAdvertising(0);expect(true).assertTrue();
+        });
       });
-    });
     it('bl_16_stop_adv_id_p_x', 0, () => {
       tI('bl_16_stop_adv_id_p_x', () => {
         ble.stopAdvertising(0);expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_17_on_adv_chg', () => {
     it('bl_17_on_adv_chg_n', 0, () => {
       tI('bl_17_on_adv_chg_n', () => {
         ble.on('advertisingStateChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_17_on_adv_chg_e', 0, () => {
       tI('bl_17_on_adv_chg_e', () => {
         try{ble.on('advertisingStateChange',()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_17_on_adv_chg_b', 0, () => {
       tI('bl_17_on_adv_chg_b', () => {
         ble.on('advertisingStateChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_17_on_adv_chg_e2', 0, () => {
       tI('bl_17_on_adv_chg_e2', () => {
         try{ble.on('advertisingStateChange',()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_17_on_adv_chg_r', 0, () => {
       tI('bl_17_on_adv_chg_r', () => {
         ble.on('advertisingStateChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_17_on_adv_chg_x', 0, () => {
       tI('bl_17_on_adv_chg_x', () => {
         ble.on('advertisingStateChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_18_off_adv_chg', () => {
     it('bl_18_off_adv_chg_n', 0, () => {
       tI('bl_18_off_adv_chg_n', () => {
         ble.off('advertisingStateChange');expect(true).assertTrue();
+        });
       });
-    });
     it('bl_18_off_adv_chg_e', 0, () => {
       tI('bl_18_off_adv_chg_e', () => {
         try{ble.off('advertisingStateChange');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_18_off_adv_chg_b', 0, () => {
       tI('bl_18_off_adv_chg_b', () => {
         ble.off('advertisingStateChange',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_18_off_adv_chg_e2', 0, () => {
       tI('bl_18_off_adv_chg_e2', () => {
         try{ble.off('advertisingStateChange');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_18_off_adv_chg_r', 0, () => {
       tI('bl_18_off_adv_chg_r', () => {
         ble.off('advertisingStateChange');expect(true).assertTrue();
+        });
       });
-    });
     it('bl_18_off_adv_chg_x', 0, () => {
       tI('bl_18_off_adv_chg_x', () => {
         ble.off('advertisingStateChange');expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_19_on_ble_find', () => {
     it('bl_19_on_ble_find_n', 0, () => {
       tI('bl_19_on_ble_find_n', () => {
         ble.on('BLEDeviceFind',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_19_on_ble_find_e', 0, () => {
       tI('bl_19_on_ble_find_e', () => {
         try{ble.on('BLEDeviceFind',()=>{});}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_19_on_ble_find_b', 0, () => {
       tI('bl_19_on_ble_find_b', () => {
         ble.on('BLEDeviceFind',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_19_on_ble_find_e2', 0, () => {
       tI('bl_19_on_ble_find_e2', () => {
         try{ble.on('BLEDeviceFind',()=>{});}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_19_on_ble_find_r', 0, () => {
       tI('bl_19_on_ble_find_r', () => {
         ble.on('BLEDeviceFind',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_19_on_ble_find_x', 0, () => {
       tI('bl_19_on_ble_find_x', () => {
         ble.on('BLEDeviceFind',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     });
     describe('bl_20_off_ble_find', () => {
     it('bl_20_off_ble_find_n', 0, () => {
       tI('bl_20_off_ble_find_n', () => {
         ble.off('BLEDeviceFind');expect(true).assertTrue();
+        });
       });
-    });
     it('bl_20_off_ble_find_e', 0, () => {
       tI('bl_20_off_ble_find_e', () => {
         try{ble.off('BLEDeviceFind');}catch(_e){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_20_off_ble_find_b', 0, () => {
       tI('bl_20_off_ble_find_b', () => {
         ble.off('BLEDeviceFind',()=>{});expect(true).assertTrue();
+        });
       });
-    });
     it('bl_20_off_ble_find_e2', 0, () => {
       tI('bl_20_off_ble_find_e2', () => {
         try{ble.off('BLEDeviceFind');}catch(_e2){expect(true).assertTrue();}
+        });
       });
-    });
     it('bl_20_off_ble_find_r', 0, () => {
       tI('bl_20_off_ble_find_r', () => {
         ble.off('BLEDeviceFind');expect(true).assertTrue();
+        });
       });
-    });
     it('bl_20_off_ble_find_x', 0, () => {
       tI('bl_20_off_ble_find_x', () => {
         ble.off('BLEDeviceFind');expect(true).assertTrue();
+        });
       });
-    });
     });
   });
 }

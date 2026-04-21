@@ -12,18 +12,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../Utils/resString';
+import LogUtil from '../../Utils/LogUtil';
+import { resStr} from '../../Utils/resString';
 
 
-import hilog from '@ohos.hilog';
 import ConfigData from '../../Utils/ConfigData';
-import { PairDevices, testItemFromRouterOrPlaceholder } from '../../Utils/common'
+import { PairDevices, testItemFromRouterOrPlaceholder} from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
-import { PageTitle } from '../../Component/pageTitle';
-import { TestImageDisplay } from '../../Component/testImageDisplay';
-import { TestData } from '../../MainAbility/model/testData'
+import { PageTitle} from '../../Component/pageTitle';
+import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { TestData} from '../../MainAbility/model/testData'
 import bluetooth from '@ohos.bluetooth';
-import { opp } from '@kit.ConnectivityKit';
+import { opp} from '@kit.ConnectivityKit';
 
 /**
  * OppSend Scenario Test Page Of Bluetooth test
@@ -41,32 +41,32 @@ struct oppSendScenarioTest {
   private fileName: string = "test.jpg";
   private fileType: string = "jpg"
 
-  aboutToAppear() {
+  aboutToAppear(){
     try {
       this.oppProfile = opp.createOppServerProfile();
       testLog("OppSend get opp profile success");
-    } catch( error ) {
+    } catch( error ){
       testLog("OppSend get opp profile fail, err: " + JSON.stringify(error));
     }
     this.getPairDevice();
   }
 
-  getPairDevice() {
+  getPairDevice(){
     let macs = bluetooth.getPairedDevices();
-    hilog.info(0x0000, 'BtTest', '%{public}s', "OppSend getPairDevice macs: " + JSON.stringify(macs));
-    for ( let i = 0 ; i < macs.length ; i ++ ) {
+    LogUtil.info("OppSend getPairDevice macs: " + JSON.stringify(macs));
+    for(let i = 0 ; i<macs.length ; i++ ){
       let name = bluetooth.getRemoteDeviceName(macs[ i ]);
-      hilog.info(0x0000, 'BtTest', '%{public}s', "OppSend getPairDevice name: " + JSON.stringify(name));
-      this.pairDevices.push({ id : macs[ i ] , name : name });
+      LogUtil.info("OppSend getPairDevice name: " + JSON.stringify(name));
+      this.pairDevices.push({id: macs[ i ], name: name});
     }
-    hilog.info(0x0000, 'BtTest', '%{public}s', "OppSend getPairDevice pairDevices: " + JSON.stringify(this.pairDevices));
+    LogUtil.info("OppSend getPairDevice pairDevices: " + JSON.stringify(this.pairDevices));
   }
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
               .accessibilityLevel('yes')
               .id('pages_subScenarioTest_oppSendScenarioTest__pt_0')
       }
@@ -74,24 +74,24 @@ struct oppSendScenarioTest {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Scroll() {
-          Column() {
+      Column(){
+        Scroll(){
+          Column(){
             Text($r('app.string.bluetoothtest_text_ypdsblbdjxzsb'))
               .fontSize(ConfigData.VP_20)
               .fontWeight(FontWeight.Bold)
-              .margin({ top : ConfigData.VP_5 })
-            Scroll() {
-              List({ space : ConfigData.VP_5 }) {
-                ForEach(this.pairDevices , (item: PairDevices, index: number) => {
-                  ListItem() {
+              .margin({top: ConfigData.VP_5})
+            Scroll(){
+              List({space: ConfigData.VP_5}){
+                ForEach(this.pairDevices, (item: PairDevices, index: number) => {
+                  ListItem(){
                     Text(item.name)
                       .fontSize(ConfigData.VP_25)
                       .width(ConfigData.WH_80_100)
-                      .margin({ left : ConfigData.PCT_10 })
+                      .margin({left: ConfigData.PCT_10})
                       .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") : $r("app.color.white"))
                       .border({
-                        radius : 5
+                        radius: 5
                       })
                   }
                   .id(index === 0 ? 'pages_subScenarioTest_oppSendScenarioTest__li_0' : `pages_subScenarioTest_oppSendScenarioTest__li_${index}`)
@@ -118,11 +118,11 @@ struct oppSendScenarioTest {
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
 
-        Column() {
+        Column(){
           Text($r('app.string.bluetoothtest_text_yxzdsbdlymdz'))
             .fontSize(ConfigData.VP_18)
             .fontWeight(FontWeight.Bold)
-            .margin({ top : ConfigData.VP_3 })
+            .margin({top: ConfigData.VP_3})
           Text(this.serverMac)
             .fontSize(ConfigData.VP_25)
             .width(ConfigData.PCT_70)
@@ -131,19 +131,19 @@ struct oppSendScenarioTest {
         }
           .height(ConfigData.PCT_15)
 
-        Column() {
+        Column(){
           Text($r('app.string.bluetoothtest_text_qsrxyfsdwjmcrtt'))
             .fontSize(ConfigData.VP_18)
             .fontWeight(FontWeight.Bold)
           Text($r('app.string.bluetoothtest_text_zwjbxzdblmlx'))
             .fontSize(ConfigData.VP_18)
             .fontWeight(FontWeight.Bold)
-          TextInput({ placeholder : $r('app.string.bluetoothtest_str_wjmc') })
+          TextInput({placeholder: $r('app.string.bluetoothtest_str_wjmc')})
             .accessibilityLevel('yes')
             .id('pages_subScenarioTest_oppSendScenarioTest__ti_0')
             .fontSize(ConfigData.VP_20)
             .onChange((str) => {
-              if ( str ) {
+              if ( str ){
                 let strs = str.split(".");
                 this.fileName = str;
                 this.fileType = strs[ 1 ];
@@ -155,18 +155,18 @@ struct oppSendScenarioTest {
         }
           .height(ConfigData.PCT_20)
 
-        Scroll() {
-          Column() {
+        Scroll(){
+          Column(){
             Text($r('app.string.bluetoothtest_text_lcrz'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_8 , bottom : ConfigData.VP_8 , left : ConfigData.VP_20 })
+              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_20})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List() {
-              ListItem() {
+            List(){
+              ListItem(){
                 Text(this.oppSendScenarioMessage)
                   .fontSize(ConfigData.VP_18)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_30 , right : ConfigData.VP_10 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_30, right: ConfigData.VP_10})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -193,9 +193,9 @@ struct oppSendScenarioTest {
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
 
-      Column() {
-        Flex({ alignItems : ItemAlign.Center , justifyContent : FlexAlign.SpaceBetween }) {
-          Column() {
+      Column(){
+        Flex({alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceBetween}){
+          Column(){
             Button('oppSendFile')
               .accessibilityLevel('yes')
               .id('pages_subScenarioTest_oppSendScenarioTest__btn_0')
@@ -204,25 +204,25 @@ struct oppSendScenarioTest {
               .width(ConfigData.VP_200)
               .height(ConfigData.VP_60)
               .fontSize(ConfigData.VP_20)
-              .margin({ top : ConfigData.VP_15 })
+              .margin({top: ConfigData.VP_15})
               .align(Alignment.Center)
               .alignSelf(ItemAlign.Center)
               .onClick(async(event: ClickEvent) => {
                 try {
-                  let fileHolders : Array<opp.FileHolder> = [];
-                  this.oppProfile.sendFile(this.serverMac , fileHolders).then(() => {
+                  let fileHolders: Array<opp.FileHolder> = [];
+                  this.oppProfile.sendFile(this.serverMac, fileHolders).then(() => {
                     let result: boolean = true;
-                    if ( result ) {
+                    if ( result ){
                       this.oppSendScenarioMessage += resStr($r('app.string.bluetoothtest_str_ofswjcgr')) + JSON.stringify(result)
                     } else {
                       this.oppSendScenarioMessage += resStr($r('app.string.bluetoothtest_str_ofswjsbr')) + JSON.stringify(result) + resStr($r('app.string.bluetoothtest_str_qhdwjmchwjljhzsbpdqk'))
                     }
                   })
-                } catch( error ) {
+              } catch( error ){
                   this.oppSendScenarioMessage += resStr($r('app.string.bluetoothtest_str_ofswjsbe')) + JSON.stringify(error)
-                }
+              }
                 testLog(this.oppSendScenarioMessage);
-                AppStorage.setOrCreate("oppSendScenarioMessage" , this.oppSendScenarioMessage)
+                AppStorage.setOrCreate("oppSendScenarioMessage", this.oppSendScenarioMessage)
               })
           }
           .width(ConfigData.WH_100_100)
@@ -240,7 +240,7 @@ struct oppSendScenarioTest {
   }
 }
 
-export function testLog(logStr: string) {
-  promptAction.showToast({ message : logStr })
-  hilog.info(0x0000, 'BtTest', '%{public}s', logStr)
+export function testLog(logStr: string){
+  promptAction.showToast({message: logStr})
+  LogUtil.info(logStr)
 }

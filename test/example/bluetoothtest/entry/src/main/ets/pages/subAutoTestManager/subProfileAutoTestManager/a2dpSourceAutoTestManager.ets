@@ -12,17 +12,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resStr } from '../../../Utils/resString';
+import hilog from '@ohos.hilog';
+import { resStr} from '../../../Utils/resString';
 
 
-import { BTAutoArrayItem, testItemFromRouterOrPlaceholder } from '../../../Utils/common'
+import { BTAutoArrayItem, testItemFromRouterOrPlaceholder} from '../../../Utils/common'
 import ConfigData from '../../../Utils/ConfigData';
-import { TestData } from '../../../MainAbility/model/testData'
-import { PageTitle } from '../../../Component/pageTitle';
-import { TestImageDisplay } from '../../../Component/testImageDisplay';
-import { AutoContentTable } from '../../../Component/autoContentTable';
+import { TestData} from '../../../MainAbility/model/testData'
+import { PageTitle} from '../../../Component/pageTitle';
+import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { AutoContentTable} from '../../../Component/autoContentTable';
 import {
-  A2dpSourceProfileManagerAutoTestCase ,
+  A2dpSourceProfileManagerAutoTestCase,
   initA2dpSourceProfileManagerAutoData
 } from '../../../MainAbility/model/autoTestDataModelsManager';
 import btmProfileModel from '../../../MainAbility/model/btmProfileModel'
@@ -41,18 +42,18 @@ struct A2dpSourceAutoTestManager {
   private deviceId = "8C:5A:F8:25:FB:E9";
   @StorageLink("a2dpSourceProfileAutoTestMessage") a2dpSourceProfileAutoTestMessage: string = ""
 
-  aboutToAppear() {
-    AppStorage.setOrCreate("deviceId" , this.deviceId)
-    AppStorage.setOrCreate("profileType" , this.profileType)
-    AppStorage.setOrCreate("btConnectionState" , this.btConnectionState)
+  aboutToAppear(){
+    AppStorage.setOrCreate("deviceId", this.deviceId)
+    AppStorage.setOrCreate("profileType", this.profileType)
+    AppStorage.setOrCreate("btConnectionState", this.btConnectionState)
     btmProfileModel.initProfile()
   }
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
               .accessibilityLevel('yes')
               .id('pages_subAutoTestManager_subProfileAutoTestManager_a2dpSourceAutoTestManager__pt_0')
       }
@@ -60,17 +61,17 @@ struct A2dpSourceAutoTestManager {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Scroll() {
-          Column() {
+      Column(){
+        Scroll(){
+          Column(){
             Text($r('app.string.autotest_api_verify_label'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_10 , bottom : ConfigData.VP_10 , left : ConfigData.VP_15 })
+              .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10, left: ConfigData.VP_15})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             AutoContentTable({
-              autoItems : initA2dpSourceProfileManagerAutoData() ,
-              changeIndex : this.changeIndex
+              autoItems: initA2dpSourceProfileManagerAutoData(),
+              changeIndex: this.changeIndex
             })
           }
           .width(ConfigData.WH_100_100)
@@ -85,18 +86,18 @@ struct A2dpSourceAutoTestManager {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'));
 
-        Scroll() {
-          Column() {
+        Scroll(){
+          Column(){
             Text($r('app.string.autotest_debug_log_label'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_8 , bottom : ConfigData.VP_8 , left : ConfigData.VP_15 })
+              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_15})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List() {
-              ListItem() {
+            List(){
+              ListItem(){
                 Text(resStr($r('app.string.autotest_log_prefix')) + "\n" + this.a2dpSourceProfileAutoTestMessage)
                   .fontSize(ConfigData.VP_17)
-                  .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_30 , right : ConfigData.VP_10 })
+                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_30, right: ConfigData.VP_10})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -122,13 +123,13 @@ struct A2dpSourceAutoTestManager {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Button({ type : ButtonType.Normal , stateEffect : true }) {
-          Row() {
+      Column(){
+        Button({type: ButtonType.Normal, stateEffect: true}){
+          Row(){
             Text($r('app.string.autotest'))
               .fontSize(ConfigData.VP_24)
               .fontColor(0xffffff)
-              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+              .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
           }
             .alignItems(VerticalAlign.Center)
         }
@@ -138,7 +139,7 @@ struct A2dpSourceAutoTestManager {
         .backgroundColor($r("app.color.blue"))
         .width(ConfigData.VP_180)
         .height(ConfigData.VP_50)
-        .margin({ top : ConfigData.VP_15 })
+        .margin({top: ConfigData.VP_15})
         .onClick(async(event: ClickEvent) => {
           this.forLoop()
         })
@@ -149,37 +150,37 @@ struct A2dpSourceAutoTestManager {
     }
   }
   //循环调用
-  async forLoop() {
+  async forLoop(){
     let a2dpSourceProfileAutoTestMessage = ""
     //拼装数组
     let a2dpAutoArray: Array<BTAutoArrayItem> = [
-      { name : "testSetLocalNameManager" , para : [ "DaYuBlue" ] },
-      { name : "testSetBluetoothScanModeManager" , para : [ 4, 0 ] }
+      { name: "testSetLocalNameManager", para: [ "DaYuBlue" ]},
+      { name: "testSetBluetoothScanModeManager", para: [ 4, 0 ]}
     ]
     let interfaces = A2dpSourceProfileManagerAutoTestCase.map(i => {
       let item = a2dpAutoArray.find(itm => itm.name === i.api.name);
-      let para = item ? item.para : []; // 确保 para 总是一个数组
-      return { name : i.api.name , para } as BTAutoArrayItem;
+      let para = item ? item.para: [];// 确保 para 总是一个数组
+      return { name: i.api.name, para} as BTAutoArrayItem;
     });
-    for ( let m = 0 ; m < interfaces.length ; m ++ ) {
+    for(let m = 0 ; m<interfaces.length ; m++ ){
       // 检查 A2dpSourceProfileManagerAutoTestCase 中对应的 api 是否是一个函数
-      if ( typeof A2dpSourceProfileManagerAutoTestCase[ m ].api === "function" ) {
+      if ( typeof A2dpSourceProfileManagerAutoTestCase[ m ].api === "function" ){
         // 使用 TypeScript 的类型断言确保 para 是一个数组
         a2dpSourceProfileAutoTestMessage += A2dpSourceProfileManagerAutoTestCase[ m ].api(... interfaces[ m ].para) + "\n";
       } else {
-        console.error(`在 BrAutoTestCase 中找不到方法: ${ A2dpSourceProfileManagerAutoTestCase[ m ] }`);
+        hilog.error(0x0000, 'BtTest', '%{public}s', `在 BrAutoTestCase 中找不到方法: ${ A2dpSourceProfileManagerAutoTestCase[ m ] }`);
       }
       this.changeIndex = m
       await sleep(1)
-      AppStorage.setOrCreate("a2dpSourceProfileAutoTestMessage" , a2dpSourceProfileAutoTestMessage)
+      AppStorage.setOrCreate("a2dpSourceProfileAutoTestMessage", a2dpSourceProfileAutoTestMessage)
     }
   }
 }
 
 async function sleep(time: number): Promise<void> {
-  return new Promise<void>((resolve , reject) => {
+  return new Promise<void>((resolve, reject) => {
     setTimeout(() => {
       resolve();
-    } , time * 1000);
+    }, time * 1000);
   });
 }

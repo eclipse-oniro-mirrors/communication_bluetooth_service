@@ -13,13 +13,14 @@
  * limitations under the License.
  */
 
-import { BTAutoArrayItem, testItemFromRouterOrPlaceholder } from '../../../Utils/common'
+import hilog from '@ohos.hilog';
+import { BTAutoArrayItem, testItemFromRouterOrPlaceholder} from '../../../Utils/common'
 import ConfigData from '../../../Utils/ConfigData';
-import { TestData } from '../../../MainAbility/model/testData'
-import { PageTitle } from '../../../Component/pageTitle';
-import { TestImageDisplay } from '../../../Component/testImageDisplay';
-import { AutoContentTable } from '../../../Component/autoContentTable';
-import { GattServerAutoTestCase , initGattServerAutoData } from '../../../MainAbility/model/autoTestDataModels';
+import { TestData} from '../../../MainAbility/model/testData'
+import { PageTitle} from '../../../Component/pageTitle';
+import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { AutoContentTable} from '../../../Component/autoContentTable';
+import { GattServerAutoTestCase, initGattServerAutoData} from '../../../MainAbility/model/autoTestDataModels';
 
 /**
  *  GattServerAutoTest Page Of Bluetooth test
@@ -32,46 +33,46 @@ struct GattServerAutoTest {
   private testItem: TestData = testItemFromRouterOrPlaceholder()
   @StorageLink("gattServerAutoTestMessage") gattServerAutoTestMessage: string = ""
 
-  aboutToAppear() {
-    AppStorage.setOrCreate('txtScanFilterDeviceId' , "6c:96:d7:3d:87:6f");
-    AppStorage.setOrCreate('txtScanFilterName' , "dudu-tiger");
-    AppStorage.setOrCreate('txtScanFilterServiceUuid' , "0000180A-0000-1000-8000-00805f9b34fb");
-    AppStorage.setOrCreate('txtScanOptions_interval' , "0");
-    AppStorage.setOrCreate('txtScanOptionsDutyMode' , '0');
-    AppStorage.setOrCreate('txtScanOptionsMatchMode' , '0');
-    AppStorage.setOrCreate('cbxBleScanFilter' , true);
-    AppStorage.setOrCreate('cbxBleScanOptions' , true);
+  aboutToAppear(){
+    AppStorage.setOrCreate('txtScanFilterDeviceId', "6c:96:d7:3d:87:6f");
+    AppStorage.setOrCreate('txtScanFilterName', "dudu-tiger");
+    AppStorage.setOrCreate('txtScanFilterServiceUuid', "0000180A-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('txtScanOptions_interval', "0");
+    AppStorage.setOrCreate('txtScanOptionsDutyMode', '0');
+    AppStorage.setOrCreate('txtScanOptionsMatchMode', '0');
+    AppStorage.setOrCreate('cbxBleScanFilter', true);
+    AppStorage.setOrCreate('cbxBleScanOptions', true);
 
-    AppStorage.setOrCreate('curServiceUUID' , '00001877-0000-1000-8000-00805F9B34FB');
-    AppStorage.setOrCreate('curCharacteristicUUID' , '00002BE0-0000-1000-8000-00805F9B34FB');
-    AppStorage.setOrCreate('curDescriptorUUID' , '00002902-0000-1000-8000-00805F9B34FB');
-    AppStorage.setOrCreate('curDescriptorValue' , 'Descriptor');
-    AppStorage.setOrCreate('curCharacteristicValue' , 'DaYuBlue');
-    AppStorage.setOrCreate('isPrimary' , true);
-    AppStorage.setOrCreate('advSettings_interval' , "1600");
-    AppStorage.setOrCreate('advSettings_txPower' , "-7");
-    AppStorage.setOrCreate('advSettings_connectable' , true);
-    AppStorage.setOrCreate('advDataServiceUuids_serviceUuid' , "000054F6-0000-1000-8000-00805f9b34fb");
-    AppStorage.setOrCreate('advDataManufactureData_manufactureId' , "7456");
-    AppStorage.setOrCreate('advDataManufactureData_manufactureValue' , "CHN");
-    AppStorage.setOrCreate('advDataServiceData_serviceUuid' , "000054F6-0000-1000-8000-00805f9b34fb");
-    AppStorage.setOrCreate('advDataServiceData_serviceValue' , "AdvValue");
-    AppStorage.setOrCreate('advResponseServiceUuids_serviceUuid' , "000054F6-0000-1000-8000-00805f9b34fb");
-    AppStorage.setOrCreate('advResponseManufactureData_manufactureId' , "6547");
-    AppStorage.setOrCreate('advResponseManufactureData_manufactureValue' , "CHN");
-    AppStorage.setOrCreate('advResponseServiceData_serviceUuid' , "000054F6-0000-1000-8000-00805f9b34fb");
-    AppStorage.setOrCreate('advResponseServiceData_serviceValue' , "AdvValue");
-    AppStorage.setOrCreate('cbxAdvSettings' , true);
-    AppStorage.setOrCreate('cbxInterval' , true);
-    AppStorage.setOrCreate('cbxTxPower' , true);
-    AppStorage.setOrCreate('cbxAdvResponse' , true);
+    AppStorage.setOrCreate('curServiceUUID', '00001877-0000-1000-8000-00805F9B34FB');
+    AppStorage.setOrCreate('curCharacteristicUUID', '00002BE0-0000-1000-8000-00805F9B34FB');
+    AppStorage.setOrCreate('curDescriptorUUID', '00002902-0000-1000-8000-00805F9B34FB');
+    AppStorage.setOrCreate('curDescriptorValue', 'Descriptor');
+    AppStorage.setOrCreate('curCharacteristicValue', 'DaYuBlue');
+    AppStorage.setOrCreate('isPrimary', true);
+    AppStorage.setOrCreate('advSettings_interval', "1600");
+    AppStorage.setOrCreate('advSettings_txPower', "-7");
+    AppStorage.setOrCreate('advSettings_connectable', true);
+    AppStorage.setOrCreate('advDataServiceUuids_serviceUuid', "000054F6-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('advDataManufactureData_manufactureId', "7456");
+    AppStorage.setOrCreate('advDataManufactureData_manufactureValue', "CHN");
+    AppStorage.setOrCreate('advDataServiceData_serviceUuid', "000054F6-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('advDataServiceData_serviceValue', "AdvValue");
+    AppStorage.setOrCreate('advResponseServiceUuids_serviceUuid', "000054F6-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('advResponseManufactureData_manufactureId', "6547");
+    AppStorage.setOrCreate('advResponseManufactureData_manufactureValue', "CHN");
+    AppStorage.setOrCreate('advResponseServiceData_serviceUuid', "000054F6-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('advResponseServiceData_serviceValue', "AdvValue");
+    AppStorage.setOrCreate('cbxAdvSettings', true);
+    AppStorage.setOrCreate('cbxInterval', true);
+    AppStorage.setOrCreate('cbxTxPower', true);
+    AppStorage.setOrCreate('cbxAdvResponse', true);
   }
 
-  build() {
-    Column() {
-      Stack({ alignContent : Alignment.TopStart }) {
-        TestImageDisplay({ testItem : this.testItem })
-        PageTitle({ testItem : this.testItem })
+  build(){
+    Column(){
+      Stack({alignContent: Alignment.TopStart}){
+        TestImageDisplay({testItem: this.testItem})
+        PageTitle({testItem: this.testItem})
               .accessibilityLevel('yes')
               .id('pages_subAutoTest_subGattAutoTest_gattServerAutoTest__pt_0')
       }
@@ -79,17 +80,17 @@ struct GattServerAutoTest {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Scroll() {
-          Column() {
+      Column(){
+        Scroll(){
+          Column(){
             Text($r('app.string.autotest_api_verify_label'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_10 , bottom : ConfigData.VP_10 , left : ConfigData.VP_15 })
+              .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10, left: ConfigData.VP_15})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             AutoContentTable({
-              autoItems : initGattServerAutoData() ,
-              changeIndex : this.changeIndex
+              autoItems: initGattServerAutoData(),
+              changeIndex: this.changeIndex
             })
           }
           .width(ConfigData.WH_100_100)
@@ -104,16 +105,16 @@ struct GattServerAutoTest {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'));
 
-        Scroll() {
-          Column() {
+        Scroll(){
+          Column(){
             Text($r('app.string.autotest_debug_log_label'))
               .fontSize(ConfigData.VP_17)
-              .margin({ top : ConfigData.VP_8 , bottom : ConfigData.VP_8 , left : ConfigData.VP_15 })
+              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_15})
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List() {
-              ListItem() {
-                Column() {
+            List(){
+              ListItem(){
+                Column(){
                   Text($r('app.string.autotest_log_prefix'))
                     .fontSize(ConfigData.VP_17)
                     .textAlign(TextAlign.Start)
@@ -123,7 +124,7 @@ struct GattServerAutoTest {
                     .textAlign(TextAlign.Start)
                     .width(ConfigData.WH_90_100)
                 }
-                .margin({ top : ConfigData.VP_5 , left : ConfigData.VP_30 , right : ConfigData.VP_10 })
+                .margin({top: ConfigData.VP_5, left: ConfigData.VP_30, right: ConfigData.VP_10})
               }
             .accessibilityLevel('yes')
             .id('pages_subAutoTest_subGattAutoTest_gattServerAutoTest__li_0')
@@ -147,13 +148,13 @@ struct GattServerAutoTest {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column() {
-        Button({ type : ButtonType.Normal , stateEffect : true }) {
-          Row() {
+      Column(){
+        Button({type: ButtonType.Normal, stateEffect: true}){
+          Row(){
             Text($r('app.string.autotest'))
               .fontSize(ConfigData.VP_24)
               .fontColor(0xffffff)
-              .margin({ left : ConfigData.VP_5 , right : ConfigData.VP_5 })
+              .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
           }
             .alignItems(VerticalAlign.Center)
         }
@@ -163,7 +164,7 @@ struct GattServerAutoTest {
         .backgroundColor($r("app.color.blue"))
         .width(ConfigData.VP_180)
         .height(ConfigData.VP_50)
-        .margin({ top : ConfigData.VP_15 })
+        .margin({top: ConfigData.VP_15})
         .onClick(async(event: ClickEvent) => {
           this.forLoop()
         })
@@ -175,38 +176,38 @@ struct GattServerAutoTest {
   }
 
   //循环调用
-  async forLoop() {
+  async forLoop(){
     let gattServerAutoTestMessage = ""
     //拼装数组
     let gattServerAutoArray: Array<BTAutoArrayItem> = [
-      { name : "testSetLocalName" , para : [ "DaYuBlue" ] },
-      { name : "testSetBluetoothScanMode" , para : [ 4, 0 ] }
+      { name: "testSetLocalName", para: [ "DaYuBlue" ]},
+      { name: "testSetBluetoothScanMode", para: [ 4, 0 ]}
     ]
     let interfaces = GattServerAutoTestCase.map(i => {
       let item = gattServerAutoArray.find(itm => itm.name === i.api.name);
-      let para = item ? item.para : []; // 确保 para 总是一个数组
-      return { name : i.api.name , para } as BTAutoArrayItem;
+      let para = item ? item.para: [];// 确保 para 总是一个数组
+      return { name: i.api.name, para} as BTAutoArrayItem;
     });
 
-    for ( let m = 0 ; m < interfaces.length ; m ++ ) {
+    for(let m = 0 ; m<interfaces.length ; m++ ){
       // 检查 GattServerAutoTestCase 中对应的 api 是否是一个函数
-      if ( typeof GattServerAutoTestCase[ m ].api === "function" ) {
+      if ( typeof GattServerAutoTestCase[ m ].api === "function" ){
         // 使用 TypeScript 的类型断言确保 para 是一个数组
         gattServerAutoTestMessage += GattServerAutoTestCase[ m ].api(... interfaces[ m ].para) + "\n";
       } else {
-        console.error(`在 BrAutoTestCase 中找不到方法: ${ GattServerAutoTestCase[ m ] }`);
+        hilog.error(0x0000, 'BtTest', '%{public}s', `在 BrAutoTestCase 中找不到方法: ${ GattServerAutoTestCase[ m ] }`);
       }
       this.changeIndex = m
       await sleep(1)
-      AppStorage.setOrCreate("gattServerAutoTestMessage" , gattServerAutoTestMessage)
+      AppStorage.setOrCreate("gattServerAutoTestMessage", gattServerAutoTestMessage)
     }
   }
 }
 
 async function sleep(time: number): Promise<void> {
-  return new Promise<void>((resolve , reject) => {
+  return new Promise<void>((resolve, reject) => {
     setTimeout(() => {
       resolve();
-    } , time * 1000);
+    }, time * 1000);
   });
 }

@@ -14,7 +14,7 @@
  */
 
 import ConfigData from '../Utils/ConfigData';
-import { TestData } from '../MainAbility/model/testData'
+import { TestData} from '../MainAbility/model/testData'
 /**
  * Test-ImageDisplay of bluetooth test
  */
@@ -22,31 +22,31 @@ import { TestData } from '../MainAbility/model/testData'
 export struct TestImageDisplay {
   private testItem!: TestData
 
-  build() {
-    Stack({ alignContent : Alignment.BottomStart }) {
-      Flex({ alignItems : ItemAlign.Start }) {
-        Stack() {
+  build(){
+    Stack({alignContent: Alignment.BottomStart}){
+      Flex({alignItems: ItemAlign.Start}){
+        Stack(){
           Image(this.testItem.image)
             .height(ConfigData.VP_80)
             .width(ConfigData.VP_80)
-            .margin({ left : ConfigData.VP_10 , bottom : ConfigData.VP_10 })
+            .margin({left: ConfigData.VP_10, bottom: ConfigData.VP_10})
         }
         .width(ConfigData.PCT_20)
 
-        Column() {
+        Column(){
           Text(this.testItem.name)
             .fontSize(ConfigData.VP_26)
             .fontWeight(500)
-            .margin({ left : ConfigData.VP_26 , top : ConfigData.VP_10 })
+            .margin({left: ConfigData.VP_26, top: ConfigData.VP_10})
             .width(ConfigData.WH_90_100)
           Text(this.testItem.detail)
             .fontSize(ConfigData.VP_17)
             .fontWeight(500)
-            .margin({ top : ConfigData.VP_8 })
+            .margin({top: ConfigData.VP_8})
             .width(ConfigData.WH_80_100)
         }
         .width(ConfigData.WH_80_100)
-        .padding({ left : ConfigData.VP_20 })
+        .padding({left: ConfigData.VP_20})
       }
     }
     .backgroundColor($r('app.color.color_FFEDF2F5_bg'))
