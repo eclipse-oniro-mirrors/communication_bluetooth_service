@@ -226,7 +226,8 @@ public:
      * @param status Read status.
      * @since 6
      */
-    virtual void OnPairStatusChanged(const BTTransport transport, const RawAddress &device, int status) = 0;
+    virtual void OnPairStatusChanged(const BTTransport transport, const RawAddress &device, int status,
+        int32_t cause = -1, std::string causeMessage = "") = 0;
 
     virtual void OnAclStateChanged(const RawAddress &device, int state, unsigned int reason) = 0;
 };

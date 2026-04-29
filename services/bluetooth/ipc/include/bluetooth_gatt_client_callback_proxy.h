@@ -27,7 +27,8 @@ public:
         : IRemoteProxy<IBluetoothGattClientCallback>(impl) {}
     ~BluetoothGattClientCallbackProxy() {}
 
-    void OnConnectionStateChanged(int32_t state, int32_t newState, int32_t disconnectReason) override;
+    void OnConnectionStateChanged(
+        int32_t state, int32_t newState, int32_t disconnectReason, std::string reasonMessage = "") override;
     void OnCharacteristicChanged(const BluetoothGattCharacteristic &characteristic) override;
     void OnCharacteristicRead(int32_t ret, const BluetoothGattCharacteristic &characteristic) override;
     void OnCharacteristicWrite(int32_t ret, const BluetoothGattCharacteristic &characteristic,
