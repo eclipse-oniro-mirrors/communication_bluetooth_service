@@ -19,98 +19,85 @@
 #include "ipc_types.h"
 #include "parcel_bt_uuid.h"
 #include "raw_address.h"
+#include "permission_manager.h"
+
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) BluetoothA2dpSrcInterfaceCode::code, {&BluetoothA2dpSrcStub::func, perm}
 
 namespace OHOS {
 namespace Bluetooth {
 using namespace OHOS::bluetooth;
 const int32_t A2DP_MAX_SRC_CONNECTION_NUMS = 0x07;
+
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const std::map<uint32_t, BluetoothA2dpSrcStub::A2dpSrcStubFuncPerm> BluetoothA2dpSrcStub::memberFuncMap_ = {
+    {STUB_FUNC(BT_A2DP_SRC_CONNECT, ConnectInner, CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_A2DP_SRC_DISCONNECT, DisconnectInner, CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_A2DP_SRC_REGISTER_OBSERVER, RegisterObserverInner, nullptr)},
+    {STUB_FUNC(BT_A2DP_SRC_DEREGISTER_OBSERVER, DeregisterObserverInner, nullptr)},
+    {STUB_FUNC(BT_A2DP_SRC_GET_DEVICE_BY_STATES, GetDevicesByStatesInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_A2DP_SRC_GET_DEVICE_STATE, GetDeviceStateInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_A2DP_SRC_GET_PLAYING_STATE, GetPlayingStateInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_A2DP_SRC_SET_CONNECT_STRATEGY, SetConnectStrategyInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_GET_CONNECT_STRATEGY, GetConnectStrategyInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_SET_ACTIVE_SINK_DEVICE, SetActiveSinkDeviceInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_GET_ACTIVE_SINK_DEVICE, GetActiveSinkDeviceInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_GET_CODEC_STATUS, GetCodecStatusInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_GET_CODEC_PREFERENCE, GetCodecPreferenceInner, CHECK_PERM(true, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_A2DP_SRC_SET_CODEC_PREFERENCE, SetCodecPreferenceInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_SWITCH_OPTIONAL_CODECS, SwitchOptionalCodecsInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_GET_OPTIONAL_CODECS_SUPPORT_STATE, GetOptionalCodecsSupportStateInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_START_PLAYING, StartPlayingInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_SUSPEND_PLAYING, SuspendPlayingInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_STOP_PLAYING, StopPlayingInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_WRITE_FRAME, WriteFrameInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_GET_RENDER_POSITION, GetRenderPositionInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_OFFLOAD_START_PLAYING, OffloadStartPlayingInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_OFFLOAD_STOP_PLAYING, OffloadStopPlayingInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_OFFLOAD_SESSION_REQUEST, A2dpOffloadSessionPathRequestInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_OFFLOAD_GET_CODEC_STATUS, GetOffloadCodecStatusInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_ENABLE_AUTO_PLAY, EnableAutoPlayInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_DISABLE_AUTO_PLAY, DisableAutoPlayInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_GET_AUTO_PLAY_DISABLED_DURATION, GetAutoPlayDisabledDurationInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SRC_GET_VIRTUALDEVICE_LIST, GetVirtualDeviceListInner,
+    CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+};
+
 BluetoothA2dpSrcStub::BluetoothA2dpSrcStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_CONNECT)] =
-        &BluetoothA2dpSrcStub::ConnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_DISCONNECT)] =
-        &BluetoothA2dpSrcStub::DisconnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_REGISTER_OBSERVER)] =
-        &BluetoothA2dpSrcStub::RegisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_DEREGISTER_OBSERVER)] =
-        &BluetoothA2dpSrcStub::DeregisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_GET_DEVICE_BY_STATES)] =
-        &BluetoothA2dpSrcStub::GetDevicesByStatesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_GET_DEVICE_STATE)] =
-        &BluetoothA2dpSrcStub::GetDeviceStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_GET_PLAYING_STATE)] =
-        &BluetoothA2dpSrcStub::GetPlayingStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_SET_CONNECT_STRATEGY)] =
-        &BluetoothA2dpSrcStub::SetConnectStrategyInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_GET_CONNECT_STRATEGY)] =
-        &BluetoothA2dpSrcStub::GetConnectStrategyInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_SET_ACTIVE_SINK_DEVICE)] =
-        &BluetoothA2dpSrcStub::SetActiveSinkDeviceInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_GET_ACTIVE_SINK_DEVICE)] =
-        &BluetoothA2dpSrcStub::GetActiveSinkDeviceInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_GET_CODEC_STATUS)] =
-        &BluetoothA2dpSrcStub::GetCodecStatusInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_GET_CODEC_PREFERENCE)] =
-        &BluetoothA2dpSrcStub::GetCodecPreferenceInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_SET_CODEC_PREFERENCE)] =
-        &BluetoothA2dpSrcStub::SetCodecPreferenceInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_SWITCH_OPTIONAL_CODECS)] =
-        &BluetoothA2dpSrcStub::SwitchOptionalCodecsInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_GET_OPTIONAL_CODECS_SUPPORT_STATE)] =
-        &BluetoothA2dpSrcStub::GetOptionalCodecsSupportStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_START_PLAYING)] =
-        &BluetoothA2dpSrcStub::StartPlayingInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_SUSPEND_PLAYING)] =
-        &BluetoothA2dpSrcStub::SuspendPlayingInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_STOP_PLAYING)] =
-        &BluetoothA2dpSrcStub::StopPlayingInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_WRITE_FRAME)] =
-        &BluetoothA2dpSrcStub::WriteFrameInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_GET_RENDER_POSITION)] =
-        &BluetoothA2dpSrcStub::GetRenderPositionInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_OFFLOAD_START_PLAYING)] =
-        &BluetoothA2dpSrcStub::OffloadStartPlayingInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_OFFLOAD_STOP_PLAYING)] =
-        &BluetoothA2dpSrcStub::OffloadStopPlayingInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_OFFLOAD_SESSION_REQUEST)] =
-        &BluetoothA2dpSrcStub::A2dpOffloadSessionPathRequestInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_OFFLOAD_GET_CODEC_STATUS)] =
-        &BluetoothA2dpSrcStub::GetOffloadCodecStatusInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_ENABLE_AUTO_PLAY)] =
-        &BluetoothA2dpSrcStub::EnableAutoPlayInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_DISABLE_AUTO_PLAY)] =
-        &BluetoothA2dpSrcStub::DisableAutoPlayInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_GET_AUTO_PLAY_DISABLED_DURATION)] =
-        &BluetoothA2dpSrcStub::GetAutoPlayDisabledDurationInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSrcInterfaceCode::BT_A2DP_SRC_GET_VIRTUALDEVICE_LIST)] =
-        &BluetoothA2dpSrcStub::GetVirtualDeviceListInner;
-}
+{}
 
 BluetoothA2dpSrcStub::~BluetoothA2dpSrcStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_.clear();
-}
+{}
 
 int BluetoothA2dpSrcStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    HILOGI("BluetoothA2dpSrcStub::OnRemoteRequest, cmd = %{public}d, flags= %{public}d", code, option.GetFlags());
-    if (BluetoothA2dpSrcStub::GetDescriptor() != data.ReadInterfaceToken()) {
-        HILOGI("local descriptor is not equal to remote");
-        return ERR_INVALID_STATE;
-    }
-    auto itFunc = memberFuncMap_.find(code);
-    if (itFunc != memberFuncMap_.end()) {
-        auto memberFunc = itFunc->second;
-        if (memberFunc != nullptr) {
-            return (this->*memberFunc)(data, reply);
-        }
-    }
-    HILOGW("BluetoothA2dpSrcStub::OnRemoteRequest, default case, need check.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothA2dpSrcStub);
 }
 
 int32_t BluetoothA2dpSrcStub::ConnectInner(MessageParcel &data, MessageParcel &reply)

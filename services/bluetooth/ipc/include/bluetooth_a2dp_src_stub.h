@@ -19,6 +19,7 @@
 #include <map>
 #include "iremote_stub.h"
 #include "i_bluetooth_a2dp_src.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -27,42 +28,44 @@ public:
     BluetoothA2dpSrcStub();
     virtual ~BluetoothA2dpSrcStub();
 
-    virtual int OnRemoteRequest(
-        uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+
+    using A2dpSrcStubFunc = std::function<int32_t(BluetoothA2dpSrcStub *, MessageParcel &, MessageParcel &)>;
+    using A2dpSrcStubFuncPerm = std::pair<A2dpSrcStubFunc, std::shared_ptr<PermissionItem>>;
 
 private:
-    ErrCode ConnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DisconnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DeregisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetPlayingStateInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetActiveSinkDeviceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetActiveSinkDeviceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetCodecStatusInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ConnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DisconnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DeregisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetPlayingStateInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetActiveSinkDeviceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetActiveSinkDeviceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetCodecStatusInner(MessageParcel &data, MessageParcel &reply);
     ErrCode GetCodecPreferenceInner(MessageParcel &data, MessageParcel &reply);
     ErrCode SetCodecPreferenceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SwitchOptionalCodecsInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetOptionalCodecsSupportStateInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode StartPlayingInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SuspendPlayingInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode StopPlayingInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode WriteFrameInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetRenderPositionInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode OffloadStartPlayingInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode OffloadStopPlayingInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode A2dpOffloadSessionPathRequestInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetOffloadCodecStatusInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode EnableAutoPlayInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DisableAutoPlayInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetAutoPlayDisabledDurationInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetVirtualDeviceListInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SwitchOptionalCodecsInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetOptionalCodecsSupportStateInner(MessageParcel &data, MessageParcel &reply);
+    int32_t StartPlayingInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SuspendPlayingInner(MessageParcel &data, MessageParcel &reply);
+    int32_t StopPlayingInner(MessageParcel &data, MessageParcel &reply);
+    int32_t WriteFrameInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetRenderPositionInner(MessageParcel &data, MessageParcel &reply);
+    int32_t OffloadStartPlayingInner(MessageParcel &data, MessageParcel &reply);
+    int32_t OffloadStopPlayingInner(MessageParcel &data, MessageParcel &reply);
+    int32_t A2dpOffloadSessionPathRequestInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetOffloadCodecStatusInner(MessageParcel &data, MessageParcel &reply);
+    int32_t EnableAutoPlayInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DisableAutoPlayInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetAutoPlayDisabledDurationInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetVirtualDeviceListInner(MessageParcel &data, MessageParcel &reply);
 
-    using BluetoothA2dpSrcServerFunc = ErrCode (BluetoothA2dpSrcStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, BluetoothA2dpSrcServerFunc> memberFuncMap_;
+private:
+    static const std::map<uint32_t, A2dpSrcStubFuncPerm> memberFuncMap_;
 
     DISALLOW_COPY_AND_MOVE(BluetoothA2dpSrcStub);
 };

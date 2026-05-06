@@ -19,6 +19,7 @@
 #include <map>
 #include "iremote_stub.h"
 #include "i_bluetooth_a2dp_sink.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -27,24 +28,25 @@ public:
     BluetoothA2dpSinkStub();
     virtual ~BluetoothA2dpSinkStub();
 
-    virtual int OnRemoteRequest(
-        uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+
+    using A2dpSinkStubFunc = std::function<int32_t(BluetoothA2dpSinkStub *, MessageParcel &, MessageParcel &)>;
+    using A2dpSinkStubFuncPerm = std::pair<A2dpSinkStubFunc, std::shared_ptr<PermissionItem>>;
 
 private:
-    ErrCode ConnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DisconnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DeregisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetPlayingStateInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SendDelayInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ConnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DisconnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DeregisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetPlayingStateInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SendDelayInner(MessageParcel &data, MessageParcel &reply);
 
-    using BluetoothA2dpSinkServerFunc = ErrCode (BluetoothA2dpSinkStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, BluetoothA2dpSinkServerFunc> memberFuncMap_;
-
+private:
+    static const std::map<uint32_t, A2dpSinkStubFuncPerm> memberFuncMap_;
     DISALLOW_COPY_AND_MOVE(BluetoothA2dpSinkStub);
 };
 }  // namespace Bluetooth

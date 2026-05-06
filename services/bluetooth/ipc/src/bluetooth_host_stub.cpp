@@ -19,317 +19,175 @@
 #include "ipc_types.h"
 #include "raw_address.h"
 #include "string_ex.h"
-#include "permission_utils.h"
+#include "permission_manager.h"
+
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) BluetoothHostInterfaceCode::code, {&BluetoothHostStub::func, perm}
 
 namespace OHOS {
 namespace Bluetooth {
-const std::map<uint32_t, std::function<ErrCode(BluetoothHostStub *, MessageParcel &, MessageParcel &)>>
-    BluetoothHostStub::memberFuncMap_ = {
-        {BluetoothHostInterfaceCode::BT_REGISTER_OBSERVER,
-            std::bind(&BluetoothHostStub::RegisterObserverInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_DEREGISTER_OBSERVER,
-            std::bind(&BluetoothHostStub::DeregisterObserverInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_ENABLE,
-            std::bind(&BluetoothHostStub::EnableBtInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_DISABLE,
-            std::bind(&BluetoothHostStub::DisableBtInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GETPROFILE,
-            std::bind(&BluetoothHostStub::GetProfileInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_BLE,
-            std::bind(&BluetoothHostStub::GetBleRemoteInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_FACTORY_RESET,
-            std::bind(&BluetoothHostStub::BluetoothFactoryResetInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GETSTATE,
-            std::bind(&BluetoothHostStub::GetBtStateInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_LOCAL_ADDRESS,
-            std::bind(&BluetoothHostStub::GetLocalAddressInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GENERATE_LOCAL_OOB_DATA,
-            std::bind(&BluetoothHostStub::GenerateLocalOobDataInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_DISABLE_BLE,
-            std::bind(&BluetoothHostStub::DisableBleInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_ENABLE_BLE,
-            std::bind(&BluetoothHostStub::EnableBleInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_PROFILE_LIST,
-            std::bind(&BluetoothHostStub::GetProfileListInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_MAXNUM_CONNECTED_AUDIODEVICES,
-            std::bind(&BluetoothHostStub::GetMaxNumConnectedAudioDevicesInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_BT_STATE,
-            std::bind(&BluetoothHostStub::GetBtConnectionStateInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_BT_PROFILE_CONNSTATE,
-            std::bind(&BluetoothHostStub::GetBtProfileConnStateInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_LOCAL_DEVICE_CLASS,
-            std::bind(&BluetoothHostStub::GetLocalDeviceClassInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_SET_LOCAL_DEVICE_CLASS,
-            std::bind(&BluetoothHostStub::SetLocalDeviceClassInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_LOCAL_NAME,
-            std::bind(&BluetoothHostStub::GetLocalNameInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_SET_LOCAL_NAME,
-            std::bind(&BluetoothHostStub::SetLocalNameInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_BT_SCAN_MODE,
-            std::bind(&BluetoothHostStub::GetBtScanModeInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_SET_BT_SCAN_MODE,
-            std::bind(&BluetoothHostStub::SetBtScanModeInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_BONDABLE_MODE,
-            std::bind(&BluetoothHostStub::GetBondableModeInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_SET_BONDABLE_MODE,
-            std::bind(&BluetoothHostStub::SetBondableModeInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_START_BT_DISCOVERY,
-            std::bind(&BluetoothHostStub::StartBtDiscoveryInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_CANCEL_BT_DISCOVERY,
-            std::bind(&BluetoothHostStub::CancelBtDiscoveryInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_IS_BT_DISCOVERING,
-            std::bind(&BluetoothHostStub::IsBtDiscoveringInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_BT_DISCOVERY_END_MILLIS,
-            std::bind(&BluetoothHostStub::GetBtDiscoveryEndMillisInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_PAIRED_DEVICES,
-            std::bind(&BluetoothHostStub::GetPairedDevicesInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_REMOVE_PAIR,
-            std::bind(&BluetoothHostStub::RemovePairInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_REMOVE_ALL_PAIRS,
-            std::bind(&BluetoothHostStub::RemoveAllPairsInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_REGISTER_REMOTE_DEVICE_OBSERVER,
-            std::bind(&BluetoothHostStub::RegisterRemoteDeviceObserverInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_DEREGISTER_REMOTE_DEVICE_OBSERVER,
-            std::bind(&BluetoothHostStub::DeregisterRemoteDeviceObserverInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_BLE_MAX_ADVERTISING_DATALENGTH,
-            std::bind(&BluetoothHostStub::GetBleMaxAdvertisingDataLengthInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_CONNECTED_BLE_DEVICES,
-            std::bind(&BluetoothHostStub::GetConnectedBLEDevicesInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_DEVICE_TYPE,
-            std::bind(&BluetoothHostStub::GetDeviceTypeInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_PHONEBOOK_PERMISSION,
-            std::bind(&BluetoothHostStub::GetPhonebookPermissionInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SET_PHONEBOOK_PERMISSION,
-            nullptr},
-        {BluetoothHostInterfaceCode::GET_MESSAGE_PERMISSION,
-            std::bind(&BluetoothHostStub::GetMessagePermissionInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SET_MESSAGE_PERMISSION,
-            nullptr},
-        {BluetoothHostInterfaceCode::GET_POWER_MODE,
-            std::bind(&BluetoothHostStub::GetPowerModeInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_DEVICE_NAME,
-            std::bind(&BluetoothHostStub::GetDeviceNameInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_DEVICE_ALIAS,
-            std::bind(&BluetoothHostStub::GetDeviceAliasInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SET_DEVICE_ALIAS,
-            std::bind(&BluetoothHostStub::SetDeviceAliasInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_DEVICE_BATTERY_INFO,
-            std::bind(&BluetoothHostStub::GetRemoteDeviceBatteryInfoInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SET_DEVICE_BATTERY_INFO,
-            std::bind(&BluetoothHostStub::SetRemoteDeviceBatteryInfoInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_PAIR_STATE,
-            std::bind(&BluetoothHostStub::GetPairStateInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::START_PAIR,
-            std::bind(&BluetoothHostStub::StartPairInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::CANCEL_PAIRING,
-            std::bind(&BluetoothHostStub::CancelPairingInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::IS_BONDED_FROM_LOCAL,
-            std::bind(&BluetoothHostStub::IsBondedFromLocalInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::IS_ACL_CONNECTED,
-            std::bind(&BluetoothHostStub::IsAclConnectedInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::IS_ACL_ENCRYPTED,
-            std::bind(&BluetoothHostStub::IsAclEncryptedInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_DEVICE_CLASS,
-            std::bind(&BluetoothHostStub::GetDeviceClassInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SET_DEVICE_PIN,
-            std::bind(&BluetoothHostStub::SetDevicePinInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SET_DEVICE_PAIRING_CONFIRMATION,
-            std::bind(&BluetoothHostStub::SetDevicePairingConfirmationInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SET_DEVICE_PASSKEY,
-            std::bind(&BluetoothHostStub::SetDevicePasskeyInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::PAIR_REQUEST_PEPLY,
-            std::bind(&BluetoothHostStub::PairRequestReplyInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::READ_REMOTE_RSSI_VALUE,
-            std::bind(&BluetoothHostStub::ReadRemoteRssiValueInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_LOCAL_SUPPORTED_UUIDS,
-            std::bind(&BluetoothHostStub::GetLocalSupportedUuidsInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::IS_PROFILE_EXIST,
-            std::bind(&BluetoothHostStub::IsProfileExistInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_DEVICE_UUIDS,
-            std::bind(&BluetoothHostStub::GetDeviceUuidsInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_LOCAL_PROFILE_UUIDS,
-            std::bind(&BluetoothHostStub::GetLocalProfileUuidsInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_REGISTER_BLE_ADAPTER_OBSERVER,
-            std::bind(&BluetoothHostStub::RegisterBleAdapterObserverInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_DEREGISTER_BLE_ADAPTER_OBSERVER,
-            std::bind(&BluetoothHostStub::DeregisterBleAdapterObserverInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_REGISTER_BLE_PERIPHERAL_OBSERVER,
-            std::bind(&BluetoothHostStub::RegisterBlePeripheralCallbackInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_DEREGISTER_BLE_PERIPHERAL_OBSERVER,
-            std::bind(&BluetoothHostStub::DeregisterBlePeripheralCallbackInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_SET_FAST_SCAN,
-            std::bind(&BluetoothHostStub::SetFastScanInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_RANDOM_ADDRESS, std::bind(&BluetoothHostStub::GetRandomAddressInner,
-            std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_REAL_ADDRESS, std::bind(&BluetoothHostStub::GetRealAddressInner,
-            std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SYNC_RANDOM_ADDRESS, std::bind(&BluetoothHostStub::SyncRandomAddressInner,
-            std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::START_CREDIBLE_PAIR,
-            std::bind(&BluetoothHostStub::StartCrediblePairInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::CONNECT_ALLOWED_PROFILES,
-            std::bind(&BluetoothHostStub::ConnectAllowedProfilesInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::DISCONNECT_ALLOWED_PROFILES,
-            std::bind(&BluetoothHostStub::DisconnectAllowedProfilesInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SET_CUSTOM_TYPE,
-            std::bind(&BluetoothHostStub::SetDeviceCustomTypeInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SATELLITE_CONTROL,
-            std::bind(&BluetoothHostStub::SatelliteControlInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_REGISTER_RESOURCE_MANAGER_OBSERVER,
-            std::bind(&BluetoothHostStub::RegisterBtResourceManagerObserverInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_DEREGISTER_RESOURCE_MANAGER_OBSERVER,
-            std::bind(&BluetoothHostStub::DeregisterBtResourceManagerObserverInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::UPDATE_VIRTUAL_DEVICE,
-            std::bind(&BluetoothHostStub::UpdateVirtualDeviceInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_VIRTUAL_AUTO_CONN_SWITCH,
-            std::bind(&BluetoothHostStub::IsSupportVirtualAutoConnectInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SET_VIRTUAL_AUTO_CONN_TYPE,
-            std::bind(&BluetoothHostStub::SetVirtualAutoConnectTypeInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::SET_FAST_SCAN_LEVEL,
-            std::bind(&BluetoothHostStub::SetFastScanLevelInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::CTRL_DEVICE_ACTION,
-            std::bind(&BluetoothHostStub::ControlDeviceActionInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_CONNECTION_TIME,
-            std::bind(&BluetoothHostStub::GetLastConnectionTimeInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_UPDATE_CLOUD_DEVICE,
-            std::bind(&BluetoothHostStub::UpdateCloudBluetoothDevInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_CLOUD_BOND_STATE,
-            std::bind(&BluetoothHostStub::GetCloudBondStateInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_DEVICE_TRANSPORT,
-            std::bind(&BluetoothHostStub::GetDeviceTransportInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_UPDATE_REFUSE_POLICY,
-            std::bind(&BluetoothHostStub::UpdateRefusePolicyInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::PROCESS_RANDOM_DEVICE_ID_COMMAND,
-            std::bind(&BluetoothHostStub::ProcessRandomDeviceIdCommandInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_GET_CAR_KEY_DFX_DATA,
-            std::bind(&BluetoothHostStub::GetCarKeyDfxDataInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_SET_CAR_KEY_CARD_DATA,
-            std::bind(&BluetoothHostStub::SetCarKeyCardDataInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::BT_NOTIFY_DIALOG_RESULT,
-            std::bind(&BluetoothHostStub::NotifyDialogResultInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::START_REMOTE_SDP_SEARCH,
-            std::bind(&BluetoothHostStub::StartRemoteSdpSearchInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_REMOTE_SERVICES,
-            std::bind(&BluetoothHostStub::GetRemoteServicesInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothHostInterfaceCode::GET_VIRTUAL_ADDRESS_BY_HASH,
-            std::bind(&BluetoothHostStub::GetVirtualAddressByHashInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},     
-        {BluetoothHostInterfaceCode::SET_CONNECTION_PRIORITY,
-            std::bind(&BluetoothHostStub::SetConnectionPriorityInner,
-                std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)},
+using namespace OHOS::bluetooth;
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const std::map<uint32_t, BluetoothHostStub::BluetoothHostStubFuncPerm> BluetoothHostStub::memberFuncMap_ = {
+    {STUB_FUNC(BT_REGISTER_OBSERVER, RegisterObserverInner, nullptr)},
+    {STUB_FUNC(BT_DEREGISTER_OBSERVER, DeregisterObserverInner, nullptr)},
+    {STUB_FUNC(BT_ENABLE, EnableBtInner, CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_DISABLE, DisableBtInner, CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_GETPROFILE, GetProfileInner, nullptr)},
+    {STUB_FUNC(BT_GET_BLE, GetBleRemoteInner, nullptr)},
+    {STUB_FUNC(BT_FACTORY_RESET, BluetoothFactoryResetInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_GETSTATE, GetBtStateInner, nullptr)},
+    {STUB_FUNC(BT_GET_LOCAL_ADDRESS, GetLocalAddressInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, GET_BLUETOOTH_LOCAL_MAC)))},
+    {STUB_FUNC(BT_GENERATE_LOCAL_OOB_DATA, GenerateLocalOobDataInner, CHECK_PERM(true, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_DISABLE_BLE, DisableBleInner, CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_ENABLE_BLE, EnableBleInner, CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_GET_PROFILE_LIST, GetProfileListInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_GET_MAXNUM_CONNECTED_AUDIODEVICES, GetMaxNumConnectedAudioDevicesInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_GET_BT_STATE, GetBtConnectionStateInner, CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_GET_BT_PROFILE_CONNSTATE, GetBtProfileConnStateInner,
+        CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_GET_LOCAL_DEVICE_CLASS, GetLocalDeviceClassInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_SET_LOCAL_DEVICE_CLASS, SetLocalDeviceClassInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_GET_LOCAL_NAME, GetLocalNameInner, CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_SET_LOCAL_NAME, SetLocalNameInner, CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_GET_BT_SCAN_MODE, GetBtScanModeInner, CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_SET_BT_SCAN_MODE, SetBtScanModeInner, CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_GET_BONDABLE_MODE, GetBondableModeInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_SET_BONDABLE_MODE, SetBondableModeInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_START_BT_DISCOVERY, StartBtDiscoveryInner, nullptr)},
+    {STUB_FUNC(BT_CANCEL_BT_DISCOVERY, CancelBtDiscoveryInner,
+        CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_IS_BT_DISCOVERING, IsBtDiscoveringInner, CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_GET_BT_DISCOVERY_END_MILLIS, GetBtDiscoveryEndMillisInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_GET_PAIRED_DEVICES, GetPairedDevicesInner, CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_REMOVE_PAIR, RemovePairInner, CHECK_PERM(true, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_REMOVE_ALL_PAIRS, RemoveAllPairsInner,
+        CHECK_PERM(true, {DISCOVER_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(CANCEL_PAIRING, CancelPairingInner, CHECK_PERM(true, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_REGISTER_REMOTE_DEVICE_OBSERVER, RegisterRemoteDeviceObserverInner, nullptr)},
+    {STUB_FUNC(BT_DEREGISTER_REMOTE_DEVICE_OBSERVER, DeregisterRemoteDeviceObserverInner, nullptr)},
+    {STUB_FUNC(BT_GET_BLE_MAX_ADVERTISING_DATALENGTH, GetBleMaxAdvertisingDataLengthInner, nullptr)},
+    {STUB_FUNC(BT_GET_CONNECTED_BLE_DEVICES, GetConnectedBLEDevicesInner,
+        CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GET_DEVICE_TYPE, GetDeviceTypeInner, nullptr)},
+    {STUB_FUNC(GET_PHONEBOOK_PERMISSION, GetPhonebookPermissionInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(SET_PHONEBOOK_PERMISSION, SetPhonebookPermissionInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GET_MESSAGE_PERMISSION, GetMessagePermissionInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(SET_MESSAGE_PERMISSION, SetMessagePermissionInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GET_POWER_MODE, GetPowerModeInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GET_DEVICE_NAME, GetDeviceNameInner, CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GET_DEVICE_ALIAS, GetDeviceAliasInner,
+        CHECK_PERM(true, {USE_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(SET_DEVICE_ALIAS, SetDeviceAliasInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GET_DEVICE_BATTERY_INFO, GetRemoteDeviceBatteryInfoInner, CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(SET_DEVICE_BATTERY_INFO, SetRemoteDeviceBatteryInfoInner, CHECK_PERM(true, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GET_PAIR_STATE, GetPairStateInner, CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(START_PAIR, StartPairInner, CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(START_CREDIBLE_PAIR, StartCrediblePairInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(IS_BONDED_FROM_LOCAL, IsBondedFromLocalInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(IS_ACL_CONNECTED, IsAclConnectedInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(IS_ACL_ENCRYPTED, IsAclEncryptedInner, nullptr)},
+    {STUB_FUNC(GET_DEVICE_CLASS, GetDeviceClassInner, nullptr)},
+    {STUB_FUNC(SET_DEVICE_PIN, SetDevicePinInner, CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(SET_DEVICE_PAIRING_CONFIRMATION, SetDevicePairingConfirmationInner,
+        CHECK_PERM(false, {MANAGE_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(SET_DEVICE_PASSKEY, SetDevicePasskeyInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(PAIR_REQUEST_PEPLY, PairRequestReplyInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(READ_REMOTE_RSSI_VALUE, ReadRemoteRssiValueInner, nullptr)},
+    {STUB_FUNC(GET_LOCAL_SUPPORTED_UUIDS, GetLocalSupportedUuidsInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GET_LOCAL_PROFILE_UUIDS, GetLocalProfileUuidsInner, CHECK_PERM(true, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GET_DEVICE_UUIDS, GetDeviceUuidsInner, CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_REGISTER_BLE_ADAPTER_OBSERVER, RegisterBleAdapterObserverInner, nullptr)},
+    {STUB_FUNC(BT_DEREGISTER_BLE_ADAPTER_OBSERVER, DeregisterBleAdapterObserverInner, nullptr)},
+    {STUB_FUNC(BT_REGISTER_BLE_PERIPHERAL_OBSERVER, RegisterBlePeripheralCallbackInner, nullptr)},
+    {STUB_FUNC(BT_DEREGISTER_BLE_PERIPHERAL_OBSERVER, DeregisterBlePeripheralCallbackInner, nullptr)},
+    {STUB_FUNC(BT_SET_FAST_SCAN, SetFastScanInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GET_RANDOM_ADDRESS, GetRandomAddressInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GET_REAL_ADDRESS, GetRealAddressInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(SYNC_RANDOM_ADDRESS, SyncRandomAddressInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(CONNECT_ALLOWED_PROFILES, ConnectAllowedProfilesInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(DISCONNECT_ALLOWED_PROFILES, DisconnectAllowedProfilesInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(SET_CUSTOM_TYPE, SetDeviceCustomTypeInner, CHECK_PERM(true, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(SATELLITE_CONTROL, SatelliteControlInner,
+        CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_REGISTER_RESOURCE_MANAGER_OBSERVER, RegisterBtResourceManagerObserverInner,
+        CHECK_PERM(true, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_DEREGISTER_RESOURCE_MANAGER_OBSERVER, DeregisterBtResourceManagerObserverInner,
+        CHECK_PERM(true, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GET_VIRTUAL_AUTO_CONN_SWITCH, IsSupportVirtualAutoConnectInner,
+        CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(SET_VIRTUAL_AUTO_CONN_TYPE, SetVirtualAutoConnectTypeInner,
+        CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(SET_FAST_SCAN_LEVEL, SetFastScanLevelInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(UPDATE_VIRTUAL_DEVICE, UpdateVirtualDeviceInner,
+        CHECK_PERM(true, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(CTRL_DEVICE_ACTION, ControlDeviceActionInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GET_CONNECTION_TIME, GetLastConnectionTimeInner, nullptr)},
+    {STUB_FUNC(BT_UPDATE_CLOUD_DEVICE, UpdateCloudBluetoothDevInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GET_CLOUD_BOND_STATE, GetCloudBondStateInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_UPDATE_REFUSE_POLICY, UpdateRefusePolicyInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(PROCESS_RANDOM_DEVICE_ID_COMMAND, ProcessRandomDeviceIdCommandInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GET_DEVICE_TRANSPORT, GetDeviceTransportInner, nullptr)},
+    {STUB_FUNC(BT_GET_CAR_KEY_DFX_DATA, GetCarKeyDfxDataInner, nullptr)},
+    {STUB_FUNC(BT_SET_CAR_KEY_CARD_DATA, SetCarKeyCardDataInner, nullptr)},
+    {STUB_FUNC(IS_PROFILE_EXIST, IsProfileExistInner, nullptr)},
+    {STUB_FUNC(BT_NOTIFY_DIALOG_RESULT, NotifyDialogResultInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(START_REMOTE_SDP_SEARCH, StartRemoteSdpSearchInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GET_REMOTE_SERVICES, GetRemoteServicesInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GET_VIRTUAL_ADDRESS_BY_HASH, GetVirtualAddressByHashInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(SET_CONNECTION_PRIORITY, SetConnectionPriorityInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
 };
 
 BluetoothHostStub::BluetoothHostStub(){};
-BluetoothHostStub::~BluetoothHostStub()
-{}
+BluetoothHostStub::~BluetoothHostStub(){};
+
 int32_t BluetoothHostStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    HILOGI("BluetoothHostStub::OnRemoteRequest, cmd = %{public}u, flags= %{public}d", code, option.GetFlags());
-    if (BluetoothHostStub::GetDescriptor() != data.ReadInterfaceToken()) {
-        HILOGE("BluetoothHostStub::OnRemoteRequest, local descriptor is not equal to remote");
-        return ERR_INVALID_STATE;
-    }
-    auto itFunc = memberFuncMap_.find(code);
-    if (itFunc != memberFuncMap_.end()) {
-        auto memberFunc = itFunc->second;
-        if (memberFunc != nullptr) {
-            return memberFunc(this, data, reply);
-        }
-    }
-    HILOGW("BluetoothHostStub::OnRemoteRequest, default case, need check.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothHostStub);
 }
 
-ErrCode BluetoothHostStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothHostStub::RegisterObserverInner starts");
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
@@ -338,7 +196,7 @@ ErrCode BluetoothHostStub::RegisterObserverInner(MessageParcel &data, MessagePar
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::DeregisterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::DeregisterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothHostStub::DeregisterObserverInner starts");
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
@@ -375,7 +233,7 @@ int32_t BluetoothHostStub::DisableBtInner(MessageParcel &data, MessageParcel &re
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetProfileInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetProfileInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothHostStub::GetProfileInner starts");
     std::string name = data.ReadString();
@@ -388,7 +246,7 @@ ErrCode BluetoothHostStub::GetProfileInner(MessageParcel &data, MessageParcel &r
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetBleRemoteInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetBleRemoteInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothHostStub::GetBleRemoteInner starts");
     std::string name = data.ReadString();
@@ -412,7 +270,7 @@ int32_t BluetoothHostStub::BluetoothFactoryResetInner(MessageParcel &data, Messa
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetBtStateInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetBtStateInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothHostStub::GetBtStateInner starts");
     int32_t state = 0;
@@ -473,7 +331,7 @@ int32_t BluetoothHostStub::EnableBleInner(MessageParcel &data, MessageParcel &re
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetProfileListInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetProfileListInner(MessageParcel &data, MessageParcel &reply)
 {
     std::vector<uint32_t> result = GetProfileList();
     bool ret = reply.WriteUInt32Vector(result);
@@ -484,7 +342,7 @@ ErrCode BluetoothHostStub::GetProfileListInner(MessageParcel &data, MessageParce
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetMaxNumConnectedAudioDevicesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetMaxNumConnectedAudioDevicesInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = GetMaxNumConnectedAudioDevices();
     bool ret = reply.WriteInt32(result);
@@ -532,7 +390,7 @@ int32_t BluetoothHostStub::GetBtProfileConnStateInner(MessageParcel &data, Messa
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetLocalDeviceClassInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetLocalDeviceClassInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = GetLocalDeviceClass();
     bool ret = reply.WriteInt32(result);
@@ -543,7 +401,7 @@ ErrCode BluetoothHostStub::GetLocalDeviceClassInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::SetLocalDeviceClassInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::SetLocalDeviceClassInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t deviceClass;
     data.ReadInt32(deviceClass);
@@ -587,7 +445,7 @@ int32_t BluetoothHostStub::SetLocalNameInner(MessageParcel &data, MessageParcel 
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetDeviceTypeInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetDeviceTypeInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t transport;
     if (!data.ReadInt32(transport)) {
@@ -625,7 +483,7 @@ int32_t BluetoothHostStub::GetBtScanModeInner(MessageParcel &data, MessageParcel
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetPhonebookPermissionInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetPhonebookPermissionInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string address;
     if (!data.ReadString(address)) {
@@ -656,7 +514,7 @@ int32_t BluetoothHostStub::SetBtScanModeInner(MessageParcel &data, MessageParcel
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::SetPhonebookPermissionInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::SetPhonebookPermissionInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string address;
     if (!data.ReadString(address)) {
@@ -677,7 +535,7 @@ ErrCode BluetoothHostStub::SetPhonebookPermissionInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetBondableModeInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetBondableModeInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t transport;
     data.ReadInt32(transport);
@@ -689,7 +547,7 @@ ErrCode BluetoothHostStub::GetBondableModeInner(MessageParcel &data, MessageParc
     }
     return NO_ERROR;
 }
-ErrCode BluetoothHostStub::GetMessagePermissionInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetMessagePermissionInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string address;
     if (!data.ReadString(address)) {
@@ -705,7 +563,7 @@ ErrCode BluetoothHostStub::GetMessagePermissionInner(MessageParcel &data, Messag
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::SetBondableModeInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::SetBondableModeInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t transport;
     data.ReadInt32(transport);
@@ -721,7 +579,7 @@ ErrCode BluetoothHostStub::SetBondableModeInner(MessageParcel &data, MessageParc
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::SetMessagePermissionInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::SetMessagePermissionInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string address;
     if (!data.ReadString(address)) {
@@ -742,7 +600,7 @@ ErrCode BluetoothHostStub::SetMessagePermissionInner(MessageParcel &data, Messag
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetPowerModeInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetPowerModeInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string address;
     if (!data.ReadString(address)) {
@@ -812,7 +670,7 @@ int32_t BluetoothHostStub::GetDeviceNameInner(MessageParcel &data, MessageParcel
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetDeviceAliasInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetDeviceAliasInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string address;
     if (!data.ReadString(address)) {
@@ -828,7 +686,7 @@ ErrCode BluetoothHostStub::GetDeviceAliasInner(MessageParcel &data, MessageParce
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::IsBtDiscoveringInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::IsBtDiscoveringInner(MessageParcel &data, MessageParcel &reply)
 {
     bool isDiscovering = false;
     int32_t transport;
@@ -847,7 +705,7 @@ ErrCode BluetoothHostStub::IsBtDiscoveringInner(MessageParcel &data, MessageParc
     return BT_NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::SetDeviceAliasInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::SetDeviceAliasInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string address;
     if (!data.ReadString(address)) {
@@ -890,7 +748,7 @@ int32_t BluetoothHostStub::SetRemoteDeviceBatteryInfoInner(MessageParcel &data, 
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetBtDiscoveryEndMillisInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetBtDiscoveryEndMillisInner(MessageParcel &data, MessageParcel &reply)
 {
     int64_t result = GetBtDiscoveryEndMillis();
     bool ret = reply.WriteInt64(result);
@@ -901,7 +759,7 @@ ErrCode BluetoothHostStub::GetBtDiscoveryEndMillisInner(MessageParcel &data, Mes
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetPairStateInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetPairStateInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t transport;
     if (!data.ReadInt32(transport)) {
@@ -989,7 +847,7 @@ int32_t BluetoothHostStub::RemovePairInner(MessageParcel &data, MessageParcel &r
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::CancelPairingInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::CancelPairingInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t transport;
     if (!data.ReadInt32(transport)) {
@@ -1010,7 +868,7 @@ ErrCode BluetoothHostStub::CancelPairingInner(MessageParcel &data, MessageParcel
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::RemoveAllPairsInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::RemoveAllPairsInner(MessageParcel &data, MessageParcel &reply)
 {
     bool result = RemoveAllPairs();
     bool ret = reply.WriteBool(result);
@@ -1022,7 +880,7 @@ ErrCode BluetoothHostStub::RemoveAllPairsInner(MessageParcel &data, MessageParce
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::IsBondedFromLocalInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::IsBondedFromLocalInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t transport;
     if (!data.ReadInt32(transport)) {
@@ -1064,7 +922,7 @@ int32_t BluetoothHostStub::SetDevicePinInner(MessageParcel &data, MessageParcel 
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::IsAclConnectedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::IsAclConnectedInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t transport;
     if (!data.ReadInt32(transport)) {
@@ -1089,7 +947,7 @@ ErrCode BluetoothHostStub::IsAclConnectedInner(MessageParcel &data, MessageParce
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::RegisterRemoteDeviceObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::RegisterRemoteDeviceObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     auto tempObject = data.ReadRemoteObject();
     sptr<IBluetoothRemoteDeviceObserver> observer;
@@ -1098,7 +956,7 @@ ErrCode BluetoothHostStub::RegisterRemoteDeviceObserverInner(MessageParcel &data
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::DeregisterRemoteDeviceObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::DeregisterRemoteDeviceObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     auto tempObject = data.ReadRemoteObject();
     sptr<IBluetoothRemoteDeviceObserver> observer;
@@ -1107,7 +965,7 @@ ErrCode BluetoothHostStub::DeregisterRemoteDeviceObserverInner(MessageParcel &da
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetBleMaxAdvertisingDataLengthInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetBleMaxAdvertisingDataLengthInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = GetBleMaxAdvertisingDataLength();
     bool ret = reply.WriteInt32(result);
@@ -1124,7 +982,7 @@ int32_t BluetoothHostStub::GetConnectedBLEDevicesInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::IsAclEncryptedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::IsAclEncryptedInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t transport;
     if (!data.ReadInt32(transport)) {
@@ -1193,7 +1051,7 @@ int32_t BluetoothHostStub::SetDevicePairingConfirmationInner(MessageParcel &data
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::SetDevicePasskeyInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::SetDevicePasskeyInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t transport;
     if (!data.ReadInt32(transport)) {
@@ -1224,7 +1082,7 @@ ErrCode BluetoothHostStub::SetDevicePasskeyInner(MessageParcel &data, MessagePar
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::PairRequestReplyInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::PairRequestReplyInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t transport;
     if (!data.ReadInt32(transport)) {
@@ -1250,7 +1108,7 @@ ErrCode BluetoothHostStub::PairRequestReplyInner(MessageParcel &data, MessagePar
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::ReadRemoteRssiValueInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::ReadRemoteRssiValueInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string address;
     if (!data.ReadString(address)) {
@@ -1266,7 +1124,7 @@ ErrCode BluetoothHostStub::ReadRemoteRssiValueInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetLocalSupportedUuidsInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetLocalSupportedUuidsInner(MessageParcel &data, MessageParcel &reply)
 {
     std::vector<std::string> uuids;
     GetLocalSupportedUuids(uuids);
@@ -1285,7 +1143,7 @@ ErrCode BluetoothHostStub::GetLocalSupportedUuidsInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetDeviceUuidsInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetDeviceUuidsInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string address;
     std::vector<std::string> uuids;
@@ -1313,12 +1171,12 @@ ErrCode BluetoothHostStub::GetDeviceUuidsInner(MessageParcel &data, MessageParce
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetLocalProfileUuidsInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetLocalProfileUuidsInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::RegisterBleAdapterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::RegisterBleAdapterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     auto tempObject = data.ReadRemoteObject();
     sptr<IBluetoothHostObserver> observer;
@@ -1327,7 +1185,7 @@ ErrCode BluetoothHostStub::RegisterBleAdapterObserverInner(MessageParcel &data, 
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::DeregisterBleAdapterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::DeregisterBleAdapterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     auto tempObject = data.ReadRemoteObject();
     sptr<IBluetoothHostObserver> observer;
@@ -1336,7 +1194,7 @@ ErrCode BluetoothHostStub::DeregisterBleAdapterObserverInner(MessageParcel &data
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::RegisterBlePeripheralCallbackInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::RegisterBlePeripheralCallbackInner(MessageParcel &data, MessageParcel &reply)
 {
     auto tempObject = data.ReadRemoteObject();
     sptr<IBluetoothBlePeripheralObserver> observer;
@@ -1345,7 +1203,7 @@ ErrCode BluetoothHostStub::RegisterBlePeripheralCallbackInner(MessageParcel &dat
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::DeregisterBlePeripheralCallbackInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::DeregisterBlePeripheralCallbackInner(MessageParcel &data, MessageParcel &reply)
 {
     auto tempObject = data.ReadRemoteObject();
     sptr<IBluetoothBlePeripheralObserver> observer;
@@ -1359,7 +1217,7 @@ int32_t BluetoothHostStub::SetFastScanInner(MessageParcel &data, MessageParcel &
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetRandomAddressInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetRandomAddressInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string realAddress = data.ReadString();
     std::string randomAddress;
@@ -1378,18 +1236,18 @@ ErrCode BluetoothHostStub::GetRandomAddressInner(MessageParcel &data, MessagePar
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::GetRealAddressInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::GetRealAddressInner(MessageParcel &data, MessageParcel &reply)
 {
     reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::SyncRandomAddressInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::SyncRandomAddressInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::StartCrediblePairInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::StartCrediblePairInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string address = data.ReadString();
     int32_t transport = data.ReadInt32();
@@ -1401,7 +1259,7 @@ ErrCode BluetoothHostStub::StartCrediblePairInner(MessageParcel &data, MessagePa
     return NO_ERROR;
 }
 
-ErrCode BluetoothHostStub::SatelliteControlInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHostStub::SatelliteControlInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }

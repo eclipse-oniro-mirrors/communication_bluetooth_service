@@ -15,113 +15,119 @@
 
 #include "bluetooth_avrcp_ct_stub.h"
 #include "bluetooth_log.h"
-#include "ipc_types.h"
-#include "string_ex.h"
+#include "permission_manager.h"
+
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::func), perm)
 
 namespace OHOS {
 namespace Bluetooth {
 const uint32_t AVRCP_NOTIDICATION_EVENT_COUNT_MAX = 0XFF;
 const uint32_t AVRCP_PLAYER_APP_SETTING_ATTRIBUTES_NUM_MAX = 0XFF;
+
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const std::map<uint32_t, BluetoothAvrcpCtStub::AvrcpCtStubFuncPerm> BluetoothAvrcpCtStub::memberFuncMap_ = {
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_REGISTER_OBSERVER),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::RegisterObserverInner), nullptr)},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_UNREGISTER_OBSERVER),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::UnregisterObserverInner), nullptr)},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_CONNECTED_DEVICES),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetConnectedDevicesInner), nullptr)},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_DEVICES_BY_STATES),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetDevicesByStatesInner), nullptr)},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_DEVICE_STATE),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetDeviceStateInner), nullptr)},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_CONNECT),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::ConnectInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_DISCONNECT),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::DisconnectInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_PRESS_BUTTON),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::PressButtonnner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_RELEASE_BUTTON),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::ReleaseButtonInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_UNIT_INFO),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetUnitInfoInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_SUB_UNIT_INFO),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetSubUnitInfoInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_SUPPORTED_COMPANIES),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetSupportedCompaniesInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_SUPPORTED_EVENTS),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetSupportedEventsInner), nullptr)},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_APP_SETTING_ATTRIBUTES),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetPlayerAppSettingAttributesInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_APP_SETTING_VALUES),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetPlayerAppSettingValuesInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_APP_SETTING_CURRENT_VALUE),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetPlayerAppSettingCurrentValueInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_SET_PLAYER_APP_SETTING_CURRENT_VALUE),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::SetPlayerAppSettingCurrentValueInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_APP_SETTING_ATTRIBUTE_TEXT),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetPlayerAppSettingAttributeTextInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_APP_SETTING_VALUES_TEXT),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetPlayerAppSettingValueTextInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_ELEMENT_ATTRIBUTES),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetElementAttributesInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_STATUS),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetPlayStatusInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_PLAY_ITEM),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::PlayItemInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_FOLDER_ITEMS),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetFolderItemsInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_TOTAL_NUMBER_OF_ITEMS),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetTotalNumberOfItemsInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_SET_ABSOLUTE_VOLUME),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::SetAbsoluteVolumeInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_ENABLE_NOTIFICATION),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::EnableNotificationInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_DISABLE_NOTIFICATION),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::DisableNotificationInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_ITEM_ATTRIBUTES),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetItemAttributesInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_SET_BROWSERED_PLAYER),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::SetBrowsedPlayerInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_MEDIA_PLAYER_LIST),
+     std::make_pair(AvrcpCtStubFunc(&BluetoothAvrcpCtStub::GetMeidaPlayerListInner),
+         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+};
+
 BluetoothAvrcpCtStub::BluetoothAvrcpCtStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_REGISTER_OBSERVER)] =
-        &BluetoothAvrcpCtStub::RegisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_UNREGISTER_OBSERVER)] =
-        &BluetoothAvrcpCtStub::UnregisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_CONNECTED_DEVICES)] =
-        &BluetoothAvrcpCtStub::GetConnectedDevicesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_DEVICES_BY_STATES)] =
-        &BluetoothAvrcpCtStub::GetDevicesByStatesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_DEVICE_STATE)] =
-        &BluetoothAvrcpCtStub::GetDeviceStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_CONNECT)] =
-        nullptr;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_DISCONNECT)] =
-        &BluetoothAvrcpCtStub::DisconnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_PRESS_BUTTON)] =
-        &BluetoothAvrcpCtStub::PressButtonnner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_RELEASE_BUTTON)] =
-        &BluetoothAvrcpCtStub::ReleaseButtonInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_UNIT_INFO)] =
-        &BluetoothAvrcpCtStub::GetUnitInfoInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_SUB_UNIT_INFO)] =
-        &BluetoothAvrcpCtStub::GetSubUnitInfoInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_SUPPORTED_COMPANIES)] =
-        &BluetoothAvrcpCtStub::GetSupportedCompaniesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_SUPPORTED_EVENTS)] =
-        &BluetoothAvrcpCtStub::GetSupportedEventsInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_APP_SETTING_ATTRIBUTES)] =
-        &BluetoothAvrcpCtStub::GetPlayerAppSettingAttributesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_APP_SETTING_VALUES)] =
-        &BluetoothAvrcpCtStub::GetPlayerAppSettingValuesInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_APP_SETTING_CURRENT_VALUE)] =
-        &BluetoothAvrcpCtStub::GetPlayerAppSettingCurrentValueInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothAvrcpCtInterfaceCode::AVRCP_CT_SET_PLAYER_APP_SETTING_CURRENT_VALUE)] =
-        &BluetoothAvrcpCtStub::SetPlayerAppSettingCurrentValueInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_APP_SETTING_ATTRIBUTE_TEXT)] =
-        &BluetoothAvrcpCtStub::GetPlayerAppSettingAttributeTextInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_APP_SETTING_VALUES_TEXT)] =
-        &BluetoothAvrcpCtStub::GetPlayerAppSettingValueTextInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_ELEMENT_ATTRIBUTES)] =
-        &BluetoothAvrcpCtStub::GetElementAttributesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_PLAYER_STATUS)] =
-        &BluetoothAvrcpCtStub::GetPlayStatusInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_PLAY_ITEM)] =
-        &BluetoothAvrcpCtStub::PlayItemInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_FOLDER_ITEMS)] =
-        &BluetoothAvrcpCtStub::GetFolderItemsInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_TOTAL_NUMBER_OF_ITEMS)] =
-        &BluetoothAvrcpCtStub::GetTotalNumberOfItemsInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_SET_ABSOLUTE_VOLUME)] =
-        &BluetoothAvrcpCtStub::SetAbsoluteVolumeInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_ENABLE_NOTIFICATION)] =
-        &BluetoothAvrcpCtStub::EnableNotificationInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_DISABLE_NOTIFICATION)] =
-        &BluetoothAvrcpCtStub::DisableNotificationInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_GET_ITEM_ATTRIBUTES)] =
-        &BluetoothAvrcpCtStub::GetItemAttributesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_SET_BROWSERED_PLAYER)] =
-        &BluetoothAvrcpCtStub::SetBrowsedPlayerInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpCtInterfaceCode::AVRCP_CT_MEDIA_PLAYER_LIST)] =
-        &BluetoothAvrcpCtStub::GetMeidaPlayerListInner;
-}
+{}
 
 BluetoothAvrcpCtStub::~BluetoothAvrcpCtStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_.clear();
-}
+{}
 
 int BluetoothAvrcpCtStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    HILOGD("BluetoothAvrcpCtStub::OnRemoteRequest, cmd = %{public}d, flags= %{public}d",
-        code,
-        option.GetFlags());
-    std::u16string descriptor = BluetoothAvrcpCtStub::GetDescriptor();
-    std::u16string remoteDescriptor = data.ReadInterfaceToken();
-    if (descriptor != remoteDescriptor) {
-        HILOGI("local descriptor is not equal to remote");
-        return ERR_INVALID_STATE;
-    }
-
-    auto itFunc = memberFuncMap_.find(code);
-    if (itFunc != memberFuncMap_.end()) {
-        auto memberFunc = itFunc->second;
-        if (memberFunc != nullptr) {
-            return (this->*memberFunc)(data,reply);
-        }
-    }
-
-    HILOGW("BluetoothAvrcpCtStub::OnRemoteRequest, default case, need check.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothAvrcpCtStub);
 }
 
-ErrCode BluetoothAvrcpCtStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     sptr<IRemoteObject>  tempObject = data.ReadRemoteObject();    
     sptr<IBluetoothAvrcpCtObserver> observer;
@@ -130,7 +136,7 @@ ErrCode BluetoothAvrcpCtStub::RegisterObserverInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::UnregisterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::UnregisterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     sptr<IRemoteObject>  tempObject = data.ReadRemoteObject();
     sptr<IBluetoothAvrcpCtObserver> observer;
@@ -139,7 +145,7 @@ ErrCode BluetoothAvrcpCtStub::UnregisterObserverInner(MessageParcel &data, Messa
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetConnectedDevicesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetConnectedDevicesInner(MessageParcel &data, MessageParcel &reply)
 {
     std::vector<RawAddress> rawAdds = GetConnectedDevices();
     reply.WriteInt32(rawAdds.size());
@@ -152,7 +158,7 @@ ErrCode BluetoothAvrcpCtStub::GetConnectedDevicesInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply)
 {
     std::vector<int32_t> states = {};
     int32_t stateSize = data.ReadInt32();
@@ -177,7 +183,7 @@ ErrCode BluetoothAvrcpCtStub::GetDevicesByStatesInner(MessageParcel &data, Messa
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetDeviceStateInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetDeviceStateInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t state = GetDeviceState(RawAddress(data.ReadString()));
     reply.WriteInt32(state);
@@ -185,7 +191,7 @@ ErrCode BluetoothAvrcpCtStub::GetDeviceStateInner(MessageParcel &data, MessagePa
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = Connect(RawAddress(data.ReadString()));
     reply.WriteInt32(result);
@@ -193,7 +199,7 @@ ErrCode BluetoothAvrcpCtStub::ConnectInner(MessageParcel &data, MessageParcel &r
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::DisconnectInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::DisconnectInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = Disconnect(RawAddress(data.ReadString()));
     reply.WriteInt32(result);
@@ -201,7 +207,7 @@ ErrCode BluetoothAvrcpCtStub::DisconnectInner(MessageParcel &data, MessageParcel
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::PressButtonnner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::PressButtonnner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = PressButton(RawAddress(data.ReadString()), data.ReadInt32());
     reply.WriteInt32(result);
@@ -209,7 +215,7 @@ ErrCode BluetoothAvrcpCtStub::PressButtonnner(MessageParcel &data, MessageParcel
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::ReleaseButtonInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::ReleaseButtonInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = ReleaseButton(RawAddress(data.ReadString()), data.ReadInt32());
     reply.WriteInt32(result);
@@ -217,7 +223,7 @@ ErrCode BluetoothAvrcpCtStub::ReleaseButtonInner(MessageParcel &data, MessagePar
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetUnitInfoInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetUnitInfoInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = GetUnitInfo(RawAddress(data.ReadString()));
     reply.WriteInt32(result);
@@ -225,7 +231,7 @@ ErrCode BluetoothAvrcpCtStub::GetUnitInfoInner(MessageParcel &data, MessageParce
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetSubUnitInfoInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetSubUnitInfoInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = GetSubUnitInfo(RawAddress(data.ReadString()));
     reply.WriteInt32(result);
@@ -233,7 +239,7 @@ ErrCode BluetoothAvrcpCtStub::GetSubUnitInfoInner(MessageParcel &data, MessagePa
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetSupportedCompaniesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetSupportedCompaniesInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = GetSupportedCompanies(RawAddress(data.ReadString()));
     reply.WriteInt32(result);
@@ -241,7 +247,7 @@ ErrCode BluetoothAvrcpCtStub::GetSupportedCompaniesInner(MessageParcel &data, Me
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetSupportedEventsInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetSupportedEventsInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = GetSupportedEvents(RawAddress(data.ReadString()));
     reply.WriteInt32(result);
@@ -249,7 +255,7 @@ ErrCode BluetoothAvrcpCtStub::GetSupportedEventsInner(MessageParcel &data, Messa
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetPlayerAppSettingAttributesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetPlayerAppSettingAttributesInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = GetPlayerAppSettingAttributes(RawAddress(data.ReadString()));
     reply.WriteInt32(result);
@@ -257,7 +263,7 @@ ErrCode BluetoothAvrcpCtStub::GetPlayerAppSettingAttributesInner(MessageParcel &
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetPlayerAppSettingValuesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetPlayerAppSettingValuesInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t result = GetPlayerAppSettingValues(RawAddress(data.ReadString()), data.ReadInt32());
     reply.WriteInt32(result);
@@ -265,7 +271,7 @@ ErrCode BluetoothAvrcpCtStub::GetPlayerAppSettingValuesInner(MessageParcel &data
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetPlayerAppSettingCurrentValueInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetPlayerAppSettingCurrentValueInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     std::vector<int32_t> attributes = {};
@@ -284,7 +290,7 @@ ErrCode BluetoothAvrcpCtStub::GetPlayerAppSettingCurrentValueInner(MessageParcel
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::SetPlayerAppSettingCurrentValueInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::SetPlayerAppSettingCurrentValueInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     std::vector<int32_t> attributes = {};
@@ -315,7 +321,7 @@ ErrCode BluetoothAvrcpCtStub::SetPlayerAppSettingCurrentValueInner(MessageParcel
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetPlayerAppSettingAttributeTextInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetPlayerAppSettingAttributeTextInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     std::vector<int32_t> attributes = {};
@@ -334,7 +340,7 @@ ErrCode BluetoothAvrcpCtStub::GetPlayerAppSettingAttributeTextInner(MessageParce
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetPlayerAppSettingValueTextInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetPlayerAppSettingValueTextInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     int32_t attributes = data.ReadInt32();
@@ -355,7 +361,7 @@ ErrCode BluetoothAvrcpCtStub::GetPlayerAppSettingValueTextInner(MessageParcel &d
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetElementAttributesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetElementAttributesInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     std::vector<int32_t> attributes = {};
@@ -374,7 +380,7 @@ ErrCode BluetoothAvrcpCtStub::GetElementAttributesInner(MessageParcel &data, Mes
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetPlayStatusInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetPlayStatusInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     int32_t result = GetPlayStatus(raw);
@@ -383,7 +389,7 @@ ErrCode BluetoothAvrcpCtStub::GetPlayStatusInner(MessageParcel &data, MessagePar
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::PlayItemInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::PlayItemInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     int32_t result = PlayItem(raw, data.ReadInt32(), data.ReadInt64(), data.ReadInt32());
@@ -392,7 +398,7 @@ ErrCode BluetoothAvrcpCtStub::PlayItemInner(MessageParcel &data, MessageParcel &
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetFolderItemsInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetFolderItemsInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     int32_t startItem = data.ReadInt32();
@@ -414,7 +420,7 @@ ErrCode BluetoothAvrcpCtStub::GetFolderItemsInner(MessageParcel &data, MessagePa
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetTotalNumberOfItemsInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetTotalNumberOfItemsInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     int32_t scope = data.ReadInt32();
@@ -424,7 +430,7 @@ ErrCode BluetoothAvrcpCtStub::GetTotalNumberOfItemsInner(MessageParcel &data, Me
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::SetAbsoluteVolumeInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::SetAbsoluteVolumeInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     int32_t volume = data.ReadInt32();
@@ -434,7 +440,7 @@ ErrCode BluetoothAvrcpCtStub::SetAbsoluteVolumeInner(MessageParcel &data, Messag
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::EnableNotificationInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::EnableNotificationInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     std::vector<int32_t> events = {};
@@ -453,7 +459,7 @@ ErrCode BluetoothAvrcpCtStub::EnableNotificationInner(MessageParcel &data, Messa
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::DisableNotificationInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::DisableNotificationInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     std::vector<int32_t> events = {};
@@ -471,7 +477,7 @@ ErrCode BluetoothAvrcpCtStub::DisableNotificationInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::GetItemAttributesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetItemAttributesInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     int64_t uid = data.ReadInt64();
@@ -491,19 +497,16 @@ ErrCode BluetoothAvrcpCtStub::GetItemAttributesInner(MessageParcel &data, Messag
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpCtStub::SetBrowsedPlayerInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::SetBrowsedPlayerInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     int32_t playerId = data.ReadInt32();
-
     int32_t result = SetBrowsedPlayer(raw, playerId);
     reply.WriteInt32(result);
-
     return NO_ERROR;
-
 }
 
-ErrCode BluetoothAvrcpCtStub::GetMeidaPlayerListInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpCtStub::GetMeidaPlayerListInner(MessageParcel &data, MessageParcel &reply)
 {
     RawAddress raw = RawAddress(data.ReadString());
     int32_t startItem = data.ReadInt32();

@@ -43,7 +43,7 @@ bool DialogSwitch::RequestBluetoothSwitchDialog(DialogSwitchType type)
 {
     const std::string abilityName = "bluetooth";
     const std::string bundleName = "com.ohos.settings";
-    std::string thirdlyBundleName = PermissionManager::GetCallingName();
+    std::string thirdlyBundleName = Bluetooth::PermissionManager::GetCallingName();
     std::string connectStr = DialogSwitch::BuildStartCommand(type, thirdlyBundleName);
     HILOGI("The bundlename is %{public}s.", thirdlyBundleName.c_str());
     if (!BluetoothDialog::DialogConnectExtension(connectStr, bundleName, abilityName)) {

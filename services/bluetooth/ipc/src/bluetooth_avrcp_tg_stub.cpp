@@ -17,88 +17,72 @@
 #include "bluetooth_log.h"
 #include "ipc_types.h"
 #include "string_ex.h"
+#include "permission_manager.h"
+
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) BluetoothAvrcpTgInterfaceCode::code, {&BluetoothAvrcpTgStub::func, perm}
 
 namespace OHOS {
 namespace Bluetooth {
+
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const std::map<uint32_t, BluetoothAvrcpTgStub::AvrcpTgStubFuncPerm> BluetoothAvrcpTgStub::memberFuncMap_ = {
+    {STUB_FUNC(BT_AVRCP_TG_REGISTER_OBSERVER, RegisterObserverInner, nullptr)},
+    {STUB_FUNC(BT_AVRCP_TG_UNREGISTER_OBSERVER, UnregisterObserverInner, nullptr)},
+    {STUB_FUNC(BT_AVRCP_TG_SET_ACTIVE_DEVICE, SetActiveDeviceInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_CONNECT, ConnectInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_DISCONNECT, DisconnectInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_GET_CONNECTED_DEVICES, GetConnectedDevicesInner, nullptr)},
+    {STUB_FUNC(BT_AVRCP_TG_GET_DEVICES_BY_STATES, GetDevicesByStatesInner, nullptr)},
+    {STUB_FUNC(BT_AVRCP_TG_GET_DEVICE_STATE, GetDeviceStateInner, nullptr)},
+    {STUB_FUNC(BT_AVRCP_TG_NOTIFY_PLAYBACK_STATUS_CHANGED, NotifyPlaybackStatusChangedInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_NOTIFY_TRACK_CHANGED, NotifyTrackChangedInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_NOTIFY_TRACK_REACHED_END, NotifyTrackReachedEndInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_NOTIFY_TRACK_REACHED_START, NotifyTrackReachedStartInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_NOTIFY_PLAYBACK_POS_CHANGED, NotifyPlaybackPosChangedInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_NOTIFY_PLAYER_APP_SETTING_CHANGED, NotifyPlayerAppSettingChangedInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_NOTIFY_NOWPLAYING_CONTENT_CHANGED, NotifyNowPlayingContentChangedInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_NOTIFY_AVAILABLE_PLAYERS_CHANGED, NotifyAvailablePlayersChangedInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_NOTIFY_ADDRESSED_PLAYER_CHANGED, NotifyAddressedPlayerChangedInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_NOTIFY_UID_CHANGED, NotifyUidChangedInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_NOTIFY_VOLUME_CHANGED, NotifyVolumeChangedInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_SET_DEVICE_ABSOLUTE_VOLUME, SetDeviceAbsoluteVolumeInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_AVRCP_TG_GET_DEVICE_ABS_VOLUME_ABILITY, GetDeviceAbsVolumeAbilityInner,
+        CHECK_PERM(true, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_AVRCP_TG_SET_DEVICE_ABS_VOLUME_ABILITY, SetDeviceAbsVolumeAbilityInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+};
+
 BluetoothAvrcpTgStub::BluetoothAvrcpTgStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_REGISTER_OBSERVER)] =
-        &BluetoothAvrcpTgStub::RegisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_UNREGISTER_OBSERVER)] =
-        &BluetoothAvrcpTgStub::UnregisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_SET_ACTIVE_DEVICE)] =
-        &BluetoothAvrcpTgStub::SetActiveDeviceInner; 
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_CONNECT)] =
-        &BluetoothAvrcpTgStub::ConnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_DISCONNECT)] =
-        &BluetoothAvrcpTgStub::DisconnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_GET_CONNECTED_DEVICES)] =
-        &BluetoothAvrcpTgStub::GetConnectedDevicesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_GET_DEVICES_BY_STATES)] =
-        &BluetoothAvrcpTgStub::GetDevicesByStatesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_GET_DEVICE_STATE)] =
-        &BluetoothAvrcpTgStub::GetDeviceStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_NOTIFY_PLAYBACK_STATUS_CHANGED)] =
-        &BluetoothAvrcpTgStub::NotifyPlaybackStatusChangedInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_NOTIFY_TRACK_CHANGED)] =
-        &BluetoothAvrcpTgStub::NotifyTrackChangedInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_NOTIFY_TRACK_REACHED_END)] =
-        &BluetoothAvrcpTgStub::NotifyTrackReachedEndInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_NOTIFY_TRACK_REACHED_START)] =
-        &BluetoothAvrcpTgStub::NotifyTrackReachedStartInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_NOTIFY_PLAYBACK_POS_CHANGED)] =
-        &BluetoothAvrcpTgStub::NotifyPlaybackPosChangedInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_NOTIFY_PLAYER_APP_SETTING_CHANGED)] =
-        &BluetoothAvrcpTgStub::NotifyPlayerAppSettingChangedInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_NOTIFY_NOWPLAYING_CONTENT_CHANGED)] =
-        &BluetoothAvrcpTgStub::NotifyNowPlayingContentChangedInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_NOTIFY_AVAILABLE_PLAYERS_CHANGED)] =
-        &BluetoothAvrcpTgStub::NotifyAvailablePlayersChangedInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_NOTIFY_ADDRESSED_PLAYER_CHANGED)] =
-        &BluetoothAvrcpTgStub::NotifyAddressedPlayerChangedInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_NOTIFY_UID_CHANGED)] =
-        &BluetoothAvrcpTgStub::NotifyUidChangedInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_NOTIFY_VOLUME_CHANGED)] =
-        &BluetoothAvrcpTgStub::NotifyVolumeChangedInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_SET_DEVICE_ABSOLUTE_VOLUME)] =
-        &BluetoothAvrcpTgStub::SetDeviceAbsoluteVolumeInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_SET_DEVICE_ABS_VOLUME_ABILITY)] =
-        &BluetoothAvrcpTgStub::SetDeviceAbsVolumeAbilityInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothAvrcpTgInterfaceCode::BT_AVRCP_TG_GET_DEVICE_ABS_VOLUME_ABILITY)] =
-        &BluetoothAvrcpTgStub::GetDeviceAbsVolumeAbilityInner;
-}
+{}
 
 BluetoothAvrcpTgStub::~BluetoothAvrcpTgStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_.clear();
-}
+{}
 
 int BluetoothAvrcpTgStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    HILOGD("BluetoothAvrcpTgStub::OnRemoteRequest, cmd = %{public}d, flags= %{public}d", code, option.GetFlags());
-    std::u16string descriptor = BluetoothAvrcpTgStub::GetDescriptor();
-    std::u16string remoteDescriptor = data.ReadInterfaceToken();
-    if (descriptor != remoteDescriptor) {
-        HILOGI("local descriptor is not equal to remote");
-        return ERR_INVALID_STATE;
-    }
-    auto itFunc = memberFuncMap_.find(code);
-    if (itFunc != memberFuncMap_.end()) {
-        auto memberFunc = itFunc->second;
-        if (memberFunc != nullptr) {
-            return (this->*memberFunc)(data, reply);
-        }
-    }
-    HILOGW("BluetoothAvrcpTgStub::OnRemoteRequest, default case, need check.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothAvrcpTgStub);
 }
 
-ErrCode BluetoothAvrcpTgStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::RegisterObserverInner starts");
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
@@ -108,7 +92,7 @@ ErrCode BluetoothAvrcpTgStub::RegisterObserverInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::UnregisterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::UnregisterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::UnregisterObserverInner starts");
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
@@ -118,7 +102,7 @@ ErrCode BluetoothAvrcpTgStub::UnregisterObserverInner(MessageParcel &data, Messa
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::SetActiveDeviceInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::SetActiveDeviceInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::SetActiveDeviceInner starts");
     std::shared_ptr<BluetoothRawAddress> addr(data.ReadParcelable<BluetoothRawAddress>());
@@ -130,7 +114,7 @@ ErrCode BluetoothAvrcpTgStub::SetActiveDeviceInner(MessageParcel &data, MessageP
 }
 
   
-ErrCode BluetoothAvrcpTgStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::ConnectInner starts");
     std::shared_ptr<BluetoothRawAddress> addr(data.ReadParcelable<BluetoothRawAddress>());
@@ -147,7 +131,7 @@ ErrCode BluetoothAvrcpTgStub::ConnectInner(MessageParcel &data, MessageParcel &r
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::DisconnectInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::DisconnectInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::DisconnectInner starts");
     std::shared_ptr<BluetoothRawAddress> addr(data.ReadParcelable<BluetoothRawAddress>());
@@ -165,7 +149,7 @@ ErrCode BluetoothAvrcpTgStub::DisconnectInner(MessageParcel &data, MessageParcel
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::GetConnectedDevicesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::GetConnectedDevicesInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::GetConnectedDevicesInner starts");
     std::vector<BluetoothRawAddress> result = GetConnectedDevices();
@@ -180,7 +164,7 @@ ErrCode BluetoothAvrcpTgStub::GetConnectedDevicesInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t statesSize = data.ReadInt32();
     if (IsInvalidAttributesSize(statesSize)) {
@@ -205,7 +189,7 @@ ErrCode BluetoothAvrcpTgStub::GetDevicesByStatesInner(MessageParcel &data, Messa
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::GetDeviceStateInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::GetDeviceStateInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::GetDeviceStateInner starts");
     std::shared_ptr<BluetoothRawAddress> addr(data.ReadParcelable<BluetoothRawAddress>());
@@ -222,7 +206,7 @@ ErrCode BluetoothAvrcpTgStub::GetDeviceStateInner(MessageParcel &data, MessagePa
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::NotifyPlaybackStatusChangedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::NotifyPlaybackStatusChangedInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::NotifyPlaybackStatusChangedInner starts");
     int32_t playStatus = data.ReadInt32();
@@ -232,7 +216,7 @@ ErrCode BluetoothAvrcpTgStub::NotifyPlaybackStatusChangedInner(MessageParcel &da
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::NotifyTrackChangedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::NotifyTrackChangedInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::NotifyTrackChangedInner starts");
     long uid = data.ReadInt64();
@@ -242,7 +226,7 @@ ErrCode BluetoothAvrcpTgStub::NotifyTrackChangedInner(MessageParcel &data, Messa
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::NotifyTrackReachedEndInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::NotifyTrackReachedEndInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::NotifyTrackReachedEndInner starts");
     int32_t playbackPos = data.ReadInt32();
@@ -251,7 +235,7 @@ ErrCode BluetoothAvrcpTgStub::NotifyTrackReachedEndInner(MessageParcel &data, Me
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::NotifyTrackReachedStartInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::NotifyTrackReachedStartInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::NotifyTrackReachedStartInner starts");
     int32_t playbackPos = data.ReadInt32();
@@ -260,7 +244,7 @@ ErrCode BluetoothAvrcpTgStub::NotifyTrackReachedStartInner(MessageParcel &data, 
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::NotifyPlaybackPosChangedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::NotifyPlaybackPosChangedInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::NotifyPlaybackPosChangedInner starts");
     int32_t playbackPos = data.ReadInt32();
@@ -269,7 +253,7 @@ ErrCode BluetoothAvrcpTgStub::NotifyPlaybackPosChangedInner(MessageParcel &data,
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::NotifyPlayerAppSettingChangedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::NotifyPlayerAppSettingChangedInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::NotifyPlayerAppSettingChangedInner starts");
     int32_t attributesSize = data.ReadInt32();
@@ -298,7 +282,7 @@ ErrCode BluetoothAvrcpTgStub::NotifyPlayerAppSettingChangedInner(MessageParcel &
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::NotifyNowPlayingContentChangedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::NotifyNowPlayingContentChangedInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::NotifyNowPlayingContentChangedInner starts");
 
@@ -306,7 +290,7 @@ ErrCode BluetoothAvrcpTgStub::NotifyNowPlayingContentChangedInner(MessageParcel 
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::NotifyAvailablePlayersChangedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::NotifyAvailablePlayersChangedInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::NotifyAvailablePlayersChangedInner starts");
 
@@ -314,7 +298,7 @@ ErrCode BluetoothAvrcpTgStub::NotifyAvailablePlayersChangedInner(MessageParcel &
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::NotifyAddressedPlayerChangedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::NotifyAddressedPlayerChangedInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::NotifyAddressedPlayerChangedInner starts");
     int32_t playerId = data.ReadInt32();
@@ -324,7 +308,7 @@ ErrCode BluetoothAvrcpTgStub::NotifyAddressedPlayerChangedInner(MessageParcel &d
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::NotifyUidChangedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::NotifyUidChangedInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::NotifyUidChangedInner starts");
     int32_t uidCounter = data.ReadInt32();
@@ -333,7 +317,7 @@ ErrCode BluetoothAvrcpTgStub::NotifyUidChangedInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::NotifyVolumeChangedInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::NotifyVolumeChangedInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("BluetoothAvrcpTgStub::NotifyVolumeChangedInner starts");
     int32_t volume = data.ReadInt32();
@@ -342,7 +326,7 @@ ErrCode BluetoothAvrcpTgStub::NotifyVolumeChangedInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothAvrcpTgStub::SetDeviceAbsoluteVolumeInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::SetDeviceAbsoluteVolumeInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("enter");
     std::shared_ptr<BluetoothRawAddress> addr(data.ReadParcelable<BluetoothRawAddress>());
@@ -357,7 +341,7 @@ ErrCode BluetoothAvrcpTgStub::SetDeviceAbsoluteVolumeInner(MessageParcel &data, 
     }
     return NO_ERROR;
 }
-ErrCode BluetoothAvrcpTgStub::SetDeviceAbsVolumeAbilityInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::SetDeviceAbsVolumeAbilityInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("enter");
     std::shared_ptr<BluetoothRawAddress> addr(data.ReadParcelable<BluetoothRawAddress>());
@@ -371,7 +355,7 @@ ErrCode BluetoothAvrcpTgStub::SetDeviceAbsVolumeAbilityInner(MessageParcel &data
     }
     return NO_ERROR;
 }
-ErrCode BluetoothAvrcpTgStub::GetDeviceAbsVolumeAbilityInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothAvrcpTgStub::GetDeviceAbsVolumeAbilityInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("enter");
     std::shared_ptr<BluetoothRawAddress> addr(data.ReadParcelable<BluetoothRawAddress>());
