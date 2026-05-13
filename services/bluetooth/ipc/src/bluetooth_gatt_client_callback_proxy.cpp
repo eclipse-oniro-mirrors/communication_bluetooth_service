@@ -19,7 +19,7 @@
 namespace OHOS {
 namespace Bluetooth {
 void BluetoothGattClientCallbackProxy::OnConnectionStateChanged(
-    int32_t state, int32_t newState, int32_t disconnectReason, std::string reasonMessage)
+    int32_t state, int32_t newState, int32_t disconnectReason, const std::string &reasonMessage)
 {
     HILOGI("BluetoothGattClientCallbackProxy::OnConnectionStateChanged Triggered!");
     MessageParcel data;
