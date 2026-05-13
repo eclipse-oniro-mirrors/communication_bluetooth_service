@@ -61,7 +61,7 @@ void BluetoothBlePeripheralObserverProxy::OnReadRemoteRssiEvent(const BluetoothR
     }
 }
 void BluetoothBlePeripheralObserverProxy::OnPairStatusChanged(
-    const int32_t transport, const BluetoothRawAddress &device, int status, int cause, std::string causeMessage)
+    const int32_t transport, const BluetoothRawAddress &device, int status, int cause, const std::string &causeMessage)
 {
     MessageParcel data;
     if (!data.WriteInterfaceToken(BluetoothBlePeripheralObserverProxy::GetDescriptor())) {
