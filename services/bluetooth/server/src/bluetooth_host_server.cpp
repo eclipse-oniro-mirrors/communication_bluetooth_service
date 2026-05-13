@@ -342,8 +342,7 @@ public:
         return;
     }
 
-    void OnPairStatusChanged(const BTTransport transport, const RawAddress &device, const int32_t status,
-        int32_t cause = -1, std::string causeMessage = "") override
+    void OnPairStatusChanged(const BTTransport transport, const RawAddress &device, const int32_t status) override
     {
         HILOGI("device: %{public}s, status: %{public}d", GET_ENCRYPT_ADDR(device), status);
         impl_->remoteObservers_.ForEach([this, transport, device, status](IBluetoothRemoteDeviceObserver *observer) {
@@ -523,8 +522,7 @@ public:
         });
     }
 
-    void OnPairStatusChanged(const BTTransport transport, const RawAddress &device, int32_t status,
-        int32_t cause = -1, std::string causeMessage = "") override
+    void OnPairStatusChanged(const BTTransport transport, const RawAddress &device, int32_t status) override
     {
         HILOGI("device: %{public}s, status: %{public}d", GET_ENCRYPT_ADDR(device), status);
         impl_->bleRemoteObservers_.ForEach([this, transport, device, status](
