@@ -28,7 +28,7 @@ public:
 
     void OnReadRemoteRssiEvent(const BluetoothRawAddress &device, int rssi, int status) override;
     void OnPairStatusChanged(const int32_t transport, const BluetoothRawAddress &device,
-        int status, int cause, std::string causeMessage = "") override;
+        int status, int cause, const std::string &causeMessage = "") override;
     void OnAclStateChanged(const BluetoothRawAddress &device, int state, unsigned int reason) override;
 
 private:
