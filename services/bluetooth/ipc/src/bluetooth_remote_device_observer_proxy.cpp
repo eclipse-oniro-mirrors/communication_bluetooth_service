@@ -25,8 +25,8 @@ BluetoothRemoteDeviceObserverproxy::BluetoothRemoteDeviceObserverproxy(const spt
 BluetoothRemoteDeviceObserverproxy::~BluetoothRemoteDeviceObserverproxy()
 {}
 
-void BluetoothRemoteDeviceObserverproxy::OnPairStatusChanged(
-    const int32_t transport, const BluetoothRawAddress &device, int32_t status, int32_t cause, std::string causeMessage)
+void BluetoothRemoteDeviceObserverproxy::OnPairStatusChanged(const int32_t transport, const BluetoothRawAddress &device,
+    int32_t status, int32_t cause, const std::string &causeMessage)
 {
     MessageParcel data;
     if (!data.WriteInterfaceToken(BluetoothRemoteDeviceObserverproxy::GetDescriptor())) {
