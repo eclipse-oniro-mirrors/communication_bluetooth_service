@@ -137,8 +137,7 @@ public:
      * @param status Remote device pair status.
      * @since 6
      */
-    virtual void OnPairStatusChanged(const BTTransport transport, const RawAddress &device, int status,
-        int32_t cause = -1, std::string causeMessage = "") = 0;
+    virtual void OnPairStatusChanged(const BTTransport transport, const RawAddress &device, int status) = 0;
 
     /**
      * @brief Remote uuid changed observer.

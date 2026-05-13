@@ -38,6 +38,7 @@ namespace OHOS {
 namespace Bluetooth {
 
 constexpr int32_t CONN_UNKNOWN = 4;
+inline const std::string GATT_DIS_MSG_CONN_UNKNOWN = "CONN_UNKNOWN";
 struct BluetoothGattClientServer::impl {
     class GattClientCallbackImpl;
     class SystemStateObserver;
@@ -100,7 +101,7 @@ public:
             HiSysEventWrite(OHOS::HiviewDFX::HiSysEvent::Domain::BT_SERVICE, "GATT_CLIENT_CONN_STATE",
                 OHOS::HiviewDFX::HiSysEvent::EventType::STATISTIC, "PID", pid, "UID", uid, "STATE", state);
         }
-        callback_->OnConnectionStateChanged(state, newState, CONN_UNKNOWN);
+        callback_->OnConnectionStateChanged(state, newState, CONN_UNKNOWN, GATT_DIS_MSG_CONN_UNKNOWN);
     }
 
     void OnCharacteristicChanged(const Characteristic &characteristic) override
