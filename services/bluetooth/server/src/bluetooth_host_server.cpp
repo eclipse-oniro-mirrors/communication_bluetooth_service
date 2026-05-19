@@ -355,7 +355,7 @@ public:
             if (PermissionUtils::VerifyUseBluetoothPermission(tokenId) == PERMISSION_DENIED) {
                 HILOGE("false, check permission failed");
             } else {
-                observer->OnPairStatusChanged(transport, device, status, PAIR_COMMON_BOND_CAUSE);
+                observer->OnPairStatusChanged(transport, device, status, PAIR_COMMON_BOND_CAUSE, BOND_MSG_NO_ERROR);
             }
         });
     }
@@ -531,7 +531,7 @@ public:
             if (PermissionUtils::VerifyUseBluetoothPermission(tokenId) == PERMISSION_DENIED) {
                 HILOGE("false, check permission failed");
             } else {
-                observer->OnPairStatusChanged(transport, device, status, PAIR_COMMON_BOND_CAUSE);
+                observer->OnPairStatusChanged(transport, device, status, PAIR_COMMON_BOND_CAUSE, BOND_MSG_NO_ERROR);
             }
         });
     }

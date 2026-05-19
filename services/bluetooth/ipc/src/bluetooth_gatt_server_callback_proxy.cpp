@@ -46,8 +46,8 @@ void BluetoothGattServerCallbackProxy::OnCharacteristicReadRequest(
     }
     return;
 }
-void BluetoothGattServerCallbackProxy::OnConnectionStateChanged(
-    const BluetoothGattDevice &device, int32_t ret, int32_t state, int32_t disconnectReason)
+void BluetoothGattServerCallbackProxy::OnConnectionStateChanged(const BluetoothGattDevice &device, int32_t ret,
+    int32_t state, int32_t disconnectReason, const std::string &reasonMessage)
 {
     HILOGI("BluetoothGattServerCallbackProxy::OnConnectionStateChanged Triggered!");
     MessageParcel data;
