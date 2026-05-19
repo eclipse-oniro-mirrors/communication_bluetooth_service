@@ -576,7 +576,7 @@ public:
             if (PermissionManager::VerifyPermission(ACCESS_BLUETOOTH, tokenId) == false) {
                 HILOGE("false, check permission failed");
             } else {
-                observer->OnPairStatusChanged(transport, device, status, PAIR_COMMON_BOND_CAUSE);
+                observer->OnPairStatusChanged(transport, device, status, PAIR_COMMON_BOND_CAUSE, BOND_MSG_NO_ERROR);
             }
         });
     }

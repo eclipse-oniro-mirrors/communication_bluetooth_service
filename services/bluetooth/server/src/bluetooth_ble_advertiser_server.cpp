@@ -330,5 +330,17 @@ int BluetoothBleAdvertiserServer::ChangeAdvertisingParams(uint8_t advHandle,
     HILOGI("NOT SUPPORT NOW");
     return BT_ERR_API_NOT_SUPPORT;
 }
+
+int BluetoothBleAdvertiserServer::BleStartRangeAdv(bluetooth::BleAppType appType)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return BT_ERR_API_NOT_SUPPORT;
+}
+
+int BluetoothBleAdvertiserServer::BleStopRangeAdv(bluetooth::BleAppType appType)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return BT_ERR_API_NOT_SUPPORT;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS
