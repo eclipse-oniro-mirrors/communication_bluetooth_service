@@ -18,71 +18,62 @@
 #include "bluetooth_errorcode.h"
 #include "ipc_types.h"
 #include "string_ex.h"
+#include "permission_manager.h"
+
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) BluetoothGattServerInterfaceCode::code, {&BluetoothGattServerStub::func, perm}
 
 namespace OHOS {
 namespace Bluetooth {
+using namespace OHOS::bluetooth;
+
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const std::map<uint32_t, BluetoothGattServerStub::GattServerStubFuncPerm> BluetoothGattServerStub::memberFuncMap_ = {
+    {STUB_FUNC(GATT_SERVER_ADD_SERVICE, AddServiceInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_CLEAR_SERVICES, ClearServicesInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_CONNECT, ConnectInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GATT_SERVER_CANCEL_CONNECTION, CancelConnectionInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GATT_SERVER_REGISTER, RegisterApplicationInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_DEREGISTER, DeregisterApplicationInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_NOTIFY_CLIENT, NotifyClientInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_REMOVE_SERVICE, RemoveServiceInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_RESPOND_CHARACTERISTIC_READ, RespondCharacteristicReadInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_RESPOND_CHARACTERISTIC_WRITE, RespondCharacteristicWriteInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_RESPOND_DESCRIPTOR_READ, RespondDescriptorReadInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_RESPOND_DESCRIPTOR_WRITE, RespondDescriptorWriteInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_GET_CONNECTED_STATE, GetConnectedStateInner,
+    CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_SET_PHY, SetPhyInner,
+    CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GATT_SERVER_READ_PHY, ReadPhyInner,
+    CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+};
+
 BluetoothGattServerStub::BluetoothGattServerStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_ADD_SERVICE)] =
-        &BluetoothGattServerStub::AddServiceInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_CLEAR_SERVICES)] =
-        &BluetoothGattServerStub::ClearServicesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_CANCEL_CONNECTION)] =
-        &BluetoothGattServerStub::CancelConnectionInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_REGISTER)] =
-        &BluetoothGattServerStub::RegisterApplicationInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_DEREGISTER)] =
-        &BluetoothGattServerStub::DeregisterApplicationInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_NOTIFY_CLIENT)] =
-        &BluetoothGattServerStub::NotifyClientInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_REMOVE_SERVICE)] =
-        &BluetoothGattServerStub::RemoveServiceInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_RESPOND_CHARACTERISTIC_READ)] =
-        &BluetoothGattServerStub::RespondCharacteristicReadInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_RESPOND_CHARACTERISTIC_WRITE)] =
-        &BluetoothGattServerStub::RespondCharacteristicWriteInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_RESPOND_DESCRIPTOR_READ)] =
-        &BluetoothGattServerStub::RespondDescriptorReadInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_RESPOND_DESCRIPTOR_WRITE)] =
-        &BluetoothGattServerStub::RespondDescriptorWriteInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_CONNECT)] =
-        &BluetoothGattServerStub::ConnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_GET_CONNECTED_STATE)] =
-        &BluetoothGattServerStub::GetConnectedStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_SET_PHY)] =
-        &BluetoothGattServerStub::SetPhyInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothGattServerInterfaceCode::GATT_SERVER_READ_PHY)] =
-        &BluetoothGattServerStub::ReadPhyInner;
-}
+{}
 
 BluetoothGattServerStub::~BluetoothGattServerStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_.clear();
-}
+{}
 int BluetoothGattServerStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    HILOGD("BluetoothGattServerStub::OnRemoteRequest, cmd = %{public}u, flags= %{public}d", code, option.GetFlags());
-    std::u16string descriptor = BluetoothGattServerStub::GetDescriptor();
-    std::u16string remoteDescriptor = data.ReadInterfaceToken();
-    if (descriptor != remoteDescriptor) {
-        HILOGI("local descriptor is not equal to remote");
-        return ERR_INVALID_STATE;
-    }
-
-    auto itFunc = memberFuncMap_.find(code);
-    if (itFunc != memberFuncMap_.end()) {
-        auto memberFunc = itFunc->second;
-        if (memberFunc != nullptr) {
-            return (this->*memberFunc)(data, reply);
-        }
-    }
-    HILOGW("BluetoothGattServerStub::OnRemoteRequest, default case, need check.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothGattServerStub);
 }
-ErrCode BluetoothGattServerStub::AddServiceInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::AddServiceInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t appID = data.ReadInt32();
     std::shared_ptr<BluetoothGattService> service(data.ReadParcelable<BluetoothGattService>());
@@ -97,7 +88,7 @@ ErrCode BluetoothGattServerStub::AddServiceInner(MessageParcel &data, MessagePar
     }
     return NO_ERROR;
 }
-ErrCode BluetoothGattServerStub::ClearServicesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::ClearServicesInner(MessageParcel &data, MessageParcel &reply)
 {
     int appId = data.ReadInt32();
     int result = ClearServices(appId);
@@ -109,7 +100,7 @@ ErrCode BluetoothGattServerStub::ClearServicesInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothGattServerStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
 {
     int appId = data.ReadInt32();
     std::shared_ptr<BluetoothGattDevice> device(data.ReadParcelable<BluetoothGattDevice>());
@@ -118,14 +109,14 @@ ErrCode BluetoothGattServerStub::ConnectInner(MessageParcel &data, MessageParcel
     return Connect(appId, *device, isDirect);
 }
 
-ErrCode BluetoothGattServerStub::CancelConnectionInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::CancelConnectionInner(MessageParcel &data, MessageParcel &reply)
 {
     int appId = data.ReadInt32();
     std::shared_ptr<BluetoothGattDevice> device(data.ReadParcelable<BluetoothGattDevice>());
     CHECK_AND_RETURN_LOG_RET(device != nullptr, TRANSACTION_ERR, "Read parcelable BluetoothGattDevice failed");
     return CancelConnection(appId, *device);
 }
-ErrCode BluetoothGattServerStub::RegisterApplicationInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::RegisterApplicationInner(MessageParcel &data, MessageParcel &reply)
 {
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
     const sptr<IBluetoothGattServerCallback> callback = OHOS::iface_cast<IBluetoothGattServerCallback>(remote);
@@ -137,7 +128,7 @@ ErrCode BluetoothGattServerStub::RegisterApplicationInner(MessageParcel &data, M
     }
     return NO_ERROR;
 }
-ErrCode BluetoothGattServerStub::DeregisterApplicationInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::DeregisterApplicationInner(MessageParcel &data, MessageParcel &reply)
 {
     int appId = data.ReadInt32();
     int result = DeregisterApplication(appId);
@@ -148,7 +139,7 @@ ErrCode BluetoothGattServerStub::DeregisterApplicationInner(MessageParcel &data,
     }
     return NO_ERROR;
 }
-ErrCode BluetoothGattServerStub::NotifyClientInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::NotifyClientInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothGattDevice> device(data.ReadParcelable<BluetoothGattDevice>());
     if (!device) {
@@ -167,7 +158,7 @@ ErrCode BluetoothGattServerStub::NotifyClientInner(MessageParcel &data, MessageP
     }
     return NO_ERROR;
 }
-ErrCode BluetoothGattServerStub::RemoveServiceInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::RemoveServiceInner(MessageParcel &data, MessageParcel &reply)
 {
     int appId = data.ReadInt32();
     std::shared_ptr<BluetoothGattService> service(data.ReadParcelable<BluetoothGattService>());
@@ -182,7 +173,7 @@ ErrCode BluetoothGattServerStub::RemoveServiceInner(MessageParcel &data, Message
     }
     return NO_ERROR;
 }
-ErrCode BluetoothGattServerStub::RespondCharacteristicReadInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::RespondCharacteristicReadInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothGattDevice> device(data.ReadParcelable<BluetoothGattDevice>());
     if (!device) {
@@ -201,7 +192,7 @@ ErrCode BluetoothGattServerStub::RespondCharacteristicReadInner(MessageParcel &d
     }
     return NO_ERROR;
 }
-ErrCode BluetoothGattServerStub::RespondCharacteristicWriteInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::RespondCharacteristicWriteInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothGattDevice> device(data.ReadParcelable<BluetoothGattDevice>());
     if (!device) {
@@ -220,7 +211,7 @@ ErrCode BluetoothGattServerStub::RespondCharacteristicWriteInner(MessageParcel &
     }
     return NO_ERROR;
 }
-ErrCode BluetoothGattServerStub::RespondDescriptorReadInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::RespondDescriptorReadInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothGattDevice> device(data.ReadParcelable<BluetoothGattDevice>());
     if (!device) {
@@ -239,7 +230,7 @@ ErrCode BluetoothGattServerStub::RespondDescriptorReadInner(MessageParcel &data,
     }
     return NO_ERROR;
 }
-ErrCode BluetoothGattServerStub::RespondDescriptorWriteInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::RespondDescriptorWriteInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothGattDevice> device(data.ReadParcelable<BluetoothGattDevice>());
     if (!device) {
@@ -259,7 +250,7 @@ ErrCode BluetoothGattServerStub::RespondDescriptorWriteInner(MessageParcel &data
     return NO_ERROR;
 }
 
-ErrCode BluetoothGattServerStub::GetConnectedStateInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::GetConnectedStateInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("Not Support");
     if (!reply.WriteInt32(BT_ERR_API_NOT_SUPPORT)) {
@@ -269,7 +260,7 @@ ErrCode BluetoothGattServerStub::GetConnectedStateInner(MessageParcel &data, Mes
     return NO_ERROR;
 }
 
-ErrCode BluetoothGattServerStub::SetPhyInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::SetPhyInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("Not Support");
     if (!reply.WriteInt32(BT_ERR_API_NOT_SUPPORT)) {
@@ -279,7 +270,7 @@ ErrCode BluetoothGattServerStub::SetPhyInner(MessageParcel &data, MessageParcel 
     return NO_ERROR;
 }
 
-ErrCode BluetoothGattServerStub::ReadPhyInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothGattServerStub::ReadPhyInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("Not Support");
     if (!reply.WriteInt32(BT_ERR_API_NOT_SUPPORT)) {

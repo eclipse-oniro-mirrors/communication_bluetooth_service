@@ -18,6 +18,7 @@
 #include <map>
 #include <iremote_stub.h>
 #include "i_bluetooth_pan.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -26,23 +27,21 @@ public:
     BluetoothPanStub();
     ~BluetoothPanStub();
 
-    virtual int OnRemoteRequest(
-        uint32_t code,
-        MessageParcel& data,
-        MessageParcel& reply,
-        MessageOption& option) override;
+    int OnRemoteRequest(uint32_t code, MessageParcel& data, MessageParcel& reply, MessageOption& option) override;
+    using BluetoothPanStubFunc = std::function<int32_t(BluetoothPanStub *, MessageParcel &, MessageParcel &)>;
+    using BluetoothPanStubFuncPerm = std::pair<BluetoothPanStub, std::shared_ptr<PermissionItem>>;
 
 private:
     int32_t DisconnectInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DeregisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DeregisterObserverInner(MessageParcel &data, MessageParcel &reply);
     int32_t SetTetheringInner(MessageParcel &data, MessageParcel &reply);
     int32_t IsTetheringOnInner(MessageParcel &data, MessageParcel &reply);
 
-    using BluetoothPanFunc = ErrCode (BluetoothPanStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, BluetoothPanFunc> memberFuncMap_;
+private:
+    static const std::map<uint32_t, BluetoothPanStubFuncPerm> memberFuncMap_;
     DISALLOW_COPY_AND_MOVE(BluetoothPanStub);
 };
 }  // namespace Bluetooth

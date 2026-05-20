@@ -34,7 +34,6 @@
 #include "class_creator.h"
 #include "foundation/communication/bluetooth_service/services/bluetooth/service/src/dialog/dialog_switch.h"
 #include "interface_adapter_classic.h"
-#include "permission_utils.h"
 #include "permission_manager.h"
 #include "power_manager.h"
 #include "profile_config.h"
@@ -353,11 +352,6 @@ bool AdapterManager::Enable(const BTTransport transport) const
     std::lock_guard<std::recursive_mutex> lock(pimpl->syncMutex_);
     std::string propertynames[] = {PROPERTY_BREDR_TURNON, PROPERTY_BLE_TURNON};
 
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        LOG_ERROR("Enable() false, check permission failed");
-        return false;
-    }
-
     if (GetSysState() != SYS_STATE_STARTED) {
         LOG_ERROR("AdapterManager system is stoped");
         return false;
@@ -370,7 +364,7 @@ bool AdapterManager::Enable(const BTTransport transport) const
     }
 
     if (GetState(transport) == BTStateID::STATE_TURN_OFF) {
-        if (!PermissionManager::IsSystemHap() && transport == ADAPTER_BLE &&
+        if (!Bluetooth::PermissionManager::IsSystemHap() && transport == ADAPTER_BLE &&
             DialogSwitch::RequestBluetoothSwitchDialog(ENABLE_BLUETOOTH)) {
             return true;
         }
@@ -395,11 +389,6 @@ bool AdapterManager::Disable(const BTTransport transport) const
     LOG_DEBUG("%{public}s start transport is %{public}d", __PRETTY_FUNCTION__, transport);
     std::lock_guard<std::recursive_mutex> lock(pimpl->syncMutex_);
     std::string propertynames[] = {PROPERTY_BREDR_TURNON, PROPERTY_BLE_TURNON};
-
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        LOG_ERROR("Disable() false, check permission failed");
-        return false;
-    }
 
     if ((transport == ADAPTER_BREDR && pimpl->classicAdapter_ == nullptr) ||
         (transport == ADAPTER_BLE && pimpl->bleAdapter_ == nullptr)) {

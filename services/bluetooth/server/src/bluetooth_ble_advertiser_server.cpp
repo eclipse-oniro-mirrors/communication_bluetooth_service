@@ -22,7 +22,6 @@
 #include "interface_adapter_manager.h"
 #include "ipc_skeleton.h"
 #include "remote_observer_list.h"
-#include "permission_utils.h"
 #include "safe_map.h"
 
 #define ADVERTISE_FAILED_TOO_MANY_ADVERTISERS 0x02
@@ -204,11 +203,6 @@ int BluetoothBleAdvertiserServer::StartAdvertising(const BluetoothBleAdvertiserS
     uint16_t duration, bool isRawData)
 {
     HILOGI("enter");
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
-
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     if (bleService != nullptr) {
         BleAdvertiserSettingsImpl settingsImpl;
@@ -245,11 +239,6 @@ int BluetoothBleAdvertiserServer::DisableAdvertising(uint8_t advHandle)
 int BluetoothBleAdvertiserServer::StopAdvertising(int32_t advHandle)
 {
     HILOGI("enter, advHandle: %{public}d", advHandle);
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
-
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     if (bleService != nullptr) {
         bleService->StopAdvertising(advHandle);
@@ -312,10 +301,6 @@ int32_t BluetoothBleAdvertiserServer::GetAdvertiserHandle(int32_t &advHandle,
     const sptr<IBluetoothBleAdvertiseCallback> &callback)
 {
     HILOGI("enter");
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     if (bleService == nullptr) {
         return BT_ERR_INTERNAL_ERROR;

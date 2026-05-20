@@ -21,6 +21,7 @@
 #include "iremote_stub.h"
 #include "i_bluetooth_host.h"
 #include "i_bluetooth_avrcp_ct.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -29,46 +30,47 @@ public:
     BluetoothAvrcpCtStub();
     virtual ~BluetoothAvrcpCtStub();
 
-    virtual int OnRemoteRequest(
-        uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    using AvrcpCtStubFunc = std::function<int32_t(BluetoothAvrcpCtStub *, MessageParcel &, MessageParcel &)>;
+    using AvrcpCtStubFuncPerm = std::pair<AvrcpCtStubFunc, std::shared_ptr<PermissionItem>>;
 
 private:
-    ErrCode RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode UnregisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetConnectedDevicesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ConnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DisconnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode PressButtonnner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ReleaseButtonInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetUnitInfoInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetSubUnitInfoInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetSupportedCompaniesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetSupportedEventsInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetPlayerAppSettingAttributesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetPlayerAppSettingValuesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetPlayerAppSettingCurrentValueInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetPlayerAppSettingCurrentValueInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetPlayerAppSettingAttributeTextInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetPlayerAppSettingValueTextInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetElementAttributesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetPlayStatusInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode PlayItemInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetFolderItemsInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetTotalNumberOfItemsInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetAbsoluteVolumeInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode EnableNotificationInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DisableNotificationInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetItemAttributesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetBrowsedPlayerInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetMeidaPlayerListInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t UnregisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetConnectedDevicesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ConnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DisconnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t PressButtonnner(MessageParcel &data, MessageParcel &reply);
+    int32_t ReleaseButtonInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetUnitInfoInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetSubUnitInfoInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetSupportedCompaniesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetSupportedEventsInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetPlayerAppSettingAttributesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetPlayerAppSettingValuesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetPlayerAppSettingCurrentValueInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetPlayerAppSettingCurrentValueInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetPlayerAppSettingAttributeTextInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetPlayerAppSettingValueTextInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetElementAttributesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetPlayStatusInner(MessageParcel &data, MessageParcel &reply);
+    int32_t PlayItemInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetFolderItemsInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetTotalNumberOfItemsInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetAbsoluteVolumeInner(MessageParcel &data, MessageParcel &reply);
+    int32_t EnableNotificationInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DisableNotificationInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetItemAttributesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetBrowsedPlayerInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetMeidaPlayerListInner(MessageParcel &data, MessageParcel &reply);
 
     bool IsInvalidAttributesSize(int32_t attributesSize);
     bool IsInvalidDeviceStatesSize(int32_t statesSize);
 
-    using BluetoothAvrcpCtStubFunc = ErrCode (BluetoothAvrcpCtStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, BluetoothAvrcpCtStubFunc> memberFuncMap_;
+private:
+    static const std::map<uint32_t, AvrcpCtStubFuncPerm> memberFuncMap_;
 
     DISALLOW_COPY_AND_MOVE(BluetoothAvrcpCtStub);
 };

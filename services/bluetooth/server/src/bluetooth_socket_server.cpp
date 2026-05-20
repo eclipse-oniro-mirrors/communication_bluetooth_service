@@ -19,7 +19,6 @@
 #include "bt_def.h"
 #include "interface_profile_manager.h"
 #include "interface_profile_socket.h"
-#include "permission_utils.h"
 #include "bluetooth_socket_server.h"
 
 using namespace OHOS::bluetooth;
@@ -28,10 +27,6 @@ namespace OHOS {
 namespace Bluetooth {
 int BluetoothSocketServer::Connect(ConnectSocketParam &param, int &fd)
 {
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_INTERNAL_ERROR;
-    }
     IProfileSocket *socket = (IProfileSocket *)IProfileManager::GetInstance()->GetProfileService(PROFILE_NAME_SPP);
     if (socket != nullptr) {
         fd = socket->Connect(param.addr, param.uuid, (int)param.securityFlag, (int)param.type);
@@ -42,11 +37,6 @@ int BluetoothSocketServer::Connect(ConnectSocketParam &param, int &fd)
 
 int BluetoothSocketServer::Listen(ListenSocketParam &param, int &fd)
 {
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
-
     IProfileSocket *socket = (IProfileSocket *)IProfileManager::GetInstance()->GetProfileService(PROFILE_NAME_SPP);
     if (socket != nullptr) {
         fd = socket->Listen(param.name, param.uuid, (int)param.securityFlag, (int)param.type);

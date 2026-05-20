@@ -22,7 +22,6 @@
 #include "interface_profile_avrcp_ct.h"
 #include "interface_profile_manager.h"
 #include "remote_observer_list.h"
-#include "permission_utils.h"
 
 
 namespace OHOS {
@@ -818,10 +817,6 @@ std::vector<RawAddress> BluetoothAvrcpCtServer::GetDevicesByStates(const std::ve
 {
     HILOGI("start.");
     std::vector<RawAddress> devices {};
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return devices;
-    }
     if (pimpl->IsEnabled()) {
         std::vector<int> convertStates;
         for (auto state : states) {
@@ -839,10 +834,6 @@ std::vector<RawAddress> BluetoothAvrcpCtServer::GetDevicesByStates(const std::ve
 int32_t BluetoothAvrcpCtServer::GetDeviceState(const RawAddress &device)
 {
     HILOGI("addr: %{public}s", GetEncryptAddr(device.GetAddress()).c_str());
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_FAILURE;
-    }
     int32_t result = 0;
 
     if (pimpl->IsEnabled()) {

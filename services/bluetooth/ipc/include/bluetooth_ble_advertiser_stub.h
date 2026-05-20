@@ -20,6 +20,7 @@
 
 #include "i_bluetooth_ble_advertiser.h"
 #include "iremote_stub.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -27,26 +28,29 @@ class BluetoothBleAdvertiserStub : public IRemoteStub<IBluetoothBleAdvertiser> {
 public:
     BluetoothBleAdvertiserStub();
     ~BluetoothBleAdvertiserStub() override;
-    DISALLOW_COPY_AND_MOVE(BluetoothBleAdvertiserStub);
 
-    virtual int OnRemoteRequest(
-        uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    using BleAdvertiserStubFunc =
+        std::function<int32_t(BluetoothBleAdvertiserStub *, MessageParcel &, MessageParcel &)>;
+
+    using BleAdvertiserStubFuncPerm = std::pair<BleAdvertiserStubFunc, std::shared_ptr<PermissionItem>>;
+    using BleAdvertiserStubFuncMap = std::map<uint32_t, BleAdvertiserStubFuncPerm>;
 
 private:
-    static const std::map<uint32_t,
-        std::function<ErrCode(BluetoothBleAdvertiserStub *, MessageParcel &, MessageParcel &)>>
-        interfaces_;
+    int32_t RegisterBleAdvertiserCallbackInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DeregisterBleAdvertiserCallbackInner(MessageParcel &data, MessageParcel &reply);
+    int32_t StartAdvertisingInner(MessageParcel &data, MessageParcel &reply);
+    int32_t EnableAdvertisingInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DisableAdvertisingInner(MessageParcel &data, MessageParcel &reply);
+    int32_t StopAdvertisingInner(MessageParcel &data, MessageParcel &reply);
+    int32_t CloseInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetAdvertiserHandleInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetAdvertisingDataInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ChangeAdvertisingParamsInner(MessageParcel &data, MessageParcel &reply);
 
-    ErrCode RegisterBleAdvertiserCallbackInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DeregisterBleAdvertiserCallbackInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode StartAdvertisingInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode EnableAdvertisingInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DisableAdvertisingInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode StopAdvertisingInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode CloseInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetAdvertiserHandleInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetAdvertisingDataInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ChangeAdvertisingParamsInner(MessageParcel &data, MessageParcel &reply);
+private:
+    static const BleAdvertiserStubFuncMap memberFuncMap_;
+    DISALLOW_COPY_AND_MOVE(BluetoothBleAdvertiserStub);
 };
 }  // namespace Bluetooth
 }  // namespace OHOS
