@@ -130,7 +130,26 @@ int32_t BluetoothSocketStub::DeregisterServerObserverInner(MessageParcel &data, 
 
 int32_t BluetoothSocketStub::RegisterClientObserverInner(MessageParcel &data, MessageParcel &reply)
 {
-    return reply.WriteInt32(BT_NO_ERROR);
+    sptr<BluetoothRawAddress> addr(data.ReadStrongParcelable<BluetoothRawAddress>());
+    if (!addr) {
+        HILOGE("BluetoothSocketStub::RegisterClientObserver failed");
+        return ERR_INVALID_VALUE;
+    }
+    std::shared_ptr<BluetoothUuid> uuid(data.ReadParcelable<BluetoothUuid>());
+    if (uuid == nullptr) {
+        HILOGE("reply writing failed in: %{public}s.", __func__);
+        return ERR_INVALID_VALUE;
+    }
+    sptr<IBluetoothClientSocketObserver> observer =
+        OHOS::iface_cast<IBluetoothClientSocketObserver>(data.ReadRemoteObject());
+    CHECK_AND_RETURN_LOG_RET(observer != nullptr, ERR_INVALID_VALUE, "observer is nullptr");
+    int result = RegisterClientObserver(*addr, *uuid, observer);
+    bool ret = reply.WriteInt32(result);
+    if (!ret) {
+        HILOGE("reply writing failed.");
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
+    return BT_NO_ERROR;
 }
 
 int32_t BluetoothSocketStub::DeregisterClientObserverInner(MessageParcel &data, MessageParcel &reply)

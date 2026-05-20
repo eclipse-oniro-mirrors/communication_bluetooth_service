@@ -58,6 +58,9 @@ int BluetoothSocketServer::DeregisterServerObserver(const sptr<IBluetoothServerS
 int BluetoothSocketServer::RegisterClientObserver(const BluetoothRawAddress &addr, const bluetooth::Uuid uuid,
     const sptr<IBluetoothClientSocketObserver> &observer)
 {
+    if (!IsValidAddress(addr.GetAddress())) {
+        return BT_ERR_INTERNAL_ERROR;
+    }
     return BT_ERR_API_NOT_SUPPORT;
 }
 
