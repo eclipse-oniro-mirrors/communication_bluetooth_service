@@ -386,7 +386,7 @@ public:
             if (!CheckDiscoverOrAccessPermission(tokenId)) {
                 return;
             }
-            observer->OnPairStatusChanged(transport, device, status, PAIR_COMMON_BOND_CAUSE);
+            observer->OnPairStatusChanged(transport, device, status, PAIR_COMMON_BOND_CAUSE, BOND_MSG_NO_ERROR);
         });
     }
 
