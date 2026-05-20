@@ -20,6 +20,7 @@
 
 #include "i_bluetooth_ble_central_manager.h"
 #include "iremote_stub.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -27,34 +28,37 @@ class BluetoothBleCentralManagerStub : public IRemoteStub<IBluetoothBleCentralMa
 public:
     BluetoothBleCentralManagerStub();
     ~BluetoothBleCentralManagerStub() override;
-    DISALLOW_COPY_AND_MOVE(BluetoothBleCentralManagerStub);
 
-    virtual int OnRemoteRequest(
-        uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+
+    using BleCentralManagerStubFunc =
+        std::function<int32_t(BluetoothBleCentralManagerStub *, MessageParcel &, MessageParcel &)>;
+    using BleCentralManagerStubFuncPerm = std::pair<BleCentralManagerStubFunc, std::shared_ptr<PermissionItem>>;
+    using BleCentralManagerStubFuncMap = std::map<uint32_t, BleCentralManagerStubFuncPerm>;
 
 private:
-    static const std::map<uint32_t,
-        std::function<ErrCode(BluetoothBleCentralManagerStub *, MessageParcel &, MessageParcel &)>>
-        interfaces_;
+    int32_t RegisterBleCentralManagerCallbackInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DeregisterBleCentralManagerCallbackInner(MessageParcel &data, MessageParcel &reply);
+    int32_t StartScanInner(MessageParcel &data, MessageParcel &reply);
+    int32_t StopScanInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RemoveScanFilterInner(MessageParcel &data, MessageParcel &reply);
+    int32_t FreezeByRssInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ResetAllProxyInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetLpDeviceAdvParamInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetScanReportChannelToLpDeviceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t EnableSyncDataToLpDeviceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DisableSyncDataToLpDeviceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SendParamsToLpDeviceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t IsLpDeviceAvailableInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetLpDeviceParamInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RemoveLpDeviceParamInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ChangeScanParamsInner(MessageParcel &data, MessageParcel &reply);
+    int32_t IsValidScannerIdInner(MessageParcel &data, MessageParcel &reply);
+    int32_t FlushBatchScanResultsInner(MessageParcel &data, MessageParcel &reply);
 
-    ErrCode RegisterBleCentralManagerCallbackInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DeregisterBleCentralManagerCallbackInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode StartScanInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode StopScanInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RemoveScanFilterInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode FreezeByRssInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ResetAllProxyInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetLpDeviceAdvParamInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetScanReportChannelToLpDeviceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode EnableSyncDataToLpDeviceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DisableSyncDataToLpDeviceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SendParamsToLpDeviceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode IsLpDeviceAvailableInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetLpDeviceParamInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RemoveLpDeviceParamInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ChangeScanParamsInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode IsValidScannerIdInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode FlushBatchScanResultsInner(MessageParcel &data, MessageParcel &reply);
+private:
+    static const BleCentralManagerStubFuncMap memberFuncMap_;
+    DISALLOW_COPY_AND_MOVE(BluetoothBleCentralManagerStub);
 };
 }  // namespace Bluetooth
 }  // namespace OHOS

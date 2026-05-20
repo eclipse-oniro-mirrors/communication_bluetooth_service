@@ -22,7 +22,6 @@
 #include "interface_profile_avrcp_tg.h"
 #include "interface_profile_manager.h"
 #include "remote_observer_list.h"
-#include "permission_utils.h"
 #include "bluetooth_errorcode.h"
 
 
@@ -209,10 +208,6 @@ void BluetoothAvrcpTgServer::SetActiveDevice(const BluetoothRawAddress &addr)
 int32_t BluetoothAvrcpTgServer::Connect(const BluetoothRawAddress &addr)
 {
     HILOGI("address: %{public}s", GetEncryptAddr(addr.GetAddress()).c_str());
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("Connect error, check permission failed");
-        return BT_FAILURE;
-    }
     int32_t result = 0;
 
     if (pimpl->IsEnabled()) {
@@ -265,11 +260,6 @@ std::vector<BluetoothRawAddress> BluetoothAvrcpTgServer::GetDevicesByStates(cons
     HILOGI("start.");
 
     std::vector<BluetoothRawAddress> results;
-
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return results;
-    }
     if (!pimpl->IsEnabled()) {
         HILOGE("service is null or disable ");
         return results;
@@ -295,10 +285,6 @@ std::vector<BluetoothRawAddress> BluetoothAvrcpTgServer::GetDevicesByStates(cons
 int32_t BluetoothAvrcpTgServer::GetDeviceState(const BluetoothRawAddress &addr)
 {
     HILOGI("address: %{public}s", GetEncryptAddr(addr.GetAddress()).c_str());
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_FAILURE;
-    }
     int32_t result = 0;
 
     if (pimpl->IsEnabled()) {

@@ -20,6 +20,7 @@
 
 #include "iremote_stub.h"
 #include "i_bluetooth_gatt_client.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -28,34 +29,34 @@ public:
     BluetoothGattClientStub();
     virtual ~BluetoothGattClientStub();
 
-    virtual int OnRemoteRequest(
-        uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    using GattClientStubFunc = std::function<int32_t(BluetoothGattClientStub *, MessageParcel &, MessageParcel &)>;
+    using GattClientStubFuncPerm = std::pair<GattClientStubFunc, std::shared_ptr<PermissionItem>>;
+private:
+    int32_t RegisterApplicationInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DeregisterApplicationInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ConnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DisconnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DiscoveryServicesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ReadCharacteristicInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ReadCharacteristicByUuidInner(MessageParcel &data, MessageParcel &reply);
+    int32_t WriteCharacteristicInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SignedWriteCharacteristicInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ReadDescriptorInner(MessageParcel &data, MessageParcel &reply);
+    int32_t WriteDescriptorInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RequestExchangeMtuInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetAllDeviceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RequestConnectionPriorityInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetServicesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RequestFastestConnInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ReadRemoteRssiValueInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RequestNotificationInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetConnectedStateInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetPhyInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ReadPhyInner(MessageParcel &data, MessageParcel &reply);
 
 private:
-    ErrCode RegisterApplicationInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DeregisterApplicationInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ConnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DisconnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DiscoveryServicesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ReadCharacteristicInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ReadCharacteristicByUuidInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode WriteCharacteristicInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SignedWriteCharacteristicInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ReadDescriptorInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode WriteDescriptorInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RequestExchangeMtuInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetAllDeviceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RequestConnectionPriorityInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetServicesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RequestFastestConnInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ReadRemoteRssiValueInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RequestNotificationInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetConnectedStateInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetPhyInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ReadPhyInner(MessageParcel &data, MessageParcel &reply);
-
-    using BluetoothHostFunc = ErrCode (BluetoothGattClientStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, BluetoothHostFunc> memberFuncMap_;
+    static const std::map<uint32_t, GattClientStubFuncPerm> memberFuncMap_;
     DISALLOW_COPY_AND_MOVE(BluetoothGattClientStub);
 };
 }  // namespace Bluetooth

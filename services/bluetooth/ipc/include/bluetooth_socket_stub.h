@@ -20,6 +20,7 @@
 
 #include "iremote_stub.h"
 #include "i_bluetooth_socket.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -28,21 +29,21 @@ public:
     BluetoothSocketStub();
     ~BluetoothSocketStub();
 
-    virtual int32_t OnRemoteRequest(
-        uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    using SocketStubFunc = std::function<int32_t(BluetoothSocketStub *, MessageParcel &, MessageParcel &)>;
+    using SocketStubFuncPerm = std::pair<SocketStubFunc, std::shared_ptr<PermissionItem>>;
 
 private:
-    ErrCode ConnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ListenInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DeregisterServerObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RegisterClientObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DeregisterClientObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode UpdateCocConnectionParamsInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode IsAllowSocketConnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ConnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ListenInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DeregisterServerObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RegisterClientObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DeregisterClientObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t UpdateCocConnectionParamsInner(MessageParcel &data, MessageParcel &reply);
+    int32_t IsAllowSocketConnectInner(MessageParcel &data, MessageParcel &reply);
 
-    using BluetoothSocketFunc = ErrCode (BluetoothSocketStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, BluetoothSocketFunc> memberFuncMap_;
-
+private:
+    static const std::map<uint32_t, SocketStubFuncPerm> memberFuncMap_;
     DISALLOW_COPY_AND_MOVE(BluetoothSocketStub);
 };
 }  // namespace Bluetooth

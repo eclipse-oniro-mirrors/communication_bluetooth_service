@@ -18,62 +18,50 @@
 #include "ipc_types.h"
 #include "parcel_bt_uuid.h"
 #include "raw_address.h"
+#include "permission_manager.h"
+
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) BluetoothA2dpSinkInterfaceCode::code, {&BluetoothA2dpSinkStub::func, perm}
 
 namespace OHOS {
 namespace Bluetooth {
 using namespace OHOS::bluetooth;
 const int32_t A2DP_MAX_SNK_CONNECTION_NUMS = 0x07;
+
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const std::map<uint32_t, BluetoothA2dpSinkStub::A2dpSinkStubFuncPerm> BluetoothA2dpSinkStub::memberFuncMap_ = {
+    {STUB_FUNC(BT_A2DP_SINK_CONNECT, ConnectInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SINK_DISCONNECT, DisconnectInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SINK_REGISTER_OBSERVER, RegisterObserverInner, nullptr)},
+    {STUB_FUNC(BT_A2DP_SINK_DEREGISTER_OBSERVER, DeregisterObserverInner, nullptr)},
+    {STUB_FUNC(BT_A2DP_SINK_GET_DEVICE_BY_STATES, GetDevicesByStatesInner, nullptr)},
+    {STUB_FUNC(BT_A2DP_SINK_GET_DEVICE_STATE, GetDeviceStateInner, nullptr)},
+    {STUB_FUNC(BT_A2DP_SINK_GET_PLAYING_STATE, GetPlayingStateInner, nullptr)},
+    {STUB_FUNC(BT_A2DP_SINK_SET_CONNECT_STRATEGY, SetConnectStrategyInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SINK_GET_CONNECT_STRATEGY, GetConnectStrategyInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_A2DP_SINK_SEND_DELAY, SendDelayInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+};
+
 BluetoothA2dpSinkStub::BluetoothA2dpSinkStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSinkInterfaceCode::BT_A2DP_SINK_CONNECT)] =
-        nullptr;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSinkInterfaceCode::BT_A2DP_SINK_DISCONNECT)] =
-        &BluetoothA2dpSinkStub::DisconnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSinkInterfaceCode::BT_A2DP_SINK_REGISTER_OBSERVER)] =
-        &BluetoothA2dpSinkStub::RegisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSinkInterfaceCode::BT_A2DP_SINK_DEREGISTER_OBSERVER)] =
-        &BluetoothA2dpSinkStub::DeregisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSinkInterfaceCode::BT_A2DP_SINK_GET_DEVICE_BY_STATES)] =
-        &BluetoothA2dpSinkStub::GetDevicesByStatesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSinkInterfaceCode::BT_A2DP_SINK_GET_DEVICE_STATE)] =
-        &BluetoothA2dpSinkStub::GetDeviceStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSinkInterfaceCode::BT_A2DP_SINK_GET_PLAYING_STATE)] =
-        &BluetoothA2dpSinkStub::GetPlayingStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSinkInterfaceCode::BT_A2DP_SINK_SET_CONNECT_STRATEGY)] =
-        &BluetoothA2dpSinkStub::SetConnectStrategyInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSinkInterfaceCode::BT_A2DP_SINK_GET_CONNECT_STRATEGY)] =
-        &BluetoothA2dpSinkStub::GetConnectStrategyInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothA2dpSinkInterfaceCode::BT_A2DP_SINK_SEND_DELAY)] =
-        &BluetoothA2dpSinkStub::SendDelayInner;
-}
+{}
 
 BluetoothA2dpSinkStub::~BluetoothA2dpSinkStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_.clear();
-}
+{}
 
 int BluetoothA2dpSinkStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    HILOGI("BluetoothA2dpSinkStub::OnRemoteRequest, cmd = %{public}d, flags= %{public}d", code, option.GetFlags());
-    if (BluetoothA2dpSinkStub::GetDescriptor() != data.ReadInterfaceToken()) {
-        HILOGI("local descriptor is not equal to remote");
-        return ERR_INVALID_STATE;
-    }
-    auto itFunc = memberFuncMap_.find(code);
-    if (itFunc != memberFuncMap_.end()) {
-        auto memberFunc = itFunc->second;
-        if (memberFunc != nullptr) {
-            return (this->*memberFunc)(data, reply);
-        }
-    }
-    HILOGW("BluetoothA2dpSinkStub::OnRemoteRequest, default case, need check.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothA2dpSinkStub);
 }
 
-ErrCode BluetoothA2dpSinkStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothA2dpSinkStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string addr = data.ReadString();
 
@@ -88,7 +76,7 @@ ErrCode BluetoothA2dpSinkStub::ConnectInner(MessageParcel &data, MessageParcel &
     return NO_ERROR;
 }
 
-ErrCode BluetoothA2dpSinkStub::DisconnectInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothA2dpSinkStub::DisconnectInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string addr = data.ReadString();
 
@@ -103,7 +91,7 @@ ErrCode BluetoothA2dpSinkStub::DisconnectInner(MessageParcel &data, MessageParce
     return NO_ERROR;
 }
 
-ErrCode BluetoothA2dpSinkStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothA2dpSinkStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
     const sptr<IBluetoothA2dpSinkObserver> observer = OHOS::iface_cast<IBluetoothA2dpSinkObserver>(remote);
@@ -112,7 +100,7 @@ ErrCode BluetoothA2dpSinkStub::RegisterObserverInner(MessageParcel &data, Messag
     return NO_ERROR;
 }
 
-ErrCode BluetoothA2dpSinkStub::DeregisterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothA2dpSinkStub::DeregisterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
     const sptr<IBluetoothA2dpSinkObserver> observer = OHOS::iface_cast<IBluetoothA2dpSinkObserver>(remote);
@@ -121,7 +109,7 @@ ErrCode BluetoothA2dpSinkStub::DeregisterObserverInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothA2dpSinkStub::GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothA2dpSinkStub::GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply)
 {
     std::vector<int32_t> states = {};
     int32_t stateSize = data.ReadInt32();
@@ -146,7 +134,7 @@ ErrCode BluetoothA2dpSinkStub::GetDevicesByStatesInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothA2dpSinkStub::GetDeviceStateInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothA2dpSinkStub::GetDeviceStateInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string addr = data.ReadString();
 
@@ -161,7 +149,7 @@ ErrCode BluetoothA2dpSinkStub::GetDeviceStateInner(MessageParcel &data, MessageP
     return NO_ERROR;
 }
 
-ErrCode BluetoothA2dpSinkStub::GetPlayingStateInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothA2dpSinkStub::GetPlayingStateInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string addr = data.ReadString();
     int32_t state = 0;
@@ -172,7 +160,7 @@ ErrCode BluetoothA2dpSinkStub::GetPlayingStateInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothA2dpSinkStub::SetConnectStrategyInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothA2dpSinkStub::SetConnectStrategyInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string addr = data.ReadString();
     int strategy = data.ReadInt32();
@@ -188,7 +176,7 @@ ErrCode BluetoothA2dpSinkStub::SetConnectStrategyInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothA2dpSinkStub::GetConnectStrategyInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothA2dpSinkStub::GetConnectStrategyInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string addr = data.ReadString();
     int result = GetConnectStrategy(RawAddress(addr));
@@ -202,7 +190,7 @@ ErrCode BluetoothA2dpSinkStub::GetConnectStrategyInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothA2dpSinkStub::SendDelayInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothA2dpSinkStub::SendDelayInner(MessageParcel &data, MessageParcel &reply)
 {
     std::string addr = data.ReadString();
     int delayValue = data.ReadInt32();

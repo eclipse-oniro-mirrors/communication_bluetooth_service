@@ -26,7 +26,7 @@
 #include "interface_adapter_manager.h"
 #include "ipc_skeleton.h"
 #include "remote_observer_list.h"
-#include "permission_utils.h"
+#include "permission_manager.h"
 #include "bluetooth_ble_central_manager_server.h"
 #include "safe_map.h"
 
@@ -94,27 +94,35 @@ public:
                 HILOGD("pid:%{public}d is proxy pid, not callback.", pid);
                 return;
             }
-            if (PermissionUtils::VerifyUseBluetoothPermission(tokenId) == PERMISSION_DENIED) {
-                HILOGE("OnScanCallback(): failed, check permission failed, tokenId: %{public}u", tokenId);
-            } else {
-                BluetoothBleScanResult bleScanResult(result);
-                int32_t scannerId = this->pimpl_->observersScannerId_[observer->AsObject()];
-                std::lock_guard<std::mutex> lock(this->pimpl_->bleScanFiltersMutex_);
-                HILOGD("OnScanCallback() start bleScanFilter Address: %{public}s scannerId:%{public}d",
-                    GetEncryptAddr(result.GetPeripheralDevice().GetRawAddress().GetAddress()).c_str(), scannerId);
-                bool scanFiltersIsEnanled_ = this->pimpl_->observersScanFiltersIsEnanled_[scannerId];
-                // if bleScanFilter been set empty when stopped scan, we need refuse callback instead of filter pass
-                if (!scanFiltersIsEnanled_) {
+            if (PermissionManager::IsNativeCaller(tokenId) ||
+                PermissionManager::GetApiVersion(tokenId) >= API_VERSION_10) {
+                if (!PermissionManager::VerifyPermission(ACCESS_BLUETOOTH, tokenId)) {
+                    HILOGI("check ACCESS_BLUETOOTH permission failed");
                     return;
                 }
-                std::vector<bluetooth::BleScanFilterImpl> scanFilters_ = this->pimpl_->
-                    observersBleScanFilters_[scannerId];
-                if (scanFilters_.empty() ||
-                    BluetoothBleFilterMatcher::MatchesScanFilters(scanFilters_, bleScanResult) == MatchResult::MATCH) {
-                    observer->OnScanCallback(bleScanResult);
-                    HILOGD("OnScanCallback() passed bleScanFilter Address: %{public}s scannerId:%{public}d",
-                        GetEncryptAddr(result.GetPeripheralDevice().GetRawAddress().GetAddress()).c_str(), scannerId);
+            } else {
+                if (!PermissionManager::VerifyPermission(USE_BLUETOOTH, tokenId)) {
+                    HILOGI("check USE_BLUETOOTH permission failed");
+                    return;
                 }
+            }
+            BluetoothBleScanResult bleScanResult(result);
+            int32_t scannerId = this->pimpl_->observersScannerId_[observer->AsObject()];
+            std::lock_guard<std::mutex> lock(this->pimpl_->bleScanFiltersMutex_);
+            HILOGD("OnScanCallback() start bleScanFilter Address: %{public}s scannerId:%{public}d",
+                GetEncryptAddr(result.GetPeripheralDevice().GetRawAddress().GetAddress()).c_str(), scannerId);
+            bool scanFiltersIsEnanled_ = this->pimpl_->observersScanFiltersIsEnanled_[scannerId];
+            // if bleScanFilter been set empty when stopped scan, we need refuse callback instead of filter pass
+            if (!scanFiltersIsEnanled_) {
+                return;
+            }
+            std::vector<bluetooth::BleScanFilterImpl> scanFilters_ = this->pimpl_->
+                observersBleScanFilters_[scannerId];
+            if (scanFilters_.empty() ||
+                BluetoothBleFilterMatcher::MatchesScanFilters(scanFilters_, bleScanResult) == MatchResult::MATCH) {
+                observer->OnScanCallback(bleScanResult);
+                HILOGD("OnScanCallback() passed bleScanFilter Address: %{public}s scannerId:%{public}d",
+                    GetEncryptAddr(result.GetPeripheralDevice().GetRawAddress().GetAddress()).c_str(), scannerId);
             }
         });
     }
@@ -349,19 +357,19 @@ bool BluetoothBleCentralManagerServer::IsResourceScheduleControlApp(int32_t pid)
 
 bool CheckBleScanPermission()
 {
-    if (PermissionUtils::GetApiVersion() >= 10) { // 10:api version
-        if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
+    if (PermissionManager::GetApiVersion() >= API_VERSION_10) { // 10:api version
+        if (PermissionManager::VerifyPermission(ACCESS_BLUETOOTH) == false) {
             HILOGE("check access permission failed.");
             return false;
         }
     } else {
-        if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED ||
-            PermissionUtils::VerifyManageBluetoothPermission() == PERMISSION_DENIED) {
+        if (PermissionManager::VerifyPermission(DISCOVER_BLUETOOTH) == false ||
+            PermissionManager::VerifyPermission(MANAGE_BLUETOOTH) == false) {
             HILOGE("check permission failed.");
             return false;
         }
-        if (PermissionUtils::VerifyApproximatelyPermission() == PERMISSION_DENIED &&
-            PermissionUtils::VerifyLocationPermission() == PERMISSION_DENIED) {
+        if (PermissionManager::VerifyPermission(APPROXIMATELY_LOCATION) == false &&
+            PermissionManager::VerifyPermission(LOCATION) == false) {
             HILOGE("No location permission");
             return false;
         }
@@ -430,11 +438,6 @@ int BluetoothBleCentralManagerServer::StopScan(int32_t scannerId)
     int32_t pid = IPCSkeleton::GetCallingPid();
     int32_t uid = IPCSkeleton::GetCallingUid();
     HILOGI("pid: %{public}d, uid: %{public}d", pid, uid);
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("check permission failed.");
-        return BT_ERR_PERMISSION_FAILED;
-    }
-
     pimpl->eventHandler_->PostSyncTask([&]() {
         if (!pimpl->isScanning) {
             HILOGE("scan is not started.");
@@ -566,11 +569,19 @@ void BluetoothBleCentralManagerServer::DeregisterBleCentralManagerCallbackInner(
 int BluetoothBleCentralManagerServer::ChangeScanParams(int32_t scannerId, const BluetoothBleScanSettings &settings,
     const std::vector<BluetoothBleScanFilter> &filters, uint32_t filterAction)
 {
+    if (!CheckBleScanPermission()) {
+        HILOGE("check permission failed.");
+        return BT_ERR_PERMISSION_FAILED;
+    }
     return BT_ERR_API_NOT_SUPPORT;
 }
 
 int BluetoothBleCentralManagerServer::IsValidScannerId(int32_t scannerId, bool &isValid)
 {
+    if (!CheckBleScanPermission()) {
+        HILOGE("check permission failed.");
+        return BT_ERR_PERMISSION_FAILED;
+    }
     isValid = true;
     return NO_ERROR;
 }

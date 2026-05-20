@@ -20,34 +20,37 @@
 #include "ipc_types.h"
 #include "parcel_bt_uuid.h"
 #include "bt_def.h"
+#include "permission_manager.h"
 
-using std::placeholders::_1;
-using std::placeholders::_2;
-using std::placeholders::_3;
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) \
+BluetoothBleAdvertiserInterfaceCode::code, {&BluetoothBleAdvertiserStub::func, perm} \
+
 namespace OHOS {
 namespace Bluetooth {
-const std::map<uint32_t, std::function<ErrCode(BluetoothBleAdvertiserStub *, MessageParcel &, MessageParcel &)>>
-    BluetoothBleAdvertiserStub::interfaces_ = {
-        {BluetoothBleAdvertiserInterfaceCode::BLE_REGISTER_BLE_ADVERTISER_CALLBACK,
-            std::bind(&BluetoothBleAdvertiserStub::RegisterBleAdvertiserCallbackInner, _1, _2, _3)},
-        {BluetoothBleAdvertiserInterfaceCode::BLE_DE_REGISTER_BLE_ADVERTISER_CALLBACK,
-            std::bind(&BluetoothBleAdvertiserStub::DeregisterBleAdvertiserCallbackInner, _1, _2, _3)},
-        {BluetoothBleAdvertiserInterfaceCode::BLE_START_ADVERTISING,
-            std::bind(&BluetoothBleAdvertiserStub::StartAdvertisingInner, _1, _2, _3)},
-        {BluetoothBleAdvertiserInterfaceCode::BLE_ENABLE_ADVERTISING,
-            std::bind(&BluetoothBleAdvertiserStub::EnableAdvertisingInner, _1, _2, _3)},
-        {BluetoothBleAdvertiserInterfaceCode::BLE_DISABLE_ADVERTISING,
-            std::bind(&BluetoothBleAdvertiserStub::DisableAdvertisingInner, _1, _2, _3)},
-        {BluetoothBleAdvertiserInterfaceCode::BLE_STOP_ADVERTISING,
-            std::bind(&BluetoothBleAdvertiserStub::StopAdvertisingInner, _1, _2, _3)},
-        {BluetoothBleAdvertiserInterfaceCode::BLE_CLOSE,
-            std::bind(&BluetoothBleAdvertiserStub::CloseInner, _1, _2, _3)},
-        {BluetoothBleAdvertiserInterfaceCode::BLE_GET_ADVERTISER_HANDLE,
-            std::bind(&BluetoothBleAdvertiserStub::GetAdvertiserHandleInner, _1, _2, _3)},
-        {BluetoothBleAdvertiserInterfaceCode::BLE_SET_ADVERTISING_DATA,
-            std::bind(&BluetoothBleAdvertiserStub::SetAdvertisingDataInner, _1, _2, _3)},
-        {BluetoothBleAdvertiserInterfaceCode::BLE_CHANGE_ADVERTISING_PARAMS,
-            std::bind(&BluetoothBleAdvertiserStub::ChangeAdvertisingParamsInner, _1, _2, _3)},
+using namespace OHOS::bluetooth;
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const BluetoothBleAdvertiserStub::BleAdvertiserStubFuncMap BluetoothBleAdvertiserStub::memberFuncMap_ = {
+    {STUB_FUNC(BLE_REGISTER_BLE_ADVERTISER_CALLBACK, RegisterBleAdvertiserCallbackInner, nullptr)},
+    {STUB_FUNC(BLE_DE_REGISTER_BLE_ADVERTISER_CALLBACK, DeregisterBleAdvertiserCallbackInner, nullptr)},
+    {STUB_FUNC(BLE_START_ADVERTISING, StartAdvertisingInner,
+        CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BLE_ENABLE_ADVERTISING, EnableAdvertisingInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BLE_DISABLE_ADVERTISING, DisableAdvertisingInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BLE_STOP_ADVERTISING, StopAdvertisingInner,
+        CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BLE_CLOSE, CloseInner,
+        CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BLE_GET_ADVERTISER_HANDLE, GetAdvertiserHandleInner,
+        CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BLE_SET_ADVERTISING_DATA, SetAdvertisingDataInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_CHANGE_ADVERTISING_PARAMS, ChangeAdvertisingParamsInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
 };
 
 BluetoothBleAdvertiserStub::BluetoothBleAdvertiserStub()
@@ -59,33 +62,10 @@ BluetoothBleAdvertiserStub::~BluetoothBleAdvertiserStub()
 int BluetoothBleAdvertiserStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    if (BluetoothBleAdvertiserStub::GetDescriptor() != data.ReadInterfaceToken()) {
-        HILOGW("[OnRemoteRequest] fail: invalid interface token!");
-        return OBJECT_NULL;
-    }
-
-    auto it = interfaces_.find(code);
-    if (it == interfaces_.end()) {
-        HILOGW("[OnRemoteRequest] fail: unknown code!");
-        return IRemoteStub<IBluetoothBleAdvertiser>::OnRemoteRequest(code, data, reply, option);
-    }
-
-    auto fun = it->second;
-    if (fun == nullptr) {
-        HILOGW("[OnRemoteRequest] fail: not find function!");
-        return IRemoteStub<IBluetoothBleAdvertiser>::OnRemoteRequest(code, data, reply, option);
-    }
-
-    ErrCode result = fun(this, data, reply);
-    if (SUCCEEDED(result)) {
-        return NO_ERROR;
-    }
-
-    HILOGW("[OnRemoteRequest] fail: Failed to call interface %{public}u, err:%{public}d", code, result);
-    return result;
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothBleAdvertiserStub);
 }
 
-ErrCode BluetoothBleAdvertiserStub::RegisterBleAdvertiserCallbackInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleAdvertiserStub::RegisterBleAdvertiserCallbackInner(MessageParcel &data, MessageParcel &reply)
 {
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
     const sptr<IBluetoothBleAdvertiseCallback> callBack = OHOS::iface_cast<IBluetoothBleAdvertiseCallback>(remote);
@@ -93,7 +73,7 @@ ErrCode BluetoothBleAdvertiserStub::RegisterBleAdvertiserCallbackInner(MessagePa
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleAdvertiserStub::DeregisterBleAdvertiserCallbackInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleAdvertiserStub::DeregisterBleAdvertiserCallbackInner(MessageParcel &data, MessageParcel &reply)
 {
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
     const sptr<IBluetoothBleAdvertiseCallback> callBack = OHOS::iface_cast<IBluetoothBleAdvertiseCallback>(remote);
@@ -101,7 +81,7 @@ ErrCode BluetoothBleAdvertiserStub::DeregisterBleAdvertiserCallbackInner(Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleAdvertiserStub::StartAdvertisingInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleAdvertiserStub::StartAdvertisingInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothBleAdvertiserSettings> settings(data.ReadParcelable<BluetoothBleAdvertiserSettings>());
     if (settings == nullptr) {
@@ -131,7 +111,7 @@ ErrCode BluetoothBleAdvertiserStub::StartAdvertisingInner(MessageParcel &data, M
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleAdvertiserStub::EnableAdvertisingInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleAdvertiserStub::EnableAdvertisingInner(MessageParcel &data, MessageParcel &reply)
 {
     uint8_t advHandle = data.ReadUint8();
     uint16_t duration = data.ReadUint16();
@@ -143,7 +123,7 @@ ErrCode BluetoothBleAdvertiserStub::EnableAdvertisingInner(MessageParcel &data, 
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleAdvertiserStub::DisableAdvertisingInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleAdvertiserStub::DisableAdvertisingInner(MessageParcel &data, MessageParcel &reply)
 {
     uint8_t advHandle = data.ReadUint8();
     int32_t ret = DisableAdvertising(advHandle);
@@ -154,7 +134,7 @@ ErrCode BluetoothBleAdvertiserStub::DisableAdvertisingInner(MessageParcel &data,
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleAdvertiserStub::StopAdvertisingInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleAdvertiserStub::StopAdvertisingInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t advHandle = data.ReadInt32();
     int32_t ret = StopAdvertising(advHandle);
@@ -165,14 +145,14 @@ ErrCode BluetoothBleAdvertiserStub::StopAdvertisingInner(MessageParcel &data, Me
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleAdvertiserStub::CloseInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleAdvertiserStub::CloseInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t advHandle = data.ReadInt32();
     Close(advHandle);
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleAdvertiserStub::GetAdvertiserHandleInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleAdvertiserStub::GetAdvertiserHandleInner(MessageParcel &data, MessageParcel &reply)
 {
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
     const sptr<IBluetoothBleAdvertiseCallback> callBack = OHOS::iface_cast<IBluetoothBleAdvertiseCallback>(remote);
@@ -187,12 +167,12 @@ ErrCode BluetoothBleAdvertiserStub::GetAdvertiserHandleInner(MessageParcel &data
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleAdvertiserStub::SetAdvertisingDataInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleAdvertiserStub::SetAdvertisingDataInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleAdvertiserStub::ChangeAdvertisingParamsInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleAdvertiserStub::ChangeAdvertisingParamsInner(MessageParcel &data, MessageParcel &reply)
 {
     int advHandle = data.ReadUint8();
     std::shared_ptr<BluetoothBleAdvertiserSettings> settings(data.ReadParcelable<BluetoothBleAdvertiserSettings>());

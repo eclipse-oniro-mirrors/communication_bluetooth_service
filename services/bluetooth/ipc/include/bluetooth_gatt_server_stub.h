@@ -21,6 +21,7 @@
 #include "iremote_stub.h"
 #include "i_bluetooth_host.h"
 #include "i_bluetooth_gatt_server.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -29,28 +30,28 @@ public:
     BluetoothGattServerStub();
     virtual ~BluetoothGattServerStub();
 
-    virtual int OnRemoteRequest(
-        uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    using GattServerStubFunc = std::function<int32_t(BluetoothGattServerStub *, MessageParcel &, MessageParcel &)>;
+    using GattServerStubFuncPerm = std::pair<GattServerStubFunc, std::shared_ptr<PermissionItem>>;
+private:
+    int32_t AddServiceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ClearServicesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ConnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t CancelConnectionInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RegisterApplicationInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DeregisterApplicationInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyClientInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RemoveServiceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RespondCharacteristicReadInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RespondCharacteristicWriteInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RespondDescriptorReadInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RespondDescriptorWriteInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetConnectedStateInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetPhyInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ReadPhyInner(MessageParcel &data, MessageParcel &reply);
 
 private:
-    ErrCode AddServiceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ClearServicesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ConnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode CancelConnectionInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RegisterApplicationInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DeregisterApplicationInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyClientInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RemoveServiceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RespondCharacteristicReadInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RespondCharacteristicWriteInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RespondDescriptorReadInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RespondDescriptorWriteInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetConnectedStateInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetPhyInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ReadPhyInner(MessageParcel &data, MessageParcel &reply);
-    using BluetoothGattServerFunc = ErrCode (BluetoothGattServerStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, BluetoothGattServerFunc> memberFuncMap_;
-
+    static const std::map<uint32_t, GattServerStubFuncPerm> memberFuncMap_;
     DISALLOW_COPY_AND_MOVE(BluetoothGattServerStub);
 };
 }  // namespace Bluetooth
