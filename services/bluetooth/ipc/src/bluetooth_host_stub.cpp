@@ -176,6 +176,14 @@ const std::map<uint32_t, BluetoothHostStub::BluetoothHostStubFuncPerm> Bluetooth
         CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
     {STUB_FUNC(SET_CONNECTION_PRIORITY, SetConnectionPriorityInner,
         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(IS_BAS_SUPPORTED, IsBasSupportedInner, CHECK_PERM(false, {}, {}))},
+    {STUB_FUNC(BT_REGISTER_DEVICE_BATTERY_OBSERVER, RegisterDeviceBatteryObserverInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_DEREGISTER_DEVICE_BATTERY_OBSERVER, DeregisterDeviceBatteryObserverInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BT_GET_BATTERY_LEVEL, GetBatteryLevelInner, CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(GET_CONNECTED_DEVICE_BATTERY_INFOS, GetConnectedDeviceBatteryInfosInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
 };
 
 BluetoothHostStub::BluetoothHostStub(){};
@@ -1443,6 +1451,36 @@ int32_t BluetoothHostStub::GetVirtualAddressByHashInner(MessageParcel &data, Mes
 }
 
 int32_t BluetoothHostStub::SetConnectionPriorityInner(MessageParcel &data, MessageParcel &reply)
+{
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::IsBasSupportedInner(MessageParcel &data, MessageParcel &reply)
+{
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::RegisterDeviceBatteryObserverInner(MessageParcel &data, MessageParcel &reply)
+{
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::DeregisterDeviceBatteryObserverInner(MessageParcel &data, MessageParcel &reply)
+{
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::GetBatteryLevelInner(MessageParcel &data, MessageParcel &reply)
+{
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::GetConnectedDeviceBatterInfosInner(MessageParcel &data, MessageParcel &reply)
 {
     reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
     return NO_ERROR;
