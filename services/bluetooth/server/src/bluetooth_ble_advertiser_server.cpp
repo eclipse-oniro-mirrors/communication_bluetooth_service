@@ -337,7 +337,7 @@ int BluetoothBleAdvertiserServer::GetAdvPowerForRangingBusiness(bluetooth::BleAp
     return BT_ERR_API_NOT_SUPPORT;
 }
 
-int BluetoothBleAdvertiserServer::BleRestoreRangingAntSwtich(bluetooth::BleAppType appType)
+int BluetoothBleAdvertiserServer::BleRestoreRangingAntSwitch(bluetooth::BleAppType appType)
 {
     HILOGI("NOT SUPPORT NOW");
     return BT_ERR_API_NOT_SUPPORT;
