@@ -331,13 +331,13 @@ int BluetoothBleAdvertiserServer::ChangeAdvertisingParams(uint8_t advHandle,
     return BT_ERR_API_NOT_SUPPORT;
 }
 
-int BluetoothBleAdvertiserServer::BleStartRangeAdv(bluetooth::BleAppType appType)
+int BluetoothBleAdvertiserServer::GetAdvPowerForRangingBusiness(bluetooth::BleAppType appType, int8_t &advpower)
 {
     HILOGI("NOT SUPPORT NOW");
     return BT_ERR_API_NOT_SUPPORT;
 }
 
-int BluetoothBleAdvertiserServer::BleStopRangeAdv(bluetooth::BleAppType appType)
+int BluetoothBleAdvertiserServer::BleRestoreRangingAntSwitch(bluetooth::BleAppType appType)
 {
     HILOGI("NOT SUPPORT NOW");
     return BT_ERR_API_NOT_SUPPORT;

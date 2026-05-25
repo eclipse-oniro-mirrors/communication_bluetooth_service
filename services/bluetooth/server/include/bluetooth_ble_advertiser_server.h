@@ -44,8 +44,8 @@ public:
         const BluetoothBleAdvertiserData &scanResponse, int32_t advHandle,
         bluetooth::SetAdvDataType type = bluetooth::SET_ADV_DATA_BOTH) override;
     virtual int ChangeAdvertisingParams(uint8_t advHandle, const BluetoothBleAdvertiserSettings &settings) override;
-    virtual int BleStartRangeAdv(bluetooth::BleAppType appType) override;
-    virtual int BleStopRangeAdv(bluetooth::BleAppType appType) override;
+    virtual int GetAdvPowerForRangingBusiness(bluetooth::BleAppType appType, int8_t &advpower) override;
+    virtual int BleRestoreRangingAntSwitch(bluetooth::BleAppType appType) override;
 
 private:
     std::recursive_mutex mutex_ {};
