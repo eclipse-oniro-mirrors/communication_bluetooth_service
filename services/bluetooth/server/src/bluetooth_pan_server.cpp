@@ -20,7 +20,6 @@
 #include "interface_profile.h"
 #include "interface_profile_pan.h"
 #include "i_bluetooth_host_observer.h"
-#include "permission_utils.h"
 #include "remote_observer_list.h"
 #include "hilog/log.h"
 
@@ -205,14 +204,6 @@ int32_t BluetoothPanServer::GetDeviceState(const BluetoothRawAddress &device, in
 int32_t BluetoothPanServer::Disconnect(const BluetoothRawAddress &device)
 {
     HILOGI("addr:%{public}s", GET_ENCRYPT_ADDR(device));
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     if (pimpl == nullptr || pimpl->panService_ == nullptr) {
         HILOGI("not init.");
         return BT_ERR_INTERNAL_ERROR;
@@ -223,14 +214,6 @@ int32_t BluetoothPanServer::Disconnect(const BluetoothRawAddress &device)
 int32_t BluetoothPanServer::SetTethering(const bool enable)
 {
     HILOGI("enable:%{public}d", enable);
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     if (pimpl == nullptr || pimpl->panService_ == nullptr) {
         HILOGI("not init.");
         return BT_ERR_INTERNAL_ERROR;
@@ -240,10 +223,6 @@ int32_t BluetoothPanServer::SetTethering(const bool enable)
 
 int32_t BluetoothPanServer::IsTetheringOn(bool& result)
 {
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
     if (pimpl == nullptr || pimpl->panService_ == nullptr) {
         HILOGI("not init.");
         return BT_ERR_INTERNAL_ERROR;

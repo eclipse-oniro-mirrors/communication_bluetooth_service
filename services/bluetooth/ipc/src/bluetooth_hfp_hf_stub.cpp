@@ -15,114 +15,75 @@
 
 #include "bluetooth_hfp_hf_stub.h"
 #include "bluetooth_log.h"
+#include "permission_manager.h"
+
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) BluetoothHfpHfInterfaceCode::code, {&BluetoothHfpHfStub::func, perm}
 
 namespace OHOS {
 namespace Bluetooth {
-BluetoothHfpHfStub::BluetoothHfpHfStub() {
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_CONNECT_SCO)] =
-        &BluetoothHfpHfStub::ConnectScoInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_DISCONNECT_SCO)] =
-        &BluetoothHfpHfStub::DisconnectScoInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_GET_DEVICES_BY_STATES)] =
-        &BluetoothHfpHfStub::GetDevicesByStatesInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_GET_DEVICE_STATE)] =
-        &BluetoothHfpHfStub::GetDeviceStateInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_GET_SCO_STATE)] =
-        &BluetoothHfpHfStub::GetScoStateInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_SEND_DTMF_TONE)] =
-        &BluetoothHfpHfStub::SendDTMFToneInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_CONNECT)] =
-        nullptr;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_DISCONNECT)] =
-        &BluetoothHfpHfStub::DisconnectInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_OPEN_VOICE_RECOGNITION)] =
-        &BluetoothHfpHfStub::OpenVoiceRecognitionInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_CLOSE_VOICE_RECOGNITION)] =
-        &BluetoothHfpHfStub::CloseVoiceRecognitionInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_GET_CURRENT_CALL_LIST)] =
-        &BluetoothHfpHfStub::GetCurrentCallListInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_ACCEPT_INCOMING_CALL)] =
-        &BluetoothHfpHfStub::AcceptIncomingCallInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_HOLD_ACTIVE_CALL)] =
-        &BluetoothHfpHfStub::HoldActiveCallInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_REJECT_INCOMING_CALL)] =
-        &BluetoothHfpHfStub::RejectIncomingCallInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_SEND_KEY_PRESSED)] =
-        &BluetoothHfpHfStub::SendKeyPressedInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_HANDLE_INCOMING_CALL)] =
-        &BluetoothHfpHfStub::HandleIncomingCallInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_HANDLE_MULLTI_CALL)] =
-        &BluetoothHfpHfStub::HandleMultiCallInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_DIAL_LAST_NUMBER)] =
-        &BluetoothHfpHfStub::DialLastNumberInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_DIAL_MEMORY)] =
-        &BluetoothHfpHfStub::DialMemoryInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_SEND_VOICE_TAG)] =
-        &BluetoothHfpHfStub::SendVoiceTagInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_FINISH_ATIVE_CALL)] =
-        &BluetoothHfpHfStub::FinishActiveCallInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_START_DIAL)] =
-        &BluetoothHfpHfStub::StartDialInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_REGISTER_OBSERVER)] =
-        &BluetoothHfpHfStub::RegisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(
-        BluetoothHfpHfInterfaceCode::BT_HFP_HF_DEREGISTER_OBSERVER)] =
-        &BluetoothHfpHfStub::DeregisterObserverInner;
+using namespace OHOS::bluetooth;
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const std::map<uint32_t, BluetoothHfpHfStub::HfpHfStubFuncPerm> BluetoothHfpHfStub::memberFuncMap_ = {
+    {STUB_FUNC(BT_HFP_HF_CONNECT_SCO, ConnectScoInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_DISCONNECT_SCO, DisconnectScoInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_GET_DEVICES_BY_STATES, GetDevicesByStatesInner, nullptr)},
+    {STUB_FUNC(BT_HFP_HF_GET_DEVICE_STATE, GetDeviceStateInner, nullptr)},
+    {STUB_FUNC(BT_HFP_HF_GET_SCO_STATE, GetScoStateInner, nullptr)},
+    {STUB_FUNC(BT_HFP_HF_SEND_DTMF_TONE, SendDTMFToneInner, nullptr)},
+    {STUB_FUNC(BT_HFP_HF_CONNECT, ConnectInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_DISCONNECT, DisconnectInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_OPEN_VOICE_RECOGNITION, OpenVoiceRecognitionInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_CLOSE_VOICE_RECOGNITION, CloseVoiceRecognitionInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_GET_CURRENT_CALL_LIST, GetCurrentCallListInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_ACCEPT_INCOMING_CALL, AcceptIncomingCallInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_HOLD_ACTIVE_CALL, HoldActiveCallInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_REJECT_INCOMING_CALL, RejectIncomingCallInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_SEND_KEY_PRESSED, SendKeyPressedInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_HANDLE_INCOMING_CALL, HandleIncomingCallInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_HANDLE_MULLTI_CALL, HandleMultiCallInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_DIAL_LAST_NUMBER, DialLastNumberInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_DIAL_MEMORY, DialMemoryInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_SEND_VOICE_TAG, SendVoiceTagInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_FINISH_ATIVE_CALL, FinishActiveCallInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_START_DIAL, StartDialInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BT_HFP_HF_REGISTER_OBSERVER, RegisterObserverInner, nullptr)},
+    {STUB_FUNC(BT_HFP_HF_DEREGISTER_OBSERVER, DeregisterObserverInner, nullptr)},
+};
 
-    HILOGD("%{public}s ends.", __func__);
+BluetoothHfpHfStub::BluetoothHfpHfStub()
+{}
+
+BluetoothHfpHfStub::~BluetoothHfpHfStub()
+{}
+
+int BluetoothHfpHfStub::OnRemoteRequest()
+{
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothHfpHfStub);
 }
 
-BluetoothHfpHfStub::~BluetoothHfpHfStub() {
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_.clear();
-}
-
-int BluetoothHfpHfStub::OnRemoteRequest(
-    uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) {
-    HILOGD("BluetoothHfpHfStub::OnRemoteRequest, cmd = %{public}d, flags= %{public}d", code, option.GetFlags());
-    std::u16string descriptor = BluetoothHfpHfStub::GetDescriptor();
-    std::u16string remoteDescriptor = data.ReadInterfaceToken();
-    if (descriptor != remoteDescriptor) {
-        HILOGI("local descriptor is not equal to remote");
-        return ERR_INVALID_STATE;
-    }
-
-    auto itFunc = memberFuncMap_.find(code);
-    if (itFunc != memberFuncMap_.end()) {
-        auto memberFunc = itFunc->second;
-        if (memberFunc != nullptr) {
-            return (this->*memberFunc)(data, reply);
-        }
-    }
-    HILOGW("BluetoothHfpHfStub::OnRemoteRequest, default case, need check.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);   
-}
-
-ErrCode BluetoothHfpHfStub::ConnectScoInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::ConnectScoInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -135,7 +96,8 @@ ErrCode BluetoothHfpHfStub::ConnectScoInner(MessageParcel &data, MessageParcel &
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::DisconnectScoInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::DisconnectScoInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -148,7 +110,8 @@ ErrCode BluetoothHfpHfStub::DisconnectScoInner(MessageParcel &data, MessageParce
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply)
+{
     std::vector<BluetoothRawAddress> devices;
     std::vector<int> states;
     data.ReadInt32Vector(&states);
@@ -167,7 +130,8 @@ ErrCode BluetoothHfpHfStub::GetDevicesByStatesInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::GetDeviceStateInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::GetDeviceStateInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -180,7 +144,8 @@ ErrCode BluetoothHfpHfStub::GetDeviceStateInner(MessageParcel &data, MessageParc
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::GetScoStateInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::GetScoStateInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -193,7 +158,8 @@ ErrCode BluetoothHfpHfStub::GetScoStateInner(MessageParcel &data, MessageParcel 
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::SendDTMFToneInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::SendDTMFToneInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -207,7 +173,8 @@ ErrCode BluetoothHfpHfStub::SendDTMFToneInner(MessageParcel &data, MessageParcel
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::ConnectInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -220,7 +187,8 @@ ErrCode BluetoothHfpHfStub::ConnectInner(MessageParcel &data, MessageParcel &rep
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::DisconnectInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::DisconnectInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -233,7 +201,8 @@ ErrCode BluetoothHfpHfStub::DisconnectInner(MessageParcel &data, MessageParcel &
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::OpenVoiceRecognitionInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::OpenVoiceRecognitionInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -246,7 +215,8 @@ ErrCode BluetoothHfpHfStub::OpenVoiceRecognitionInner(MessageParcel &data, Messa
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::CloseVoiceRecognitionInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::CloseVoiceRecognitionInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -259,7 +229,8 @@ ErrCode BluetoothHfpHfStub::CloseVoiceRecognitionInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::GetCurrentCallListInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::GetCurrentCallListInner(MessageParcel &data, MessageParcel &reply)
+{
     std::vector<BluetoothHfpHfCall> calls;
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
@@ -280,7 +251,8 @@ ErrCode BluetoothHfpHfStub::GetCurrentCallListInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::AcceptIncomingCallInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::AcceptIncomingCallInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -294,7 +266,8 @@ ErrCode BluetoothHfpHfStub::AcceptIncomingCallInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::HoldActiveCallInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::HoldActiveCallInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -307,7 +280,8 @@ ErrCode BluetoothHfpHfStub::HoldActiveCallInner(MessageParcel &data, MessageParc
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::SendKeyPressedInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::SendKeyPressedInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -320,7 +294,8 @@ ErrCode BluetoothHfpHfStub::SendKeyPressedInner(MessageParcel &data, MessageParc
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::RejectIncomingCallInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::RejectIncomingCallInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -333,7 +308,7 @@ ErrCode BluetoothHfpHfStub::RejectIncomingCallInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::HandleIncomingCallInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHfpHfStub::HandleIncomingCallInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
@@ -349,7 +324,7 @@ ErrCode BluetoothHfpHfStub::HandleIncomingCallInner(MessageParcel &data, Message
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::HandleMultiCallInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHfpHfStub::HandleMultiCallInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
@@ -366,7 +341,7 @@ ErrCode BluetoothHfpHfStub::HandleMultiCallInner(MessageParcel &data, MessagePar
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::DialLastNumberInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHfpHfStub::DialLastNumberInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
@@ -381,7 +356,7 @@ ErrCode BluetoothHfpHfStub::DialLastNumberInner(MessageParcel &data, MessageParc
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::DialMemoryInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHfpHfStub::DialMemoryInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
@@ -398,7 +373,7 @@ ErrCode BluetoothHfpHfStub::DialMemoryInner(MessageParcel &data, MessageParcel &
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::SendVoiceTagInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothHfpHfStub::SendVoiceTagInner(MessageParcel &data, MessageParcel &reply)
 {
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
@@ -415,7 +390,8 @@ ErrCode BluetoothHfpHfStub::SendVoiceTagInner(MessageParcel &data, MessageParcel
 }
 
 
-ErrCode BluetoothHfpHfStub::FinishActiveCallInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::FinishActiveCallInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -432,7 +408,8 @@ ErrCode BluetoothHfpHfStub::FinishActiveCallInner(MessageParcel &data, MessagePa
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::StartDialInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::StartDialInner(MessageParcel &data, MessageParcel &reply)
+{
     std::shared_ptr<BluetoothRawAddress> device(data.ReadParcelable<BluetoothRawAddress>());
     if (!device) {
         return TRANSACTION_ERR;
@@ -450,14 +427,16 @@ ErrCode BluetoothHfpHfStub::StartDialInner(MessageParcel &data, MessageParcel &r
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply)
+{
     sptr<IRemoteObject> tempObject = data.ReadRemoteObject();
     sptr<IBluetoothHfpHfObserver> observer = iface_cast<IBluetoothHfpHfObserver>(tempObject);
     RegisterObserver(observer);
     return NO_ERROR;
 }
 
-ErrCode BluetoothHfpHfStub::DeregisterObserverInner(MessageParcel &data, MessageParcel &reply) {
+int32_t BluetoothHfpHfStub::DeregisterObserverInner(MessageParcel &data, MessageParcel &reply)
+{
     sptr<IRemoteObject> tempObject = data.ReadRemoteObject();
     sptr<IBluetoothHfpHfObserver> observer = iface_cast<IBluetoothHfpHfObserver>(tempObject);
     DeregisterObserver(observer);

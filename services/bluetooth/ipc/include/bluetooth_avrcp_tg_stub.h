@@ -20,6 +20,7 @@
 
 #include "iremote_stub.h"
 #include "i_bluetooth_avrcp_tg.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -28,38 +29,39 @@ public:
     BluetoothAvrcpTgStub();
     virtual ~BluetoothAvrcpTgStub();
 
-    ErrCode OnRemoteRequest(
-        uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    using AvrcpTgStubFunc = std::function<int32_t(BluetoothAvrcpTgStub *, MessageParcel &, MessageParcel &)>;
+    using AvrcpTgStubFuncPerm = std::pair<AvrcpTgStubFunc, std::shared_ptr<PermissionItem>>;
 
 private:
-    ErrCode RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode UnregisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetActiveDeviceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ConnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DisconnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetConnectedDevicesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyPlaybackStatusChangedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyTrackChangedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyTrackReachedEndInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyTrackReachedStartInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyPlaybackPosChangedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyPlayerAppSettingChangedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyNowPlayingContentChangedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyAvailablePlayersChangedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyAddressedPlayerChangedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyUidChangedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode NotifyVolumeChangedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetDeviceAbsoluteVolumeInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetDeviceAbsVolumeAbilityInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetDeviceAbsVolumeAbilityInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t UnregisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetActiveDeviceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ConnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DisconnectInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetConnectedDevicesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyPlaybackStatusChangedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyTrackChangedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyTrackReachedEndInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyTrackReachedStartInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyPlaybackPosChangedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyPlayerAppSettingChangedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyNowPlayingContentChangedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyAvailablePlayersChangedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyAddressedPlayerChangedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyUidChangedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t NotifyVolumeChangedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetDeviceAbsoluteVolumeInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetDeviceAbsVolumeAbilityInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetDeviceAbsVolumeAbilityInner(MessageParcel &data, MessageParcel &reply);
 
     bool IsInvalidAttributesSize(int32_t attributesSize);
     bool IsInvalidDeviceStatesSize(int32_t statesSize);
 
-    using BluetoothHostFunc = ErrCode (BluetoothAvrcpTgStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, BluetoothHostFunc> memberFuncMap_;
+private:
+    static const std::map<uint32_t, AvrcpTgStubFuncPerm> memberFuncMap_;
     DISALLOW_COPY_AND_MOVE(BluetoothAvrcpTgStub);
 };
 }  // namespace Bluetooth

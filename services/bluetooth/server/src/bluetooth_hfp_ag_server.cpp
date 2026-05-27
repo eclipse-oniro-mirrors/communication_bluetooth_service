@@ -26,7 +26,7 @@
 #include "interface_profile.h"
 #include "interface_adapter_manager.h"
 #include "remote_observer_list.h"
-#include "permission_utils.h"
+#include "permission_manager.h"
 
 
 namespace OHOS {
@@ -163,10 +163,6 @@ BluetoothHfpAgServer::~BluetoothHfpAgServer()
 int32_t BluetoothHfpAgServer::GetConnectDevices(std::vector<BluetoothRawAddress> &devices)
 {
     HILOGI("Enter!");
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("GetConnectDevices() false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     std::list<RawAddress> deviceList;
     if (pimpl->HfpAgService_  != nullptr) {
         deviceList = pimpl->HfpAgService_->GetConnectDevices();
@@ -200,10 +196,6 @@ int BluetoothHfpAgServer::GetDevicesByStates(const std::vector<int> &states, std
 
 int32_t BluetoothHfpAgServer::GetDeviceState(const BluetoothRawAddress &device, int32_t &state)
 {
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("GetDeviceState() false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     RawAddress addr(device.GetAddress());
     if (pimpl->HfpAgService_) {
         state = pimpl->HfpAgService_->GetDeviceState(addr);
@@ -217,12 +209,8 @@ int32_t BluetoothHfpAgServer::GetDeviceState(const BluetoothRawAddress &device, 
 int32_t BluetoothHfpAgServer::Connect(const BluetoothRawAddress &device)
 {
     HILOGI("target device:%{public}s()", GET_ENCRYPT_ADDR(device));
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("Connect error, check permission failed");
+    if (PermissionManager::GetApiVersion() >= API_VERSION_10 && !PermissionManager::IsSystemHap()) {
+        HILOGE("check permission failed, system hap need.");
         return BT_ERR_PERMISSION_FAILED;
     }
     RawAddress addr(device.GetAddress());
@@ -238,12 +226,8 @@ int32_t BluetoothHfpAgServer::Connect(const BluetoothRawAddress &device)
 int32_t BluetoothHfpAgServer::Disconnect(const BluetoothRawAddress &device)
 {
     HILOGI("target device:%{public}s()", GET_ENCRYPT_ADDR(device));
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("Disconnect error, check permission failed");
+    if (PermissionManager::GetApiVersion() >= API_VERSION_10 && !PermissionManager::IsSystemHap()) {
+        HILOGE("check permission failed, system hap need.");
         return BT_ERR_PERMISSION_FAILED;
     }
     RawAddress addr(device.GetAddress());
@@ -266,10 +250,6 @@ int BluetoothHfpAgServer::GetScoState(const BluetoothRawAddress &device)
 bool BluetoothHfpAgServer::ConnectSco()
 {
     HILOGI("Enter!");
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("error, check permission failed");
-        return false;
-    }
     if (pimpl->HfpAgService_ != nullptr) {
         return pimpl->HfpAgService_->ConnectSco();
     }
@@ -307,10 +287,6 @@ void BluetoothHfpAgServer::ClccResponse(int index, int direction, int status, in
 bool BluetoothHfpAgServer::OpenVoiceRecognition(const BluetoothRawAddress &device)
 {
     HILOGI("target device:%{public}s()", GET_ENCRYPT_ADDR(device));
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("error, check permission failed");
-        return false;
-    }
     RawAddress addr(device.GetAddress());
     if (pimpl->HfpAgService_ != nullptr) {
         return pimpl->HfpAgService_->OpenVoiceRecognition(addr);
@@ -418,10 +394,6 @@ void BluetoothHfpAgServer::DeregisterObserver(const sptr<IBluetoothHfpAgObserver
 int BluetoothHfpAgServer::SetConnectStrategy(const BluetoothRawAddress &device, int strategy)
 {
     HILOGI("target device:%{public}s()", GET_ENCRYPT_ADDR(device));
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
     return NO_ERROR;
 }
 
