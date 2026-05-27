@@ -46,6 +46,8 @@ constexpr uint8_t BLE_LEGACY_ADV_DATA_LEN_MAX = 0x1F;
 constexpr uint8_t BLE_LEGACY_SCAN_RSP_DATA_LEN_MAX = 0x1F;
 constexpr uint8_t BLE_EX_ADV_PAYLOAD_DATA_LEN = 0XBF;
 
+constexpr uint8_t BLE_LEGACY_ADV_SCANABLE = 0x12;
+
 /// Batch scan params
 constexpr uint16_t BLE_SCAN_MODE_BATCH_LOW_POWER_WINDOW_MS = 500;
 constexpr uint16_t BLE_SCAN_MODE_BATCH_LOW_POWER_INTERVAL_MS = 45000;
