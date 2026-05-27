@@ -1957,9 +1957,9 @@ int32_t BluetoothHostServer::SetConnectionPriority(const std::string &address, i
     return BT_ERR_API_NOT_SUPPORT;
 }
 
-bool BluetoothHostServer::IsBasSupported()
+int32_t BluetoothHostServer::IsBasSupported(bool &isSupported)
 {
-    return false;
+    return BT_ERR_API_NOT_SUPPORT;
 }
 
 int32_t BluetoothHostServer::RegisterDeviceBatteryObserver(const sptr<IBluetoothDeviceBatteryObserver> &observer)
@@ -1977,9 +1977,9 @@ int32_t BluetoothHostServer::GetBatteryLevel(const std::string &address)
     return BT_ERR_API_NOT_SUPPORT;
 }
 
-std::map<std::string, int32_t> BluetoothHostServer::GetConnectedDeviceBatterInfos()
+int32_t BluetoothHostServer::GetConnectedDeviceBatterInfos(std::map<std::string, int32_t> &batteryInfos)
 {
-    return {};
+    return BT_ERR_API_NOT_SUPPORT;
 }
 }  // namespace Bluetooth
 }  // namespace OHOS
