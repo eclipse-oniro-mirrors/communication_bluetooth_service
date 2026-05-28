@@ -262,7 +262,6 @@ void BleAdvertiserImpl::StartAdvertising(const BleAdvertiserSettingsImpl &settin
     const BleAdvertiserDataImpl &advData, const BleAdvertiserDataImpl &scanResponse, uint8_t advHandle)
 {
     LOG_DEBUG("[BleAdvertiserImpl] %{public}s,%{public}zu", __func__, pimpl->advHandleQue_.size());
-
     std::lock_guard<std::recursive_mutex> lk(pimpl->mutex_);
     int advStatus = ADVERTISE_NOT_STARTED;
     auto iter = pimpl->advHandleSettingDatas_.find(advHandle);
@@ -795,7 +794,7 @@ int BleAdvertiserImpl::SetExAdvParamToGap(uint8_t advHandle, const BleAdvertiser
         if (settings.IsConnectable()) {
             advType |= BLE_LEGACY_ADV_IND_WITH_EX_ADV;
         } else {
-            advType |= BLE_LEGACY_ADV_NONCONN_IND_WITH_EX_ADV;
+            advType |= BLE_LEGACY_ADV_SCANABLE;
         }
     } else {
         if (settings.IsConnectable()) {
