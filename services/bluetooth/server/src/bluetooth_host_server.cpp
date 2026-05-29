@@ -1956,5 +1956,11 @@ int32_t BluetoothHostServer::SetConnectionPriority(const std::string &address, i
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
+
+int32_t BluetoothHostServer::VerifyMultiPermissions(bool systemHapNeeded,
+    const std::set<std::string> &permissions)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS
