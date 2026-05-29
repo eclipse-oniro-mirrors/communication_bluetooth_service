@@ -130,11 +130,7 @@ private:
     int32_t StartRemoteSdpSearchInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetRemoteServicesInner(MessageParcel &data, MessageParcel &reply);
     int32_t SetConnectionPriorityInner(MessageParcel &data, MessageParcel &reply);
-    int32_t IsBasSupportedInner(MessageParcel &data, MessageParcel &reply);
-    int32_t RegisterDeviceBatteryObserverInner(MessageParcel &data, MessageParcel &reply);
-    int32_t DeregisterDeviceBatteryObserverInner(MessageParcel &data, MessageParcel &reply);
-    int32_t GetBatteryLevelInner(MessageParcel &data, MessageParcel &reply);
-    int32_t GetConnectedDeviceBatterInfosInner(MessageParcel &data, MessageParcel &reply);
+    int32_t VerifyMultiPermissionsInner(MessageParcel &data, MessageParcel &reply);
 
 private:
     static const std::map<uint32_t, BluetoothHostStubFuncPerm> memberFuncMap_;

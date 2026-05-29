@@ -158,11 +158,7 @@ public:
     int32_t GetVirtualAddressByHash(
         int hashAlgorithmType, const std::string &hashValue, std::string &virtualAddress) override;
     int32_t SetConnectionPriority(const std::string &address, int32_t priority) override;
-    int32_t IsBasSupported(bool &isSupported) override;
-    int32_t RegisterDeviceBatteryObserver(const sptr<IBluetoothDeviceBatteryObserver> &observer) override;
-    int32_t DeregisterDeviceBatteryObserver(const sptr<IBluetoothDeviceBatteryObserver> &observer) override;
-    int32_t GetBatteryLevel(const std::string &address) override;
-    int32_t GetConnectedDeviceBatterInfos(std::map<std::string, int32_t> &batteryInfos) override;
+    int32_t VerifyMultiPermissions(bool systemHapNeeded, const std::set<std::string> &permissions) override;
 private:
     static sptr<BluetoothHostServer> instance;
     static std::mutex instanceLock;
