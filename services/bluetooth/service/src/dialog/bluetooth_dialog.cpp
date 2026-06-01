@@ -154,8 +154,8 @@ bool BluetoothDialog::DialogConnectExtension(
     const std::string commandStr, const std::string bundleName, const std::string abilityName)
 {
     AAFwk::Want want;
-    std::string sceneboardName = "com.ohos.systemui";
-    std::string abilityNames = "com.ohos.systemui.dialog";
+    std::string sceneboardName = "com.ohos.sceneboard";
+    std::string abilityNames = "com.ohos.sceneboard.systemdialog";
     want.SetElementName(sceneboardName, abilityNames);
     bool ret = DialogConnectExtensionAbility(want, commandStr, bundleName, abilityName);
     if (!ret) {
