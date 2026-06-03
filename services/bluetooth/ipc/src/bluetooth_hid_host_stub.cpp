@@ -16,63 +16,54 @@
 
 #include "bluetooth_errorcode.h"
 #include "bluetooth_log.h"
+#include "permission_manager.h"
+
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) \
+static_cast<uint32_t>(BluetoothHidHostInterfaceCode::code), {&BluetoothHidHostStub::func, perm} \
 
 namespace OHOS {
 namespace Bluetooth {
+using namespace OHOS::bluetooth;
 const uint32_t HID_DEVICE_BY_STATES_NUM_MAX = 0XFF;
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const std::map<uint32_t, BluetoothHidHostStub::HidHostStubFuncPerm> BluetoothHidHostStub::memberFuncMap_ = {
+    {STUB_FUNC(COMMAND_CONNECT, ConnectInner,
+    CHECK_PERM(true, {DISCOVER_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(COMMAND_DISCONNECT, DisconnectInner,
+    CHECK_PERM(true, {DISCOVER_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(COMMAND_GET_DEVICE_STATE, GetDeviceStateInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_GET_DEVICES_BY_STATES, GetDevicesByStatesInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_REGISTER_OBSERVER, RegisterObserverInner, nullptr)},
+    {STUB_FUNC(COMMAND_DEREGISTER_OBSERVER, DeregisterObserverInner, nullptr)},
+    {STUB_FUNC(COMMAND_VCUN_PLUG, HidHostVCUnplugInner,
+    CHECK_PERM(false, {DISCOVER_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(COMMAND_SEND_DATA, HidHostSendDataInner,
+    CHECK_PERM(false, {DISCOVER_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(COMMAND_SET_REPORT, HidHostSetReportInner,
+    CHECK_PERM(false, {DISCOVER_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(COMMAND_GET_REPORT, HidHostGetReportInner,
+    CHECK_PERM(false, {DISCOVER_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(COMMAND_SET_CONNECT_STRATEGY, HidHostSetConnectStrategyInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(COMMAND_GET_CONNECT_STRATEGY, HidHostGetConnectStrategyInner,
+    CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+};
+
 BluetoothHidHostStub::BluetoothHidHostStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_CONNECT)] =
-        &BluetoothHidHostStub::ConnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_DISCONNECT)] =
-        &BluetoothHidHostStub::DisconnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_GET_DEVICE_STATE)] =
-        &BluetoothHidHostStub::GetDeviceStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_GET_DEVICES_BY_STATES)] =
-        &BluetoothHidHostStub::GetDevicesByStatesInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_REGISTER_OBSERVER)] =
-        &BluetoothHidHostStub::RegisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_DEREGISTER_OBSERVER)] =
-        &BluetoothHidHostStub::DeregisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_VCUN_PLUG)] =
-        &BluetoothHidHostStub::HidHostVCUnplugInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_SEND_DATA)] =
-        &BluetoothHidHostStub::HidHostSendDataInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_SET_REPORT)] =
-        &BluetoothHidHostStub::HidHostSetReportInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_GET_REPORT)] =
-        &BluetoothHidHostStub::HidHostGetReportInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_SET_CONNECT_STRATEGY)] =
-        &BluetoothHidHostStub::HidHostSetConnectStrategyInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidHostInterfaceCode::COMMAND_GET_CONNECT_STRATEGY)] =
-        &BluetoothHidHostStub::HidHostGetConnectStrategyInner;
-    HILOGD("%{public}s ends.", __func__);
-}
+{}
 
 BluetoothHidHostStub::~BluetoothHidHostStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_.clear();
-}
+{}
 
 int BluetoothHidHostStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    HILOGI("BluetoothHidHostStub::OnRemoteRequest, cmd = %{public}d, flags= %{public}d", code, option.GetFlags());
-    if (BluetoothHidHostStub::GetDescriptor() != data.ReadInterfaceToken()) {
-        HILOGE("local descriptor is not equal to remote");
-        return IPC_INVOKER_TRANSLATE_ERR;
-    }
-    auto itFunc = memberFuncMap_.find(code);
-    if (itFunc != memberFuncMap_.end()) {
-        auto memberFunc = itFunc->second;
-        if (memberFunc != nullptr) {
-            return (this->*memberFunc)(data, reply);
-        }
-    }
-    HILOGW("BluetoothHfpHfStub::OnRemoteRequest, default case, need check.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothHidHostStub);
 }
 
 int32_t BluetoothHidHostStub::ConnectInner(MessageParcel &data, MessageParcel &reply)

@@ -19,59 +19,41 @@
 #include "bluetooth_socket_observer_proxy.h"
 #include "ipc_types.h"
 #include "bluetooth_socket_stub.h"
+#include "permission_manager.h"
+
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) BluetoothSocketInterfaceCode::code, {&BluetoothSocketStub::func, perm}
 
 namespace OHOS {
 namespace Bluetooth {
+using namespace OHOS::bluetooth;
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const std::map<uint32_t, BluetoothSocketStub::SocketStubFuncPerm> BluetoothSocketStub::memberFuncMap_ = {
+{STUB_FUNC(SOCKET_CONNECT, ConnectInner, CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+{STUB_FUNC(SOCKET_LISTEN, ListenInner, CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+{STUB_FUNC(SOCKET_UPDATE_COC_PARAMS, UpdateCocConnectionParamsInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+{STUB_FUNC(DEREGISTER_SERVER_OBSERVER, DeregisterServerObserverInner, nullptr)},
+{STUB_FUNC(REGISTER_CLIENT_OBSERVER, RegisterClientObserverInner, nullptr)},
+{STUB_FUNC(DEREGISTER_CLIENT_OBSERVER, DeregisterClientObserverInner, nullptr)},
+{STUB_FUNC(SOCKET_IS_ALLOW_CONNECT, IsAllowSocketConnectInner,
+    CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+};
 BluetoothSocketStub::BluetoothSocketStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_[static_cast<uint32_t>(BluetoothSocketInterfaceCode::SOCKET_CONNECT)] =
-        &BluetoothSocketStub::ConnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothSocketInterfaceCode::SOCKET_LISTEN)] =
-        &BluetoothSocketStub::ListenInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothSocketInterfaceCode::DEREGISTER_SERVER_OBSERVER)] =
-        &BluetoothSocketStub::DeregisterServerObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothSocketInterfaceCode::REGISTER_CLIENT_OBSERVER)] =
-        &BluetoothSocketStub::RegisterClientObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothSocketInterfaceCode::DEREGISTER_SERVER_OBSERVER)] =
-        &BluetoothSocketStub::DeregisterClientObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothSocketInterfaceCode::SOCKET_UPDATE_COC_PARAMS)] =
-        &BluetoothSocketStub::UpdateCocConnectionParamsInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothSocketInterfaceCode::SOCKET_IS_ALLOW_CONNECT)] =
-        &BluetoothSocketStub::IsAllowSocketConnectInner;
-}
+{}
 
 BluetoothSocketStub::~BluetoothSocketStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_.clear();
-}
+{}
 
 int32_t BluetoothSocketStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    HILOGD("BluetoothSocketStub::OnRemoteRequest, cmd = %{public}d, flags= %{public}d", code, option.GetFlags());
-
-    std::u16string descriptor = BluetoothSocketStub::GetDescriptor();
-    std::u16string remoteDescriptor = data.ReadInterfaceToken();
-    if (descriptor != remoteDescriptor) {
-        HILOGE("BluetoothSocketStub::OnRemoteRequest, local descriptor is not equal to remote");
-        return ERR_INVALID_STATE;
-    }
-
-    auto itFunc = memberFuncMap_.find(code);
-    if (itFunc != memberFuncMap_.end()) {
-        auto memberFunc = itFunc->second;
-        if (memberFunc != nullptr) {
-            return (this->*memberFunc)(data, reply);
-        }
-    }
-
-    HILOGW("BluetoothHostObserverStub::OnRemoteRequest, default case, need check.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothSocketStub);
 }
 
-ErrCode BluetoothSocketStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothSocketStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("ConnectInner starts");
     std::string addr = data.ReadString();
@@ -103,7 +85,7 @@ ErrCode BluetoothSocketStub::ConnectInner(MessageParcel &data, MessageParcel &re
     return NO_ERROR;
 }
 
-ErrCode BluetoothSocketStub::ListenInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothSocketStub::ListenInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("ListenInner starts");
     std::string name = data.ReadString();
@@ -136,7 +118,7 @@ ErrCode BluetoothSocketStub::ListenInner(MessageParcel &data, MessageParcel &rep
     return NO_ERROR;
 }
 
-ErrCode BluetoothSocketStub::DeregisterServerObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothSocketStub::DeregisterServerObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGI("DeregisterServerObserverInner starts");
     sptr<IBluetoothServerSocketObserver> observer =
@@ -146,22 +128,41 @@ ErrCode BluetoothSocketStub::DeregisterServerObserverInner(MessageParcel &data, 
     return NO_ERROR;
 }
 
-ErrCode BluetoothSocketStub::RegisterClientObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothSocketStub::RegisterClientObserverInner(MessageParcel &data, MessageParcel &reply)
+{
+    sptr<BluetoothRawAddress> addr(data.ReadStrongParcelable<BluetoothRawAddress>());
+    if (!addr) {
+        HILOGE("BluetoothSocketStub::RegisterClientObserver failed");
+        return ERR_INVALID_VALUE;
+    }
+    std::shared_ptr<BluetoothUuid> uuid(data.ReadParcelable<BluetoothUuid>());
+    if (uuid == nullptr) {
+        HILOGE("reply writing failed in: %{public}s.", __func__);
+        return ERR_INVALID_VALUE;
+    }
+    sptr<IBluetoothClientSocketObserver> observer =
+        OHOS::iface_cast<IBluetoothClientSocketObserver>(data.ReadRemoteObject());
+    CHECK_AND_RETURN_LOG_RET(observer != nullptr, ERR_INVALID_VALUE, "observer is nullptr");
+    int result = RegisterClientObserver(*addr, *uuid, observer);
+    bool ret = reply.WriteInt32(result);
+    if (!ret) {
+        HILOGE("reply writing failed.");
+        return BT_ERR_IPC_TRANS_FAILED;
+    }
+    return BT_NO_ERROR;
+}
+
+int32_t BluetoothSocketStub::DeregisterClientObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     return reply.WriteInt32(BT_NO_ERROR);
 }
 
-ErrCode BluetoothSocketStub::DeregisterClientObserverInner(MessageParcel &data, MessageParcel &reply)
-{
-    return reply.WriteInt32(BT_NO_ERROR);
-}
-
-ErrCode BluetoothSocketStub::UpdateCocConnectionParamsInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothSocketStub::UpdateCocConnectionParamsInner(MessageParcel &data, MessageParcel &reply)
 {
     return reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
 }
 
-ErrCode BluetoothSocketStub::IsAllowSocketConnectInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothSocketStub::IsAllowSocketConnectInner(MessageParcel &data, MessageParcel &reply)
 {
     reply.WriteInt32(BT_NO_ERROR);
     return reply.WriteBool(true);

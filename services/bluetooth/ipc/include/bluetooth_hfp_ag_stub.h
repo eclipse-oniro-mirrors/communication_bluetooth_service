@@ -18,6 +18,7 @@
 #include <map>
 #include "iremote_stub.h"
 #include "i_bluetooth_hfp_ag.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -26,46 +27,46 @@ public:
     BluetoothHfpAgStub();
     ~BluetoothHfpAgStub();
 
-    virtual int OnRemoteRequest(
-        uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
+    using HfpAgStubFunc = std::function<int32_t(BluetoothHfpAgStub *, MessageParcel &, MessageParcel &)>;
+    using HfpAgStubFuncPerm = std::pair<HfpAgStubFunc, std::shared_ptr<PermissionItem>>;
 
 private:
     void RegisterBasicConnectionFunctions();
     void RegisterScoConnectionFunctions();
     int32_t GetConnectDevicesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
     int32_t ConnectInner(MessageParcel &data, MessageParcel &reply);
     int32_t DisconnectInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetScoStateInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ConnectScoInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DisconnectScoInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode PhoneStateChangedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ClccResponseInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode OpenVoiceRecognitionInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode CloseVoiceRecognitionInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode IsAudioConnectedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetActiveDeviceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetActiveDeviceInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode IntoMockInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SendNoCarrierInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DeregisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode SetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode GetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetScoStateInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ConnectScoInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DisconnectScoInner(MessageParcel &data, MessageParcel &reply);
+    int32_t PhoneStateChangedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t ClccResponseInner(MessageParcel &data, MessageParcel &reply);
+    int32_t OpenVoiceRecognitionInner(MessageParcel &data, MessageParcel &reply);
+    int32_t CloseVoiceRecognitionInner(MessageParcel &data, MessageParcel &reply);
+    int32_t IsAudioConnectedInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetActiveDeviceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetActiveDeviceInner(MessageParcel &data, MessageParcel &reply);
+    int32_t IntoMockInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SendNoCarrierInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DeregisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t SetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
     int32_t IsInbandRingingEnabledInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode ConnectScoInnerEx(MessageParcel &data, MessageParcel &reply);
-    ErrCode DisconnectScoInnerEx(MessageParcel &data, MessageParcel &reply);
+    int32_t ConnectScoInnerEx(MessageParcel &data, MessageParcel &reply);
+    int32_t DisconnectScoInnerEx(MessageParcel &data, MessageParcel &reply);
     int32_t CallDetailsChangedInner(MessageParcel &data, MessageParcel &reply);
     int32_t IsHfpFeatureSupportedInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode EnableBtCallLogInner(MessageParcel &data, MessageParcel &reply);
+    int32_t EnableBtCallLogInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetVirtualDeviceListInner(MessageParcel &data, MessageParcel &reply);
     int32_t UpdateVirtualDeviceInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetCurrentCallTypeInner(MessageParcel &data, MessageParcel &reply);
 
-    using BluetoothHfpAgFunc = ErrCode (BluetoothHfpAgStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, BluetoothHfpAgFunc> memberFuncMap_;
-
+private:
+    static const std::map<uint32_t, HfpAgStubFuncPerm> memberFuncMap_;
     DISALLOW_COPY_AND_MOVE(BluetoothHfpAgStub);
 };
 

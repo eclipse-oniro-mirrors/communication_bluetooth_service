@@ -36,7 +36,6 @@
 #include "dialog_switch.h"
 #include "hisysevent.h"
 #include "interface_adapter_manager.h"
-#include "permission_utils.h"
 #include "permission_manager.h"
 #include "bluetooth_host_server.h"
 
@@ -201,7 +200,7 @@ public:
                     return;
                 }
                 uint32_t tokenId = this->impl_->observersToken_.ReadVal(observer->AsObject());
-                if (PermissionUtils::VerifyUseBluetoothPermission(tokenId) == PERMISSION_DENIED) {
+                if (PermissionManager::VerifyPermission(ACCESS_BLUETOOTH, tokenId) == false) {
                     HILOGE("false, check permission failed");
                 } else {
                     observer->OnStateChanged(transport, state);
@@ -221,8 +220,8 @@ public:
                     HILOGI("pid:%{public}d is proxy pid, not callback.", pid);
                     return;
                 }
-                uint32_t  tokenId = this->impl_->bleObserversToken_.ReadVal(observer->AsObject());
-                if (PermissionUtils::VerifyUseBluetoothPermission(tokenId) == PERMISSION_DENIED) {
+                uint32_t tokenId = this->impl_->bleObserversToken_.ReadVal(observer->AsObject());
+                if (PermissionManager::VerifyPermission(ACCESS_BLUETOOTH, tokenId) == false) {
                     HILOGE("false, check permission failed");
                 } else {
                     observer->OnStateChanged(transport, state);
@@ -246,6 +245,23 @@ class BluetoothHostServer::impl::AdapterClassicObserver : public IAdapterClassic
 public:
     AdapterClassicObserver(BluetoothHostServer::impl *impl) : impl_(impl) {};
     ~AdapterClassicObserver() override = default;
+
+    bool CheckDiscoverOrAccessPermission(uint64_t tokenId)
+    {
+        if (PermissionManager::IsNativeCaller(tokenId) ||
+            PermissionManager::GetApiVersion(tokenId) >= API_VERSION_10) {
+            if (!PermissionManager::VerifyPermission(ACCESS_BLUETOOTH, tokenId)) {
+                HILOGI("check ACCESS_BLUETOOTH permission failed");
+                return false;
+            }
+        } else {
+            if (!PermissionManager::VerifyPermission(DISCOVER_BLUETOOTH, tokenId)) {
+                HILOGI("check DISCOVER_BLUETOOTH permission failed");
+                return false;
+            }
+        }
+        return true;
+    }
 
     void OnDiscoveryStateChanged(const int32_t status) override
     {
@@ -278,11 +294,10 @@ public:
                 return;
             }
             uint32_t tokenId = this->impl_->observersToken_.ReadVal(observer->AsObject());
-            if (PermissionUtils::VerifyDiscoverBluetoothPermission(tokenId) == PERMISSION_DENIED) {
-                HILOGE("OnDiscoveryResult() false, check permission failed");
-            } else {
-                observer->OnDiscoveryResult(device, rssi, deviceName, deviceClass);
+            if (!CheckDiscoverOrAccessPermission(tokenId)) {
+                return;
             }
+            observer->OnDiscoveryResult(device, rssi, deviceName, deviceClass);
         });
     }
 
@@ -300,11 +315,10 @@ public:
             GET_ENCRYPT_ADDR(device), reqType, number);
         impl_->observers_.ForEach([this, transport, device, reqType, number](IBluetoothHostObserver *observer) {
             uint32_t tokenId = this->impl_->observersToken_.ReadVal(observer->AsObject());
-            if (PermissionUtils::VerifyUseBluetoothPermission(tokenId) == PERMISSION_DENIED) {
-                HILOGE("false, check permission failed");
-            } else {
-                observer->OnPairConfirmed(transport, device, reqType, number);
+            if (!CheckDiscoverOrAccessPermission(tokenId)) {
+                return;
             }
+            observer->OnPairConfirmed(transport, device, reqType, number);
         });
     }
 
@@ -337,6 +351,23 @@ public:
     ClassicRemoteDeviceObserver(BluetoothHostServer::impl *impl) : impl_(impl) {};
     ~ClassicRemoteDeviceObserver() override = default;
 
+    bool CheckDiscoverOrAccessPermission(uint64_t tokenId)
+    {
+        if (PermissionManager::IsNativeCaller(tokenId) ||
+            PermissionManager::GetApiVersion(tokenId) >= API_VERSION_10) {
+            if (!PermissionManager::VerifyPermission(ACCESS_BLUETOOTH, tokenId)) {
+                HILOGI("check ACCESS_BLUETOOTH permission failed");
+                return false;
+            }
+        } else {
+            if (!PermissionManager::VerifyPermission(DISCOVER_BLUETOOTH, tokenId)) {
+                HILOGI("check DISCOVER_BLUETOOTH permission failed");
+                return false;
+            }
+        }
+        return true;
+    }
+
     void OnAclStateChanged(const RawAddress &device, int state, unsigned int reason) override
     {
         return;
@@ -352,11 +383,10 @@ public:
                 return;
             }
             uint32_t tokenId = this->impl_->remoteObserversToken_.ReadVal(observer->AsObject());
-            if (PermissionUtils::VerifyUseBluetoothPermission(tokenId) == PERMISSION_DENIED) {
-                HILOGE("false, check permission failed");
-            } else {
-                observer->OnPairStatusChanged(transport, device, status, PAIR_COMMON_BOND_CAUSE);
+            if (!CheckDiscoverOrAccessPermission(tokenId)) {
+                return;
             }
+            observer->OnPairStatusChanged(transport, device, status, PAIR_COMMON_BOND_CAUSE);
         });
     }
 
@@ -421,6 +451,23 @@ public:
     AdapterBleObserver(BluetoothHostServer::impl *impl) : impl_(impl){};
     ~AdapterBleObserver() override = default;
 
+    bool CheckDiscoverOrAccessPermission(uint64_t tokenId)
+    {
+        if (PermissionManager::IsNativeCaller(tokenId) ||
+            PermissionManager::GetApiVersion(tokenId) >= API_VERSION_10) {
+            if (!PermissionManager::VerifyPermission(ACCESS_BLUETOOTH, tokenId)) {
+                HILOGI("check ACCESS_BLUETOOTH permission failed");
+                return false;
+            }
+        } else {
+            if (!PermissionManager::VerifyPermission(DISCOVER_BLUETOOTH, tokenId)) {
+                HILOGI("check DISCOVER_BLUETOOTH permission failed");
+                return false;
+            }
+        }
+        return true;
+    }
+
     void OnDiscoveryStateChanged(const int32_t status) override
     {
         HILOGI("status: %{public}d", status);
@@ -446,11 +493,10 @@ public:
                 return;
             }
             uint32_t tokenId = this->impl_->bleObserversToken_.ReadVal(observer->AsObject());
-            if (PermissionUtils::VerifyDiscoverBluetoothPermission(tokenId) == PERMISSION_DENIED) {
-                HILOGE("false, check permission failed");
-            } else {
-                observer->OnDiscoveryResult(device, rssi, deviceName, deviceClass);
+            if (!CheckDiscoverOrAccessPermission(tokenId)) {
+                return;
             }
+            observer->OnDiscoveryResult(device, rssi, deviceName, deviceClass);
         });
     }
 
@@ -473,11 +519,10 @@ public:
                 return;
             }
             uint32_t tokenId = this->impl_->bleObserversToken_.ReadVal(observer->AsObject());
-            if (PermissionUtils::VerifyUseBluetoothPermission(tokenId) == PERMISSION_DENIED) {
-                HILOGE("OnPairConfirmed() false, check permission failed");
-            } else {
-                observer->OnPairConfirmed(transport, device, reqType, number);
+            if (!CheckDiscoverOrAccessPermission(tokenId)) {
+                return;
             }
+            observer->OnPairConfirmed(transport, device, reqType, number);
         });
     }
 
@@ -528,7 +573,7 @@ public:
         impl_->bleRemoteObservers_.ForEach([this, transport, device, status](
             IBluetoothBlePeripheralObserver *observer) {
             uint32_t tokenId = this->impl_->bleRemoteObserversToken_.ReadVal(observer->AsObject());
-            if (PermissionUtils::VerifyUseBluetoothPermission(tokenId) == PERMISSION_DENIED) {
+            if (PermissionManager::VerifyPermission(ACCESS_BLUETOOTH, tokenId) == false) {
                 HILOGE("false, check permission failed");
             } else {
                 observer->OnPairStatusChanged(transport, device, status, PAIR_COMMON_BOND_CAUSE);
@@ -796,10 +841,6 @@ int32_t BluetoothHostServer::EnableBt()
 int32_t BluetoothHostServer::DisableBt(bool isAsync, const std::string &callingName)
 {
     (void)(callingName);
-    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check Access permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     if (isAsync) {
         return BT_ERR_API_NOT_SUPPORT;
     }
@@ -883,14 +924,6 @@ int32_t BluetoothHostServer::GetDeviceType(int32_t transport, const std::string 
 int32_t BluetoothHostServer::GetLocalAddress(std::string &addr)
 {
     HILOGI("Enter!");
-    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check Access permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
-    if (PermissionUtils::VerifyGetBluetoothLocalMacPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check GetLocalMac permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     if (IsBtEnabled() && classicService) {
@@ -914,10 +947,6 @@ int32_t BluetoothHostServer::EnableBle(bool noAutoConnect, bool isAsync, const s
 {
     HILOGI("Enter!");
     (void)(callingName);
-    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check Access permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     if (isAsync) {
         return BT_ERR_API_NOT_SUPPORT;
     }
@@ -960,10 +989,6 @@ int32_t BluetoothHostServer::GetMaxNumConnectedAudioDevices()
 
 int32_t BluetoothHostServer::GetBtConnectionState(int32_t &state)
 {
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     if (IsBtEnabled()) {
         state = (int32_t)IAdapterManager::GetInstance()->GetAdapterConnectState();
         HILOGI("state: %{public}d", state);
@@ -977,10 +1002,6 @@ int32_t BluetoothHostServer::GetBtConnectionState(int32_t &state)
 int32_t BluetoothHostServer::GetBtProfileConnState(uint32_t profileId, int &state)
 {
     HILOGI("Enter!");
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     if (IsBtEnabled()) {
         state = (int32_t)IProfileManager::GetInstance()->GetProfileServiceConnectState(profileId);
         return NO_ERROR;
@@ -1023,10 +1044,6 @@ bool BluetoothHostServer::SetLocalDeviceClass(const int32_t &deviceClass)
 int32_t BluetoothHostServer::GetLocalName(std::string &name)
 {
     HILOGI("Enter!");
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     if (IsBtEnabled() && classicService) {
@@ -1044,13 +1061,8 @@ int32_t BluetoothHostServer::GetLocalName(std::string &name)
 int32_t BluetoothHostServer::SetLocalName(const std::string &name)
 {
     HILOGI("name: %{public}s", name.c_str());
-    int api12 = 12;
-    if (!PermissionUtils::CheckSystemHapApp() && PermissionUtils::GetApiVersion() >= api12) {
+    if (!PermissionManager::IsSystemHap() && PermissionManager::GetApiVersion() >= API_VERSION_12) {
         return BT_ERR_API_NOT_SUPPORT;
-    }
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
     }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
@@ -1078,10 +1090,6 @@ int32_t BluetoothHostServer::SetLocalName(const std::string &name)
 int32_t BluetoothHostServer::GetBtScanMode(int32_t &scanMode)
 {
     HILOGI("Enter!");
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     if (IsBtEnabled() && classicService) {
         scanMode = classicService->GetBtScanMode();
@@ -1095,10 +1103,6 @@ int32_t BluetoothHostServer::GetBtScanMode(int32_t &scanMode)
 int32_t BluetoothHostServer::SetBtScanMode(int32_t mode, int32_t duration)
 {
     HILOGI("mode: %{public}d, duration: %{public}d", mode, duration);
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     if (IsBtEnabled() && classicService) {
         if (classicService->SetBtScanMode(mode, duration)) {
@@ -1144,14 +1148,22 @@ bool BluetoothHostServer::SetBondableMode(int32_t transport, int32_t mode)
 int32_t BluetoothHostServer::StartBtDiscovery()
 {
     HILOGI("Enter!");
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
-    if (PermissionUtils::VerifyApproximatelyPermission() == PERMISSION_DENIED &&
-        PermissionUtils::VerifyLocationPermission() == PERMISSION_DENIED) {
-        HILOGE("No location permission");
-        return BT_ERR_PERMISSION_FAILED;
+    if (PermissionManager::IsNativeCaller()||PermissionManager::GetApiVersion() >= API_VERSION_10) {
+        if (PermissionManager::VerifyPermission(ACCESS_BLUETOOTH) == false) {
+            HILOGE("check access permission failed.");
+            return BT_ERR_PERMISSION_FAILED;
+        }
+    } else {
+        if (PermissionManager::VerifyPermission(DISCOVER_BLUETOOTH) == false ||
+            PermissionManager::VerifyPermission(MANAGE_BLUETOOTH) == false) {
+            HILOGE("check permission failed.");
+            return BT_ERR_PERMISSION_FAILED;
+        }
+        if (PermissionManager::VerifyPermission(APPROXIMATELY_LOCATION) == false &&
+            PermissionManager::VerifyPermission(LOCATION) == false) {
+            HILOGE("No location permission");
+            return BT_ERR_PERMISSION_FAILED;
+        }
     }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     if (IsBtEnabled() && classicService) {
@@ -1168,10 +1180,6 @@ int32_t BluetoothHostServer::StartBtDiscovery()
 int32_t BluetoothHostServer::CancelBtDiscovery()
 {
     HILOGI("Enter!");
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     if (IsBtEnabled() && classicService) {
         if (classicService->CancelBtDiscovery()) {
@@ -1187,10 +1195,6 @@ int32_t BluetoothHostServer::CancelBtDiscovery()
 int32_t BluetoothHostServer::IsBtDiscovering(bool &isDisCovering, int32_t transport)
 {
     HILOGI("transport: %{public}d", transport);
-    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     if ((transport == BTTransport::ADAPTER_BREDR) && IsBtEnabled() && classicService) {
@@ -1219,17 +1223,6 @@ long BluetoothHostServer::GetBtDiscoveryEndMillis()
 int32_t BluetoothHostServer::GetPairedDevices(std::vector<BluetoothRawAddress> &pairedAddr)
 {
     HILOGI("GetPairedDevices");
-    if (PermissionUtils::GetApiVersion() >= 10) { // 10:api version
-        if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
-            HILOGE("false, check Access permission failed");
-            return BT_ERR_PERMISSION_FAILED;
-        }
-    } else {
-        if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-            HILOGE("false, check permission failed");
-            return BT_ERR_SYSTEM_PERMISSION_FAILED;
-        }
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     std::vector<RawAddress> rawAddrVec;
@@ -1277,14 +1270,6 @@ int32_t BluetoothHostServer::RemovePair(int32_t transport, const sptr<BluetoothR
         return BT_ERR_INTERNAL_ERROR;
     }
     HILOGI("addr:%{public}s, transport:%{public}d", GET_ENCRYPT_ADDR(*device), transport);
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("check permission failed.");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     transport = GetTransportByDeviceType(transport, device->GetAddress());
@@ -1306,10 +1291,6 @@ int32_t BluetoothHostServer::RemovePair(int32_t transport, const sptr<BluetoothR
 bool BluetoothHostServer::RemoveAllPairs()
 {
     HILOGI("Enter!");
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("check permission failed");
-        return false;
-    }
     if (BTStateID::STATE_TURN_ON != IAdapterManager::GetInstance()->GetState(BTTransport::ADAPTER_BREDR) &&
         BTStateID::STATE_TURN_ON != IAdapterManager::GetInstance()->GetState(BTTransport::ADAPTER_BLE)) {
         HILOGW("BT current state is not enabled!");
@@ -1379,10 +1360,6 @@ int32_t BluetoothHostServer::GetPowerMode(const std::string &address)
 
 int32_t BluetoothHostServer::GetDeviceName(int32_t transport, const std::string &address, std::string &name, bool alias)
 {
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     RawAddress addr(address);
@@ -1402,10 +1379,6 @@ int32_t BluetoothHostServer::GetDeviceName(int32_t transport, const std::string 
 std::string BluetoothHostServer::GetDeviceAlias(const std::string &address)
 {
     HILOGI("address: %{public}s", GetEncryptAddr(address).c_str());
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return INVALID_NAME;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     if (IsBtEnabled() && classicService) {
         RawAddress addr(address);
@@ -1419,10 +1392,6 @@ std::string BluetoothHostServer::GetDeviceAlias(const std::string &address)
 int32_t BluetoothHostServer::SetDeviceAlias(const std::string &address, const std::string &aliasName)
 {
     HILOGI("address: %{public}s, aliasName: %{public}s", GetEncryptAddr(address).c_str(), aliasName.c_str());
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     if (IsBtEnabled() && classicService) {
         RawAddress addr(address);
@@ -1447,10 +1416,6 @@ int32_t BluetoothHostServer::IsProfileExist(const std::string &profileName, bool
 int32_t BluetoothHostServer::GetRemoteDeviceBatteryInfo(const std::string &address,
     BluetoothBatteryInfo &batteryInfo)
 {
-    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check Access permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     return BT_ERR_INTERNAL_ERROR;
 }
 
@@ -1463,10 +1428,6 @@ int32_t BluetoothHostServer::SetRemoteDeviceBatteryInfo(const std::string &addre
 int32_t BluetoothHostServer::GetPairState(int32_t transport, const std::string &address, int32_t &pairState)
 {
     HILOGI("transport: %{public}d, address: %{public}s", transport, GetEncryptAddr(address).c_str());
-    if (PermissionUtils::VerifyAccessBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check Access permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     RawAddress addr(address);
@@ -1489,10 +1450,6 @@ int32_t BluetoothHostServer::StartPair(int32_t transport, const BluetoothRawAddr
     }
     std::string address = bluetoothRawAddress.GetAddress();
     HILOGI("transport: %{public}d, address: %{public}s", transport, GetEncryptAddr(address).c_str());
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("StartPair false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     RawAddress addr(address);
@@ -1515,14 +1472,6 @@ int32_t BluetoothHostServer::StartPair(int32_t transport, const BluetoothRawAddr
 bool BluetoothHostServer::CancelPairing(int32_t transport, const std::string &address)
 {
     HILOGI("transport: %{public}d, address: %{public}s", transport, GetEncryptAddr(address).c_str());
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return false;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     RawAddress addr(address);
@@ -1588,10 +1537,6 @@ bool BluetoothHostServer::IsAclEncrypted(int32_t transport, const std::string &a
 int32_t BluetoothHostServer::GetDeviceClass(const std::string &address, int32_t &cod)
 {
     HILOGI("address: %{public}s", GetEncryptAddr(address).c_str());
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     if (IsBtEnabled() && classicService) {
         RawAddress addr(address);
@@ -1635,10 +1580,6 @@ int32_t BluetoothHostServer::GetLocalProfileUuids(std::vector<std::string> &uuid
 int32_t BluetoothHostServer::SetDevicePin(const std::string &address, const std::string &pin)
 {
     HILOGI("address: %{public}s, pin: %{public}s", GetEncryptAddr(address).c_str(), pin.c_str());
-    if (PermissionUtils::VerifyManageBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     if (IsBtEnabled() && classicService) {
         RawAddress addr(address);
@@ -1656,10 +1597,6 @@ int32_t BluetoothHostServer::SetDevicePairingConfirmation(int32_t transport, con
 {
     HILOGI("transport: %{public}d, address: %{public}s, accept: %{public}d",
         transport, GetEncryptAddr(address).c_str(), accept);
-    if (PermissionUtils::VerifyManageBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     RawAddress addr(address);
@@ -1683,10 +1620,6 @@ bool BluetoothHostServer::SetDevicePasskey(int32_t transport, const std::string 
 {
     HILOGI("transport: %{public}d, address: %{public}s, passkey: %{public}d, accept: %{public}d",
         transport, GetEncryptAddr(address).c_str(), passkey, accept);
-    if (PermissionUtils::VerifyManageBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return false;
-    }
     auto classicService = IAdapterManager::GetInstance()->GetClassicAdapterInterface();
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     RawAddress addr(address);
@@ -1720,10 +1653,6 @@ bool BluetoothHostServer::PairRequestReply(int32_t transport, const std::string 
 bool BluetoothHostServer::ReadRemoteRssiValue(const std::string &address)
 {
     HILOGI("address: %{public}s", GetEncryptAddr(address).c_str());
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return false;
-    }
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     if (IsBleEnabled() && bleService) {
         RawAddress addr(address);
@@ -1887,10 +1816,6 @@ int32_t BluetoothHostServer::SyncRandomAddress(const std::string &realAddr, cons
 
 int32_t BluetoothHostServer::StartCrediblePair(int32_t transport, const std::string &address)
 {
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
     return NO_ERROR;
 }
 

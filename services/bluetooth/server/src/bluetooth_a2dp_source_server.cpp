@@ -23,8 +23,8 @@
 #include "interface_profile_a2dp_src.h"
 #include "remote_observer_list.h"
 #include "interface_adapter_manager.h"
-#include "permission_utils.h"
 #include "bluetooth_a2dp_source_server.h"
+#include "permission_manager.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -225,13 +225,9 @@ void BluetoothA2dpSourceServer::DeregisterObserver(const sptr<IBluetoothA2dpSour
 int32_t BluetoothA2dpSourceServer::Connect(const RawAddress &device)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("Connect error, check permission failed");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
+    if (PermissionManager::GetApiVersion() >= API_VERSION_10 && !PermissionManager::IsSystemHap()) {
+        HILOGE("check permission failed, system hap need.");
+        return BT_ERR_PERMISSION_FAILED;
     }
     OHOS::Bluetooth::BluetoothHiTrace::BluetoothStartAsyncTrace("A2DP_SRC_CONNECT", 1);
     int32_t result = pimpl->a2dpSrcService_->Connect(device);
@@ -242,13 +238,9 @@ int32_t BluetoothA2dpSourceServer::Connect(const RawAddress &device)
 int32_t BluetoothA2dpSourceServer::Disconnect(const RawAddress &device)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
-    if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("Disconnect error, check permission failed");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
+    if (PermissionManager::GetApiVersion() >= API_VERSION_10 && !PermissionManager::IsSystemHap()) {
+        HILOGE("check permission failed, system hap need.");
+        return BT_ERR_PERMISSION_FAILED;
     }
     return pimpl->a2dpSrcService_->Disconnect(device);
 }
@@ -256,10 +248,6 @@ int32_t BluetoothA2dpSourceServer::Disconnect(const RawAddress &device)
 int BluetoothA2dpSourceServer::GetDeviceState(const RawAddress &device, int &state)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return RET_NO_SUPPORT;
-    }
     state = pimpl->a2dpSrcService_->GetDeviceState(device);
     return NO_ERROR;
 }
@@ -267,10 +255,6 @@ int BluetoothA2dpSourceServer::GetDeviceState(const RawAddress &device, int &sta
 int BluetoothA2dpSourceServer::GetDevicesByStates(const std::vector<int32_t> &states, std::vector<RawAddress> &rawAddrs)
 {
     HILOGI("starts");
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_PERMISSION_FAILED;
-    }
     std::vector<int> tmpStates;
     for (int32_t state : states) {
         HILOGI("state = %{public}d", state);
@@ -284,10 +268,6 @@ int BluetoothA2dpSourceServer::GetDevicesByStates(const std::vector<int32_t> &st
 int32_t BluetoothA2dpSourceServer::GetPlayingState(const RawAddress &device, int &state)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
     int ret = pimpl->a2dpSrcService_->GetPlayingState(device, state);
     if (ret != NO_ERROR) {
         return BT_ERR_INTERNAL_ERROR;
@@ -297,10 +277,6 @@ int32_t BluetoothA2dpSourceServer::GetPlayingState(const RawAddress &device, int
 
 int BluetoothA2dpSourceServer::SetConnectStrategy(const RawAddress &device, int strategy)
 {
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
     HILOGI("addr: %{public}s, strategy: %{public}d", GET_ENCRYPT_ADDR(device), strategy);
     return pimpl->a2dpSrcService_->SetConnectStrategy(device, strategy);
 }

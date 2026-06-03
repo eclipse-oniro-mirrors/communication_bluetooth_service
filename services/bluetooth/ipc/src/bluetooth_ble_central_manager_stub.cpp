@@ -21,63 +21,50 @@
 #include "ipc_types.h"
 #include "parcel_bt_uuid.h"
 #include "bluetooth_bt_uuid.h"
+#include "bluetooth_errorcode.h"
+#include "permission_manager.h"
+
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) \
+BluetoothBleCentralManagerInterfaceCode::code, {&BluetoothBleCentralManagerStub::func, perm} \
 
 namespace OHOS {
 namespace Bluetooth {
+using namespace OHOS::bluetooth;
 const int32_t BLE_CENTRAL_MANAGER_STUB_READ_DATA_SIZE_MAX_LEN = 0x100;
-const std::map<uint32_t, std::function<ErrCode(BluetoothBleCentralManagerStub *, MessageParcel &, MessageParcel &)>>
-    BluetoothBleCentralManagerStub::interfaces_ = {
-        {BluetoothBleCentralManagerInterfaceCode::BLE_REGISTER_BLE_CENTRAL_MANAGER_CALLBACK,
-            std::bind(&BluetoothBleCentralManagerStub::RegisterBleCentralManagerCallbackInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_DE_REGISTER_BLE_CENTRAL_MANAGER_CALLBACK,
-            std::bind(&BluetoothBleCentralManagerStub::DeregisterBleCentralManagerCallbackInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_START_SCAN,
-            std::bind(&BluetoothBleCentralManagerStub::StartScanInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_REMOVE_SCAN_FILTER,
-            std::bind(&BluetoothBleCentralManagerStub::RemoveScanFilterInner, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_STOP_SCAN,
-            std::bind(&BluetoothBleCentralManagerStub::StopScanInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_FREEZE_BY_RSS,
-            std::bind(&BluetoothBleCentralManagerStub::FreezeByRssInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_RESET_ALL_PROXY,
-            std::bind(&BluetoothBleCentralManagerStub::ResetAllProxyInner, std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_SET_LPDEVICE_ADV_PARAM,
-            std::bind(&BluetoothBleCentralManagerStub::SetLpDeviceAdvParamInner, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_SET_SCAN_REPORT_CHANNEL_TO_LPDEVICE,
-            std::bind(&BluetoothBleCentralManagerStub::SetScanReportChannelToLpDeviceInner, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_ENABLE_SYNC_DATA_TO_LPDEVICE,
-            std::bind(&BluetoothBleCentralManagerStub::EnableSyncDataToLpDeviceInner, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_DISABLE_SYNC_DATA_TO_LPDEVICE,
-            std::bind(&BluetoothBleCentralManagerStub::DisableSyncDataToLpDeviceInner, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_SEND_PARAMS_TO_LPDEVICE,
-            std::bind(&BluetoothBleCentralManagerStub::SendParamsToLpDeviceInner, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_IS_LPDEVICE_AVAILABLE,
-            std::bind(&BluetoothBleCentralManagerStub::IsLpDeviceAvailableInner, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_SET_LPDEVICE_PARAM,
-            std::bind(&BluetoothBleCentralManagerStub::SetLpDeviceParamInner, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_REMOVE_LPDEVICE_PARAM,
-            std::bind(&BluetoothBleCentralManagerStub::RemoveLpDeviceParamInner, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_CHANGE_SCAN_PARAM,
-            std::bind(&BluetoothBleCentralManagerStub::ChangeScanParamsInner, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3)},
-        {BluetoothBleCentralManagerInterfaceCode::BLE_IS_VALID_SCANNERID,
-            std::bind(&BluetoothBleCentralManagerStub::IsValidScannerIdInner, std::placeholders::_1,
-            std::placeholders::_2, std::placeholders::_3)},
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const BluetoothBleCentralManagerStub::BleCentralManagerStubFuncMap BluetoothBleCentralManagerStub::memberFuncMap_ = {
+    {STUB_FUNC(BLE_REGISTER_BLE_CENTRAL_MANAGER_CALLBACK, RegisterBleCentralManagerCallbackInner, nullptr)},
+    {STUB_FUNC(BLE_DE_REGISTER_BLE_CENTRAL_MANAGER_CALLBACK, DeregisterBleCentralManagerCallbackInner, nullptr)},
+    {STUB_FUNC(BLE_START_SCAN, StartScanInner, nullptr)},
+    {STUB_FUNC(BLE_REMOVE_SCAN_FILTER, RemoveScanFilterInner,
+        CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BLE_STOP_SCAN, StopScanInner, CHECK_PERM(false, {DISCOVER_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(BLE_FREEZE_BY_RSS, FreezeByRssInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_RESET_ALL_PROXY, ResetAllProxyInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_SET_LPDEVICE_ADV_PARAM, SetLpDeviceAdvParamInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_SET_SCAN_REPORT_CHANNEL_TO_LPDEVICE, SetScanReportChannelToLpDeviceInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_ENABLE_SYNC_DATA_TO_LPDEVICE, EnableSyncDataToLpDeviceInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_DISABLE_SYNC_DATA_TO_LPDEVICE, DisableSyncDataToLpDeviceInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_SEND_PARAMS_TO_LPDEVICE, SendParamsToLpDeviceInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_IS_LPDEVICE_AVAILABLE, IsLpDeviceAvailableInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_SET_LPDEVICE_PARAM, SetLpDeviceParamInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_REMOVE_LPDEVICE_PARAM, RemoveLpDeviceParamInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_CHANGE_SCAN_PARAM, ChangeScanParamsInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(BLE_IS_VALID_SCANNERID, IsValidScannerIdInner, nullptr)},
 };
 
 BluetoothBleCentralManagerStub::BluetoothBleCentralManagerStub()
@@ -89,33 +76,10 @@ BluetoothBleCentralManagerStub::~BluetoothBleCentralManagerStub()
 int BluetoothBleCentralManagerStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    if (BluetoothBleCentralManagerStub::GetDescriptor() != data.ReadInterfaceToken()) {
-        HILOGW("[OnRemoteRequest] fail: invalid interface token!");
-        return OBJECT_NULL;
-    }
-
-    auto it = interfaces_.find(code);
-    if (it == interfaces_.end()) {
-        HILOGW("[OnRemoteRequest] fail: unknown code!");
-        return IRemoteStub<IBluetoothBleCentralManager>::OnRemoteRequest(code, data, reply, option);
-    }
-
-    auto fun = it->second;
-    if (fun == nullptr) {
-        HILOGW("[OnRemoteRequest] fail: not find function!");
-        return IRemoteStub<IBluetoothBleCentralManager>::OnRemoteRequest(code, data, reply, option);
-    }
-
-    ErrCode result = fun(this, data, reply);
-    if (SUCCEEDED(result)) {
-        return NO_ERROR;
-    }
-
-    HILOGW("[OnRemoteRequest] fail: Failed to call interface %{public}u, err:%{public}d", code, result);
-    return result;
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothBleCentralManagerStub);
 }
 
-ErrCode BluetoothBleCentralManagerStub::RegisterBleCentralManagerCallbackInner(
+int32_t BluetoothBleCentralManagerStub::RegisterBleCentralManagerCallbackInner(
     MessageParcel &data, MessageParcel &reply)
 {
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
@@ -131,7 +95,7 @@ ErrCode BluetoothBleCentralManagerStub::RegisterBleCentralManagerCallbackInner(
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::DeregisterBleCentralManagerCallbackInner(
+int32_t BluetoothBleCentralManagerStub::DeregisterBleCentralManagerCallbackInner(
     MessageParcel &data, MessageParcel &reply)
 {
     int32_t scannerId = data.ReadInt32();
@@ -142,7 +106,7 @@ ErrCode BluetoothBleCentralManagerStub::DeregisterBleCentralManagerCallbackInner
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::StartScanInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::StartScanInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t scannerId = data.ReadInt32();
     std::shared_ptr<BluetoothBleScanSettings> settings(data.ReadParcelable<BluetoothBleScanSettings>());
@@ -176,7 +140,7 @@ ErrCode BluetoothBleCentralManagerStub::StartScanInner(MessageParcel &data, Mess
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::StopScanInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::StopScanInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t scannerId = data.ReadInt32();
     int ret = StopScan(scannerId);
@@ -187,7 +151,7 @@ ErrCode BluetoothBleCentralManagerStub::StopScanInner(MessageParcel &data, Messa
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::RemoveScanFilterInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::RemoveScanFilterInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t scannerId = data.ReadInt32();
 
@@ -195,7 +159,7 @@ ErrCode BluetoothBleCentralManagerStub::RemoveScanFilterInner(MessageParcel &dat
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::FreezeByRssInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::FreezeByRssInner(MessageParcel &data, MessageParcel &reply)
 {
     std::vector<int> pidVec {};
     CHECK_AND_RETURN_LOG_RET(data.ReadInt32Vector(&pidVec), ERR_INVALID_VALUE, "ipc failed");
@@ -210,7 +174,7 @@ ErrCode BluetoothBleCentralManagerStub::FreezeByRssInner(MessageParcel &data, Me
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::ResetAllProxyInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::ResetAllProxyInner(MessageParcel &data, MessageParcel &reply)
 {
     bool ret = ResetAllProxy();
     if (!reply.WriteBool(ret)) {
@@ -219,47 +183,47 @@ ErrCode BluetoothBleCentralManagerStub::ResetAllProxyInner(MessageParcel &data, 
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::SetLpDeviceAdvParamInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::SetLpDeviceAdvParamInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::SetScanReportChannelToLpDeviceInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::SetScanReportChannelToLpDeviceInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::EnableSyncDataToLpDeviceInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::EnableSyncDataToLpDeviceInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::DisableSyncDataToLpDeviceInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::DisableSyncDataToLpDeviceInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::SendParamsToLpDeviceInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::SendParamsToLpDeviceInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::IsLpDeviceAvailableInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::IsLpDeviceAvailableInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::SetLpDeviceParamInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::SetLpDeviceParamInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::RemoveLpDeviceParamInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::RemoveLpDeviceParamInner(MessageParcel &data, MessageParcel &reply)
 {
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::ChangeScanParamsInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::ChangeScanParamsInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t scannerId = data.ReadInt32();
     std::shared_ptr<BluetoothBleScanSettings> settings(data.ReadParcelable<BluetoothBleScanSettings>());
@@ -294,7 +258,7 @@ ErrCode BluetoothBleCentralManagerStub::ChangeScanParamsInner(MessageParcel &dat
     return NO_ERROR;
 }
 
-ErrCode BluetoothBleCentralManagerStub::IsValidScannerIdInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothBleCentralManagerStub::IsValidScannerIdInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t scannerId = data.ReadInt32();
     bool isValid = true;

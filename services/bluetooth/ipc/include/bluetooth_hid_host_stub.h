@@ -18,6 +18,7 @@
 #include <map>
 #include <iremote_stub.h>
 #include "i_bluetooth_hid_host.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -27,28 +28,26 @@ public:
     BluetoothHidHostStub();
     ~BluetoothHidHostStub();
 
-    virtual int OnRemoteRequest(
-        uint32_t code,
-        MessageParcel& data,
-        MessageParcel& reply,
-        MessageOption& option) override;
+    int OnRemoteRequest(uint32_t code, MessageParcel& data, MessageParcel& reply, MessageOption& option) override;
+    using HidHostStubFunc = std::function<int32_t(BluetoothHidHostStub *, MessageParcel &, MessageParcel &)>;
+    using HidHostStubFuncPerm = std::pair<HidHostStubFunc, std::shared_ptr<PermissionItem>>;
 
 private:
     int32_t ConnectInner(MessageParcel &data, MessageParcel &reply);
     int32_t DisconnectInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetDeviceStateInner(MessageParcel &data, MessageParcel &reply);
     int32_t GetDevicesByStatesInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode DeregisterObserverInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode HidHostVCUnplugInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode HidHostSendDataInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode HidHostSetReportInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode HidHostGetReportInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode HidHostSetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
-    ErrCode HidHostGetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
+    int32_t RegisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t DeregisterObserverInner(MessageParcel &data, MessageParcel &reply);
+    int32_t HidHostVCUnplugInner(MessageParcel &data, MessageParcel &reply);
+    int32_t HidHostSendDataInner(MessageParcel &data, MessageParcel &reply);
+    int32_t HidHostSetReportInner(MessageParcel &data, MessageParcel &reply);
+    int32_t HidHostGetReportInner(MessageParcel &data, MessageParcel &reply);
+    int32_t HidHostSetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
+    int32_t HidHostGetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
 
-    using BluetoothHidHostFunc = ErrCode (BluetoothHidHostStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, BluetoothHidHostFunc> memberFuncMap_;
+private:
+    static const std::map<uint32_t, HidHostStubFuncPerm> memberFuncMap_;
     DISALLOW_COPY_AND_MOVE(BluetoothHidHostStub);
 };
 } // Bluetooth
