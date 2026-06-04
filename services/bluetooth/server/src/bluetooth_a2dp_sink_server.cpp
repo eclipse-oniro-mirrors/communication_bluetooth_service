@@ -20,7 +20,6 @@
 #include "interface_profile_a2dp_snk.h"
 #include "remote_observer_list.h"
 #include "interface_adapter_manager.h"
-#include "permission_utils.h"
 #include "bluetooth_a2dp_sink_server.h"
 
 namespace OHOS {
@@ -168,10 +167,6 @@ int BluetoothA2dpSinkServer::Disconnect(const RawAddress &device)
 int BluetoothA2dpSinkServer::GetDeviceState(const RawAddress &device)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_FAILURE;
-    }
     return pimpl->a2dpSnkService_->GetDeviceState(device);
 }
 
@@ -179,10 +174,6 @@ std::vector<RawAddress> BluetoothA2dpSinkServer::GetDevicesByStates(const std::v
 {
     HILOGI("starts");
     std::vector<RawAddress> rawDevices;
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return rawDevices;
-    }
     std::vector<int> tmpStates;
     for (int32_t state : states) {
         HILOGI("state = %{public}d", state);
@@ -196,19 +187,11 @@ std::vector<RawAddress> BluetoothA2dpSinkServer::GetDevicesByStates(const std::v
 int BluetoothA2dpSinkServer::GetPlayingState(const RawAddress &device, int &state)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_FAILURE;
-    }
     return pimpl->a2dpSnkService_->GetPlayingState(device, state);
 }
 
 int BluetoothA2dpSinkServer::SetConnectStrategy(const RawAddress &device, int strategy)
 {
-    if (!PermissionUtils::CheckSystemHapApp()) {
-        HILOGE("check system api failed.");
-        return BT_ERR_SYSTEM_PERMISSION_FAILED;
-    }
     HILOGI("addr: %{public}s, strategy: %{public}d", GET_ENCRYPT_ADDR(device), strategy);
     return pimpl->a2dpSnkService_->SetConnectStrategy(device, strategy);
 }

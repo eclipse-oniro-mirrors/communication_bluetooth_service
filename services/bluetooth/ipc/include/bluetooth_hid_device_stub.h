@@ -18,6 +18,7 @@
 #include <map>
 #include <iremote_stub.h>
 #include "i_bluetooth_hid_device.h"
+#include "permission_item.h"
 
 namespace OHOS {
 namespace Bluetooth {
@@ -26,11 +27,9 @@ public:
     BluetoothHidDeviceStub();
     ~BluetoothHidDeviceStub();
 
-    virtual int OnRemoteRequest(
-        uint32_t code,
-        MessageParcel& data,
-        MessageParcel& reply,
-        MessageOption& option) override;
+    int OnRemoteRequest(uint32_t code, MessageParcel& data, MessageParcel& reply, MessageOption& option) override;
+    using HidDeviceStubFunc = std::function<int32_t(BluetoothHidDeviceStub *, MessageParcel &, MessageParcel &)>;
+    using HidDeviceStubFuncPerm = std::pair<HidDeviceStubFunc, std::shared_ptr<PermissionItem>>;
 private:
     int32_t ConnectInner(MessageParcel &data, MessageParcel &reply);
     int32_t DisconnectInner(MessageParcel &data, MessageParcel &reply);
@@ -46,8 +45,8 @@ private:
     int32_t HidDeviceSetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
     int32_t HidDeviceGetConnectStrategyInner(MessageParcel &data, MessageParcel &reply);
 
-    using BluetoothHidDeviceFunc = ErrCode (BluetoothHidDeviceStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, BluetoothHidDeviceFunc> memberFuncMap_;
+private:
+    static const std::map<uint32_t, HidDeviceStubFuncPerm> memberFuncMap_;
     DISALLOW_COPY_AND_MOVE(BluetoothHidDeviceStub);
 };
 } // Bluetooth

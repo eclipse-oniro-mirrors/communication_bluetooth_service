@@ -37,6 +37,31 @@ std::string GetEncryptAddr(std::string addr)
     return out;
 }
 
+bool IsValidAddress(const std::string &addr)
+{
+    if (addr.empty() || addr.length() != ADDRESS_LENGTH) {
+        return false;
+    }
+    for (size_t i = 0; i < ADDRESS_LENGTH; i++) {
+        char c = addr[i];
+        switch (i % ADDRESS_SEPARATOR_UNIT) {
+            case 0:
+            case 1:
+                if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')) {
+                    break;
+                }
+                return false;
+            case ADDRESS_COLON_INDEX:
+            default:
+                if (c == ':') {
+                    break;
+                }
+                return false;
+        }
+    }
+    return true;
+}
+
 std::string GetScanModeName(int mode)
 {
     switch (mode) {

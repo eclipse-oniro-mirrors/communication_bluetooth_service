@@ -22,7 +22,6 @@
 #include "interface_profile_manager.h"
 #include "interface_profile.h"
 #include "interface_adapter_manager.h"
-#include "permission_utils.h"
 #include "remote_observer_list.h"
 
 using namespace OHOS::bluetooth;
@@ -211,10 +210,6 @@ bool BluetoothHfpHfServer::DisconnectSco(const BluetoothRawAddress &device) {
 int BluetoothHfpHfServer::GetDevicesByStates(const std::vector<int> &states,
     std::vector<BluetoothRawAddress> &devices) {
     HILOGI("Enter!");
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_FAILURE;
-    }
     std::vector<int> tmpStates;
     for (int32_t state : states) {
         HILOGI("state = %{public}d", state);
@@ -235,10 +230,6 @@ int BluetoothHfpHfServer::GetDevicesByStates(const std::vector<int> &states,
 
 int BluetoothHfpHfServer::GetDeviceState(const BluetoothRawAddress &device) {
     HILOGI("addr: %{public}s", GetEncryptAddr((device).GetAddress()).c_str());
-    if (PermissionUtils::VerifyUseBluetoothPermission() == PERMISSION_DENIED) {
-        HILOGE("false, check permission failed");
-        return BT_FAILURE;
-    }
     RawAddress addr(device.GetAddress());
     if (pimpl->HfpHfService_ != nullptr) {
         return pimpl->HfpHfService_->GetDeviceState(addr);

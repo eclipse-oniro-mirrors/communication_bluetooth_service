@@ -16,68 +16,56 @@
 
 #include "bluetooth_errorcode.h"
 #include "bluetooth_log.h"
+#include "permission_manager.h"
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) BluetoothHidDeviceInterfaceCode::code, {&BluetoothHidDeviceStub::func, perm}
+
 
 namespace OHOS {
 namespace Bluetooth {
+using namespace OHOS::bluetooth;
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const std::map<uint32_t, BluetoothHidDeviceStub::HidDeviceStubFuncPerm> BluetoothHidDeviceStub::memberFuncMap_ = {
+    {STUB_FUNC(COMMAND_CONNECT, ConnectInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_DISCONNECT, DisconnectInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_GET_CONNECTION_STATE, GetConnectionStateInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_GET_CONNECTED_DEVICES, GetConnectedDevicesInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_REGISTER_APP, RegisterAppInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_UNREGISTER_APP, UnRegisterAppInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_REGISTER_OBSERVER, RegisterObserverInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_DEREGISTER_OBSERVER, DeregisterObserverInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_SEND_REPORT, SendReportInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_REPLY_REPORT, ReplyReportInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_REPORT_ERROR, ReportErrorInner,
+        CHECK_PERM(false, {}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_SET_CONNECT_STRATEGY, HidDeviceSetConnectStrategyInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(COMMAND_GET_CONNECT_STRATEGY, HidDeviceGetConnectStrategyInner,
+        CHECK_PERM(true, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+};
+
 BluetoothHidDeviceStub::BluetoothHidDeviceStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_REGISTER_APP)] =
-        &BluetoothHidDeviceStub::RegisterAppInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_UNREGISTER_APP)] =
-        &BluetoothHidDeviceStub::UnRegisterAppInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_CONNECT)] =
-        &BluetoothHidDeviceStub::ConnectInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_DISCONNECT)] =
-        &BluetoothHidDeviceStub::DisconnectInner;
-
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_GET_CONNECTION_STATE)] =
-        &BluetoothHidDeviceStub::GetConnectionStateInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_GET_CONNECTED_DEVICES)] =
-        &BluetoothHidDeviceStub::GetConnectedDevicesInner;
-
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_REGISTER_OBSERVER)] =
-        &BluetoothHidDeviceStub::RegisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_DEREGISTER_OBSERVER)] =
-        &BluetoothHidDeviceStub::DeregisterObserverInner;
-
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_SEND_REPORT)] =
-        &BluetoothHidDeviceStub::SendReportInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_REPLY_REPORT)] =
-        &BluetoothHidDeviceStub::ReplyReportInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_REPORT_ERROR)] =
-        &BluetoothHidDeviceStub::ReportErrorInner;
-
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_SET_CONNECT_STRATEGY)] =
-        &BluetoothHidDeviceStub::HidDeviceSetConnectStrategyInner;
-    memberFuncMap_[static_cast<uint32_t>(BluetoothHidDeviceInterfaceCode::COMMAND_GET_CONNECT_STRATEGY)] =
-        &BluetoothHidDeviceStub::HidDeviceGetConnectStrategyInner;
-    HILOGD("%{public}s ends.", __func__);
-}
+{}
 
 BluetoothHidDeviceStub::~BluetoothHidDeviceStub()
-{
-    HILOGD("%{public}s start.", __func__);
-    memberFuncMap_.clear();
-}
+{}
 
 int BluetoothHidDeviceStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    HILOGI("BluetoothHidDeviceStub::OnRemoteRequest, cmd = %{public}d, flags= %{public}d", code, option.GetFlags());
-    if (BluetoothHidDeviceStub::GetDescriptor() != data.ReadInterfaceToken()) {
-        HILOGE("local descriptor is not equal to remote");
-        return IPC_INVOKER_TRANSLATE_ERR;
-    }
-    auto itFunc = memberFuncMap_.find(code);
-    if (itFunc != memberFuncMap_.end()) {
-        auto memberFunc = itFunc->second;
-        if (memberFunc != nullptr) {
-            return (this->*memberFunc)(data, reply);
-        }
-    }
-    HILOGW("BluetoothHidDeviceStub::OnRemoteRequest, default case, need check.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothHidDeviceStub);
 }
 
 int32_t BluetoothHidDeviceStub::ConnectInner(MessageParcel &data, MessageParcel &reply)

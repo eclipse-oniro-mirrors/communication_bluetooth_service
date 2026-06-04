@@ -15,53 +15,44 @@
 #include "bluetooth_errorcode.h"
 #include "bluetooth_pan_stub.h"
 #include "bluetooth_log.h"
+#include "permission_manager.h"
+
+#ifdef STUB_FUNC
+#undef STUB_FUNC
+#endif
+#define STUB_FUNC(code, func, perm) BluetoothPanInterfaceCode::code, {&BluetoothPanStub::func, perm}
 
 namespace OHOS {
 namespace Bluetooth {
+using namespace OHOS::bluetooth;
 const uint32_t PAN_DEVICES_STATES_MAX_NUMS = 0XFF;
+
+// Note: Permissions need to be configured when the itf to be used. "nullptr" means no permission needed.
+const std::map<uint32_t, BluetoothPanStub::BluetoothPanStubPerm> BluetoothPanStub::memberFuncMap_ = {
+
+    {STUB_FUNC(COMMAND_DISCONNECT, DisconnectInner,
+    CHECK_PERM(true, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_GET_DEVICE_STATE, GetDeviceStateInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_GET_DEVICES_BY_STATES, GetDevicesByStatesInner,
+    CHECK_PERM(false, {USE_BLUETOOTH}, {ACCESS_BLUETOOTH}))},
+    {STUB_FUNC(COMMAND_REGISTER_OBSERVER, RegisterObserverInner, nullptr)},
+    {STUB_FUNC(COMMAND_DEREGISTER_OBSERVER, DeregisterObserverInner, nullptr)},
+    {STUB_FUNC(COMMAND_SET_TETHERING, SetTetheringInner,
+    CHECK_PERM(true, {DISCOVER_BLUETOOTH}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(COMMAND_IS_TETHERING_ON, IsTetheringOnInner,
+    CHECK_PERM(true, {}, {ACCESS_BLUETOOTH}))},
+};
 BluetoothPanStub::BluetoothPanStub()
-{
-    HILOGD("start.");
-    memberFuncMap_[static_cast<uint32_t>(COMMAND_DISCONNECT)] =
-        &BluetoothPanStub::DisconnectInner;
-    memberFuncMap_[static_cast<uint32_t>(COMMAND_GET_DEVICE_STATE)] =
-        &BluetoothPanStub::GetDeviceStateInner;
-    memberFuncMap_[static_cast<uint32_t>(COMMAND_GET_DEVICES_BY_STATES)] =
-        &BluetoothPanStub::GetDevicesByStatesInner;
-    memberFuncMap_[static_cast<uint32_t>(COMMAND_REGISTER_OBSERVER)] =
-        &BluetoothPanStub::RegisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(COMMAND_DEREGISTER_OBSERVER)] =
-        &BluetoothPanStub::DeregisterObserverInner;
-    memberFuncMap_[static_cast<uint32_t>(COMMAND_SET_TETHERING)] =
-        &BluetoothPanStub::SetTetheringInner;
-    memberFuncMap_[static_cast<uint32_t>(COMMAND_IS_TETHERING_ON)] =
-        &BluetoothPanStub::IsTetheringOnInner;
-    HILOGD("ends.");
-}
+{}
 
 BluetoothPanStub::~BluetoothPanStub()
-{
-    HILOGD("start.");
-    memberFuncMap_.clear();
-}
+{}
 
 int BluetoothPanStub::OnRemoteRequest(
     uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    HILOGI("BluetoothPanStub::OnRemoteRequest, cmd = %{public}d, flags= %{public}d", code, option.GetFlags());
-    if (BluetoothPanStub::GetDescriptor() != data.ReadInterfaceToken()) {
-        HILOGE("local descriptor is not equal to remote");
-        return IPC_INVOKER_TRANSLATE_ERR;
-    }
-    auto itFunc = memberFuncMap_.find(code);
-    if (itFunc != memberFuncMap_.end()) {
-        auto memberFunc = itFunc->second;
-        if (memberFunc != nullptr) {
-            return (this->*memberFunc)(data, reply);
-        }
-    }
-    HILOGW("BluetoothHfpHfStub::OnRemoteRequest, default case, need check.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    CHECK_PERMISSION_AND_EXECUTE_FUNC_RETURN(BluetoothPanStub);
 }
 
 int32_t BluetoothPanStub::DisconnectInner(MessageParcel &data, MessageParcel &reply)
@@ -140,7 +131,7 @@ int32_t BluetoothPanStub::GetDevicesByStatesInner(MessageParcel &data, MessagePa
     return NO_ERROR;
 }
 
-ErrCode BluetoothPanStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothPanStub::RegisterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGD("BluetoothPanStub::RegisterObserverInner");
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
@@ -149,7 +140,7 @@ ErrCode BluetoothPanStub::RegisterObserverInner(MessageParcel &data, MessageParc
     return NO_ERROR;
 }
 
-ErrCode BluetoothPanStub::DeregisterObserverInner(MessageParcel &data, MessageParcel &reply)
+int32_t BluetoothPanStub::DeregisterObserverInner(MessageParcel &data, MessageParcel &reply)
 {
     HILOGD("BluetoothPanStub::DeregisterObserverInner");
     sptr<IRemoteObject> remote = data.ReadRemoteObject();
