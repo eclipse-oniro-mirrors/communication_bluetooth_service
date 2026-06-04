@@ -400,26 +400,26 @@ HWTEST_F(HostTest, Host_ModuleTest_GetPhonebookPermission_00100, TestSize.Level1
     GTEST_LOG_(INFO) << "Host_ModuleTest_GetPhonebookPermission_00100 start";
 
     BluetoothRemoteDevice device_("00:00:00:00:00:00", BT_TRANSPORT_BREDR);
-    EXPECT_FALSE(device_.SetPhonebookPermission(static_cast<int>(BTPermissionType::ACCESS_ALLOWED)));
-    EXPECT_EQ(device_.GetPhonebookPermission(), static_cast<int>(BTPermissionType::ACCESS_UNKNOWN));
+    EXPECT_TRUE(device_.SetPhonebookPermission(static_cast<int>(BTPermissionType::ACCESS_ALLOWED)));
+    EXPECT_EQ(device_.GetPhonebookPermission(), static_cast<int>(BTPermissionType::ACCESS_ALLOWED));
 
     GTEST_LOG_(INFO) << "Host_ModuleTest_GetPhonebookPermission_00100 end";
 }
 
 /**
- * @tc.number: Host_ModuleTest_SetPhonebookPermission_00100
+ * @tc.number: Host_ModuleTest_SetPhonebookPermission_00200
  * @tc.name:
  * @tc.desc:
  */
-HWTEST_F(HostTest, Host_ModuleTest_SetPhonebookPermission_00100, TestSize.Level1)
+HWTEST_F(HostTest, Host_ModuleTest_SetPhonebookPermission_00200, TestSize.Level1)
 {
-    GTEST_LOG_(INFO) << "Host_ModuleTest_SetPhonebookPermission_00100 start";
+    GTEST_LOG_(INFO) << "Host_ModuleTest_SetPhonebookPermission_00200 start";
 
     BluetoothRemoteDevice device_("00:00:00:00:00:00", BT_TRANSPORT_BREDR);
-    EXPECT_FALSE(device_.SetPhonebookPermission(static_cast<int>(BTPermissionType::ACCESS_FORBIDDEN)));
-    EXPECT_EQ(device_.GetPhonebookPermission(), static_cast<int>(BTPermissionType::ACCESS_UNKNOWN));
+    EXPECT_TRUE(device_.SetPhonebookPermission(static_cast<int>(BTPermissionType::ACCESS_FORBIDDEN)));
+    EXPECT_EQ(device_.GetPhonebookPermission(), static_cast<int>(BTPermissionType::ACCESS_FORBIDDEN));
 
-    GTEST_LOG_(INFO) << "Host_ModuleTest_SetPhonebookPermission_00100 end";
+    GTEST_LOG_(INFO) << "Host_ModuleTest_SetPhonebookPermission_00200 end";
 }
 
 /**
@@ -429,33 +429,33 @@ HWTEST_F(HostTest, Host_ModuleTest_SetPhonebookPermission_00100, TestSize.Level1
  */
 HWTEST_F(HostTest, Host_ModuleTest_GetMessagePermission_00100, TestSize.Level1)
 {
-    GTEST_LOG_(INFO) << "Host_ModuleTest_GetPhonebookPermission_00100 start";
+    GTEST_LOG_(INFO) << "Host_ModuleTest_GetMessagePermission_00100 start";
 
     BluetoothRemoteDevice device_("00:00:00:00:00:00", BT_TRANSPORT_BREDR);
-    EXPECT_FALSE(device_.SetMessagePermission(static_cast<int>(BTPermissionType::ACCESS_ALLOWED)));
-    EXPECT_EQ(device_.GetMessagePermission(), static_cast<int>(BTPermissionType::ACCESS_UNKNOWN));
+    EXPECT_TRUE(device_.SetMessagePermission(static_cast<int>(BTPermissionType::ACCESS_ALLOWED)));
+    EXPECT_EQ(device_.GetMessagePermission(), static_cast<int>(BTPermissionType::ACCESS_ALLOWED));
 
     GTEST_LOG_(INFO) << "Host_ModuleTest_GetMessagePermission_00100 end";
 }
 
 /**
- * @tc.number: Host_ModuleTest_SetMessagePermission_00100
+ * @tc.number: Host_ModuleTest_SetMessagePermission_00200
  * @tc.name:
  * @tc.desc:
  */
-HWTEST_F(HostTest, Host_ModuleTest_SetMessagePermission_00100, TestSize.Level1)
+HWTEST_F(HostTest, Host_ModuleTest_SetMessagePermission_00200, TestSize.Level1)
 {
     GTEST_LOG_(INFO) << "Host_ModuleTest_SetMessagePermission_00100 start";
 
     BluetoothRemoteDevice device_("00:00:00:00:00:00", BT_TRANSPORT_BREDR);
-    EXPECT_FALSE(device_.SetMessagePermission(static_cast<int>(BTPermissionType::ACCESS_FORBIDDEN)));
-    EXPECT_EQ(device_.GetMessagePermission(), static_cast<int>(BTPermissionType::ACCESS_UNKNOWN));
+    EXPECT_TRUE(device_.SetMessagePermission(static_cast<int>(BTPermissionType::ACCESS_FORBIDDEN)));
+    EXPECT_EQ(device_.GetMessagePermission(), static_cast<int>(BTPermissionType::ACCESS_FORBIDDEN));
 
-    GTEST_LOG_(INFO) << "Host_ModuleTest_SetMessagePermission_00100 end";
+    GTEST_LOG_(INFO) << "Host_ModuleTest_SetMessagePermission_00200 end";
 }
 
 /**
- * @tc.number: Host_ModuleTest_SetMessagePermission_00100
+ * @tc.number: Host_ModuleTest_GetPowerMode_00100
  * @tc.name:
  * @tc.desc:
  */
