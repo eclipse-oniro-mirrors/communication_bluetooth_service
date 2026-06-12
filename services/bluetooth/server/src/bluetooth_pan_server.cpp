@@ -238,13 +238,13 @@ int32_t BluetoothPanServer::IsTetheringOn(bool& result)
     return NO_ERROR;
 }
 
-int32_t BluetoothPanServer::SetConnectStrategyInner(const BluetoothRawAddress &device, int strategy)
+int32_t BluetoothPanServer::SetConnectStrategy(const BluetoothRawAddress &device, int strategy)
 {
     HILOGI("NOT SUPPORT NOW");
     return BT_NO_ERROR;
 }
 
-int32_t BluetoothPanServer::GetConnectStrategyInner(const BluetoothRawAddress &device, int &strategy)
+int32_t BluetoothPanServer::GetConnectStrategy(const BluetoothRawAddress &device, int &strategy)
 {
     HILOGI("NOT SUPPORT NOW");
     return BT_NO_ERROR;
