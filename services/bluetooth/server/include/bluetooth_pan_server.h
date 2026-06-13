@@ -35,6 +35,8 @@ public:
     BluetoothPanServer();
     ~BluetoothPanServer() override;
 
+    int32_t Connect(const BluetoothRawAddress &device) override;
+
     int32_t Disconnect(const BluetoothRawAddress &device) override;
 
     int32_t GetDeviceState(const BluetoothRawAddress &device, int32_t &state) override;
@@ -52,6 +54,9 @@ public:
     int32_t SetTethering(const bool enable) override;
 
     int32_t IsTetheringOn(bool& result) override;
+
+    int32_t SetConnectStrategy(const BluetoothRawAddress &device, int strategy) override;
+    int32_t GetConnectStrategy(const BluetoothRawAddress &device, int &strategy) override;
 
 private:
     BLUETOOTH_DISALLOW_COPY_AND_ASSIGN(BluetoothPanServer);

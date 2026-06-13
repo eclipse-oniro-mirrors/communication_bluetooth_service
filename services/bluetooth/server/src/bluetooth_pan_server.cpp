@@ -211,6 +211,12 @@ int32_t BluetoothPanServer::Disconnect(const BluetoothRawAddress &device)
     return pimpl->panService_->Disconnect(device);
 }
 
+int32_t BluetoothPanServer::Connect(const BluetoothRawAddress &device)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return BT_NO_ERROR;
+}
+
 int32_t BluetoothPanServer::SetTethering(const bool enable)
 {
     HILOGI("enable:%{public}d", enable);
@@ -230,6 +236,18 @@ int32_t BluetoothPanServer::IsTetheringOn(bool& result)
     result = pimpl->panService_->IsTetheringOn();
     HILOGI("IsTetheringOn:%{public}d", result);
     return NO_ERROR;
+}
+
+int32_t BluetoothPanServer::SetConnectStrategy(const BluetoothRawAddress &device, int strategy)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return BT_NO_ERROR;
+}
+
+int32_t BluetoothPanServer::GetConnectStrategy(const BluetoothRawAddress &device, int &strategy)
+{
+    HILOGI("NOT SUPPORT NOW");
+    return BT_NO_ERROR;
 }
 }  // namespace Bluetooth
 }  // namespace OHOS
