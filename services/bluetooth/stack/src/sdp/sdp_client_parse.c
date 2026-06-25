@@ -1049,7 +1049,7 @@ static int SdpGetCommonProtocolDescriptorList(
         totalLength--;
         offset++;
         pos = SdpGetLengthFromType(bufferInfo->buffer + offset, type, &currentLength);
-        if (totalLength < currentLength) {
+        if (totalLength < currentLength + pos) {
             LOG_ERROR("[%{public}s][%{public}d] Wrong length.", __FUNCTION__, __LINE__);
             return BT_BAD_PARAM;
         }
