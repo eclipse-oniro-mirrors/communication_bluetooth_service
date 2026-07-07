@@ -385,6 +385,12 @@ ohos_shared_library("btservice") {
       "input:libmmi-client",
     ]
   }
+  
+  if (is_standard_system) {
+    external_deps += [ "init:libbegetutil" ]
+  } else {
+    external_deps += [ "startup:syspara" ]
+  }
 
   subsystem_name = "communication"
   part_name = "bluetooth_service"

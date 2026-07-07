@@ -1186,7 +1186,12 @@ uint8_t BleAdvertiserImpl::CreateAdvertiserSetHandle(int32_t &status) const
     }
 
     uint8_t newHandle = BLE_LEGACY_ADVERTISING_HANDLE;
-    uint8_t end = BleFeature::GetInstance().GetBleExAdvGetMaxHandleNum();
+    uint8_t end = maxAdvNum;
+    if (IsWukong100Device()) {
+        end = wukongMaxAdvNum;
+    } else {
+        end = BleFeature::GetInstance().GetBleExAdvGetMaxHandleNum();
+    }
     for (; newHandle < end; ++newHandle) {
         std::vector<uint8_t>::iterator ret =
             std::find(pimpl->advCreateHandles_.begin(), pimpl->advCreateHandles_.end(), newHandle);

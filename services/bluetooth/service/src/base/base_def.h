@@ -18,6 +18,7 @@
 
 #include <memory>
 #include <string>
+#include <parameters.h>
 
 #if (__cplusplus < 201703L)
 #error "CXX Version Error!!!"
@@ -69,4 +70,14 @@ const std::string BT_CONFIG_PATH = "/data/service/el1/public/bluetooth/";
     } while ((fn) == -1 && errno == EINTR)
 #endif
 
+constexpr const char* IMAGE_BUILDTIME_KEY = "const.image.buildtime";
+constexpr const char* WUKONG100_KEYWORD = "wukong100";
+constexpr const char* DEFAULT_BUILDTIME_VALUE = "";
+
+inline bool IsWukong100Device()
+{
+    std::string buildTimeValue = OHOS::system::GetParameter(IMAGE_BUILDTIME_KEY,
+        DEFAULT_BUILDTIME_VALUE);
+    return buildTimeValue.find(WUKONG100_KEYWORD) != std::string::npos;
+}
 #endif  // BASE_DEF_H
