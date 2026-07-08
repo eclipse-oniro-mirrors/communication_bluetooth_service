@@ -16,8 +16,8 @@
 import BluetoothModel, { BluetoothDevice, BondState, DeviceState} from '../model/BluetoothModel';
 import ConfigData from '../../Utils/ConfigData';
 import LogUtil from '../../Utils/LogUtil';
-import BaseSettingsController from '../../Component/controller/BaseSettingsController';
-import ISettingsController from '../../Component/controller/ISettingsController';
+import BaseSettingsController from '../../component/controller/BaseSettingsController';
+import ISettingsController from '../../component/controller/ISettingsController';
 
 const DISCOVERY_DURING_TIME: number = 30000;// 30'
 const DISCOVERY_INTERVAL_TIME: number = 3000;// 3'
