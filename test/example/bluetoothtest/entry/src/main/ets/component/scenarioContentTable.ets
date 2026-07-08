@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,40 +15,36 @@
 
 import LogUtil from '../Utils/LogUtil';
 import ConfigData from '../Utils/ConfigData';
-import { TestAuto} from '../MainAbility/model/testData'
+import { TestScenario} from '../MainAbility/model/testData'
 
 /**
- *  Auto Test ContentTable Component Page Of Bluetooth test
+ *  Scenario Test ContentTable Component Page Of Bluetooth test
  */
 
 @Component
-export struct AutoContentTable {
-  @State autoItems: TestAuto[] = [];
-  @State localName: string = 'DaYuBlue'
+export struct ScenarioContentTable {
+  @State scenarioItems: TestScenario[] = [];
   @Prop changeIndex: number;
+  @State localName: string = 'DaYuBlue'
 
-  @Builder IngredientItem(autoItem: TestAuto, index: number){
+  @Builder IngredientItem(scenarioItem: TestScenario, index: number){
     Stack(){
       Flex(){
-        Flex({alignItems: ItemAlign.Center}){
-          Image($r('app.media.bluetooth'))
-            .objectFit(ImageFit.Contain)
-            .autoResize(false)
-            .height(ConfigData.VP_26)
-            .width(ConfigData.VP_25)
-        }
-        .height(ConfigData.VP_30)
-        .width(ConfigData.PCT_10)
-        .padding({left: ConfigData.VP_10})
-
         Flex({direction: FlexDirection.Column, alignItems: ItemAlign.Start}){
           Row(){
-            Text(autoItem.method)
+            Text(scenarioItem.detail)
               .fontSize(ConfigData.VP_17)
               .margin({top: ConfigData.VP_3, bottom: ConfigData.VP_3, left: ConfigData.VP_10})
               .textAlign(TextAlign.Start)
               .height(ConfigData.VP_40)
-              .width(ConfigData.VP_200)
+              .width(ConfigData.VP_30)
+
+            Text(scenarioItem.method)
+              .fontSize(ConfigData.VP_17)
+              .margin({top: ConfigData.VP_3, bottom: ConfigData.VP_3, left: ConfigData.VP_10})
+              .textAlign(TextAlign.Start)
+              .height(ConfigData.VP_40)
+              .width(ConfigData.VP_240)
           }
           .height(ConfigData.VP_30)
           .width(ConfigData.PCT_70)
@@ -57,13 +53,14 @@ export struct AutoContentTable {
         .layoutWeight(6)
 
         Flex({alignItems: ItemAlign.Center}){
-          Text(this.changeIndex >= 0 ? this.getCurrentState(index) : autoItem.result)
+          Text(this.changeIndex >= 0 ? this.getCurrentState(index) : scenarioItem.result)
             .margin({left: ConfigData.VP_10})
             .fontSize(ConfigData.VP_17)
             .flexGrow(1)
         }
         .layoutWeight(3)
         .padding({left: ConfigData.VP_10})
+        .margin({left: ConfigData.VP_10})
       }
     }
     .height(ConfigData.VP_40)
@@ -73,12 +70,12 @@ export struct AutoContentTable {
   }
 
   getCurrentState(index: number){
-    if ( index <= this.changeIndex ) this.autoItems[ index ].result = 'pass';
-    return this.autoItems[ index ].result
+    if ( index <= this.changeIndex ) this.scenarioItems[ index ].result = 'pass';
+    return this.scenarioItems[ index ].result
   }
 
   aboutToAppear(): void {
-    LogUtil.info($r('app.string.bluetoothtest_str_azjgjwb'))
+    LogUtil.info($r('app.string.bluetoothtest_str_szjgjwb'))
   }
 
   build(){
@@ -89,7 +86,7 @@ export struct AutoContentTable {
           justifyContent: FlexAlign.SpaceBetween,
           alignItems: ItemAlign.Start
         }){
-          ForEach(this.autoItems, (item: TestAuto, index: number) => {
+          ForEach(this.scenarioItems, (item: TestScenario, index: number) => {
             this.IngredientItem(item, index)
           })
         }

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,33 @@
  * limitations under the License.
  */
 
-import hilog from '@ohos.hilog';
-import ConfigData from '../Utils/ConfigData';
-import { TestData} from '../MainAbility/model/testData'
-import { TestList} from './testList';
-
 /**
- * Manual-Api Test Of Bluetooth test
+ *  ISettingsController Of Bluetooth test
  */
 
-@Component
-export struct ManualApiTest {
-  private testItems!: TestData[]
+export default interface ISettingsController {
+  /**
+   * Bind component.
+   */
+  bindComponent(component: any): ISettingsController;
 
-  aboutToAppear(){
-    hilog.info(0x0000, 'BtTest', '%{public}s', "ManualApiTest testItems:" + JSON.stringify(this.testItems))
-  }
+  /**
+   *  Bind component's properties.
+   */
+  bindProperties(componentProperties: string[], controllerProperties?: string[]): ISettingsController
 
-  build(){
-    Column(){
-      TestList({
-        testItems: this.testItems
-      })
-    }
-      .height(ConfigData.WH_100_100)
-  }
+  /**
+   * Initialize data.
+   */
+  initData(): ISettingsController;
+
+  /**
+   * Subscribe listeners.
+   */
+  subscribe(): ISettingsController;
+
+  /**
+   * Unsubscribe listeners.
+   */
+  unsubscribe(): ISettingsController;
 }
