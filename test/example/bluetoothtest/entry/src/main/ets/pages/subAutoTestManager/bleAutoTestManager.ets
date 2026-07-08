@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ import { resStr} from '../../Utils/resString';
 
 import ConfigData from '../../Utils/ConfigData';
 import { TestData} from '../../MainAbility/model/testData'
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { BleManagerAutoTestCase, initBleManagerAutoData} from '../../MainAbility/model/autoTestDataModelsManager'
-import { AutoContentTable} from '../../Component/autoContentTable'
+import { AutoContentTable} from '../../component/autoContentTable'
 import { BTAutoArrayItem, testItemFromRouterOrPlaceholder} from '../../Utils/common'
 
 /**

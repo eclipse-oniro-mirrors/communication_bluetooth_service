@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,10 @@ import BluetoothModelManager from '../../../MainAbility/model/BluetoothModelMana
 import { BluetoothDevice} from '../../../MainAbility/model/BluetoothModel'
 import BluetoothDeviceController from '../../../MainAbility/controller/BluetoothDeviceController';
 import { TestData} from '../../../MainAbility/model/testData'
-import { PageTitle} from '../../../Component/pageTitle';
-import { ContentTable} from '../../../Component/contentTable';
+import { PageTitle} from '../../../component/pageTitle';
+import { ContentTable} from '../../../component/contentTable';
 import { initSppClientManagerApiData} from '../../../MainAbility/model/testDataModelsManager'
-import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { TestImageDisplay} from '../../../component/testImageDisplay';
 import { testItemFromRouterOrPlaceholder} from '../../../Utils/common'
 
 let MODEL = "bluetoothModel:"

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  */
 import hilog from '@ohos.hilog';
 import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
-import { ContentTable} from '../../Component/contentTable';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
+import { ContentTable} from '../../component/contentTable';
 import BluetoothModel, { BluetoothDevice} from '../../MainAbility/model/BluetoothModel';
 import BluetoothDeviceController from '../../MainAbility/controller/BluetoothDeviceController';
 import ConfigData from '../../Utils/ConfigData';

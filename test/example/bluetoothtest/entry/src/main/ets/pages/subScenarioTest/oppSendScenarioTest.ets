@@ -19,8 +19,8 @@ import { resStr} from '../../Utils/resString';
 import ConfigData from '../../Utils/ConfigData';
 import { PairDevices, testItemFromRouterOrPlaceholder} from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { TestData} from '../../MainAbility/model/testData'
 import bluetooth from '@ohos.bluetooth';
 import { opp} from '@kit.ConnectivityKit';

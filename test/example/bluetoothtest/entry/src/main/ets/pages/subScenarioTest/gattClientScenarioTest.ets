@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 import LogUtil from '../../Utils/LogUtil';
 import ConfigData from '../../Utils/ConfigData';
 import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { TestData} from '../../MainAbility/model/testData'
-import { ScenarioContentTable} from '../../Component/scenarioContentTable'
+import { ScenarioContentTable} from '../../component/scenarioContentTable'
 import { initGattClientScenarioData} from '../../MainAbility/model/scenarioTestDataModel'
 import * as GattClientInterface from '../../MainAbility/model/gattClientInterface'
 import * as BrInterface from '../../MainAbility/model/brInterface'

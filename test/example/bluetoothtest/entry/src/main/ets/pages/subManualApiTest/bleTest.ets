@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ import ConfigData from '../../Utils/ConfigData';
 import { BleScanFilter, testItemFromRouterOrPlaceholder} from '../../Utils/common'
 import BluetoothModel from '../../MainAbility/model/BluetoothModel';
 import bluetooth from '@ohos.bluetooth';
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
-import { ContentTable} from '../../Component/contentTable';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
+import { ContentTable} from '../../component/contentTable';
 import { TestData} from '../../MainAbility/model/testData'
 import { initBleApiData} from '../../MainAbility/model/testDataModels'
-import { BleFilterTable} from '../../Component/bleFilterTable';
+import { BleFilterTable} from '../../component/bleFilterTable';
 
 /**
  * BLE Test Page Of Bluetooth test

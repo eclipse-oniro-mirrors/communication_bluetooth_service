@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import ConfigData from '../../../Utils/ConfigData';
 import BluetoothModel, { BluetoothDevice} from '../../../MainAbility/model/BluetoothModel';
 import BluetoothDeviceController from '../../../MainAbility/controller/BluetoothDeviceController';
 import { TestData} from '../../../MainAbility/model/testData'
-import { PageTitle} from '../../../Component/pageTitle';
-import { ContentTable} from '../../../Component/contentTable';
+import { PageTitle} from '../../../component/pageTitle';
+import { ContentTable} from '../../../component/contentTable';
 import { initSppServerApiData} from '../../../MainAbility/model/testDataModels'
-import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { TestImageDisplay} from '../../../component/testImageDisplay';
 interface PinRequiredData {
   deviceId: string;
   pinCode: string;

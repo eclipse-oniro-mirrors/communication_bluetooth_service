@@ -19,10 +19,10 @@ import { resStr} from '../../../Utils/resString';
 import ConfigData from '../../../Utils/ConfigData';
 import BluetoothModel from '../../../MainAbility/model/BluetoothModel';
 import router from '@ohos.router'
-import { TitleComponent} from '../../../Component/titleComponent';
+import { TitleComponent} from '../../../component/titleComponent';
 import InputMethod from '@ohos.inputMethod';
 import bluetooth from '@ohos.bluetooth';
-import { PageTitle} from '../../../Component/pageTitle';
+import { PageTitle} from '../../../component/pageTitle';
 
 /**
  * setScanMode page of bluetooth test

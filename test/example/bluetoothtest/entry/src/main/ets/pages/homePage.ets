@@ -16,12 +16,12 @@
 import ConfigData from '../Utils/ConfigData';
 import { Category, TestData} from '../MainAbility/model/testData'
 import { initTestData} from '../MainAbility/model/testDataModels'
-import { MainPageTitle} from '../Component/mainPageTitle';
-import { ManualApiTest} from '../Component/manualApiTestComponent';
-import { ManualSceneTest} from '../Component/manualSceneTest';
-import { AutoTest} from '../Component/autoTest';
-import { ProfileTest} from '../Component/profileTest';
-import { BenchmarkTest} from '../Component/benchmarkTest';
+import { MainPageTitle} from '../component/mainPageTitle';
+import { ManualApiTest} from '../component/manualApiTestComponent';
+import { ManualSceneTest} from '../component/manualSceneTest';
+import { AutoTest} from '../component/autoTest';
+import { ProfileTest} from '../component/profileTest';
+import { BenchmarkTest} from '../component/benchmarkTest';
 import abilityAccessCtrl from '@ohos.abilityAccessCtrl';
 import common from '@ohos.app.ability.common';
 import { Permissions} from '@ohos.abilityAccessCtrl';

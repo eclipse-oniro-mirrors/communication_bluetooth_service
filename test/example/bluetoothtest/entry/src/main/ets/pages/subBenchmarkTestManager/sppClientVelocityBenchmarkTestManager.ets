@@ -16,8 +16,8 @@ import { resStr} from '../../Utils/resString';
 
 
 import ConfigData from '../../Utils/ConfigData';
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { TestData} from '../../MainAbility/model/testData'
 import * as SppClientManagerInterface from '../../MainAbility/model/sppClientManagerInterface'
 import bluetoothManager from '@ohos.bluetoothManager';

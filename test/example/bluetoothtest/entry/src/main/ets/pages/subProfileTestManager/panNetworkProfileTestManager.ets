@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@ import { resStr} from '../../Utils/resString';
 import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
 import { initPanNetworkProfileManagerApiData} from '../../MainAbility/model/testDataModelsManager'
-import { ContentTable} from '../../Component/contentTable';
+import { ContentTable} from '../../component/contentTable';
 import router from '@ohos.router';
 import btmProfileModel from '../../MainAbility/model/btmProfileModel';
 import ConfigData from '../../Utils/ConfigData';
 import LogUtil from '../../Utils/LogUtil';
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { TestData} from '../../MainAbility/model/testData'
 import bluetooth from '@ohos.bluetooth';
 import bluetoothManager from '@ohos.bluetoothManager';

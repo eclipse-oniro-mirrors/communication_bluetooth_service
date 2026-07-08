@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import { resStr} from '../../../Utils/resString';
 
 
 import ConfigData from '../../../Utils/ConfigData';
-import { TitleComponent} from '../../../Component/titleComponent';
+import { TitleComponent} from '../../../component/titleComponent';
 import bt from '@ohos.bluetooth';
 
 /**

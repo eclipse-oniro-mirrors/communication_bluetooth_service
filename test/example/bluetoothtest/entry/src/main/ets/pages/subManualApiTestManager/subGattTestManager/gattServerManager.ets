@@ -17,11 +17,11 @@ import { resStr} from '../../../Utils/resString';
 
 
 import { testItemFromRouterOrPlaceholder} from '../../../Utils/common'
-import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { TestImageDisplay} from '../../../component/testImageDisplay';
 import ConfigData from '../../../Utils/ConfigData';
 import bluetoothManager from '@ohos.bluetoothManager';
-import { ContentTable} from '../../../Component/contentTable';
-import { PageTitle} from '../../../Component/pageTitle';
+import { ContentTable} from '../../../component/contentTable';
+import { PageTitle} from '../../../component/pageTitle';
 import { initGattServerManagerApiData} from '../../../MainAbility/model/testDataModelsManager'
 import { TestData} from '../../../MainAbility/model/testData'
 import promptAction from '@ohos.promptAction';

@@ -17,14 +17,14 @@ import { resStr} from '../../Utils/resString';
 
 import { PairDevices, testItemFromRouterOrPlaceholder} from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
-import { ContentTable} from '../../Component/contentTable';
+import { ContentTable} from '../../component/contentTable';
 import { initOppProfileApiData} from '../../MainAbility/model/testDataModels'
 import router from '@ohos.router';
 import btProfileModel from '../../MainAbility/model/btProfileModel';
 import ConfigData from '../../Utils/ConfigData';
 import LogUtil from '../../Utils/LogUtil';
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import bluetooth from '@ohos.bluetooth';
 import { TestData} from '../../MainAbility/model/testData'
 import bluetoothManager from '@ohos.bluetoothManager';

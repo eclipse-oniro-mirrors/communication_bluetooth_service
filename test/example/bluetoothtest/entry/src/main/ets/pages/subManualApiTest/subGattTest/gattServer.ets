@@ -16,12 +16,12 @@ import LogUtil from '../../../Utils/LogUtil';
 import { resStr} from '../../../Utils/resString';
 
 
-import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { TestImageDisplay} from '../../../component/testImageDisplay';
 import { TestData} from '../../../MainAbility/model/testData'
 import ConfigData from '../../../Utils/ConfigData';
 import bluetooth from '@ohos.bluetooth';
-import { ContentTable} from '../../../Component/contentTable';
-import { PageTitle} from '../../../Component/pageTitle';
+import { ContentTable} from '../../../component/contentTable';
+import { PageTitle} from '../../../component/pageTitle';
 import { initGattServerApiData} from '../../../MainAbility/model/testDataModels'
 import promptAction from '@ohos.promptAction';
 import { testItemFromRouterOrPlaceholder} from '../../../Utils/common'

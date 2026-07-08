@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import ConfigData from '../../../Utils/ConfigData';
 import BluetoothModel from '../../../MainAbility/model/BluetoothModel';
 import router from '@ohos.router';
 import InputMethod from '@ohos.inputMethod';
-import { PageTitle} from '../../../Component/pageTitle';
+import { PageTitle} from '../../../component/pageTitle';
 /**
  * about phone
  */

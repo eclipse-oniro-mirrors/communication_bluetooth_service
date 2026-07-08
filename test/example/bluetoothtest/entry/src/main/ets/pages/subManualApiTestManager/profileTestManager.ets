@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ import ConfigData from '../../Utils/ConfigData';
 import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
 import { TestData} from '../../MainAbility/model/testData'
 import { initA2dpSourceProfileManagerApiData} from '../../MainAbility/model/testDataModelsManager'
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
-import { ContentTable} from '../../Component/contentTable';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
+import { ContentTable} from '../../component/contentTable';
 import btmProfileModel from '../../MainAbility/model/btmProfileModel';
 
 /**

@@ -14,8 +14,8 @@
  */
 
 import ConfigData from '../../../Utils/ConfigData';
-import { PageTitle} from '../../../Component/pageTitle';
-import { TitleComponent} from '../../../Component/titleComponent';
+import { PageTitle} from '../../../component/pageTitle';
+import { TitleComponent} from '../../../component/titleComponent';
 
 /**
  * profileConnState page of bluetooth test

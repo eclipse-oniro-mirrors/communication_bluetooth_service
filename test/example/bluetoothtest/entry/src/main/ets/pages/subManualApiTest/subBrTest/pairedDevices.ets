@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 import ConfigData from '../../../Utils/ConfigData';
 import router from '@ohos.router'
-import { TitleComponent} from '../../../Component/titleComponent';
-import { PageTitle} from '../../../Component/pageTitle';
+import { TitleComponent} from '../../../component/titleComponent';
+import { PageTitle} from '../../../component/pageTitle';
 
 /**
  * pairedDevices page of bluetooth test

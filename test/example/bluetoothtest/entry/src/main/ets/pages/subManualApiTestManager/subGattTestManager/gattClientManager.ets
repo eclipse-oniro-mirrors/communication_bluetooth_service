@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@ import { resStr} from '../../../Utils/resString';
 
 
 import { testItemFromRouterOrPlaceholder} from '../../../Utils/common'
-import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { TestImageDisplay} from '../../../component/testImageDisplay';
 import ConfigData from '../../../Utils/ConfigData';
 import { initGattClientManagerApiData} from '../../../MainAbility/model/testDataModelsManager'
-import { PageTitle} from '../../../Component/pageTitle';
-import { ContentTable} from '../../../Component/contentTable';
+import { PageTitle} from '../../../component/pageTitle';
+import { ContentTable} from '../../../component/contentTable';
 import { TestData} from '../../../MainAbility/model/testData'
 
 const G_MAC = '6c:96:d7:3d:87:6f'

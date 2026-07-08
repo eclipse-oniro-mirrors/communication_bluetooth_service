@@ -17,9 +17,9 @@ import hilog from '@ohos.hilog';
 import { BTAutoArrayItem, testItemFromRouterOrPlaceholder} from '../../../Utils/common'
 import ConfigData from '../../../Utils/ConfigData';
 import { TestData} from '../../../MainAbility/model/testData'
-import { PageTitle} from '../../../Component/pageTitle';
-import { TestImageDisplay} from '../../../Component/testImageDisplay';
-import { AutoContentTable} from '../../../Component/autoContentTable';
+import { PageTitle} from '../../../component/pageTitle';
+import { TestImageDisplay} from '../../../component/testImageDisplay';
+import { AutoContentTable} from '../../../component/autoContentTable';
 import { GattClientAutoTestCase, initGattClientAutoData} from '../../../MainAbility/model/autoTestDataModels';
 
 /**

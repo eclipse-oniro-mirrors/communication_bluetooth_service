@@ -20,8 +20,8 @@ import LogUtil from '../../../Utils/LogUtil';
 import BluetoothDeviceController from '../../../MainAbility/controller/BluetoothDeviceController';
 import { BluetoothDevice, DeviceState, DeviceType} from '../../../MainAbility/model/BluetoothModel'
 import router from '@ohos.router';
-import ImageAnimatorComponent from '../../../Component/imageAnimatorComponent';
-import { PageTitle} from '../../../Component/pageTitle';
+import ImageAnimatorComponent from '../../../component/imageAnimatorComponent';
+import { PageTitle} from '../../../component/pageTitle';
 import bluetooth from '@ohos.bluetooth';
 /**
  * deviceFound

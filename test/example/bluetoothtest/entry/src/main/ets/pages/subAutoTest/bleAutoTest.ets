@@ -19,10 +19,10 @@ import { resStr} from '../../Utils/resString';
 import { BTAutoArrayItem, testItemFromRouterOrPlaceholder} from '../../Utils/common'
 import ConfigData from '../../Utils/ConfigData';
 import { TestData} from '../../MainAbility/model/testData'
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { BleAutoTestCase, initBleAutoData} from '../../MainAbility/model/autoTestDataModels'
-import { AutoContentTable} from '../../Component/autoContentTable'
+import { AutoContentTable} from '../../component/autoContentTable'
 
 /**
  *  BleAutoTest Page Of Bluetooth test
