@@ -28,19 +28,21 @@ import { opp} from '@kit.ConnectivityKit';
  * Profile A2DP Test Page Of Bluetooth test
  */
 
-export function testProfileConnect(){
+export function testProfileConnect() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_pt_4'))
     let textMessage = ""
     let btConnectionState: number = AppStorage.get("btConnectionState") !
     let deviceId: string = AppStorage.get("deviceId") !
     let profileType: number = AppStorage.get("profileType") !
-    if ( btConnectionState == 1 || btConnectionState == 2 ){
-      promptAction.showToast({message: btConnectionState == 1 ? $r('app.string.bluetoothtest_str_gsbzzljz') : $r('app.string.bluetoothtest_str_gsbylj')});
+    if (btConnectionState == 1 || btConnectionState == 2) {
+      promptAction.showToast({message: btConnectionState == 1 ?
+        $r('app.string.bluetoothtest_str_gsbzzljz') : $r('app.string.bluetoothtest_str_gsbylj')});
       return message;
     }
-    let ret: boolean = (btProfileModel.getProfile(profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).connect(deviceId);
-    if ( ret ){
+    let ret: boolean = (btProfileModel.getProfile(profileType) as bluetooth.A2dpSourceProfile |
+      bluetooth.HandsFreeAudioGatewayProfile).connect(deviceId);
+    if (ret) {
       btConnectionState = 1;
     }
     textMessage = resStr($r('app.string.bluetoothtest_str_cr')) + ret;
@@ -48,27 +50,29 @@ export function testProfileConnect(){
     AppStorage.SetOrCreate("textMessage", textMessage)
     promptAction.showToast({message: message});
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testProfileConnect. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testProfileConnect. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testProfileConnect. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testProfileConnect. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testProfileDisConnect(){
+export function testProfileDisConnect() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_pt_3'))
     let textMessage = ""
     let btConnectionState: number = AppStorage.get("btConnectionState") !
     let deviceId: string = AppStorage.get("deviceId") !
     let profileType: number = AppStorage.get("profileType") !
-    if ( btConnectionState == 0 || btConnectionState == 3 ){
-      promptAction.showToast({message: btConnectionState == 0 ? $r('app.string.bluetoothtest_str_gsbydk') : $r('app.string.bluetoothtest_str_gsbzzdklj')})
+    if (btConnectionState == 0 || btConnectionState == 3) {
+      promptAction.showToast({message: btConnectionState == 0 ?
+        $r('app.string.bluetoothtest_str_gsbydk') : $r('app.string.bluetoothtest_str_gsbzzdklj')})
       return message;
     }
-    let ret: boolean = (btProfileModel.getProfile(profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).disconnect(deviceId);
-    if ( ret ){
+    let ret: boolean = (btProfileModel.getProfile(profileType) as bluetooth.A2dpSourceProfile |
+      bluetooth.HandsFreeAudioGatewayProfile).disconnect(deviceId);
+    if (ret) {
       btConnectionState = 3;
     }
     textMessage = resStr($r('app.string.bluetoothtest_str_dr')) + ret;
@@ -76,15 +80,15 @@ export function testProfileDisConnect(){
     message = resStr($r('app.string.bluetoothtest_str_dr')) + ret;
     promptAction.showToast({message: message});
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testProfileDisConnect. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testProfileDisConnect. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testProfileDisConnect. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testProfileDisConnect. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testProfileGetPlayingState(){
+export function testProfileGetPlayingState() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_pt_1'))
     let textMessage = ""
@@ -95,7 +99,7 @@ export function testProfileGetPlayingState(){
     let profile: bluetooth.A2dpSourceProfile
     profile = btProfileModel.getProfile(parseInt(profileType)) as bluetooth.A2dpSourceProfile
     let ret = - 1
-    if ( profile ){
+    if (profile) {
       ret = profile.getPlayingState(deviceId)
     }
     textMessage = resStr($r('app.string.bluetoothtest_str_gr_1')) + ret;
@@ -103,48 +107,52 @@ export function testProfileGetPlayingState(){
     AppStorage.SetOrCreate("textMessage", textMessage)
     promptAction.showToast({message: message});
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testProfileGetPlayingState. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testProfileGetPlayingState. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testProfileGetPlayingState. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testProfileGetPlayingState. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testProfileGetConnectionDevices(){
+export function testProfileGetConnectionDevices() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_pt'))
     let textMessage = ""
     let profileType: number = AppStorage.get("profileType") !
-    let ret: Array<string> =(btProfileModel.getProfile(profileType) as bluetooth.BaseProfile).getConnectionDevices()
+    let ret: Array<string> =(btProfileModel.getProfile(profileType) as
+      bluetooth.BaseProfile).getConnectionDevices()
     textMessage = resStr($r('app.string.bluetoothtest_str_gr')) + JSON.stringify(ret);
     message = resStr($r('app.string.bluetoothtest_str_gr')) + JSON.stringify(ret);
     AppStorage.SetOrCreate("textMessage", textMessage)
     promptAction.showToast({message: message});
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testProfileGetConnectionDevices. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testProfileGetConnectionDevices. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testProfileGetConnectionDevices. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testProfileGetConnectionDevices. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testProfileGetDeviceState(){
+export function testProfileGetDeviceState() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_pt_2'))
     let textMessage = ""
     let deviceId: string = AppStorage.get("deviceId") !
     let profileType: number = AppStorage.get("profileType") !
-    let ret: number = (btProfileModel.getProfile(profileType) as bluetooth.BaseProfile).getDeviceState(deviceId)
+    let ret: number = (btProfileModel.getProfile(profileType) as
+      bluetooth.BaseProfile).getDeviceState(deviceId)
     textMessage = resStr($r('app.string.bluetoothtest_str_gr_2')) + ret;
     message = resStr($r('app.string.bluetoothtest_str_gr_2')) + ret;
     AppStorage.SetOrCreate("textMessage", textMessage)
     promptAction.showToast({message: message});
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testProfileGetDeviceState. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testProfileGetDeviceState. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testProfileGetDeviceState. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testProfileGetDeviceState. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -152,35 +160,39 @@ export function testProfileGetDeviceState(){
 
 let transferStateChange = false
 
-export function testOnTransferStateChange(){
+export function testOnTransferStateChange() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_ot_3'))
     let textMessage = ""
     let profileType: number = AppStorage.get("profileType") !
-    if ( transferStateChange ){
-      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).off("transferStateChange", () => {
+    if (transferStateChange) {
+      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).off("transferStateChange",
+        () => {
         promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_otjtygb'))})
       })
       message = resStr($r('app.string.bluetoothtest_str_gbcsztgbsj'))
     } else {
-      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).on("transferStateChange", (stateInformation) => {
+      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).on("transferStateChange",
+        (stateInformation) => {
         LogUtil.info("transferStateChange enter")
         textMessage = resStr($r('app.string.bluetoothtest_str_ts'));
         message = resStr($r('app.string.bluetoothtest_str_ts'));
         AppStorage.SetOrCreate("textMessage", textMessage)
         let curProgress = (stateInformation.currentBytes * 100) / stateInformation.totalBytes;
-        if ( curProgress === 100 ){
-          LogUtil.info(resStr($r('app.string.bluetoothtest_str_jswjcgwjcflj')) + JSON.stringify(stateInformation.filePath));
-          promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_jswjcgwjcflj')) + JSON.stringify(stateInformation.filePath)})
+        if (curProgress === 100) {
+          LogUtil.info(resStr($r('app.string.bluetoothtest_str_jswjcgwjcflj')) +
+            JSON.stringify(stateInformation.filePath));
+          promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_jswjcgwjcflj')) +
+            JSON.stringify(stateInformation.filePath)})
         }
         promptAction.showToast({message: message});
       })
     }
     transferStateChange = !transferStateChange
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testOnTransferStateChange. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testOnTransferStateChange. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testOnTransferStateChange. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testOnTransferStateChange. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -188,23 +200,29 @@ export function testOnTransferStateChange(){
 
 let receiveIncomingFile = false
 
-export function testOnReceiveIncomingFile(){
+export function testOnReceiveIncomingFile() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_ot_2'))
     let textMessage = ""
     let profileType: number = AppStorage.get("profileType") !
-    if ( receiveIncomingFile ){
-      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).off("receiveIncomingFile", () => {
+    if (receiveIncomingFile) {
+      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).off("receiveIncomingFile",
+        () => {
         promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_orjtygb'))})
       })
       message = resStr($r('app.string.bluetoothtest_str_gbjswjztgbsj'))
     } else {
-      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).on("receiveIncomingFile", (information) => {
+      (btProfileModel.getProfile(profileType) as opp.OppServerProfile).on("receiveIncomingFile",
+        (information) => {
         LogUtil.info("receiveIncomingFile enter")
         let deviceName: string = information.remoteDeviceName;
         let fileName: string = information.filePath;
-        textMessage = resStr($r('app.string.bluetoothtest_str_r')) + deviceName + resStr($r('app.string.bluetoothtest_str_f')) + fileName;
-        message = resStr($r('app.string.bluetoothtest_str_r')) + deviceName + resStr($r('app.string.bluetoothtest_str_f')) + fileName;
+        textMessage =
+          resStr($r('app.string.bluetoothtest_str_r')) + deviceName +
+            resStr($r('app.string.bluetoothtest_str_f')) + fileName;
+        message =
+          resStr($r('app.string.bluetoothtest_str_r')) + deviceName +
+            resStr($r('app.string.bluetoothtest_str_f')) + fileName;
         AppStorage.SetOrCreate("textMessage", textMessage)
         promptAction.showToast({message: message});
       })
@@ -213,15 +231,15 @@ export function testOnReceiveIncomingFile(){
     receiveIncomingFile = !receiveIncomingFile
     return message
   }
-  catch( e ){
-    LogUtil.info(`Failed to testOnReceiveIncomingFile. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testOnReceiveIncomingFile. message: ${ e.message }, code: ${ e.code }`
+  catch(e) {
+    LogUtil.info(`Failed to testOnReceiveIncomingFile. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testOnReceiveIncomingFile. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testSendFile(serverMac: string, fileName: string, fileType: string){
+export function testSendFile(serverMac: string, fileName: string, fileType: string) {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_st_22'))
     let textMessage = ""
@@ -237,22 +255,23 @@ export function testSendFile(serverMac: string, fileName: string, fileType: stri
     })
 
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSendFile. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSendFile. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSendFile. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testSendFile. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testSetIncomingFileConfirmation(){
+export function testSetIncomingFileConfirmation() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_st_2'))
     let textMessage = ""
     let profileType: number = AppStorage.get("profileType") !
     let pathDir = "/test.jpg";
     let file = fs.openSync(pathDir, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
-    (btProfileModel.getProfile(profileType) as opp.OppServerProfile).setIncomingFileConfirmation(true, file.fd).
+    (btProfileModel.getProfile(profileType) as
+      opp.OppServerProfile).setIncomingFileConfirmation(true, file.fd).
       then(() => {
         let result = true;
         LogUtil.info("result: " + result);
@@ -263,15 +282,17 @@ export function testSetIncomingFileConfirmation(){
       })
 
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSetIncomingFileConfirmation. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSetIncomingFileConfirmation. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSetIncomingFileConfirmation. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testSetIncomingFileConfirmation. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testGetCurrentTransferInformation(){
+export function testGetCurrentTransferInformation() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_gt'))
     let textMessage = ""
@@ -287,15 +308,17 @@ export function testGetCurrentTransferInformation(){
       })
 
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGetCurrentTransferInformation. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGetCurrentTransferInformation. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGetCurrentTransferInformation. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testGetCurrentTransferInformation. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testCancelTransfer(){
+export function testCancelTransfer() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_ct_3'))
     let textMessage = ""
@@ -310,9 +333,9 @@ export function testCancelTransfer(){
     })
 
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testCancelTransfer. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testCancelTransfer. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testCancelTransfer. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testCancelTransfer. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }

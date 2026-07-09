@@ -22,7 +22,7 @@ import promptAction from '@ohos.promptAction';
 const TAG: string = '[MediaUtils]'
 
 class MediaUtils {
-  async createAndGetFile(context: any){
+  async createAndGetFile(context: any) {
     let mediaTest = photoAccessHelper.getPhotoAccessHelper(context)
     let options: photoAccessHelper.CreateOptions = {
       title: 'IMG_'
@@ -30,7 +30,7 @@ class MediaUtils {
     return await mediaTest.createAsset(photoAccessHelper.PhotoType.IMAGE, 'jpg', options)
   }
 
-  async savePicture(data: image.PixelMap, context: any){
+  async savePicture(data: image.PixelMap, context: any) {
     Logger.info(TAG, `savePicture`)
   //[TODO] 接口变化重新写
   // let packOpts: image.PackingOption = {

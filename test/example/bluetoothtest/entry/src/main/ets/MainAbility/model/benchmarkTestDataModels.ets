@@ -418,7 +418,8 @@ export const SppServerBenchmarkTestCase: BenchmarkTest[] = [
 export function initBrBenchmarkData(): Array<TestBenchmark> {
   let TestBenchmarkArray: Array<TestBenchmark> = []
   BrBenchmarkTestCase.forEach(item => {
-    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestBenchmarkArray;
 }
@@ -426,7 +427,8 @@ export function initBrBenchmarkData(): Array<TestBenchmark> {
 export function initBleBenchmarkData(): Array<TestBenchmark> {
   let TestBenchmarkArray: Array<TestBenchmark> = []
   BleBenchmarkTestCase.forEach(item => {
-    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestBenchmarkArray;
 }
@@ -434,7 +436,8 @@ export function initBleBenchmarkData(): Array<TestBenchmark> {
 export function initGattClientBenchmarkData(): Array<TestBenchmark> {
   let TestBenchmarkArray: Array<TestBenchmark> = []
   GattClientBenchmarkTestCase.forEach(item => {
-    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestBenchmarkArray;
 }
@@ -442,7 +445,8 @@ export function initGattClientBenchmarkData(): Array<TestBenchmark> {
 export function initGattServerBenchmarkData(): Array<TestBenchmark> {
   let TestBenchmarkArray: Array<TestBenchmark> = []
   GattServerBenchmarkTestCase.forEach(item => {
-    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestBenchmarkArray;
 }
@@ -450,7 +454,8 @@ export function initGattServerBenchmarkData(): Array<TestBenchmark> {
 export function initSppClientBenchmarkData(): Array<TestBenchmark> {
   let TestBenchmarkArray: Array<TestBenchmark> = []
   SppClientBenchmarkTestCase.forEach(item => {
-    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestBenchmarkArray;
 }
@@ -458,7 +463,8 @@ export function initSppClientBenchmarkData(): Array<TestBenchmark> {
 export function initSppServerBenchmarkData(): Array<TestBenchmark> {
   let TestBenchmarkArray: Array<TestBenchmark> = []
   SppServerBenchmarkTestCase.forEach(item => {
-    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestBenchmarkArray.push(new TestBenchmark(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestBenchmarkArray;
 }

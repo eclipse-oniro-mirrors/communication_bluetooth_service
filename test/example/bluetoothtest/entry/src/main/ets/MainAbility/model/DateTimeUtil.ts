@@ -21,7 +21,7 @@ export default class DateTimeUtil {
   /**
    * 时分秒
    */
-  getTime(){
+  getTime() {
     const DATETIME = new Date()
     return this.concatTime(DATETIME.getHours(), DATETIME.getMinutes(), DATETIME.getSeconds())
   }
@@ -29,7 +29,7 @@ export default class DateTimeUtil {
   /**
    * 年月日
    */
-  getDate(){
+  getDate() {
     const DATETIME = new Date()
     return this.concatDate(DATETIME.getFullYear(), DATETIME.getMonth() + 1, DATETIME.getDate())
   }
@@ -38,7 +38,7 @@ export default class DateTimeUtil {
    * 日期不足两位补充0
    * @param value-数据值
    */
-  fill(value: number){
+  fill(value: number) {
     return (value > 9 ? '' : '0') + value
   }
 
@@ -48,7 +48,7 @@ export default class DateTimeUtil {
    * @param month
    * @param date
    */
-  concatDate(year: number, month: number, date: number){
+  concatDate(year: number, month: number, date: number) {
     return `${year}${this.fill(month)}${this.fill(date)}`
   }
 
@@ -58,7 +58,7 @@ export default class DateTimeUtil {
    * @param minutes
    * @param seconds
    */
-  concatTime(hours: number, minutes: number, seconds: number){
+  concatTime(hours: number, minutes: number, seconds: number) {
     return `${this.fill(hours)}${this.fill(minutes)}${this.fill(seconds)}`
   }
 }

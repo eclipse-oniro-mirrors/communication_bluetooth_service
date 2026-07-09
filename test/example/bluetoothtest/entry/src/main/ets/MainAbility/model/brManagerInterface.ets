@@ -42,10 +42,10 @@ export function testInputBluetoothManager(): string {
 
 let btManagerEnable = false
 
-export function testEnableBluetoothManager(){
+export function testEnableBluetoothManager() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_et'))
-    if ( btManagerEnable ){
+    if (btManagerEnable) {
       message = resStr($r('app.string.bluetoothtest_str_lyyjsn'));
     } else {
       BluetoothModelManager.enableBluetooth();
@@ -55,9 +55,9 @@ export function testEnableBluetoothManager(){
     }
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testEnableBluetoothManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testEnableBluetoothManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testEnableBluetoothManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testEnableBluetoothManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -66,7 +66,7 @@ export function testEnableBluetoothManager(){
 export function testDisableBluetoothManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_dt'))
-    if ( !btManagerEnable ){
+    if (!btManagerEnable) {
       message = resStr($r('app.string.bluetoothtest_str_lyhwsn'))
     } else {
       BluetoothModelManager.disableBluetooth();
@@ -76,9 +76,11 @@ export function testDisableBluetoothManager(): string {
     }
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testDisableBluetoothManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testDisableBluetoothManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testDisableBluetoothManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testDisableBluetoothManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -88,7 +90,7 @@ export function testGetStateManager(): string {
   try {
     let ret = BluetoothModelManager.getState()
     let stateManagerBT = "getState test"
-    switch ( ret ){
+    switch (ret) {
       case 0:
         stateManagerBT = 'STATE_OFF';
         break;
@@ -115,18 +117,18 @@ export function testGetStateManager(): string {
         break;
     }
     let message = resStr($r('app.string.bluetoothtest_str_dqlydzts')) + stateManagerBT;
-    if ( ret == 0 || ret == 3 ){
+    if (ret == 0 || ret == 3) {
       btManagerEnable = false
-    } else if ( ret == 1 || ret == 2 ){
+    } else if (ret == 1 || ret == 2) {
       btManagerEnable = true
     } else {
       LogUtil.info(resStr($r('app.string.bluetoothtest_str_ckbzt')))
     }
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGetStateManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGetStateManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGetStateManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testGetStateManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -138,9 +140,11 @@ export function testGetBtConnectionStateManager(): string {
     let message = resStr($r('app.string.bluetoothtest_str_dqljzts')) + ret;
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGetBtConnectionStateManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGetBtConnectionStateManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGetBtConnectionStateManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testGetBtConnectionStateManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -149,12 +153,13 @@ export function testGetBtConnectionStateManager(): string {
 export function testSetLocalNameManager(name: string): string {
   try {
     let ret = BluetoothModelManager.setLocalName(name)
-    let message = resStr($r('app.string.bluetoothtest_str_sz')) + ret + resStr($r('app.string.bluetoothtest_str_sbmcw')) + name;
+    let message = resStr($r('app.string.bluetoothtest_str_sz')) + ret +
+      resStr($r('app.string.bluetoothtest_str_sbmcw')) + name;
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSetLocalNameManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSetLocalNameManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSetLocalNameManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testSetLocalNameManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -166,9 +171,9 @@ export function testGetLocalNameManager(): string {
     let message = resStr($r('app.string.bluetoothtest_str_bsbmcs')) + ret;
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGetLocalNameManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGetLocalNameManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGetLocalNameManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testGetLocalNameManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -176,20 +181,26 @@ export function testGetLocalNameManager(): string {
 
 export function testSetBluetoothScanModeManager(mode: number, dur: number): string {
   try {
-    let retObj: RetObj = { mod: 0, duration: - 1}
+    let retObj: RetObj = {
+      mod: 0,
+      duration: - 1
+    }
     let ret = BluetoothModelManager.setBluetoothScanMode(mode, dur)
     AppStorage.setOrCreate('setScanModeRet', ret);
     retObj.mod = mode;
     retObj.duration = dur;
     LogUtil.info("BluetoothModelManager.setBluetoothScanMode success!" + JSON.stringify(retObj))
-    // let message = ret ? "setBluetoothScanMode执行成功" + JSON.stringify( retObj ) : "setBluetoothScanMode执行失败"    //dialog会报错
+    // let message = ret ? "setBluetoothScanMode执行成功" + JSON.stringify(retObj) :
+    //   "setBluetoothScanMode执行失败"    //dialog会报错
     let message = resStr($r('app.string.bluetoothtest_str_szxcg_1'))
     let showToastMessage = resStr($r('app.string.bluetoothtest_str_szxcg_1'))
     promptAction.showToast({message: showToastMessage})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSetBluetoothScanModeManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSetBluetoothScanModeManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSetBluetoothScanModeManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testSetBluetoothScanModeManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -201,19 +212,21 @@ export function testGetBluetoothScanModeManager(): string {
     let message = resStr($r('app.string.bluetoothtest_str_ms')) + ret;
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGetBluetoothScanModeManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGetBluetoothScanModeManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGetBluetoothScanModeManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testGetBluetoothScanModeManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testStartBluetoothDiscoveryManager(){
+export function testStartBluetoothDiscoveryManager() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_st_3'))
     let btManagerEnable: boolean = AppStorage.get('bluetoothManagerIsOn') !
-    if ( !btManagerEnable ){
+    if (!btManagerEnable) {
       message = resStr($r('app.string.bluetoothtest_str_lyhwsn'))
       return message;
     } else {
@@ -222,9 +235,11 @@ export function testStartBluetoothDiscoveryManager(){
     }
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testStartBluetoothDiscoveryManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testStartBluetoothDiscoveryManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testStartBluetoothDiscoveryManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testStartBluetoothDiscoveryManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -236,9 +251,11 @@ export function testStopBluetoothDiscoveryManager(): string {
     let message = resStr($r('app.string.bluetoothtest_str_szx_1')) + ret;
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testStopBluetoothDiscoveryManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testStopBluetoothDiscoveryManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testStopBluetoothDiscoveryManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testStopBluetoothDiscoveryManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -255,12 +272,14 @@ export function testPairDeviceManager(deviceId: string): string {
     }, () => {
       promptAction.showToast({message: "testPairDevice Failed"})
     })
-    message = resStr($r('app.string.bluetoothtest_str_pd')) + deviceId + resStr($r('app.string.bluetoothtest_str_cg'))
+    message =
+      resStr($r('app.string.bluetoothtest_str_pd')) + deviceId +
+        resStr($r('app.string.bluetoothtest_str_cg'))
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testPairDeviceManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testPairDeviceManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testPairDeviceManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testPairDeviceManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -270,12 +289,13 @@ export function testUnPairedDeviceManager(deviceId: string): string {
   //  let deviceId = "123123"
   try {
     let ret = BluetoothModelManager.unpairDevice(deviceId)
-    let message = resStr($r('app.string.bluetoothtest_str_sb')) + deviceId + resStr($r('app.string.bluetoothtest_str_dk')) + ret;
+    let message = resStr($r('app.string.bluetoothtest_str_sb')) + deviceId +
+      resStr($r('app.string.bluetoothtest_str_dk')) + ret;
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testUnPairedDeviceManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testUnPairedDeviceManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testUnPairedDeviceManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testUnPairedDeviceManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -287,9 +307,11 @@ export function testGetRemoteDeviceNameManager(deviceId: string): string {
     let message = resStr($r('app.string.bluetoothtest_str_ycsbm')) + ret;
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGetRemoteDeviceNameManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGetRemoteDeviceNameManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGetRemoteDeviceNameManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testGetRemoteDeviceNameManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -302,9 +324,11 @@ export function testGetRemoteDeviceClassManager(deviceId: string): string {
     let message = resStr($r('app.string.bluetoothtest_str_yccm')) + ret;
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGetRemoteDeviceClassManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGetRemoteDeviceClassManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGetRemoteDeviceClassManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testGetRemoteDeviceClassManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -315,17 +339,19 @@ export function testGetPairedDevicesManager(): string {
     let ret = BluetoothModelManager.getPairedDeviceIds()
     let message = resStr($r('app.string.bluetoothtest_str_gt_8'))
     LogUtil.info("BluetoothModelManager.getPairedDeviceIds:" + ret)
-    if ( ret.length == 0 ){
+    if (ret.length == 0) {
       message = resStr($r('app.string.bluetoothtest_str_dqmyrhpdsb'))
     } else {
-      message = resStr($r('app.string.bluetoothtest_str_sbw')) + ret[ 0 ]
-      AppStorage.setOrCreate('pairedMac', ret[ 0 ]);
+      message = resStr($r('app.string.bluetoothtest_str_sbw')) + ret[0]
+      AppStorage.setOrCreate('pairedMac', ret[0]);
     }
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGetPairedDevicesManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGetPairedDevicesManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGetPairedDevicesManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testGetPairedDevicesManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -339,9 +365,11 @@ export function testGetProfileConnStateManager1(profileId: number): string {
     promptAction.showToast({message: message})
     LogUtil.info("BluetoothModelManager.testGetProfileConnState1:" + ret)
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGetProfileConnStateManager1. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGetProfileConnStateManager1. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGetProfileConnStateManager1. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testGetProfileConnStateManager1. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -352,7 +380,7 @@ export function testGetProfileConnStateManager2(profileId: number, deviceId: str
     let ret = bluetoothManager.getProfileInstance(profileId).getDeviceState(deviceId)
     let stateProfile = ""
     LogUtil.info('testGetProfileConnState2 state is ' + ret);
-    switch ( ret ){
+    switch (ret) {
       case 0:
         stateProfile = 'STATE_DISCONNECTED';
         break;
@@ -372,9 +400,11 @@ export function testGetProfileConnStateManager2(profileId: number, deviceId: str
     let message = stateProfile;
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGetProfileConnStateManager2. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGetProfileConnStateManager2. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGetProfileConnStateManager2. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testGetProfileConnStateManager2. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -386,7 +416,7 @@ export function testOnStateChangeManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_ot_12'))
     LogUtil.info('testOnStateChange test')
-    if ( stateChangeManager ){
+    if (stateChangeManager) {
       bluetoothManager.off('stateChange', () => {
         promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_osjtygb'))})
       })
@@ -395,7 +425,7 @@ export function testOnStateChangeManager(): string {
     } else {
       bluetoothManager.on('stateChange', (data: bluetoothManager.BluetoothState) => {
         let btStateMessageManager = ""
-        switch ( data ){
+        switch (data) {
           case 0:
             btStateMessageManager += 'STATE_OFF';
             break;
@@ -421,16 +451,17 @@ export function testOnStateChangeManager(): string {
             btStateMessageManager += resStr($r('app.string.bluetoothtest_str_wzzt'));
             break;
         }
-        promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_zt')) + btStateMessageManager})
+        promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_zt')) +
+          btStateMessageManager})
       })
       message = resStr($r('app.string.bluetoothtest_str_dkzcztbh'))
       promptAction.showToast({message: message})
     }
     stateChangeManager = !stateChangeManager
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testOnStateChangeManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testOnStateChangeManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testOnStateChangeManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testOnStateChangeManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -442,7 +473,7 @@ export function testOnPinRequiredManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_ot_11'))
     LogUtil.info('testOnPinRequired test')
-    if ( pinRequiredManager ){
+    if (pinRequiredManager) {
       bluetoothManager.off('pinRequired', () => {
         promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_opjtygb'))})
       })
@@ -455,9 +486,9 @@ export function testOnPinRequiredManager(): string {
     }
     pinRequiredManager = !pinRequiredManager
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testOnPinRequiredManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testOnPinRequiredManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testOnPinRequiredManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testOnPinRequiredManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -469,7 +500,7 @@ export function testOnBondStateChangeManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_ot_7'))
     LogUtil.info('testOnBondStateChange test')
-    if ( bondStateFlagManager ){
+    if (bondStateFlagManager) {
       bluetoothManager.off('bondStateChange', () => {
         promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_objtygb'))})
       })
@@ -482,9 +513,11 @@ export function testOnBondStateChangeManager(): string {
     }
     bondStateFlagManager = !bondStateFlagManager
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testOnBondStateChangeManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testOnBondStateChangeManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testOnBondStateChangeManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testOnBondStateChangeManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -498,16 +531,19 @@ export function subscribeBluetoothDeviceFindManager(): string {
       LogUtil.info('available bluetooth devices changed.')
       deviceIds?.forEach(async(deviceId) => {
         LogUtil.info('available bluetooth find [' + deviceId + '] ')
-        let message = (resStr($r('app.string.bluetoothtest_str_abf')) + deviceId + resStr($r('app.string.bluetoothtest_str_str')))
+        let message = (resStr($r('app.string.bluetoothtest_str_abf')) + deviceId +
+          resStr($r('app.string.bluetoothtest_str_str')))
         promptAction.showToast({message: message})
         AppStorage.setOrCreate('bluetoothAvailableDevices', message)
       })
     });
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to subscribeBluetoothDeviceFindManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to subscribeBluetoothDeviceFindManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to subscribeBluetoothDeviceFindManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to subscribeBluetoothDeviceFindManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }

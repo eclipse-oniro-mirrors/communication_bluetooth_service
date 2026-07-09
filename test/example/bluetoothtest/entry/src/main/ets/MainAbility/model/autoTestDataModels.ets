@@ -260,8 +260,12 @@ export const BrAutoTestCase: AutoTest[] = [
     result: 'None',
     category: AutoCategory.BrAuto
 },
-  //  { name: '获取配置文件连接状态1', detail: '获取配置文件的连接状态', method: 'getProfileConnState', api:testGetProfileConnState1,result: 'None', category: AutoCategory.BrAuto },
-  //  { name: '获取配置文件连接状态2', detail: '获取设备的配置文件状态', method: 'getDeviceState',api:testGetProfileConnState2, result: 'None', category: AutoCategory.BrAuto },
+  //  { name: '获取配置文件连接状态1', detail: '获取配置文件的连接状态',
+  //    method: 'getProfileConnState', api:testGetProfileConnState1,result: 'None',
+  //    category: AutoCategory.BrAuto },
+  //  { name: '获取配置文件连接状态2', detail: '获取设备的配置文件状态',
+  //    method: 'getDeviceState',api:testGetProfileConnState2, result: 'None',
+  //    category: AutoCategory.BrAuto },
   {
     name: $r('app.string.bluetoothtest_str_gly'),
     detail: $r('app.string.bluetoothtest_str_qsnly'),
@@ -1310,7 +1314,8 @@ export const PanNetworkProfileAutoTestCase: AutoTest[] = [
 export function initBrAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   BrAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1318,7 +1323,8 @@ export function initBrAutoData(): Array<TestAuto> {
 export function initBleAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   BleAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1326,7 +1332,8 @@ export function initBleAutoData(): Array<TestAuto> {
 export function initGattClientAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   GattClientAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1334,7 +1341,8 @@ export function initGattClientAutoData(): Array<TestAuto> {
 export function initGattServerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   GattServerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1342,7 +1350,8 @@ export function initGattServerAutoData(): Array<TestAuto> {
 export function initSppClientAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   SppClientAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1350,7 +1359,8 @@ export function initSppClientAutoData(): Array<TestAuto> {
 export function initSppServerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   SppServerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1359,7 +1369,8 @@ export function initSppServerAutoData(): Array<TestAuto> {
 export function initA2dpSourceProfileAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   A2dpSourceProfileAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1368,7 +1379,8 @@ export function initA2dpSourceProfileAutoData(): Array<TestAuto> {
 export function initHandsFreeAudioGatewayProfileAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   HandsFreeAudioGatewayProfileAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1377,7 +1389,8 @@ export function initHandsFreeAudioGatewayProfileAutoData(): Array<TestAuto> {
 export function initHitHostProfileAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   HitHostProfileAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1385,7 +1398,8 @@ export function initHitHostProfileAutoData(): Array<TestAuto> {
 export function initPanNetworkProfileAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   PanNetworkProfileAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
