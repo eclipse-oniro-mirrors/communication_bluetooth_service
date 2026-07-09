@@ -39,20 +39,22 @@ export class BTMProfileModel extends BaseModel {
 
   initProfile(): void {
     LogUtil.info('btm_test BTProfileModel start');
+    try {
+      this.profiles[this.PROFILE_A2DP_SOURCE] = btm.getProfileInstance(this.PROFILE_A2DP_SOURCE) as
+        btm.A2dpSourceProfile;
 
-    this.profiles[this.PROFILE_A2DP_SOURCE] = btm.getProfileInstance(this.PROFILE_A2DP_SOURCE) as
-      btm.A2dpSourceProfile;
+      this.profiles[this.PROFILE_HANDS_FREE_AUDIO_GATEWAY] =
+        btm.getProfileInstance(this.PROFILE_HANDS_FREE_AUDIO_GATEWAY) as
+          btm.HandsFreeAudioGatewayProfile;
 
-    this.profiles[this.PROFILE_HANDS_FREE_AUDIO_GATEWAY] =
-      btm.getProfileInstance(this.PROFILE_HANDS_FREE_AUDIO_GATEWAY) as
-        btm.HandsFreeAudioGatewayProfile;
+      this.profiles[this.PROFILE_HID_HOST] = btm.getProfileInstance(this.PROFILE_HID_HOST) as
+        btm.HidHostProfile;
 
-    this.profiles[this.PROFILE_HID_HOST] = btm.getProfileInstance(this.PROFILE_HID_HOST) as
-      btm.HidHostProfile;
-
-    this.profiles[this.PROFILE_PAN_NETWORK] = btm.getProfileInstance(this.PROFILE_PAN_NETWORK) as
-      btm.PanProfile;
-
+      this.profiles[this.PROFILE_PAN_NETWORK] = btm.getProfileInstance(this.PROFILE_PAN_NETWORK) as
+        btm.PanProfile;
+    } catch (e) {
+      LogUtil.info(`BTMProfileModel initProfile failed: ${e.message}, code: ${e.code}`);
+    }
     LogUtil.info('bt_test BTProfileModel end');
   }
 

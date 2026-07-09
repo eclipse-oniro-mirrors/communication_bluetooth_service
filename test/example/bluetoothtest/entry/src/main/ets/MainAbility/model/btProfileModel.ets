@@ -43,27 +43,30 @@ export class BTProfileModel extends BaseModel {
 
   initProfile() {
     LogUtil.info('bt_test BTProfileModel start');
+    try {
+      this.profiles[this.PROFILE_A2DP_SOURCE] = bt.getProfile(this.PROFILE_A2DP_SOURCE) as
+        bt.A2dpSourceProfile;
 
-    this.profiles[this.PROFILE_A2DP_SOURCE] = bt.getProfile(this.PROFILE_A2DP_SOURCE) as
-      bt.A2dpSourceProfile;
+      this.profiles[this.PROFILE_HANDS_FREE_AUDIO_GATEWAY] =
+        bt.getProfile(this.PROFILE_HANDS_FREE_AUDIO_GATEWAY) as bt.HandsFreeAudioGatewayProfile;
 
-    this.profiles[this.PROFILE_HANDS_FREE_AUDIO_GATEWAY] =
-      bt.getProfile(this.PROFILE_HANDS_FREE_AUDIO_GATEWAY) as bt.HandsFreeAudioGatewayProfile;
+      this.profiles[this.PROFILE_HID_HOST] = hid.createHidHostProfile() as hid.HidHostProfile;
 
-    this.profiles[this.PROFILE_HID_HOST] = hid.createHidHostProfile() as hid.HidHostProfile;
+      this.profiles[this.PROFILE_PAN_NETWORK] = pan.createPanProfile() as pan.PanProfile;
 
-    this.profiles[this.PROFILE_PAN_NETWORK] = pan.createPanProfile() as pan.PanProfile;
+      this.profiles[this.PROFILE_OPP] = opp.createOppServerProfile();
 
-    this.profiles[this.PROFILE_OPP] = opp.createOppServerProfile();
-
-    LogUtil.info("this.profiles[ this.PROFILE_A2DP_SOURCE ]" +
-      JSON.stringify(bt.getProfile(this.PROFILE_A2DP_SOURCE)))
-    LogUtil.info("this.profiles[ this.PROFILE_HANDS_FREE_AUDIO_GATEWAY ]" +
-      bt.getProfile(this.PROFILE_HANDS_FREE_AUDIO_GATEWAY))
-    LogUtil.info("this.profiles[ this.PROFILE_HID_HOST ]" + this.profiles[this.PROFILE_HID_HOST])
-    LogUtil.info("this.profiles[ this.PROFILE_PAN_NETWORK ]" + this.profiles[
-      this.PROFILE_PAN_NETWORK])
-    LogUtil.info("this.profiles[ this.PROFILE_OPP ]" + bt.getProfile(this.PROFILE_OPP))
+      LogUtil.info("this.profiles[ this.PROFILE_A2DP_SOURCE ]" +
+        JSON.stringify(bt.getProfile(this.PROFILE_A2DP_SOURCE)))
+      LogUtil.info("this.profiles[ this.PROFILE_HANDS_FREE_AUDIO_GATEWAY ]" +
+        bt.getProfile(this.PROFILE_HANDS_FREE_AUDIO_GATEWAY))
+      LogUtil.info("this.profiles[ this.PROFILE_HID_HOST ]" + this.profiles[this.PROFILE_HID_HOST])
+      LogUtil.info("this.profiles[ this.PROFILE_PAN_NETWORK ]" + this.profiles[
+        this.PROFILE_PAN_NETWORK])
+      LogUtil.info("this.profiles[ this.PROFILE_OPP ]" + bt.getProfile(this.PROFILE_OPP))
+    } catch (e) {
+      LogUtil.info(`BTProfileModel initProfile failed: ${e.message}, code: ${e.code}`);
+    }
     LogUtil.info('bt_test BTProfileModel end')
   }
 

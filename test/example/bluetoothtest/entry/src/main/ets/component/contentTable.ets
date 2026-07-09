@@ -453,6 +453,7 @@ export struct ContentTable {
     })
     .backgroundColor($r("app.color.white"))
     .onClick(() => {
+      try {
       switch (apiItem.method) {
         case "setLocalName": {
           this.currentApiItem = apiItem;
@@ -588,6 +589,11 @@ export struct ContentTable {
           promptAction.showToast({message: message});
         }
           break;
+      }
+      } catch (e) {
+        LogUtil.info(`ContentTable onClick failed: ${e.message}, code: ${e.code}`);
+        const errMsg = `Failed: ${e.message}`;
+        promptAction.showToast({message: errMsg});
       }
     })
   }

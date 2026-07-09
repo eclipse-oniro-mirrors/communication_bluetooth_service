@@ -14,6 +14,7 @@
  */
 
 import ConfigData from '../Utils/ConfigData';
+import LogUtil from '../Utils/LogUtil';
 import { TestData, TestApi} from '../MainAbility/model/testData'
 import promptAction from '@ohos.promptAction'
 
@@ -82,6 +83,7 @@ export struct AutoVerificationTable {
     })
     .backgroundColor($r("app.color.white"))
     .onClick(() => {
+      try {
       switch (apiItem.method) {
         default: {
           let message = apiItem.api();
@@ -91,6 +93,11 @@ export struct AutoVerificationTable {
           promptAction.showToast({message: message});
         }
           break;
+      }
+      } catch (e) {
+        LogUtil.info(`AutoVerificationTable onClick failed: ${e.message}, code: ${e.code}`);
+        const errMsg = `Failed: ${e.message}`;
+        promptAction.showToast({message: errMsg});
       }
     })
   }
