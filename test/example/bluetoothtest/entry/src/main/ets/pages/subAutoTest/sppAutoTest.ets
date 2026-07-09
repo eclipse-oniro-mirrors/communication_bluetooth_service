@@ -32,23 +32,24 @@ struct SppAutoTest {
   private testItem: TestData = testItemFromRouterOrPlaceholder()
   @StorageLink("autoTestMessage") autoTestMessage: string = ""
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
       .accessibilityLevel('yes')
       .id('pages_subAutoTest_sppAutoTest__pt_0')
       }
 
-      List(){
+      List() {
         ForEach(this.sppAutoTestItems, (item: TestData, index: number) => {
-          ListItem(){
+          ListItem() {
             TestListItem({
               testItem: item
             })
           }
-      .id(index === 0 ? 'pages_subAutoTest_sppAutoTest__li_0' : `pages_subAutoTest_sppAutoTest__li_${index}`)
+      .id(index === 0 ? 'pages_subAutoTest_sppAutoTest__li_0' :
+        `pages_subAutoTest_sppAutoTest__li_${index}`)
         }, (item: TestData) => item.id)
       }
       .height(ConfigData.PCT_93)
