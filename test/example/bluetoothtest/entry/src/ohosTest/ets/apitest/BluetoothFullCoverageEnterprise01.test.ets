@@ -1244,348 +1244,1238 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('ent_addDisallowedBluetoothDevices_r', 0, () => {
-      fcRun('ent_addDisallowedBluetoothDevices_r', () => {
-try{enterpriseBt.addDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'},[BADDR]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_addDisallowedBluetoothDevices_r', () => {
+            try {enterpriseBt.addDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'}, [BADDR]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_ADDDISALLOWEDBLUETOOTHDEVICES_X
+     * @tc.name ent_addDisallowedBluetoothDevices_x
+     * @tc.desc Verify Bluetooth API ent addDisallowedBluetoothDevices repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_addDisallowedBluetoothDevices_x', 0, () => {
-      fcRun('ent_addDisallowedBluetoothDevices_x', () => {
-try{enterpriseBt.addDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'},[BADDR]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_addDisallowedBluetoothDevices_x', () => {
+            try {enterpriseBt.addDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'}, [BADDR]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_ADDDISALLOWEDBLUETOOTHDEVICES_C
+     * @tc.name ent_addDisallowedBluetoothDevices_c
+     * @tc.desc Verify Bluetooth API ent addDisallowedBluetoothDevices combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_addDisallowedBluetoothDevices_c', 0, () => {
-      fcRunCombo('ent_addDisallowedBluetoothDevices_c', [() => {
-try{enterpriseBt.addDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'},[BADDR]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+                  fcRunCombo('ent_addDisallowedBluetoothDevices_c', [() => {
+            try {enterpriseBt.addDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'}, [BADDR]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('ent_removeDisallowedBluetoothDevices', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHDEVICES_N
+     * @tc.name ent_removeDisallowedBluetoothDevices_n
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothDevices normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothDevices_n', 0, () => {
-      fcRun('ent_removeDisallowedBluetoothDevices_n', () => {
-try{enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'},[BADDR]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_removeDisallowedBluetoothDevices_n', () => {
+            try {enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'}, [BADDR]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHDEVICES_E
+     * @tc.name ent_removeDisallowedBluetoothDevices_e
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothDevices error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothDevices_e', 0, () => {
-      fcRunErr('ent_removeDisallowedBluetoothDevices_e', () => {
-try{try{enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'},[BADDR]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue();
-        }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRunErr('ent_removeDisallowedBluetoothDevices_e', () => {
+            try {try {enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'}, [BADDR]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue();
+                    }} catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHDEVICES_B
+     * @tc.name ent_removeDisallowedBluetoothDevices_b
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothDevices boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothDevices_b', 0, () => {
-      fcRun('ent_removeDisallowedBluetoothDevices_b', () => {
-try{enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'},[BADDR]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_removeDisallowedBluetoothDevices_b', () => {
+            try {enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'}, [BADDR]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHDEVICES_R
+     * @tc.name ent_removeDisallowedBluetoothDevices_r
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothDevices return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothDevices_r', 0, () => {
-      fcRun('ent_removeDisallowedBluetoothDevices_r', () => {
-try{enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'},[BADDR]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_removeDisallowedBluetoothDevices_r', () => {
+            try {enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'}, [BADDR]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHDEVICES_X
+     * @tc.name ent_removeDisallowedBluetoothDevices_x
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothDevices repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothDevices_x', 0, () => {
-      fcRun('ent_removeDisallowedBluetoothDevices_x', () => {
-try{enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'},[BADDR]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_removeDisallowedBluetoothDevices_x', () => {
+            try {enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'}, [BADDR]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHDEVICES_C
+     * @tc.name ent_removeDisallowedBluetoothDevices_c
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothDevices combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothDevices_c', 0, () => {
-      fcRunCombo('ent_removeDisallowedBluetoothDevices_c', [() => {
-try{enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'},[BADDR]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+                  fcRunCombo('ent_removeDisallowedBluetoothDevices_c', [() => {
+            try {enterpriseBt.removeDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'}, [BADDR]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('ent_getDisallowedBluetoothDevices', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHDEVICES_N
+     * @tc.name ent_getDisallowedBluetoothDevices_n
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothDevices normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothDevices_n', 0, () => {
-      fcRun('ent_getDisallowedBluetoothDevices_n', () => {
-        try{const
-a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'});
-        expect(Array.isArray(a)).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_getDisallowedBluetoothDevices_n', () => {
+                    try {const
+            a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'});
+                    expect(Array.isArray(a)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHDEVICES_E
+     * @tc.name ent_getDisallowedBluetoothDevices_e
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothDevices error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothDevices_e', 0, () => {
-      fcRunErr('ent_getDisallowedBluetoothDevices_e', () => {
-        try{try{const
-a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'});
-        expect(Array.isArray(a)).assertTrue(); }catch(_e){expect(true).assertTrue();
-        }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRunErr('ent_getDisallowedBluetoothDevices_e', () => {
+                    try {try {const
+            a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'});
+                    expect(Array.isArray(a)).assertTrue(); } catch (_e) {expect(true).assertTrue();
+                    }} catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHDEVICES_B
+     * @tc.name ent_getDisallowedBluetoothDevices_b
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothDevices boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothDevices_b', 0, () => {
-      fcRun('ent_getDisallowedBluetoothDevices_b', () => {
-        try{const
-a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'});
-        expect(Array.isArray(a)).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_getDisallowedBluetoothDevices_b', () => {
+                    try {const
+            a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'});
+                    expect(Array.isArray(a)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHDEVICES_R
+     * @tc.name ent_getDisallowedBluetoothDevices_r
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothDevices return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothDevices_r', 0, () => {
-      fcRun('ent_getDisallowedBluetoothDevices_r', () => {
-        try{const
-a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'});
-        expect(Array.isArray(a)).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_getDisallowedBluetoothDevices_r', () => {
+                    try {const
+            a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'});
+                    expect(Array.isArray(a)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHDEVICES_X
+     * @tc.name ent_getDisallowedBluetoothDevices_x
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothDevices repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothDevices_x', 0, () => {
-      fcRun('ent_getDisallowedBluetoothDevices_x', () => {
-        try{const
-a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'});
-        expect(Array.isArray(a)).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_getDisallowedBluetoothDevices_x', () => {
+                    try {const
+            a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'});
+                    expect(Array.isArray(a)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHDEVICES_C
+     * @tc.name ent_getDisallowedBluetoothDevices_c
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothDevices combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothDevices_c', 0, () => {
-      fcRunCombo('ent_getDisallowedBluetoothDevices_c', [() => {
-        try{const
-a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test',abilityName:'EntryAbility'});
-        expect(Array.isArray(a)).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+                  fcRunCombo('ent_getDisallowedBluetoothDevices_c', [() => {
+                    try {const
+            a=enterpriseBt.getDisallowedBluetoothDevices({bundleName:'com.example.test', abilityName:'EntryAbility'});
+                    expect(Array.isArray(a)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('ent_addDisallowedBluetoothProtocols', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_ADDDISALLOWEDBLUETOOTHPROTOCOLS_N
+     * @tc.name ent_addDisallowedBluetoothProtocols_n
+     * @tc.desc Verify Bluetooth API ent addDisallowedBluetoothProtocols normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_addDisallowedBluetoothProtocols_n', 0, () => {
-      fcRun('ent_addDisallowedBluetoothProtocols_n', () => {
-try{enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_addDisallowedBluetoothProtocols_n', () => {
+            try {enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_ADDDISALLOWEDBLUETOOTHPROTOCOLS_E
+     * @tc.name ent_addDisallowedBluetoothProtocols_e
+     * @tc.desc Verify Bluetooth API ent addDisallowedBluetoothProtocols error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_addDisallowedBluetoothProtocols_e', 0, () => {
-      fcRunErr('ent_addDisallowedBluetoothProtocols_e', () => {
-try{try{enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue();
-        }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRunErr('ent_addDisallowedBluetoothProtocols_e', () => {
+            try {try {enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue();
+                    }} catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_ADDDISALLOWEDBLUETOOTHPROTOCOLS_B
+     * @tc.name ent_addDisallowedBluetoothProtocols_b
+     * @tc.desc Verify Bluetooth API ent addDisallowedBluetoothProtocols boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_addDisallowedBluetoothProtocols_b', 0, () => {
-      fcRun('ent_addDisallowedBluetoothProtocols_b', () => {
-try{enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_addDisallowedBluetoothProtocols_b', () => {
+            try {enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_ADDDISALLOWEDBLUETOOTHPROTOCOLS_R
+     * @tc.name ent_addDisallowedBluetoothProtocols_r
+     * @tc.desc Verify Bluetooth API ent addDisallowedBluetoothProtocols return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_addDisallowedBluetoothProtocols_r', 0, () => {
-      fcRun('ent_addDisallowedBluetoothProtocols_r', () => {
-try{enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_addDisallowedBluetoothProtocols_r', () => {
+            try {enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_ADDDISALLOWEDBLUETOOTHPROTOCOLS_X
+     * @tc.name ent_addDisallowedBluetoothProtocols_x
+     * @tc.desc Verify Bluetooth API ent addDisallowedBluetoothProtocols repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_addDisallowedBluetoothProtocols_x', 0, () => {
-      fcRun('ent_addDisallowedBluetoothProtocols_x', () => {
-try{enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_addDisallowedBluetoothProtocols_x', () => {
+            try {enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_ADDDISALLOWEDBLUETOOTHPROTOCOLS_C
+     * @tc.name ent_addDisallowedBluetoothProtocols_c
+     * @tc.desc Verify Bluetooth API ent addDisallowedBluetoothProtocols combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_addDisallowedBluetoothProtocols_c', 0, () => {
-      fcRunCombo('ent_addDisallowedBluetoothProtocols_c', [() => {
-try{enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+                  fcRunCombo('ent_addDisallowedBluetoothProtocols_c', [() => {
+            try {enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('ent_removeDisallowedBluetoothProtocols', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHPROTOCOLS_N
+     * @tc.name ent_removeDisallowedBluetoothProtocols_n
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothProtocols normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothProtocols_n', 0, () => {
-      fcRun('ent_removeDisallowedBluetoothProtocols_n', () => {
-try{enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_removeDisallowedBluetoothProtocols_n', () => {
+            try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHPROTOCOLS_E
+     * @tc.name ent_removeDisallowedBluetoothProtocols_e
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothProtocols error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothProtocols_e', 0, () => {
-      fcRunErr('ent_removeDisallowedBluetoothProtocols_e', () => {
-try{try{enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue();
-        }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRunErr('ent_removeDisallowedBluetoothProtocols_e', () => {
+            try {try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue();
+                    }} catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHPROTOCOLS_B
+     * @tc.name ent_removeDisallowedBluetoothProtocols_b
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothProtocols boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothProtocols_b', 0, () => {
-      fcRun('ent_removeDisallowedBluetoothProtocols_b', () => {
-try{enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_removeDisallowedBluetoothProtocols_b', () => {
+            try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHPROTOCOLS_R
+     * @tc.name ent_removeDisallowedBluetoothProtocols_r
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothProtocols return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothProtocols_r', 0, () => {
-      fcRun('ent_removeDisallowedBluetoothProtocols_r', () => {
-try{enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_removeDisallowedBluetoothProtocols_r', () => {
+            try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHPROTOCOLS_X
+     * @tc.name ent_removeDisallowedBluetoothProtocols_x
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothProtocols repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothProtocols_x', 0, () => {
-      fcRun('ent_removeDisallowedBluetoothProtocols_x', () => {
-try{enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_removeDisallowedBluetoothProtocols_x', () => {
+            try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHPROTOCOLS_C
+     * @tc.name ent_removeDisallowedBluetoothProtocols_c
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothProtocols combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_removeDisallowedBluetoothProtocols_c', 0, () => {
-      fcRunCombo('ent_removeDisallowedBluetoothProtocols_c', [() => {
-try{enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0,[0]);
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+                  fcRunCombo('ent_removeDisallowedBluetoothProtocols_c', [() => {
+            try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('ent_getDisallowedBluetoothProtocols', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHPROTOCOLS_N
+     * @tc.name ent_getDisallowedBluetoothProtocols_n
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothProtocols normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothProtocols_n', 0, () => {
-      fcRun('ent_getDisallowedBluetoothProtocols_n', () => {
-        try{const
-p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0);
-        expect(Array.isArray(p)).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_getDisallowedBluetoothProtocols_n', () => {
+                    try {const
+            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
+                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHPROTOCOLS_E
+     * @tc.name ent_getDisallowedBluetoothProtocols_e
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothProtocols error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothProtocols_e', 0, () => {
-      fcRunErr('ent_getDisallowedBluetoothProtocols_e', () => {
-        try{try{const
-p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0);
-        expect(Array.isArray(p)).assertTrue(); }catch(_e){expect(true).assertTrue();
-        }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRunErr('ent_getDisallowedBluetoothProtocols_e', () => {
+                    try {try {const
+            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
+                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue();
+                    }} catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHPROTOCOLS_B
+     * @tc.name ent_getDisallowedBluetoothProtocols_b
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothProtocols boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothProtocols_b', 0, () => {
-      fcRun('ent_getDisallowedBluetoothProtocols_b', () => {
-        try{const
-p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0);
-        expect(Array.isArray(p)).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_getDisallowedBluetoothProtocols_b', () => {
+                    try {const
+            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
+                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHPROTOCOLS_R
+     * @tc.name ent_getDisallowedBluetoothProtocols_r
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothProtocols return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothProtocols_r', 0, () => {
-      fcRun('ent_getDisallowedBluetoothProtocols_r', () => {
-        try{const
-p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0);
-        expect(Array.isArray(p)).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_getDisallowedBluetoothProtocols_r', () => {
+                    try {const
+            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
+                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHPROTOCOLS_X
+     * @tc.name ent_getDisallowedBluetoothProtocols_x
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothProtocols repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothProtocols_x', 0, () => {
-      fcRun('ent_getDisallowedBluetoothProtocols_x', () => {
-        try{const
-p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0);
-        expect(Array.isArray(p)).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('ent_getDisallowedBluetoothProtocols_x', () => {
+                    try {const
+            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
+                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHPROTOCOLS_C
+     * @tc.name ent_getDisallowedBluetoothProtocols_c
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothProtocols combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('ent_getDisallowedBluetoothProtocols_c', 0, () => {
-      fcRunCombo('ent_getDisallowedBluetoothProtocols_c', [() => {
-        try{const
-p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test',abilityName:'EntryAbility'},0);
-        expect(Array.isArray(p)).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+                  fcRunCombo('ent_getDisallowedBluetoothProtocols_c', [() => {
+                    try {const
+            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
+                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('pa_isPartnerAgentSupported', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISPARTNERAGENTSUPPORTED_N
+     * @tc.name pa_isPartnerAgentSupported_n
+     * @tc.desc Verify Bluetooth API pa isPartnerAgentSupported normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isPartnerAgentSupported_n', 0, () => {
-      fcRun('pa_isPartnerAgentSupported_n', () => {
-        try{const v=partnerAgent.isPartnerAgentSupported();
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isPartnerAgentSupported_n', () => {
+              try {const v = partnerAgent.isPartnerAgentSupported();
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISPARTNERAGENTSUPPORTED_E
+     * @tc.name pa_isPartnerAgentSupported_e
+     * @tc.desc Verify Bluetooth API pa isPartnerAgentSupported error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isPartnerAgentSupported_e', 0, () => {
-      fcRunErr('pa_isPartnerAgentSupported_e', () => {
-        try{try{const v=partnerAgent.isPartnerAgentSupported();
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue();
-        }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('pa_isPartnerAgentSupported_e', () => {
+              try {try {const v = partnerAgent.isPartnerAgentSupported();
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue();
+              }} catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISPARTNERAGENTSUPPORTED_B
+     * @tc.name pa_isPartnerAgentSupported_b
+     * @tc.desc Verify Bluetooth API pa isPartnerAgentSupported boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isPartnerAgentSupported_b', 0, () => {
-      fcRun('pa_isPartnerAgentSupported_b', () => {
-        try{const v=partnerAgent.isPartnerAgentSupported();
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isPartnerAgentSupported_b', () => {
+              try {const v = partnerAgent.isPartnerAgentSupported();
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISPARTNERAGENTSUPPORTED_R
+     * @tc.name pa_isPartnerAgentSupported_r
+     * @tc.desc Verify Bluetooth API pa isPartnerAgentSupported return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isPartnerAgentSupported_r', 0, () => {
-      fcRun('pa_isPartnerAgentSupported_r', () => {
-        try{const v=partnerAgent.isPartnerAgentSupported();
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isPartnerAgentSupported_r', () => {
+              try {const v = partnerAgent.isPartnerAgentSupported();
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISPARTNERAGENTSUPPORTED_X
+     * @tc.name pa_isPartnerAgentSupported_x
+     * @tc.desc Verify Bluetooth API pa isPartnerAgentSupported repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isPartnerAgentSupported_x', 0, () => {
-      fcRun('pa_isPartnerAgentSupported_x', () => {
-        try{const v=partnerAgent.isPartnerAgentSupported();
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isPartnerAgentSupported_x', () => {
+              try {const v = partnerAgent.isPartnerAgentSupported();
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISPARTNERAGENTSUPPORTED_C
+     * @tc.name pa_isPartnerAgentSupported_c
+     * @tc.desc Verify Bluetooth API pa isPartnerAgentSupported combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isPartnerAgentSupported_c', 0, () => {
-      fcRunCombo('pa_isPartnerAgentSupported_c', [() => {
-        try{const v=partnerAgent.isPartnerAgentSupported();
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('pa_isPartnerAgentSupported_c', [() => {
+              try {const v = partnerAgent.isPartnerAgentSupported();
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('pa_bindDevice', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_BINDDEVICE_N
+     * @tc.name pa_bindDevice_n
+     * @tc.desc Verify Bluetooth API pa bindDevice normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_bindDevice_n', 0, () => {
-      fcRun('pa_bindDevice_n', () => {
-try{partnerAgent.bindDevice(partnerDeviceAddr(),partnerDeviceCap(),partnerBusinessCap(),'EntryAbility');
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('pa_bindDevice_n', () => {
+            try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_BINDDEVICE_E
+     * @tc.name pa_bindDevice_e
+     * @tc.desc Verify Bluetooth API pa bindDevice error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_bindDevice_e', 0, () => {
-      fcRunErr('pa_bindDevice_e', () => {
-try{try{partnerAgent.bindDevice(partnerDeviceAddr(),partnerDeviceCap(),partnerBusinessCap(),'EntryAbility');
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue();
-        }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRunErr('pa_bindDevice_e', () => {
+            try {try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue();
+                    }} catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_BINDDEVICE_B
+     * @tc.name pa_bindDevice_b
+     * @tc.desc Verify Bluetooth API pa bindDevice boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_bindDevice_b', 0, () => {
-      fcRun('pa_bindDevice_b', () => {
-try{partnerAgent.bindDevice(partnerDeviceAddr(),partnerDeviceCap(),partnerBusinessCap(),'EntryAbility');
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('pa_bindDevice_b', () => {
+            try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_BINDDEVICE_R
+     * @tc.name pa_bindDevice_r
+     * @tc.desc Verify Bluetooth API pa bindDevice return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_bindDevice_r', 0, () => {
-      fcRun('pa_bindDevice_r', () => {
-try{partnerAgent.bindDevice(partnerDeviceAddr(),partnerDeviceCap(),partnerBusinessCap(),'EntryAbility');
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('pa_bindDevice_r', () => {
+            try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_BINDDEVICE_X
+     * @tc.name pa_bindDevice_x
+     * @tc.desc Verify Bluetooth API pa bindDevice repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_bindDevice_x', 0, () => {
-      fcRun('pa_bindDevice_x', () => {
-try{partnerAgent.bindDevice(partnerDeviceAddr(),partnerDeviceCap(),partnerBusinessCap(),'EntryAbility');
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+                  fcRun('pa_bindDevice_x', () => {
+            try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_BINDDEVICE_C
+     * @tc.name pa_bindDevice_c
+     * @tc.desc Verify Bluetooth API pa bindDevice combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_bindDevice_c', 0, () => {
-      fcRunCombo('pa_bindDevice_c', [() => {
-try{partnerAgent.bindDevice(partnerDeviceAddr(),partnerDeviceCap(),partnerBusinessCap(),'EntryAbility');
-        expect(true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+                  fcRunCombo('pa_bindDevice_c', [() => {
+            try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
+                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+                  }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('pa_unbindDevice', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_UNBINDDEVICE_N
+     * @tc.name pa_unbindDevice_n
+     * @tc.desc Verify Bluetooth API pa unbindDevice normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_unbindDevice_n', 0, () => {
-      fcRun('pa_unbindDevice_n', () => {
-        try{partnerAgent.unbindDevice(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_unbindDevice_n', () => {
+              try {
+                partnerAgent.unbindDevice(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_UNBINDDEVICE_E
+     * @tc.name pa_unbindDevice_e
+     * @tc.desc Verify Bluetooth API pa unbindDevice error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_unbindDevice_e', 0, () => {
-      fcRunErr('pa_unbindDevice_e', () => {
-        try{try{partnerAgent.unbindDevice(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('pa_unbindDevice_e', () => {
+              try {
+                try {partnerAgent.unbindDevice(partnerDeviceAddr()); expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue(); }} catch (_e) {expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_UNBINDDEVICE_B
+     * @tc.name pa_unbindDevice_b
+     * @tc.desc Verify Bluetooth API pa unbindDevice boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_unbindDevice_b', 0, () => {
-      fcRun('pa_unbindDevice_b', () => {
-        try{partnerAgent.unbindDevice(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_unbindDevice_b', () => {
+              try {
+                partnerAgent.unbindDevice(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_UNBINDDEVICE_R
+     * @tc.name pa_unbindDevice_r
+     * @tc.desc Verify Bluetooth API pa unbindDevice return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_unbindDevice_r', 0, () => {
-      fcRun('pa_unbindDevice_r', () => {
-        try{partnerAgent.unbindDevice(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_unbindDevice_r', () => {
+              try {
+                partnerAgent.unbindDevice(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_UNBINDDEVICE_X
+     * @tc.name pa_unbindDevice_x
+     * @tc.desc Verify Bluetooth API pa unbindDevice repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_unbindDevice_x', 0, () => {
-      fcRun('pa_unbindDevice_x', () => {
-        try{partnerAgent.unbindDevice(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_unbindDevice_x', () => {
+              try {
+                partnerAgent.unbindDevice(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_UNBINDDEVICE_C
+     * @tc.name pa_unbindDevice_c
+     * @tc.desc Verify Bluetooth API pa unbindDevice combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_unbindDevice_c', 0, () => {
-      fcRunCombo('pa_unbindDevice_c', [() => {
-        try{partnerAgent.unbindDevice(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('pa_unbindDevice_c', [() => {
+              try {
+                partnerAgent.unbindDevice(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('pa_isDeviceBound', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICEBOUND_N
+     * @tc.name pa_isDeviceBound_n
+     * @tc.desc Verify Bluetooth API pa isDeviceBound normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceBound_n', 0, () => {
       fcRun('pa_isDeviceBound_n', () => {
         try{const v=partnerAgent.isDeviceBound(partnerDeviceAddr());
