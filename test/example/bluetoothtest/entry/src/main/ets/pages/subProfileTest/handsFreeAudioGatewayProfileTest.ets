@@ -49,16 +49,17 @@ struct HandsFreeAudioGatewayProfileTest {
   private deviceId = "8C:5A:F8:25:FB:E9";
   private testItem: TestData = testItemFromRouterOrPlaceholder()
 
-  aboutToAppear(){
-    LogUtil.log(ConfigData.TAG + "xzyj: aboutToAppear a2dp: deviceId " + JSON.stringify(this.deviceId));
+  aboutToAppear() {
+    LogUtil.log(ConfigData.TAG + "xzyj: aboutToAppear a2dp: deviceId " +
+      JSON.stringify(this.deviceId));
     AppStorage.setOrCreate("deviceId", this.deviceId)
     btProfileModel.initProfile()
   }
 
-  build(){
-    Row(){
-      Column(){
-        Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Row() {
+      Column() {
+        Stack({alignContent: Alignment.TopStart}) {
           TestImageDisplay({testItem: this.testItem})
           PageTitle({testItem: this.testItem})
           .accessibilityLevel('yes')
@@ -71,15 +72,17 @@ struct HandsFreeAudioGatewayProfileTest {
         Text(this.hasProfile ? this.profileExist: this.profileNotExist)
           .margin({top: ConfigData.VP_10})
           .fontSize(ConfigData.VP_20)
-          .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') : $r('app.color.color_FF0000_red'))
-          .border({width: 0.5})
+          .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') :
+            $r('app.color.color_FF0000_red'))
+          .border({width: ConfigData.BORDER_WIDTH_HALF})
           .padding(ConfigData.VP_5)
           .fontStyle(FontStyle.Italic);
-        Column(){
-          Row(){
+        Column() {
+          Row() {
             Text($r('app.string.bluetoothtest_text_xzzzljdsbw'))
               .fontSize("17").width(ConfigData.VP_110).margin(ConfigData.VP_5)
-            TextInput({text: JSON.stringify(this.deviceId), placeholder: $r('app.string.bluetoothtest_str_qsrxyljdd')})
+            TextInput({text: JSON.stringify(this.deviceId),
+              placeholder: $r('app.string.bluetoothtest_str_qsrxyljdd')})
               .accessibilityLevel('yes')
               .id('pages_subProfileTest_handsFreeAudioGatewayProfileTest__ti_0')
               .fontSize(ConfigData.VP_17)
@@ -91,18 +94,25 @@ struct HandsFreeAudioGatewayProfileTest {
               .borderRadius(ConfigData.HEIGHT_1_VP)
           }
           .backgroundColor($r("app.color.moon"))
-          .margin({top: ConfigData.VP_20, bottom: ConfigData.VP_20, left: ConfigData.VP_20, right: ConfigData.VP_20})
+          .margin({top: ConfigData.VP_20, bottom: ConfigData.VP_20, left: ConfigData.VP_20,
+            right: ConfigData.VP_20})
           .alignItems(VerticalAlign.Center)
 
-          Column(){
+          Column() {
             Text(resStr($r('app.string.label_api_result_space')) + this.hfpMessage)
               .fontSize(ConfigData.VP_17)
               .textAlign(TextAlign.Start)
-              .margin({top: ConfigData.VP_5, left: ConfigData.VP_10})
+              .margin({
+                top: ConfigData.VP_5,
+                left: ConfigData.VP_10
+              })
               .width(ConfigData.WH_100_100)
             Text(resStr($r('app.string.label_connection_state_change')) + this.connectionStateInfo)
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_10, left: ConfigData.VP_10})
+              .margin({
+                top: ConfigData.VP_10,
+                left: ConfigData.VP_10
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_90_100)
           }
@@ -115,7 +125,7 @@ struct HandsFreeAudioGatewayProfileTest {
             .padding(ConfigData.VP_5)
             .fontSize(ConfigData.VP_17)
             .fontColor($r('app.color.color_4444444_grey'));
-          Column(){
+          Column() {
             ContentTable({apiItems: initHandsFreeAudioGatewayProfileApiData()})
           }
           .height(ConfigData.PCT_66)
@@ -129,15 +139,15 @@ struct HandsFreeAudioGatewayProfileTest {
     .alignItems(VerticalAlign.Top)
   }
 
-  onPageShow(){
+  onPageShow() {
     this.bluetoothState = btProfileModel.getBluetoothState();
-    if ( this.bluetoothState == btProfileModel.BLUETOOTH_STATE_OFF ){
+    if (this.bluetoothState == btProfileModel.BLUETOOTH_STATE_OFF) {
       this.profileNotExist = resStr($r('app.string.bluetoothtest_str_lywdkqxkqlyhzsy'))
       return;
     }
     this.hasProfile = btProfileModel.hasProfile(btProfileModel.PROFILE_HANDS_FREE_AUDIO_GATEWAY);
     LogUtil.info("bt_test pageType: " + this.pageType);
-    switch ( this.pageType ){
+    switch (this.pageType) {
       //      case 0:
       //        this.title = $r('app.string.a2dp_sink_profile_test_title');
       //        this.profileExist = "A2DP_SINK exist";
@@ -210,9 +220,11 @@ struct HandsFreeAudioGatewayProfileTest {
     AppStorage.setOrCreate("profileType", this.profileType)
     promptAction.showToast({message: this.profileType.toString()})
     this.hasProfile = btProfileModel.hasProfile(this.profileType);
-    if ( this.hasProfile ){
+    if (this.hasProfile) {
       LogUtil.info("bt_test registered connectionStateChange type: " + this.profileType);
-      (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).on("connectionStateChange", (date: bluetooth.StateChangeParam) => {
+      (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile |
+        bluetooth.HandsFreeAudioGatewayProfile).on("connectionStateChange",
+          (date: bluetooth.StateChangeParam) => {
         this.connectionStateInfo = JSON.stringify(date);
         this.btConnectionState = date.state;
         AppStorage.setOrCreate("btConnectionState", this.btConnectionState)
@@ -220,9 +232,10 @@ struct HandsFreeAudioGatewayProfileTest {
     }
   }
 
-  onPageHide(){
-    if ( this.hasProfile ){
-      (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).off("connectionStateChange");
+  onPageHide() {
+    if (this.hasProfile) {
+      (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile |
+        bluetooth.HandsFreeAudioGatewayProfile).off("connectionStateChange");
     }
     LogUtil.info("bt_test Ability end");
   }
