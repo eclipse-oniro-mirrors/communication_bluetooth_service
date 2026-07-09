@@ -22,7 +22,8 @@ import { PageTitle} from '../../component/pageTitle';
 import { TestImageDisplay} from '../../component/testImageDisplay';
 import { TestData} from '../../MainAbility/model/testData'
 import * as GattServerManagerInterface from '../../MainAbility/model/gattServerManagerInterface'
-import { testSetBluetoothScanModeManager, testSetLocalNameManager} from '../../MainAbility/model/brManagerInterface'
+import { testSetBluetoothScanModeManager,
+  testSetLocalNameManager} from '../../MainAbility/model/brManagerInterface'
 
 /**
  *  Bluetooth GattServer Manager Velocity Benchmark Test Page Of Bluetooth test
@@ -36,7 +37,7 @@ struct GattServerVelocityBenchmarkTestManager {
   @State gatt_Cycle_index: number = 10
   @StorageLink("gattServerBenchmarkTestMessage") gattServerBenchmarkTestMessage: string = ""
 
-  aboutToAppear(){
+  aboutToAppear() {
     AppStorage.setOrCreate('txtScanFilterDeviceId', "08:FB:EA:1B:3C:63");
     AppStorage.setOrCreate('txtScanFilterName', "dudu-tiger");
     AppStorage.setOrCreate('txtScanFilterServiceUuid', "0000180A-0000-1000-8000-00805f9b34fb");
@@ -55,15 +56,19 @@ struct GattServerVelocityBenchmarkTestManager {
     AppStorage.setOrCreate('advSettings_interval', "1600");
     AppStorage.setOrCreate('advSettings_txPower', "-7");
     AppStorage.setOrCreate('advSettings_connectable', true);
-    AppStorage.setOrCreate('advDataServiceUuids_serviceUuid', "000054F6-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('advDataServiceUuids_serviceUuid',
+      "000054F6-0000-1000-8000-00805f9b34fb");
     AppStorage.setOrCreate('advDataManufactureData_manufactureId', "7456");
     AppStorage.setOrCreate('advDataManufactureData_manufactureValue', "CHN");
-    AppStorage.setOrCreate('advDataServiceData_serviceUuid', "000054F6-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('advDataServiceData_serviceUuid',
+      "000054F6-0000-1000-8000-00805f9b34fb");
     AppStorage.setOrCreate('advDataServiceData_serviceValue', "AdvValue");
-    AppStorage.setOrCreate('advResponseServiceUuids_serviceUuid', "000054F6-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('advResponseServiceUuids_serviceUuid',
+      "000054F6-0000-1000-8000-00805f9b34fb");
     AppStorage.setOrCreate('advResponseManufactureData_manufactureId', "6547");
     AppStorage.setOrCreate('advResponseManufactureData_manufactureValue', "CHN");
-    AppStorage.setOrCreate('advResponseServiceData_serviceUuid', "000054F6-0000-1000-8000-00805f9b34fb");
+    AppStorage.setOrCreate('advResponseServiceData_serviceUuid',
+      "000054F6-0000-1000-8000-00805f9b34fb");
     AppStorage.setOrCreate('advResponseServiceData_serviceValue', "AdvValue");
     AppStorage.setOrCreate('cbxAdvSettings', true);
     AppStorage.setOrCreate('cbxInterval', true);
@@ -71,37 +76,41 @@ struct GattServerVelocityBenchmarkTestManager {
     AppStorage.setOrCreate('cbxAdvResponse', true);
   }
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
-              .accessibilityLevel('yes')
-              .id('pages_subBenchmarkTestManager_gattServerVelocityBenchmarkTestManager__pt_0')
+        .accessibilityLevel('yes')
+        .id('pages_subBenchmarkTestManager_gattServerVelocityBenchmarkTestManager__pt_0')
       }
 
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
 
-      Column(){
-        Scroll(){
-          Column(){
+      Column() {
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_xncs'))
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10, left: ConfigData.VP_20})
+              .margin({
+                top: ConfigData.VP_10,
+                bottom: ConfigData.VP_10,
+                left: ConfigData.VP_20
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             Text($r('app.string.bluetoothtest_text_gdxncsscsgldsfnxxbhdslxn'))
               .fontSize(ConfigData.VP_17)
               .margin({left: ConfigData.VP_15})
               .backgroundColor($r("app.color.spring"))
-            Row(){
+            Row() {
               Text($r('app.string.bluetoothtest_text_gci'))
                 .fontSize(ConfigData.VP_20)
                 .width(ConfigData.VP_180)
                 .padding({left: ConfigData.VP_15})
-              Column(){
+              Column() {
                 Select([
                   { value: "100"},
                   { value: "100"},
@@ -111,9 +120,9 @@ struct GattServerVelocityBenchmarkTestManager {
                   .backgroundColor($r("app.color.white"))
                   .selected(0)
                   .value("100")
-                  .font({size: 17})
+                  .font({size: ConfigData.font_17})
                   .margin({right: ConfigData.VP_120})
-                  .selectedOptionFont({size: 17})
+                  .selectedOptionFont({size: ConfigData.font_17})
                   .optionFont({size: ConfigData.VP_15})
                   .width(ConfigData.WH_50_100)
                   .onSelect((index: number) => {
@@ -139,18 +148,26 @@ struct GattServerVelocityBenchmarkTestManager {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'))
 
-        Scroll(){
-          Column(){
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_rz'))
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_10})
+              .margin({
+                top: ConfigData.VP_8,
+                bottom: ConfigData.VP_8,
+                left: ConfigData.VP_10
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List(){
-              ListItem(){
+            List() {
+              ListItem() {
                 Text(this.gattServerBenchmarkTestMessage)
                   .fontSize(ConfigData.VP_17)
-                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_10, right: ConfigData.VP_10})
+                  .margin({
+                    top: ConfigData.VP_5,
+                    left: ConfigData.VP_10,
+                    right: ConfigData.VP_10
+                  })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -172,14 +189,23 @@ struct GattServerVelocityBenchmarkTestManager {
       .width(ConfigData.WH_100_100)
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Column(){
-        Flex({alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceBetween}){
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+      Column() {
+        Flex({
+          alignItems: ItemAlign.Center,
+          justifyContent: FlexAlign.SpaceBetween
+        }) {
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Text($r('app.string.bluetoothtest_text_slxncs'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+                .margin({
+                  left: ConfigData.VP_5,
+                  right: ConfigData.VP_5
+                })
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -189,42 +215,64 @@ struct GattServerVelocityBenchmarkTestManager {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, left: ConfigData.VP_5, right: ConfigData.VP_5})
+          .margin({
+            top: ConfigData.VP_15,
+            left: ConfigData.VP_5,
+            right: ConfigData.VP_5
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let gattServerBenchmarkTestMessage = ""
             //创建Gatt服务器
-            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_12')) + testFunc(GattServerManagerInterface.testCreateGattServerManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_12'))
+              + testFunc(GattServerManagerInterface.testCreateGattServerManager)
+              + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
             await sleep(2)
             //添加服务
-            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_22')) + testFunc(GattServerManagerInterface.testAddServiceManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_22'))
+              + testFunc(GattServerManagerInterface.testAddServiceManager)
+              + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
             await sleep(2)
 
-            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_7')) + testFunc(GattServerManagerInterface.testOnConnectStateChangeManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_7'))
+              + testFunc(GattServerManagerInterface.testOnConnectStateChangeManager)
+              + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
             await sleep(2)
 
-            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_15')) + testFunc(GattServerManagerInterface.testStartAdvertisingManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_15'))
+              + testFunc(GattServerManagerInterface.testStartAdvertisingManager)
+              + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
             await sleep(20)
 
-            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_6')) + testFunc(GattServerManagerInterface.testOnCharacteristicReadManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_6'))
+              + testFunc(GattServerManagerInterface.testOnCharacteristicReadManager)
+              + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
             await sleep(2)
 
-            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_5')) + testFunc(GattServerManagerInterface.testOnCharacteristicWriteManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_5'))
+              + testFunc(GattServerManagerInterface.testOnCharacteristicWriteManager)
+              + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
             await sleep(2)
           })
 
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Text($r('app.string.bluetoothtest_text_jscs'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+                .margin({
+                  left: ConfigData.VP_5,
+                  right: ConfigData.VP_5
+                })
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -234,28 +282,44 @@ struct GattServerVelocityBenchmarkTestManager {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, left: ConfigData.VP_5, right: ConfigData.VP_5})
+          .margin({
+            top: ConfigData.VP_15,
+            left: ConfigData.VP_5,
+            right: ConfigData.VP_5
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let gattServerBenchmarkTestMessage = ""
-            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_18')) + testFunc(GattServerManagerInterface.testStopAdvertisingManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_18'))
+              + testFunc(GattServerManagerInterface.testStopAdvertisingManager)
+              + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
             await sleep(2)
 
-            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_20')) + testFunc(GattServerManagerInterface.testRemoveServiceManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_20'))
+              + testFunc(GattServerManagerInterface.testRemoveServiceManager)
+              + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
             await sleep(2)
 
-            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_17')) + testFunc(GattServerManagerInterface.testGattServerCloseManager) + "\n"
+            gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_17'))
+              + testFunc(GattServerManagerInterface.testGattServerCloseManager)
+              + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
             await sleep(2)
           })
 
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Image($r('app.media.ic_public_delete_filled'))
           .accessibilityLevel('yes')
-          .id('pages_subBenchmarkTestManager_gattServerVelocityBenchmarkTestManager__img_0').width(ConfigData.VP_30).height(ConfigData.VP_40).margin({left: ConfigData.VP_5})
+          .id('pages_subBenchmarkTestManager_gattServerVelocityBenchmarkTestManager__img_0')
+          .width(ConfigData.VP_30)
+          .height(ConfigData.VP_40)
+          .margin({left: ConfigData.VP_5})
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -265,7 +329,10 @@ struct GattServerVelocityBenchmarkTestManager {
           .backgroundColor($r("app.color.moon"))
           .width(ConfigData.VP_50)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, right: ConfigData.VP_40})
+          .margin({
+            top: ConfigData.VP_15,
+            right: ConfigData.VP_40
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let gattServerBenchmarkTestMessage = ""
@@ -282,16 +349,16 @@ struct GattServerVelocityBenchmarkTestManager {
   }
 }
 
-export function test(func: Function){
+export function test(func: Function) {
   let start = new Date().getTime();//起始时间
   func();//执行待测函数
   let end = new Date().getTime();//接受时间
   return (end - start) + "ms";//返回函数执行需要时间
 }
 
-export function testFunc(func: Function){
+export function testFunc(func: Function) {
   let start = new Date().getTime()
-  switch ( func ){
+  switch (func) {
     case testSetLocalNameManager: {
       func("DaYuBlue")
     }
@@ -312,7 +379,13 @@ export function testFunc(func: Function){
   LogUtil.info(resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms")
   let message = ""
   message += resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms" + "\n"
-  message += resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + resStr($r('app.string.bluetoothtest_str_m_1')) + resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms" + "\n"
+  message += resStr($r('app.string.bluetoothtest_str_ks'))
+    + Number(start)
+    + resStr($r('app.string.bluetoothtest_str_m_1'))
+    + resStr($r('app.string.bluetoothtest_str_js'))
+    + Number(end)
+    + "ms"
+    + "\n"
   return message
 }
 

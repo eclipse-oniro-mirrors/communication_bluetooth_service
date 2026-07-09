@@ -31,13 +31,13 @@ import btProfileModel from '../../MainAbility/model/btProfileModel';
 struct ProfileTest {
   private testItem: TestData = testItemFromRouterOrPlaceholder()
 
-  aboutToAppear(){
+  aboutToAppear() {
   // btProfileModel.initProfile()
   }
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
     .accessibilityLevel('yes')
