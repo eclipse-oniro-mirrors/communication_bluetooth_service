@@ -31,23 +31,24 @@ struct GattTestManager {
   private testItem: TestData = testItemFromRouterOrPlaceholder();
   private gattApiTestItems: TestData[] = initGattManagerApiTestData();
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
       .accessibilityLevel('yes')
       .id('pages_subManualApiTestManager_gattTestManager__pt_0')
       }
 
-      List(){
+      List() {
         ForEach(this.gattApiTestItems, (item: TestData, index: number) => {
-          ListItem(){
+          ListItem() {
             TestListItem({
               testItem: item
             })
           }
-      .id(index === 0 ? 'pages_subManualApiTestManager_gattTestManager__li_0' : `pages_subManualApiTestManager_gattTestManager__li_${index}`)
+      .id(index === 0 ? 'pages_subManualApiTestManager_gattTestManager__li_0' :
+        `pages_subManualApiTestManager_gattTestManager__li_${index}`)
         }, (item: TestData) => item.id)
       }
       .height(ConfigData.PCT_93)

@@ -27,25 +27,39 @@ struct pairedDevices {
   private scanMode: number = 0;
   @StorageLink('pairedDevices') pairedDevices: string[] = [];
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       GridContainer({
         columns: 12,
         sizeType: SizeType.Auto,
         gutter: vp2px(1) === 2 ? ConfigData.VP_12: ConfigData.VP_0,
         margin: vp2px(1) === 2 ? ConfigData.VP_24: ConfigData.VP_0
-      }){
-        Row({}){
-          Column(){
+      }) {
+        Row({}) {
+          Column() {
           }
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs: { span: 0, offset: 0}, sm: { span: 0, offset: 0},
-            md: { span: 0, offset: 0}, lg: { span: 2, offset: 0}
+            xs: {
+              span: 0,
+              offset: 0
+            },
+            sm: {
+              span: 0,
+              offset: 0
+            },
+            md: {
+              span: 0,
+              offset: 0
+            },
+            lg: {
+              span: 2,
+              offset: 0
+            }
           });
 
-          Column(){
+          Column() {
             PageTitle({detail: $r('app.string.bluetoothtest_str_ypdsb')})
 
 
@@ -55,13 +69,16 @@ struct pairedDevices {
                 right: $r('sys.float.ohos_id_card_margin_end')
               })
 
-            Column(){
-              List(){
+            Column() {
+              List() {
                 ForEach(this.pairedDevices, (item: string, index: number) => {
-                  ListItem(){
+                  ListItem() {
                     TitleComponent({title: item});
                   }
-                    .padding({top: ConfigData.VP_2, bottom: ConfigData.VP_2})
+                    .padding({
+                      top: ConfigData.VP_2,
+                      bottom: ConfigData.VP_2
+                    })
                 }, item => JSON.stringify(item));
               }
 
@@ -72,8 +89,8 @@ struct pairedDevices {
               direction: FlexDirection.Row,
               justifyContent: FlexAlign.Center,
               alignItems: ItemAlign.Center
-            }){
-              Row(){
+            }) {
+              Row() {
                 ButtonComponent({text: $r("app.string.cancel"), isOnClick: () => {
                   router.back();
                 }})
@@ -81,7 +98,7 @@ struct pairedDevices {
               .width(ConfigData.VP_120)
               .margin({right: ConfigData.VP_12})
 
-              Row(){
+              Row() {
                 ButtonComponent({text: $r("app.string.confirm"), isOnClick: () => {
                   router.back();
                 }})
@@ -89,12 +106,29 @@ struct pairedDevices {
                 .width(ConfigData.VP_120)
             }
           }
-          .padding({left: ConfigData.VP_24, right: ConfigData.VP_24})
+          .padding({
+            left: ConfigData.VP_24,
+            right: ConfigData.VP_24
+          })
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs: { span: 12, offset: 0}, sm: { span: 12, offset: 0},
-            md: { span: 12, offset: 0}, lg: { span: 8, offset: 2}
+            xs: {
+              span: 12,
+              offset: 0
+            },
+            sm: {
+              span: 12,
+              offset: 0
+            },
+            md: {
+              span: 12,
+              offset: 0
+            },
+            lg: {
+              span: 8,
+              offset: 2
+            }
           });
         }
         .width(ConfigData.WH_100_100)
@@ -117,8 +151,8 @@ struct ButtonComponent {
   private isOnClick = () => {
   };
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       Text(this.text)
         .fontSize(ConfigData.FP_16)
         .fontWeight(FontWeight.Medium)
@@ -128,12 +162,13 @@ struct ButtonComponent {
         .width(ConfigData.VP_120)
         .height(ConfigData.VP_40)
         .borderRadius(ConfigData.VP_20)
-        .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") : $r("sys.color.ohos_id_color_foreground_contrary"))
+        .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") :
+          $r("sys.color.ohos_id_color_foreground_contrary"))
         .onTouch((event: TouchEvent) => {
-          if ( event.type === TouchType.Down ){
+          if (event.type === TouchType.Down) {
             this.isTouched = true;
           }
-          if ( event.type === TouchType.Up ){
+          if (event.type === TouchType.Up) {
             this.isTouched = false;
           }
         })

@@ -28,12 +28,12 @@ struct profileConnState {
   @State profileId: number = - 1;
   @State profileType: string = '';
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       PageTitle({detail: $r('app.string.bluetoothtest_str_xzpi')})
-      Column(){
-        List(){
-          ListItem(){
+      Column() {
+        List() {
+          ListItem() {
             TitleComponent({
               title: "SELECT_PROFILE_ID",
               bgColor: $r("app.color.moon"),
@@ -43,11 +43,12 @@ struct profileConnState {
           .height(ConfigData.VP_80)
           .borderRadius(ConfigData.VP_10)
 
-          ListItem(){
+          ListItem() {
             TitleComponent({
               title: "A2DP_SOURCE",
               fontSize: ConfigData.VP_15,
-              bgColor: this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+              bgColor: this.currentClick === 0 ? $r('app.color.font_color_007DFF') :
+                $r('app.color.white_bg_color')
             });
           }
           .padding({top: ConfigData.VP_10})
@@ -58,11 +59,12 @@ struct profileConnState {
             this.profileId = 1;
           })
 
-          ListItem(){
+          ListItem() {
             TitleComponent({
               title: "HANDS_FREE_AUDIO_GATEWAY",
               fontSize: ConfigData.VP_15,
-              bgColor: this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+              bgColor: this.currentClick === 1 ? $r('app.color.font_color_007DFF') :
+                $r('app.color.white_bg_color')
             })
           }
           .padding({top: ConfigData.VP_20})
@@ -73,11 +75,12 @@ struct profileConnState {
             this.profileId = 4;
           })
 
-          ListItem(){
+          ListItem() {
             TitleComponent({
               title: "HID_HOST",
               fontSize: ConfigData.VP_15,
-              bgColor: this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+              bgColor: this.currentClick === 2 ? $r('app.color.font_color_007DFF') :
+                $r('app.color.white_bg_color')
             });
           }
           .padding({top: ConfigData.VP_20})
@@ -98,8 +101,8 @@ struct profileConnState {
         .width(ConfigData.WH_100_100)
         .backgroundColor($r("app.color.moon"))
 
-      Row(){
-        Column(){
+      Row() {
+        Column() {
           Text($r('app.string.cancel'))
             .textAlign(TextAlign.Center)
             .fontSize(ConfigData.FP_17)
@@ -111,7 +114,7 @@ struct profileConnState {
         }
         .padding({right: ConfigData.VP_10})
 
-        Column(){
+        Column() {
           Text($r('app.string.confirm'))
             .textAlign(TextAlign.Center)
             .fontSize(ConfigData.FP_17)
@@ -125,7 +128,10 @@ struct profileConnState {
       }
       .width(ConfigData.WH_80_100)
     }
-    .padding({left: ConfigData.VP_24, right: ConfigData.VP_24})
+    .padding({
+      left: ConfigData.VP_24,
+      right: ConfigData.VP_24
+    })
     .width(ConfigData.WH_100_100)
     .height(ConfigData.WH_100_100)
     .backgroundColor($r("app.color.lead"))
@@ -139,8 +145,8 @@ struct ButtonComponent {
   private text;
   private isOnClick = () => {};
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       Text(this.text)
         .fontSize(ConfigData.FP_16)
         .fontWeight(FontWeight.Medium)
@@ -150,12 +156,13 @@ struct ButtonComponent {
         .width(ConfigData.VP_100)
         .height(ConfigData.VP_40)
         .borderRadius(ConfigData.VP_20)
-        .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") : $r("sys.color.ohos_id_color_foreground_contrary"))
+        .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") :
+          $r("sys.color.ohos_id_color_foreground_contrary"))
         .onTouch((event: TouchEvent) => {
-          if ( event.type === TouchType.Down ){
+          if (event.type === TouchType.Down) {
             this.isTouched = true;
           }
-          if ( event.type === TouchType.Up ){
+          if (event.type === TouchType.Up) {
             this.isTouched = false;
           }
         })
