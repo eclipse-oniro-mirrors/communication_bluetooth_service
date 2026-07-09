@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import hilog from '@ohos.hilog';
 import LogUtil from '../../Utils/LogUtil';
 import { resStr} from '../../Utils/resString';
 
@@ -42,7 +41,7 @@ struct BleFoundScenarioTestManager {
   @State changeIndex: number = - 1
   @StorageLink("bleFoundScenarioMessage") bleFoundScenarioMessage: string = ""
 
-  aboutToAppear(){
+  aboutToAppear() {
     AppStorage.setOrCreate('txtScanFilterDeviceId', "08:FB:EA:1B:3C:63");// 6c:96:d7:3d:87:6f
     AppStorage.setOrCreate('txtScanFilterName', "dudu-tiger");
     AppStorage.setOrCreate('txtScanFilterServiceUuid', "0000180A-0000-1000-8000-00805f9b34fb");
@@ -53,24 +52,28 @@ struct BleFoundScenarioTestManager {
     AppStorage.setOrCreate('cbxBleScanOptions', true);
   }
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
-              .accessibilityLevel('yes')
-              .id('pages_subScenarioTestManager_bleFoundScenarioTestManager__pt_0')
+        .accessibilityLevel('yes')
+        .id('pages_subScenarioTestManager_bleFoundScenarioTestManager__pt_0')
       }
 
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column(){
-        Scroll(){
-          Column(){
+      Column() {
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_cjlcyz'))
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10, left: ConfigData.VP_20})
+              .margin({
+                top: ConfigData.VP_10,
+                bottom: ConfigData.VP_10,
+                left: ConfigData.VP_20
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             ScenarioContentTable({
@@ -90,18 +93,26 @@ struct BleFoundScenarioTestManager {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'));
 
-        Scroll(){
-          Column(){
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_lcrz'))
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_20})
+              .margin({
+                top: ConfigData.VP_8,
+                bottom: ConfigData.VP_8,
+                left: ConfigData.VP_20
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List(){
-              ListItem(){
+            List() {
+              ListItem() {
                 Text(this.bleFoundScenarioMessage)
                   .fontSize(ConfigData.VP_17)
-                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_30, right: ConfigData.VP_10})
+                  .margin({
+                    top: ConfigData.VP_5,
+                    left: ConfigData.VP_30,
+                    right: ConfigData.VP_10
+                  })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -128,13 +139,22 @@ struct BleFoundScenarioTestManager {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column(){
-        Flex({alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceBetween}){
-          Button({type: ButtonType.Normal, stateEffect: true}){
+      Column() {
+        Flex({
+          alignItems: ItemAlign.Center,
+          justifyContent: FlexAlign.SpaceBetween
+        }) {
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
             Text($r('app.string.bluetoothtest_text_cjcsks'))
               .fontSize(ConfigData.VP_24)
               .fontColor(0xffffff)
-              .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+              .margin({
+                left: ConfigData.VP_5,
+                right: ConfigData.VP_5
+              })
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTestManager_bleFoundScenarioTestManager__btn_0')
@@ -142,19 +162,28 @@ struct BleFoundScenarioTestManager {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, left: ConfigData.VP_20})
+          .margin({
+            top: ConfigData.VP_15,
+            left: ConfigData.VP_20
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_ksbcjcs'))})
             this.forLoop()
           })
 
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Text($r('app.string.bluetoothtest_text_cjcsjs'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+                .margin({
+                  left: ConfigData.VP_5,
+                  right: ConfigData.VP_5
+                })
             }
               .alignItems(VerticalAlign.Top)
           }
@@ -164,11 +193,15 @@ struct BleFoundScenarioTestManager {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, left: ConfigData.VP_10, right: ConfigData.VP_10})
+          .margin({
+            top: ConfigData.VP_15,
+            left: ConfigData.VP_10,
+            right: ConfigData.VP_10
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let self = this
-            const arr = [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+            const arr = [0, 1, 2, 3, 4, 5, 6, 7]
             let bleFoundScenarioMessage = ""
             // 停止BLE扫描
             bleFoundScenarioMessage += BLEManagerInterface.testStopBLEScanManager() + "\n"
@@ -191,12 +224,18 @@ struct BleFoundScenarioTestManager {
             AppStorage.setOrCreate("bleFoundScenarioMessage", bleFoundScenarioMessage)
           })
 
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Text($r('app.string.bluetoothtest_text_qkrz'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+                .margin({
+                  left: ConfigData.VP_5,
+                  right: ConfigData.VP_5
+                })
             }
               .alignItems(VerticalAlign.Top)
           }
@@ -206,7 +245,10 @@ struct BleFoundScenarioTestManager {
           .backgroundColor($r("app.color.moon"))
           .width(ConfigData.VP_80)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, right: ConfigData.VP_20})
+          .margin({
+            top: ConfigData.VP_15,
+            right: ConfigData.VP_20
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
             let bleFoundScenarioMessage = ""
@@ -223,25 +265,33 @@ struct BleFoundScenarioTestManager {
   }
 
   //循环调用
-  async forLoop(){
+  async forLoop() {
     let bleFoundScenarioMessage = ""
     //拼装数组
     let bleScenarioArray: Array<BTAutoArrayItem> = [
-      { name: "testSetLocalNameManager", para: [ "DaYuBlue" ]},
-      { name: "testSetBluetoothScanModeManager", para: [ 4, 0 ]}
+      {
+        name: "testSetLocalNameManager",
+        para: ["DaYuBlue"]
+      },
+      {
+        name: "testSetBluetoothScanModeManager",
+        para: [4, 0]
+      }
     ]
     let interfaces = BleFoundManagerScenarioTestCase.map(i => {
       let item = bleScenarioArray.find(itm => itm.name === i.api.name);
       let para = item ? item.para: [];
       return { name: i.api.name, para} as BTAutoArrayItem;
     })
-    for(let m = 0 ; m<interfaces.length ; m++ ){
+    for(let m = 0 ; m<interfaces.length ; m++) {
       // 检查 BleFoundManagerScenarioTestCase 中对应的 api 是否是一个函数
-      if ( typeof BleFoundManagerScenarioTestCase[ m ].api === "function" ){
+      if (typeof BleFoundManagerScenarioTestCase[m].api === "function") {
         // 使用 TypeScript 的类型断言确保 para 是一个数组
-        bleFoundScenarioMessage += BleFoundManagerScenarioTestCase[ m ].api(... interfaces[ m ].para) + "\n";
+        bleFoundScenarioMessage += BleFoundManagerScenarioTestCase[m].api(... interfaces[m
+          ].para)
+          + "\n";
       } else {
-        hilog.error(0x0000, 'BtTest', '%{public}s', `在 BrAutoTestCase 中找不到方法: ${ BleFoundManagerScenarioTestCase[ m ] }`);
+        LogUtil.error(`在 BrAutoTestCase 中找不到方法: ${BleFoundManagerScenarioTestCase[m] }`);
       }
       this.changeIndex = m
       await sleep(1)
