@@ -29,6 +29,16 @@ import bluetoothExpandedMatrixConnection02 from './BluetoothExpandedMatrixConnec
 import bluetoothExpandedMatrixLegacy01 from './BluetoothExpandedMatrixLegacy01.test'
 import bluetoothExpandedMatrixLegacy02 from './BluetoothExpandedMatrixLegacy02.test'
 import bluetoothExpandedMatrixRotate from './BluetoothExpandedMatrixRotate.test'
+import bluetoothFullCoverageAccess01 from './BluetoothFullCoverageAccess01.test'
+import bluetoothFullCoverageLegacy01 from './BluetoothFullCoverageLegacy01.test'
+import bluetoothFullCoverageLegacy02 from './BluetoothFullCoverageLegacy02.test'
+import bluetoothFullCoverageProfile01 from './BluetoothFullCoverageProfile01.test'
+import bluetoothFullCoverageProfile02 from './BluetoothFullCoverageProfile02.test'
+import bluetoothFullCoverageGatt01 from './BluetoothFullCoverageGatt01.test'
+import bluetoothFullCoverageGatt02 from './BluetoothFullCoverageGatt02.test'
+import bluetoothFullCoverageEnterprise01 from './BluetoothFullCoverageEnterprise01.test'
+import bluetoothFullCoverageCombo01 from './BluetoothFullCoverageCombo01.test'
+import bluetoothFullCoverageCombo02 from './BluetoothFullCoverageCombo02.test'
 
 export function registerApitestSuite(): void {
   abilityTest()
@@ -44,6 +54,16 @@ export function registerApitestSuite(): void {
   bluetoothExpandedMatrixLegacy01()
   bluetoothExpandedMatrixLegacy02()
   bluetoothExpandedMatrixRotate()
+  bluetoothFullCoverageAccess01()
+  bluetoothFullCoverageLegacy01()
+  bluetoothFullCoverageLegacy02()
+  bluetoothFullCoverageProfile01()
+  bluetoothFullCoverageProfile02()
+  bluetoothFullCoverageGatt01()
+  bluetoothFullCoverageGatt02()
+  bluetoothFullCoverageEnterprise01()
+  bluetoothFullCoverageCombo01()
+  bluetoothFullCoverageCombo02()
 }
 
 export default function testsuiteApitestOnly(): void {
