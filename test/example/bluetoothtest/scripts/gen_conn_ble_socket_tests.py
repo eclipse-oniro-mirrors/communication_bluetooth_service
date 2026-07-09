@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import os
+import sys
 import textwrap
 
 OUT_DIR = os.path.join(
@@ -1006,7 +1007,18 @@ def gen_file(
         else:
             out_lines.extend(textwrap.wrap(ln, width=96, break_long_words=False, replace_whitespace=False))
     with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(out_lines) + "\n")
+        content = "\n".join(out_lines) + "\n"
+    _repo = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+    _skill = os.path.join(_repo, "skills", "ohtest")
+    if os.path.isdir(_skill) and _skill not in sys.path:
+        sys.path.insert(0, _skill)
+    try:
+        from apitest_format import format_apitest_source
+        content = format_apitest_source(content)
+    except ImportError:
+        pass
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
     return n_cases
 
 

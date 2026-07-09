@@ -27,7 +27,7 @@ export const BADDR = '00:11:22:33:44:55';
 export function tI(tag: string, fn: () => void): void {
   try {
     fn();
-  } catch (e){
+  } catch (e) {
     console.info(`[CBS] ${tag}`);
   }
 }
@@ -62,3 +62,5 @@ export function bleAp(): ble.AdvertisingParams {
     advertisingData: bleAd()
   };
 }
+
+
