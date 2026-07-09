@@ -1,0 +1,11 @@
+total_cases=1716
+file=BluetoothFullCoverageAccess01.test.ets
+file=BluetoothFullCoverageLegacy01.test.ets
+file=BluetoothFullCoverageLegacy02.test.ets
+file=BluetoothFullCoverageProfile01.test.ets
+file=BluetoothFullCoverageProfile02.test.ets
+file=BluetoothFullCoverageGatt01.test.ets
+file=BluetoothFullCoverageGatt02.test.ets
+file=BluetoothFullCoverageEnterprise01.test.ets
+file=BluetoothFullCoverageCombo01.test.ets
+file=BluetoothFullCoverageCombo02.test.ets
