@@ -24,8 +24,8 @@ import { TestList} from './testList';
 export struct AutoTest {
   private testItems!: TestData[]
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       TestList({
         testItems: this.testItems
       })

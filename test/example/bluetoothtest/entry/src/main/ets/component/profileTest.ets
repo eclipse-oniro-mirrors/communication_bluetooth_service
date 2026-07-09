@@ -23,8 +23,8 @@ import { TestList} from './testList';
 export struct ProfileTest {
   private testItems!: TestData[]
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       TestList({
         testItems: this.testItems
       })

@@ -26,10 +26,13 @@ export struct SubEntryComponent {
   private date: string = 'defaultDate';
   private deviceId: string = 'defaultDeviceId';
 
-  build(){
-    Navigator({target: this.targetPage}){
-      Flex({justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center}){
-        Row(){
+  build() {
+    Navigator({target: this.targetPage}) {
+      Flex({
+        justifyContent: FlexAlign.SpaceBetween,
+        alignItems: ItemAlign.Center
+      }) {
+        Row() {
           Text(this.title)
             .fontSize(ConfigData.FP_30)
             .lineHeight(ConfigData.VP_32)
@@ -49,24 +52,33 @@ export struct SubEntryComponent {
       .width(ConfigData.WH_100_100)
       .borderRadius(ConfigData.VP_12)
       .linearGradient(this.isTouched ? {
-                                         angle: 90,
-                                         direction: GradientDirection.Right,
-                                         colors: [ [ $r("app.color.DCEAF9"), 0.0 ], [ $r("app.color.FAFAFA"), 1.0 ] ]
+        angle: ConfigData.GRADIENT_ANGLE_90,
+        direction: GradientDirection.Right,
+        colors: [
+          [$r("app.color.DCEAF9"), 0.0],
+          [$r("app.color.FAFAFA"), 1.0]
+        ]
       } : {
-                                             angle: 90,
-                                             direction: GradientDirection.Right,
-                                             colors: [ [ $r("sys.color.ohos_id_color_foreground_contrary"), 1 ], [ $r("sys.color.ohos_id_color_foreground_contrary"), 1 ] ]
-                                           })
-                                           .onTouch((event: TouchEvent) => {
-        if ( event.type === TouchType.Down ){
+        angle: ConfigData.GRADIENT_ANGLE_90,
+        direction: GradientDirection.Right,
+        colors: [
+          [$r("sys.color.ohos_id_color_foreground_contrary"), 1],
+          [$r("sys.color.ohos_id_color_foreground_contrary"), 1]
+        ]
+      })
+      .onTouch((event: TouchEvent) => {
+        if (event.type === TouchType.Down) {
           this.isTouched = true;
         }
-        if ( event.type === TouchType.Up ){
+        if (event.type === TouchType.Up) {
           this.isTouched = false;
         }
       })
     }
-    .params({date: this.date, deviceId: this.deviceId})
+    .params({
+      date: this.date,
+      deviceId: this.deviceId
+    })
     .padding(ConfigData.VP_4)
     .height(ConfigData.VP_100)
     .borderRadius(ConfigData.VP_24)
@@ -84,10 +96,13 @@ export struct SubEntryComponentWithEndText {
   private targetPage: string = 'defaultPage'
   private title: string | Resource = 'defaultTitle'
 
-  build(){
-    Navigator({target: this.targetPage}){
-      Flex({justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center}){
-        Row(){
+  build() {
+    Navigator({target: this.targetPage}) {
+      Flex({
+        justifyContent: FlexAlign.SpaceBetween,
+        alignItems: ItemAlign.Center
+      }) {
+        Row() {
           Text(this.title)
             .fontSize(ConfigData.FP_16)
             .lineHeight('22vp')
@@ -97,7 +112,7 @@ export struct SubEntryComponentWithEndText {
             .textAlign(TextAlign.Start);
         }
 
-        Row(){
+        Row() {
           Text(this.endText)
             .fontSize(ConfigData.FP_14)
             .lineHeight('19vp')
@@ -115,19 +130,25 @@ export struct SubEntryComponentWithEndText {
       .width(ConfigData.WH_100_100)
       .borderRadius(ConfigData.VP_20)
       .linearGradient(this.isTouched ? {
-                                         angle: 90,
-                                         direction: GradientDirection.Right,
-                                         colors: [ [ $r("app.color.DCEAF9"), 0.0 ], [ $r("app.color.FAFAFA"), 1.0 ] ]
+        angle: ConfigData.GRADIENT_ANGLE_90,
+        direction: GradientDirection.Right,
+        colors: [
+          [$r("app.color.DCEAF9"), 0.0],
+          [$r("app.color.FAFAFA"), 1.0]
+        ]
       } : {
-                                             angle: 90,
-                                             direction: GradientDirection.Right,
-                                             colors: [ [ $r("sys.color.ohos_id_color_foreground_contrary"), 1 ], [ $r("sys.color.ohos_id_color_foreground_contrary"), 1 ] ]
-                                           })
-                                           .onTouch((event: TouchEvent) => {
-        if ( event.type === TouchType.Down ){
+        angle: ConfigData.GRADIENT_ANGLE_90,
+        direction: GradientDirection.Right,
+        colors: [
+          [$r("sys.color.ohos_id_color_foreground_contrary"), 1],
+          [$r("sys.color.ohos_id_color_foreground_contrary"), 1]
+        ]
+      })
+      .onTouch((event: TouchEvent) => {
+        if (event.type === TouchType.Down) {
           this.isTouched = true;
         }
-        if ( event.type === TouchType.Up ){
+        if (event.type === TouchType.Up) {
           this.isTouched = false;
         }
       });

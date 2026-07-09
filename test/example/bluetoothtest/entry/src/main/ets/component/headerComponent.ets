@@ -28,24 +28,28 @@ export default struct HeadTableComponent {
   private headName: string | Resource = '';
   @State isTouch: boolean = false;
 
-  build(){
-    Row(){
-      Stack({alignContent: Alignment.Center}){
+  build() {
+    Row() {
+      Stack({alignContent: Alignment.Center}) {
         Image($r('app.media.ic_back'))
           .width(ConfigData.VP_30)
           .height(ConfigData.VP_30)
       }
-      .margin({left: ConfigData.VP_4, right: ConfigData.VP_16})
-      .backgroundColor(this.isTouch ? $r('app.color.color_E3E3E3_grey') : $r('app.color.color_00000000_transparent'))
+      .margin({
+        left: ConfigData.VP_4,
+        right: ConfigData.VP_16
+      })
+      .backgroundColor(this.isTouch ? $r('app.color.color_E3E3E3_grey') :
+        $r('app.color.color_00000000_transparent'))
       .visibility(this.icBackIsVisibility ? Visibility.Visible: Visibility.None)
       .onClick(() => {
         router.back();
       })
       .onTouch((event: TouchEvent) => {
-        if ( event.type === TouchType.Down ){
+        if (event.type === TouchType.Down) {
           this.isTouch = true;
         }
-        if ( event.type === TouchType.Up ){
+        if (event.type === TouchType.Up) {
           this.isTouch = false;
         }
       });
@@ -59,7 +63,10 @@ export default struct HeadTableComponent {
         .maxLines(ConfigData.MAX_LINES_1)
         .textOverflow({overflow: TextOverflow.Ellipsis})
         .textAlign(TextAlign.Start)
-        .margin({top: ConfigData.VP_13, bottom: ConfigData.VP_15});
+        .margin({
+          top: ConfigData.VP_13,
+          bottom: ConfigData.VP_15
+        });
     }
     .width(ConfigData.WH_100_100)
     .padding({left: ConfigData.VP_8})

@@ -23,8 +23,8 @@ export default struct ImageAnimatorComponent {
   private imageHeight: number | Resource = 0
   private whtl: number | string = ComponentConfig.value_20;
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       ImageAnimator()
         .images([
           {
@@ -69,7 +69,7 @@ export default struct ImageAnimatorComponent {
           height: this.whtl,
           top: this.whtl,
           left: this.whtl
-      } ])
+      }])
         .width(this.imageWidth)
         .height(this.imageHeight)
         .iterations(- 1)

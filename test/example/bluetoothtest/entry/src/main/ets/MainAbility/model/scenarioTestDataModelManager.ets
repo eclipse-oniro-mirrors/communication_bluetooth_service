@@ -728,7 +728,8 @@ export const SppServerManagerScenarioTestCase: ScenarioManagerTest[] = [
 export function initBRFoundManagerScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   BrFoundManagerScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }
@@ -736,7 +737,8 @@ export function initBRFoundManagerScenarioData(): Array<TestScenario> {
 export function initBleFoundManagerScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   BleFoundManagerScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }
@@ -744,7 +746,8 @@ export function initBleFoundManagerScenarioData(): Array<TestScenario> {
 export function initGattClientManagerScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   GattClientManagerScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }
@@ -752,7 +755,8 @@ export function initGattClientManagerScenarioData(): Array<TestScenario> {
 export function initGattServerManagerScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   GattServerManagerScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }
@@ -760,7 +764,8 @@ export function initGattServerManagerScenarioData(): Array<TestScenario> {
 export function initSppClientManagerScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   SppClientManagerScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }
@@ -768,7 +773,8 @@ export function initSppClientManagerScenarioData(): Array<TestScenario> {
 export function initSppServerManagerScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   SppServerManagerScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }

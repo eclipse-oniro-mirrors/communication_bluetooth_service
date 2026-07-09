@@ -29,7 +29,8 @@ import {
   testSetLocalName,
   testStopBluetoothDiscovery
 } from './brInterface'
-import { testGetConnectedBLEDevices, testOnBLEDeviceFind, testStartBLEScan, testStopBLEScan} from './bleInterface'
+import { testGetConnectedBLEDevices, testOnBLEDeviceFind, testStartBLEScan,
+  testStopBLEScan} from './bleInterface'
 import {
   testConnect,
   testCreateGattClient,
@@ -723,7 +724,8 @@ export const SppServerScenarioTestCase: ScenarioTest[] = [
 export function initBRFoundScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   BrFoundScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }
@@ -731,7 +733,8 @@ export function initBRFoundScenarioData(): Array<TestScenario> {
 export function initBleFoundScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   BleFoundScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }
@@ -739,7 +742,8 @@ export function initBleFoundScenarioData(): Array<TestScenario> {
 export function initGattClientScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   GattClientScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }
@@ -747,7 +751,8 @@ export function initGattClientScenarioData(): Array<TestScenario> {
 export function initGattServerScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   GattServerScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }
@@ -755,7 +760,8 @@ export function initGattServerScenarioData(): Array<TestScenario> {
 export function initSppClientScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   SppClientScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }
@@ -763,7 +769,8 @@ export function initSppClientScenarioData(): Array<TestScenario> {
 export function initSppServerScenarioData(): Array<TestScenario> {
   let TestScenarioArray: Array<TestScenario> = []
   SppServerScenarioTestCase.forEach(item => {
-    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestScenarioArray.push(new TestScenario(item.name, item.detail, item.method, item.api,
+      item.result, item.category));
   })
   return TestScenarioArray;
 }

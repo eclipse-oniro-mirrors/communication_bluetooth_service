@@ -44,17 +44,20 @@ export struct GetProfileConnSateDialog {
   cancel!: () => void
   confirm!: (value: string) => void
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       Text(this.hitText)
         .fontSize(ConfigData.VP_20)
-        .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10})
+        .margin({
+          top: ConfigData.VP_10,
+          bottom: ConfigData.VP_10
+        })
       Select(this.getProfileList)
         .selected(this.currentClick)
-        .value(this.getProfileList[ this.currentClick ].value)
+        .value(this.getProfileList[this.currentClick].value)
         .font({size: ConfigData.VP_20})
         .selectedOptionFont({size: ConfigData.VP_20})
-        .optionFont({size: 17})
+        .optionFont({size: ConfigData.font_17})
         .height(ConfigData.VP_80)
         .width(ConfigData.WH_90_100)
         .onSelect((index: number) => {
@@ -62,7 +65,7 @@ export struct GetProfileConnSateDialog {
           this.currentClick = index
         })
 
-      Flex({justifyContent: FlexAlign.SpaceAround}){
+      Flex({justifyContent: FlexAlign.SpaceAround}) {
         Button($r('app.string.bluetoothtest_str_qx'))
           .onClick(() => {
             this.controller.close()
@@ -74,14 +77,16 @@ export struct GetProfileConnSateDialog {
             this.inputValue = this.currentClick.toString()
             this.changeIndex = this.currentIndex
             //TODO: 设备调试时候需要打开
-            if ( true ){
+            if (true) {
               let message = ""
               message = this.apiItem.api!(this.currentClick, this.pairedMac)
-              this.apiItem.result = this.getProfileList[ this.currentClick ].value + resStr($r('app.string.bluetoothtest_str_zt')) + message
+              this.apiItem.result =
+                this.getProfileList[this.currentClick].value +
+                  resStr($r('app.string.bluetoothtest_str_zt')) + message
               LogUtil.info("this.apiItem.result:" + this.apiItem.result)
             } else {
               let message = ""
-              this.apiItem.result = this.getProfileList[ this.currentClick ].value
+              this.apiItem.result = this.getProfileList[this.currentClick].value
               LogUtil.info("this.apiItem.result:" + this.apiItem.result)
             }
             this.controller.close()
@@ -116,14 +121,17 @@ export struct SetScanModeDialog {
   cancel!: () => void
   confirm!: (value: string) => void
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       Text(this.hitText)
         .fontSize(ConfigData.VP_20)
-        .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10})
+        .margin({
+          top: ConfigData.VP_10,
+          bottom: ConfigData.VP_10
+        })
       Select(this.scanModeList)
         .selected(this.currentClick)
-        .value(this.scanModeList[ this.currentClick ].value)
+        .value(this.scanModeList[this.currentClick].value)
         .font({size: ConfigData.VP_12})
         .selectedOptionFont({size: ConfigData.VP_12})
         .optionFont({size: ConfigData.VP_12})
@@ -139,13 +147,13 @@ export struct SetScanModeDialog {
       }).type(InputType.Number)
         .height(ConfigData.VP_60).width(ConfigData.WH_90_100)
         .onChange((value: string) => {
-          if ( value == "" ){
+          if (value == "") {
             this.duration = 0
           } else {
             this.duration = parseInt(value)
           }
         })
-      Flex({justifyContent: FlexAlign.SpaceAround}){
+      Flex({justifyContent: FlexAlign.SpaceAround}) {
         Button($r('app.string.bluetoothtest_str_qx'))
           .onClick(() => {
             this.controller.close()
@@ -157,16 +165,17 @@ export struct SetScanModeDialog {
             this.inputValue = this.currentClick.toString()
             this.changeIndex = this.currentIndex
             //TODO: 设备调试时候需要打开
-            if ( true ){
+            if (true) {
               let message: string = this.apiItem.api!(this.currentClick, this.duration)
               LogUtil.info(resStr($r('app.string.bluetoothtest_str_lx')) +typeof message)
-              // LogUtil.info("类型:" + this.scanModeList[ message.mode ].value)
+              // LogUtil.info("类型:" + this.scanModeList[message.mode].value)
               LogUtil.info(resStr($r('app.string.bluetoothtest_str_yc')) + message)
-              // this.apiItem.result = "类型:" + this.scanModeList[ message.mode ].value + ";延迟:" + message.duration.toString()
+              // this.apiItem.result = "类型:" + this.scanModeList[message.mode].value +
+              //   ";延迟:" + message.duration.toString()
               this.apiItem.result = resStr($r('app.string.bluetoothtest_str_lxhyc')) + message
               LogUtil.info("this.apiItem.result:" + this.apiItem.result)
             } else {
-              this.apiItem.result = this.scanModeList[ this.currentClick ].value
+              this.apiItem.result = this.scanModeList[this.currentClick].value
               LogUtil.info("this.apiItem.result:" + this.apiItem.result)
             }
             this.controller.close()
@@ -192,19 +201,25 @@ export struct InputDialog {
   cancel!: () => void
   confirm!: (value: string) => void
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       Text(this.hitText)
         .fontSize(ConfigData.VP_20)
-        .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10})
-      TextInput({placeholder: '', text: this.textValue})
+        .margin({
+          top: ConfigData.VP_10,
+          bottom: ConfigData.VP_10
+        })
+      TextInput({
+        placeholder: '',
+        text: this.textValue
+      })
         .height(ConfigData.VP_60)
         .width(ConfigData.WH_90_100)
         .onChange((value: string) => {
           this.textValue = value
         })
 
-      Flex({justifyContent: FlexAlign.SpaceAround}){
+      Flex({justifyContent: FlexAlign.SpaceAround}) {
         Button($r('app.string.bluetoothtest_str_qx'))
           .onClick(() => {
             this.controller.close()
@@ -217,7 +232,7 @@ export struct InputDialog {
             this.changeIndex = this.currentIndex
             //TODO: 设备调试时候需要打开
             let message = ""
-            if ( true ){
+            if (true) {
               message = this.apiItem.api!(this.textValue)
               LogUtil.info("message:" + message)
               this.apiItem.result = message
@@ -253,17 +268,20 @@ export struct SetConnectionStrategyDialog {
   cancel!: () => void
   confirm!: (value: string) => void
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       Text(this.hitText)
         .fontSize(ConfigData.VP_20)
-        .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10})
+        .margin({
+          top: ConfigData.VP_10,
+          bottom: ConfigData.VP_10
+        })
       Select(this.connectionStrategyList)
         .selected(this.currentClick)
-        .value(this.connectionStrategyList[ this.currentClick ].value)
+        .value(this.connectionStrategyList[this.currentClick].value)
         .font({size: ConfigData.VP_18})
         .selectedOptionFont({size: ConfigData.VP_18})
-        .optionFont({size: 17})
+        .optionFont({size: ConfigData.font_17})
         .height(ConfigData.VP_80)
         .width(ConfigData.WH_90_100)
         .onSelect((index: number) => {
@@ -271,7 +289,7 @@ export struct SetConnectionStrategyDialog {
           this.currentClick = index
         })
 
-      Flex({justifyContent: FlexAlign.SpaceAround}){
+      Flex({justifyContent: FlexAlign.SpaceAround}) {
         Button($r('app.string.bluetoothtest_str_qx'))
           .onClick(() => {
             this.controller.close()
@@ -283,14 +301,14 @@ export struct SetConnectionStrategyDialog {
             this.inputValue = this.currentClick.toString()
             this.changeIndex = this.currentIndex
             //TODO: 设备调试时候需要打开
-            if ( true ){
+            if (true) {
               let message = ""
               message = this.apiItem.api!(this.currentClick)
-              this.apiItem.result = this.connectionStrategyList[ this.currentClick ].value
+              this.apiItem.result = this.connectionStrategyList[this.currentClick].value
               LogUtil.info("this.apiItem.result:" + this.apiItem.result)
             } else {
               let message = ""
-              this.apiItem.result = this.connectionStrategyList[ this.currentClick ].value
+              this.apiItem.result = this.connectionStrategyList[this.currentClick].value
               LogUtil.info("this.apiItem.result:" + this.apiItem.result)
             }
             this.controller.close()
@@ -371,18 +389,18 @@ export struct ContentTable {
     autoCancel: true
   })
 
-  onCancel(){
+  onCancel() {
     LogUtil.info($r('app.string.bluetoothtest_str_qx'))
   }
 
-  onAccept(text: string){
+  onAccept(text: string) {
     LogUtil.info('input text:' + String(text))
   }
 
-  @Builder IngredientItem(apiItem: TestApi, index: number){
-    Stack(){
-      Flex(){
-        Flex({alignItems: ItemAlign.Center}){
+  @Builder IngredientItem(apiItem: TestApi, index: number) {
+    Stack() {
+      Flex() {
+        Flex({alignItems: ItemAlign.Center}) {
           Image($r('app.media.bleSmall'))
             .objectFit(ImageFit.Contain)
             .autoResize(false)
@@ -390,40 +408,52 @@ export struct ContentTable {
             .width(ConfigData.VP_40)
             .padding({top: ConfigData.VP_15})
         }
-        .layoutWeight(1)
+        .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
         .padding({left: ConfigData.VP_10})
 
-        Flex({direction: FlexDirection.Column, alignItems: ItemAlign.Start}){
+        Flex({
+          direction: FlexDirection.Column,
+          alignItems: ItemAlign.Start
+        }) {
           Text(apiItem.name)
             .fontSize(ConfigData.VP_17_4)
             .fontWeight(FontWeight.Bold)
-            .layoutWeight(1)
-            .padding({left: ConfigData.VP_10, top: ConfigData.VP_10})
+            .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+            .padding({
+              left: ConfigData.VP_10,
+              top: ConfigData.VP_10
+            })
           Text(apiItem.method)
             .fontSize(ConfigData.VP_17_4)
             .fontWeight(FontWeight.Bold)
-            .layoutWeight(1)
-            .padding({left: ConfigData.VP_10, top: ConfigData.VP_5})
+            .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+            .padding({
+              left: ConfigData.VP_10,
+              top: ConfigData.VP_5
+            })
         }
-        .layoutWeight(6)
+        .layoutWeight(ConfigData.LAYOUT_WEIGHT_6)
         .width(ConfigData.WH_80_100)
 
-        Flex({alignItems: ItemAlign.Center}){
+        Flex({alignItems: ItemAlign.Center}) {
           Text(this.changeIndex >= 0 ? this.getCurrentState(index) : apiItem.result)
             .fontSize(ConfigData.VP_17_4)
-            .flexGrow(1)
+            .flexGrow(ConfigData.LAYOUT_WEIGHT_1)
             .padding({top: ConfigData.VP_15})
         }
-        .layoutWeight(3)
+        .layoutWeight(ConfigData.LAYOUT_WEIGHT_3)
         .padding({left: ConfigData.VP_25})
       }
     }
     .height(ConfigData.VP_80)
     .borderRadius(ConfigData.VP_10)
-    .margin({top: ConfigData.VP_5, bottom: ConfigData.VP_5})
+    .margin({
+      top: ConfigData.VP_5,
+      bottom: ConfigData.VP_5
+    })
     .backgroundColor($r("app.color.white"))
     .onClick(() => {
-      switch ( apiItem.method ){
+      switch (apiItem.method) {
         case "setLocalName": {
           this.currentApiItem = apiItem;
           this.currentIndex += 1;
@@ -449,7 +479,8 @@ export struct ContentTable {
         }
           break;
         case "pairDevice": {
-          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
+          let message: string = apiItem.api?.(this.pairedMac)
+            || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -457,7 +488,8 @@ export struct ContentTable {
         }
           break;
         case "pairDeviceManager": {
-          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
+          let message: string = apiItem.api?.(this.pairedMac)
+            || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -465,7 +497,8 @@ export struct ContentTable {
         }
           break;
         case "unpairDevice": {
-          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
+          let message: string = apiItem.api?.(this.pairedMac)
+            || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -473,7 +506,8 @@ export struct ContentTable {
         }
           break;
         case "unpairDeviceManager": {
-          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
+          let message: string = apiItem.api?.(this.pairedMac)
+            || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -481,7 +515,8 @@ export struct ContentTable {
         }
           break;
         case "getDeviceName": {
-          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
+          let message: string = apiItem.api?.(this.pairedMac)
+            || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -489,7 +524,8 @@ export struct ContentTable {
         }
           break;
         case "getDeviceNameManager": {
-          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
+          let message: string = apiItem.api?.(this.pairedMac)
+            || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -497,7 +533,8 @@ export struct ContentTable {
         }
           break;
         case "getDeviceType": {
-          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
+          let message: string = apiItem.api?.(this.pairedMac)
+            || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -505,7 +542,8 @@ export struct ContentTable {
         }
           break;
         case "getDeviceTypeManager": {
-          let message: string = apiItem.api?.(this.pairedMac) || $r('app.string.bluetoothtest_str_mrxx');
+          let message: string = apiItem.api?.(this.pairedMac)
+            || $r('app.string.bluetoothtest_str_mrxx');
           apiItem.result = message;
           this.currentIndex += 1;
           this.changeIndex = this.currentIndex;
@@ -554,18 +592,18 @@ export struct ContentTable {
     })
   }
 
-  getCurrentState(index: number){
-    return this.apiItems[ index ].result
+  getCurrentState(index: number) {
+    return this.apiItems[index].result
   }
 
-  build(){
-    Column(){
-      Scroll(){
+  build() {
+    Column() {
+      Scroll() {
         Flex({
           direction: FlexDirection.Column,
           justifyContent: FlexAlign.SpaceBetween,
           alignItems: ItemAlign.Start
-        }){
+        }) {
           ForEach(this.apiItems, (item: TestApi, index: number) => {
             this.IngredientItem(item, index)
           })
@@ -574,6 +612,10 @@ export struct ContentTable {
       .scrollBarWidth(ConfigData.VP_20)
     }
     .height(ConfigData.PCT_66)
-    .padding({top: ConfigData.VP_5, right: ConfigData.VP_10, left: ConfigData.VP_10})
+    .padding({
+      top: ConfigData.VP_5,
+      right: ConfigData.VP_10,
+      left: ConfigData.VP_10
+    })
   }
 }

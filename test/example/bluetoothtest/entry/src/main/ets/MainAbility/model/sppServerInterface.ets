@@ -27,7 +27,7 @@ export function testSppServerCreateSafe(): string {
     let message = resStr($r('app.string.bluetoothtest_str_st_10'))
     LogUtil.info('spp server socketId(safe mode) create! ');
     let uuid: string = AppStorage.get('inputUuid') !
-    if ( uuid == '' ){
+    if (uuid == '') {
       message = resStr($r('app.string.bluetoothtest_str_uwk'));
       promptAction.showToast({message: message})
       return message
@@ -39,7 +39,7 @@ export function testSppServerCreateSafe(): string {
       type: 0
     }, (code: BusinessError, serverSocketID) => {
       LogUtil.info('bluetooth error code: ' + typeof code + " ; " + JSON.stringify(code));
-      if ( !code || code.code == 0 ){
+      if (!code || code.code == 0) {
         LogUtil.info('spp server: serverSocketID(safe mode) - ' + serverSocketID);
         serverNumber = serverSocketID;
         message = resStr($r('app.string.bluetoothtest_str_cjscg'));
@@ -50,9 +50,9 @@ export function testSppServerCreateSafe(): string {
     });
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSppServerCreateSafe. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSppServerCreateSafe. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSppServerCreateSafe. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testSppServerCreateSafe. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -63,7 +63,7 @@ export function testSppServerCreateUnSafe(): string {
     let message = resStr($r('app.string.bluetoothtest_str_st_7'))
     let uuid: string = AppStorage.get('inputUuid') !
     LogUtil.info('spp server socketId(non-safe mode) create! ')
-    if ( uuid == '' ){
+    if (uuid == '') {
       message = resStr($r('app.string.bluetoothtest_str_uwk'));
       promptAction.showToast({message: message})
     }
@@ -74,7 +74,7 @@ export function testSppServerCreateUnSafe(): string {
       type: 0
     }, (code, serverSocketID) => {
       LogUtil.info('bluetooth error code: ' + typeof code + " ; " + JSON.stringify(code));
-      if ( !code || code.code == 0 ){
+      if (!code || code.code == 0) {
         LogUtil.info('spp server: serverSocketID(non-safe mode) ' + serverSocketID);
         serverNumber = serverSocketID;
         message = resStr($r('app.string.bluetoothtest_str_cjscg'));
@@ -83,9 +83,9 @@ export function testSppServerCreateUnSafe(): string {
     });
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSppServerCreateUnSafe. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSppServerCreateUnSafe. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSppServerCreateUnSafe. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testSppServerCreateUnSafe. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -100,7 +100,7 @@ export function testSppServerAccept(): string {
     LogUtil.info('testSppServerAccept test')
     LogUtil.info('testSppServerAccept serverNumber ' + serverNumber)
     bluetooth.sppAccept(serverNumber, (code, clientSocketID) => {
-      if ( !code || code.code == 0 ){
+      if (!code || code.code == 0) {
         LogUtil.info('spp server: clientSocketID - ' + clientSocketID)
         LogUtil.info('test serverNumber ' + serverNumber);
         clientNumber = clientSocketID;
@@ -110,7 +110,7 @@ export function testSppServerAccept(): string {
           (dataBuffer: ArrayBuffer) => {
             const data = new Uint8Array(dataBuffer);
             LogUtil.info('spp bluetooth read is: ' + data);
-            if ( data != null ){
+            if (data != null) {
               message = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
             } else {
               message = resStr($r('app.string.bluetoothtest_str_dqsb'));
@@ -123,9 +123,9 @@ export function testSppServerAccept(): string {
     })
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSppServerAccept. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSppServerAccept. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSppServerAccept. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testSppServerAccept. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -138,7 +138,7 @@ export function testSppServerWrite(): String {
     let writeServerData: string = AppStorage.get("writeServerData") !
     let writeArrayBuffer: ArrayBuffer = strToArrayBuffer(writeServerData) as ArrayBuffer;
     const sppWriteSuccess = bluetooth.sppWrite(clientNumber, writeArrayBuffer);
-    if ( sppWriteSuccess ){
+    if (sppWriteSuccess) {
       LogUtil.info('sppWrite successfully');
       message = resStr($r('app.string.bluetoothtest_str_xrcg'));
     } else {
@@ -147,9 +147,9 @@ export function testSppServerWrite(): String {
     }
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSppServerWrite. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSppServerWrite. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSppServerWrite. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testSppServerWrite. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -163,7 +163,7 @@ export function testSppServerReadOn(): String {
       (dataBuffer: ArrayBuffer) => {
         const data = new Uint8Array(dataBuffer)
         LogUtil.info('spp bluetooth read is: ' + data);
-        if ( data != null ){
+        if (data != null) {
           message = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
         } else {
           message = resStr($r('app.string.bluetoothtest_str_dqsb'));
@@ -175,9 +175,9 @@ export function testSppServerReadOn(): String {
     );
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSppServerReadOn. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSppServerReadOn. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSppServerReadOn. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testSppServerReadOn. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -190,7 +190,7 @@ export function testSppServerReadOff(): String {
       (dataBuffer: ArrayBuffer) => {
         const data = new Uint8Array(dataBuffer)
         LogUtil.info('spp bluetooth read is: ' + data);
-        if ( data != null ){
+        if (data != null) {
           message = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
         } else {
           message = resStr($r('app.string.bluetoothtest_str_dqsb'));
@@ -202,9 +202,9 @@ export function testSppServerReadOff(): String {
     );
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSppServerReadOff. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSppServerReadOff. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSppServerReadOff. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testSppServerReadOff. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -221,9 +221,9 @@ export function testSppCloseServerSocket(): String {
     message = resStr($r('app.string.bluetoothtest_str_gbfwd'));
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSppCloseServerSocket. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSppCloseServerSocket. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSppCloseServerSocket. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testSppCloseServerSocket. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -238,18 +238,18 @@ export function testSppCloseClientSocket(): String {
     message = resStr($r('app.string.bluetoothtest_str_gbkhd'));
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testSppCloseClientSocket. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testSppCloseClientSocket. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testSppCloseClientSocket. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testSppCloseClientSocket. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function strToArrayBuffer(str: string){
+export function strToArrayBuffer(str: string) {
   let array = new Uint8Array(str.length)
-  for(let i = 0 ; i<str.length ; i++ ){
-    array[ i ] = str.charCodeAt(i);
+  for(let i = 0 ; i<str.length ; i++) {
+    array[i] = str.charCodeAt(i);
   }
   return array.buffer
 }

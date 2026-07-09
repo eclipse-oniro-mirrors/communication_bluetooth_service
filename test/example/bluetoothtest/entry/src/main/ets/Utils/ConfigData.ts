@@ -37,6 +37,25 @@ export class ConfigData {
   WH_90_100 = '90%';
   value_20 = 20;
   font_20 = 20;
+  font_1 = 1;
+  font_12 = 12;
+  font_16 = 16;
+  font_17 = 17;
+  /** 截图区域默认宽高（像素） */
+  SCREENSHOT_SIZE = 400;
+  /** 截图按钮尺寸（像素） */
+  SCREENSHOT_BTN_SIZE = 55;
+  /** 细边框宽度 */
+  BORDER_WIDTH_HALF = 0.5;
+  BORDER_RADIUS_10 = 10;
+  LAYOUT_WEIGHT_1 = 1;
+  LAYOUT_WEIGHT_3 = 3;
+  LAYOUT_WEIGHT_6 = 6;
+  LONG_PRESS_DURATION_MS = 1000;
+  PAN_GESTURE_DISTANCE = 5.0;
+  PINCH_GESTURE_DISTANCE = 4;
+  ROTATION_GESTURE_ANGLE = 2;
+  GRADIENT_ANGLE_90 = 90;
   MAX_LINES_1 = 1;
   MAX_LINES_2 = 2;
   MAX_LINES_3 = 3;

@@ -31,10 +31,14 @@ export struct TitleComponent {
   @StorageLink('on_pinRequired') pin: string = 'on:pinRequired';
   @StorageLink('on_bondStateChange') bondState: string = 'on:bondStateChange';
 
-  build(){
-    Column(){
-      Flex({justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center}){
-        Text(this.stateChangeFlag ? this.state: (this.pinRequiredFlag ? this.pin: (this.bondStateChangeFlag ? this.bondState: this.title)))
+  build() {
+    Column() {
+      Flex({
+        justifyContent: FlexAlign.SpaceBetween,
+        alignItems: ItemAlign.Center
+      }) {
+        Text(this.stateChangeFlag ? this.state: (this.pinRequiredFlag ? this.pin:
+          (this.bondStateChangeFlag ? this.bondState: this.title)))
           .textAlign(TextAlign.Center)
           .width(ConfigData.WH_100_100)
           .height(ConfigData.VP_70)
@@ -47,20 +51,21 @@ export struct TitleComponent {
       .backgroundColor(this.bgColor)
       .linearGradient(this.isTouched ?
         {
-          angle: 90,
+          angle: ConfigData.GRADIENT_ANGLE_90,
           direction: GradientDirection.Right,
-          colors: [ [ $r("app.color.DCEAF9"), 0.0 ], [ $r("app.color.FAFAFA"), 1.0 ] ]
+          colors: [[$r("app.color.DCEAF9"), 0.0], [$r("app.color.FAFAFA"), 1.0]]
       } :
         {
-          angle: 90,
+          angle: ConfigData.GRADIENT_ANGLE_90,
           direction: GradientDirection.Right,
-          colors: [ [ $r("sys.color.ohos_id_color_foreground_contrary"), 1 ], [ $r("sys.color.ohos_id_color_foreground_contrary"), 1 ] ]
+          colors: [[$r("sys.color.ohos_id_color_foreground_contrary"), 1],
+            [$r("sys.color.ohos_id_color_foreground_contrary"), 1]]
         })
         .onTouch((event: TouchEvent) => {
-        if ( event.type === TouchType.Down ){
+        if (event.type === TouchType.Down) {
           this.isTouched = true;
         }
-        if ( event.type === TouchType.Up ){
+        if (event.type === TouchType.Up) {
           this.isTouched = false;
         }
       })

@@ -22,9 +22,9 @@ import router from '@ohos.router'
 export struct TestGridItem {
   private testItem: TestData
 
-  build(){
-    Column(){
-      Row(){
+  build() {
+    Column() {
+      Row() {
         Image(this.testItem.image)
           .objectFit(ImageFit.Contain)
           .height(ConfigData.VP_152)
@@ -32,10 +32,13 @@ export struct TestGridItem {
       }
         .backgroundColor($r('app.color.color_FFF1F3F5_bg'))
 
-      Flex({justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
+      Flex({
+        justifyContent: FlexAlign.Start,
+        alignItems: ItemAlign.Center
+      }) {
         Text(this.testItem.name)
           .fontSize(ConfigData.VP_14)
-          .flexGrow(1)
+          .flexGrow(ConfigData.LAYOUT_WEIGHT_1)
           .padding({left: ConfigData.VP_8})
         Text(this.testItem.detail)
           .fontSize(ConfigData.VP_14)
@@ -48,7 +51,10 @@ export struct TestGridItem {
     .height(ConfigData.VP_184)
     .width(ConfigData.WH_100_100)
     .onClick(() => {
-      router.pushUrl({url: 'MainAbility/pagesTestDetail', params: { testId: this.testItem}})
+      router.pushUrl({
+        url: 'MainAbility/pagesTestDetail',
+        params: { testId: this.testItem}
+      })
     })
   }
 }

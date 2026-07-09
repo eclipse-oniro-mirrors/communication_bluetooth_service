@@ -20,10 +20,10 @@ import { getUiAbilityContext} from './uiContextStore';
  */
 export function resStr(res: Resource): string {
   const ctx = getUiAbilityContext();
-  if (ctx?.resourceManager){
+  if (ctx?.resourceManager) {
     try {
       return ctx.resourceManager.getStringSync(res);
-    } catch (_e){
+    } catch (_e) {
       return '';
     }
   }

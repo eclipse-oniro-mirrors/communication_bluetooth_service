@@ -37,11 +37,11 @@ export struct BleFilterTable {
   @State cbxBleScanOptions: boolean = false;
   @State txtScanOptions_interval: string = "0";
 
-  getCurrentState(index: number){
-    return this.apiItems[ index ].result
+  getCurrentState(index: number) {
+    return this.apiItems[index].result
   }
 
-  aboutToAppear(){
+  aboutToAppear() {
     AppStorage.setOrCreate('txtScanFilterDeviceId', this.txtScanFilter_deviceId);
     AppStorage.setOrCreate('txtScanFilterName', this.txtScanFilter_name);
     AppStorage.setOrCreate('txtScanFilterServiceUuid', this.txtScanFilter_serviceUuid);
@@ -52,20 +52,23 @@ export struct BleFilterTable {
     AppStorage.setOrCreate('cbxBleScanOptions', this.cbxBleScanOptions);
   }
 
-  build(){
-    Scroll(){
-      Column(){
-        Row(){
+  build() {
+    Scroll() {
+      Column() {
+        Row() {
           Text($r('app.string.bluetoothtest_text_bsmglcs'))
             .fontSize(ConfigData.VP_17)
             .fontColor($r('app.color.color_4444444_grey'))
             .width(ConfigData.WH_80_100)
             .padding(ConfigData.VP_5)
-          Checkbox({name: 'bleScanFilter', group: 'checkboxGroup99'})
+          Checkbox({
+            name: 'bleScanFilter',
+            group: 'checkboxGroup99'
+          })
             .select(this.cbxBleScanFilter)
             .selectedColor(0x39a2db)
             .onChange((value) => {
-              if ( value ){
+              if (value) {
                 this.cbxBleScanFilter = true;
               } else {
                 this.cbxBleScanFilter = false;
@@ -79,16 +82,19 @@ export struct BleFilterTable {
         .borderWidth(ConfigData.HEIGHT_1_VP)
         .padding(ConfigData.VP_5)
         .borderColor($r("app.color.lead"))
-        .backgroundColor( $r( "app.color.moon" ) )
+        .backgroundColor($r("app.color.moon"))
 
-        Column(){
-          Column(){
-            Column(){
-              Row(){
+        Column() {
+          Column() {
+            Column() {
+              Row() {
                 Text($r('app.string.bluetoothtest_text_m'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.VP_60);
-                TextInput({text: this.txtScanFilter_deviceId, placeholder: "input deviceId"})
+                TextInput({
+                  text: this.txtScanFilter_deviceId,
+                  placeholder: "input deviceId"
+                })
                   .fontSize(ConfigData.VP_15)
                   .onChange((strInput) => {
                     this.txtScanFilter_deviceId = strInput;
@@ -100,13 +106,16 @@ export struct BleFilterTable {
               .padding(ConfigData.VP_5)
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
-              .backgroundColor( $r( "app.color.spring" ) )
+              .backgroundColor($r("app.color.spring"))
 
-              Row(){
+              Row() {
                 Text($r('app.string.bluetoothtest_text_n'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.VP_60);
-                TextInput({text: this.txtScanFilter_name, placeholder: "input name"})
+                TextInput({
+                  text: this.txtScanFilter_name,
+                  placeholder: "input name"
+                })
                   .fontSize(ConfigData.VP_15)
                   .onChange((strInput) => {
                     this.txtScanFilter_name = strInput;
@@ -118,13 +127,16 @@ export struct BleFilterTable {
               .padding(ConfigData.VP_5)
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
-              .backgroundColor( $r( "app.color.spring" ) )
+              .backgroundColor($r("app.color.spring"))
 
-              Row(){
+              Row() {
                 Text($r('app.string.bluetoothtest_text_s_1'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.VP_100);
-                TextInput({text: this.txtScanFilter_serviceUuid, placeholder: "input serviceUuid"})
+                TextInput({
+                  text: this.txtScanFilter_serviceUuid,
+                  placeholder: "input serviceUuid"
+                })
                   .fontSize(ConfigData.VP_15)
                   .onChange((strInput) => {
                     this.txtScanFilter_serviceUuid = strInput;
@@ -136,7 +148,7 @@ export struct BleFilterTable {
               .padding(ConfigData.VP_5)
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
-              .backgroundColor( $r( "app.color.spring" ) )
+              .backgroundColor($r("app.color.spring"))
             }
             .height(ConfigData.VP_180)
             .width(ConfigData.WH_100_100)
@@ -145,18 +157,21 @@ export struct BleFilterTable {
           .borderColor($r("app.color.lead"))
           .borderWidth(ConfigData.HEIGHT_1_VP)
 
-          Column(){
-            Row(){
+          Column() {
+            Row() {
               Text($r('app.string.bluetoothtest_text_bsmpz'))
                 .padding(ConfigData.VP_5)
                 .fontSize(ConfigData.VP_17)
                 .fontColor($r('app.color.color_4444444_grey'))
                 .width(ConfigData.WH_80_100)
-              Checkbox({name: 'bleScanOptions', group: 'checkboxGroup95'})
+              Checkbox({
+                name: 'bleScanOptions',
+                group: 'checkboxGroup95'
+              })
                 .select(this.cbxBleScanOptions)
                 .selectedColor(0x39a2db)
                 .onChange((value) => {
-                  if ( value ){
+                  if (value) {
                     this.cbxBleScanOptions = true;
                     this.cbxBleScanFilter = true;
                     AppStorage.setOrCreate('cbxBleScanOptions', this.cbxBleScanOptions);
@@ -172,14 +187,17 @@ export struct BleFilterTable {
             .height(ConfigData.VP_40)
             .width(ConfigData.WH_100_100)
             .padding(ConfigData.VP_5)
-            .backgroundColor( $r( "app.color.moon" ) );
+            .backgroundColor($r("app.color.moon"));
 
-            Column(){
-              Row(){
+            Column() {
+              Row() {
                 Text($r('app.string.bluetoothtest_text_i_1'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.VP_80)
-                TextInput({text: this.txtScanOptions_interval, placeholder: "input interval"})
+                TextInput({
+                  text: this.txtScanOptions_interval,
+                  placeholder: "input interval"
+                })
                   .fontSize(ConfigData.VP_17)
                   .onChange((strInput) => {
                     this.txtScanOptions_interval = strInput;
@@ -190,13 +208,13 @@ export struct BleFilterTable {
               .padding(ConfigData.VP_5)
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
-              .backgroundColor( $r( "app.color.spring" ) )
+              .backgroundColor($r("app.color.spring"))
 
-              Row(){
+              Row() {
                 Text($r('app.string.bluetoothtest_text_d_1'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.VP_80)
-                Column(){
+                Column() {
                   Select([
                     { value: 'LOW_POWER'},
                     { value: 'BALANCED'},
@@ -204,8 +222,8 @@ export struct BleFilterTable {
                   ])
                     .selected(2)
                     .value('LOW_POWER')
-                    .font({size: 17})
-                    .selectedOptionFont({size: 17})
+                    .font({size: ConfigData.font_17})
+                    .selectedOptionFont({size: ConfigData.font_17})
                     .optionFont({size: ConfigData.VP_15})
                     .width(ConfigData.WH_80_100)
                     .onSelect((index: number) => {
@@ -218,20 +236,20 @@ export struct BleFilterTable {
               .padding(ConfigData.VP_5)
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
-              .backgroundColor( $r( "app.color.spring" ) )
+              .backgroundColor($r("app.color.spring"))
 
-              Row(){
+              Row() {
                 Text($r('app.string.bluetoothtest_text_m_1'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.VP_90)
-                Column(){
+                Column() {
                   Select([
                     { value: 'MATCH_MODE_AGGRESSIVE'},
                     { value: 'MATCH_MODE_STICKY'}
                   ])
                     .value('MATCH_MODE_AGGRESSIVE')
-                    .font({size: 17})
-                    .selectedOptionFont({size: 17})
+                    .font({size: ConfigData.font_17})
+                    .selectedOptionFont({size: ConfigData.font_17})
                     .optionFont({size: ConfigData.VP_15})
                     .width(ConfigData.PCT_75)
                     .onSelect((index: number) => {
@@ -244,7 +262,7 @@ export struct BleFilterTable {
               .padding(ConfigData.VP_5)
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
-              .backgroundColor( $r( "app.color.spring" ) )
+              .backgroundColor($r("app.color.spring"))
             }
             .width(ConfigData.WH_100_100)
             .padding(ConfigData.VP_5)

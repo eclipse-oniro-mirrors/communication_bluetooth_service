@@ -48,8 +48,9 @@ export class TestData {
   image?: Resource
   category?: Category;
 
-  constructor(name: Resource | string, detail: Resource | string, url: string, image: Resource, category: Category){
-    this.id = `${ NextId ++ }`;
+  constructor(name: Resource | string, detail: Resource | string, url: string, image: Resource,
+    category: Category) {
+    this.id = `${NextId ++ }`;
     this.name = name;
     this.url = url;
     this.detail = detail;
@@ -92,8 +93,8 @@ export class TestApi {
   category?: CaseCategory;
 
   constructor(name: Resource | string, detail: Resource | string, method: string, api: Function,
-    result: string, category: CaseCategory){
-    this.id = `${ NextId ++ }`;
+    result: string, category: CaseCategory) {
+    this.id = `${NextId ++ }`;
     this.name = name;
     this.detail = detail;
     this.method = method;
@@ -136,8 +137,9 @@ export class TestAuto {
   result?: string;
   category?: AutoCategory;
 
-  constructor(name: Resource | string, detail: Resource | string, method: string, api: Function, result: string, category: AutoCategory){
-    this.id = `${ NextId ++ }`;
+  constructor(name: Resource | string, detail: Resource | string, method: string, api: Function,
+    result: string, category: AutoCategory) {
+    this.id = `${NextId ++ }`;
     this.name = name;
     this.detail = detail;
     this.method = method;
@@ -173,8 +175,9 @@ export class TestScenario {
   result: string;
   category: ScenarioCategory;
 
-  constructor(name: Resource | string, detail: Resource | string, method: string, api: Function, result: string, category: ScenarioCategory){
-    this.id = `${ NextId ++ }`;
+  constructor(name: Resource | string, detail: Resource | string, method: string, api: Function,
+    result: string, category: ScenarioCategory) {
+    this.id = `${NextId ++ }`;
     this.name = name;
     this.detail = detail;
     this.method = method;
@@ -209,8 +212,9 @@ export class TestBenchmark {
   result: string;
   category: BenchmarkCategory;
 
-  constructor(name: Resource | string, detail: Resource | string, method: string, api: Function, result: string, category: BenchmarkCategory){
-    this.id = `${ NextId ++ }`;
+  constructor(name: Resource | string, detail: Resource | string, method: string, api: Function,
+    result: string, category: BenchmarkCategory) {
+    this.id = `${NextId ++ }`;
     this.name = name;
     this.detail = detail;
     this.method = method;

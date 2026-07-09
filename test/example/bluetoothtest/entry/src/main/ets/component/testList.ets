@@ -14,7 +14,7 @@
  */
 
 
-import hilog from '@ohos.hilog';
+import LogUtil from '../Utils/LogUtil';
 import { TestData} from '../MainAbility/model/testData'
 import { TestListItem} from './testListItems';
 import ConfigData from '../Utils/ConfigData';
@@ -25,16 +25,16 @@ import ConfigData from '../Utils/ConfigData';
 export struct TestList {
   private testItems!: TestData[]
 
-  aboutToAppear(){
-    hilog.info(0x0000, 'BtTest', '%{public}s', "TestList testItems:" + JSON.stringify(this.testItems))
+  aboutToAppear() {
+    LogUtil.info("TestList testItems:" + JSON.stringify(this.testItems))
   }
 
-  build(){
-    Column(){
-      Scroll(){
-        List(){
+  build() {
+    Column() {
+      Scroll() {
+        List() {
           ForEach(this.testItems, (item: TestData) => {
-            ListItem(){
+            ListItem() {
               TestListItem({
                 testItem: item
               })

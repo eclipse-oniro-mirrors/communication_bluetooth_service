@@ -42,32 +42,40 @@ export struct PageTitle {
   @State angle: number = 0
   getScreen = (isFullScreen: boolean) => {
     let screenshotOptions: screenshot.ScreenshotOptions = {
-      screenRect: { left: 0, top: 0, width: 400, height: 400},
-      imageSize: { width: 400, height: 400},
+      screenRect: {
+        left: 0,
+        top: 0,
+        width: ConfigData.SCREENSHOT_SIZE,
+        height: ConfigData.SCREENSHOT_SIZE
+      },
+      imageSize: {
+        width: ConfigData.SCREENSHOT_SIZE,
+        height: ConfigData.SCREENSHOT_SIZE
+      },
       rotation: 0,
       displayId: 0
     }
-    if ( isFullScreen ){
+    if (isFullScreen) {
       screenshotOptions = {
         rotation: 0
       }
     }
     try {
       screenshot.save(screenshotOptions, (err, data: image.PixelMap) => {
-        if ( err ){
-          Logger.info(TAG, `Failed to save the screenshot. Error:${ JSON.stringify(err) }`)
+        if (err) {
+          Logger.info(TAG, `Failed to save the screenshot. Error:${JSON.stringify(err) }`)
         }
         Logger.info(TAG, 'save callback')
         MediaUtils.savePicture(data, getContext(this))
       })
-    } catch( err ){
-      Logger.error(`save failed, code is ${ err.code }, message is ${ err.message }`)
+    } catch(err) {
+      Logger.error(`save failed, code is ${err.code }, message is ${err.message }`)
     }
   }
 
   @Builder
-  CustomBtn(text: Resource, isFullScreen: boolean){
-    Button(){
+  CustomBtn(text: Resource, isFullScreen: boolean) {
+    Button() {
       Image($r('app.media.screenShot'))
         .height(ConfigData.VP_40)
         .width(ConfigData.VP_40)
@@ -77,17 +85,21 @@ export struct PageTitle {
     .backgroundColor($r("app.color.blue"))
     .height(ConfigData.WH_100_100)
     .width(ConfigData.WH_100_100)
-    .margin({left: ConfigData.VP_3, right: ConfigData.VP_3, top: ConfigData.VP_2})
+    .margin({
+      left: ConfigData.VP_3,
+      right: ConfigData.VP_3,
+      top: ConfigData.VP_2
+    })
     .onClick(() => {
       LogUtil.info('[Screenshot] onClick, screenshot')
       this.getScreen(isFullScreen)
     })
   }
 
-  build(){
-    Column(){
-      Flex({alignItems: ItemAlign.Start}){
-        Button(){
+  build() {
+    Column() {
+      Flex({alignItems: ItemAlign.Start}) {
+        Button() {
           Image($r('app.media.Back'))
             .width(ConfigData.PCT_60)
             .height(ConfigData.PCT_60)
@@ -96,7 +108,10 @@ export struct PageTitle {
         .width(ConfigData.PCT_20)
         .height(ConfigData.WH_100_100)
         .backgroundColor($r("app.color.blue"))
-        .padding({left: ConfigData.HEIGHT_1_VP, top: ConfigData.VP_15})
+        .padding({
+          left: ConfigData.HEIGHT_1_VP,
+          top: ConfigData.VP_15
+        })
         .onClick(() => {
           router.back()
         })
@@ -106,8 +121,8 @@ export struct PageTitle {
         .margin({left: ConfigData.VP_3})
         .padding({top: ConfigData.VP_18})
 
-        Scroll(){
-          Column(){
+        Scroll() {
+          Column() {
             this.CustomBtn($r('app.string.btn_fullscreen'), true)
           }
           .width(ConfigData.WH_100_100)
@@ -117,14 +132,21 @@ export struct PageTitle {
           .borderColor(Color.Green)
           .gesture(
             GestureGroup(GestureMode.Parallel,
-              TapGesture({count: 2, fingers: 1})
+              TapGesture({
+                count: 2,
+                fingers: 1
+              })
                 .onAction(() => {
                   this.myborderWidth += 1
           }),
-              LongPressGesture({fingers: 1, repeat: true, duration: 1000})
+              LongPressGesture({
+                fingers: 1,
+                repeat: true,
+                duration: ConfigData.LONG_PRESS_DURATION_MS
+              })
                 .onAction((event: GestureEvent) => {
                   this.colOpacity -= 0.1
-                  if ( event.repeat ){
+                  if (event.repeat) {
                     this.count++
                   }
                 })
@@ -132,7 +154,11 @@ export struct PageTitle {
                   this.colOpacity = 1;
                   this.count = 0;
           }),
-              PanGesture({fingers: 1, direction: PanDirection.All, distance: 5.0})
+              PanGesture({
+                fingers: 1,
+                direction: PanDirection.All,
+                distance: ConfigData.PAN_GESTURE_DISTANCE
+              })
                 .onActionStart(() => {
                   LogUtil.info('Pan start')
                 })
@@ -143,19 +169,25 @@ export struct PageTitle {
                 .onActionEnd(() => {
                   LogUtil.info('Pan end')
           }),
-              PinchGesture({fingers: 2, distance: 4})
+              PinchGesture({
+                fingers: 2,
+                distance: ConfigData.PINCH_GESTURE_DISTANCE
+              })
                 .onActionStart(() => {
                   LogUtil.info('PinchGesture start')
                 })
                 .onActionUpdate((event: GestureEvent) => {
                   this.myscale = event.scale
-                  this.myborderRadius = 10
+                  this.myborderRadius = ConfigData.BORDER_RADIUS_10
                 })
                 .onActionEnd(() => {
                   LogUtil.info('PinchGesture end')
                   this.getScreen(true)
           }),
-              RotationGesture({fingers: 2, angle: 2})
+              RotationGesture({
+                fingers: 2,
+                angle: ConfigData.ROTATION_GESTURE_ANGLE
+              })
                 .onActionStart(() => {
                   LogUtil.info('RotationGesture start')
                 })
@@ -171,7 +203,7 @@ export struct PageTitle {
               })
           )
         }
-        .layoutWeight(1)
+        .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
       }
       .height(ConfigData.VP_61)
       .backgroundColor($r('app.color.color_FFEDF2F5_bg'))

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import hilog from '@ohos.hilog';
+import LogUtil from '../Utils/LogUtil';
 import ConfigData from '../Utils/ConfigData';
 import { TestData} from '../MainAbility/model/testData'
 
@@ -25,14 +25,17 @@ export struct TestListItem {
   private testItem!: TestData
 
 
-  aboutToAppear(){
-    hilog.info(0x0000, 'BtTest', '%{public}s', "TestListItem testItem:" + JSON.stringify(this.testItem))
+  aboutToAppear() {
+    LogUtil.info("TestListItem testItem:" + JSON.stringify(this.testItem))
   }
 
-  build(){
-    Navigator({target: this.testItem.url ? this.testItem.url: ""}){
-      Flex({justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
-        Row(){
+  build() {
+    Navigator({target: this.testItem.url ? this.testItem.url: ""}) {
+      Flex({
+        justifyContent: FlexAlign.Start,
+        alignItems: ItemAlign.Center
+      }) {
+        Row() {
           Image(this.testItem.image)
             .objectFit(ImageFit.Contain)
             .autoResize(false)
@@ -44,19 +47,29 @@ export struct TestListItem {
 
         Text(this.testItem.name)
           .fontSize(ConfigData.VP_20)
-          .flexGrow(1)
+          .flexGrow(ConfigData.LAYOUT_WEIGHT_1)
           .margin({left: ConfigData.VP_12})
           .width(ConfigData.WH_45_100)
         Text(this.testItem.detail)
           .fontSize(ConfigData.VP_17)
-          .margin({left: ConfigData.VP_10, right: ConfigData.VP_5})
+          .margin({
+            left: ConfigData.VP_10,
+            right: ConfigData.VP_5
+          })
           .width(ConfigData.WH_45_100)
       }
       .height(ConfigData.VP_95)
     }
     .params({testItem: this.testItem})
-    .margin({right: ConfigData.VP_10, left: ConfigData.VP_10, top: ConfigData.VP_10})
-    .padding({left: ConfigData.VP_15, right: ConfigData.VP_15})
+    .margin({
+      right: ConfigData.VP_10,
+      left: ConfigData.VP_10,
+      top: ConfigData.VP_10
+    })
+    .padding({
+      left: ConfigData.VP_15,
+      right: ConfigData.VP_15
+    })
     .borderRadius(ConfigData.VP_10)
     .backgroundColor($r("app.color.white"))
   }

@@ -25,17 +25,17 @@ export struct TestGrid {
   private gridRowTemplate: string = ''
   private heightValue: number
 
-  aboutToAppear(){
+  aboutToAppear() {
     let rows = Math.round(this.testItems.length / 2);
     this.gridRowTemplate = '1fr '.repeat(rows);
     this.heightValue = rows * 192 - 8;
   }
 
-  build(){
-    Scroll(){
-      Grid(){
+  build() {
+    Scroll() {
+      Grid() {
         ForEach(this.testItems, (item: TestData) => {
-          GridItem(){
+          GridItem() {
             TestGridItem({testItem: item})
           }
         }, (item: TestData) => item.id)
@@ -47,6 +47,9 @@ export struct TestGrid {
       .height(this.heightValue)
     }
     .scrollBar(BarState.Off)
-    .padding({left: ConfigData.VP_16, right: ConfigData.VP_16})
+    .padding({
+      left: ConfigData.VP_16,
+      right: ConfigData.VP_16
+    })
   }
 }
