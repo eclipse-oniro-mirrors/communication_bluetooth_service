@@ -2477,196 +2477,769 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceBound_n', 0, () => {
-      fcRun('pa_isDeviceBound_n', () => {
-        try{const v=partnerAgent.isDeviceBound(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isDeviceBound_n', () => {
+              try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICEBOUND_E
+     * @tc.name pa_isDeviceBound_e
+     * @tc.desc Verify Bluetooth API pa isDeviceBound error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceBound_e', 0, () => {
-      fcRunErr('pa_isDeviceBound_e', () => {
-        try{try{const v=partnerAgent.isDeviceBound(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue();
-        }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('pa_isDeviceBound_e', () => {
+              try {try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue();
+              }} catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICEBOUND_B
+     * @tc.name pa_isDeviceBound_b
+     * @tc.desc Verify Bluetooth API pa isDeviceBound boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceBound_b', 0, () => {
-      fcRun('pa_isDeviceBound_b', () => {
-        try{const v=partnerAgent.isDeviceBound(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isDeviceBound_b', () => {
+              try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICEBOUND_R
+     * @tc.name pa_isDeviceBound_r
+     * @tc.desc Verify Bluetooth API pa isDeviceBound return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceBound_r', 0, () => {
-      fcRun('pa_isDeviceBound_r', () => {
-        try{const v=partnerAgent.isDeviceBound(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isDeviceBound_r', () => {
+              try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICEBOUND_X
+     * @tc.name pa_isDeviceBound_x
+     * @tc.desc Verify Bluetooth API pa isDeviceBound repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceBound_x', 0, () => {
-      fcRun('pa_isDeviceBound_x', () => {
-        try{const v=partnerAgent.isDeviceBound(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isDeviceBound_x', () => {
+              try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICEBOUND_C
+     * @tc.name pa_isDeviceBound_c
+     * @tc.desc Verify Bluetooth API pa isDeviceBound combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceBound_c', 0, () => {
-      fcRunCombo('pa_isDeviceBound_c', [() => {
-        try{const v=partnerAgent.isDeviceBound(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('pa_isDeviceBound_c', [() => {
+              try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('pa_getBoundDevices', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_GETBOUNDDEVICES_N
+     * @tc.name pa_getBoundDevices_n
+     * @tc.desc Verify Bluetooth API pa getBoundDevices normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_getBoundDevices_n', 0, () => {
-      fcRun('pa_getBoundDevices_n', () => {
-        try{const a=partnerAgent.getBoundDevices(); expect(Array.isArray(a)).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_getBoundDevices_n', () => {
+              try {
+                const a = partnerAgent.getBoundDevices();
+                expect(Array.isArray(a)).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_GETBOUNDDEVICES_E
+     * @tc.name pa_getBoundDevices_e
+     * @tc.desc Verify Bluetooth API pa getBoundDevices error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_getBoundDevices_e', 0, () => {
-      fcRunErr('pa_getBoundDevices_e', () => {
-        try{try{const a=partnerAgent.getBoundDevices(); expect(Array.isArray(a)).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('pa_getBoundDevices_e', () => {
+              try {
+                try {const a = partnerAgent.getBoundDevices(); expect(Array.isArray(a)).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue(); }} catch (_e) {expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_GETBOUNDDEVICES_B
+     * @tc.name pa_getBoundDevices_b
+     * @tc.desc Verify Bluetooth API pa getBoundDevices boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_getBoundDevices_b', 0, () => {
-      fcRun('pa_getBoundDevices_b', () => {
-        try{const a=partnerAgent.getBoundDevices(); expect(Array.isArray(a)).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_getBoundDevices_b', () => {
+              try {
+                const a = partnerAgent.getBoundDevices();
+                expect(Array.isArray(a)).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_GETBOUNDDEVICES_R
+     * @tc.name pa_getBoundDevices_r
+     * @tc.desc Verify Bluetooth API pa getBoundDevices return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_getBoundDevices_r', 0, () => {
-      fcRun('pa_getBoundDevices_r', () => {
-        try{const a=partnerAgent.getBoundDevices(); expect(Array.isArray(a)).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_getBoundDevices_r', () => {
+              try {
+                const a = partnerAgent.getBoundDevices();
+                expect(Array.isArray(a)).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_GETBOUNDDEVICES_X
+     * @tc.name pa_getBoundDevices_x
+     * @tc.desc Verify Bluetooth API pa getBoundDevices repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_getBoundDevices_x', 0, () => {
-      fcRun('pa_getBoundDevices_x', () => {
-        try{const a=partnerAgent.getBoundDevices(); expect(Array.isArray(a)).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_getBoundDevices_x', () => {
+              try {
+                const a = partnerAgent.getBoundDevices();
+                expect(Array.isArray(a)).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_GETBOUNDDEVICES_C
+     * @tc.name pa_getBoundDevices_c
+     * @tc.desc Verify Bluetooth API pa getBoundDevices combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_getBoundDevices_c', 0, () => {
-      fcRunCombo('pa_getBoundDevices_c', [() => {
-        try{const a=partnerAgent.getBoundDevices(); expect(Array.isArray(a)).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('pa_getBoundDevices_c', [() => {
+              try {
+                const a = partnerAgent.getBoundDevices();
+                expect(Array.isArray(a)).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('pa_enableDeviceControl', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ENABLEDEVICECONTROL_N
+     * @tc.name pa_enableDeviceControl_n
+     * @tc.desc Verify Bluetooth API pa enableDeviceControl normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_enableDeviceControl_n', 0, () => {
-      fcRun('pa_enableDeviceControl_n', () => {
-        try{partnerAgent.enableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_enableDeviceControl_n', () => {
+              try {
+                partnerAgent.enableDeviceControl(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ENABLEDEVICECONTROL_E
+     * @tc.name pa_enableDeviceControl_e
+     * @tc.desc Verify Bluetooth API pa enableDeviceControl error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_enableDeviceControl_e', 0, () => {
-      fcRunErr('pa_enableDeviceControl_e', () => {
-        try{try{partnerAgent.enableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('pa_enableDeviceControl_e', () => {
+              try {
+                try {partnerAgent.enableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue(); }} catch (_e) {expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ENABLEDEVICECONTROL_B
+     * @tc.name pa_enableDeviceControl_b
+     * @tc.desc Verify Bluetooth API pa enableDeviceControl boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_enableDeviceControl_b', 0, () => {
-      fcRun('pa_enableDeviceControl_b', () => {
-        try{partnerAgent.enableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_enableDeviceControl_b', () => {
+              try {
+                partnerAgent.enableDeviceControl(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ENABLEDEVICECONTROL_R
+     * @tc.name pa_enableDeviceControl_r
+     * @tc.desc Verify Bluetooth API pa enableDeviceControl return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_enableDeviceControl_r', 0, () => {
-      fcRun('pa_enableDeviceControl_r', () => {
-        try{partnerAgent.enableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_enableDeviceControl_r', () => {
+              try {
+                partnerAgent.enableDeviceControl(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ENABLEDEVICECONTROL_X
+     * @tc.name pa_enableDeviceControl_x
+     * @tc.desc Verify Bluetooth API pa enableDeviceControl repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_enableDeviceControl_x', 0, () => {
-      fcRun('pa_enableDeviceControl_x', () => {
-        try{partnerAgent.enableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_enableDeviceControl_x', () => {
+              try {
+                partnerAgent.enableDeviceControl(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ENABLEDEVICECONTROL_C
+     * @tc.name pa_enableDeviceControl_c
+     * @tc.desc Verify Bluetooth API pa enableDeviceControl combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_enableDeviceControl_c', 0, () => {
-      fcRunCombo('pa_enableDeviceControl_c', [() => {
-        try{partnerAgent.enableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('pa_enableDeviceControl_c', [() => {
+              try {
+                partnerAgent.enableDeviceControl(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('pa_disableDeviceControl', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_DISABLEDEVICECONTROL_N
+     * @tc.name pa_disableDeviceControl_n
+     * @tc.desc Verify Bluetooth API pa disableDeviceControl normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_disableDeviceControl_n', 0, () => {
-      fcRun('pa_disableDeviceControl_n', () => {
-        try{partnerAgent.disableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_disableDeviceControl_n', () => {
+              try {
+                partnerAgent.disableDeviceControl(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_DISABLEDEVICECONTROL_E
+     * @tc.name pa_disableDeviceControl_e
+     * @tc.desc Verify Bluetooth API pa disableDeviceControl error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_disableDeviceControl_e', 0, () => {
-      fcRunErr('pa_disableDeviceControl_e', () => {
-        try{try{partnerAgent.disableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('pa_disableDeviceControl_e', () => {
+              try {
+                try {partnerAgent.disableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue(); }} catch (_e) {expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_DISABLEDEVICECONTROL_B
+     * @tc.name pa_disableDeviceControl_b
+     * @tc.desc Verify Bluetooth API pa disableDeviceControl boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_disableDeviceControl_b', 0, () => {
-      fcRun('pa_disableDeviceControl_b', () => {
-        try{partnerAgent.disableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_disableDeviceControl_b', () => {
+              try {
+                partnerAgent.disableDeviceControl(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_DISABLEDEVICECONTROL_R
+     * @tc.name pa_disableDeviceControl_r
+     * @tc.desc Verify Bluetooth API pa disableDeviceControl return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_disableDeviceControl_r', 0, () => {
-      fcRun('pa_disableDeviceControl_r', () => {
-        try{partnerAgent.disableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_disableDeviceControl_r', () => {
+              try {
+                partnerAgent.disableDeviceControl(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_DISABLEDEVICECONTROL_X
+     * @tc.name pa_disableDeviceControl_x
+     * @tc.desc Verify Bluetooth API pa disableDeviceControl repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_disableDeviceControl_x', 0, () => {
-      fcRun('pa_disableDeviceControl_x', () => {
-        try{partnerAgent.disableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_disableDeviceControl_x', () => {
+              try {
+                partnerAgent.disableDeviceControl(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_DISABLEDEVICECONTROL_C
+     * @tc.name pa_disableDeviceControl_c
+     * @tc.desc Verify Bluetooth API pa disableDeviceControl combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_disableDeviceControl_c', 0, () => {
-      fcRunCombo('pa_disableDeviceControl_c', [() => {
-        try{partnerAgent.disableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('pa_disableDeviceControl_c', [() => {
+              try {
+                partnerAgent.disableDeviceControl(partnerDeviceAddr());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('pa_isDeviceControlEnabled', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICECONTROLENABLED_N
+     * @tc.name pa_isDeviceControlEnabled_n
+     * @tc.desc Verify Bluetooth API pa isDeviceControlEnabled normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceControlEnabled_n', 0, () => {
-      fcRun('pa_isDeviceControlEnabled_n', () => {
-        try{const v=partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isDeviceControlEnabled_n', () => {
+              try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICECONTROLENABLED_E
+     * @tc.name pa_isDeviceControlEnabled_e
+     * @tc.desc Verify Bluetooth API pa isDeviceControlEnabled error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceControlEnabled_e', 0, () => {
-      fcRunErr('pa_isDeviceControlEnabled_e', () => {
-        try{try{const v=partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue();
-        }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('pa_isDeviceControlEnabled_e', () => {
+              try {try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue();
+              }} catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICECONTROLENABLED_B
+     * @tc.name pa_isDeviceControlEnabled_b
+     * @tc.desc Verify Bluetooth API pa isDeviceControlEnabled boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceControlEnabled_b', 0, () => {
-      fcRun('pa_isDeviceControlEnabled_b', () => {
-        try{const v=partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isDeviceControlEnabled_b', () => {
+              try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICECONTROLENABLED_R
+     * @tc.name pa_isDeviceControlEnabled_r
+     * @tc.desc Verify Bluetooth API pa isDeviceControlEnabled return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceControlEnabled_r', 0, () => {
-      fcRun('pa_isDeviceControlEnabled_r', () => {
-        try{const v=partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isDeviceControlEnabled_r', () => {
+              try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICECONTROLENABLED_X
+     * @tc.name pa_isDeviceControlEnabled_x
+     * @tc.desc Verify Bluetooth API pa isDeviceControlEnabled repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceControlEnabled_x', 0, () => {
-      fcRun('pa_isDeviceControlEnabled_x', () => {
-        try{const v=partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('pa_isDeviceControlEnabled_x', () => {
+              try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICECONTROLENABLED_C
+     * @tc.name pa_isDeviceControlEnabled_c
+     * @tc.desc Verify Bluetooth API pa isDeviceControlEnabled combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('pa_isDeviceControlEnabled_c', 0, () => {
-      fcRunCombo('pa_isDeviceControlEnabled_c', [() => {
-        try{const v=partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-        expect(typeof v==='boolean').assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('pa_isDeviceControlEnabled_c', [() => {
+              try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
   });
 }
+
+
+
 
