@@ -153,8 +153,12 @@ struct BleBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             this.forLoop()
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -184,6 +188,7 @@ struct BleBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let bleBenchmarkTestMessage = ""
             bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_s_1'))
               + testFunc(subscribeBLEDeviceFind)
@@ -205,7 +210,10 @@ struct BleBenchmarkTestManager {
               + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
             await sleep(1)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -235,6 +243,7 @@ struct BleBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let bleBenchmarkTestMessage = ""
             let i = 0
             for(i ; i<10 ; i++) {
@@ -272,7 +281,10 @@ struct BleBenchmarkTestManager {
               AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
               await sleep(1)
             }
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -300,9 +312,13 @@ struct BleBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let bleBenchmarkTestMessage = ""
             AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)
@@ -314,6 +330,7 @@ struct BleBenchmarkTestManager {
   }
 
   async forLoop() {
+    try {
     let bleBenchmarkTestMessage = ""
     //拼装数组
     let bleBenchmarkArray: Array<BTAutoArrayItem> = [
@@ -341,7 +358,10 @@ struct BleBenchmarkTestManager {
       AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
       await sleep(1)
     }
-  }
+  
+    } catch (e) {
+      LogUtil.info(`forLoop failed: ${e.message}, code: ${e.code}`);
+    }}
 }
 
 

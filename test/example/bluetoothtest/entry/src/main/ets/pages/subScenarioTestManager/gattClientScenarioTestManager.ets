@@ -171,6 +171,7 @@ struct GattClientScenarioTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let self = this
             const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
             let gattClientScenarioMessage = ""
@@ -284,7 +285,10 @@ struct GattClientScenarioTestManager {
             self.changeIndex = arr[12]
             gattClientScenarioMessage += AppStorage.get("Rssi") + "\n"
             AppStorage.setOrCreate("gattClientScenarioMessage", gattClientScenarioMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -314,6 +318,7 @@ struct GattClientScenarioTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let self = this
             const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
             let gattClientScenarioMessage = ""
@@ -361,7 +366,10 @@ struct GattClientScenarioTestManager {
             AppStorage.setOrCreate("gattClientScenarioMessage", gattClientScenarioMessage)
             await sleep(1)
 
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -390,9 +398,13 @@ struct GattClientScenarioTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let gattClientScenarioMessage = ""
             AppStorage.setOrCreate("gattClientScenarioMessage", gattClientScenarioMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))

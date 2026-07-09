@@ -201,6 +201,7 @@ struct GattServerScenarioTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let self = this
             const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
@@ -289,7 +290,10 @@ struct GattServerScenarioTestManager {
             gattServerScenarioMessage += AppStorage.get("descriptorWriteMsg") + "\n"
             AppStorage.setOrCreate("gattServerScenarioMessage", gattServerScenarioMessage)
             await sleep(3)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -319,6 +323,7 @@ struct GattServerScenarioTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let self = this
             const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
             let gattServerScenarioMessage = ""
@@ -356,7 +361,10 @@ struct GattServerScenarioTestManager {
             self.changeIndex = arr[14]
             await sleep(1)
             AppStorage.setOrCreate("gattServerScenarioMessage", gattServerScenarioMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -385,9 +393,13 @@ struct GattServerScenarioTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let gattServerScenarioMessage = ""
             AppStorage.setOrCreate("gattServerScenarioMessage", gattServerScenarioMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)

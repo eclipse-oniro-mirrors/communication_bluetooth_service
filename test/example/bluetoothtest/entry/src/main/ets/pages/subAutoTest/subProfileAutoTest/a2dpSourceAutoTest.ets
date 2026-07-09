@@ -160,8 +160,12 @@ struct A2dpSourceAutoTest {
         .height(ConfigData.VP_50)
         .margin({top: ConfigData.VP_15})
         .onClick(async(event: ClickEvent) => {
+          try {
           this.forLoop()
-        })
+        
+          } catch (e) {
+            LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+          }})
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
       .width(ConfigData.WH_100_100)
@@ -171,6 +175,7 @@ struct A2dpSourceAutoTest {
 
   //循环调用
   async forLoop() {
+    try {
     let a2dpSourceProfileAutoTestMessage = ""
     //拼装数组
     let a2dpAutoArray: Array<BTAutoArrayItem> = [
@@ -202,7 +207,10 @@ struct A2dpSourceAutoTest {
       await sleep(1)
       AppStorage.setOrCreate("a2dpSourceProfileAutoTestMessage", a2dpSourceProfileAutoTestMessage)
     }
-  }
+  
+    } catch (e) {
+      LogUtil.info(`forLoop failed: ${e.message}, code: ${e.code}`);
+    }}
 }
 
 async function sleep(time: number): Promise<void> {

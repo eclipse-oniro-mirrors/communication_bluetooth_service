@@ -169,8 +169,12 @@ struct HandsFreeAudioGatewayAutoTestManager {
         .height(ConfigData.VP_50)
         .margin({top: ConfigData.VP_15})
         .onClick(async(event: ClickEvent) => {
+          try {
           this.forLoop()
-        })
+        
+          } catch (e) {
+            LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+          }})
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
       .width(ConfigData.WH_100_100)
@@ -180,6 +184,7 @@ struct HandsFreeAudioGatewayAutoTestManager {
 
   //循环调用
   async forLoop() {
+    try {
     let hfpAutoTestMessage = ""
     //拼装数组
     let hfpAutoArray: Array<BTAutoArrayItem> = [
@@ -211,7 +216,10 @@ struct HandsFreeAudioGatewayAutoTestManager {
       await sleep(1)
       AppStorage.setOrCreate("hfpAutoTestMessage", hfpAutoTestMessage)
     }
-  }
+  
+    } catch (e) {
+      LogUtil.info(`forLoop failed: ${e.message}, code: ${e.code}`);
+    }}
 }
 
 async function sleep(time: number): Promise<void> {

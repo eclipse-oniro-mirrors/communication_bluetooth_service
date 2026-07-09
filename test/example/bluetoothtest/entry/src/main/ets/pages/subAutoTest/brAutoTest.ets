@@ -146,8 +146,12 @@ struct BrAutoTest {
         .height(ConfigData.VP_50)
         .margin({top: ConfigData.VP_15})
         .onClick(async(event: ClickEvent) => {
+          try {
           this.forLoop()
-        })
+        
+          } catch (e) {
+            LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+          }})
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
       .width(ConfigData.WH_100_100)
@@ -156,6 +160,7 @@ struct BrAutoTest {
   }
   //循环调用
   async forLoop() {
+    try {
     let brAutoTestMessage = ""
     //拼装数组
     let brAutoArray: Array<BTAutoArrayItem> = [
@@ -186,7 +191,10 @@ struct BrAutoTest {
       await sleep(1);
       AppStorage.setOrCreate("brAutoTestMessage", brAutoTestMessage);
     }
-  }
+  
+    } catch (e) {
+      LogUtil.info(`forLoop failed: ${e.message}, code: ${e.code}`);
+    }}
 }
 
 async function sleep(time: number): Promise<void> {

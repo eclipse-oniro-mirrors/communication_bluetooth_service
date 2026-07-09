@@ -222,6 +222,7 @@ struct GattServerVelocityBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let gattServerBenchmarkTestMessage = ""
             //创建Gatt服务器
             gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_12'))
@@ -259,7 +260,10 @@ struct GattServerVelocityBenchmarkTestManager {
               + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
             await sleep(2)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -289,6 +293,7 @@ struct GattServerVelocityBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let gattServerBenchmarkTestMessage = ""
             gattServerBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_18'))
               + testFunc(GattServerManagerInterface.testStopAdvertisingManager)
@@ -307,7 +312,10 @@ struct GattServerVelocityBenchmarkTestManager {
               + "\n"
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
             await sleep(2)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -335,9 +343,13 @@ struct GattServerVelocityBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let gattServerBenchmarkTestMessage = ""
             AppStorage.setOrCreate("gattServerBenchmarkTestMessage", gattServerBenchmarkTestMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)

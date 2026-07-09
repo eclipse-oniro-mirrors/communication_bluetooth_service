@@ -22,6 +22,7 @@ import btProfileModel from './btProfileModel'
 import promptAction from '@ohos.promptAction';
 import { fileIo as fs} from '@kit.CoreFileKit';
 import { opp} from '@kit.ConnectivityKit';
+import { BusinessError } from '@ohos.base';
 
 
 /**
@@ -252,6 +253,10 @@ export function testSendFile(serverMac: string, fileName: string, fileType: stri
       AppStorage.SetOrCreate("textMessage", textMessage)
       message = resStr($r('app.string.bluetoothtest_str_ofswjcgr'))
       promptAction.showToast({message: message})
+    }).catch((e: BusinessError) => {
+      LogUtil.info(`Failed to testSendFile. message: ${e.message}, code: ${e.code}`)
+      let errMessage = `Failed to testSendFile. message: ${e.message}, code: ${e.code}`
+      promptAction.showToast({message: errMessage})
     })
 
     return message
@@ -279,6 +284,10 @@ export function testSetIncomingFileConfirmation() {
         AppStorage.SetOrCreate("textMessage", textMessage)
         message = resStr($r('app.string.bluetoothtest_str_r_2')) + result
         promptAction.showToast({message: message})
+      }).catch((e: BusinessError) => {
+        LogUtil.info(`Failed to testSetIncomingFileConfirmation. message: ${e.message}, code: ${e.code}`)
+        let errMessage = `Failed to testSetIncomingFileConfirmation. message: ${e.message}, code: ${e.code}`
+        promptAction.showToast({message: errMessage})
       })
 
     return message
@@ -305,6 +314,10 @@ export function testGetCurrentTransferInformation() {
         AppStorage.SetOrCreate("textMessage", textMessage)
         message = resStr($r('app.string.bluetoothtest_str_dqxx')) + JSON.stringify(result)
         promptAction.showToast({message: message})
+      }).catch((e: BusinessError) => {
+        LogUtil.info(`Failed to testGetCurrentTransferInformation. message: ${e.message}, code: ${e.code}`)
+        let errMessage = `Failed to testGetCurrentTransferInformation. message: ${e.message}, code: ${e.code}`
+        promptAction.showToast({message: errMessage})
       })
 
     return message
@@ -330,6 +343,10 @@ export function testCancelTransfer() {
       AppStorage.SetOrCreate("textMessage", textMessage)
       message = resStr($r('app.string.bluetoothtest_str_qxcs')) + JSON.stringify(result)
       promptAction.showToast({message: message})
+    }).catch((e: BusinessError) => {
+      LogUtil.info(`Failed to testCancelTransfer. message: ${e.message}, code: ${e.code}`)
+      let errMessage = `Failed to testCancelTransfer. message: ${e.message}, code: ${e.code}`
+      promptAction.showToast({message: errMessage})
     })
 
     return message

@@ -204,6 +204,7 @@ struct GattClientVelocityBenchmarkTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let gattClientBenchmarkTestMessage = ""
             //创建Gatt客户端
             gattClientBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_11'))
@@ -260,7 +261,10 @@ struct GattClientVelocityBenchmarkTest {
               + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage", gattClientBenchmarkTestMessage)
             await sleep(2)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -290,6 +294,7 @@ struct GattClientVelocityBenchmarkTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let gattClientBenchmarkTestMessage = ""
 
             gattClientBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_23'))
@@ -303,7 +308,10 @@ struct GattClientVelocityBenchmarkTest {
               + "\n"
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage", gattClientBenchmarkTestMessage)
             await sleep(2)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -331,9 +339,13 @@ struct GattClientVelocityBenchmarkTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let gattClientBenchmarkTestMessage = ""
             AppStorage.setOrCreate("gattClientBenchmarkTestMessage", gattClientBenchmarkTestMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)

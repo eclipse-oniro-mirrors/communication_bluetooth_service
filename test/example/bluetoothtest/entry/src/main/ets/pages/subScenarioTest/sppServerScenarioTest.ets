@@ -166,6 +166,7 @@ struct SppServerScenarioTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppServerScenarioMessage = ""
             let self = this
             const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -242,7 +243,10 @@ struct SppServerScenarioTest {
             await sleep(2)
             AppStorage.setOrCreate("sppServerScenarioMessage", sppServerScenarioMessage)
 
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -272,6 +276,7 @@ struct SppServerScenarioTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppServerScenarioMessage = ""
             let self = this
             const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -304,7 +309,10 @@ struct SppServerScenarioTest {
             self.changeIndex = arr[14]
             AppStorage.setOrCreate("sppServerScenarioMessage", sppServerScenarioMessage)
             await sleep(1)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -333,9 +341,13 @@ struct SppServerScenarioTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppServerScenarioMessage = ""
             AppStorage.setOrCreate("sppServerScenarioMessage", sppServerScenarioMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)

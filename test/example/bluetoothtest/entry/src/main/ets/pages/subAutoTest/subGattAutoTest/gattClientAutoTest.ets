@@ -158,8 +158,12 @@ struct GattClientAutoTest {
           .height(ConfigData.VP_50)
           .margin({top: ConfigData.VP_15})
           .onClick(async(event: ClickEvent) => {
+            try {
             this.forLoop()
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
       }
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
       .width(ConfigData.WH_100_100)
@@ -169,6 +173,7 @@ struct GattClientAutoTest {
 
   //循环调用
   async forLoop() {
+    try {
     let gattClientAutoTestMessage = ""
 
     //拼装数组
@@ -200,7 +205,10 @@ struct GattClientAutoTest {
       await sleep(1)
       AppStorage.setOrCreate("gattClientAutoTestMessage", gattClientAutoTestMessage)
     }
-  }
+  
+    } catch (e) {
+      LogUtil.info(`forLoop failed: ${e.message}, code: ${e.code}`);
+    }}
 }
 
 async function sleep(time: number): Promise<void> {

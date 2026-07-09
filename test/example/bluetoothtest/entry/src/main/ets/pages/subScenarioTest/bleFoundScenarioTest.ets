@@ -163,8 +163,12 @@ struct BleFoundScenarioTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             this.forLoop()
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -194,6 +198,7 @@ struct BleFoundScenarioTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let bleFoundScenarioMessage = ""
             // 停止BLE扫描
             bleFoundScenarioMessage += BLEInterface.testStopBLEScan() + "\n"
@@ -214,7 +219,10 @@ struct BleFoundScenarioTest {
             //            self.changeIndex = arr[7]
             await sleep(1)
             AppStorage.setOrCreate("bleFoundScenarioMessage", bleFoundScenarioMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -243,9 +251,13 @@ struct BleFoundScenarioTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let bleFoundScenarioMessage = ""
             AppStorage.setOrCreate("bleFoundScenarioMessage", bleFoundScenarioMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)
@@ -258,6 +270,7 @@ struct BleFoundScenarioTest {
 
   //循环调用
   async forLoop() {
+    try {
     let bleFoundScenarioMessage = ""
     //拼装数组
     let bleScenarioArray: Array<BTAutoArrayItem> = [
@@ -289,7 +302,10 @@ struct BleFoundScenarioTest {
       await sleep(1)
       AppStorage.setOrCreate("bleFoundScenarioMessage", bleFoundScenarioMessage)
     }
-  }
+  
+    } catch (e) {
+      LogUtil.info(`forLoop failed: ${e.message}, code: ${e.code}`);
+    }}
 }
 
 async function sleep(time: number): Promise<void> {

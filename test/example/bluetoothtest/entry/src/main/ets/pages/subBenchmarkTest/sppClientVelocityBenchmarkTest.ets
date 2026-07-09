@@ -292,6 +292,7 @@ struct SppClientVelocityBenchmarkTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppClientVelocityBenchmarkTestMessage = ""
             let writeClientData = loopWriteDate()
             AppStorage.setOrCreate("writeClientData", writeClientData)
@@ -307,7 +308,10 @@ struct SppClientVelocityBenchmarkTest {
               sppClientVelocityBenchmarkTestMessage)
             await sleep(5)
 
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -337,6 +341,7 @@ struct SppClientVelocityBenchmarkTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppClientVelocityBenchmarkTestMessage = ""
 
             sppClientVelocityBenchmarkTestMessage +=
@@ -355,7 +360,10 @@ struct SppClientVelocityBenchmarkTest {
               sppClientVelocityBenchmarkTestMessage)
             await sleep(1)
 
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -383,10 +391,14 @@ struct SppClientVelocityBenchmarkTest {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppClientVelocityBenchmarkTestMessage = ""
             AppStorage.setOrCreate("sppClientVelocityBenchmarkTestMessage",
               sppClientVelocityBenchmarkTestMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)

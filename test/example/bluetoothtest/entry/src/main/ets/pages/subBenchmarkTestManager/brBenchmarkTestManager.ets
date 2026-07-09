@@ -150,8 +150,12 @@ struct BrBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             this.forLoop()
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -181,6 +185,7 @@ struct BrBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let brBenchmarkTestMessage = ""
             brBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_s'))
               + testFunc(subscribeBluetoothDeviceFind)
@@ -202,7 +207,10 @@ struct BrBenchmarkTestManager {
               + "\n"
             AppStorage.setOrCreate("brBenchmarkTestMessage", brBenchmarkTestMessage)
             await sleep(1)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -232,6 +240,7 @@ struct BrBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let brBenchmarkTestMessage = ""
             let i = 0
             for(i ; i<10 ; i++) {
@@ -265,7 +274,10 @@ struct BrBenchmarkTestManager {
               AppStorage.setOrCreate("brBenchmarkTestMessage", brBenchmarkTestMessage)
               await sleep(1)
             }
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -293,9 +305,13 @@ struct BrBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let brBenchmarkTestMessage = ""
             AppStorage.setOrCreate("brBenchmarkTestMessage", brBenchmarkTestMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)
@@ -307,6 +323,7 @@ struct BrBenchmarkTestManager {
   }
 
   async forLoop() {
+    try {
     let brBenchmarkTestMessage = ""
     //拼装数组
     let brBenchmarkArray: Array<BTAutoArrayItem> = [
@@ -332,7 +349,10 @@ struct BrBenchmarkTestManager {
       AppStorage.setOrCreate("brBenchmarkTestMessage", brBenchmarkTestMessage)
       await sleep(1)
     }
-  }
+  
+    } catch (e) {
+      LogUtil.info(`forLoop failed: ${e.message}, code: ${e.code}`);
+    }}
 }
 
 

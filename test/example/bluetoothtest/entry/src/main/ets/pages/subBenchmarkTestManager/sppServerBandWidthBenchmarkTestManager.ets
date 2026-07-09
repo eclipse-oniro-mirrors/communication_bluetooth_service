@@ -229,6 +229,7 @@ struct SppServerBandWidthBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppServerBandWidthBenchmarkTestMessage = ""
 
             let writeServerDataBW: string = loopWriteDate()
@@ -246,7 +247,10 @@ struct SppServerBandWidthBenchmarkTestManager {
               sppServerBandWidthBenchmarkTestMessage)
             await sleep(5)
 
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -276,6 +280,7 @@ struct SppServerBandWidthBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppServerBandWidthBenchmarkTestMessage = ""
 
             sppServerBandWidthBenchmarkTestMessage +=
@@ -301,7 +306,10 @@ struct SppServerBandWidthBenchmarkTestManager {
             AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage",
               sppServerBandWidthBenchmarkTestMessage)
             await sleep(1)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -329,10 +337,14 @@ struct SppServerBandWidthBenchmarkTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppServerBandWidthBenchmarkTestMessage = ""
             AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage",
               sppServerBandWidthBenchmarkTestMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)

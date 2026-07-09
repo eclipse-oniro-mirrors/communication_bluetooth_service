@@ -157,10 +157,14 @@ struct BrFoundScenarioTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             promptAction.showToast({message:
               resStr($r('app.string.bluetoothtest_str_ksblyfxcjcs'))})
             this.forLoop()
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -190,6 +194,7 @@ struct BrFoundScenarioTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let self = this
             //            const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
             let brFoundScenarioMessage = ""
@@ -208,7 +213,10 @@ struct BrFoundScenarioTestManager {
             //            self.changeIndex = arr[9]
             await sleep(1)
             AppStorage.setOrCreate("brFoundScenarioMessage", brFoundScenarioMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
           Button({
             type: ButtonType.Normal,
@@ -237,9 +245,13 @@ struct BrFoundScenarioTestManager {
           })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let brFoundScenarioMessage = ""
             AppStorage.setOrCreate("brFoundScenarioMessage", brFoundScenarioMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)
@@ -272,6 +284,7 @@ struct BrFoundScenarioTestManager {
 
   //循环调用
   async forLoop() {
+    try {
     let brFoundScenarioMessage = ""
     //拼装数组
     let brScenarioArray: Array<BTAutoArrayItem> = [
@@ -303,7 +316,10 @@ struct BrFoundScenarioTestManager {
       await sleep(1)
       AppStorage.setOrCreate("brFoundScenarioMessage", brFoundScenarioMessage)
     }
-  }
+  
+    } catch (e) {
+      LogUtil.info(`forLoop failed: ${e.message}, code: ${e.code}`);
+    }}
 }
 
 async function sleep(time: number): Promise<void> {
