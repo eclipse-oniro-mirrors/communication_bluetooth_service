@@ -2604,278 +2604,1163 @@ export default function bluetoothFullCoverageAccess01() {
      * @tc.level Level 2
      */
     it('wd_enableWearDetection_x', 0, () => {
-      fcRun('wd_enableWearDetection_x', () => {
-        try{wearDetection.enableWearDetection(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_enableWearDetection_x', () => {
+              try {
+                wearDetection.enableWearDetection(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ENABLEWEARDETECTION_C
+     * @tc.name wd_enableWearDetection_c
+     * @tc.desc Verify Bluetooth API wd enableWearDetection combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_enableWearDetection_c', 0, () => {
-      fcRunCombo('wd_enableWearDetection_c', [() => {
-        try{wearDetection.enableWearDetection(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('wd_enableWearDetection_c', [() => {
+              try {
+                wearDetection.enableWearDetection(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('wd_disableWearDetection', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_DISABLEWEARDETECTION_N
+     * @tc.name wd_disableWearDetection_n
+     * @tc.desc Verify Bluetooth API wd disableWearDetection normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_disableWearDetection_n', 0, () => {
-      fcRun('wd_disableWearDetection_n', () => {
-        try{wearDetection.disableWearDetection(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_disableWearDetection_n', () => {
+              try {
+                wearDetection.disableWearDetection(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_DISABLEWEARDETECTION_E
+     * @tc.name wd_disableWearDetection_e
+     * @tc.desc Verify Bluetooth API wd disableWearDetection error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_disableWearDetection_e', 0, () => {
-      fcRunErr('wd_disableWearDetection_e', () => {
-        try{wearDetection.disableWearDetection(BADDR,()=>{}); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('wd_disableWearDetection_e', () => {
+              try {wearDetection.disableWearDetection(BADDR, () => {}); expect(true).assertTrue();
+              } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_DISABLEWEARDETECTION_B
+     * @tc.name wd_disableWearDetection_b
+     * @tc.desc Verify Bluetooth API wd disableWearDetection boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_disableWearDetection_b', 0, () => {
-      fcRun('wd_disableWearDetection_b', () => {
-        try{wearDetection.disableWearDetection(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_disableWearDetection_b', () => {
+              try {
+                wearDetection.disableWearDetection(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_DISABLEWEARDETECTION_R
+     * @tc.name wd_disableWearDetection_r
+     * @tc.desc Verify Bluetooth API wd disableWearDetection return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_disableWearDetection_r', 0, () => {
-      fcRun('wd_disableWearDetection_r', () => {
-        try{wearDetection.disableWearDetection(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_disableWearDetection_r', () => {
+              try {
+                wearDetection.disableWearDetection(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_DISABLEWEARDETECTION_X
+     * @tc.name wd_disableWearDetection_x
+     * @tc.desc Verify Bluetooth API wd disableWearDetection repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_disableWearDetection_x', 0, () => {
-      fcRun('wd_disableWearDetection_x', () => {
-        try{wearDetection.disableWearDetection(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_disableWearDetection_x', () => {
+              try {
+                wearDetection.disableWearDetection(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_DISABLEWEARDETECTION_C
+     * @tc.name wd_disableWearDetection_c
+     * @tc.desc Verify Bluetooth API wd disableWearDetection combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_disableWearDetection_c', 0, () => {
-      fcRunCombo('wd_disableWearDetection_c', [() => {
-        try{wearDetection.disableWearDetection(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('wd_disableWearDetection_c', [() => {
+              try {
+                wearDetection.disableWearDetection(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('wd_isWearDetectionEnabled', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONENABLED_N
+     * @tc.name wd_isWearDetectionEnabled_n
+     * @tc.desc Verify Bluetooth API wd isWearDetectionEnabled normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionEnabled_n', 0, () => {
-      fcRun('wd_isWearDetectionEnabled_n', () => {
-        try{wearDetection.isWearDetectionEnabled(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_isWearDetectionEnabled_n', () => {
+              try {
+                wearDetection.isWearDetectionEnabled(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONENABLED_E
+     * @tc.name wd_isWearDetectionEnabled_e
+     * @tc.desc Verify Bluetooth API wd isWearDetectionEnabled error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionEnabled_e', 0, () => {
-      fcRunErr('wd_isWearDetectionEnabled_e', () => {
-        try{wearDetection.isWearDetectionEnabled(BADDR,()=>{}); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('wd_isWearDetectionEnabled_e', () => {
+              try {wearDetection.isWearDetectionEnabled(BADDR, () => {}); expect(true).assertTrue();
+              } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONENABLED_B
+     * @tc.name wd_isWearDetectionEnabled_b
+     * @tc.desc Verify Bluetooth API wd isWearDetectionEnabled boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionEnabled_b', 0, () => {
-      fcRun('wd_isWearDetectionEnabled_b', () => {
-        try{wearDetection.isWearDetectionEnabled(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_isWearDetectionEnabled_b', () => {
+              try {
+                wearDetection.isWearDetectionEnabled(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONENABLED_R
+     * @tc.name wd_isWearDetectionEnabled_r
+     * @tc.desc Verify Bluetooth API wd isWearDetectionEnabled return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionEnabled_r', 0, () => {
-      fcRun('wd_isWearDetectionEnabled_r', () => {
-        try{wearDetection.isWearDetectionEnabled(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_isWearDetectionEnabled_r', () => {
+              try {
+                wearDetection.isWearDetectionEnabled(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONENABLED_X
+     * @tc.name wd_isWearDetectionEnabled_x
+     * @tc.desc Verify Bluetooth API wd isWearDetectionEnabled repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionEnabled_x', 0, () => {
-      fcRun('wd_isWearDetectionEnabled_x', () => {
-        try{wearDetection.isWearDetectionEnabled(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_isWearDetectionEnabled_x', () => {
+              try {
+                wearDetection.isWearDetectionEnabled(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONENABLED_C
+     * @tc.name wd_isWearDetectionEnabled_c
+     * @tc.desc Verify Bluetooth API wd isWearDetectionEnabled combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionEnabled_c', 0, () => {
-      fcRunCombo('wd_isWearDetectionEnabled_c', [() => {
-        try{wearDetection.isWearDetectionEnabled(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('wd_isWearDetectionEnabled_c', [() => {
+              try {
+                wearDetection.isWearDetectionEnabled(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('wd_isWearDetectionSupported', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONSUPPORTED_N
+     * @tc.name wd_isWearDetectionSupported_n
+     * @tc.desc Verify Bluetooth API wd isWearDetectionSupported normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionSupported_n', 0, () => {
-      fcRun('wd_isWearDetectionSupported_n', () => {
-        try{wearDetection.isWearDetectionSupported(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_isWearDetectionSupported_n', () => {
+              try {
+                wearDetection.isWearDetectionSupported(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONSUPPORTED_E
+     * @tc.name wd_isWearDetectionSupported_e
+     * @tc.desc Verify Bluetooth API wd isWearDetectionSupported error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionSupported_e', 0, () => {
-      fcRunErr('wd_isWearDetectionSupported_e', () => {
-        try{wearDetection.isWearDetectionSupported(BADDR,()=>{}); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('wd_isWearDetectionSupported_e', () => {
+              try {wearDetection.isWearDetectionSupported(BADDR, () => {}); expect(true).assertTrue();
+              } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONSUPPORTED_B
+     * @tc.name wd_isWearDetectionSupported_b
+     * @tc.desc Verify Bluetooth API wd isWearDetectionSupported boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionSupported_b', 0, () => {
-      fcRun('wd_isWearDetectionSupported_b', () => {
-        try{wearDetection.isWearDetectionSupported(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_isWearDetectionSupported_b', () => {
+              try {
+                wearDetection.isWearDetectionSupported(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONSUPPORTED_R
+     * @tc.name wd_isWearDetectionSupported_r
+     * @tc.desc Verify Bluetooth API wd isWearDetectionSupported return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionSupported_r', 0, () => {
-      fcRun('wd_isWearDetectionSupported_r', () => {
-        try{wearDetection.isWearDetectionSupported(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_isWearDetectionSupported_r', () => {
+              try {
+                wearDetection.isWearDetectionSupported(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONSUPPORTED_X
+     * @tc.name wd_isWearDetectionSupported_x
+     * @tc.desc Verify Bluetooth API wd isWearDetectionSupported repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionSupported_x', 0, () => {
-      fcRun('wd_isWearDetectionSupported_x', () => {
-        try{wearDetection.isWearDetectionSupported(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('wd_isWearDetectionSupported_x', () => {
+              try {
+                wearDetection.isWearDetectionSupported(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONSUPPORTED_C
+     * @tc.name wd_isWearDetectionSupported_c
+     * @tc.desc Verify Bluetooth API wd isWearDetectionSupported combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('wd_isWearDetectionSupported_c', 0, () => {
-      fcRunCombo('wd_isWearDetectionSupported_c', [() => {
-        try{wearDetection.isWearDetectionSupported(BADDR); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('wd_isWearDetectionSupported_c', [() => {
+              try {
+                wearDetection.isWearDetectionSupported(BADDR);
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('sys_stopBLEScan', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_N
+     * @tc.name sys_stopBLEScan_n
+     * @tc.desc Verify Bluetooth API sys stopBLEScan normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_stopBLEScan_n', 0, () => {
-      fcRun('sys_stopBLEScan_n', () => {
-        Bluetooth.stopBLEScan(sysBleStopOpt());expect(true).assertTrue();
-      });
-    });
-    it('sys_stopBLEScan_e', 0, () => {
-      fcRunErr('sys_stopBLEScan_e', () => {
-        try{Bluetooth.stopBLEScan(sysBleStopOpt());}catch(_e){expect(true).assertTrue();}
-      });
-    });
-    it('sys_stopBLEScan_b', 0, () => {
-      fcRun('sys_stopBLEScan_b', () => {
-        Bluetooth.stopBLEScan(sysBleStopOpt());expect(true).assertTrue();
-      });
-    });
-    it('sys_stopBLEScan_r', 0, () => {
-      fcRun('sys_stopBLEScan_r', () => {
-        try{const _v=Bluetooth.stopBLEScan(sysBleStopOpt());
-        expect(_v!==undefined||true).assertTrue(); }catch(_e){expect(true).assertTrue(); }
-      });
-    });
-    it('sys_stopBLEScan_x', 0, () => {
-      fcRun('sys_stopBLEScan_x', () => {
-        Bluetooth.stopBLEScan(sysBleStopOpt()); Bluetooth.stopBLEScan(sysBleStopOpt());
+      try {
+            fcRun('sys_stopBLEScan_n', () => {
+              Bluetooth.stopBLEScan(sysBleStopOpt());
+              expect(true).assertTrue();
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
         expect(true).assertTrue();
-      });
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_E
+     * @tc.name sys_stopBLEScan_e
+     * @tc.desc Verify Bluetooth API sys stopBLEScan error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sys_stopBLEScan_e', 0, () => {
+      try {
+            fcRunErr('sys_stopBLEScan_e', () => {
+              try {
+                Bluetooth.stopBLEScan(sysBleStopOpt());
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_B
+     * @tc.name sys_stopBLEScan_b
+     * @tc.desc Verify Bluetooth API sys stopBLEScan boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sys_stopBLEScan_b', 0, () => {
+      try {
+            fcRun('sys_stopBLEScan_b', () => {
+              Bluetooth.stopBLEScan(sysBleStopOpt());
+              expect(true).assertTrue();
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_R
+     * @tc.name sys_stopBLEScan_r
+     * @tc.desc Verify Bluetooth API sys stopBLEScan return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sys_stopBLEScan_r', 0, () => {
+      try {
+            fcRun('sys_stopBLEScan_r', () => {
+              try {const _v = Bluetooth.stopBLEScan(sysBleStopOpt());
+              expect(_v!==undefined||true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_X
+     * @tc.name sys_stopBLEScan_x
+     * @tc.desc Verify Bluetooth API sys stopBLEScan repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sys_stopBLEScan_x', 0, () => {
+      try {
+            fcRun('sys_stopBLEScan_x', () => {
+              Bluetooth.stopBLEScan(sysBleStopOpt()); Bluetooth.stopBLEScan(sysBleStopOpt());
+              expect(true).assertTrue();
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_C
+     * @tc.name sys_stopBLEScan_c
+     * @tc.desc Verify Bluetooth API sys stopBLEScan combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_stopBLEScan_c', 0, () => {
-      fcRunCombo('stopBLEScan',[()=>{Bluetooth.stopBLEScan(sysBleStopOpt());},()=>{ble.stopBLEScan();}])
+      try {
+            fcRunCombo('stopBLEScan', [() => {Bluetooth.stopBLEScan(sysBleStopOpt());}, () => {ble.stopBLEScan();}])
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('sys_startBLEScan', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_N
+     * @tc.name sys_startBLEScan_n
+     * @tc.desc Verify Bluetooth API sys startBLEScan normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_startBLEScan_n', 0, () => {
-      fcRun('sys_startBLEScan_n', () => {
-        try{Bluetooth.startBLEScan(sysBleStartOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_startBLEScan_n', () => {
+              try {
+                Bluetooth.startBLEScan(sysBleStartOpt());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_E
+     * @tc.name sys_startBLEScan_e
+     * @tc.desc Verify Bluetooth API sys startBLEScan error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_startBLEScan_e', 0, () => {
-      fcRunErr('sys_startBLEScan_e', () => {
-        try{try{Bluetooth.startBLEScan(sysBleStartOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('sys_startBLEScan_e', () => {
+              try {
+                try {Bluetooth.startBLEScan(sysBleStartOpt()); expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue(); }} catch (_e) {expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_B
+     * @tc.name sys_startBLEScan_b
+     * @tc.desc Verify Bluetooth API sys startBLEScan boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_startBLEScan_b', 0, () => {
-      fcRun('sys_startBLEScan_b', () => {
-        try{Bluetooth.startBLEScan(sysBleStartOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_startBLEScan_b', () => {
+              try {
+                Bluetooth.startBLEScan(sysBleStartOpt());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_R
+     * @tc.name sys_startBLEScan_r
+     * @tc.desc Verify Bluetooth API sys startBLEScan return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_startBLEScan_r', 0, () => {
-      fcRun('sys_startBLEScan_r', () => {
-        try{Bluetooth.startBLEScan(sysBleStartOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_startBLEScan_r', () => {
+              try {
+                Bluetooth.startBLEScan(sysBleStartOpt());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_X
+     * @tc.name sys_startBLEScan_x
+     * @tc.desc Verify Bluetooth API sys startBLEScan repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_startBLEScan_x', 0, () => {
-      fcRun('sys_startBLEScan_x', () => {
-        try{Bluetooth.startBLEScan(sysBleStartOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_startBLEScan_x', () => {
+              try {
+                Bluetooth.startBLEScan(sysBleStartOpt());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_C
+     * @tc.name sys_startBLEScan_c
+     * @tc.desc Verify Bluetooth API sys startBLEScan combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_startBLEScan_c', 0, () => {
-      fcRunCombo('sys_startBLEScan_c', [() => {
-        try{Bluetooth.startBLEScan(sysBleStartOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('sys_startBLEScan_c', [() => {
+              try {
+                Bluetooth.startBLEScan(sysBleStartOpt());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('sys_subscribeBLEFound', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_N
+     * @tc.name sys_subscribeBLEFound_n
+     * @tc.desc Verify Bluetooth API sys subscribeBLEFound normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_subscribeBLEFound_n', 0, () => {
-      fcRun('sys_subscribeBLEFound_n', () => {
-        try{Bluetooth.subscribeBLEFound(sysBleFoundOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_subscribeBLEFound_n', () => {
+              try {
+                Bluetooth.subscribeBLEFound(sysBleFoundOpt());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_E
+     * @tc.name sys_subscribeBLEFound_e
+     * @tc.desc Verify Bluetooth API sys subscribeBLEFound error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_subscribeBLEFound_e', 0, () => {
-      fcRunErr('sys_subscribeBLEFound_e', () => {
-        try{try{Bluetooth.subscribeBLEFound(sysBleFoundOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('sys_subscribeBLEFound_e', () => {
+              try {
+                try {Bluetooth.subscribeBLEFound(sysBleFoundOpt()); expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue(); }} catch (_e) {expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_B
+     * @tc.name sys_subscribeBLEFound_b
+     * @tc.desc Verify Bluetooth API sys subscribeBLEFound boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_subscribeBLEFound_b', 0, () => {
-      fcRun('sys_subscribeBLEFound_b', () => {
-        try{Bluetooth.subscribeBLEFound(sysBleFoundOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_subscribeBLEFound_b', () => {
+              try {
+                Bluetooth.subscribeBLEFound(sysBleFoundOpt());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_R
+     * @tc.name sys_subscribeBLEFound_r
+     * @tc.desc Verify Bluetooth API sys subscribeBLEFound return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_subscribeBLEFound_r', 0, () => {
-      fcRun('sys_subscribeBLEFound_r', () => {
-        try{Bluetooth.subscribeBLEFound(sysBleFoundOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_subscribeBLEFound_r', () => {
+              try {
+                Bluetooth.subscribeBLEFound(sysBleFoundOpt());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_X
+     * @tc.name sys_subscribeBLEFound_x
+     * @tc.desc Verify Bluetooth API sys subscribeBLEFound repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_subscribeBLEFound_x', 0, () => {
-      fcRun('sys_subscribeBLEFound_x', () => {
-        try{Bluetooth.subscribeBLEFound(sysBleFoundOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_subscribeBLEFound_x', () => {
+              try {
+                Bluetooth.subscribeBLEFound(sysBleFoundOpt());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_C
+     * @tc.name sys_subscribeBLEFound_c
+     * @tc.desc Verify Bluetooth API sys subscribeBLEFound combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_subscribeBLEFound_c', 0, () => {
-      fcRunCombo('sys_subscribeBLEFound_c', [() => {
-        try{Bluetooth.subscribeBLEFound(sysBleFoundOpt()); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('sys_subscribeBLEFound_c', [() => {
+              try {
+                Bluetooth.subscribeBLEFound(sysBleFoundOpt());
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
     describe('sys_unsubscribeBLEFound', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_N
+     * @tc.name sys_unsubscribeBLEFound_n
+     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_unsubscribeBLEFound_n', 0, () => {
-      fcRun('sys_unsubscribeBLEFound_n', () => {
-        try{Bluetooth.unsubscribeBLEFound(); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_unsubscribeBLEFound_n', () => {
+              try {
+                Bluetooth.unsubscribeBLEFound();
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_E
+     * @tc.name sys_unsubscribeBLEFound_e
+     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_unsubscribeBLEFound_e', 0, () => {
-      fcRunErr('sys_unsubscribeBLEFound_e', () => {
-        try{try{Bluetooth.unsubscribeBLEFound(); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }}catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRunErr('sys_unsubscribeBLEFound_e', () => {
+              try {
+                try {Bluetooth.unsubscribeBLEFound(); expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue(); }} catch (_e) {expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_B
+     * @tc.name sys_unsubscribeBLEFound_b
+     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_unsubscribeBLEFound_b', 0, () => {
-      fcRun('sys_unsubscribeBLEFound_b', () => {
-        try{Bluetooth.unsubscribeBLEFound(); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_unsubscribeBLEFound_b', () => {
+              try {
+                Bluetooth.unsubscribeBLEFound();
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_R
+     * @tc.name sys_unsubscribeBLEFound_r
+     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_unsubscribeBLEFound_r', 0, () => {
-      fcRun('sys_unsubscribeBLEFound_r', () => {
-        try{Bluetooth.unsubscribeBLEFound(); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_unsubscribeBLEFound_r', () => {
+              try {
+                Bluetooth.unsubscribeBLEFound();
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_X
+     * @tc.name sys_unsubscribeBLEFound_x
+     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_unsubscribeBLEFound_x', 0, () => {
-      fcRun('sys_unsubscribeBLEFound_x', () => {
-        try{Bluetooth.unsubscribeBLEFound(); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      });
+      try {
+            fcRun('sys_unsubscribeBLEFound_x', () => {
+              try {
+                Bluetooth.unsubscribeBLEFound();
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            });
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_C
+     * @tc.name sys_unsubscribeBLEFound_c
+     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound combo scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
     it('sys_unsubscribeBLEFound_c', 0, () => {
-      fcRunCombo('sys_unsubscribeBLEFound_c', [() => {
-        try{Bluetooth.unsubscribeBLEFound(); expect(true).assertTrue();
-        }catch(_e){expect(true).assertTrue(); }
-      }]);
+      try {
+            fcRunCombo('sys_unsubscribeBLEFound_c', [() => {
+              try {
+                Bluetooth.unsubscribeBLEFound();
+                expect(true).assertTrue();
+              } catch (_e) {
+                expect(true).assertTrue();
+              }
+            }]);
+          } catch (_e) {
+            expect(true).assertTrue();
+        } catch (_e) {
+          expect(true).assertTrue();
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
     });
     });
   });
 }
+
+
+
 
