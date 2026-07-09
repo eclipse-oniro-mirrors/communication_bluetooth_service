@@ -57,7 +57,7 @@ export function fcRunErr(tag: string, fn: () => void): void {
 }
 
 /** Return path: run fn and apply checker on result; checker failure is non-fatal. */
-export function fcRunRet<T>(tag: string, fn: () => T, check: (v: T) => boolean): void {
+export function fcRunRet < T > (tag: string, fn: () => T, check: (v: T) => boolean): void {
   try {
     const v = fn();
     if (check(v)) {
@@ -73,7 +73,7 @@ export function fcRunRet<T>(tag: string, fn: () => T, check: (v: T) => boolean):
 }
 
 /** Combo: sequential API calls in one it(). */
-export function fcRunCombo(tag: string, steps: Array<() => void>): void {
+export function fcRunCombo(tag: string, steps: Array < () => void > ): void {
   for (let i = 0; i < steps.length; i++) {
     try {
       steps[i]();
@@ -217,3 +217,5 @@ export function bleNotifyChar(): ble.NotifyCharacteristic {
 export function gattServerResponse(): ble.ServerResponse {
   return { deviceId: BADDR, transId: 0, status: 0, offset: 0, value: buf0() };
 }
+
+
