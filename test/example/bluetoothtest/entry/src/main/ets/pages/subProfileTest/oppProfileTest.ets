@@ -17,14 +17,14 @@ import { resStr} from '../../Utils/resString';
 
 import { PairDevices, testItemFromRouterOrPlaceholder} from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
-import { ContentTable} from '../../Component/contentTable';
+import { ContentTable} from '../../component/contentTable';
 import { initOppProfileApiData} from '../../MainAbility/model/testDataModels'
 import router from '@ohos.router';
 import btProfileModel from '../../MainAbility/model/btProfileModel';
 import ConfigData from '../../Utils/ConfigData';
 import LogUtil from '../../Utils/LogUtil';
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import bluetooth from '@ohos.bluetooth';
 import { TestData} from '../../MainAbility/model/testData'
 import bluetoothManager from '@ohos.bluetoothManager';
@@ -53,28 +53,32 @@ struct OppProfileTest {
   private testItem: TestData = testItemFromRouterOrPlaceholder()
   private pairDevices: PairDevices[] = [];
 
-  aboutToAppear(){
-    LogUtil.log(ConfigData.TAG + "xzyj: aboutToAppear a2dp: deviceId " + JSON.stringify(this.deviceId));
+  aboutToAppear() {
+    LogUtil.log(ConfigData.TAG + "xzyj: aboutToAppear a2dp: deviceId " +
+      JSON.stringify(this.deviceId));
     AppStorage.setOrCreate("deviceId", this.deviceId)
     btProfileModel.initProfile()
     this.getPairDevice();
   }
 
-  getPairDevice(){
+  getPairDevice() {
     let macs = bluetooth.getPairedDevices();
     LogUtil.info("OppSend getPairDevice macs: " + JSON.stringify(macs));
-    for(let i = 0 ; i<macs.length ; i++ ){
-      let name = bluetooth.getRemoteDeviceName(macs[ i ]);
+    for(let i = 0 ; i<macs.length ; i++) {
+      let name = bluetooth.getRemoteDeviceName(macs[i]);
       LogUtil.info("OppSend getPairDevice name: " + JSON.stringify(name));
-      this.pairDevices.push({id: macs[ i ], name: name} as PairDevices);
+      this.pairDevices.push({
+        id: macs[i],
+        name: name
+      } as PairDevices);
     }
     LogUtil.info("OppSend getPairDevice pairDevices: " + JSON.stringify(this.pairDevices));
   }
 
-  build(){
-    Row(){
-      Column(){
-        Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Row() {
+      Column() {
+        Stack({alignContent: Alignment.TopStart}) {
           TestImageDisplay({testItem: this.testItem})
           PageTitle({testItem: this.testItem})
           .accessibilityLevel('yes')
@@ -87,30 +91,35 @@ struct OppProfileTest {
         Text(this.hasProfile ? this.profileExist: this.profileNotExist)
           .margin({top: ConfigData.VP_10})
           .fontSize(ConfigData.VP_20)
-          .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') : $r('app.color.color_FF0000_red'))
-          .border({width: 0.5})
+          .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') :
+            $r('app.color.color_FF0000_red'))
+          .border({width: ConfigData.BORDER_WIDTH_HALF})
           .padding(ConfigData.VP_5)
           .fontStyle(FontStyle.Italic);
-        Column(){
-          Column(){
-            Scroll(){
-              Column(){
+        Column() {
+          Column() {
+            Scroll() {
+              Column() {
                 Text($r('app.string.bluetoothtest_text_ypdsblbdjxzsb'))
                   .fontSize(ConfigData.VP_20)
                   .fontWeight(FontWeight.Bold)
                   .margin({top: ConfigData.VP_5})
-                Scroll(){
-                  List({space: ConfigData.VP_5}){
+                Scroll() {
+                  List({space: ConfigData.VP_5}) {
                     ForEach(
                       this.pairDevices.length > 0 ? this.pairDevices:
-                        [{ id: '__uitest_placeholder__', name: '—'} as PairDevices],
+                        [{
+                          id: '__uitest_placeholder__',
+                          name: '—'
+                        } as PairDevices],
                       (item: PairDevices, index: number) => {
-                        ListItem(){
+                        ListItem() {
                           Text(item.name)
                             .fontSize(ConfigData.VP_25)
                             .width(ConfigData.WH_80_100)
                             .margin({left: ConfigData.PCT_10})
-                            .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") : $r("app.color.white"))
+                            .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") :
+                              $r("app.color.white"))
                             .border({
                               radius: 5
                             })
@@ -119,7 +128,7 @@ struct OppProfileTest {
                           `pages_subProfileTest_oppProfileTest__li_${index}`)
                         .accessibilityLevel('yes')
                         .onClick(() => {
-                          if (item.id !== '__uitest_placeholder__'){
+                          if (item.id !== '__uitest_placeholder__') {
                             this.serverMac = item.id;
                           }
                         })
@@ -156,16 +165,23 @@ struct OppProfileTest {
             .height(ConfigData.HEIGHT_1_VP)
             .backgroundColor($r('app.color.black'));
 
-          Scroll(){
-            Column(){
+          Scroll() {
+            Column() {
               Text(resStr($r('app.string.label_api_result_space')) + this.oppMessage)
                 .fontSize(ConfigData.VP_17)
                 .textAlign(TextAlign.Start)
-                .margin({top: ConfigData.VP_5, left: ConfigData.VP_10})
+                .margin({
+                  top: ConfigData.VP_5,
+                  left: ConfigData.VP_10
+                })
                 .width(ConfigData.WH_100_100)
-              Text(resStr($r('app.string.label_connection_state_change')) + this.connectionStateInfo)
+              Text(resStr($r('app.string.label_connection_state_change')) +
+                this.connectionStateInfo)
                 .fontSize(ConfigData.VP_17)
-                .margin({top: ConfigData.VP_10, left: ConfigData.VP_10})
+                .margin({
+                  top: ConfigData.VP_10,
+                  left: ConfigData.VP_10
+                })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
             }
@@ -183,7 +199,7 @@ struct OppProfileTest {
             .padding(ConfigData.VP_5)
             .fontSize(ConfigData.VP_17)
             .fontColor($r('app.color.color_4444444_grey'));
-          Column(){
+          Column() {
             ContentTable({apiItems: initOppProfileApiData()})
           }
           .height(ConfigData.PCT_66)
@@ -191,7 +207,8 @@ struct OppProfileTest {
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)
         .height(ConfigData.WH_100_100)
-        .visibility(shouldSkipBluetoothPermissionRequest() || this.hasProfile ? Visibility.Visible: Visibility.Hidden);
+        .visibility(shouldSkipBluetoothPermissionRequest()
+          || this.hasProfile ? Visibility.Visible: Visibility.Hidden);
       }
       .width(ConfigData.WH_100_100)
     }
@@ -200,15 +217,15 @@ struct OppProfileTest {
     .alignItems(VerticalAlign.Top)
   }
 
-  onPageShow(){
+  onPageShow() {
     this.bluetoothState = btProfileModel.getBluetoothState();
-    if ( this.bluetoothState == btProfileModel.BLUETOOTH_STATE_OFF ){
+    if (this.bluetoothState == btProfileModel.BLUETOOTH_STATE_OFF) {
       this.profileNotExist = resStr($r('app.string.bluetoothtest_str_lywdkqxkqlyhzsy'))
       return;
     }
     this.hasProfile = btProfileModel.hasProfile(btProfileModel.PROFILE_OPP);
     LogUtil.info("bt_test pageType: " + this.pageType);
-    switch ( this.pageType ){
+    switch (this.pageType) {
       //      case 0:
       //        this.title = $r('app.string.a2dp_sink_profile_test_title');
       //        this.profileExist = "A2DP_SINK exist";
@@ -281,11 +298,13 @@ struct OppProfileTest {
     AppStorage.setOrCreate("profileType", this.profileType)
     promptAction.showToast({message: this.profileType.toString()})
     this.hasProfile = btProfileModel.hasProfile(this.profileType);
-    if ( this.hasProfile ){
+    if (this.hasProfile) {
       LogUtil.info("bt_test registered connectionStateChange type: " + this.profileType);
       if (this.profileType === btProfileModel.PROFILE_A2DP_SOURCE ||
-        this.profileType === btProfileModel.PROFILE_HANDS_FREE_AUDIO_GATEWAY){
-        (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).on("connectionStateChange", (date: bluetoothManager.StateChangeParam) => {
+        this.profileType === btProfileModel.PROFILE_HANDS_FREE_AUDIO_GATEWAY) {
+        (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile |
+          bluetooth.HandsFreeAudioGatewayProfile).on("connectionStateChange",
+            (date: bluetoothManager.StateChangeParam) => {
           this.connectionStateInfo = JSON.stringify(date);
           this.btConnectionState = date.state;
           AppStorage.setOrCreate("btConnectionState", this.btConnectionState)
@@ -294,11 +313,12 @@ struct OppProfileTest {
     }
   }
 
-  onPageHide(){
-    if ( this.hasProfile ){
+  onPageHide() {
+    if (this.hasProfile) {
       if (this.profileType === btProfileModel.PROFILE_A2DP_SOURCE ||
-        this.profileType === btProfileModel.PROFILE_HANDS_FREE_AUDIO_GATEWAY){
-        (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile | bluetooth.HandsFreeAudioGatewayProfile).off("connectionStateChange");
+        this.profileType === btProfileModel.PROFILE_HANDS_FREE_AUDIO_GATEWAY) {
+        (btProfileModel.getProfile(this.profileType) as bluetooth.A2dpSourceProfile |
+          bluetooth.HandsFreeAudioGatewayProfile).off("connectionStateChange");
         }
     }
     LogUtil.info("bt_test Ability end");

@@ -32,9 +32,9 @@ export function testGattClient(): string {
     let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGattClient. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGattClient. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGattClient. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testGattClient. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -46,9 +46,9 @@ export function testGattServer(): string {
     let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGattServer. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGattServer. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGattServer. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testGattServer. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }

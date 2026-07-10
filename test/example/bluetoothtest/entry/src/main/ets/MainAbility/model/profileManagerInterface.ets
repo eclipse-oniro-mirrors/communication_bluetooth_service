@@ -18,10 +18,14 @@ import { resStr} from '../../Utils/resString';
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction'
 
-const PAGE_URI_GET_A2DP_SOURCE_PROFILE_MANAGER = 'pages/subProfileTestManager/a2dpSourceProfileTestManager';
-const PAGE_URI_GET_HANDS_FREE_AUDIO_GATEWAY_PROFILE_MANAGER = 'pages/subProfileTestManager/handsFreeAudioGatewayProfileTestManager';
-const PAGE_URI_GET_HID_HOST_PROFILE_MANAGER = 'pages/subProfileTestManager/hidHostProfileTestManager';
-const PAGE_URI_GET_Pan_NETWORK_PROFILE_MANAGER = 'pages/subProfileTestManager/panNetworkProfileTestManager';
+const PAGE_URI_GET_A2DP_SOURCE_PROFILE_MANAGER =
+  'pages/subProfileTestManager/a2dpSourceProfileTestManager';
+const PAGE_URI_GET_HANDS_FREE_AUDIO_GATEWAY_PROFILE_MANAGER =
+  'pages/subProfileTestManager/handsFreeAudioGatewayProfileTestManager';
+const PAGE_URI_GET_HID_HOST_PROFILE_MANAGER =
+  'pages/subProfileTestManager/hidHostProfileTestManager';
+const PAGE_URI_GET_Pan_NETWORK_PROFILE_MANAGER =
+  'pages/subProfileTestManager/panNetworkProfileTestManager';
 
 
 export function testA2dpSourceProfileManager(): string {

@@ -16,12 +16,12 @@
 import ConfigData from '../Utils/ConfigData';
 import { Category, TestData} from '../MainAbility/model/testData'
 import { initTestData} from '../MainAbility/model/testDataModels'
-import { MainPageTitle} from '../Component/mainPageTitle';
-import { ManualApiTest} from '../Component/manualApiTestComponent';
-import { ManualSceneTest} from '../Component/manualSceneTest';
-import { AutoTest} from '../Component/autoTest';
-import { ProfileTest} from '../Component/profileTest';
-import { BenchmarkTest} from '../Component/benchmarkTest';
+import { MainPageTitle} from '../component/mainPageTitle';
+import { ManualApiTest} from '../component/manualApiTestComponent';
+import { ManualSceneTest} from '../component/manualSceneTest';
+import { AutoTest} from '../component/autoTest';
+import { ProfileTest} from '../component/profileTest';
+import { BenchmarkTest} from '../component/benchmarkTest';
 import abilityAccessCtrl from '@ohos.abilityAccessCtrl';
 import common from '@ohos.app.ability.common';
 import { Permissions} from '@ohos.abilityAccessCtrl';
@@ -36,84 +36,93 @@ struct TestCategory {
 
   /** Tab 标签栏始终可见；UiTest 的 id 挂在标签上，避免仅当前 Tab 的 TabContent 被挂载导致查找不到。 */
   @Builder
-  HomeTabBarItem(label: Resource, stableId: string){
-    Column(){
+  HomeTabBarItem(label: Resource, stableId: string) {
+    Column() {
       Text(label)
         .id(stableId)
         .accessibilityLevel('yes')
-        .fontSize(12)
+        .fontSize(ConfigData.font_12)
         .margin({top: ConfigData.VP_5})
     }
     .accessibilityLevel('yes')
   }
 
-  build(){
-    Stack(){
-      Tabs(){
-        TabContent(){
-          ManualApiTest({testItems: this.testItems.filter(item => (item.category === Category.API))})
+  build() {
+    Stack() {
+      Tabs() {
+        TabContent() {
+          ManualApiTest({testItems: this.testItems.filter(item => (item.category ===
+            Category.API))})
         }
         .tabBar((): void => {
           this.HomeTabBarItem($r("app.string.api"), 'pages_homePage__tc_0');
         })
 
-        TabContent(){
-          ManualApiTest({testItems: this.testItems.filter(item => (item.category === Category.APIManager))})
+        TabContent() {
+          ManualApiTest({testItems: this.testItems.filter(item => (item.category ===
+            Category.APIManager))})
         }
         .tabBar((): void => {
           this.HomeTabBarItem($r("app.string.api_M"), 'pages_homePage__tc_1');
         })
 
-        TabContent(){
-          AutoTest({testItems: this.testItems.filter(item => (item.category === Category.AutoTest))})
+        TabContent() {
+          AutoTest({testItems: this.testItems.filter(item => (item.category ===
+            Category.AutoTest))})
         }
         .tabBar((): void => {
           this.HomeTabBarItem($r("app.string.autotest"), 'pages_homePage__tc_2');
         })
 
-        TabContent(){
-          AutoTest({testItems: this.testItems.filter(item => (item.category === Category.AutoTestManager))})
+        TabContent() {
+          AutoTest({testItems: this.testItems.filter(item => (item.category ===
+            Category.AutoTestManager))})
         }
         .tabBar((): void => {
           this.HomeTabBarItem($r("app.string.autotest_M"), 'pages_homePage__tc_3');
         })
 
-        TabContent(){
-          ManualSceneTest({testItems: this.testItems.filter(item => (item.category === Category.Scenario))})
+        TabContent() {
+          ManualSceneTest({testItems: this.testItems.filter(item => (item.category ===
+            Category.Scenario))})
         }
         .tabBar((): void => {
           this.HomeTabBarItem($r("app.string.scenario"), 'pages_homePage__tc_4');
         })
 
-        TabContent(){
-          ManualSceneTest({testItems: this.testItems.filter(item => (item.category === Category.ScenarioManager))})
+        TabContent() {
+          ManualSceneTest({testItems: this.testItems.filter(item => (item.category ===
+            Category.ScenarioManager))})
         }
         .tabBar((): void => {
           this.HomeTabBarItem($r("app.string.scenario_M"), 'pages_homePage__tc_5');
         })
 
-        TabContent(){
-          ProfileTest({testItems: this.testItems.filter(item => (item.category === Category.Profile))})
+        TabContent() {
+          ProfileTest({testItems: this.testItems.filter(item => (item.category ===
+            Category.Profile))})
         }
         .tabBar((): void => {
           this.HomeTabBarItem($r("app.string.profile"), 'pages_homePage__tc_6');
         })
 
-        TabContent(){
-          ProfileTest({testItems: this.testItems.filter(item => (item.category === Category.ProfileManager))})
+        TabContent() {
+          ProfileTest({testItems: this.testItems.filter(item => (item.category ===
+            Category.ProfileManager))})
         }
         .tabBar((): void => {
           this.HomeTabBarItem($r("app.string.profile_M"), 'pages_homePage__tc_7');
         })
 
-        TabContent(){
-          BenchmarkTest({testItems: this.testItems.filter(item => (item.category === Category.BenchMark))})
+        TabContent() {
+          BenchmarkTest({testItems: this.testItems.filter(item => (item.category ===
+            Category.BenchMark))})
         }
         .tabBar((): void => {
           this.HomeTabBarItem($r("app.string.benchmark"), 'pages_homePage__tc_8');
         })
 
-        TabContent(){
+        TabContent() {
           BenchmarkTest({
             testItems: this.testItems.filter(item => (item.category === Category.BenchMarkManager))
           })
@@ -150,72 +159,72 @@ struct HomePage {
     "ohos.permission.READ_MEDIA"
   ]
 
-  init(){
+  init() {
     this.testItems = initTestData();
   }
 
   /** UiTest 在 Tabs 自定义 tabBar 上常扫不到 Text.id；自动化时在首页底部挂载与 Tab 一一对应的锚点（仍参与无障碍树）。 */
   @Builder
-  HomeUiTestTabIdAnchors(){
-    Row(){
+  HomeUiTestTabIdAnchors() {
+    Row() {
       Text($r('app.string.bluetoothtest_text_empty'))
         .id('pages_homePage__tc_0')
-        .layoutWeight(1)
-        .fontSize(1)
+        .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+        .fontSize(ConfigData.font_1)
         .height(ConfigData.VP_2)
         .accessibilityLevel('yes')
       Text($r('app.string.bluetoothtest_text_empty'))
     .id('pages_homePage__tc_1')
-    .layoutWeight(1)
-    .fontSize(1)
+    .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+    .fontSize(ConfigData.font_1)
     .height(ConfigData.VP_2)
     .accessibilityLevel('yes')
       Text($r('app.string.bluetoothtest_text_empty'))
     .id('pages_homePage__tc_2')
-    .layoutWeight(1)
-    .fontSize(1)
+    .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+    .fontSize(ConfigData.font_1)
     .height(ConfigData.VP_2)
     .accessibilityLevel('yes')
       Text($r('app.string.bluetoothtest_text_empty'))
     .id('pages_homePage__tc_3')
-    .layoutWeight(1)
-    .fontSize(1)
+    .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+    .fontSize(ConfigData.font_1)
     .height(ConfigData.VP_2)
     .accessibilityLevel('yes')
       Text($r('app.string.bluetoothtest_text_empty'))
     .id('pages_homePage__tc_4')
-    .layoutWeight(1)
-    .fontSize(1)
+    .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+    .fontSize(ConfigData.font_1)
     .height(ConfigData.VP_2)
     .accessibilityLevel('yes')
       Text($r('app.string.bluetoothtest_text_empty'))
     .id('pages_homePage__tc_5')
-    .layoutWeight(1)
-    .fontSize(1)
+    .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+    .fontSize(ConfigData.font_1)
     .height(ConfigData.VP_2)
     .accessibilityLevel('yes')
       Text($r('app.string.bluetoothtest_text_empty'))
     .id('pages_homePage__tc_6')
-    .layoutWeight(1)
-    .fontSize(1)
+    .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+    .fontSize(ConfigData.font_1)
     .height(ConfigData.VP_2)
     .accessibilityLevel('yes')
       Text($r('app.string.bluetoothtest_text_empty'))
     .id('pages_homePage__tc_7')
-    .layoutWeight(1)
-    .fontSize(1)
+    .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+    .fontSize(ConfigData.font_1)
     .height(ConfigData.VP_2)
     .accessibilityLevel('yes')
       Text($r('app.string.bluetoothtest_text_empty'))
     .id('pages_homePage__tc_8')
-    .layoutWeight(1)
-    .fontSize(1)
+    .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+    .fontSize(ConfigData.font_1)
     .height(ConfigData.VP_2)
     .accessibilityLevel('yes')
       Text($r('app.string.bluetoothtest_text_empty'))
     .id('pages_homePage__tc_9')
-    .layoutWeight(1)
-    .fontSize(1)
+    .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
+    .fontSize(ConfigData.font_1)
     .height(ConfigData.VP_2)
     .accessibilityLevel('yes')
     }
@@ -223,8 +232,8 @@ struct HomePage {
     .height(ConfigData.VP_2)
   }
 
-  aboutToAppear(){
-    if (shouldSkipBluetoothPermissionRequest()){
+  aboutToAppear() {
+    if (shouldSkipBluetoothPermissionRequest()) {
       return;
     }
     let abilityMgr = abilityAccessCtrl.createAtManager();
@@ -235,13 +244,13 @@ struct HomePage {
     })
   }
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       MainPageTitle()
         .accessibilityLevel('yes')
         .id('pages_homePage__mpt_0')
         .accessibilityLevel('yes')
-      Stack({alignContent: Alignment.TopEnd}){
+      Stack({alignContent: Alignment.TopEnd}) {
         TestCategory({testItems: this.testItems})
         Image($r('app.media.Switch'))
           .accessibilityLevel('yes')
@@ -249,12 +258,15 @@ struct HomePage {
           .accessibilityLevel('yes')
           .height(ConfigData.VP_30)
           .width(ConfigData.VP_30)
-          .margin({top: ConfigData.VP_5, right: ConfigData.VP_10})
+          .margin({
+            top: ConfigData.VP_5,
+            right: ConfigData.VP_10
+          })
           .onClick(() => {
           })
       }
       .height(ConfigData.WH_100_100)
-      if (shouldSkipBluetoothPermissionRequest()){
+      if (shouldSkipBluetoothPermissionRequest()) {
         this.HomeUiTestTabIdAnchors()
       }
     }

@@ -19,7 +19,8 @@ import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 
 const PAGE_URI_GET_A2DP_SOURCE_PROFILE = 'pages/subProfileTest/a2dpSourceProfileTest';
-const PAGE_URI_GET_HANDS_FREE_AUDIO_GATEWAY_PROFILE = 'pages/subProfileTest/handsFreeAudioGatewayProfileTest';
+const PAGE_URI_GET_HANDS_FREE_AUDIO_GATEWAY_PROFILE =
+  'pages/subProfileTest/handsFreeAudioGatewayProfileTest';
 const PAGE_URI_GET_HID_HOST_PROFILE = 'pages/subProfileTest/hidHostProfileTest';
 const PAGE_URI_GET_Pan_NETWORK_PROFILE = 'pages/subProfileTest/panNetworkProfileTest';
 

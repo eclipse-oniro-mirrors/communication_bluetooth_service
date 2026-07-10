@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ import { resStr} from '../../Utils/resString';
 
 import ConfigData from '../../Utils/ConfigData';
 import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { TestData} from '../../MainAbility/model/testData'
-import { ScenarioContentTable} from '../../Component/scenarioContentTable'
+import { ScenarioContentTable} from '../../component/scenarioContentTable'
 import { initSppClientScenarioData} from '../../MainAbility/model/scenarioTestDataModel'
 import * as BrInterface from '../../MainAbility/model/brInterface'
 import * as SPPClientInterface from '../../MainAbility/model/sppClientInterface'
@@ -43,7 +43,7 @@ struct SppClientScenarioTest {
   @StorageLink("sppClientScenarioMessage") sppClientScenarioMessage: string = ""
   @StorageLink('dataReadMessage') dataReadMessage: string = "";
 
-  aboutToAppear(){
+  aboutToAppear() {
 
     AppStorage.setOrCreate('txtScanFilterDeviceId', "08:FB:EA:1B:3C:63");
     AppStorage.setOrCreate('txtScanFilterName', "dudu-tiger");
@@ -59,24 +59,28 @@ struct SppClientScenarioTest {
     AppStorage.setOrCreate('writeClientData', this.writeClientData);
   }
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
-              .accessibilityLevel('yes')
-              .id('pages_subScenarioTest_sppClientScenarioTest__pt_0')
+        .accessibilityLevel('yes')
+        .id('pages_subScenarioTest_sppClientScenarioTest__pt_0')
       }
 
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column(){
-        Scroll(){
-          Column(){
+      Column() {
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_cjlcyz'))
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10, left: ConfigData.VP_20})
+              .margin({
+                top: ConfigData.VP_10,
+                bottom: ConfigData.VP_10,
+                left: ConfigData.VP_20
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             ScenarioContentTable({
@@ -96,18 +100,26 @@ struct SppClientScenarioTest {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'));
 
-        Scroll(){
-          Column(){
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_lcrz'))
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_20})
+              .margin({
+                top: ConfigData.VP_8,
+                bottom: ConfigData.VP_8,
+                left: ConfigData.VP_20
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List(){
-              ListItem(){
+            List() {
+              ListItem() {
                 Text(this.sppClientScenarioMessage)
                   .fontSize(ConfigData.VP_17)
-                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_30, right: ConfigData.VP_10})
+                  .margin({
+                    top: ConfigData.VP_5,
+                    left: ConfigData.VP_30,
+                    right: ConfigData.VP_10
+                  })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -134,13 +146,22 @@ struct SppClientScenarioTest {
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column(){
-        Flex({alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceBetween}){
-          Button({type: ButtonType.Normal, stateEffect: true}){
+      Column() {
+        Flex({
+          alignItems: ItemAlign.Center,
+          justifyContent: FlexAlign.SpaceBetween
+        }) {
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
             Text($r('app.string.bluetoothtest_text_cjcsks'))
               .fontSize(ConfigData.VP_24)
               .fontColor(0xffffff)
-              .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+              .margin({
+                left: ConfigData.VP_5,
+                right: ConfigData.VP_5
+              })
           }
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_sppClientScenarioTest__btn_0')
@@ -148,61 +169,65 @@ struct SppClientScenarioTest {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, left: ConfigData.VP_20})
+          .margin({
+            top: ConfigData.VP_15,
+            left: ConfigData.VP_20
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let self = this
-            const arr = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
             let sppClientScenarioMessage = ""
             // 注册状态变化
             sppClientScenarioMessage += BrInterface.testOnStateChange() + "\n"
             LogUtil.info("testOnStateChange success")
-            self.changeIndex = arr[ 0 ]
+            self.changeIndex = arr[0]
             await sleep(1)
 
             // 开蓝牙
             sppClientScenarioMessage += BrInterface.testEnableBluetooth() + "\n";
             LogUtil.info("testEnableBluetooth success")
-            self.changeIndex = arr[ 1 ]
+            self.changeIndex = arr[1]
             await sleep(2)
             AppStorage.setOrCreate("sppClientScenarioMessage", sppClientScenarioMessage)
 
             // 获取状态
             sppClientScenarioMessage += BrInterface.testGetState() + "\n";
             LogUtil.info("testGetState success")
-            self.changeIndex = arr[ 2 ]
+            self.changeIndex = arr[2]
             await sleep(1)
 
             // 设置扫描模式
             sppClientScenarioMessage += BrInterface.testSetBluetoothScanMode(4, 0) + "\n"
             LogUtil.info("testSetBluetoothScanMode success")
-            self.changeIndex = arr[ 3 ]
+            self.changeIndex = arr[3]
             await sleep(1)
 
             // 获取扫描模式
             sppClientScenarioMessage += BrInterface.testGetBluetoothScanMode() + "\n"
             LogUtil.info("testGetBluetoothScanMode success")
-            self.changeIndex = arr[ 4 ]
+            self.changeIndex = arr[4]
             await sleep(1)
 
             // Spp客户端连接
             sppClientScenarioMessage += SPPClientInterface.testSppClientConnectSafe() + "\n"
             LogUtil.info("testSppClientConnectSafe success")
-            self.changeIndex = arr[ 5 ]
+            self.changeIndex = arr[5]
             AppStorage.setOrCreate("sppClientScenarioMessage", sppClientScenarioMessage)
             await sleep(10)
 
             //获取当前连接状态
             sppClientScenarioMessage += BrInterface.testGetBtConnectionState() + "\n"
             LogUtil.info("testGetBtConnectionState success")
-            self.changeIndex = arr[ 6 ]
+            self.changeIndex = arr[6]
             AppStorage.setOrCreate("sppClientScenarioMessage", sppClientScenarioMessage)
             await sleep(2)
 
             //spp客户端读取打开
             sppClientScenarioMessage += SPPClientInterface.testSppClientReadOn() + "\n"
             LogUtil.info("testSppClientReadOn success")
-            self.changeIndex = arr[ 7 ]
+            self.changeIndex = arr[7]
             sppClientScenarioMessage += AppStorage.get("dataReadMessage") + "\n"
             AppStorage.setOrCreate("sppClientScenarioMessage", sppClientScenarioMessage)
             await sleep(5)
@@ -210,17 +235,26 @@ struct SppClientScenarioTest {
             // SPP客户端写入
             sppClientScenarioMessage += SPPClientInterface.testSppClientWrite() + "\n"
             LogUtil.info("testSppClientWrite success")
-            self.changeIndex = arr[ 8 ]
+            self.changeIndex = arr[8]
             AppStorage.setOrCreate("sppClientScenarioMessage", sppClientScenarioMessage)
             await sleep(2)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Text($r('app.string.bluetoothtest_text_cjcsjs'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+                .margin({
+                  left: ConfigData.VP_5,
+                  right: ConfigData.VP_5
+                })
             }
               .alignItems(VerticalAlign.Top)
           }
@@ -230,22 +264,27 @@ struct SppClientScenarioTest {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, left: ConfigData.VP_10, right: ConfigData.VP_10})
+          .margin({
+            top: ConfigData.VP_15,
+            left: ConfigData.VP_10,
+            right: ConfigData.VP_10
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let self = this
-            const arr = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
             let sppClientScenarioMessage = ""
             // spp客户端读取关闭
             sppClientScenarioMessage += SPPClientInterface.testSppClientReadOff() + "\n"
             LogUtil.info("testSppClientReadOff success")
-            self.changeIndex = arr[ 9 ]
+            self.changeIndex = arr[9]
             await sleep(1)
 
             // spp客户端关闭
             sppClientScenarioMessage += SPPClientInterface.testSppClientClose() + "\n"
             LogUtil.info("testSppClientClose success")
-            self.changeIndex = arr[ 10 ]
+            self.changeIndex = arr[10]
             await sleep(1)
 
             //关闭注册状态变化
@@ -256,17 +295,26 @@ struct SppClientScenarioTest {
             //关蓝牙
             sppClientScenarioMessage += BrInterface.testDisableBluetooth() + "\n"
             LogUtil.info("testDisableBluetooth success")
-            self.changeIndex = arr[ 11 ]
+            self.changeIndex = arr[11]
             await sleep(1)
             AppStorage.setOrCreate("sppClientScenarioMessage", sppClientScenarioMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Text($r('app.string.bluetoothtest_text_qkrz'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+                .margin({
+                  left: ConfigData.VP_5,
+                  right: ConfigData.VP_5
+                })
             }
               .alignItems(VerticalAlign.Top)
           }
@@ -276,12 +324,19 @@ struct SppClientScenarioTest {
           .backgroundColor($r("app.color.moon"))
           .width(ConfigData.VP_80)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, right: ConfigData.VP_20})
+          .margin({
+            top: ConfigData.VP_15,
+            right: ConfigData.VP_20
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppClientScenarioMessage = ""
             AppStorage.setOrCreate("sppClientScenarioMessage", sppClientScenarioMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)
@@ -292,11 +347,12 @@ struct SppClientScenarioTest {
     }
   }
 
-  dataRead(dataBuffer: ArrayBuffer){
+  dataRead(dataBuffer: ArrayBuffer) {
     const data = new Uint8Array(dataBuffer);
     LogUtil.info('spp bluetooth read is: ' + data);
-    if ( data != null ){
-      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
+    if (data != null) {
+      this.dataReadMessage =
+        resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
       this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
@@ -313,24 +369,25 @@ async function sleep(time: number): Promise<void> {
 
 let clientNumber = - 1
 
-export function acceptClientSocket(number: number){
+export function acceptClientSocket(number: number) {
   LogUtil.info('spp clientSocket socketID: ' + number);
   // 获取的clientNumber用作服务端后续读/写操作socket的id。
   clientNumber = number;
 }
 
-export function sppClientClose(){
-  LogUtil.info("bluetoothModel:" + 'sppCloseClientSocket clientNumber: ' + JSON.stringify(clientNumber))
+export function sppClientClose() {
+  LogUtil.info("bluetoothModel:" + 'sppCloseClientSocket clientNumber: ' +
+    JSON.stringify(clientNumber))
   bluetooth.sppCloseClientSocket(clientNumber)
   let message = resStr($r('app.string.bluetoothtest_str_gbcgc')) + clientNumber;
   promptAction.showToast({message: message})
   return message
 }
 
-export function strToArrayBuffer(str: string){
+export function strToArrayBuffer(str: string) {
   let array = new Uint8Array(str.length);
-  for(let i = 0 ; i<str.length ; i++ ){
-    array[ i ] = str.charCodeAt(i);
+  for(let i = 0 ; i<str.length ; i++) {
+    array[i] = str.charCodeAt(i);
   }
   return array.buffer
 }

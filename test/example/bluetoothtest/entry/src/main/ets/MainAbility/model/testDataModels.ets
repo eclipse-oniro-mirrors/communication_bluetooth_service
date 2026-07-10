@@ -830,7 +830,8 @@ const SppServerTestCase: BRTest[] = [
     result: 'None',
     category: CaseCategory.SPPServer
 },
-  //  { name: 'SPP客户端写入', detail: '使能蓝牙', method: 'spp_Client_Write', api: testSppClientWrite, result: 'None', category: CaseCategory.SPPServer },
+  //  { name: 'SPP客户端写入', detail: '使能蓝牙', method: 'spp_Client_Write',
+  //    api: testSppClientWrite, result: 'None', category: CaseCategory.SPPServer },
   {
     name: $r('app.string.bluetoothtest_str_sfwqxr'),
     detail: $r('app.string.bluetoothtest_str_sfwqxr'),
@@ -1560,7 +1561,8 @@ export function initTestData(): Array<TestData> {
 export function initBRApiData(): Array<TestApi> {
   let TestApiArray: Array<TestApi> = []
   BRTestCase.forEach(item => {
-    TestApiArray.push(new TestApi(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestApiArray.push(new TestApi(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestApiArray;
 }
@@ -1568,7 +1570,8 @@ export function initBRApiData(): Array<TestApi> {
 export function initBleApiData(): Array<TestApi> {
   let TestApiArray: Array<TestApi> = []
   BleTestCase.forEach(item => {
-    TestApiArray.push(new TestApi(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestApiArray.push(new TestApi(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestApiArray;
 }
@@ -1593,7 +1596,8 @@ export function initSppApiTestData(): Array<TestData> {
 export function initGattClientApiData(): Array<TestApi> {
   let TestApiArray: Array<TestApi> = []
   GattClientTestCase.forEach(item => {
-    TestApiArray.push(new TestApi(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestApiArray.push(new TestApi(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestApiArray;
 }
@@ -1601,7 +1605,8 @@ export function initGattClientApiData(): Array<TestApi> {
 export function initGattServerApiData(): Array<TestApi> {
   let TestApiArray: Array<TestApi> = []
   GattServerTestCase.forEach(item => {
-    TestApiArray.push(new TestApi(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestApiArray.push(new TestApi(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestApiArray;
 }
@@ -1609,7 +1614,8 @@ export function initGattServerApiData(): Array<TestApi> {
 export function initSppClientApiData(): Array<TestApi> {
   let TestApiArray: Array<TestApi> = []
   SppClientTestCase.forEach(item => {
-    TestApiArray.push(new TestApi(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestApiArray.push(new TestApi(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestApiArray;
 }
@@ -1617,7 +1623,8 @@ export function initSppClientApiData(): Array<TestApi> {
 export function initSppServerApiData(): Array<TestApi> {
   let TestApiArray: Array<TestApi> = []
   SppServerTestCase.forEach(item => {
-    TestApiArray.push(new TestApi(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestApiArray.push(new TestApi(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestApiArray;
 }
@@ -1625,7 +1632,8 @@ export function initSppServerApiData(): Array<TestApi> {
 export function initA2dpSourceProfileApiData(): Array<TestApi> {
   let TestApiArray: Array<TestApi> = []
   A2dpSourceProfileTestCase.forEach(item => {
-    TestApiArray.push(new TestApi(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestApiArray.push(new TestApi(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestApiArray;
 }
@@ -1633,7 +1641,8 @@ export function initA2dpSourceProfileApiData(): Array<TestApi> {
 export function initHandsFreeAudioGatewayProfileApiData(): Array<TestApi> {
   let TestApiArray: Array<TestApi> = []
   HandsFreeAudioGatewayProfileTestCase.forEach(item => {
-    TestApiArray.push(new TestApi(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestApiArray.push(new TestApi(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestApiArray;
 }
@@ -1641,7 +1650,8 @@ export function initHandsFreeAudioGatewayProfileApiData(): Array<TestApi> {
 export function initHitHostProfileApiData(): Array<TestApi> {
   let TestApiArray: Array<TestApi> = []
   HitHostProfileTestCase.forEach(item => {
-    TestApiArray.push(new TestApi(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestApiArray.push(new TestApi(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestApiArray;
 }
@@ -1649,7 +1659,8 @@ export function initHitHostProfileApiData(): Array<TestApi> {
 export function initPanNetworkProfileApiData(): Array<TestApi> {
   let TestApiArray: Array<TestApi> = []
   PanNetworkProfileTestCase.forEach(item => {
-    TestApiArray.push(new TestApi(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestApiArray.push(new TestApi(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestApiArray;
 }
@@ -1657,7 +1668,8 @@ export function initPanNetworkProfileApiData(): Array<TestApi> {
 export function initOppProfileApiData(): Array<TestApi> {
   let TestApiArray: Array<TestApi> = []
   OppProfileTestCase.forEach(item => {
-    TestApiArray.push(new TestApi(item.name, item.detail, item.method, item.api, item.result, item.category));
+    TestApiArray.push(new TestApi(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestApiArray;
 }

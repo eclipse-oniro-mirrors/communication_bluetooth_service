@@ -18,8 +18,10 @@ import { resStr} from '../../Utils/resString';
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 
-const PAGE_URI_GET_SPP_CLIENT_TEST_MANAGER = 'pages/subManualApiTestManager/subSppTestManager/sppClientManager';
-const PAGE_URI_GET_SPP_SERVER_TEST_MANAGER = 'pages/subManualApiTestManager/subSppTestManager/sppServerManager';
+const PAGE_URI_GET_SPP_CLIENT_TEST_MANAGER =
+  'pages/subManualApiTestManager/subSppTestManager/sppClientManager';
+const PAGE_URI_GET_SPP_SERVER_TEST_MANAGER =
+  'pages/subManualApiTestManager/subSppTestManager/sppServerManager';
 
 export function testSppClient(): string {
   router.pushUrl({url: PAGE_URI_GET_SPP_CLIENT_TEST_MANAGER})

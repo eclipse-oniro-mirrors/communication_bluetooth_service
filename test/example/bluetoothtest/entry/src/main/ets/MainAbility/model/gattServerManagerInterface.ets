@@ -27,8 +27,8 @@ export function testCreateGattServerManager(): string {
   try {
     let btState = bluetoothManager.getState();
     let message = resStr($r('app.string.bluetoothtest_str_ct_2'))
-    if ( btState === bluetoothManager.BluetoothState.STATE_ON ){
-      if ( gattServerInstance ){
+    if (btState === bluetoothManager.BluetoothState.STATE_ON) {
+      if (gattServerInstance) {
         message = resStr($r('app.string.bluetoothtest_str_ge_3'));
         promptAction.showToast({message: message})
         return message
@@ -39,16 +39,18 @@ export function testCreateGattServerManager(): string {
       LogUtil.info("CreateGattServer:succeeds!-----------")
       promptAction.showToast({message: message})
       return message
-    } else if ( btState === bluetoothManager.BluetoothState.STATE_OFF ){
+    } else if (btState === bluetoothManager.BluetoothState.STATE_OFF) {
       message = resStr($r('app.string.bluetoothtest_str_bine'))
     } else {
       message = resStr($r('app.string.bluetoothtest_str_sw'));
     }
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testCreateGattServerManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testCreateGattServerManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testCreateGattServerManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testCreateGattServerManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -58,12 +60,12 @@ export function testAddServiceManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_at'))
     let btStatus = bluetoothManager.getState()
-    if ( btStatus === bluetoothManager.BluetoothState.STATE_OFF ){
+    if (btStatus === bluetoothManager.BluetoothState.STATE_OFF) {
       message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({message: message})
       return message
     }
-    if ( !gattServerInstance ){
+    if (!gattServerInstance) {
       message = "NO_GATT_Server_OBJECT";
       promptAction.showToast({message: message})
       return message
@@ -106,9 +108,9 @@ export function testAddServiceManager(): string {
     LogUtil.info("gattServerInstance.addService succeeds!-----------" + message)
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testAddServiceManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testAddServiceManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testAddServiceManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testAddServiceManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -119,8 +121,8 @@ export function testRemoveServiceManager(): string {
     let message = resStr($r('app.string.bluetoothtest_str_rt_4'))
     let curServiceUUID: string = AppStorage.get("curServiceUUID") !
     let btState = bluetoothManager.getState()
-    if ( btState == bluetoothManager.BluetoothState.STATE_ON ){
-      if ( !gattServerInstance ){
+    if (btState == bluetoothManager.BluetoothState.STATE_ON) {
+      if (!gattServerInstance) {
         message = "NO_GATT_Server_OBJECT";
         promptAction.showToast({message: message})
         return message
@@ -128,58 +130,58 @@ export function testRemoveServiceManager(): string {
       message = resStr($r('app.string.bluetoothtest_str_rr'));
       gattServerInstance.removeService(curServiceUUID)
       message += 'true';
-    } else if ( btState == bluetoothManager.BluetoothState.STATE_OFF ){
+    } else if (btState == bluetoothManager.BluetoothState.STATE_OFF) {
       message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
       message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testRemoveServiceManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testRemoveServiceManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testRemoveServiceManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testRemoveServiceManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
 let curAdvData: bluetoothManager.AdvertiseData = {
-  serviceUuids: [ "00003344-0000-1000-8000-00805f9b34fb", "00008899-0000-1000-8000-00805f9b34fb" ],
-  manufactureData: [ {
+  serviceUuids: ["00003344-0000-1000-8000-00805f9b34fb", "00008899-0000-1000-8000-00805f9b34fb"],
+  manufactureData: [{
     manufactureId: 7456,
     manufactureValue: string2ArrayBuffer("OHOS CHN")
-  } ],
-  serviceData: [ {
+  }],
+  serviceData: [{
     serviceUuid: "000054F6-0000-1000-8000-00805f9b34fb",
     serviceValue: string2ArrayBuffer("OhosBle!")
   }, {
     serviceUuid: "00009999-0000-1000-8000-00805f9b34fb",
     serviceValue: string2ArrayBuffer("dudu_tiger")
-  } ]
+  }]
 };
 
 let curAdvResponse: bluetoothManager.AdvertiseData = {
   serviceUuids: [//"000054F6-0000-1000-8000-00805f9b34fb",
-    "00009999-0000-1000-8000-00805f9b34fb" ],
-  manufactureData: [ {
+    "00009999-0000-1000-8000-00805f9b34fb"],
+  manufactureData: [{
     manufactureId: 6547,
     manufactureValue: string2ArrayBuffer("OHOS CHN")
-  } ],
-  serviceData: [ {
+  }],
+  serviceData: [{
     serviceUuid: "000054F6-0000-1000-8000-00805f9b34fb",
     serviceValue: string2ArrayBuffer("OhosBle!")
   }, {
     serviceUuid: "00007456-0000-1000-8000-00805f9b34fb",
     serviceValue: string2ArrayBuffer("OhosBle")
-  } ]
+  }]
 };
 
 export function testStartAdvertisingManager(): string {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_st_13'))
     let btState = bluetoothManager.getState();
-    if ( btState === bluetoothManager.BluetoothState.STATE_ON ){
-      if ( !gattServerInstance ){
+    if (btState === bluetoothManager.BluetoothState.STATE_ON) {
+      if (!gattServerInstance) {
         message = "NO_GATT_Server_OBJECT";
         promptAction.showToast({message: message})
         return message
@@ -195,12 +197,12 @@ export function testStartAdvertisingManager(): string {
         txPower: - 7,
         connectable: true
       }
-      if ( cbxAdvSettings ){
-        if ( cbxInterval ){
+      if (cbxAdvSettings) {
+        if (cbxInterval) {
           let advSettings_interval: string = AppStorage.get("advSettings_interval") !
           curAdvSettings.interval = parseInt(advSettings_interval)
         }
-        if ( cbxTxPower ){
+        if (cbxTxPower) {
           let advSettings_txPower: string = AppStorage.get("advSettings_txPower") !
           curAdvSettings.txPower = parseInt(advSettings_txPower)
         }
@@ -209,11 +211,16 @@ export function testStartAdvertisingManager(): string {
       }
 
       //    buildAdvData();
-      let advDataServiceUuids_serviceUuid: string = AppStorage.get("advDataServiceUuids_serviceUuid") !
-      let advDataManufactureData_manufactureId: string = AppStorage.get("advDataManufactureData_manufactureId") !
-      let advDataManufactureData_manufactureValue: string = AppStorage.get("advDataManufactureData_manufactureValue") !
-      let advDataServiceData_serviceUuid: string = AppStorage.get("advDataServiceData_serviceUuid") !
-      let advDataServiceData_serviceValue: string = AppStorage.get("advDataServiceData_serviceValue") !
+      let advDataServiceUuids_serviceUuid: string =
+        AppStorage.get("advDataServiceUuids_serviceUuid") !
+      let advDataManufactureData_manufactureId: string =
+        AppStorage.get("advDataManufactureData_manufactureId") !
+      let advDataManufactureData_manufactureValue: string =
+        AppStorage.get("advDataManufactureData_manufactureValue") !
+      let advDataServiceData_serviceUuid: string =
+        AppStorage.get("advDataServiceData_serviceUuid") !
+      let advDataServiceData_serviceValue: string =
+        AppStorage.get("advDataServiceData_serviceValue") !
       let advDataServiceUuidList: Array<string> = []
       let advDataManufactureDataList: Array<bluetoothManager.ManufactureData> = []
       let advDataServiceDataList: Array<bluetoothManager.ServiceData> = []
@@ -236,11 +243,16 @@ export function testStartAdvertisingManager(): string {
       }
 
       //    buildAdvResponse();
-      let advResponseServiceUuids_serviceUuid: string = AppStorage.get("advResponseServiceUuids_serviceUuid") !
-      let advResponseManufactureData_manufactureId: string = AppStorage.get("advResponseManufactureData_manufactureId") !
-      let advResponseManufactureData_manufactureValue: string = AppStorage.get("advResponseManufactureData_manufactureValue") !
-      let advResponseServiceData_serviceUuid: string = AppStorage.get("advResponseServiceData_serviceUuid") !
-      let advResponseServiceData_serviceValue: string = AppStorage.get("advResponseServiceData_serviceValue") !
+      let advResponseServiceUuids_serviceUuid: string =
+        AppStorage.get("advResponseServiceUuids_serviceUuid") !
+      let advResponseManufactureData_manufactureId: string =
+        AppStorage.get("advResponseManufactureData_manufactureId") !
+      let advResponseManufactureData_manufactureValue: string =
+        AppStorage.get("advResponseManufactureData_manufactureValue") !
+      let advResponseServiceData_serviceUuid: string =
+        AppStorage.get("advResponseServiceData_serviceUuid") !
+      let advResponseServiceData_serviceValue: string =
+        AppStorage.get("advResponseServiceData_serviceValue") !
       let advResponseServiceUuidList: Array<string> = []
       let advResponseManufactureDataList: Array<bluetoothManager.ManufactureData> = []
       let advResponseServiceDataList: Array<bluetoothManager.ServiceData> = []
@@ -269,9 +281,10 @@ export function testStartAdvertisingManager(): string {
       let cbxAdvResponse: boolean = AppStorage.get("cbxAdvResponse") !
       message = resStr($r('app.string.bluetoothtest_str_sbipo'));
 
-      if ( !cbxAdvResponse ){
+      if (!cbxAdvResponse) {
         LogUtil.info("advData.serviceUuids:" + advData.serviceUuids + "\n")
-        LogUtil.info("advData.manufactureData:" + advData.manufactureData + (typeof advData.manufactureData) + "\n")
+        LogUtil.info("advData.manufactureData:" + advData.manufactureData + (typeof
+          advData.manufactureData) + "\n")
         LogUtil.info("advData.serviceData:" + advData.serviceData + "\n")
         gattServerInstance!.startAdvertising(setting, advData)
         LogUtil.info("startAdvertising(setting,advData)-----------")
@@ -284,17 +297,20 @@ export function testStartAdvertisingManager(): string {
       }
       LogUtil.info("cbxAdvSettings:" + cbxAdvSettings + "\n")
       LogUtil.info("cbxAdvResponse:" + cbxAdvResponse + "\n")
-      message = resStr($r('app.string.bluetoothtest_str_ss')) + cbxAdvSettings + "," + cbxAdvResponse;
-    } else if ( btState === bluetoothManager.BluetoothState.STATE_OFF ){
+      message =
+        resStr($r('app.string.bluetoothtest_str_ss')) + cbxAdvSettings + "," + cbxAdvResponse;
+    } else if (btState === bluetoothManager.BluetoothState.STATE_OFF) {
       message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
       message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testStartAdvertisingManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testStartAdvertisingManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testStartAdvertisingManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testStartAdvertisingManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -304,24 +320,24 @@ export function testStopAdvertisingManager(): String {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_st_16'))
     let btState = bluetoothManager.getState()
-    if ( btState == bluetoothManager.BluetoothState.STATE_ON ){
-      if ( !gattServerInstance ){
+    if (btState == bluetoothManager.BluetoothState.STATE_ON) {
+      if (!gattServerInstance) {
         message = "NO_GATT_Server_OBJECT";
         promptAction.showToast({message: message})
         return message
       }
       gattServerInstance!.stopAdvertising();
       message = resStr($r('app.string.bluetoothtest_str_ss_1'));
-    } else if ( btState == bluetoothManager.BluetoothState.STATE_OFF ){
+    } else if (btState == bluetoothManager.BluetoothState.STATE_OFF) {
       message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
       message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testStopAdvertisingManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testStopAdvertisingManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testStopAdvertisingManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testStopAdvertisingManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -331,24 +347,24 @@ export function testGattServerCloseManager(): String {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_gt_10'))
     let btState = bluetoothManager.getState()
-    if ( btState == bluetoothManager.BluetoothState.STATE_ON ){
-      if ( !gattServerInstance ){
+    if (btState == bluetoothManager.BluetoothState.STATE_ON) {
+      if (!gattServerInstance) {
         message = "NO_GATT_Server_OBJECT";
         promptAction.showToast({message: message})
         return message
       }
       gattServerInstance!.close();
       message = resStr($r('app.string.bluetoothtest_str_gcs'));
-    } else if ( btState == bluetoothManager.BluetoothState.STATE_OFF ){
+    } else if (btState == bluetoothManager.BluetoothState.STATE_OFF) {
       message = resStr($r('app.string.bluetoothtest_str_bine'));
     } else {
       message = resStr($r('app.string.bluetoothtest_str_spw'));
     }
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGattServerCloseManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGattServerCloseManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGattServerCloseManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testGattServerCloseManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -361,12 +377,12 @@ export function testOnConnectStateChangeManager(): String {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_ot_6'))
     let btStatus = bluetoothManager.getState()
-    if ( btStatus === bluetoothManager.BluetoothState.STATE_OFF ){
+    if (btStatus === bluetoothManager.BluetoothState.STATE_OFF) {
       message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({message: message})
       return message
     }
-    if ( connectStateChange ){
+    if (connectStateChange) {
       gattServerInstance!.off("connectStateChange", () => {
       })
       message = resStr($r('app.string.bluetoothtest_str_gbljztbh'))
@@ -383,9 +399,11 @@ export function testOnConnectStateChangeManager(): String {
     connectStateChange = !connectStateChange
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testOnConnectStateChangeManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testOnConnectStateChangeManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testOnConnectStateChangeManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testOnConnectStateChangeManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -398,12 +416,12 @@ export function testOnCharacteristicReadManager(): String {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_ot_5'))
     let btStatus = bluetoothManager.getState()
-    if ( btStatus === bluetoothManager.BluetoothState.STATE_OFF ){
+    if (btStatus === bluetoothManager.BluetoothState.STATE_OFF) {
       message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({message: message})
       return message
     }
-    if ( characteristicRead ){
+    if (characteristicRead) {
       gattServerInstance!.off("characteristicRead", () => {
       })
       message = resStr($r('app.string.bluetoothtest_str_tzzdqgb'))
@@ -423,11 +441,14 @@ export function testOnCharacteristicReadManager(): String {
         let characteristicUuid = characteristicReadReq.characteristicUuid;
         let serviceUuid = characteristicReadReq.serviceUuid;
 
-        characteristicReadMsg += 'characteristicRead input parameters: deviceId = ' + clientDeviceId + '\n';
+        characteristicReadMsg += 'characteristicRead input parameters: deviceId = '
+          + clientDeviceId
+          + '\n';
         characteristicReadMsg += 'transId = ' + transId + '\n';
         characteristicReadMsg += "characteristicUuid = " + characteristicUuid + '\n';
         characteristicReadMsg += "serviceUuid = " + serviceUuid + '\n';
-        AppStorage.setOrCreate("characteristicReadMsg", characteristicReadMsg)// build data for response
+        AppStorage.setOrCreate("characteristicReadMsg", characteristicReadMsg)
+        // build data for response
         let arrayBufferCCC = string2ArrayBuffer('DaYuBlue');
 
         let serverResponse: bluetoothManager.ServerResponse = {
@@ -447,9 +468,11 @@ export function testOnCharacteristicReadManager(): String {
     characteristicRead = !characteristicRead
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testOnCharacteristicReadManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testOnCharacteristicReadManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testOnCharacteristicReadManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testOnCharacteristicReadManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -462,12 +485,12 @@ export function testOnCharacteristicWriteManager(): String {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_ot_4'))
     let btStatus = bluetoothManager.getState()
-    if ( btStatus === bluetoothManager.BluetoothState.STATE_OFF ){
+    if (btStatus === bluetoothManager.BluetoothState.STATE_OFF) {
       message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({message: message})
       return message
     }
-    if ( characteristicWrite ){
+    if (characteristicWrite) {
       gattServerInstance!.off("characteristicWrite", () => {
       });
       message = resStr($r('app.string.bluetoothtest_str_tzzxrgb'))
@@ -494,7 +517,8 @@ export function testOnCharacteristicWriteManager(): String {
         let serviceUuid = characteristicWriteReq.serviceUuid;
 
 
-        characteristicWriteMsg += "The characteristicWriteReq input parameters: deviceId =" + deviceId;
+        characteristicWriteMsg += "The characteristicWriteReq input parameters: deviceId ="
+          + deviceId;
         characteristicWriteMsg += "transId =" + transId;
         characteristicWriteMsg += "offset =" + offset;
         characteristicWriteMsg += "isPrep =" + isPrep;
@@ -511,7 +535,7 @@ export function testOnCharacteristicWriteManager(): String {
           value: arrayBufferCCC
         };
         // sendResponse
-        if ( needRsp ){
+        if (needRsp) {
           let ret = gattServerInstance!.sendResponse(serverResponse);
           message = resStr($r('app.string.bluetoothtest_str_cs')) + ret;
           promptAction.showToast({message: message})
@@ -531,9 +555,11 @@ export function testOnCharacteristicWriteManager(): String {
     characteristicWrite = !characteristicWrite
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testOnCharacteristicWriteManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testOnCharacteristicWriteManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testOnCharacteristicWriteManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testOnCharacteristicWriteManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -546,11 +572,11 @@ export function testOnDescriptorReadManager(): String {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_ot_9'))
     let btStatus = bluetoothManager.getState()
-    if ( btStatus === bluetoothManager.BluetoothState.STATE_OFF ){
+    if (btStatus === bluetoothManager.BluetoothState.STATE_OFF) {
       message = resStr($r('app.string.bluetoothtest_str_bine'));
       return message;
     }
-    if ( descriptorRead ){
+    if (descriptorRead) {
       gattServerInstance!.off("descriptorRead", () => {
       });
       message = resStr($r('app.string.bluetoothtest_str_msfdqgb'));
@@ -586,9 +612,11 @@ export function testOnDescriptorReadManager(): String {
     descriptorRead = !descriptorRead
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testOnDescriptorReadManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testOnDescriptorReadManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testOnDescriptorReadManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testOnDescriptorReadManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -601,12 +629,12 @@ export function testOnDescriptorWriteManager(): String {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_ot_8'))
     let btStatus = bluetoothManager.getState()
-    if ( btStatus === bluetoothManager.BluetoothState.STATE_OFF ){
+    if (btStatus === bluetoothManager.BluetoothState.STATE_OFF) {
       message = resStr($r('app.string.bluetoothtest_str_bine'));
       promptAction.showToast({message: message})
       return message
     }
-    if ( descriptorWrite ){
+    if (descriptorWrite) {
       gattServerInstance!.off("descriptorWrite", () => {
       });
       message = resStr($r('app.string.bluetoothtest_str_msfxrgb'));
@@ -616,7 +644,8 @@ export function testOnDescriptorWriteManager(): String {
       gattServerInstance!.on('descriptorWrite', (descriptorWriteReq) => {
         let btOnDescriptorWrite = 'on:descriptorWrite'
         let descriptorWriteMsg = "descriptorWriteIn";
-        descriptorWriteMsg += "The descriptorWriteReq client address: deviceId is " + descriptorWriteReq.deviceId;
+        descriptorWriteMsg += "The descriptorWriteReq client address: deviceId is "
+          + descriptorWriteReq.deviceId;
         let deviceId = descriptorWriteReq.deviceId;
         let transId = descriptorWriteReq.transId;
         /** Indicates the byte offset of the start position for writing descriptor value */
@@ -633,7 +662,7 @@ export function testOnDescriptorWriteManager(): String {
 
         let arrayBufferDesc = new ArrayBuffer(8);
         let descValue = new Uint8Array(arrayBufferDesc);
-        descValue[ 0 ] = value[ 0 ];
+        descValue[0] = value[0];
         let serverResponse: bluetoothManager.ServerResponse = {
           deviceId: deviceId,
           transId: transId,
@@ -642,7 +671,7 @@ export function testOnDescriptorWriteManager(): String {
           value: arrayBufferDesc
         };
 
-        if ( needRsp ){
+        if (needRsp) {
           let ret = gattServerInstance!.sendResponse(serverResponse);
           message = resStr($r('app.string.bluetoothtest_str_ds')) + ret;
           promptAction.showToast({message: message})
@@ -654,18 +683,20 @@ export function testOnDescriptorWriteManager(): String {
     descriptorWrite = !descriptorWrite
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testOnDescriptorWriteManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testOnDescriptorWriteManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testOnDescriptorWriteManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testOnDescriptorWriteManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function string2ArrayBuffer(str: string){
+export function string2ArrayBuffer(str: string) {
   let array = new Uint8Array(str.length)
-  for(let i = 0 ; i<str.length ; i++ ){
-    array[ i ] = str.charCodeAt(i);
+  for(let i = 0 ; i<str.length ; i++) {
+    array[i] = str.charCodeAt(i);
   }
   return array.buffer
 }

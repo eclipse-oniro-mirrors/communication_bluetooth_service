@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ import { resStr} from '../../Utils/resString';
 
 import ConfigData from '../../Utils/ConfigData';
 import { BTAutoArrayItem, ScanResult, testItemFromRouterOrPlaceholder} from '../../Utils/common'
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { TestData} from '../../MainAbility/model/testData'
 import * as BleInterface from '../../MainAbility/model/bleInterface'
 import { testStopBLEScan} from '../../MainAbility/model/bleInterface'
@@ -41,25 +41,29 @@ struct BleBenchmarkTest {
   @State changeIndex: number = - 1
   @StorageLink("bleBenchmarkTestMessage") bleBenchmarkTestMessage: string = ""
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
-              .accessibilityLevel('yes')
-              .id('pages_subBenchmarkTest_bleBenchmarkTest__pt_0')
+        .accessibilityLevel('yes')
+        .id('pages_subBenchmarkTest_bleBenchmarkTest__pt_0')
       }
 
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
 
-      Column(){
-        Scroll(){
-          Column(){
+      Column() {
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_xncs'))
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10, left: ConfigData.VP_20})
+              .margin({
+                top: ConfigData.VP_10,
+                bottom: ConfigData.VP_10,
+                left: ConfigData.VP_20
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             Text($r('app.string.bluetoothtest_text_bdxncsscszfxblysdsjxnhwdxn'))
@@ -78,18 +82,26 @@ struct BleBenchmarkTest {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'))
 
-        Scroll(){
-          Column(){
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_rz'))
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_10})
+              .margin({
+                top: ConfigData.VP_8,
+                bottom: ConfigData.VP_8,
+                left: ConfigData.VP_10
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List(){
-              ListItem(){
+            List() {
+              ListItem() {
                 Text(this.bleBenchmarkTestMessage)
                   .fontSize(ConfigData.VP_17)
-                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_10, right: ConfigData.VP_10})
+                  .margin({
+                    top: ConfigData.VP_5,
+                    left: ConfigData.VP_10,
+                    right: ConfigData.VP_10
+                  })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -111,13 +123,22 @@ struct BleBenchmarkTest {
       .width(ConfigData.WH_100_100)
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Column(){
-        Flex({alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceBetween}){
-          Button({type: ButtonType.Normal, stateEffect: true}){
+      Column() {
+        Flex({
+          alignItems: ItemAlign.Center,
+          justifyContent: FlexAlign.SpaceBetween
+        }) {
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
             Text($r('app.string.bluetoothtest_text_xncszb'))
               .fontSize(ConfigData.VP_24)
               .fontColor(0xffffff)
-              .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+              .margin({
+                left: ConfigData.VP_5,
+                right: ConfigData.VP_5
+              })
           }
           .accessibilityLevel('yes')
           .id('pages_subBenchmarkTest_bleBenchmarkTest__btn_0')
@@ -125,18 +146,31 @@ struct BleBenchmarkTest {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, left: ConfigData.VP_5})
+          .margin({
+            top: ConfigData.VP_15,
+            left: ConfigData.VP_5
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             this.forLoop()
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Text($r('app.string.bluetoothtest_text_sjxncs'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+                .margin({
+                  left: ConfigData.VP_5,
+                  right: ConfigData.VP_5
+                })
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -146,30 +180,50 @@ struct BleBenchmarkTest {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, left: ConfigData.VP_5, right: ConfigData.VP_5})
+          .margin({
+            top: ConfigData.VP_15,
+            left: ConfigData.VP_5,
+            right: ConfigData.VP_5
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let bleBenchmarkTestMessage = ""
-            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_s_1')) + testFunc(subscribeBLEDeviceFind) + "\n"
+            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_s_1'))
+              + testFunc(subscribeBLEDeviceFind)
+              + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
             await sleep(1)
             bleBenchmarkTestMessage += "startBleScan" + testFunc(BluetoothModel.startBLEScan) + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
             await sleep(10)
-            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_21')) + testFunc(BleInterface.testStopBLEScan) + "\n"
+            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_21'))
+              + testFunc(BleInterface.testStopBLEScan)
+              + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
             await sleep(1)
-            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_t')) + testFunc(BrInterface.testOnStateChange) + "\n"
+            bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_t'))
+              + testFunc(BrInterface.testOnStateChange)
+              + "\n"
             AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
             await sleep(1)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Text($r('app.string.bluetoothtest_text_wdxncs'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+                .margin({
+                  left: ConfigData.VP_5,
+                  right: ConfigData.VP_5
+                })
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -179,29 +233,44 @@ struct BleBenchmarkTest {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, left: ConfigData.VP_5, right: ConfigData.VP_5})
+          .margin({
+            top: ConfigData.VP_15,
+            left: ConfigData.VP_5,
+            right: ConfigData.VP_5
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let bleBenchmarkTestMessage = ""
             let i = 0
-            for( i ; i<10 ; i++ ){
-              bleBenchmarkTestMessage = resStr($r('app.string.bluetoothtest_str_d_1')) + (i + 1) + resStr($r('app.string.bluetoothtest_str_cwdxcs')) + "\n"
+            for(i ; i<10 ; i++) {
+              bleBenchmarkTestMessage =
+                resStr($r('app.string.bluetoothtest_str_d_1')) + (i + 1) +
+                  resStr($r('app.string.bluetoothtest_str_cwdxcs')) + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
               await sleep(1)
 
-              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_s_1')) + testFunc(subscribeBLEDeviceFind) + "\n"
+              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_s_1'))
+                + testFunc(subscribeBLEDeviceFind)
+                + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
               await sleep(1)
 
-              bleBenchmarkTestMessage += "startBleScan" + testFunc(BluetoothModel.startBLEScan) + "\n"
+              bleBenchmarkTestMessage += "startBleScan"
+                + testFunc(BluetoothModel.startBLEScan)
+                + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
               await sleep(10)
 
-              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_21')) + testFunc(testStopBLEScan) + "\n"
+              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_21'))
+                + testFunc(testStopBLEScan)
+                + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
               await sleep(1)
 
-              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_uzx_1')) + testFunc(BluetoothModel.unsubscribeBLEDeviceFind) + "\n"
+              bleBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_uzx_1'))
+                + testFunc(BluetoothModel.unsubscribeBLEDeviceFind)
+                + "\n"
               AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
               await sleep(1)
 
@@ -209,13 +278,22 @@ struct BleBenchmarkTest {
               AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
               await sleep(1)
             }
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Image($r('app.media.ic_public_delete_filled'))
           .accessibilityLevel('yes')
-          .id('pages_subBenchmarkTest_bleBenchmarkTest__img_0').width(ConfigData.VP_30).height(ConfigData.VP_40).margin({left: ConfigData.VP_5})
+          .id('pages_subBenchmarkTest_bleBenchmarkTest__img_0')
+          .width(ConfigData.VP_30)
+          .height(ConfigData.VP_40)
+          .margin({left: ConfigData.VP_5})
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -225,12 +303,19 @@ struct BleBenchmarkTest {
           .backgroundColor($r("app.color.moon"))
           .width(ConfigData.VP_50)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, right: ConfigData.VP_5})
+          .margin({
+            top: ConfigData.VP_15,
+            right: ConfigData.VP_5
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let bleBenchmarkTestMessage = ""
             AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)
@@ -241,12 +326,19 @@ struct BleBenchmarkTest {
     }
   }
 
-  async forLoop(){
+  async forLoop() {
+    try {
     let bleBenchmarkTestMessage = ""
     //拼装数组
     let bleBenchmarkArray: Array<BTAutoArrayItem> = [
-      { name: "testSetLocalName", para: [ "DaYuBlue" ]},
-      { name: "testSetBluetoothScanMode", para: [ 4, 0 ]}
+      {
+        name: "testSetLocalName",
+        para: ["DaYuBlue"]
+      },
+      {
+        name: "testSetBluetoothScanMode",
+        para: [4, 0]
+      }
     ]
     let interfaces = BleBenchmarkTestCase.map(i => {
       let item = bleBenchmarkArray.find(itm => itm.name === i.api.name);
@@ -254,25 +346,31 @@ struct BleBenchmarkTest {
       return { name: i.api.name, para} as BTAutoArrayItem;
     })
 
-    for(let m = 0 ; m<interfaces.length ; m++ ){
-      bleBenchmarkTestMessage += BleBenchmarkTestCase[ m ].name + "," + testFunc(BleBenchmarkTestCase[ m ].api) + "\n"
+    for(let m = 0 ; m<interfaces.length ; m++) {
+      bleBenchmarkTestMessage += BleBenchmarkTestCase[m].name
+        + ","
+        + testFunc(BleBenchmarkTestCase[m].api)
+        + "\n"
       AppStorage.setOrCreate("bleBenchmarkTestMessage", bleBenchmarkTestMessage)
       await sleep(1)
     }
-  }
+  
+    } catch (e) {
+      LogUtil.info(`forLoop failed: ${e.message}, code: ${e.code}`);
+    }}
 }
 
 
-export function test(func: Function){
+export function test(func: Function) {
   let start = new Date().getTime();//起始时间
   func();//执行待测函数
   let end = new Date().getTime();//接受时间
   return (end - start) + "ms";//返回函数执行需要时间
 }
 
-export function testFunc(func: Function){
+export function testFunc(func: Function) {
   let start = new Date().getTime()
-  switch ( func ){
+  switch (func) {
     case BluetoothModel.startBLEScan: {
       func(null)
     }
@@ -297,7 +395,13 @@ export function testFunc(func: Function){
   LogUtil.info(resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms")
   let message = ""
   message += resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms" + "\n"
-  message += resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + resStr($r('app.string.bluetoothtest_str_m_1')) + resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms" + "\n"
+  message += resStr($r('app.string.bluetoothtest_str_ks'))
+    + Number(start)
+    + resStr($r('app.string.bluetoothtest_str_m_1'))
+    + resStr($r('app.string.bluetoothtest_str_js'))
+    + Number(end)
+    + "ms"
+    + "\n"
   return message
 }
 
@@ -309,7 +413,7 @@ async function sleep(time: number): Promise<void> {
   });
 }
 
-function subscribeBLEDeviceFind(){
+function subscribeBLEDeviceFind() {
   let start2 = new Date().getTime()
   let bleRunMessage = resStr($r('app.string.bluetoothtest_str_s_3'))
   let message = resStr($r('app.string.bluetoothtest_str_st_5'))
@@ -328,12 +432,30 @@ function subscribeBLEDeviceFind(){
       LogUtil.info("btRssi:" + String(btRssi))
       LogUtil.info("DeviceFound Start222 ------------------------")
       LogUtil.info('available ble find [' + JSON.stringify(obj2) + '] ')
-      let message = (resStr($r('app.string.bluetoothtest_str_abf_1')) + JSON.stringify(obj2) + resStr($r('app.string.bluetoothtest_str_str')))
+      let message = (resStr($r('app.string.bluetoothtest_str_abf_1')) + JSON.stringify(obj2) +
+        resStr($r('app.string.bluetoothtest_str_str')))
       promptAction.showToast({message: message})
-      bleRunMessage += "\n" + resStr($r('app.string.bluetoothtest_str_hf')) + Number(end2 - start2) + resStr($r('app.string.bluetoothtest_str_m_2')) + resStr($r('app.string.bluetoothtest_str_mw')) + JSON.stringify(obj2) + resStr($r('app.string.bluetoothtest_str_d')) + btRssi.toFixed(2) + resStr($r('app.string.bluetoothtest_str_str_1')) + "\n"
-      bleRunMessage += resStr($r('app.string.bluetoothtest_str_ks')) + Number(start2) + resStr($r('app.string.bluetoothtest_str_m_1')) + resStr($r('app.string.bluetoothtest_str_js')) + Number(end2) + "ms" + "\n"
-      LogUtil.info(resStr($r('app.string.bluetoothtest_str_hf')) + Number(end2 - start2) + "ms;" + resStr($r('app.string.bluetoothtest_str_mw')) + JSON.stringify(obj2) + "]" + "\n")
-      LogUtil.info(resStr($r('app.string.bluetoothtest_str_ks')) + Number(start2) + "ms; " + resStr($r('app.string.bluetoothtest_str_js')) + Number(end2) + "ms" + "\n")
+      bleRunMessage += "\n"
+        + resStr($r('app.string.bluetoothtest_str_hf'))
+        + Number(end2 - start2)
+        + resStr($r('app.string.bluetoothtest_str_m_2'))
+        + resStr($r('app.string.bluetoothtest_str_mw'))
+        + JSON.stringify(obj2)
+        + resStr($r('app.string.bluetoothtest_str_d'))
+        + btRssi.toFixed(2)
+        + resStr($r('app.string.bluetoothtest_str_str_1'))
+        + "\n"
+      bleRunMessage += resStr($r('app.string.bluetoothtest_str_ks'))
+        + Number(start2)
+        + resStr($r('app.string.bluetoothtest_str_m_1'))
+        + resStr($r('app.string.bluetoothtest_str_js'))
+        + Number(end2)
+        + "ms"
+        + "\n"
+      LogUtil.info(resStr($r('app.string.bluetoothtest_str_hf')) + Number(end2 - start2) + "ms;" +
+        resStr($r('app.string.bluetoothtest_str_mw')) + JSON.stringify(obj2) + "]" + "\n")
+      LogUtil.info(resStr($r('app.string.bluetoothtest_str_ks')) + Number(start2) + "ms; " +
+        resStr($r('app.string.bluetoothtest_str_js')) + Number(end2) + "ms" + "\n")
       await sleep(1)
       AppStorage.setOrCreate('bleRunMessage', bleRunMessage);
       await sleep(1)

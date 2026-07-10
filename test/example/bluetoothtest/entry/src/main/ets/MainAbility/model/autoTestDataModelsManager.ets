@@ -1308,7 +1308,8 @@ export const PanNetworkProfileManagerAutoTestCase: AutoManagerTest[] = [
 export function initBrManagerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   BrManagerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1316,7 +1317,8 @@ export function initBrManagerAutoData(): Array<TestAuto> {
 export function initBleManagerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   BleManagerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1324,7 +1326,8 @@ export function initBleManagerAutoData(): Array<TestAuto> {
 export function initGattClientManagerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   GattClientManagerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1332,7 +1335,8 @@ export function initGattClientManagerAutoData(): Array<TestAuto> {
 export function initGattServerManagerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   GattServerManagerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1340,7 +1344,8 @@ export function initGattServerManagerAutoData(): Array<TestAuto> {
 export function initSppClientManagerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   SppClientManagerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1348,7 +1353,8 @@ export function initSppClientManagerAutoData(): Array<TestAuto> {
 export function initSppServerManagerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   SppServerManagerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1356,7 +1362,8 @@ export function initSppServerManagerAutoData(): Array<TestAuto> {
 export function initA2dpSourceProfileManagerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   A2dpSourceProfileManagerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1364,7 +1371,8 @@ export function initA2dpSourceProfileManagerAutoData(): Array<TestAuto> {
 export function initHandsFreeAudioGatewayProfileManagerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   HandsFreeAudioGatewayProfileManagerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1372,7 +1380,8 @@ export function initHandsFreeAudioGatewayProfileManagerAutoData(): Array<TestAut
 export function initHitHostProfileManagerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   HitHostProfileManagerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }
@@ -1380,7 +1389,8 @@ export function initHitHostProfileManagerAutoData(): Array<TestAuto> {
 export function initPanNetworkProfileManagerAutoData(): Array<TestAuto> {
   let TestAutoArray: Array<TestAuto> = []
   PanNetworkProfileManagerAutoTestCase.forEach(item => {
-    TestAutoArray.push(new TestAuto(item.name , item.detail , item.method , item.api , item.result , item.category));
+    TestAutoArray.push(new TestAuto(item.name, item.detail, item.method,
+      item.api, item.result, item.category));
   })
   return TestAutoArray;
 }

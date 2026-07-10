@@ -17,11 +17,11 @@ import { resStr} from '../../../Utils/resString';
 
 
 import { testItemFromRouterOrPlaceholder} from '../../../Utils/common'
-import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { TestImageDisplay} from '../../../component/testImageDisplay';
 import ConfigData from '../../../Utils/ConfigData';
 import bluetoothManager from '@ohos.bluetoothManager';
-import { ContentTable} from '../../../Component/contentTable';
-import { PageTitle} from '../../../Component/pageTitle';
+import { ContentTable} from '../../../component/contentTable';
+import { PageTitle} from '../../../component/pageTitle';
 import { initGattServerManagerApiData} from '../../../MainAbility/model/testDataModelsManager'
 import { TestData} from '../../../MainAbility/model/testData'
 import promptAction from '@ohos.promptAction';
@@ -67,9 +67,9 @@ struct GattServerSetting {
   private advResponseServiceData_serviceUuid: string = "000054F6-0000-1000-8000-00805f9b34fb";
   private advResponseServiceData_serviceValue: string = "AdvValue";
 
-  build(){
-    Column(){
-      Column(){
+  build() {
+    Column() {
+      Column() {
         Text($r('app.string.bluetoothtest_text_gfwpz'))
           .margin({top: ConfigData.HEIGHT_1_VP})
           .padding(ConfigData.HEIGHT_1_VP)
@@ -78,14 +78,17 @@ struct GattServerSetting {
           .height(ConfigData.VP_30)
           .width(ConfigData.PCT_94)
           .textAlign(TextAlign.Start)
-        Scroll(){
-          Column(){
-            Row(){
+        Scroll() {
+          Column() {
+            Row() {
               Text($r('app.string.bluetoothtest_text_fwu_1'))
                 .fontSize(ConfigData.VP_15)
                 .width(ConfigData.VP_70)
                 .padding({left: ConfigData.VP_10});
-              TextInput({text: this.curServiceUUID, placeholder: "input service UUID"})
+              TextInput({
+                text: this.curServiceUUID,
+                placeholder: "input service UUID"
+              })
                 .accessibilityLevel('yes')
                 .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_0')
                 .fontSize(ConfigData.VP_17)
@@ -101,13 +104,14 @@ struct GattServerSetting {
             .padding(ConfigData.VP_5)
             .backgroundColor($r("app.color.moon"));
 
-            Column(){
-              Row(){
+            Column() {
+              Row() {
                 Text($r('app.string.bluetoothtest_text_cu'))
                   .fontSize(ConfigData.VP_15)
                   .width(ConfigData.VP_70)
                   .padding({left: ConfigData.VP_10});
-                TextInput({text: this.curCharacteristicUUID, placeholder: "input characteristic UUID"})
+                TextInput({text: this.curCharacteristicUUID,
+                  placeholder: "input characteristic UUID"})
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_1')
                   .fontSize(ConfigData.VP_17)
@@ -123,12 +127,13 @@ struct GattServerSetting {
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
 
-              Row(){
+              Row() {
                 Text($r('app.string.bluetoothtest_text_cv'))
                   .fontSize(ConfigData.VP_15)
                   .width(ConfigData.VP_70)
                   .padding({left: ConfigData.VP_10});
-                TextInput({text: this.curCharacteristicValue, placeholder: "input characteristic Value"})
+                TextInput({text: this.curCharacteristicValue,
+                  placeholder: "input characteristic Value"})
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_2')
                   .fontSize(ConfigData.VP_17)
@@ -149,12 +154,15 @@ struct GattServerSetting {
             .padding(ConfigData.VP_5)
             .backgroundColor($r("app.color.spring"));
 
-            Flex({direction: FlexDirection.Column}){
-              Row(){
+            Flex({direction: FlexDirection.Column}) {
+              Row() {
                 Text($r('app.string.bluetoothtest_text_du'))
                   .fontSize(ConfigData.VP_15)
                   .width(ConfigData.VP_70);
-                TextInput({text: this.curDescriptorUUID, placeholder: "input descriptor UUID"})
+                TextInput({
+                  text: this.curDescriptorUUID,
+                  placeholder: "input descriptor UUID"
+                })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_3')
                   .fontSize(ConfigData.VP_17)
@@ -170,11 +178,14 @@ struct GattServerSetting {
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
 
-              Row(){
+              Row() {
                 Text($r('app.string.bluetoothtest_text_dv'))
                   .fontSize(ConfigData.VP_15)
                   .width(ConfigData.VP_70);
-                TextInput({text: this.curDescriptorValue, placeholder: "input descriptor Value"})
+                TextInput({
+                  text: this.curDescriptorValue,
+                  placeholder: "input descriptor Value"
+                })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_4')
                   .fontSize(ConfigData.VP_17)
@@ -201,8 +212,8 @@ struct GattServerSetting {
       }
       .backgroundColor($r("app.color.lead"))
 
-      Column(){
-        Row(){
+      Column() {
+        Row() {
           Text($r('app.string.bluetoothtest_text_gbpz'))
             .margin({top: ConfigData.HEIGHT_1_VP})
             .padding(ConfigData.VP_5)
@@ -211,13 +222,16 @@ struct GattServerSetting {
             .height(ConfigData.VP_30)
             .width(ConfigData.PCT_70)
             .textAlign(TextAlign.Start)
-          Checkbox({name: 'AdvSettings', group: 'checkboxGroup1'})
+          Checkbox({
+            name: 'AdvSettings',
+            group: 'checkboxGroup1'
+          })
             .accessibilityLevel('yes')
             .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__cb_0')
             .select(this.cbxAdvSettings)
             .selectedColor(0x39a2db)
             .onChange((value: boolean) => {
-              if ( value ){
+              if (value) {
                 this.cbxAdvSettings = true;
               } else {
                 this.cbxAdvSettings = false;
@@ -233,18 +247,21 @@ struct GattServerSetting {
         }
         .height(ConfigData.VP_40)
 
-        Scroll(){
-          Column(){
-            Column(){
-              Row(){
-                Checkbox({name: 'interval', group: 'checkboxGroup1'})
+        Scroll() {
+          Column() {
+            Column() {
+              Row() {
+                Checkbox({
+                  name: 'interval',
+                  group: 'checkboxGroup1'
+                })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__cb_1')
                   .select(this.cbxInterval)
                   .selectedColor(0x39a2db)
                   .width(ConfigData.VP_30)
                   .onChange((value) => {
-                    if ( value ){
+                    if (value) {
                       this.cbxInterval = true;
                     } else {
                       this.cbxInterval = false;
@@ -254,7 +271,10 @@ struct GattServerSetting {
                 Text($r('app.string.bluetoothtest_text_i_1'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.VP_70);
-                    TextInput({text: this.advSettings_interval, placeholder: "32~1600"})
+                    TextInput({
+                      text: this.advSettings_interval,
+                      placeholder: "32~1600"
+                    })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_5')
                   .fontSize(ConfigData.VP_18)
@@ -269,15 +289,18 @@ struct GattServerSetting {
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
 
-              Row(){
-                Checkbox({name: 'txPower', group: 'checkboxGroup'})
+              Row() {
+                Checkbox({
+                  name: 'txPower',
+                  group: 'checkboxGroup'
+                })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__cb_2')
                   .select(this.cbxTxPower)
                   .selectedColor(0x39a2db)
                   .width(ConfigData.VP_30)
                   .onChange((value) => {
-                    if ( value ){
+                    if (value) {
                       this.cbxTxPower = true;
                     } else {
                       this.cbxTxPower = false;
@@ -287,7 +310,8 @@ struct GattServerSetting {
                 Text($r('app.string.bluetoothtest_text_t'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.VP_70)
-                    TextInput({text: this.advSettings_txPower.toString(), placeholder: "input txPower"})
+                    TextInput({text: this.advSettings_txPower.toString(),
+                      placeholder: "input txPower"})
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_6')
                   .fontSize(ConfigData.VP_18)
@@ -303,14 +327,17 @@ struct GattServerSetting {
               .justifyContent(FlexAlign.Start)
               .alignItems(VerticalAlign.Center)
 
-              Row(){
-                Checkbox({name: 'connectable', group: 'checkboxGroup'})
+              Row() {
+                Checkbox({
+                  name: 'connectable',
+                  group: 'checkboxGroup'
+                })
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__cb_3')
                   .select(this.cbxConnectable)
                   .selectedColor(0x39a2db)
                   .onChange((value) => {
-                    if ( value ){
+                    if (value) {
                       this.cbxConnectable = true;
                     } else {
                       this.cbxConnectable = false;
@@ -333,13 +360,14 @@ struct GattServerSetting {
             .padding(ConfigData.VP_5)
             .backgroundColor(0xAFEEEE);
 
-            Column(){
-              Row(){
+            Column() {
+              Row() {
                 Text($r('app.string.bluetoothtest_text_fwu'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.VP_60)
                   .padding({left: ConfigData.VP_10})
-                TextInput({text: this.advDataServiceUuids_serviceUuid, placeholder: "input serviceUuid"})
+                TextInput({text: this.advDataServiceUuids_serviceUuid,
+                  placeholder: "input serviceUuid"})
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_7')
                   .fontSize(ConfigData.VP_17)
@@ -351,11 +379,11 @@ struct GattServerSetting {
               }
               .width(ConfigData.WH_100_100)
 
-              Column(){
+              Column() {
                 Text($r('app.string.bluetoothtest_text_m_2'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.WH_100_100)
-                Row(){
+                Row() {
                   Text($r('app.string.bluetoothtest_text_i'))
                     .fontSize(ConfigData.VP_17)
                     .width(ConfigData.VP_30)
@@ -393,18 +421,20 @@ struct GattServerSetting {
               .borderWidth(ConfigData.HEIGHT_1_VP)
               .borderColor($r("app.color.lead"))
 
-              Column(){
+              Column() {
                 Text($r('app.string.bluetoothtest_text_s'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.WH_100_100)
-                Column(){
-                  Row(){
+                Column() {
+                  Row() {
                     Text($r('app.string.bluetoothtest_text_s_1'))
                       .fontSize(ConfigData.VP_17)
                       .width(ConfigData.VP_70)
-                    TextInput({text: '' + this.advDataServiceData_serviceUuid, placeholder: "input serviceUuid"})
+                    TextInput({text: '' + this.advDataServiceData_serviceUuid,
+                      placeholder: "input serviceUuid"})
                       .accessibilityLevel('yes')
-                      .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_10')
+                      .id(
+                        'pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_10')
                       .fontSize(ConfigData.VP_17)
                       .onChange((strInput) => {
                         this.advDataServiceData_serviceUuid = strInput;
@@ -413,7 +443,7 @@ struct GattServerSetting {
                       .width(ConfigData.WH_80_100)
                   }
 
-                  Row(){
+                  Row() {
                     Text($r('app.string.bluetoothtest_text_s_2'))
                       .fontSize(ConfigData.VP_17)
                       .width(ConfigData.VP_70)
@@ -439,14 +469,17 @@ struct GattServerSetting {
             .width(ConfigData.WH_100_100)
             .backgroundColor($r("app.color.moon"));
 
-            Row(){
-              Checkbox({name: 'AdvResponse', group: 'checkboxGroup1'})
+            Row() {
+              Checkbox({
+                name: 'AdvResponse',
+                group: 'checkboxGroup1'
+              })
                 .accessibilityLevel('yes')
                 .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__cb_4')
                 .select(this.cbxAdvResponse)
                 .selectedColor(0x39a2db)
                 .onChange((value) => {
-                  if ( value ){
+                  if (value) {
                     this.cbxAdvResponse = true;
                   } else {
                     this.cbxAdvResponse = false;
@@ -458,19 +491,23 @@ struct GattServerSetting {
                 .width(ConfigData.VP_30)
                 .margin({left: ConfigData.HEIGHT_1_VP})
               Text($r('app.string.bluetoothtest_text_r'))
-                .margin({top: ConfigData.VP_5, left: ConfigData.VP_5})
+                .margin({
+                  top: ConfigData.VP_5,
+                  left: ConfigData.VP_5
+                })
                 .fontSize(ConfigData.VP_17)
                 .fontColor($r('app.color.color_4444444_grey'));
             }
             .height(ConfigData.VP_40)
             .width(ConfigData.WH_100_100)
             .padding(ConfigData.VP_5);
-            Column(){
-              Row(){
+            Column() {
+              Row() {
                 Text($r('app.string.bluetoothtest_text_s_1'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.VP_70)//.width(ConfigData.VP_40)
-                TextInput({text: this.advResponseServiceUuids_serviceUuid, placeholder: "input serviceUuid"})
+                TextInput({text: this.advResponseServiceUuids_serviceUuid,
+                  placeholder: "input serviceUuid"})
                   .accessibilityLevel('yes')
                   .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_12')
                   .fontSize(ConfigData.VP_17)
@@ -481,20 +518,21 @@ struct GattServerSetting {
                   .width(ConfigData.WH_80_100)
               }
 
-              Column(){
+              Column() {
                 Text($r('app.string.bluetoothtest_text_m_2'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.WH_100_100)
                   .backgroundColor($r("app.color.lead"))
-                Column(){
-                  Row(){
+                Column() {
+                  Row() {
                     Text($r('app.string.bluetoothtest_text_i'))
                       .fontSize(ConfigData.VP_17)
                       .width(ConfigData.VP_50)
                     TextInput({text: this.advResponseManufactureData_manufactureId,
                       placeholder: "input manufactureId(less than 8 char)"})
                       .accessibilityLevel('yes')
-                      .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_13')
+                      .id(
+                        'pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_13')
                       .fontSize(ConfigData.VP_17)
                       .onChange((strInput) => {
                         this.advResponseManufactureData_manufactureId = strInput;
@@ -503,18 +541,20 @@ struct GattServerSetting {
                       .width(ConfigData.WH_80_100)
                   }
 
-                  Row(){
+                  Row() {
                     Text($r('app.string.bluetoothtest_text_v'))
                       .fontSize(ConfigData.VP_17)
                       .width(ConfigData.VP_50)
                     TextInput({text: this.advResponseManufactureData_manufactureValue,
                       placeholder: "input manufactureValue(less than 8 char)"})
                       .accessibilityLevel('yes')
-                      .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_14')
+                      .id(
+                        'pages_subManualApiTestManager_subGattTestManager_gattServerManager__ti_14')
                       .fontSize(ConfigData.VP_17)
                       .onChange((strInput) => {
                         this.advResponseManufactureData_manufactureValue = strInput;
-                        AppStorage.setOrCreate('advResponseManufactureData_manufactureValue', strInput)
+                        AppStorage.setOrCreate('advResponseManufactureData_manufactureValue',
+                          strInput)
                       })
                       .width(ConfigData.WH_80_100)
                   }
@@ -524,13 +564,13 @@ struct GattServerSetting {
               .borderWidth(ConfigData.HEIGHT_1_VP)
               .borderColor($r("app.color.lead"))
 
-              Column(){
+              Column() {
                 Text($r('app.string.bluetoothtest_text_s'))
                   .fontSize(ConfigData.VP_17)
                   .width(ConfigData.WH_100_100)
                   .backgroundColor($r("app.color.lead"))
-                Column(){
-                  Row(){
+                Column() {
+                  Row() {
                     Text($r('app.string.bluetoothtest_text_s_1'))
                       .fontSize(ConfigData.VP_17)
                       .width(ConfigData.VP_70)
@@ -548,7 +588,7 @@ struct GattServerSetting {
                       .width(ConfigData.WH_80_100)
                   }
 
-                  Row(){
+                  Row() {
                     Text($r('app.string.bluetoothtest_text_s_2'))
                       .fontSize(ConfigData.VP_17)
                       .width(ConfigData.VP_70)
@@ -673,38 +713,39 @@ struct GattServerManager {
     connectable: true
   };
   private curAdvData: bluetoothManager.AdvertiseData = {
-    serviceUuids: [ "00003344-0000-1000-8000-00805f9b34fb", "00008899-0000-1000-8000-00805f9b34fb" ],
-    manufactureData: [ {
+    serviceUuids: ["00003344-0000-1000-8000-00805f9b34fb",
+      "00008899-0000-1000-8000-00805f9b34fb"],
+    manufactureData: [{
       manufactureId: 7456,
       manufactureValue: string2ArrayBuffer("OHOS CHN")
-    } ],
-    serviceData: [ {
+    }],
+    serviceData: [{
       serviceUuid: "000054F6-0000-1000-8000-00805f9b34fb",
       serviceValue: string2ArrayBuffer("OhosBle!")
     }, {
       serviceUuid: "00009999-0000-1000-8000-00805f9b34fb",
       serviceValue: string2ArrayBuffer("dudu_tiger")
-    } ]
+    }]
   };
   private curAdvResponse: bluetoothManager.AdvertiseData = {
     serviceUuids: [//"000054F6-0000-1000-8000-00805f9b34fb",
-      "00009999-0000-1000-8000-00805f9b34fb" ],
-    manufactureData: [ {
+      "00009999-0000-1000-8000-00805f9b34fb"],
+    manufactureData: [{
       manufactureId: 6547,
       manufactureValue: string2ArrayBuffer("OHOS CHN")
-    } ],
-    serviceData: [ {
+    }],
+    serviceData: [{
       serviceUuid: "000054F6-0000-1000-8000-00805f9b34fb",
       serviceValue: string2ArrayBuffer("OhosBle!")
     }, {
       serviceUuid: "00007456-0000-1000-8000-00805f9b34fb",
       serviceValue: string2ArrayBuffer("OhosBle")
-    } ]
+    }]
   };
 
   //------------@State->private------------------------------
 
-  aboutToAppear(){
+  aboutToAppear() {
     AppStorage.setOrCreate('curServiceUUID', this.curServiceUUID);
     AppStorage.setOrCreate('curCharacteristicUUID', this.curCharacteristicUUID);
     AppStorage.setOrCreate('curDescriptorUUID', this.curDescriptorUUID);
@@ -715,24 +756,31 @@ struct GattServerManager {
     AppStorage.setOrCreate('advSettings_txPower', this.advSettings_txPower);
     AppStorage.setOrCreate('advSettings_connectable', this.advSettings_connectable);
     AppStorage.setOrCreate('advDataServiceUuids_serviceUuid', this.advDataServiceUuids_serviceUuid);
-    AppStorage.setOrCreate('advDataManufactureData_manufactureId', this.advDataManufactureData_manufactureId);
-    AppStorage.setOrCreate('advDataManufactureData_manufactureValue', this.advDataManufactureData_manufactureValue);
+    AppStorage.setOrCreate('advDataManufactureData_manufactureId',
+      this.advDataManufactureData_manufactureId);
+    AppStorage.setOrCreate('advDataManufactureData_manufactureValue',
+      this.advDataManufactureData_manufactureValue);
     AppStorage.setOrCreate('advDataServiceData_serviceUuid', this.advDataServiceData_serviceUuid);
     AppStorage.setOrCreate('advDataServiceData_serviceValue', this.advDataServiceData_serviceValue);
-    AppStorage.setOrCreate('advResponseServiceUuids_serviceUuid', this.advResponseServiceUuids_serviceUuid);
-    AppStorage.setOrCreate('advResponseManufactureData_manufactureId', this.advResponseManufactureData_manufactureId);
-    AppStorage.setOrCreate('advResponseManufactureData_manufactureValue', this.advResponseManufactureData_manufactureValue);
-    AppStorage.setOrCreate('advResponseServiceData_serviceUuid', this.advResponseServiceData_serviceUuid);
-    AppStorage.setOrCreate('advResponseServiceData_serviceValue', this.advResponseServiceData_serviceValue);
+    AppStorage.setOrCreate('advResponseServiceUuids_serviceUuid',
+      this.advResponseServiceUuids_serviceUuid);
+    AppStorage.setOrCreate('advResponseManufactureData_manufactureId',
+      this.advResponseManufactureData_manufactureId);
+    AppStorage.setOrCreate('advResponseManufactureData_manufactureValue',
+      this.advResponseManufactureData_manufactureValue);
+    AppStorage.setOrCreate('advResponseServiceData_serviceUuid',
+      this.advResponseServiceData_serviceUuid);
+    AppStorage.setOrCreate('advResponseServiceData_serviceValue',
+      this.advResponseServiceData_serviceValue);
     AppStorage.setOrCreate('cbxAdvSettings', this.cbxAdvSettings);
     AppStorage.setOrCreate('cbxInterval', this.cbxInterval);
     AppStorage.setOrCreate('cbxTxPower', this.cbxTxPower);
     AppStorage.setOrCreate('cbxAdvResponse', this.cbxAdvResponse);
   }
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
           .accessibilityLevel('yes')
@@ -742,7 +790,7 @@ struct GattServerManager {
       Stack()
         .height(ConfigData.VP_0_5)
         .backgroundColor($r('app.color.black'));
-      Row(){
+      Row() {
         Text($r('app.string.bluetoothtest_text_g_1'))
           .fontSize(ConfigData.VP_20)
           .height(ConfigData.VP_60)
@@ -753,52 +801,77 @@ struct GattServerManager {
           .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__img_0')
           .height(ConfigData.VP_50)
           .width(ConfigData.VP_50)
-          .padding({top: ConfigData.VP_10, bottom: ConfigData.VP_10, left: ConfigData.VP_10})
+          .padding({
+            top: ConfigData.VP_10,
+            bottom: ConfigData.VP_10,
+            left: ConfigData.VP_10
+          })
           .onClick(() => {
             this.showList = !this.showList;
           })
       }
       .width(ConfigData.WH_100_100)
 
-      Column(){
-        if ( this.showList ){
+      Column() {
+        if (this.showList) {
           GattServerSetting()
         } else {
-          Column(){
-            Column(){
+          Column() {
+            Column() {
               Text($r('app.string.bluetoothtest_text_jgxs'))
                 .fontSize(ConfigData.VP_17)
-                .margin({top: ConfigData.VP_5, left: ConfigData.VP_10})
+                .margin({
+                  top: ConfigData.VP_5,
+                  left: ConfigData.VP_10
+                })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_100_100)
               Text(resStr($r('app.string.label_gatt_result_colon')) + this.message)
                 .fontSize(ConfigData.VP_17)
-                .margin({top: ConfigData.HEIGHT_1_VP, left: ConfigData.VP_10})
+                .margin({
+                  top: ConfigData.HEIGHT_1_VP,
+                  left: ConfigData.VP_10
+                })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
               Text(resStr($r('app.string.label_gatt_conn_state_colon')) + this.connectStateMsg)
                 .fontSize(ConfigData.VP_17)
-                .margin({top: ConfigData.HEIGHT_1_VP, left: ConfigData.VP_10})
+                .margin({
+                  top: ConfigData.HEIGHT_1_VP,
+                  left: ConfigData.VP_10
+                })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
               Text(resStr($r('app.string.label_char_read_colon')) + this.characteristicReadMsg)
                 .fontSize(ConfigData.VP_17)
-                .margin({top: ConfigData.HEIGHT_1_VP, left: ConfigData.VP_10})
+                .margin({
+                  top: ConfigData.HEIGHT_1_VP,
+                  left: ConfigData.VP_10
+                })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
               Text(resStr($r('app.string.label_char_write_colon')) + this.characteristicWriteMsg)
                 .fontSize(ConfigData.VP_17)
-                .margin({top: ConfigData.HEIGHT_1_VP, left: ConfigData.VP_10})
+                .margin({
+                  top: ConfigData.HEIGHT_1_VP,
+                  left: ConfigData.VP_10
+                })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
               Text(resStr($r('app.string.label_desc_read_colon')) + this.descriptorReadMsg)
                 .fontSize(ConfigData.VP_17)
-                .margin({top: ConfigData.HEIGHT_1_VP, left: ConfigData.VP_10})
+                .margin({
+                  top: ConfigData.HEIGHT_1_VP,
+                  left: ConfigData.VP_10
+                })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
               Text(resStr($r('app.string.label_desc_write_colon')) + this.descriptorWriteMsg)
                 .fontSize(ConfigData.VP_17)
-                .margin({top: ConfigData.HEIGHT_1_VP, left: ConfigData.VP_10})
+                .margin({
+                  top: ConfigData.HEIGHT_1_VP,
+                  left: ConfigData.VP_10
+                })
                 .textAlign(TextAlign.Start)
                 .width(ConfigData.WH_90_100)
             }
@@ -809,20 +882,23 @@ struct GattServerManager {
             Stack()
               .height(ConfigData.VP_0_25)
               .backgroundColor($r('app.color.black'));
-            Column(){
+            Column() {
               Text($r('app.string.bluetoothtest_text_gncs'))
-                .margin({top: ConfigData.VP_5, left: ConfigData.VP_10})
+                .margin({
+                  top: ConfigData.VP_5,
+                  left: ConfigData.VP_10
+                })
                 .padding(ConfigData.VP_5)
                 .fontSize(ConfigData.VP_18)
                 .width(ConfigData.WH_100_100)
-              Scroll(){
+              Scroll() {
                 ContentTable({apiItems: initGattServerManagerApiData()})//子层调用
               }
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subGattTestManager_gattServerManager__sc_2')
               .width(ConfigData.WH_100_100)
               .align(Alignment.TopStart)
-              .layoutWeight(1)
+              .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
               .margin({top: $r('sys.float.ohos_id_card_margin_middle')})
             }
             .height(ConfigData.PCT_75)
@@ -835,21 +911,21 @@ struct GattServerManager {
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
   }
 
-  private buildAdvSettings(){
-    if ( this.cbxAdvSettings ){
-      if ( this.cbxInterval ){
+  private buildAdvSettings() {
+    if (this.cbxAdvSettings) {
+      if (this.cbxInterval) {
         this.curAdvSettings.interval = parseInt(this.advSettings_interval);
       }
-      if ( this.cbxTxPower ){
+      if (this.cbxTxPower) {
         this.curAdvSettings.txPower = parseInt(this.advSettings_txPower);
       }
-      if ( this.cbxConnectable ){
+      if (this.cbxConnectable) {
         this.curAdvSettings.connectable = this.advSettings_connectable;
       }
     }
   }
 
-  private buildAdvData(){
+  private buildAdvData() {
     let serviceUuidInstance = this.advDataServiceUuids_serviceUuid;
     this.curAdvData.serviceUuids.length = 0;
     this.curAdvData.serviceUuids.push(serviceUuidInstance);
@@ -873,8 +949,8 @@ struct GattServerManager {
     this.curAdvData.serviceData.push(serviceDataInstance);
   }
 
-  private buildAdvResponse(){
-    if ( !this.cbxAdvResponse ){
+  private buildAdvResponse() {
+    if (!this.cbxAdvResponse) {
       return;
     }
     let serviceUuidInstance = this.advResponseServiceUuids_serviceUuid;
@@ -901,7 +977,7 @@ struct GattServerManager {
     this.curAdvResponse.serviceData.push(serviceDataInstance);
   }
 
-  private buildGattService(){
+  private buildGattService() {
     // build descriptors
     let descriptors: Array<bluetooth.BLEDescriptor> = [];
     let descriptor: bluetooth.BLEDescriptor = {
@@ -929,7 +1005,7 @@ struct GattServerManager {
     this.curGattService.includeServices = [];
   }
 
-  private buildNotifyCharacteristic(){
+  private buildNotifyCharacteristic() {
     this.notifyCharacteristic_notifyCharacteristic = {
       serviceUuid: this.notifyCharacteristic_serviceUuid,
       characteristicUuid: this.notifyCharacteristic_characteristicUuid,
@@ -938,7 +1014,7 @@ struct GattServerManager {
     }
   }
 
-  private buildServerResponse(){
+  private buildServerResponse() {
     this.serverResponse = {
       deviceId: this.serverResponse_deviceId,
       transId: parseInt(this.serverResponse_transId),
@@ -954,10 +1030,10 @@ struct GattServerManager {
  * @param {*} str: the string to covert
  * @return: ArrayBuffer
  */
-function string2ArrayBuffer(str: string){
+function string2ArrayBuffer(str: string) {
   let array = new Uint8Array(str.length);
-  for(let i = 0 ; i<str.length ; i++ ){
-    array[ i ] = str.charCodeAt(i);
+  for(let i = 0 ; i<str.length ; i++) {
+    array[i] = str.charCodeAt(i);
   }
   return array.buffer
 }

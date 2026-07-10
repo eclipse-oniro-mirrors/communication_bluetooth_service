@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import ConfigData from '../../../Utils/ConfigData';
 import BluetoothModel from '../../../MainAbility/model/BluetoothModel';
 import router from '@ohos.router';
 import InputMethod from '@ohos.inputMethod';
-import { PageTitle} from '../../../Component/pageTitle';
+import { PageTitle} from '../../../component/pageTitle';
 /**
  * about phone
  */
@@ -27,25 +27,39 @@ struct DeviceNameCard {
   private deviceName: string = BluetoothModel.getLocalName();
   private deviceInfo: any = ''
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       GridContainer({
         columns: 12,
         sizeType: SizeType.Auto,
         gutter: vp2px(1) === 2 ? ConfigData.VP_12: ConfigData.VP_0,
         margin: vp2px(1) === 2 ? ConfigData.VP_24: ConfigData.VP_0
-      }){
-        Row({}){
-          Column(){
+      }) {
+        Row({}) {
+          Column() {
           }
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs: { span: 0, offset: 0}, sm: { span: 0, offset: 0},
-            md: { span: 0, offset: 0}, lg: { span: 2, offset: 0}
+            xs: {
+              span: 0,
+              offset: 0
+            },
+            sm: {
+              span: 0,
+              offset: 0
+            },
+            md: {
+              span: 0,
+              offset: 0
+            },
+            lg: {
+              span: 2,
+              offset: 0
+            }
           });
 
-          Column(){
+          Column() {
             PageTitle({detail: $r('app.string.bluetoothtest_str_sbmc')})
 
             TextInput({text: this.deviceName})
@@ -70,7 +84,8 @@ struct DeviceNameCard {
               })
               .onSubmit((enterKey) => {
                 InputMethod.getInputMethodController().stopInput().then((ret) => {
-                  LogUtil.info(`${ ConfigData.TAG }, enterType: ${ enterKey }, stopInput: ${ ret }`);
+                  LogUtil.info(`${ConfigData.TAG }, enterType: ${enterKey },
+                    stopInput: ${ret }`);
               });
               })
             Divider()
@@ -79,7 +94,7 @@ struct DeviceNameCard {
                 right: $r('sys.float.ohos_id_card_margin_end')
               })
 
-            Column(){
+            Column() {
               Blank()
             }
               .height(ConfigData.WH_25_100)
@@ -88,8 +103,8 @@ struct DeviceNameCard {
               direction: FlexDirection.Row,
               justifyContent: FlexAlign.Center,
               alignItems: ItemAlign.Center
-            }){
-              Row(){
+            }) {
+              Row() {
                 ButtonComponent({text: $r("app.string.cancel"), isOnClick: () => {
                   router.back();
                 }})
@@ -97,7 +112,7 @@ struct DeviceNameCard {
               .width(ConfigData.VP_120)
               .margin({right: ConfigData.VP_12})
 
-              Row(){
+              Row() {
                 ButtonComponent({text: $r("app.string.confirm"), isOnClick: () => {
                   let ret = BluetoothModel.setLocalName(this.deviceName);
                   AppStorage.setOrCreate('setLocalNameRet', ret);
@@ -107,21 +122,52 @@ struct DeviceNameCard {
                 .width(ConfigData.VP_120)
             }
           }
-          .padding({left: ConfigData.VP_24, right: ConfigData.VP_24})
+          .padding({
+            left: ConfigData.VP_24,
+            right: ConfigData.VP_24
+          })
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs: { span: 12, offset: 0}, sm: { span: 12, offset: 0},
-            md: { span: 12, offset: 0}, lg: { span: 8, offset: 2}
+            xs: {
+              span: 12,
+              offset: 0
+            },
+            sm: {
+              span: 12,
+              offset: 0
+            },
+            md: {
+              span: 12,
+              offset: 0
+            },
+            lg: {
+              span: 8,
+              offset: 2
+            }
           });
 
-          Column(){
+          Column() {
           }
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs: { span: 0, offset: 12}, sm: { span: 0, offset: 12},
-            md: { span: 0, offset: 12}, lg: { span: 2, offset: 10}
+            xs: {
+              span: 0,
+              offset: 12
+            },
+            sm: {
+              span: 0,
+              offset: 12
+            },
+            md: {
+              span: 0,
+              offset: 12
+            },
+            lg: {
+              span: 2,
+              offset: 10
+            }
           })
         }
         .width(ConfigData.WH_100_100)
@@ -144,8 +190,8 @@ struct ButtonComponent {
   private isOnClick = () => {
   };
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       Text(this.text)
         .fontSize(ConfigData.FP_16)
         .fontWeight(FontWeight.Medium)
@@ -155,12 +201,13 @@ struct ButtonComponent {
         .width(ConfigData.VP_120)
         .height(ConfigData.VP_40)
         .borderRadius(ConfigData.VP_20)
-        .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") : $r("sys.color.ohos_id_color_foreground_contrary"))
+        .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") :
+          $r("sys.color.ohos_id_color_foreground_contrary"))
         .onTouch((event: TouchEvent) => {
-          if ( event.type === TouchType.Down ){
+          if (event.type === TouchType.Down) {
             this.isTouched = true;
           }
-          if ( event.type === TouchType.Up ){
+          if (event.type === TouchType.Up) {
             this.isTouched = false;
           }
         })

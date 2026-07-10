@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ import LogUtil from '../../../Utils/LogUtil';
 import { resStr} from '../../../Utils/resString';
 
 import ConfigData from '../../../Utils/ConfigData';
-import { TitleComponent} from '../../../Component/titleComponent';
+import { TitleComponent} from '../../../component/titleComponent';
 import bt from '@ohos.bluetooth';
 
 /**
@@ -31,13 +31,16 @@ struct profileConnState2 {
   private stateProfile: string = ""
   @State deviceId: string = AppStorage.get('inputDeviceId');
 
-  build(){
-    Row(){
-      Column(){
-        Row(){
+  build() {
+    Row() {
+      Column() {
+        Row() {
           Text($r('app.string.bluetoothtest_text_mbsbm'))
             .fontSize(ConfigData.VP_20)
-          TextInput({text: this.deviceId, placeholder: $r('app.string.bluetoothtest_str_qsrmdz')})
+          TextInput({
+            text: this.deviceId,
+            placeholder: $r('app.string.bluetoothtest_str_qsrmdz')
+          })
             .fontSize(ConfigData.VP_20)
             .onChange((str) => {
               this.deviceId = str;
@@ -46,15 +49,20 @@ struct profileConnState2 {
             .width(ConfigData.PCT_70)
         }
         .backgroundColor($r("app.color.moon"))
-        .margin({top: ConfigData.VP_20, left: ConfigData.VP_20, right: ConfigData.VP_20})
+        .margin({
+          top: ConfigData.VP_20,
+          left: ConfigData.VP_20,
+          right: ConfigData.VP_20
+        })
         .alignItems(VerticalAlign.Center)
 
-        List(){
-          ListItem(){
+        List() {
+          ListItem() {
             TitleComponent({
               title: "A2DP_SOURCE",
               fontSize: ConfigData.VP_15,
-              bgColor: this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+              bgColor: this.currentClick === 0 ? $r('app.color.font_color_007DFF') :
+                $r('app.color.white_bg_color')
             });
           }
           .padding({top: ConfigData.VP_20})
@@ -65,7 +73,7 @@ struct profileConnState2 {
             this.profileId = 1;
             let ret = bt.getProfile(this.profileId).getDeviceState(this.deviceId);
             LogUtil.info('A2DP state is -' + ret);
-            switch ( ret ){
+            switch (ret) {
               case 0:
                 this.stateProfile = 'STATE_DISCONNECTED';
                 break;
@@ -85,11 +93,12 @@ struct profileConnState2 {
             this.message = resStr($r('app.string.bluetoothtest_str_dqadzts')) + this.stateProfile;
           })
 
-          ListItem(){
+          ListItem() {
             TitleComponent({
               title: "HANDS_FREE_AUDIO_GATEWAY",
               fontSize: ConfigData.VP_15,
-              bgColor: this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+              bgColor: this.currentClick === 1 ? $r('app.color.font_color_007DFF') :
+                $r('app.color.white_bg_color')
             });
           }
           .padding({top: ConfigData.VP_20})
@@ -100,7 +109,7 @@ struct profileConnState2 {
             this.profileId = 4;
             let ret = bt.getProfile(this.profileId).getDeviceState(this.deviceId);
             LogUtil.info('HFP state is -' + ret);
-            switch ( ret ){
+            switch (ret) {
               case 0:
                 this.stateProfile = 'STATE_DISCONNECTED';
                 break;
@@ -120,11 +129,12 @@ struct profileConnState2 {
             this.message = resStr($r('app.string.bluetoothtest_str_dqhdzts')) + this.stateProfile;
           })
 
-          ListItem(){
+          ListItem() {
             TitleComponent({
               title: "HID_HOST",
               fontSize: ConfigData.VP_15,
-              bgColor: this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+              bgColor: this.currentClick === 2 ? $r('app.color.font_color_007DFF') :
+                $r('app.color.white_bg_color')
             });
           }
           .padding({top: ConfigData.VP_20})
@@ -135,7 +145,7 @@ struct profileConnState2 {
             this.profileId = 6;
             let ret = bt.getProfile(this.profileId).getDeviceState(this.deviceId);
             LogUtil.info('HID state is -' + ret);
-            switch ( ret ){
+            switch (ret) {
               case 0:
                 this.stateProfile = 'STATE_DISCONNECTED';
                 break;

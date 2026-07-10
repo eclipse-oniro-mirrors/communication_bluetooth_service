@@ -18,11 +18,11 @@ import { resStr} from '../../../Utils/resString';
 import ConfigData from '../../../Utils/ConfigData';
 import BluetoothModel from '../../../MainAbility/model/BluetoothModel';
 import router from '@ohos.router'
-import { TitleComponent} from '../../../Component/titleComponent';
+import { TitleComponent} from '../../../component/titleComponent';
 import InputMethod from '@ohos.inputMethod';
 import bluetooth from '@ohos.bluetooth';
 
-import { PageTitle} from '../../../Component/pageTitle';
+import { PageTitle} from '../../../component/pageTitle';
 /**
  * about phone
  */
@@ -38,13 +38,13 @@ struct setScanMode {
     this.currentClick = bluetooth.getBluetoothScanMode();
   }
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       PageTitle({detail: $r('app.string.bluetoothtest_str_szsmlx')})
-      Scroll(){
-        Column(){
-          List(){
-            ListItem(){
+      Scroll() {
+        Column() {
+          List() {
+            ListItem() {
               TitleComponent({
                 title: "SCAN_MODE_SELECT",
                 bgColor: $r('app.color.moon'),
@@ -54,11 +54,12 @@ struct setScanMode {
             .height(ConfigData.VP_80)
             .borderRadius(ConfigData.VP_10)
 
-            ListItem(){
+            ListItem() {
               TitleComponent({
                 title: "SCAN_MODE_NONE",
                 fontSize: ConfigData.VP_15,
-                bgColor: this.currentClick === 0 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+                bgColor: this.currentClick === 0 ? $r('app.color.font_color_007DFF') :
+                  $r('app.color.white_bg_color')
               });
             }
             .padding({top: ConfigData.VP_10})
@@ -68,11 +69,12 @@ struct setScanMode {
               this.currentClick = 0;
             })
 
-            ListItem(){
+            ListItem() {
               TitleComponent({
                 title: "CONNECTABLE",
                 fontSize: ConfigData.VP_15,
-                bgColor: this.currentClick === 1 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+                bgColor: this.currentClick === 1 ? $r('app.color.font_color_007DFF') :
+                  $r('app.color.white_bg_color')
               });
             }
             .padding({top: ConfigData.VP_10})
@@ -82,11 +84,12 @@ struct setScanMode {
               this.currentClick = 1;
             })
 
-            ListItem(){
+            ListItem() {
               TitleComponent({
                 title: "GENERAL_DISCOVERABLE",
                 fontSize: ConfigData.VP_15,
-                bgColor: this.currentClick === 2 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+                bgColor: this.currentClick === 2 ? $r('app.color.font_color_007DFF') :
+                  $r('app.color.white_bg_color')
               });
             }
             .padding({top: ConfigData.VP_10})
@@ -96,11 +99,12 @@ struct setScanMode {
               this.currentClick = 2;
             })
 
-            ListItem(){
+            ListItem() {
               TitleComponent({
                 title: "LIMITED_DISCOVERABLE",
                 fontSize: ConfigData.VP_15,
-                bgColor: this.currentClick === 3 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+                bgColor: this.currentClick === 3 ? $r('app.color.font_color_007DFF') :
+                  $r('app.color.white_bg_color')
               });
             }
             .padding({top: ConfigData.VP_10})
@@ -110,11 +114,12 @@ struct setScanMode {
               this.currentClick = 3;
             })
 
-            ListItem(){
+            ListItem() {
               TitleComponent({
                 title: "CONNECTABLE_GENERAL_DISCOVERABLE",
                 fontSize: ConfigData.VP_15,
-                bgColor: this.currentClick === 4 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+                bgColor: this.currentClick === 4 ? $r('app.color.font_color_007DFF') :
+                  $r('app.color.white_bg_color')
               });
             }
             .padding({top: ConfigData.VP_10})
@@ -124,11 +129,12 @@ struct setScanMode {
               this.currentClick = 4;
             })
 
-            ListItem(){
+            ListItem() {
               TitleComponent({
                 title: "CONNECTABLE_LIMITED_DISCOVERABLE",
                 fontSize: ConfigData.VP_15,
-                bgColor: this.currentClick === 5 ? $r('app.color.font_color_007DFF') : $r('app.color.white_bg_color')
+                bgColor: this.currentClick === 5 ? $r('app.color.font_color_007DFF') :
+                  $r('app.color.white_bg_color')
               });
             }
             .padding({top: ConfigData.VP_10})
@@ -148,7 +154,7 @@ struct setScanMode {
       .scrollBarColor(Color.Gray)
       .scrollBarWidth(ConfigData.VP_30)
 
-      Row(){
+      Row() {
         Text($r('app.string.bluetoothtest_text_d'))
           .textAlign(TextAlign.Center)
           .fontSize(ConfigData.FP_20)
@@ -172,7 +178,7 @@ struct setScanMode {
           })
           .onSubmit((enterKey) => {
             InputMethod.getInputMethodController().stopInput().then((ret) => {
-              LogUtil.info(`${ ConfigData.TAG }, enterType: ${ enterKey }, stopInput: ${ ret }`);
+              LogUtil.info(`${ConfigData.TAG }, enterType: ${enterKey }, stopInput: ${ret }`);
           });
           })
       }
@@ -187,8 +193,9 @@ struct setScanMode {
         .fontWeight(FontWeight.Medium)
         .backgroundColor($r("app.color.moon"))
 
-      Flex({direction: FlexDirection.Row, justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center}){
-        Row(){
+      Flex({direction: FlexDirection.Row, justifyContent: FlexAlign.Center,
+        alignItems: ItemAlign.Center}) {
+        Row() {
           ButtonComponent({text: $r("app.string.cancel"), isOnClick: () => {
             router.back();
           }})
@@ -196,9 +203,9 @@ struct setScanMode {
         .width(ConfigData.VP_120)
         .margin({right: ConfigData.VP_12})
 
-        Row(){
+        Row() {
           ButtonComponent({text: $r("app.string.confirm"), isOnClick: () => {
-            if ( this.currentClick === - 1 ){
+            if (this.currentClick === - 1) {
               this.message = resStr($r('app.string.bluetoothtest_str_qdjxzsm'));
               return;
             }
@@ -214,7 +221,10 @@ struct setScanMode {
 
       }
     }
-    .padding({left: ConfigData.VP_24, right: ConfigData.VP_24})
+    .padding({
+      left: ConfigData.VP_24,
+      right: ConfigData.VP_24
+    })
     .width(ConfigData.WH_100_100)
     .height(ConfigData.WH_100_100)
     .backgroundColor($r("app.color.lead"))
@@ -229,8 +239,8 @@ struct ButtonComponent {
   private isOnClick = () => {
   };
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       Text(this.text)
         .fontSize(ConfigData.FP_16)
         .fontWeight(FontWeight.Medium)
@@ -240,12 +250,13 @@ struct ButtonComponent {
         .width(ConfigData.VP_120)
         .height(ConfigData.VP_40)
         .borderRadius(ConfigData.VP_20)
-        .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") : $r("sys.color.ohos_id_color_foreground_contrary"))
+        .backgroundColor(!this.isTouched ? $r("app.color.color_button_grey") :
+          $r("sys.color.ohos_id_color_foreground_contrary"))
         .onTouch((event: TouchEvent) => {
-          if ( event.type === TouchType.Down ){
+          if (event.type === TouchType.Down) {
             this.isTouched = true;
           }
-          if ( event.type === TouchType.Up ){
+          if (event.type === TouchType.Up) {
             this.isTouched = false;
           }
         })

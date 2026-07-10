@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@ import { resStr} from '../../Utils/resString';
 
 import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
 import promptAction from '@ohos.promptAction';
-import { ContentTable} from '../../Component/contentTable';
+import { ContentTable} from '../../component/contentTable';
 import { initA2dpSourceProfileManagerApiData} from '../../MainAbility/model/testDataModelsManager'
 import router from '@ohos.router';
 import btmProfileModel from '../../MainAbility/model/btmProfileModel';
 import ConfigData from '../../Utils/ConfigData';
 import LogUtil from '../../Utils/LogUtil';
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { TestData} from '../../MainAbility/model/testData'
 import bluetoothManager from '@ohos.bluetoothManager';
 
@@ -49,16 +49,17 @@ struct A2dpSourceProfileManagerTest {
   private deviceId = "8C:5A:F8:25:FB:E9";
   private testItem: TestData = testItemFromRouterOrPlaceholder()
 
-  aboutToAppear(){
-    LogUtil.log(ConfigData.TAG + "xzyj: aboutToAppear a2dp: deviceId " + JSON.stringify(this.deviceId));
+  aboutToAppear() {
+    LogUtil.log(ConfigData.TAG + "xzyj: aboutToAppear a2dp: deviceId " +
+      JSON.stringify(this.deviceId));
     AppStorage.setOrCreate("deviceId", this.deviceId)
     btmProfileModel.initProfile()
   }
 
-  build(){
-    Row(){
-      Column(){
-        Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Row() {
+      Column() {
+        Stack({alignContent: Alignment.TopStart}) {
           TestImageDisplay({testItem: this.testItem})
           PageTitle({testItem: this.testItem})
           .accessibilityLevel('yes')
@@ -71,17 +72,19 @@ struct A2dpSourceProfileManagerTest {
         Text(this.hasProfile ? this.profileExist: this.profileNotExist)
           .margin({top: ConfigData.VP_10})
           .fontSize(ConfigData.VP_20)
-          .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') : $r('app.color.color_FF0000_red'))
-          .border({width: 0.5})
+          .fontColor(this.hasProfile ? $r('app.color.color_66CCFF_blue') :
+            $r('app.color.color_FF0000_red'))
+          .border({width: ConfigData.BORDER_WIDTH_HALF})
           .padding(ConfigData.VP_5)
           .fontStyle(FontStyle.Italic);
-        Column(){
-          Row(){
+        Column() {
+          Row() {
             Text($r('app.string.bluetoothtest_text_xzzzljdsbw'))
               .fontSize("17")
               .width(ConfigData.VP_110)
               .margin(ConfigData.VP_5)
-            TextInput({text: JSON.stringify(this.deviceId), placeholder: $r('app.string.bluetoothtest_str_qsrxyljdd')})
+            TextInput({text: JSON.stringify(this.deviceId),
+              placeholder: $r('app.string.bluetoothtest_str_qsrxyljdd')})
               .accessibilityLevel('yes')
               .id('pages_subProfileTestManager_a2dpSourceProfileTestManager__ti_0')
               .fontSize(ConfigData.VP_17)
@@ -93,18 +96,25 @@ struct A2dpSourceProfileManagerTest {
               .borderRadius(ConfigData.HEIGHT_1_VP)
           }
           .backgroundColor($r("app.color.moon"))
-          .margin({top: ConfigData.VP_20, bottom: ConfigData.VP_20, left: ConfigData.VP_20, right: ConfigData.VP_20})
+          .margin({top: ConfigData.VP_20, bottom: ConfigData.VP_20, left: ConfigData.VP_20,
+            right: ConfigData.VP_20})
           .alignItems(VerticalAlign.Center)
 
-          Column(){
+          Column() {
             Text(resStr($r('app.string.label_api_result_space')) + this.a2dpMessage)
               .fontSize(ConfigData.VP_17)
               .textAlign(TextAlign.Start)
-              .margin({top: ConfigData.VP_5, left: ConfigData.VP_10})
+              .margin({
+                top: ConfigData.VP_5,
+                left: ConfigData.VP_10
+              })
               .width(ConfigData.WH_100_100)
             Text(resStr($r('app.string.label_connection_state_change')) + this.connectionStateInfo)
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_10, left: ConfigData.VP_10})
+              .margin({
+                top: ConfigData.VP_10,
+                left: ConfigData.VP_10
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_90_100)
           }
@@ -117,7 +127,7 @@ struct A2dpSourceProfileManagerTest {
             .padding(ConfigData.VP_5)
             .fontSize(ConfigData.VP_17)
             .fontColor($r('app.color.color_4444444_grey'));
-          Column(){
+          Column() {
             ContentTable({apiItems: initA2dpSourceProfileManagerApiData()})
           }
           .height(ConfigData.PCT_66)
@@ -131,15 +141,15 @@ struct A2dpSourceProfileManagerTest {
     .alignItems(VerticalAlign.Top)
   }
 
-  onPageShow(){
+  onPageShow() {
     this.bluetoothState = btmProfileModel.getBluetoothState();
-    if ( this.bluetoothState == btmProfileModel.BLUETOOTH_STATE_OFF ){
+    if (this.bluetoothState == btmProfileModel.BLUETOOTH_STATE_OFF) {
       this.profileNotExist = resStr($r('app.string.bluetoothtest_str_lywdkqxkqlyhzsy'))
       return;
     }
     this.hasProfile = btmProfileModel.hasProfile(btmProfileModel.PROFILE_A2DP_SOURCE);
     LogUtil.info("bt_test pageType: " + this.pageType);
-    switch ( this.pageType ){
+    switch (this.pageType) {
       //      case 0:
       //        this.title = $r('app.string.a2dp_sink_profile_test_title');
       //        this.profileExist = "A2DP_SINK exist";
@@ -206,9 +216,10 @@ struct A2dpSourceProfileManagerTest {
     AppStorage.setOrCreate("profileType", this.profileType)
     promptAction.showToast({message: this.profileType.toString()})
     this.hasProfile = btmProfileModel.hasProfile(this.profileType);
-    if ( this.hasProfile ){
+    if (this.hasProfile) {
       LogUtil.info("bt_test registered connectionStateChange type: " + this.profileType);
-      btmProfileModel.getProfile(this.profileType)!.on("connectionStateChange", (date: bluetoothManager.StateChangeParam) => {
+      btmProfileModel.getProfile(this.profileType)!.on("connectionStateChange",
+        (date: bluetoothManager.StateChangeParam) => {
         this.connectionStateInfo = JSON.stringify(date);
         this.btConnectionState = date.state;
         AppStorage.setOrCreate("btConnectionState", this.btConnectionState)
@@ -216,8 +227,8 @@ struct A2dpSourceProfileManagerTest {
     }
   }
 
-  onPageHide(){
-    if ( this.hasProfile ){
+  onPageHide() {
+    if (this.hasProfile) {
       btmProfileModel.getProfile(this.profileType)!.off("connectionStateChange");
     }
     LogUtil.info("bt_test Ability end");

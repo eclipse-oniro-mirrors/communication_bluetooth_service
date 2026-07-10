@@ -20,9 +20,9 @@ const PLACEHOLDER = '%{public}s';
 
 function formatMessage(format: string, ...args: any[]): string {
   let msg = format;
-  for(const a of args){
+  for(const a of args) {
     const i = msg.indexOf(PLACEHOLDER);
-    if (i < 0){
+    if (i < 0) {
       break;
     }
     msg = msg.substring(0, i) + String(a) + msg.substring(i + PLACEHOLDER.length);
@@ -31,19 +31,19 @@ function formatMessage(format: string, ...args: any[]): string {
 }
 
 export default class dlog {
-  static info(format: string, ...args: any[]){
+  static info(format: string, ...args: any[]) {
     LogUtil.info(`[${TAG}] ${formatMessage(format, ...args)}`);
   }
 
-  static debug(format: string, ...args: any[]){
+  static debug(format: string, ...args: any[]) {
     LogUtil.debug(`[${TAG}] ${formatMessage(format, ...args)}`);
   }
 
-  static warn(format: string, ...args: any[]){
+  static warn(format: string, ...args: any[]) {
     LogUtil.warn(`[${TAG}] ${formatMessage(format, ...args)}`);
   }
 
-  static err(format: string, ...args: any[]){
+  static err(format: string, ...args: any[]) {
     LogUtil.error(`[${TAG}] ${formatMessage(format, ...args)}`);
   }
 }

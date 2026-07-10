@@ -113,3 +113,5 @@ export const BLUETOOTHTEST_ENTRY_PAGE_ROUTES: string[] = [
   'pages/subBenchmarkTestManager/sppServerBandWidthBenchmarkTestManager',
   'pages/subBenchmarkTestManager/sppServerVelocityBenchmarkTestManager'
 ];
+
+

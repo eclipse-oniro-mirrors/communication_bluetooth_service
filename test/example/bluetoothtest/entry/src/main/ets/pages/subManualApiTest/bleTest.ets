@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ import ConfigData from '../../Utils/ConfigData';
 import { BleScanFilter, testItemFromRouterOrPlaceholder} from '../../Utils/common'
 import BluetoothModel from '../../MainAbility/model/BluetoothModel';
 import bluetooth from '@ohos.bluetooth';
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
-import { ContentTable} from '../../Component/contentTable';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
+import { ContentTable} from '../../component/contentTable';
 import { TestData} from '../../MainAbility/model/testData'
 import { initBleApiData} from '../../MainAbility/model/testDataModels'
-import { BleFilterTable} from '../../Component/bleFilterTable';
+import { BleFilterTable} from '../../component/bleFilterTable';
 
 /**
  * BLE Test Page Of Bluetooth test
@@ -65,7 +65,7 @@ struct BleTest {
   @StorageLink('bleAvailableDevices') availBleDeviceIds: string[] = [];
   @StorageLink('OnBLEDeviceFind') On_off_BLEDeviceFind: boolean = false;
 
-  aboutToAppear(){
+  aboutToAppear() {
     AppStorage.setOrCreate("peripheralDeviceId", this.peripheralDeviceId)
     AppStorage.setOrCreate('txtScanFilterDeviceId', this.txtScanFilter_deviceId);
     AppStorage.setOrCreate('txtScanFilterName', this.txtScanFilter_name);
@@ -75,9 +75,9 @@ struct BleTest {
     AppStorage.setOrCreate('txtScanOptionsMatchMode', '0');
   }
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
             .accessibilityLevel('yes')
@@ -87,15 +87,18 @@ struct BleTest {
       Stack()
         .height(ConfigData.VP_0_5)
         .backgroundColor($r('app.color.black'));
-      Column(){
-        Row(){
+      Column() {
+        Row() {
           Text($r('app.string.bluetoothtest_text_wsm'))
             .fontSize(ConfigData.VP_18)
             .height(ConfigData.VP_40)
             .width(ConfigData.WH_25_100)
             .align(Alignment.Start)
 
-          TextInput({text: this.peripheralDeviceId, placeholder: "input peripheral deviceId."})
+          TextInput({
+            text: this.peripheralDeviceId,
+            placeholder: "input peripheral deviceId."
+          })
             .accessibilityLevel('yes')
             .id('pages_subManualApiTest_bleTest__ti_0')
             .fontSize(ConfigData.VP_18)
@@ -104,7 +107,10 @@ struct BleTest {
               AppStorage.setOrCreate("peripheralDeviceId", strInput)
             })
             .width(ConfigData.WH_55_100)
-            .padding({top: ConfigData.VP_5, left: ConfigData.VP_5})
+            .padding({
+              top: ConfigData.VP_5,
+              left: ConfigData.VP_5
+            })
             .height(ConfigData.VP_40)
             .borderStyle(BorderStyle.Dashed)
             .backgroundColor($r("app.color.white"))
@@ -113,7 +119,11 @@ struct BleTest {
             .id('pages_subManualApiTest_bleTest__img_0')
             .height(ConfigData.VP_50)
             .width(ConfigData.PCT_15)
-            .padding({top: ConfigData.VP_5, bottom: ConfigData.VP_5, left: ConfigData.VP_10})
+            .padding({
+              top: ConfigData.VP_5,
+              bottom: ConfigData.VP_5,
+              left: ConfigData.VP_10
+            })
             .onClick(() => {
               this.showList = !this.showList;
             })
@@ -121,7 +131,7 @@ struct BleTest {
       }
       .align(Alignment.TopStart)
 
-      if ( this.showList ){
+      if (this.showList) {
         ContentTable({apiItems: initBleApiData()})
       } else {
         BleFilterTable({testItem: this.testItem})
@@ -135,7 +145,7 @@ struct BleTest {
   /**
    * subscribeBLEDeviceFind
    */
-  private subscribeBLEDeviceFind(){
+  private subscribeBLEDeviceFind() {
     //回调函数里的动作是过滤，已经过滤好了就不用再考虑了。
     BluetoothModel.subscribeBLEDeviceFind((deviceItems: Array<bluetooth.ScanResult>) => {
       LogUtil.info("BLE Test:" + 'available ble devices changed.');
@@ -143,22 +153,25 @@ struct BleTest {
         let device = this.availBleDeviceIds.find((availableBleDevice) => {
           return availableBleDevice === deviceItem.deviceId
         })
-        if ( !device ){
+        if (!device) {
           let newDevice = deviceItem.deviceId;
           LogUtil.info("BLE Test:" + 'available bluetooth new device : ' + newDevice);
           this.availBleDeviceIds.push(newDevice);
-          LogUtil.info("BLE Test:" + 'available bluetooth new device pushed. availableDevices length = ' + this.availBleDeviceIds.length);
+          LogUtil.info("BLE Test:" +
+            'available bluetooth new device pushed. availableDevices length = ' +
+            this.availBleDeviceIds.length);
         }
       })
       AppStorage.setOrCreate('bluetoothAvailableDevices', this.availBleDeviceIds);
     });
   }
 
-  private buildBleScanFilters(){
+  private buildBleScanFilters() {
     this.curScanFilters = [];
-    if ( this.cbxBleScanFilter ){
+    if (this.cbxBleScanFilter) {
       let bleScanFilter: BleScanFilter = {}
-      if ( this.txtScanFilter_deviceId.length > 0 && this.txtScanFilter_name.length > 0 && this.txtScanFilter_serviceUuid.length > 0 ){
+      if (this.txtScanFilter_deviceId.length > 0 && this.txtScanFilter_name.length > 0
+        && this.txtScanFilter_serviceUuid.length > 0) {
         (bleScanFilter as BleScanFilter) = {
           deviceId: this.txtScanFilter_deviceId,
           name: this.txtScanFilter_name,
@@ -166,39 +179,45 @@ struct BleTest {
         }
         this.curScanFilters.push(bleScanFilter);
       }
-      if ( this.txtScanFilter_deviceId === '' && this.txtScanFilter_name === '' && this.txtScanFilter_serviceUuid.length > 0 ){
+      if (this.txtScanFilter_deviceId === '' && this.txtScanFilter_name === ''
+        && this.txtScanFilter_serviceUuid.length > 0) {
         (bleScanFilter as BleScanFilter) = {
           serviceUuid: this.txtScanFilter_serviceUuid
         }
         this.curScanFilters.push(bleScanFilter);
       }
-      if ( this.txtScanFilter_deviceId === '' && this.txtScanFilter_name.length > 0 && this.txtScanFilter_serviceUuid === '' ){
+      if (this.txtScanFilter_deviceId === '' && this.txtScanFilter_name.length > 0
+        && this.txtScanFilter_serviceUuid === '') {
         (bleScanFilter as BleScanFilter) = {
           name: this.txtScanFilter_name
         }
         this.curScanFilters.push(bleScanFilter);
       }
-      if ( this.txtScanFilter_deviceId.length > 0 && this.txtScanFilter_name === '' && this.txtScanFilter_serviceUuid === '' ){
+      if (this.txtScanFilter_deviceId.length > 0 && this.txtScanFilter_name === ''
+        && this.txtScanFilter_serviceUuid === '') {
         (bleScanFilter as BleScanFilter) = {
           deviceId: this.txtScanFilter_deviceId
         }
         this.curScanFilters.push(bleScanFilter);
       }
-      if ( this.txtScanFilter_deviceId === '' && this.txtScanFilter_name.length > 0 && this.txtScanFilter_serviceUuid.length > 0 ){
+      if (this.txtScanFilter_deviceId === '' && this.txtScanFilter_name.length > 0
+        && this.txtScanFilter_serviceUuid.length > 0) {
         (bleScanFilter as BleScanFilter) = {
           name: this.txtScanFilter_name,
           serviceUuid: this.txtScanFilter_serviceUuid
         }
         this.curScanFilters.push(bleScanFilter);
       }
-      if ( this.txtScanFilter_deviceId.length > 0 && this.txtScanFilter_name === '' && this.txtScanFilter_serviceUuid.length > 0 ){
+      if (this.txtScanFilter_deviceId.length > 0 && this.txtScanFilter_name === ''
+        && this.txtScanFilter_serviceUuid.length > 0) {
         (bleScanFilter as BleScanFilter) = {
           deviceId: this.txtScanFilter_deviceId,
           serviceUuid: this.txtScanFilter_serviceUuid
         }
         this.curScanFilters.push(bleScanFilter);
       }
-      if ( this.txtScanFilter_deviceId.length > 0 && this.txtScanFilter_name.length > 0 && this.txtScanFilter_serviceUuid === '' ){
+      if (this.txtScanFilter_deviceId.length > 0 && this.txtScanFilter_name.length > 0
+        && this.txtScanFilter_serviceUuid === '') {
         (bleScanFilter as BleScanFilter) = {
           deviceId: this.txtScanFilter_deviceId,
           name: this.txtScanFilter_name
@@ -208,8 +227,8 @@ struct BleTest {
     }
   }
 
-  private buildBleScanOption(){
-    if ( this.cbxBleScanOptions ){
+  private buildBleScanOption() {
+    if (this.cbxBleScanOptions) {
       this.curScanOptions = {
         interval: parseInt(this.txtScanOptions_interval),
         dutyMode: this.txtScanOptions_dutyMode,

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
 
 import ConfigData from '../../Utils/ConfigData';
 import { TestData} from '../../MainAbility/model/testData'
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { initSppApiTestData} from '../../MainAbility/model/testDataModels'
-import { TestListItem} from '../../Component/testListItems';
+import { TestListItem} from '../../component/testListItems';
 import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
 
 /**
@@ -31,23 +31,24 @@ struct SppTest {
   private testItem: TestData = testItemFromRouterOrPlaceholder()
   private sppApiTestItems: TestData[] = initSppApiTestData();
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
       .accessibilityLevel('yes')
       .id('pages_subManualApiTest_sppTest__pt_0')
       }
 
-      List(){
+      List() {
         ForEach(this.sppApiTestItems, (item: TestData, index: number) => {
-          ListItem(){
+          ListItem() {
             TestListItem({
               testItem: item
             })
           }
-      .id(index === 0 ? 'pages_subManualApiTest_sppTest__li_0' : `pages_subManualApiTest_sppTest__li_${index}`)
+      .id(index === 0 ? 'pages_subManualApiTest_sppTest__li_0' :
+        `pages_subManualApiTest_sppTest__li_${index}`)
         }, (item: TestData) => item.id)
       }
       .height(ConfigData.PCT_93)

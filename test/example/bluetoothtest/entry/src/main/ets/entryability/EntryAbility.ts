@@ -28,32 +28,32 @@ export default class EntryAbility extends UIAbility {
   private initialPage: string = DEFAULT_PAGE;
 
   private extractTestTargetPage(w: Want | undefined): string | undefined {
-    if (!w?.parameters){
+    if (!w?.parameters) {
       return undefined;
     }
     const v = w.parameters[TEST_PAGE_KEY];
     return typeof v === 'string' && v.length > 0 ? v: undefined;
   }
 
-  onCreate(want, launchParam){
+  onCreate(want, launchParam) {
     LogUtil.info('Ability onCreate');
     setUiAbilityContext(this.context);
     const p = this.extractTestTargetPage(want);
     const fromAutomatedTest = p !== undefined;
     setSkipBluetoothPermissionForAutomatedTest(fromAutomatedTest);
-    if (fromAutomatedTest && p){
+    if (fromAutomatedTest && p) {
       this.initialPage = p;
     }
   }
 
-  onNewWant(want, launchParam){
+  onNewWant(want, launchParam) {
     const p = want?.parameters?.[TEST_PAGE_KEY];
-    if (typeof p !== 'string' || p.length === 0 || !this.windowStageRef){
+    if (typeof p !== 'string' || p.length === 0 || !this.windowStageRef) {
       return;
     }
     setSkipBluetoothPermissionForAutomatedTest(true);
     this.windowStageRef.loadContent(p, (err, data) => {
-      if (err.code){
+      if (err.code) {
         LogUtil.error('loadContent onNewWant failed: ' + (JSON.stringify(err) ?? ''));
         return;
       }
@@ -61,21 +61,21 @@ export default class EntryAbility extends UIAbility {
     });
   }
 
-  onDestroy(){
+  onDestroy() {
     LogUtil.info('Ability onDestroy');
   }
 
-  onWindowStageCreate(windowStage: window.WindowStage){
+  onWindowStageCreate(windowStage: window.WindowStage) {
     LogUtil.info('Ability onWindowStageCreate');
     this.windowStageRef = windowStage;
     const fromLaunch = this.extractTestTargetPage(this.launchWant);
-    if (fromLaunch){
+    if (fromLaunch) {
       setSkipBluetoothPermissionForAutomatedTest(true);
       this.initialPage = fromLaunch;
     }
     const page = this.initialPage;
     windowStage.loadContent(page, (err, data) => {
-      if (err.code){
+      if (err.code) {
         LogUtil.error('Failed to load the content. Cause: ' + (JSON.stringify(err) ?? ''));
         return;
       }
@@ -83,16 +83,16 @@ export default class EntryAbility extends UIAbility {
     });
   }
 
-  onWindowStageDestroy(){
+  onWindowStageDestroy() {
     LogUtil.info('Ability onWindowStageDestroy');
     this.windowStageRef = null;
   }
 
-  onForeground(){
+  onForeground() {
     LogUtil.info('Ability onForeground');
   }
 
-  onBackground(){
+  onBackground() {
     LogUtil.info('Ability onBackground');
   }
 }

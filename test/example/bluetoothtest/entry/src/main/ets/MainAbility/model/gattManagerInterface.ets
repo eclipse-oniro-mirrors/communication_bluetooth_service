@@ -23,8 +23,10 @@ import { resStr} from '../../Utils/resString';
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 
-const PAGE_URI_GET_GATT_CLIENT_MANAGER = 'pages/subManualApiTestManager/subGattTestManager/gattClientManager';
-const PAGE_URI_GET_GATT_SERVER_MANAGER = 'pages/subManualApiTestManager/subGattTestManager/gattServerManager';
+const PAGE_URI_GET_GATT_CLIENT_MANAGER =
+  'pages/subManualApiTestManager/subGattTestManager/gattClientManager';
+const PAGE_URI_GET_GATT_SERVER_MANAGER =
+  'pages/subManualApiTestManager/subGattTestManager/gattServerManager';
 
 export function testGattClientManager(): string {
   try {
@@ -32,9 +34,9 @@ export function testGattClientManager(): string {
     let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGattClientManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGattClientManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGattClientManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testGattClientManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
@@ -46,9 +48,9 @@ export function testGattServerManager(): string {
     let message = resStr($r('app.string.bluetoothtest_str_tzcg'))
     promptAction.showToast({message: message})
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testGattServerManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testGattServerManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testGattServerManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testGattServerManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }

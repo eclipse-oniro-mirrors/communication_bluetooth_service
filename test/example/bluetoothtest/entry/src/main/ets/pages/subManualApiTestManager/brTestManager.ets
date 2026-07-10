@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  */
 
 import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
-import { ContentTable} from '../../Component/contentTable';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
+import { ContentTable} from '../../component/contentTable';
 import BluetoothModelManager from '../../MainAbility/model/BluetoothModelManager';
 import { BluetoothDevice} from '../../MainAbility/model/BluetoothModel';
 import BluetoothDeviceController from '../../MainAbility/controller/BluetoothDeviceController';
@@ -41,7 +41,8 @@ struct brTestManager {
   @State currentClick: number = - 1;
   @StorageLink('pairedDeviceInfo') pairingDevice: BluetoothDevice = new BluetoothDevice;
   @StorageLink('pairedDeviceId') pairedDeviceId: string = '';
-  @StorageLink('btDeviceController') controller: BluetoothDeviceController = new BluetoothDeviceController;
+  @StorageLink('btDeviceController') controller: BluetoothDeviceController = new
+    BluetoothDeviceController;
   @StorageLink('pairedMac') pairedMac: string = "6c:96:d7:3d:87:6f";
   @State pairPinCode: string = '';
   @State btOnState: string = 'on:stateChange';
@@ -64,7 +65,7 @@ struct brTestManager {
     autoCancel: true
   })
 
-  aboutToAppear(){
+  aboutToAppear() {
     this.btEnable = BluetoothModelManager.isStateOn();
     this.controller.subscribePinRequired((deviceId, pinCode) => {
       this.pairPinCode = pinCode
@@ -76,13 +77,13 @@ struct brTestManager {
     AppStorage.setOrCreate('pairedMac', this.pairedMac);
   }
 
-  init(){
+  init() {
     LogUtil.info("init-----------")
   }
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
           .accessibilityLevel('yes')
@@ -92,13 +93,17 @@ struct brTestManager {
       Stack()
         .height(ConfigData.VP_0_5)
         .backgroundColor($r('app.color.black'))
-      Column(){
+      Column() {
         Text($r('app.string.bluetoothtest_text_mbsbm'))
           .fontSize(ConfigData.VP_20)
           .height(ConfigData.VP_50)
           .width(ConfigData.WH_100_100)
-          .padding({top: ConfigData.VP_10, left: ConfigData.VP_10})
-        TextInput({text: this.pairedMac, placeholder: $r('app.string.bluetoothtest_str_qsrjjljdsbm')})
+          .padding({
+            top: ConfigData.VP_10,
+            left: ConfigData.VP_10
+          })
+        TextInput({text: this.pairedMac,
+          placeholder: $r('app.string.bluetoothtest_str_qsrjjljdsbm')})
           .accessibilityLevel('yes')
           .id('pages_subManualApiTestManager_brTestManager__ti_0')
           .height(ConfigData.VP_50)
@@ -108,7 +113,10 @@ struct brTestManager {
             this.deviceId = str;
           })
           .width(ConfigData.PCT_96)
-          .padding({top: ConfigData.VP_10, left: ConfigData.VP_10})
+          .padding({
+            top: ConfigData.VP_10,
+            left: ConfigData.VP_10
+          })
       }
       .align(Alignment.TopStart)
       ContentTable({apiItems: initBRManagerApiData()})
@@ -122,7 +130,7 @@ struct brTestManager {
    * Pair device
    * @param device
    */
-  pairDevice(deviceId: string){
+  pairDevice(deviceId: string) {
     this.controller.pair(deviceId, (pinCode: string) => {
       LogUtil.info(this.TAG_PAGE + 'pairDevice success callback : pinCode = ' + pinCode);
       // show pair pin dialog
@@ -139,9 +147,10 @@ struct brTestManager {
   /**
    * Confirm pairing
    */
-  confirmPairing(accept: boolean){
+  confirmPairing(accept: boolean) {
     LogUtil.info("confirmPairing start -----------")
-    LogUtil.info(this.TAG_PAGE + 'confirmPairing : pairingDevice + ' + JSON.stringify(this.pairingDevice))
+    LogUtil.info(this.TAG_PAGE + 'confirmPairing : pairingDevice + ' +
+      JSON.stringify(this.pairingDevice))
     LogUtil.info("confirmPairing  -----------")
     this.controller.confirmPairing(this.pairingDevice.deviceId, accept)
     LogUtil.info("confirmPairing end -----------")
@@ -150,14 +159,14 @@ struct brTestManager {
   /**
    * Show pair failed dialog
    */
-  showPairFailedDialog(){
+  showPairFailedDialog() {
     this.showPairingFailedDialog()
   }
 
   /**
    * Show connect Failed Dialog
    */
-  private showConnectFailedDialog(){
+  private showConnectFailedDialog() {
     showDialog(
       $r("app.string.bluetooth_connect_failed"),
       $r("app.string.bluetooth_connect_failed_msg"),
@@ -167,7 +176,7 @@ struct brTestManager {
   /**
    * Show pairing failed title Dialog
    */
-  private showPairingFailedDialog(){
+  private showPairingFailedDialog() {
     showDialog(
       $r("app.string.pairing_failed_title"),
       $r("app.string.pairing_failed_message"),
@@ -187,11 +196,11 @@ struct PairDialog {
   action!: (accept: boolean) => void;
 
   aboutToAppear(): void {
-    LogUtil.log(ConfigData.TAG + `bluetooth PairDialog aboutToAppear pinCode = ${ this.pinCode }`)
+    LogUtil.log(ConfigData.TAG + `bluetooth PairDialog aboutToAppear pinCode = ${this.pinCode }`)
   }
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       Text($r('app.string.bluetooth_pairing_request'))
         .fontSize(ConfigData.FP_22)
         .height(ConfigData.VP_60)
@@ -201,9 +210,10 @@ struct PairDialog {
           top: ConfigData.VP_14,
           bottom: ConfigData.VP_14
         })
-      Column(){
-        if ( this.pinCode ){
-          Text($r('app.string.bluetooth_pairing_intelligent_device_hit', this.deviceName, this.deviceName))
+      Column() {
+        if (this.pinCode) {
+          Text($r('app.string.bluetooth_pairing_intelligent_device_hit', this.deviceName,
+            this.deviceName))
             .fontSize(ConfigData.FP_16)
             .width(ConfigData.WH_100_100)
             .margin({
@@ -211,7 +221,7 @@ struct PairDialog {
               bottom: ConfigData.VP_14
             })
 
-          Text(`${ this.pinCode }`)
+          Text(`${this.pinCode }`)
             .fontSize(ConfigData.FP_32)
             .fontWeight(FontWeight.Bolder)
             .width(ConfigData.WH_100_100)
@@ -236,8 +246,11 @@ struct PairDialog {
         }
 
         // button
-        Flex({justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center}){
-          Button(){
+        Flex({
+          justifyContent: FlexAlign.Center,
+          alignItems: ItemAlign.Center
+        }) {
+          Button() {
             Text($r('app.string.cancel'))
               .fontSize(ConfigData.FP_16)
               .fontColor(Color.Blue)
@@ -247,7 +260,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width(ConfigData.VP_160)
           .height(ConfigData.VP_40)
-          .flexGrow(1)
+          .flexGrow(ConfigData.LAYOUT_WEIGHT_1)
           .onClick(() => {
             this.dialogController.close();
             this.action(false);
@@ -259,7 +272,7 @@ struct PairDialog {
           .vertical(true)
           .color(($r("app.color.color_E3E3E3_grey")))
 
-          Button(){
+          Button() {
             Text($r('app.string.bluetooth_pair_button'))
               .fontSize(ConfigData.FP_16)
               .fontColor(Color.Blue)
@@ -269,7 +282,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width(ConfigData.VP_160)
           .height(ConfigData.VP_40)
-          .flexGrow(1)
+          .flexGrow(ConfigData.LAYOUT_WEIGHT_1)
           .onClick(() => {
             this.dialogController.close();
             LogUtil.info("onClick start --------------")
@@ -299,7 +312,8 @@ struct PairDialog {
  * @param dialogMessage Dialog message
  * @param buttonValue Dialog buttonValue
  */
-function showDialog(dialogTitle: string | Resource, dialogMessage: string | Resource, buttonValue: string | Resource){
+function showDialog(dialogTitle: string | Resource, dialogMessage: string | Resource,
+  buttonValue: string | Resource) {
   AlertDialog.show({
     title: dialogTitle,
     message: dialogMessage,

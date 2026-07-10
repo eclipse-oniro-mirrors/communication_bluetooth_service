@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  */
 
 import ConfigData from '../../../Utils/ConfigData';
-import HeadTableComponent from '../../../Component/headerComponent';
+import HeadTableComponent from '../../../component/headerComponent';
 import router from '@ohos.router';
 import LogUtil from '../../../Utils/LogUtil';
 import { BluetoothDevice} from '../../../MainAbility/model/BluetoothModel';
@@ -33,34 +33,52 @@ struct BluetoothPairedDeviceInfo {
   private controller: BluetoothDeviceController = new BluetoothDeviceController()
   @State isTouched: boolean = false;
 
-  aboutToAppear(){
+  aboutToAppear() {
     param = router.getParams();
     this.bluetoothDevice = JSON.parse(param.bluetoothDevice);
-    LogUtil.log(ConfigData.TAG + "aboutToAppear bluetoothDevice: " + JSON.stringify(this.bluetoothDevice));
+    LogUtil.log(ConfigData.TAG + "aboutToAppear bluetoothDevice: " +
+      JSON.stringify(this.bluetoothDevice));
   }
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       GridContainer({
         columns: 12,
         sizeType: SizeType.Auto,
         gutter: vp2px(1) === 2 ? ConfigData.VP_12: ConfigData.VP_0,
         margin: vp2px(1) === 2 ? ConfigData.VP_24: ConfigData.VP_0
-      }){
-        Row({}){
-          Column(){
+      }) {
+        Row({}) {
+          Column() {
           }
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs: { span: 0, offset: 0}, sm: { span: 0, offset: 0},
-            md: { span: 0, offset: 0}, lg: { span: 2, offset: 0}
+            xs: {
+              span: 0,
+              offset: 0
+            },
+            sm: {
+              span: 0,
+              offset: 0
+            },
+            md: {
+              span: 0,
+              offset: 0
+            },
+            lg: {
+              span: 2,
+              offset: 0
+            }
           });
-          Column(){
-            HeadTableComponent({headName: this.bluetoothDevice.deviceName, isActive: true});
+          Column() {
+            HeadTableComponent({
+              headName: this.bluetoothDevice.deviceName,
+              isActive: true
+            });
             Blank()
-            Row(){
-              Button(){
+            Row() {
+              Button() {
                 Text($r("app.string.cancelPairing"))
                   .fontSize(ConfigData.FP_16)
                   .fontColor(Color.Blue)
@@ -70,37 +88,68 @@ struct BluetoothPairedDeviceInfo {
               .height(ConfigData.VP_40)
               .align(Alignment.Center)
               .onTouch((event: TouchEvent) => {
-                if ( event.type === TouchType.Down ){
+                if (event.type === TouchType.Down) {
                   this.isTouched = true;
                 }
-                if ( event.type === TouchType.Up ){
+                if (event.type === TouchType.Up) {
                   this.isTouched = false;
                 }
               })
               .onClick(() => {
                 LogUtil.log(ConfigData.TAG + "unpair onClick");
-                if ( this.controller.unpair(this.bluetoothDevice.deviceId) ){
+                if (this.controller.unpair(this.bluetoothDevice.deviceId)) {
                   router.back();
                 }
               })
             }
               .margin({bottom: ConfigData.VP_24});
           }
-          .padding({left: ConfigData.VP_24, right: ConfigData.VP_24})
+          .padding({
+            left: ConfigData.VP_24,
+            right: ConfigData.VP_24
+          })
           .height(ConfigData.WH_100_100)
           .width(ConfigData.WH_100_100)
           .useSizeType({
-            xs: { span: 12, offset: 0}, sm: { span: 12, offset: 0},
-            md: { span: 12, offset: 0}, lg: { span: 8, offset: 2}
+            xs: {
+              span: 12,
+              offset: 0
+            },
+            sm: {
+              span: 12,
+              offset: 0
+            },
+            md: {
+              span: 12,
+              offset: 0
+            },
+            lg: {
+              span: 8,
+              offset: 2
+            }
           });
 
-          Column(){
+          Column() {
           }
           .width(ConfigData.WH_100_100)
           .height(ConfigData.WH_100_100)
           .useSizeType({
-            xs: { span: 0, offset: 12}, sm: { span: 0, offset: 12},
-            md: { span: 0, offset: 12}, lg: { span: 2, offset: 10}
+            xs: {
+              span: 0,
+              offset: 12
+            },
+            sm: {
+              span: 0,
+              offset: 12
+            },
+            md: {
+              span: 0,
+              offset: 12
+            },
+            lg: {
+              span: 2,
+              offset: 10
+            }
           })
         }
         .width(ConfigData.WH_100_100)

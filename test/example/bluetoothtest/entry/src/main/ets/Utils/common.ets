@@ -135,7 +135,7 @@ export interface myParams extends Object {
  */
 export function testItemFromRouterOrPlaceholder(): TestData {
   const raw = router.getParams() as myParams | undefined;
-  if (raw !== undefined && raw !== null && raw.testItem !== undefined && raw.testItem !== null){
+  if (raw !== undefined && raw !== null && raw.testItem !== undefined && raw.testItem !== null) {
     return raw.testItem;
   }
   return new TestData('UiTest', 'UiTest', '', $r('app.media.icon'), Category.All);

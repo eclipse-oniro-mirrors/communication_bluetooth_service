@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import ConfigData from '../../../Utils/ConfigData';
 import BluetoothModelManager from '../../../MainAbility/model/BluetoothModelManager';
 import { BluetoothDevice} from '../../../MainAbility/model/BluetoothModel'
 import BluetoothDeviceController from '../../../MainAbility/controller/BluetoothDeviceController';
-import { PageTitle} from '../../../Component/pageTitle';
-import { ContentTable} from '../../../Component/contentTable';
+import { PageTitle} from '../../../component/pageTitle';
+import { ContentTable} from '../../../component/contentTable';
 import { initSppServerManagerApiData} from '../../../MainAbility/model/testDataModelsManager'
-import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { TestImageDisplay} from '../../../component/testImageDisplay';
 interface PinRequiredData {
   deviceId: string;
   pinCode: string;
@@ -49,7 +49,8 @@ struct SppServerManager {
   @State btEnable: boolean = false;
   @State currentClick: number = - 1;
   @StorageLink('pairedDeviceInfo') pairingDevice: BluetoothDevice = new BluetoothDevice;
-  @StorageLink('btDeviceController') controller: BluetoothDeviceController = new BluetoothDeviceController;
+  @StorageLink('btDeviceController') controller: BluetoothDeviceController = new
+    BluetoothDeviceController;
   private testItem: TestData = testItemFromRouterOrPlaceholder();
   pairDialog: CustomDialogController = new CustomDialogController({
     builder: PairDialog({
@@ -63,7 +64,7 @@ struct SppServerManager {
     autoCancel: true
   });
 
-  aboutToAppear(){
+  aboutToAppear() {
     this.btEnable = BluetoothModelManager.isStateOn();
     BluetoothModelManager.subscribePinRequired((data: PinRequiredData) => {
       this.pairPinCode = data.pinCode
@@ -76,11 +77,11 @@ struct SppServerManager {
     AppStorage.setOrCreate("writeServerData", this.writeServerData);
   }
 
-  build(){
-    Row(){
-      Column(){
-        Column(){
-          Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Row() {
+      Column() {
+        Column() {
+          Stack({alignContent: Alignment.TopStart}) {
             TestImageDisplay({testItem: this.testItem})
             PageTitle({testItem: this.testItem})
               .accessibilityLevel('yes')
@@ -91,11 +92,14 @@ struct SppServerManager {
             .height(ConfigData.VP_0_5)
             .backgroundColor($r('app.color.black'));
 
-          Row(){
+          Row() {
             Text($r('app.string.bluetoothtest_text_bjsbu'))
               .fontSize(ConfigData.VP_17)
               .width(ConfigData.VP_85)
-            TextInput({text: this.uuid, placeholder: $r('app.string.bluetoothtest_str_qsru')})
+            TextInput({
+              text: this.uuid,
+              placeholder: $r('app.string.bluetoothtest_str_qsru')
+            })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subSppTestManager_sppServerManager__ti_0')
               .fontSize(ConfigData.VP_17)
@@ -111,11 +115,12 @@ struct SppServerManager {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Row(){
+          Row() {
             Text($r('app.string.bluetoothtest_text_xrmbsbsj'))
               .fontSize(ConfigData.VP_17)
               .width(ConfigData.VP_95)
-            TextInput({text: this.writeServerData, placeholder: $r('app.string.bluetoothtest_str_qsrxrdsj')})
+            TextInput({text: this.writeServerData,
+              placeholder: $r('app.string.bluetoothtest_str_qsrxrdsj')})
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subSppTestManager_sppServerManager__ti_1')
               .fontSize(ConfigData.VP_14)
@@ -131,7 +136,7 @@ struct SppServerManager {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Row(){
+          Row() {
             Text($r('app.string.bluetoothtest_text_dqdsjw'))
               .fontSize(ConfigData.VP_17)
             Text(this.dataReadMessage)
@@ -143,7 +148,7 @@ struct SppServerManager {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Column(){
+          Column() {
             Text(resStr($r('app.string.label_api_result_tight')) + this.message)
               .fontSize(ConfigData.VP_17)
               .padding(ConfigData.VP_10)
@@ -151,15 +156,15 @@ struct SppServerManager {
           }
           .backgroundColor($r("app.color.moon"))
 
-          Column(){
-            Scroll(){
+          Column() {
+            Scroll() {
               ContentTable({apiItems: initSppServerManagerApiData()})//子层调用
             }
             .accessibilityLevel('yes')
             .id('pages_subManualApiTestManager_subSppTestManager_sppServerManager__sc_0')
             .width(ConfigData.WH_100_100)
             .align(Alignment.TopStart)
-            .layoutWeight(1)
+            .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
             .margin({top: $r('sys.float.ohos_id_card_margin_middle')})
             .height(ConfigData.WH_100_100)
           }
@@ -178,10 +183,10 @@ struct SppServerManager {
    * @param {*} str 需要转换的字符串
    * @returns 返回 arrayBuffer
    */
-  strToArrayBuffer(str: string){
+  strToArrayBuffer(str: string) {
     let array = new Uint8Array(str.length);
-    for(let i = 0 ; i<str.length ; i++ ){
-      array[ i ] = str.charCodeAt(i);
+    for(let i = 0 ; i<str.length ; i++) {
+      array[i] = str.charCodeAt(i);
     }
     return array.buffer
   }
@@ -190,7 +195,7 @@ struct SppServerManager {
    * Pair device
    * @param device
    */
-  pairDevice(deviceId: string){
+  pairDevice(deviceId: string) {
     this.controller.pair(this.deviceId, (pinCode: string) => {
       LogUtil.info(this.TAG_PAGE + 'pairDevice success callback : pinCode = ' + pinCode);
       // show pair pin dialog
@@ -207,22 +212,23 @@ struct SppServerManager {
   /**
    * Confirm pairing
    */
-  confirmPairing(accept: boolean){
-    LogUtil.info(this.TAG_PAGE + 'confirmPairing : pairingDevice + ' + JSON.stringify(this.pairingDevice));
+  confirmPairing(accept: boolean) {
+    LogUtil.info(this.TAG_PAGE + 'confirmPairing : pairingDevice + ' +
+      JSON.stringify(this.pairingDevice));
     this.controller.confirmPairing(this.pairingDevice.deviceId, accept);
   }
 
   /**
    * Show pair failed dialog
    */
-  showPairFailedDialog(){
+  showPairFailedDialog() {
     this.showPairingFailedDialog()
   }
 
   /**
    * Show connect Failed Dialog
    */
-  private showConnectFailedDialog(){
+  private showConnectFailedDialog() {
     showDialog(
       $r("app.string.bluetooth_connect_failed"),
       $r("app.string.bluetooth_connect_failed_msg"),
@@ -233,7 +239,7 @@ struct SppServerManager {
   /**
    * Show pairing failed title Dialog
    */
-  private showPairingFailedDialog(){
+  private showPairingFailedDialog() {
     showDialog(
       $r("app.string.pairing_failed_title"),
       $r("app.string.pairing_failed_message"),
@@ -241,11 +247,12 @@ struct SppServerManager {
     );
   }
 
-  dataRead(dataBuffer: ArrayBuffer){
+  dataRead(dataBuffer: ArrayBuffer) {
     const data = new Uint8Array(dataBuffer);
     LogUtil.info('spp bluetoothManager read is: ' + data);
-    if ( data != null ){
-      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
+    if (data != null) {
+      this.dataReadMessage =
+        resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
       this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
@@ -263,11 +270,12 @@ struct PairDialog {
   action!: (accept: boolean) => void;
 
   aboutToAppear(): void {
-    LogUtil.log(ConfigData.TAG + `bluetoothManager PairDialog aboutToAppear pinCode = ${ this.pinCode }`)
+    LogUtil.log(ConfigData.TAG + `bluetoothManager PairDialog aboutToAppear pinCode = ${
+      this.pinCode }`)
   }
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       Text($r('app.string.bluetooth_pairing_request'))
         .fontSize(ConfigData.FP_22)
         .height(ConfigData.VP_60)
@@ -277,9 +285,10 @@ struct PairDialog {
           top: ConfigData.VP_14,
           bottom: ConfigData.VP_14
         })
-      Column(){
-        if ( this.pinCode ){
-          Text($r('app.string.bluetooth_pairing_intelligent_device_hit', this.deviceName, this.deviceName))
+      Column() {
+        if (this.pinCode) {
+          Text($r('app.string.bluetooth_pairing_intelligent_device_hit', this.deviceName,
+            this.deviceName))
             .fontSize(ConfigData.FP_16)
             .width(ConfigData.WH_100_100)
             .margin({
@@ -287,7 +296,7 @@ struct PairDialog {
               bottom: ConfigData.VP_14
             })
 
-          Text(`${ this.pinCode }`)
+          Text(`${this.pinCode }`)
             .fontSize(ConfigData.FP_32)
             .fontWeight(FontWeight.Bolder)
             .width(ConfigData.WH_100_100)
@@ -311,8 +320,11 @@ struct PairDialog {
         }
 
         // button
-        Flex({justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center}){
-          Button(){
+        Flex({
+          justifyContent: FlexAlign.Center,
+          alignItems: ItemAlign.Center
+        }) {
+          Button() {
             Text($r('app.string.cancel'))
               .fontSize(ConfigData.FP_16)
               .fontColor(Color.Blue)
@@ -322,7 +334,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width(ConfigData.VP_160)
           .height(ConfigData.VP_40)
-          .flexGrow(1)
+          .flexGrow(ConfigData.LAYOUT_WEIGHT_1)
           .onClick(() => {
             this.dialogController.close();
             this.action(false);
@@ -334,7 +346,7 @@ struct PairDialog {
           .vertical(true)
           .color(($r("app.color.color_E3E3E3_grey")))
 
-          Button(){
+          Button() {
             Text($r('app.string.bluetooth_pair_button'))
               .fontSize(ConfigData.FP_16)
               .fontColor(Color.Blue)
@@ -344,7 +356,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width(ConfigData.VP_160)
           .height(ConfigData.VP_40)
-          .flexGrow(1)
+          .flexGrow(ConfigData.LAYOUT_WEIGHT_1)
           .onClick(() => {
             this.dialogController.close();
             this.action(true);
@@ -372,7 +384,8 @@ struct PairDialog {
  * @param dialogMessage Dialog message
  * @param buttonValue Dialog buttonValue
  */
-function showDialog(dialogTitle: string | Resource, dialogMessage: string | Resource, buttonValue: string | Resource){
+function showDialog(dialogTitle: string | Resource, dialogMessage: string | Resource,
+  buttonValue: string | Resource) {
   AlertDialog.show({
     title: dialogTitle,
     message: dialogMessage,

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,10 @@ import BluetoothModelManager from '../../../MainAbility/model/BluetoothModelMana
 import { BluetoothDevice} from '../../../MainAbility/model/BluetoothModel'
 import BluetoothDeviceController from '../../../MainAbility/controller/BluetoothDeviceController';
 import { TestData} from '../../../MainAbility/model/testData'
-import { PageTitle} from '../../../Component/pageTitle';
-import { ContentTable} from '../../../Component/contentTable';
+import { PageTitle} from '../../../component/pageTitle';
+import { ContentTable} from '../../../component/contentTable';
 import { initSppClientManagerApiData} from '../../../MainAbility/model/testDataModelsManager'
-import { TestImageDisplay} from '../../../Component/testImageDisplay';
+import { TestImageDisplay} from '../../../component/testImageDisplay';
 import { testItemFromRouterOrPlaceholder} from '../../../Utils/common'
 
 let MODEL = "bluetoothModel:"
@@ -50,7 +50,8 @@ struct SppClientManager {
   @StorageLink('bluetoothIsOn') btEnable: boolean = false;
   @State currentClick: number = - 1;
   @StorageLink('pairedDeviceInfo') pairingDevice: BluetoothDevice = new BluetoothDevice;
-  @StorageLink('btDeviceController') controller: BluetoothDeviceController = new BluetoothDeviceController;
+  @StorageLink('btDeviceController') controller: BluetoothDeviceController = new
+    BluetoothDeviceController;
   @State pairPinCode: string = '';
   private testItem: TestData = testItemFromRouterOrPlaceholder();
   pairDialog: CustomDialogController = new CustomDialogController({
@@ -65,7 +66,7 @@ struct SppClientManager {
     autoCancel: true
   });
 
-  aboutToAppear(){
+  aboutToAppear() {
     this.btEnable = BluetoothModelManager.isStateOn();
     AppStorage.setOrCreate('bluetoothIsOn', this.btEnable);
     AppStorage.setOrCreate('inputDeviceId', this.deviceId);
@@ -73,11 +74,11 @@ struct SppClientManager {
     AppStorage.setOrCreate("writeClientData", this.writeClientData);
   }
 
-  build(){
-    Row(){
-      Column(){
-        Column(){
-          Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Row() {
+      Column() {
+        Column() {
+          Stack({alignContent: Alignment.TopStart}) {
             TestImageDisplay({testItem: this.testItem})
             PageTitle({testItem: this.testItem})
               .accessibilityLevel('yes')
@@ -87,11 +88,14 @@ struct SppClientManager {
           Stack()
             .height(ConfigData.VP_0_5)
             .backgroundColor($r('app.color.black'));
-          Row(){
+          Row() {
             Text($r('app.string.bluetoothtest_text_mbsbm'))
               .fontSize(ConfigData.VP_17)
               .width(ConfigData.VP_70);
-            TextInput({text: this.deviceId, placeholder: $r('app.string.bluetoothtest_str_qsrmdz')})
+            TextInput({
+              text: this.deviceId,
+              placeholder: $r('app.string.bluetoothtest_str_qsrmdz')
+            })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subSppTestManager_sppClientManager__ti_0')
               .fontSize(ConfigData.VP_15)
@@ -107,11 +111,14 @@ struct SppClientManager {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Row(){
+          Row() {
             Text($r('app.string.bluetoothtest_text_mbsbu'))
               .fontSize(ConfigData.VP_17)
               .width(ConfigData.VP_70);
-            TextInput({text: this.uuid, placeholder: $r('app.string.bluetoothtest_str_qsru')})
+            TextInput({
+              text: this.uuid,
+              placeholder: $r('app.string.bluetoothtest_str_qsru')
+            })
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subSppTestManager_sppClientManager__ti_1')
               .fontSize(ConfigData.VP_15)
@@ -127,11 +134,12 @@ struct SppClientManager {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Row(){
+          Row() {
             Text($r('app.string.bluetoothtest_text_xrmbsbsj'))
               .fontSize(ConfigData.VP_17)
               .width(ConfigData.VP_95);
-            TextInput({text: this.writeClientData, placeholder: $r('app.string.bluetoothtest_str_qsrxrdsj')})
+            TextInput({text: this.writeClientData,
+              placeholder: $r('app.string.bluetoothtest_str_qsrxrdsj')})
               .accessibilityLevel('yes')
               .id('pages_subManualApiTestManager_subSppTestManager_sppClientManager__ti_2')
               .fontSize(ConfigData.VP_15)
@@ -147,7 +155,7 @@ struct SppClientManager {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Row(){
+          Row() {
             Text($r('app.string.bluetoothtest_text_dqdsjw'))
               .fontSize(ConfigData.VP_17)
             Text(this.dataReadMessage)
@@ -159,7 +167,7 @@ struct SppClientManager {
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
 
-          Column(){
+          Column() {
             Text(resStr($r('app.string.label_api_result_space')) + this.message)
               .fontSize(ConfigData.VP_17)
               .padding(ConfigData.VP_10)
@@ -167,8 +175,8 @@ struct SppClientManager {
           }
           .backgroundColor($r("app.color.moon"))
           .visibility(Visibility.Visible);
-          Column(){
-            Scroll(){
+          Column() {
+            Scroll() {
               ContentTable({
                 apiItems: initSppClientManagerApiData()
               })//子层调用
@@ -177,7 +185,7 @@ struct SppClientManager {
             .id('pages_subManualApiTestManager_subSppTestManager_sppClientManager__sc_0')
             .width(ConfigData.WH_100_100)
             .align(Alignment.TopStart)
-            .layoutWeight(1)
+            .layoutWeight(ConfigData.LAYOUT_WEIGHT_1)
             .margin({top: $r('sys.float.ohos_id_card_margin_middle')})
             .height(ConfigData.WH_100_100)
           }
@@ -191,7 +199,7 @@ struct SppClientManager {
     .alignItems(VerticalAlign.Top)
   }
 
-  sppClientClose(){
+  sppClientClose() {
     LogUtil.info(MODEL + 'sppCloseClientSocket clientNumber: ' + JSON.stringify(this.clientNumber))
     bluetoothManager.sppCloseClientSocket(this.clientNumber);
     this.message = resStr($r('app.string.bluetoothtest_str_gbcgc')) + this.clientNumber;
@@ -201,17 +209,18 @@ struct SppClientManager {
    * 获取的clientNumber用作客户端后续读/写操作socket的id
    * @param number
    */
-  acceptClientSocket(number: number){
+  acceptClientSocket(number: number) {
     LogUtil.info('spp clientSocket socketID: ' + number);
     // 获取的clientNumber用作服务端后续读/写操作socket的id。
     this.clientNumber = number;
   }
 
-  dataRead(dataBuffer: ArrayBuffer){
+  dataRead(dataBuffer: ArrayBuffer) {
     const data = new Uint8Array(dataBuffer);
     LogUtil.info('spp bluetoothManager read is: ' + data);
-    if ( data != null ){
-      this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
+    if (data != null) {
+      this.dataReadMessage =
+        resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
       this.dataReadMessage = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
@@ -222,10 +231,10 @@ struct SppClientManager {
    * @param {*} str 需要转换的字符串
    * @returns 返回 arrayBuffer
    */
-  strToArrayBuffer(str: string){
+  strToArrayBuffer(str: string) {
     let array = new Uint8Array(str.length);
-    for(let i = 0 ; i<str.length ; i++ ){
-      array[ i ] = str.charCodeAt(i);
+    for(let i = 0 ; i<str.length ; i++) {
+      array[i] = str.charCodeAt(i);
     }
     return array.buffer
   }
@@ -234,7 +243,7 @@ struct SppClientManager {
    * Pair device
    * @param device
    */
-  pairDevice(deviceId: string){
+  pairDevice(deviceId: string) {
     this.controller.pair(this.deviceId, (pinCode: string) => {
       LogUtil.info(this.TAG_PAGE + 'pairDevice success callback : pinCode = ' + pinCode);
       // show pair pin dialog
@@ -251,22 +260,23 @@ struct SppClientManager {
   /**
    * Confirm pairing
    */
-  confirmPairing(accept: boolean){
-    LogUtil.info(this.TAG_PAGE + 'confirmPairing : pairingDevice + ' + JSON.stringify(this.pairingDevice));
+  confirmPairing(accept: boolean) {
+    LogUtil.info(this.TAG_PAGE + 'confirmPairing : pairingDevice + ' +
+      JSON.stringify(this.pairingDevice));
     this.controller.confirmPairing(this.pairingDevice.deviceId, accept);
   }
 
   /**
    * Show pair failed dialog
    */
-  showPairFailedDialog(){
+  showPairFailedDialog() {
     this.showPairingFailedDialog()
   }
 
   /**
    * Show connect Failed Dialog
    */
-  private showConnectFailedDialog(){
+  private showConnectFailedDialog() {
     showDialog(
       $r("app.string.bluetooth_connect_failed"),
       $r("app.string.bluetooth_connect_failed_msg"),
@@ -277,7 +287,7 @@ struct SppClientManager {
   /**
    * Show pairing failed title Dialog
    */
-  private showPairingFailedDialog(){
+  private showPairingFailedDialog() {
     showDialog(
       $r("app.string.pairing_failed_title"),
       $r("app.string.pairing_failed_message"),
@@ -297,11 +307,12 @@ struct PairDialog {
   action!: (accept: boolean) => void;
 
   aboutToAppear(): void {
-    LogUtil.log(ConfigData.TAG + `bluetoothManager PairDialog aboutToAppear pinCode = ${ this.pinCode }`)
+    LogUtil.log(ConfigData.TAG + `bluetoothManager PairDialog aboutToAppear pinCode = ${
+      this.pinCode }`)
   }
 
-  build(){
-    Column(){
+  build() {
+    Column() {
       Text($r('app.string.bluetooth_pairing_request'))
         .fontSize(ConfigData.FP_22)
         .height(ConfigData.VP_60)
@@ -311,9 +322,10 @@ struct PairDialog {
           top: ConfigData.VP_14,
           bottom: ConfigData.VP_14
         })
-      Column(){
-        if ( this.pinCode ){
-          Text($r('app.string.bluetooth_pairing_intelligent_device_hit', this.deviceName, this.deviceName))
+      Column() {
+        if (this.pinCode) {
+          Text($r('app.string.bluetooth_pairing_intelligent_device_hit', this.deviceName,
+            this.deviceName))
             .fontSize(ConfigData.FP_16)
             .width(ConfigData.WH_100_100)
             .margin({
@@ -321,7 +333,7 @@ struct PairDialog {
               bottom: ConfigData.VP_14
             })
 
-          Text(`${ this.pinCode }`)
+          Text(`${this.pinCode }`)
             .fontSize(ConfigData.FP_32)
             .fontWeight(FontWeight.Bolder)
             .width(ConfigData.WH_100_100)
@@ -346,9 +358,12 @@ struct PairDialog {
         }
 
         // button
-        Flex({justifyContent: FlexAlign.Center, alignItems: ItemAlign.Center}){
+        Flex({
+          justifyContent: FlexAlign.Center,
+          alignItems: ItemAlign.Center
+        }) {
 
-          Button(){
+          Button() {
             Text($r('app.string.cancel'))
               .fontSize(ConfigData.FP_16)
               .fontColor(Color.Blue)
@@ -358,7 +373,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width(ConfigData.VP_160)
           .height(ConfigData.VP_40)
-          .flexGrow(1)
+          .flexGrow(ConfigData.LAYOUT_WEIGHT_1)
           .onClick(() => {
             this.dialogController.close();
             this.action(false);
@@ -370,7 +385,7 @@ struct PairDialog {
           .vertical(true)
           .color(($r("app.color.color_E3E3E3_grey")))
 
-          Button(){
+          Button() {
             Text($r('app.string.bluetooth_pair_button'))
               .fontSize(ConfigData.FP_16)
               .fontColor(Color.Blue)
@@ -380,7 +395,7 @@ struct PairDialog {
           .backgroundColor($r("app.color.white_bg_color"))
           .width(ConfigData.VP_160)
           .height(ConfigData.VP_40)
-          .flexGrow(1)
+          .flexGrow(ConfigData.LAYOUT_WEIGHT_1)
           .onClick(() => {
             this.dialogController.close();
             this.action(true);
@@ -408,7 +423,8 @@ struct PairDialog {
  * @param dialogMessage Dialog message
  * @param buttonValue Dialog buttonValue
  */
-function showDialog(dialogTitle: string | Resource, dialogMessage: string | Resource, buttonValue: string | Resource){
+function showDialog(dialogTitle: string | Resource, dialogMessage: string | Resource,
+  buttonValue: string | Resource) {
   AlertDialog.show({
     title: dialogTitle,
     message: dialogMessage,

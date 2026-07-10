@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ import { resStr} from '../../Utils/resString';
 
 import ConfigData from '../../Utils/ConfigData';
 import { testItemFromRouterOrPlaceholder} from '../../Utils/common'
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { TestData} from '../../MainAbility/model/testData'
 import * as SppServerInterface from '../../MainAbility/model/sppServerInterface'
 import bluetooth from '@ohos.bluetooth';
@@ -35,35 +35,40 @@ import promptAction from '@ohos.promptAction';
 struct SppServerBandWidthBenchmarkTest {
   private testItem: TestData = testItemFromRouterOrPlaceholder()
   @State changeIndex: number = - 1
-  @StorageLink("sppServerBandWidthBenchmarkTestMessage") sppServerBandWidthBenchmarkTestMessage: string = ""
+  @StorageLink("sppServerBandWidthBenchmarkTestMessage") sppServerBandWidthBenchmarkTestMessage:
+    string = ""
   private uuid: string = "00001101-0000-1000-8000-00805f9b34fb";
   @StorageLink('dataServerReadMessageBW') dataServerReadMessageBW: string = "00";
   @State writeServerDataBW: string = '1';
 
-  aboutToAppear(){
+  aboutToAppear() {
     AppStorage.setOrCreate('inputUuid', this.uuid);
     AppStorage.setOrCreate("writeServerDataBW", this.writeServerDataBW);
   }
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
-              .accessibilityLevel('yes')
-              .id('pages_subBenchmarkTest_sppServerBandWidthBenchmarkTest__pt_0')
+        .accessibilityLevel('yes')
+        .id('pages_subBenchmarkTest_sppServerBandWidthBenchmarkTest__pt_0')
       }
 
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
 
-      Column(){
-        Scroll(){
-          Column(){
+      Column() {
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_xncs'))
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_5, bottom: ConfigData.VP_5, left: ConfigData.VP_20})
+              .margin({
+                top: ConfigData.VP_5,
+                bottom: ConfigData.VP_5,
+                left: ConfigData.VP_20
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
             Text($r('app.string.bluetoothtest_text_sdxncsscssldsfxxdslhdkxn'))
@@ -74,11 +79,12 @@ struct SppServerBandWidthBenchmarkTest {
                 .height(ConfigData.HEIGHT_1_VP)
                 .backgroundColor($r('app.color.black'))
 
-              Row(){
+              Row() {
               Text($r('app.string.bluetoothtest_text_xrmbsbsj'))
                 .fontSize(ConfigData.VP_17)
                 .width(ConfigData.VP_160)
-              TextInput({text: this.writeServerDataBW, placeholder: $r('app.string.bluetoothtest_str_qsrxrdsj')})
+              TextInput({text: this.writeServerDataBW,
+                placeholder: $r('app.string.bluetoothtest_str_qsrxrdsj')})
                 .accessibilityLevel('yes')
                 .id('pages_subBenchmarkTest_sppServerBandWidthBenchmarkTest__ti_0')
                 .fontSize(ConfigData.VP_14)
@@ -97,16 +103,16 @@ struct SppServerBandWidthBenchmarkTest {
             .justifyContent(FlexAlign.Start)
             .alignItems(VerticalAlign.Center)
 
-            Scroll(){
-              Column(){
+            Scroll() {
+              Column() {
                 Text($r('app.string.bluetoothtest_text_dqdsjw'))
                   .fontSize(ConfigData.VP_17)
                   .margin({left: ConfigData.VP_10})
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_100_100)
-                Scroll(){
-                  List(){
-                    ListItem(){
+                Scroll() {
+                  List() {
+                    ListItem() {
                       Text(this.dataServerReadMessageBW)
                         .align(Alignment.TopStart)
                         .fontSize(ConfigData.VP_14)
@@ -148,19 +154,27 @@ struct SppServerBandWidthBenchmarkTest {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'))
 
-        Scroll(){
-          Column(){
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_rz'))
               .fontSize(ConfigData.VP_17)
-              .margin({top: ConfigData.VP_5, bottom: ConfigData.VP_5, left: ConfigData.VP_10})
+              .margin({
+                top: ConfigData.VP_5,
+                bottom: ConfigData.VP_5,
+                left: ConfigData.VP_10
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
               .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
-            List(){
-              ListItem(){
+            List() {
+              ListItem() {
                 Text(this.sppServerBandWidthBenchmarkTestMessage)
                   .fontSize(ConfigData.VP_17)
-                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_10, right: ConfigData.VP_10})
+                  .margin({
+                    top: ConfigData.VP_5,
+                    left: ConfigData.VP_10,
+                    right: ConfigData.VP_10
+                  })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -182,14 +196,23 @@ struct SppServerBandWidthBenchmarkTest {
       .width(ConfigData.WH_100_100)
       .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-      Column(){
-        Flex({alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceBetween}){
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+      Column() {
+        Flex({
+          alignItems: ItemAlign.Center,
+          justifyContent: FlexAlign.SpaceBetween
+        }) {
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Text($r('app.string.bluetoothtest_text_dkxncs'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+                .margin({
+                  left: ConfigData.VP_5,
+                  right: ConfigData.VP_5
+                })
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -199,31 +222,48 @@ struct SppServerBandWidthBenchmarkTest {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_100)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, left: ConfigData.VP_5, right: ConfigData.VP_5})
+          .margin({
+            top: ConfigData.VP_15,
+            left: ConfigData.VP_5,
+            right: ConfigData.VP_5
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppServerBandWidthBenchmarkTestMessage = ""
 
             let writeServerDataBW: string = loopWriteDate()
             AppStorage.setOrCreate("writeServerDataBW", writeServerDataBW)
             await sleep(2)
 
-            sppServerBandWidthBenchmarkTestMessage += "sppServerCreateSafe" + testFunc(sppServerCreateSafe)
-            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage", sppServerBandWidthBenchmarkTestMessage)
+            sppServerBandWidthBenchmarkTestMessage += "sppServerCreateSafe"
+              + testFunc(sppServerCreateSafe)
+            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage",
+              sppServerBandWidthBenchmarkTestMessage)
             await sleep(8)
 
             sppServerBandWidthBenchmarkTestMessage += "sppServerAccept" + testFunc(sppServerAccept)
-            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage", sppServerBandWidthBenchmarkTestMessage)
+            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage",
+              sppServerBandWidthBenchmarkTestMessage)
             await sleep(5)
 
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Text($r('app.string.bluetoothtest_text_jscs'))
                 .fontSize(ConfigData.VP_24)
                 .fontColor(0xffffff)
-                .margin({left: ConfigData.VP_5, right: ConfigData.VP_5})
+                .margin({
+                  left: ConfigData.VP_5,
+                  right: ConfigData.VP_5
+                })
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -233,29 +273,55 @@ struct SppServerBandWidthBenchmarkTest {
           .backgroundColor($r("app.color.blue"))
           .width(ConfigData.VP_80)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, left: ConfigData.VP_5, right: ConfigData.VP_5})
+          .margin({
+            top: ConfigData.VP_15,
+            left: ConfigData.VP_5,
+            right: ConfigData.VP_5
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppServerBandWidthBenchmarkTestMessage = ""
 
-            sppServerBandWidthBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_14')) + testFunc(SppServerInterface.testSppServerReadOff) + "\n"
-            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage", sppServerBandWidthBenchmarkTestMessage)
+            sppServerBandWidthBenchmarkTestMessage +=
+              resStr($r('app.string.bluetoothtest_str_tzx_14'))
+              + testFunc(SppServerInterface.testSppServerReadOff)
+              + "\n"
+            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage",
+              sppServerBandWidthBenchmarkTestMessage)
             await sleep(1)
 
-            sppServerBandWidthBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_tzx_8')) + testFunc(SppServerInterface.testSppCloseServerSocket) + "\n"
-            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage", sppServerBandWidthBenchmarkTestMessage)
+            sppServerBandWidthBenchmarkTestMessage +=
+              resStr($r('app.string.bluetoothtest_str_tzx_8'))
+              + testFunc(SppServerInterface.testSppCloseServerSocket)
+              + "\n"
+            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage",
+              sppServerBandWidthBenchmarkTestMessage)
             await sleep(1)
 
-            sppServerBandWidthBenchmarkTestMessage += resStr($r('app.string.bluetoothtest_str_szx_2')) + testFunc(SppServerInterface.testSppCloseClientSocket) + "\n"
-            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage", sppServerBandWidthBenchmarkTestMessage)
+            sppServerBandWidthBenchmarkTestMessage +=
+              resStr($r('app.string.bluetoothtest_str_szx_2'))
+              + testFunc(SppServerInterface.testSppCloseClientSocket)
+              + "\n"
+            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage",
+              sppServerBandWidthBenchmarkTestMessage)
             await sleep(1)
-          })
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
 
-          Button({type: ButtonType.Normal, stateEffect: true}){
-            Row(){
+          Button({
+            type: ButtonType.Normal,
+            stateEffect: true
+          }) {
+            Row() {
               Image($r('app.media.ic_public_delete_filled'))
           .accessibilityLevel('yes')
-          .id('pages_subBenchmarkTest_sppServerBandWidthBenchmarkTest__img_0').width(ConfigData.VP_30).height(ConfigData.VP_40).margin({left: ConfigData.VP_5})
+          .id('pages_subBenchmarkTest_sppServerBandWidthBenchmarkTest__img_0')
+          .width(ConfigData.VP_30)
+          .height(ConfigData.VP_40)
+          .margin({left: ConfigData.VP_5})
             }
               .alignItems(VerticalAlign.Center)
           }
@@ -265,12 +331,20 @@ struct SppServerBandWidthBenchmarkTest {
           .backgroundColor($r("app.color.moon"))
           .width(ConfigData.VP_50)
           .height(ConfigData.VP_66)
-          .margin({top: ConfigData.VP_15, right: ConfigData.VP_40})
+          .margin({
+            top: ConfigData.VP_15,
+            right: ConfigData.VP_40
+          })
           .align(Alignment.Start)
           .onClick(async(event: ClickEvent) => {
+            try {
             let sppServerBandWidthBenchmarkTestMessage = ""
-            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage", sppServerBandWidthBenchmarkTestMessage)
-          })
+            AppStorage.setOrCreate("sppServerBandWidthBenchmarkTestMessage",
+              sppServerBandWidthBenchmarkTestMessage)
+          
+            } catch (e) {
+              LogUtil.info(`async onClick failed: ${e.message}, code: ${e.code}`);
+            }})
         }
         .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
         .width(ConfigData.WH_100_100)
@@ -281,20 +355,21 @@ struct SppServerBandWidthBenchmarkTest {
     }
   }
 
-  dataRead(dataBuffer: ArrayBuffer){
+  dataRead(dataBuffer: ArrayBuffer) {
     const data = new Uint8Array(dataBuffer);
     LogUtil.info('spp bluetooth read is: ' + data);
-    if ( data != null ){
-      this.dataServerReadMessageBW = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
+    if (data != null) {
+      this.dataServerReadMessageBW =
+        resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
     } else {
       this.dataServerReadMessageBW = resStr($r('app.string.bluetoothtest_str_dqsb'));
     }
   }
 }
 
-export function testFunc(func: Function){
+export function testFunc(func: Function) {
   let start = new Date().getTime()
-  switch ( func ){
+  switch (func) {
     case testSetLocalName: {
       func("DaYuBlue")
     }
@@ -314,7 +389,13 @@ export function testFunc(func: Function){
   LogUtil.info(resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms")
   let message = ""
   message += resStr($r('app.string.bluetoothtest_str_hf')) + Number(end - start) + "ms" + "\n"
-  message += resStr($r('app.string.bluetoothtest_str_ks')) + Number(start) + resStr($r('app.string.bluetoothtest_str_m_1')) + resStr($r('app.string.bluetoothtest_str_js')) + Number(end) + "ms" + "\n"
+  message += resStr($r('app.string.bluetoothtest_str_ks'))
+    + Number(start)
+    + resStr($r('app.string.bluetoothtest_str_m_1'))
+    + resStr($r('app.string.bluetoothtest_str_js'))
+    + Number(end)
+    + "ms"
+    + "\n"
   return message
 }
 
@@ -333,14 +414,19 @@ function sppServerCreateSafe(): string {
   let message = resStr($r('app.string.bluetoothtest_str_st_10'))
   LogUtil.info('spp server socketId(safe mode) create! ');
   let uuid: string = AppStorage.get('inputUuid') !
-  if ( uuid == '' ){
+  if (uuid == '') {
     message = resStr($r('app.string.bluetoothtest_str_uwk'));
     promptAction.showToast({message: message})
   }
   // 创建蓝牙服务器侦听套接字, 返回服务端ID
-  bluetooth.sppListen('BluetoothDevice', { uuid: uuid, secure: true, type: 0}, (code, serverSocketID) => {
+  bluetooth.sppListen('BluetoothDevice', {
+    uuid: uuid,
+    secure: true,
+    type: 0
+  }, (code,
+    serverSocketID) => {
     LogUtil.info('bluetooth error code: ' + code);
-    if ( !code || code.code == 0 ){
+    if (!code || code.code == 0) {
       LogUtil.info('spp server: serverSocketID(safe mode) - ' + serverSocketID);
       serverNumber = serverSocketID;
       message = resStr($r('app.string.bluetoothtest_str_cjscg'));
@@ -361,7 +447,7 @@ function sppServerAccept(): string {
   LogUtil.info('testSppServerAccept serverNumber ' + serverNumber)
 
   bluetooth.sppAccept(serverNumber, (code, clientSocketID) => {
-    if ( !code || code.code == 0 ){
+    if (!code || code.code == 0) {
       LogUtil.info('spp server: clientSocketID - ' + clientSocketID)
       LogUtil.info('test serverNumber ' + serverNumber);
       clientNumber = clientSocketID;
@@ -371,7 +457,7 @@ function sppServerAccept(): string {
       bluetooth.on('sppRead', clientNumber, (dataBuffer: ArrayBuffer) => {
         const data = new Uint8Array(dataBuffer);
         LogUtil.info('spp bluetooth read is: ' + data);
-        if ( data != null ){
+        if (data != null) {
           serverReadMessageBW += resStr($r('app.string.bluetoothtest_str_dqcg')) + "\n"
           LogUtil.info(resStr($r('app.string.bluetoothtest_str_dqcg_1')) + JSON.stringify(data));
           AppStorage.setOrCreate("dataServerReadMessageBW", serverReadMessageBW)
@@ -383,7 +469,7 @@ function sppServerAccept(): string {
           let writeArrayBuffer: ArrayBuffer = strToArrayBuffer(writeServerDataBW) as ArrayBuffer;
           LogUtil.info('sppServerWrite  writeServerDataBW: ' + writeServerDataBW);
           const sppWriteSuccess = bluetooth.sppWrite(clientNumber, writeArrayBuffer);
-          if ( sppWriteSuccess ){
+          if (sppWriteSuccess) {
             LogUtil.info($r('app.string.bluetoothtest_str_xrcg_1'));
             message = resStr($r('app.string.bluetoothtest_str_xrcg'));
           } else {
@@ -416,7 +502,7 @@ function sppServerWrite(): string {
   let writeServerDataBW: string = AppStorage.get("writeServerDataBW") !
   let writeArrayBuffer: ArrayBuffer = strToArrayBuffer(writeServerDataBW) as ArrayBuffer;
   const sppWriteSuccess = bluetooth.sppWrite(clientNumber, writeArrayBuffer);
-  if ( sppWriteSuccess ){
+  if (sppWriteSuccess) {
     LogUtil.info('sppWrite successfully');
     message = resStr($r('app.string.bluetoothtest_str_xrcg'));
   } else {
@@ -435,7 +521,7 @@ function sppServerReadOff(): string {
     (dataBuffer: ArrayBuffer) => {
       const data = new Uint8Array(dataBuffer);
       LogUtil.info('spp bluetooth read is: ' + data);
-      if ( data != null ){
+      if (data != null) {
         message = resStr($r('app.string.bluetoothtest_str_dqcg_2')) + JSON.stringify(data);
       } else {
         message = resStr($r('app.string.bluetoothtest_str_dqsb'));
@@ -449,17 +535,17 @@ function sppServerReadOff(): string {
   return message
 }
 
-function strToArrayBuffer(str: string){
+function strToArrayBuffer(str: string) {
   let array = new Uint8Array(str.length);
-  for(let i = 0 ; i<str.length ; i++ ){
-    array[ i ] = str.charCodeAt(i);
+  for(let i = 0 ; i<str.length ; i++) {
+    array[i] = str.charCodeAt(i);
   }
   return array.buffer
 }
 
-function loopWriteDate(){
+function loopWriteDate() {
   let a = "1";
-  for(let i = 0 ;i<100 ; i++ ){
+  for(let i = 0 ;i<100 ; i++) {
     a += "1";
   }
   return a

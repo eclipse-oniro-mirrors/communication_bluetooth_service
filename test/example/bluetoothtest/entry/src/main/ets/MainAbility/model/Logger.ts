@@ -17,7 +17,7 @@ import LogUtil from '../../Utils/LogUtil';
 class Logger {
   private prefix: string
 
-  constructor(prefix: string){
+  constructor(prefix: string) {
     this.prefix = prefix
   }
 
@@ -25,19 +25,19 @@ class Logger {
     return `${this.prefix} ${args.map((x) => String(x)).join(' ')}`
   }
 
-  debug(...args: any[]){
+  debug(...args: any[]) {
     LogUtil.debug(this.line(...args))
   }
 
-  info(...args: any[]){
+  info(...args: any[]) {
     LogUtil.info(this.line(...args))
   }
 
-  warn(...args: any[]){
+  warn(...args: any[]) {
     LogUtil.warn(this.line(...args))
   }
 
-  error(...args: any[]){
+  error(...args: any[]) {
     LogUtil.error(this.line(...args))
   }
 }

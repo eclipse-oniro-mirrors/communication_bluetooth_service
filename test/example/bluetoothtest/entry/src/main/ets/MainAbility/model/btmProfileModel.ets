@@ -25,33 +25,41 @@ import pan from '@ohos.bluetooth.pan';
 
 export class BTMProfileModel extends BaseModel {
   private TAG = ConfigData.TAG + 'BTMProfileModel';
-  private profiles: btm.A2dpSourceProfile | btm.HandsFreeAudioGatewayProfile | btm.HidHostProfile | btm.PanProfile | null [] = []
+  private profiles: btm.A2dpSourceProfile | btm.HandsFreeAudioGatewayProfile | btm.HidHostProfile |
+    btm.PanProfile | null [] = []
   public PROFILE_A2DP_SOURCE = 1;
   public PROFILE_HANDS_FREE_AUDIO_GATEWAY = 4;
   public PROFILE_HID_HOST = 6;
   public PROFILE_PAN_NETWORK = 7;
   public BLUETOOTH_STATE_OFF = 0;
 
-  constructor(){
+  constructor() {
     super();
   }
 
   initProfile(): void {
     LogUtil.info('btm_test BTProfileModel start');
+    try {
+      this.profiles[this.PROFILE_A2DP_SOURCE] = btm.getProfileInstance(this.PROFILE_A2DP_SOURCE) as
+        btm.A2dpSourceProfile;
 
-    this.profiles[ this.PROFILE_A2DP_SOURCE ] = btm.getProfileInstance(this.PROFILE_A2DP_SOURCE) as btm.A2dpSourceProfile;
+      this.profiles[this.PROFILE_HANDS_FREE_AUDIO_GATEWAY] =
+        btm.getProfileInstance(this.PROFILE_HANDS_FREE_AUDIO_GATEWAY) as
+          btm.HandsFreeAudioGatewayProfile;
 
-    this.profiles[ this.PROFILE_HANDS_FREE_AUDIO_GATEWAY ] = btm.getProfileInstance(this.PROFILE_HANDS_FREE_AUDIO_GATEWAY) as btm.HandsFreeAudioGatewayProfile;
+      this.profiles[this.PROFILE_HID_HOST] = btm.getProfileInstance(this.PROFILE_HID_HOST) as
+        btm.HidHostProfile;
 
-    this.profiles[ this.PROFILE_HID_HOST ] = btm.getProfileInstance(this.PROFILE_HID_HOST) as btm.HidHostProfile;
-
-    this.profiles[ this.PROFILE_PAN_NETWORK ] = btm.getProfileInstance(this.PROFILE_PAN_NETWORK) as btm.PanProfile;
-
+      this.profiles[this.PROFILE_PAN_NETWORK] = btm.getProfileInstance(this.PROFILE_PAN_NETWORK) as
+        btm.PanProfile;
+    } catch (e) {
+      LogUtil.info(`BTMProfileModel initProfile failed: ${e.message}, code: ${e.code}`);
+    }
     LogUtil.info('bt_test BTProfileModel end');
   }
 
   hasProfile(type: number): boolean {
-    if ( !this.profiles[ type ] ){
+    if (!this.profiles[type]) {
       return false;
     } else {
       return true;
@@ -59,8 +67,8 @@ export class BTMProfileModel extends BaseModel {
   }
 
   getA2DPSourceProfile(): btm.A2dpSourceProfile | null {
-    if ( this.profiles[ this.PROFILE_A2DP_SOURCE ] != null ){
-      return this.profiles[ this.PROFILE_A2DP_SOURCE ]
+    if (this.profiles[this.PROFILE_A2DP_SOURCE] != null) {
+      return this.profiles[this.PROFILE_A2DP_SOURCE]
     } else {
       return null
     }
@@ -68,32 +76,33 @@ export class BTMProfileModel extends BaseModel {
   }
 
   getHandsFreeAudioGatewayProfile(): btm.HandsFreeAudioGatewayProfile | null {
-    if ( this.profiles[ this.PROFILE_HANDS_FREE_AUDIO_GATEWAY ] != null ){
-      return this.profiles[ this.PROFILE_HANDS_FREE_AUDIO_GATEWAY ];
+    if (this.profiles[this.PROFILE_HANDS_FREE_AUDIO_GATEWAY] != null) {
+      return this.profiles[this.PROFILE_HANDS_FREE_AUDIO_GATEWAY];
     } else {
       return null
     }
   }
 
   getHidHostProfile(): btm.HidHostProfile | null {
-    if ( this.profiles[ this.PROFILE_HID_HOST ] != null ){
-      return this.profiles[ this.PROFILE_HID_HOST ];
+    if (this.profiles[this.PROFILE_HID_HOST] != null) {
+      return this.profiles[this.PROFILE_HID_HOST];
     } else {
       return null
     }
   }
 
   getPanNetworkProfile(): btm.PanProfile | null {
-    if ( this.profiles[ this.PROFILE_PAN_NETWORK ] != null ){
-      return this.profiles[ this.PROFILE_PAN_NETWORK ];
+    if (this.profiles[this.PROFILE_PAN_NETWORK] != null) {
+      return this.profiles[this.PROFILE_PAN_NETWORK];
     } else {
       return null
     }
   }
 
-  getProfile(type: number): btm.A2dpSourceProfile | btm.HandsFreeAudioGatewayProfile | btm.HidHostProfile | btm.PanProfile | null {
-    if ( this.profiles[ type ] != null ){
-      return this.profiles[ type ];
+  getProfile(type: number): btm.A2dpSourceProfile | btm.HandsFreeAudioGatewayProfile |
+    btm.HidHostProfile | btm.PanProfile | null {
+    if (this.profiles[type] != null) {
+      return this.profiles[type];
     } else {
       LogUtil.info("This.profiles[ type ] = null")
       return null

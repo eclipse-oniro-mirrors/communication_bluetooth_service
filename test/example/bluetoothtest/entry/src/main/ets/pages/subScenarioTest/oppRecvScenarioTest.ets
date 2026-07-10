@@ -18,8 +18,8 @@ import { resStr} from '../../Utils/resString';
 
 import ConfigData from '../../Utils/ConfigData';
 import { PairDevices, testItemFromRouterOrPlaceholder} from '../../Utils/common'
-import { PageTitle} from '../../Component/pageTitle';
-import { TestImageDisplay} from '../../Component/testImageDisplay';
+import { PageTitle} from '../../component/pageTitle';
+import { TestImageDisplay} from '../../component/testImageDisplay';
 import { TestData} from '../../MainAbility/model/testData'
 import bluetooth from '@ohos.bluetooth';
 import promptAction from '@ohos.promptAction';
@@ -55,7 +55,7 @@ struct OppRecvScenarioTest {
           this.receiveDialogController.close();
           this.onTransferStateChange();
           LogUtil.info("receive success");
-        } catch( error ){
+        } catch(error) {
           LogUtil.info("receive fail, err: " + JSON.stringify(error));
         }
       },
@@ -66,84 +66,91 @@ struct OppRecvScenarioTest {
           this.oppProfile.setIncomingFileConfirmation(false, file.fd);
           this.receiveDialogController.close();
           LogUtil.info("reject receive success");
-        } catch( error ){
+        } catch(error) {
           LogUtil.info("reject receive fail, err: " + JSON.stringify(error));
         }
       }
     })
   })
 
-  aboutToAppear(){
+  aboutToAppear() {
     try {
       this.oppProfile = opp.createOppServerProfile();
       testLog("oppRecv get opp profile success");
-    } catch( error ){
+    } catch(error) {
       testLog("oppRecv get opp profile fail, err: " + JSON.stringify(error));
     }
     this.getPairDevice();
   }
 
-  getPairDevice(){
+  getPairDevice() {
     let macs = bluetooth.getPairedDevices();
     LogUtil.info("OppRecv getPairDevice macs: " + JSON.stringify(macs));
-    for(let i = 0 ; i<macs.length ; i++ ){
-      let name = bluetooth.getRemoteDeviceName(macs[ i ]);
+    for(let i = 0 ; i<macs.length ; i++) {
+      let name = bluetooth.getRemoteDeviceName(macs[i]);
       LogUtil.info("OppRecv getPairDevice name: " + JSON.stringify(name));
-      this.pairedDevices.push({id: macs[ i ], name: name});
+      this.pairedDevices.push({
+        id: macs[i],
+        name: name
+      });
     }
     LogUtil.info("OppRecv getPairDevice pairedDevices: " + JSON.stringify(this.pairedDevices));
   }
 
-  onTransferStateChange(){
+  onTransferStateChange() {
     try {
       this.oppProfile.on("transferStateChange", (stateInformation) => {
         LogUtil.info("transferStateChange enter");
         this.showProgress = true;
         this.curProgress = (stateInformation.currentBytes * 100) / stateInformation.totalBytes;
-        if ( this.curProgress === 100 ){
+        if (this.curProgress === 100) {
           this.showProgress = false;
-          this.oppRecvScenarioMessage = resStr($r('app.string.bluetoothtest_str_jswjcgwjcflj')) + JSON.stringify(stateInformation.filePath) + "\n"
+          this.oppRecvScenarioMessage =
+            resStr($r('app.string.bluetoothtest_str_jswjcgwjcflj')) +
+              JSON.stringify(stateInformation.filePath) + "\n"
           testLog(this.oppRecvScenarioMessage);
         }
       })
-    } catch( error ){
+    } catch(error) {
       LogUtil.info("on transferStateChange fail, err: " + JSON.stringify(error));
     }
   }
 
-  build(){
-    Column(){
-      Stack({alignContent: Alignment.TopStart}){
+  build() {
+    Column() {
+      Stack({alignContent: Alignment.TopStart}) {
         TestImageDisplay({testItem: this.testItem})
         PageTitle({testItem: this.testItem})
-              .accessibilityLevel('yes')
-              .id('pages_subScenarioTest_oppRecvScenarioTest__pt_0')
+        .accessibilityLevel('yes')
+        .id('pages_subScenarioTest_oppRecvScenarioTest__pt_0')
       }
 
       Stack()
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
-      Column(){
-        Scroll(){
-          Column(){
+      Column() {
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_ypdsblbdjxzsb'))
               .fontSize(ConfigData.VP_20)
               .fontWeight(FontWeight.Bold)
               .margin({top: ConfigData.VP_5})
-            Scroll(){
-              List({space: ConfigData.VP_5}){
+            Scroll() {
+              List({space: ConfigData.VP_5}) {
                 ForEach(this.pairedDevices, (item: PairDevices, index: number) => {
-                  ListItem(){
+                  ListItem() {
                     Text(item.name)
                       .fontSize(ConfigData.VP_25)
                       .width(ConfigData.WH_80_100)
                       .margin({left: ConfigData.PCT_10})
-                      .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") : $r("app.color.white"))
+                      .backgroundColor(this.serverMac === item.id ? $r("app.color.moon") :
+                        $r("app.color.white"))
                       .border({
                         radius: 5
                       })
                   }
-                  .id(index === 0 ? 'pages_subScenarioTest_oppRecvScenarioTest__li_0' : `pages_subScenarioTest_oppRecvScenarioTest__li_${index}`)
+                  .id(index === 0 ? 'pages_subScenarioTest_oppRecvScenarioTest__li_0' :
+                    `pages_subScenarioTest_oppRecvScenarioTest__li_${index}`)
                   .onClick(() => {
                     this.serverMac = item.id;
                   })
@@ -168,7 +175,7 @@ struct OppRecvScenarioTest {
           .height(ConfigData.HEIGHT_1_VP)
           .backgroundColor($r('app.color.black'));
 
-        Column(){
+        Column() {
           Text($r('app.string.bluetoothtest_text_yxzdsbdlymdz'))
             .fontSize(ConfigData.VP_18)
             .fontWeight(FontWeight.Bold)
@@ -181,18 +188,26 @@ struct OppRecvScenarioTest {
         }
           .height(ConfigData.PCT_20)
 
-        Scroll(){
-          Column(){
+        Scroll() {
+          Column() {
             Text($r('app.string.bluetoothtest_text_lcrz'))
               .fontSize(ConfigData.VP_18)
-              .margin({top: ConfigData.VP_8, bottom: ConfigData.VP_8, left: ConfigData.VP_20})
+              .margin({
+                top: ConfigData.VP_8,
+                bottom: ConfigData.VP_8,
+                left: ConfigData.VP_20
+              })
               .textAlign(TextAlign.Start)
               .width(ConfigData.WH_100_100)
-            List(){
-              ListItem(){
+            List() {
+              ListItem() {
                 Text(this.oppRecvScenarioMessage)
                   .fontSize(ConfigData.VP_18)
-                  .margin({top: ConfigData.VP_5, left: ConfigData.VP_30, right: ConfigData.VP_10})
+                  .margin({
+                    top: ConfigData.VP_5,
+                    left: ConfigData.VP_30,
+                    right: ConfigData.VP_10
+                  })
                   .textAlign(TextAlign.Start)
                   .width(ConfigData.WH_90_100)
               }
@@ -219,9 +234,12 @@ struct OppRecvScenarioTest {
         .height(ConfigData.HEIGHT_1_VP)
         .backgroundColor($r('app.color.black'));
 
-      Column(){
-        Flex({alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceBetween}){
-          Column(){
+      Column() {
+        Flex({
+          alignItems: ItemAlign.Center,
+          justifyContent: FlexAlign.SpaceBetween
+        }) {
+          Column() {
             Button($r('app.string.bluetoothtest_str_okqjswj'))
               .accessibilityLevel('yes')
               .id('pages_subScenarioTest_oppRecvScenarioTest__btn_0')
@@ -235,17 +253,20 @@ struct OppRecvScenarioTest {
               .alignSelf(ItemAlign.Center)
               .onClick(() => {
                 try {
-                  this.oppProfile.on("receiveIncomingFile", ( information) => {
+                  this.oppProfile.on("receiveIncomingFile", (information) => {
                     testLog(resStr($r('app.string.bluetoothtest_str_okqjswj')))
                     this.deviceName = information.remoteDeviceName;
                     this.fileName = information.filePath;
-                    this.oppRecvScenarioMessage = resStr($r('app.string.bluetoothtest_str_fsdw')) + this.deviceName + resStr($r('app.string.bluetoothtest_str_wjmw')) + this.fileName + "\n"
+                    this.oppRecvScenarioMessage =
+                      resStr($r('app.string.bluetoothtest_str_fsdw')) + this.deviceName +
+                        resStr($r('app.string.bluetoothtest_str_wjmw')) + this.fileName + "\n"
                     testLog(this.oppRecvScenarioMessage);
                     LogUtil.info(JSON.stringify(information));
                     this.receiveDialogController.open();
                   })
-              } catch( error ){
-                  this.oppRecvScenarioMessage = resStr($r('app.string.bluetoothtest_str_okqjswjsbe')) + JSON.stringify(error)
+              } catch(error) {
+                  this.oppRecvScenarioMessage =
+                    resStr($r('app.string.bluetoothtest_str_okqjswjsbe')) + JSON.stringify(error)
                   testLog(this.oppRecvScenarioMessage);
               }
               })
@@ -256,12 +277,17 @@ struct OppRecvScenarioTest {
           .alignItems(HorizontalAlign.Center)
           .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
 
-          if ( this.showProgress ){
-            Row({space: ConfigData.VP_5}){
-              Progress({value: this.curProgress, total: 100, type: ProgressType.Linear})
+          if (this.showProgress) {
+            Row({space: ConfigData.VP_5}) {
+              Progress({
+                value: this.curProgress,
+                total: 100,
+                type: ProgressType.Linear
+              })
                 .style({strokeWidth: ConfigData.VP_10})
 
-              Text(this.curProgress.toString() + getContext(this).resourceManager.getStringSync($r('app.string.percent_symbol')))
+              Text(this.curProgress.toString() +
+                getContext(this).resourceManager.getStringSync($r('app.string.percent_symbol')))
                 .fontSize(ConfigData.VP_30)
             }
           }
@@ -284,15 +310,19 @@ struct ReceiveCustomDialog {
   cancel!: () => void
   confirm!: () => void
 
-  build(){
-    Column(){
-      Text(resStr($r('app.string.opp_recv_confirm_prefix')) + this.deviceName + resStr($r('app.string.opp_recv_confirm_suffix')))
+  build() {
+    Column() {
+      Text(resStr($r('app.string.opp_recv_confirm_prefix')) + this.deviceName +
+        resStr($r('app.string.opp_recv_confirm_suffix')))
         .fontSize(ConfigData.VP_20)
-        .margin({top: ConfigData.VP_10, bottom: ConfigData.VP_10})
+        .margin({
+          top: ConfigData.VP_10,
+          bottom: ConfigData.VP_10
+        })
       Text(this.fileName)
     .fontSize(ConfigData.VP_18)
     .margin({bottom: ConfigData.VP_10})
-      Flex({justifyContent: FlexAlign.SpaceAround}){
+      Flex({justifyContent: FlexAlign.SpaceAround}) {
         Button($r('app.string.bluetoothtest_str_jj'))
           .accessibilityLevel('yes')
           .id('pages_subScenarioTest_oppRecvScenarioTest__btn_1')
@@ -311,7 +341,7 @@ struct ReceiveCustomDialog {
   }
 }
 
-export function testLog(logStr: string){
+export function testLog(logStr: string) {
   promptAction.showToast({message: logStr})
   LogUtil.info(logStr)
 }

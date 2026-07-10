@@ -24,41 +24,44 @@ import btm from '@ohos.bluetoothManager'
  * Profile A2DP Manager Test Page Of Bluetooth test
  */
 
-export function testProfileConnectManager(){
+export function testProfileConnectManager() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_pt_4'))
     let textMessage = ""
     let btConnectionState = AppStorage.get("btConnectionState") !
     let deviceId: string = AppStorage.get("deviceId") !
     let profileType: number = AppStorage.get("profileType") !
-    if ( btConnectionState == 1 || btConnectionState == 2 ){
-      promptAction.showToast({message: btConnectionState == 1 ? $r('app.string.bluetoothtest_str_gsbzzljz') : $r('app.string.bluetoothtest_str_gsbylj')});
+    if (btConnectionState == 1 || btConnectionState == 2) {
+      promptAction.showToast({message: btConnectionState == 1 ?
+        $r('app.string.bluetoothtest_str_gsbzzljz') : $r('app.string.bluetoothtest_str_gsbylj')});
       return message;
     }
-    (btmProfileModel.getProfile(profileType) as btm.A2dpSourceProfile | btm.HandsFreeAudioGatewayProfile | btm.HidHostProfile).connect(deviceId);
+    (btmProfileModel.getProfile(profileType) as btm.A2dpSourceProfile |
+      btm.HandsFreeAudioGatewayProfile | btm.HidHostProfile).connect(deviceId);
     btConnectionState = 1;
     textMessage = resStr($r('app.string.bluetoothtest_str_cr'))
     message = resStr($r('app.string.bluetoothtest_str_cr'));
     AppStorage.setOrCreate("textMessage", textMessage)
     promptAction.showToast({message: message});
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testProfileConnectManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testProfileConnectManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testProfileConnectManager. message: ${e.message }, code: ${e.code }`)
+    let message = `Failed to testProfileConnectManager. message: ${e.message }, code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testProfileDisConnectManager(){
+export function testProfileDisConnectManager() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_pt_3'))
     let textMessage = ""
     let btConnectionState = AppStorage.get("btConnectionState") !
     let deviceId: string = AppStorage.get("deviceId") !
     let profileType: number = AppStorage.get("profileType") !
-    if ( btConnectionState == 0 || btConnectionState == 3 ){
-      promptAction.showToast({message: btConnectionState == 0 ? $r('app.string.bluetoothtest_str_gsbydk') : $r('app.string.bluetoothtest_str_gsbzzdklj')})
+    if (btConnectionState == 0 || btConnectionState == 3) {
+      promptAction.showToast({message: btConnectionState == 0 ?
+        $r('app.string.bluetoothtest_str_gsbydk') : $r('app.string.bluetoothtest_str_gsbzzdklj')})
       return message;
     }
     btmProfileModel.getProfile(profileType)!.disconnect(deviceId);
@@ -68,15 +71,17 @@ export function testProfileDisConnectManager(){
     message = resStr($r('app.string.bluetoothtest_str_dr'));
     promptAction.showToast({message: message});
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testProfileDisConnectManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testProfileDisConnectManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testProfileDisConnectManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testProfileDisConnectManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testProfileGetPlayingStateManager(){
+export function testProfileGetPlayingStateManager() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_pt_1'))
     let textMessage = ""
@@ -87,7 +92,7 @@ export function testProfileGetPlayingStateManager(){
     let profile: btm.A2dpSourceProfile
     profile = btmProfileModel.getProfile(parseInt(profileType)) as btm.A2dpSourceProfile
     let ret = - 1
-    if ( profile ){
+    if (profile) {
       ret = profile.getPlayingState(deviceId)
     }
     textMessage = resStr($r('app.string.bluetoothtest_str_gr_1')) + ret;
@@ -95,15 +100,17 @@ export function testProfileGetPlayingStateManager(){
     AppStorage.setOrCreate("textMessage", textMessage)
     promptAction.showToast({message: message});
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testProfileGetPlayingStateManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testProfileGetPlayingStateManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testProfileGetPlayingStateManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testProfileGetPlayingStateManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testProfileGetConnectionDevicesManager(){
+export function testProfileGetConnectionDevicesManager() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_pt'))
     let textMessage = ""
@@ -114,15 +121,17 @@ export function testProfileGetConnectionDevicesManager(){
     AppStorage.setOrCreate("textMessage", textMessage)
     promptAction.showToast({message: message});
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testProfileGetConnectionDevicesManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testProfileGetConnectionDevicesManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testProfileGetConnectionDevicesManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testProfileGetConnectionDevicesManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
 }
 
-export function testProfileGetDeviceStateManager(){
+export function testProfileGetDeviceStateManager() {
   try {
     let message = resStr($r('app.string.bluetoothtest_str_pt_2'))
     let textMessage = ""
@@ -134,9 +143,11 @@ export function testProfileGetDeviceStateManager(){
     AppStorage.setOrCreate("textMessage", textMessage)
     promptAction.showToast({message: message});
     return message
-  } catch( e ){
-    LogUtil.info(`Failed to testProfileGetDeviceStateManager. message: ${ e.message }, code: ${ e.code }`)
-    let message = `Failed to testProfileGetDeviceStateManager. message: ${ e.message }, code: ${ e.code }`
+  } catch(e) {
+    LogUtil.info(`Failed to testProfileGetDeviceStateManager. message: ${e.message },
+      code: ${e.code }`)
+    let message = `Failed to testProfileGetDeviceStateManager. message: ${e.message },
+      code: ${e.code }`
     promptAction.showToast({message: message})
     return message
   }
