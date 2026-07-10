@@ -361,6 +361,9 @@ void AvrcTgStateMachineManager::StateMachine::CtConnecting::Entry(void)
     HILOGI("enter");
 
     const AvrcTgConnectInfo *info = AvrcTgConnectManager::GetInstance()->GetConnectInfo(rawAddr_);
+    if (info == nullptr) {
+        return;
+    }
 
     AVCT_Register(info->controlMtu_, info->browseMtu_, AVCT_CT);
 
@@ -544,6 +547,9 @@ void AvrcTgStateMachineManager::StateMachine::CtDisconnecting::Entry(void)
     HILOGI("enter");
 
     const AvrcTgConnectInfo *info = AvrcTgConnectManager::GetInstance()->GetConnectInfo(rawAddr_);
+    if (info == nullptr) {
+        return;
+    }
 
     if (AVCT_DisconnectReq(info->connectId_) != AVCT_SUCCESS) {
         BtAddr btAddr = {{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 0x00};
@@ -697,6 +703,9 @@ void AvrcTgStateMachineManager::StateMachine::BrConnecting::Entry(void)
     HILOGI("enter");
 
     const AvrcTgConnectInfo *info = AvrcTgConnectManager::GetInstance()->GetConnectInfo(rawAddr_);
+    if (info == nullptr) {
+        return;
+    }
 
     if (AVCT_BrConnectReq(info->connectId_, info->role_) != AVCT_SUCCESS) {
         BtAddr btAddr = {{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 0x00};
@@ -807,6 +816,9 @@ void AvrcTgStateMachineManager::StateMachine::BrDisconnecting::Entry(void)
     HILOGI("enter");
 
     const AvrcTgConnectInfo *info = AvrcTgConnectManager::GetInstance()->GetConnectInfo(rawAddr_);
+    if (info == nullptr) {
+        return;
+    }
 
     if (AVCT_BrDisconnectReq(info->connectId_) != AVCT_SUCCESS) {
         BtAddr btAddr = {{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 0x00};
