@@ -824,6 +824,9 @@ std::unique_ptr<ObexPacket> ObexHeader::Build() const
 {
     auto obexPacket = std::make_unique<ObexPacket>(packetLength_);
     uint8_t *packetBuf = obexPacket->GetBuffer();
+    if (packetBuf == nullptr) {
+        return obexPacket;
+    }
     uint16_t pos = 0;
     packetBuf[pos++] = code_;
     bool isBigEndian = ObexUtils::SysIsBigEndian();
