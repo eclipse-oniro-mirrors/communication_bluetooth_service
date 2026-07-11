@@ -875,9 +875,16 @@ void A2dpStateOpen::ProcessSuspendCfm(A2dpAvdtMsgData msgData, uint8_t role)
     if (profile->GetDisalbeTag()) {
         profile->CloseAll();
     }
-    if (profile->FindPeerByAddress(msgData.stream.addr)->GetRestart()) {
+
+    A2dpProfilePeer *peer = profile->FindPeerByAddress(msgData.stream.addr);
+    if (peer == nullptr) {
+        LOG_ERROR("[A2dpStateOpen]%{public}s Peer not found for address\n", __func__);
+        return;
+    }
+
+    if (peer->GetRestart()) {
         avdtp.ReconfigureReq(
-            msgData.stream.handle, profile->FindPeerByAddress(msgData.stream.addr)->GetReconfig(), label_);
+            msgData.stream.handle, peer->GetReconfig(), label_);
     }
 }
 
@@ -1156,8 +1163,14 @@ void A2dpStateStreaming::ProcessCloseCfm(BtAddr addr, uint8_t role)
     }
 
     SetStateName(A2DP_PROFILE_IDLE);
-    if (profile->FindPeerByAddress(addr)->GetRestart()) {
-        profile->FindPeerByAddress(addr)->UpdateConfigure();
+    A2dpProfilePeer *peer = profile->FindPeerByAddress(addr);
+    if (peer == nullptr) {
+        LOG_ERROR("[A2dpStateOpen]%{public}s Peer not found for address\n", __func__);
+        return;
+    }
+
+    if (peer->GetRestart()) {
+        peer->UpdateConfigure();
     }
 }
 
