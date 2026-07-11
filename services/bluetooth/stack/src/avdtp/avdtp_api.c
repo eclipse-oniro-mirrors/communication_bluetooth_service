@@ -285,6 +285,7 @@ uint16_t AvdtDiscoverReq(const BtAddr *bdAddr, uint8_t maxSeps, uint8_t *transLa
         BT_ADDR_FMT_DSC(bdAddr->addr),
         maxSeps);
     uint16_t Ret = AVDT_SUCCESS;
+    bool isNewlyAllocated = false;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByAddr(bdAddr);
     if (sigCtrl == NULL) {
         sigCtrl = AvdtSigCtrlAllocate(bdAddr, AVDT_ROLE_UNKOWN);
@@ -293,6 +294,7 @@ uint16_t AvdtDiscoverReq(const BtAddr *bdAddr, uint8_t maxSeps, uint8_t *transLa
             Ret = AVDT_NO_RESOURCES;
             LOG_ERROR("[AVDT]%{public}s: No SigCtrl resource!", __func__);
         }
+        isNewlyAllocated = true;
     }
     if (Ret == AVDT_SUCCESS) {
         if (sigCtrl->isProcBusy) {
@@ -306,6 +308,10 @@ uint16_t AvdtDiscoverReq(const BtAddr *bdAddr, uint8_t maxSeps, uint8_t *transLa
             *transLabel = AvdtCreateTransLabel(sigCtrl);
             AvdtSigProcEvent(sigCtrl, AVDT_DISCOVER_CMD_REQ_EVENT, &evt);
         }
+    }
+    if (isNewlyAllocated) {
+        free(sigCtrl);
+        sigCtrl = NULL;
     }
     return Ret;
 }
@@ -525,6 +531,7 @@ uint16_t AvdtGetAllCapReq(const BtAddr *bdAddr, uint8_t acpSeid, uint8_t *transL
 {
     LOG_DEBUG("[AVDT]%{public}s: acpSeid(%hhu)", __func__, acpSeid);
     uint16_t Ret = AVDT_SUCCESS;
+    bool isNewlyAllocated = false;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByAddr(bdAddr);
     if (sigCtrl == NULL) {
         sigCtrl = AvdtSigCtrlAllocate(bdAddr, AVDT_ROLE_UNKOWN);
@@ -533,6 +540,7 @@ uint16_t AvdtGetAllCapReq(const BtAddr *bdAddr, uint8_t acpSeid, uint8_t *transL
             Ret = AVDT_NO_RESOURCES;
             LOG_ERROR("[AVDT]%{public}s: AvdtSigCtrlAllocate failed!", __func__);
         }
+        isNewlyAllocated = true;
     }
     if (Ret == AVDT_SUCCESS) {
         if (sigCtrl->isProcBusy) {
@@ -546,6 +554,10 @@ uint16_t AvdtGetAllCapReq(const BtAddr *bdAddr, uint8_t acpSeid, uint8_t *transL
             *transLabel = AvdtCreateTransLabel(sigCtrl);
             AvdtSigProcEvent(sigCtrl, AVDT_GETALLCAP_CMD_REQ_EVENT, &evt);
         }
+    }
+    if (isNewlyAllocated) {
+        free(sigCtrl);
+        sigCtrl = NULL;
     }
     return Ret;
 }

@@ -975,6 +975,10 @@ void AvdtStreamProcEvent(AvdtStreamCtrl *streamCtrl, uint8_t event, AvdtEventDat
  */
 void AvdtSigProcEvent(AvdtSigCtrl *sigCtrl, uint8_t event, AvdtEventData *data)
 {
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return;
+    }
     LOG_DEBUG("[AVDT]%{public}s:event(%hhu),sigCtrl->state(%hhu)", __func__, event, sigCtrl->state);
     /* get the current state table */
     AVDT_STREAM_ST_TBL curStatus = AVDT_SIG_TBL[sigCtrl->state];
@@ -1036,6 +1040,9 @@ AvdtSigCtrl *AvdtGetSigCtrlByHandle(uint16_t handle)
             break;
         }
     }
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+    }
     return sigCtrl;
 }
 
@@ -1075,6 +1082,9 @@ AvdtSigCtrl *AvdtSigCtrlAllocate(const BtAddr *bdAddr, uint8_t role)
             __func__, i, sigCtrl->handle);
         g_avdtCb.sigCtrl[i] = sigCtrl;
         break;
+    }
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
     }
     return sigCtrl;
 }

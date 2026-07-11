@@ -654,6 +654,10 @@ uint16_t AvdtActReconfigReq(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     }
     uint16_t Ret = AVDT_SUCCESS;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     /* disable call discover seps API continually */
     (void)memcpy_s(&streamCtrl->currCfg, sizeof(AvdtSepConfig), &data->msg.reconfigureCmd.cfg, sizeof(AvdtSepConfig));
     AvdtMsgSendCmd(sigCtrl, streamCtrl, AVDT_SIG_RECONFIG, &data->msg);
@@ -729,6 +733,10 @@ uint16_t AvdtActReconfigCfm(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     uint16_t Ret = AVDT_SUCCESS;
     (void)memcpy_s(&streamCtrl->currCfg, sizeof(AvdtSepConfig), &streamCtrl->reqCfg, sizeof(AvdtSepConfig));
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     AvdtCtrlEvtCallback(
         sigCtrl, streamCtrl->handle, &(sigCtrl->peerAddress), AVDT_RECONFIG_CFM_EVT, &data->ctrlData, sigCtrl->role);
     return Ret;
@@ -775,6 +783,10 @@ uint16_t AvdtActOpenRsp(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     }
     uint16_t Ret = AVDT_SUCCESS;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     if (data->msg.single.errCode == AVDT_SUCCESS) {
         AvdtMsgSendRsp(sigCtrl, streamCtrl, AVDT_SIG_OPEN, &data->msg);
     } else {
@@ -852,6 +864,10 @@ uint16_t AvdtActSuspendReq(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     }
     uint16_t Ret = AVDT_SUCCESS;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     AvdtMsg message = {0};
     message.single.seid = data->msg.single.seid;
     AvdtMsgSendCmd(sigCtrl, streamCtrl, AVDT_SIG_SUSPEND, &message);
@@ -875,6 +891,10 @@ uint16_t AvdtActSuspendRsp(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     }
     uint16_t Ret = AVDT_SUCCESS;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     if (data->msg.single.errCode == AVDT_SUCCESS) {
         AvdtMsgSendRsp(sigCtrl, NULL, AVDT_SIG_SUSPEND, NULL);
     } else {
@@ -933,6 +953,10 @@ uint16_t AvdtActSuspendCfm(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     }
     uint16_t Ret = AVDT_SUCCESS;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     AvdtCtrlEvtCallback(
         sigCtrl, streamCtrl->handle, &(sigCtrl->peerAddress), AVDT_SUSPEND_CFM_EVT, &data->ctrlData, sigCtrl->role);
     return Ret;
@@ -955,6 +979,10 @@ uint16_t AvdtActStartReq(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     }
     uint16_t Ret = AVDT_SUCCESS;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     AvdtMsg message = {0};
     message.single.seid = data->msg.single.seid;
     AvdtMsgSendCmd(sigCtrl, streamCtrl, AVDT_SIG_START, &message);
@@ -978,6 +1006,10 @@ uint16_t AvdtActStartRsp(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     }
     uint16_t Ret = AVDT_SUCCESS;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     if (data->msg.single.errCode == AVDT_SUCCESS) {
         AvdtMsgSendRsp(sigCtrl, NULL, AVDT_SIG_START, NULL);
     } else {
@@ -1030,6 +1062,10 @@ uint16_t AvdtActStartCfm(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     }
     uint16_t Ret = AVDT_SUCCESS;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     data->ctrlData.startCfm.mtu = sigCtrl->edr;
     AvdtCtrlEvtCallback(
         sigCtrl, streamCtrl->handle, &(sigCtrl->peerAddress), AVDT_START_CFM_EVT, &data->ctrlData, sigCtrl->role);
@@ -1053,6 +1089,10 @@ uint16_t AvdtActCloseReq(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     }
     uint16_t Ret = AVDT_SUCCESS;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     AvdtMsg message = {0};
     message.single.seid = data->msg.single.seid;
     AvdtMsgSendCmd(sigCtrl, streamCtrl, AVDT_SIG_CLOSE, &message);
@@ -1256,6 +1296,10 @@ uint16_t AvdtActAbortReq(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     }
     uint16_t Ret = AVDT_SUCCESS;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     AvdtMsg message = {0};
     message.single.seid = data->msg.single.seid;
     AvdtMsgSendCmd(sigCtrl, streamCtrl, AVDT_SIG_ABORT, &message);
@@ -1324,6 +1368,10 @@ uint16_t AvdtActAbortCfm(AvdtStreamCtrl *streamCtrl, AvdtEventData *data)
     }
     uint16_t Ret = AVDT_SUCCESS;
     AvdtSigCtrl *sigCtrl = AvdtGetSigCtrlByHandle(streamCtrl->sigHandle);
+    if (sigCtrl == NULL) {
+        LOG_WARN("sigCtrl is NULL");
+        return AVDT_SUCCESS;
+    }
     AvdtCtrlEvtCallback(
         sigCtrl, streamCtrl->handle, &(sigCtrl->peerAddress), AVDT_ABORT_CFM_EVT, &data->ctrlData, sigCtrl->role);
     return Ret;
