@@ -1344,9 +1344,15 @@ void AttRecvLeData(uint16_t aclHandle, const Packet *packet)
     LOG_INFO("%{public}s enter, aclHandle = %hu", __FUNCTION__, aclHandle);
 
     Packet *packetPtr = PacketRefMalloc((Packet *)packet);
+    if (packetPtr == NULL) {
+        LOG_ERROR("PacketRefMalloc failed");
+        return;
+    }
     AttRecvLeDataAsyncContext *attRecvLeDataAsyncPtr = MEM_MALLOC.alloc(sizeof(AttRecvLeDataAsyncContext));
     if (attRecvLeDataAsyncPtr == NULL) {
         LOG_ERROR("point to NULL");
+        PacketFree(packetPtr);
+        packetPtr = NULL;
         return;
     }
     attRecvLeDataAsyncPtr->aclHandle = aclHandle;
