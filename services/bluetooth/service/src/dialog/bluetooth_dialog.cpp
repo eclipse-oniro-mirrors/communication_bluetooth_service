@@ -154,13 +154,21 @@ bool BluetoothDialog::DialogConnectExtension(
     const std::string commandStr, const std::string bundleName, const std::string abilityName)
 {
     AAFwk::Want want;
-    std::string sceneboardName = "com.ohos.systemui";
-    std::string abilityNames = "com.ohos.systemui.dialog";
+    // 首先尝试连接 sceneboard 的系统对话框 Ability
+    std::string sceneboardName = "com.ohos.sceneboard";
+    std::string abilityNames = "com.ohos.sceneboard.systemdialog";
     want.SetElementName(sceneboardName, abilityNames);
     bool ret = DialogConnectExtensionAbility(want, commandStr, bundleName, abilityName);
     if (!ret) {
-        HILOGE("ConnectExtensionAbility failed.");
-        return false;
+        //如果失败，尝试连接 systemui的对话框 Ability
+        sceneboardName = "com.ohos.systemui";
+        abilityNames = "com.ohos.systemui.dialog";
+        want.SetElementName(sceneboardName, abilityNames);
+        bool retNot = DialogConnectExtensionAbility(want, commandStr, bundleName, abilityName);
+        if (!retNot) {
+            HILOGE("ConnectExtensionAbility failed.");
+            return false;
+        }
     }
     HILOGI("ConnectExtensionAbility succeeded.");
     return true;
