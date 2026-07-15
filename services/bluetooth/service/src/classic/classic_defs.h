@@ -49,24 +49,18 @@ constexpr int PAIR_CANCELING = 0x04;
 constexpr int PAIR_INVALID_LINK_KEY_TYPE = -1;
 constexpr int PAIR_LINK_KEY_SIZE = 0x10;
 constexpr int PAIR_PINCODE_SIZE = 0x10;
+constexpr int PAIR_CONFIRM_TYPE_INVALID = 0x00;
+constexpr int PAIR_CONFIRM_TYPE_OOB = 0x06;
 constexpr int PAIR_CONFIRM_STATE_INVALID = 0x00;
 constexpr int PAIR_CONFIRM_STATE_USER_CONFIRM = 0x01;
 constexpr int PAIR_CONFIRM_STATE_USER_CONFIRM_REPLY = 0x02;
 
+constexpr int PAIR_CONFIRM_TYPE_NUMERIC = 0x04;
+const int PAIR_CONFIRM_TYPE_PASSKEY_INPUT = 0x03;
+const int PAIR_CONFIRM_TYPE_PASSKEY_DISPLAY = 0x02;
+const int PAIR_CONFIRM_TYPE_PIN_CODE = 0x01;
+const int PAIR_CONFIRM_TYPE_CONSENT = 0x05;
 
-/**
- * @brief Pairing confirmation type define
- * @since 10
-*/
-constexpr int PAIR_CONFIRM_TYPE_PIN_CODE = 0x00; // according to PAIRING_VARIANT_PIN
-constexpr int PAIR_CONFIRM_TYPE_PASSKEY_INPUT = 0x01;   // according to PIN_TYPE_NO_PASSKEY_CONSENT
-constexpr int PAIR_CONFIRM_TYPE_NUMERIC = 0x02; // according to PAIRING_VARIANT_PASSKEY_CONFIRMATION
-constexpr int PAIR_CONFIRM_TYPE_CONSENT = 0x03; // according to PAIRING_VARIANT_CONSENT
-constexpr int PAIR_CONFIRM_TYPE_PASSKEY_DISPLAY = 0x04; // according to PAIRING_VARIANT_DISPLAY_PASSKEY
-constexpr int PAIR_CONFIRM_TYPE_INVALID = 0x05; // according to PAIRING_VARIANT_DISPLAY_PIN
-constexpr int PAIR_CONFIRM_TYPE_OOB = 0x06; // according to PAIRING_VARIANT_OOB_CONSENT
-constexpr int PAIR_CONFIRM_TYPE_PIN_16_DIGITS = 0x07; // according to PAIRING_VARIANT_PIN_16_DIGITS
- 	 
 constexpr int NOERROR = 0;
 constexpr int BADPARAM = -1000;
 constexpr int BADSTATUS = -1001;
