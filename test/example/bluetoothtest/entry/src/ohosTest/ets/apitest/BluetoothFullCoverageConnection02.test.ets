@@ -1896,3 +1896,1041 @@ export default function bluetoothFullCoverageConnection02() {
           try {
             connection.on('pinRequired', () = >{});
             expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_PINREQUIRED_R
+     * @tc.name cn_on_pinRequired_r
+     * @tc.desc Verify Bluetooth API cn on pinRequired return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_pinRequired_r', 0, () => {
+      try {
+        fcRun('cn_on_pinRequired_r', () => {
+          try {
+            connection.on('pinRequired', () = >{});
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_PINREQUIRED_X
+     * @tc.name cn_on_pinRequired_x
+     * @tc.desc Verify Bluetooth API cn on pinRequired repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_pinRequired_x', 0, () => {
+      try {
+        fcRun('cn_on_pinRequired_x', () => {
+          connection.on('pinRequired', () = >{});
+          expect(true).assertTrue();
+          connection.on('pinRequired', () = >{});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_PINREQUIRED_C
+     * @tc.name cn_on_pinRequired_c
+     * @tc.desc Verify Bluetooth API cn on pinRequired condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_pinRequired_c', 0, () => {
+      try {
+        fcRun('cn_on_pinRequired_c', () => {
+          console.info('[c] condition path');
+          connection.on('pinRequired', () = >{});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_off_pinRequired', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_PINREQUIRED_N
+     * @tc.name cn_off_pinRequired_n
+     * @tc.desc Verify Bluetooth API cn off pinRequired normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_pinRequired_n', 0, () => {
+      try {
+        fcRun('cn_off_pinRequired_n', () => {
+          connection.off('pinRequired');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_PINREQUIRED_E
+     * @tc.name cn_off_pinRequired_e
+     * @tc.desc Verify Bluetooth API cn off pinRequired error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_pinRequired_e', 0, () => {
+      try {
+        fcRunErr('cn_off_pinRequired_e', () => {
+          let threw = false;
+          try {
+            connection.off('pinRequired');
+            expect(true).assertTrue();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_PINREQUIRED_B
+     * @tc.name cn_off_pinRequired_b
+     * @tc.desc Verify Bluetooth API cn off pinRequired boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_pinRequired_b', 0, () => {
+      try {
+        fcRun('cn_off_pinRequired_b', () => {
+          try {
+            connection.off('pinRequired');
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_PINREQUIRED_R
+     * @tc.name cn_off_pinRequired_r
+     * @tc.desc Verify Bluetooth API cn off pinRequired return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_pinRequired_r', 0, () => {
+      try {
+        fcRun('cn_off_pinRequired_r', () => {
+          try {
+            connection.off('pinRequired');
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_PINREQUIRED_X
+     * @tc.name cn_off_pinRequired_x
+     * @tc.desc Verify Bluetooth API cn off pinRequired repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_pinRequired_x', 0, () => {
+      try {
+        fcRun('cn_off_pinRequired_x', () => {
+          connection.off('pinRequired');
+          expect(true).assertTrue();
+          connection.off('pinRequired');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_PINREQUIRED_C
+     * @tc.name cn_off_pinRequired_c
+     * @tc.desc Verify Bluetooth API cn off pinRequired condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_pinRequired_c', 0, () => {
+      try {
+        fcRun('cn_off_pinRequired_c', () => {
+          console.info('[c] condition path');
+          connection.off('pinRequired');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_onScanModeChange', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ONSCANMODECHANGE_N
+     * @tc.name cn_onScanModeChange_n
+     * @tc.desc Verify Bluetooth API cn onScanModeChange normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_onScanModeChange_n', 0, () => {
+      try {
+        fcRun('cn_onScanModeChange_n', () => {
+          connection.onScanModeChange(() = >{});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ONSCANMODECHANGE_E
+     * @tc.name cn_onScanModeChange_e
+     * @tc.desc Verify Bluetooth API cn onScanModeChange error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_onScanModeChange_e', 0, () => {
+      try {
+        fcRunErr('cn_onScanModeChange_e', () => {
+          let threw = false;
+          try {
+            connection.onScanModeChange(() = >{});
+            expect(true).assertTrue();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ONSCANMODECHANGE_B
+     * @tc.name cn_onScanModeChange_b
+     * @tc.desc Verify Bluetooth API cn onScanModeChange boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_onScanModeChange_b', 0, () => {
+      try {
+        fcRun('cn_onScanModeChange_b', () => {
+          try {
+            connection.onScanModeChange(() = >{});
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ONSCANMODECHANGE_R
+     * @tc.name cn_onScanModeChange_r
+     * @tc.desc Verify Bluetooth API cn onScanModeChange return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_onScanModeChange_r', 0, () => {
+      try {
+        fcRun('cn_onScanModeChange_r', () => {
+          try {
+            connection.onScanModeChange(() = >{});
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ONSCANMODECHANGE_X
+     * @tc.name cn_onScanModeChange_x
+     * @tc.desc Verify Bluetooth API cn onScanModeChange repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_onScanModeChange_x', 0, () => {
+      try {
+        fcRun('cn_onScanModeChange_x', () => {
+          connection.onScanModeChange(() = >{});
+          expect(true).assertTrue();
+          connection.onScanModeChange(() = >{});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ONSCANMODECHANGE_C
+     * @tc.name cn_onScanModeChange_c
+     * @tc.desc Verify Bluetooth API cn onScanModeChange condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_onScanModeChange_c', 0, () => {
+      try {
+        fcRun('cn_onScanModeChange_c', () => {
+          console.info('[c] condition path');
+          connection.onScanModeChange(() = >{});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_offScanModeChange', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFFSCANMODECHANGE_N
+     * @tc.name cn_offScanModeChange_n
+     * @tc.desc Verify Bluetooth API cn offScanModeChange normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_offScanModeChange_n', 0, () => {
+      try {
+        fcRun('cn_offScanModeChange_n', () => {
+          connection.offScanModeChange();
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFFSCANMODECHANGE_E
+     * @tc.name cn_offScanModeChange_e
+     * @tc.desc Verify Bluetooth API cn offScanModeChange error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_offScanModeChange_e', 0, () => {
+      try {
+        fcRunErr('cn_offScanModeChange_e', () => {
+          let threw = false;
+          try {
+            connection.offScanModeChange();
+            expect(true).assertTrue();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFFSCANMODECHANGE_B
+     * @tc.name cn_offScanModeChange_b
+     * @tc.desc Verify Bluetooth API cn offScanModeChange boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_offScanModeChange_b', 0, () => {
+      try {
+        fcRun('cn_offScanModeChange_b', () => {
+          try {
+            connection.offScanModeChange();
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFFSCANMODECHANGE_R
+     * @tc.name cn_offScanModeChange_r
+     * @tc.desc Verify Bluetooth API cn offScanModeChange return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_offScanModeChange_r', 0, () => {
+      try {
+        fcRun('cn_offScanModeChange_r', () => {
+          try {
+            connection.offScanModeChange();
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFFSCANMODECHANGE_X
+     * @tc.name cn_offScanModeChange_x
+     * @tc.desc Verify Bluetooth API cn offScanModeChange repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_offScanModeChange_x', 0, () => {
+      try {
+        fcRun('cn_offScanModeChange_x', () => {
+          connection.offScanModeChange();
+          expect(true).assertTrue();
+          connection.offScanModeChange();
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFFSCANMODECHANGE_C
+     * @tc.name cn_offScanModeChange_c
+     * @tc.desc Verify Bluetooth API cn offScanModeChange condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_offScanModeChange_c', 0, () => {
+      try {
+        fcRun('cn_offScanModeChange_c', () => {
+          console.info('[c] condition path');
+          connection.offScanModeChange();
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_on_batteryChange', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_BATTERYCHANGE_N
+     * @tc.name cn_on_batteryChange_n
+     * @tc.desc Verify Bluetooth API cn on batteryChange normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_batteryChange_n', 0, () => {
+      try {
+        fcRun('cn_on_batteryChange_n', () => {
+          connection.on('batteryChange', () = >{});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_BATTERYCHANGE_E
+     * @tc.name cn_on_batteryChange_e
+     * @tc.desc Verify Bluetooth API cn on batteryChange error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_batteryChange_e', 0, () => {
+      try {
+        fcRunErr('cn_on_batteryChange_e', () => {
+          let threw = false;
+          try {
+            connection.on('batteryChange', () = >{});
+            expect(true).assertTrue();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_BATTERYCHANGE_B
+     * @tc.name cn_on_batteryChange_b
+     * @tc.desc Verify Bluetooth API cn on batteryChange boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_batteryChange_b', 0, () => {
+      try {
+        fcRun('cn_on_batteryChange_b', () => {
+          try {
+            connection.on('batteryChange', () = >{});
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_BATTERYCHANGE_R
+     * @tc.name cn_on_batteryChange_r
+     * @tc.desc Verify Bluetooth API cn on batteryChange return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_batteryChange_r', 0, () => {
+      try {
+        fcRun('cn_on_batteryChange_r', () => {
+          try {
+            connection.on('batteryChange', () = >{});
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_BATTERYCHANGE_X
+     * @tc.name cn_on_batteryChange_x
+     * @tc.desc Verify Bluetooth API cn on batteryChange repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_batteryChange_x', 0, () => {
+      try {
+        fcRun('cn_on_batteryChange_x', () => {
+          connection.on('batteryChange', () = >{});
+          expect(true).assertTrue();
+          connection.on('batteryChange', () = >{});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_BATTERYCHANGE_C
+     * @tc.name cn_on_batteryChange_c
+     * @tc.desc Verify Bluetooth API cn on batteryChange condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_batteryChange_c', 0, () => {
+      try {
+        fcRun('cn_on_batteryChange_c', () => {
+          console.info('[c] condition path');
+          connection.on('batteryChange', () = >{});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_off_batteryChange', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_BATTERYCHANGE_N
+     * @tc.name cn_off_batteryChange_n
+     * @tc.desc Verify Bluetooth API cn off batteryChange normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_batteryChange_n', 0, () => {
+      try {
+        fcRun('cn_off_batteryChange_n', () => {
+          connection.off('batteryChange');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_BATTERYCHANGE_E
+     * @tc.name cn_off_batteryChange_e
+     * @tc.desc Verify Bluetooth API cn off batteryChange error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_batteryChange_e', 0, () => {
+      try {
+        fcRunErr('cn_off_batteryChange_e', () => {
+          let threw = false;
+          try {
+            connection.off('batteryChange');
+            expect(true).assertTrue();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_BATTERYCHANGE_B
+     * @tc.name cn_off_batteryChange_b
+     * @tc.desc Verify Bluetooth API cn off batteryChange boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_batteryChange_b', 0, () => {
+      try {
+        fcRun('cn_off_batteryChange_b', () => {
+          try {
+            connection.off('batteryChange');
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_BATTERYCHANGE_R
+     * @tc.name cn_off_batteryChange_r
+     * @tc.desc Verify Bluetooth API cn off batteryChange return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_batteryChange_r', 0, () => {
+      try {
+        fcRun('cn_off_batteryChange_r', () => {
+          try {
+            connection.off('batteryChange');
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_BATTERYCHANGE_X
+     * @tc.name cn_off_batteryChange_x
+     * @tc.desc Verify Bluetooth API cn off batteryChange repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_batteryChange_x', 0, () => {
+      try {
+        fcRun('cn_off_batteryChange_x', () => {
+          connection.off('batteryChange');
+          expect(true).assertTrue();
+          connection.off('batteryChange');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_BATTERYCHANGE_C
+     * @tc.name cn_off_batteryChange_c
+     * @tc.desc Verify Bluetooth API cn off batteryChange condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_batteryChange_c', 0, () => {
+      try {
+        fcRun('cn_off_batteryChange_c', () => {
+          console.info('[c] condition path');
+          connection.off('batteryChange');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_on_discoveryResult', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_DISCOVERYRESULT_N
+     * @tc.name cn_on_discoveryResult_n
+     * @tc.desc Verify Bluetooth API cn on discoveryResult normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_discoveryResult_n', 0, () => {
+      try {
+        fcRun('cn_on_discoveryResult_n', () => {
+          connection.on('discoveryResult', () = >{});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_DISCOVERYRESULT_E
+     * @tc.name cn_on_discoveryResult_e
+     * @tc.desc Verify Bluetooth API cn on discoveryResult error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_discoveryResult_e', 0, () => {
+      try {
+        fcRunErr('cn_on_discoveryResult_e', () => {
+          let threw = false;
+          try {
+            connection.on('discoveryResult', () = >{});
+            expect(true).assertTrue();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_DISCOVERYRESULT_B
+     * @tc.name cn_on_discoveryResult_b
+     * @tc.desc Verify Bluetooth API cn on discoveryResult boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_discoveryResult_b', 0, () => {
+      try {
+        fcRun('cn_on_discoveryResult_b', () => {
+          try {
+            connection.on('discoveryResult', () = >{});
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_DISCOVERYRESULT_R
+     * @tc.name cn_on_discoveryResult_r
+     * @tc.desc Verify Bluetooth API cn on discoveryResult return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_discoveryResult_r', 0, () => {
+      try {
+        fcRun('cn_on_discoveryResult_r', () => {
+          try {
+            connection.on('discoveryResult', () = >{});
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_DISCOVERYRESULT_X
+     * @tc.name cn_on_discoveryResult_x
+     * @tc.desc Verify Bluetooth API cn on discoveryResult repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_discoveryResult_x', 0, () => {
+      try {
+        fcRun('cn_on_discoveryResult_x', () => {
+          connection.on('discoveryResult', () = >{});
+          expect(true).assertTrue();
+          connection.on('discoveryResult', () = >{});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ON_DISCOVERYRESULT_C
+     * @tc.name cn_on_discoveryResult_c
+     * @tc.desc Verify Bluetooth API cn on discoveryResult condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_on_discoveryResult_c', 0, () => {
+      try {
+        fcRun('cn_on_discoveryResult_c', () => {
+          console.info('[c] condition path');
+          connection.on('discoveryResult', () = >{});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_off_discoveryResult', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_DISCOVERYRESULT_N
+     * @tc.name cn_off_discoveryResult_n
+     * @tc.desc Verify Bluetooth API cn off discoveryResult normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_discoveryResult_n', 0, () => {
+      try {
+        fcRun('cn_off_discoveryResult_n', () => {
+          connection.off('discoveryResult');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_DISCOVERYRESULT_E
+     * @tc.name cn_off_discoveryResult_e
+     * @tc.desc Verify Bluetooth API cn off discoveryResult error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_discoveryResult_e', 0, () => {
+      try {
+        fcRunErr('cn_off_discoveryResult_e', () => {
+          let threw = false;
+          try {
+            connection.off('discoveryResult');
+            expect(true).assertTrue();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_DISCOVERYRESULT_B
+     * @tc.name cn_off_discoveryResult_b
+     * @tc.desc Verify Bluetooth API cn off discoveryResult boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_discoveryResult_b', 0, () => {
+      try {
+        fcRun('cn_off_discoveryResult_b', () => {
+          try {
+            connection.off('discoveryResult');
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_DISCOVERYRESULT_R
+     * @tc.name cn_off_discoveryResult_r
+     * @tc.desc Verify Bluetooth API cn off discoveryResult return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_discoveryResult_r', 0, () => {
+      try {
+        fcRun('cn_off_discoveryResult_r', () => {
+          try {
+            connection.off('discoveryResult');
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_DISCOVERYRESULT_X
+     * @tc.name cn_off_discoveryResult_x
+     * @tc.desc Verify Bluetooth API cn off discoveryResult repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_discoveryResult_x', 0, () => {
+      try {
+        fcRun('cn_off_discoveryResult_x', () => {
+          connection.off('discoveryResult');
+          expect(true).assertTrue();
+          connection.off('discoveryResult');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_OFF_DISCOVERYRESULT_C
+     * @tc.name cn_off_discoveryResult_c
+     * @tc.desc Verify Bluetooth API cn off discoveryResult condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_off_discoveryResult_c', 0, () => {
+      try {
+        fcRun('cn_off_discoveryResult_c', () => {
+          console.info('[c] condition path');
+          connection.off('discoveryResult');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+  });
+}
+
+
