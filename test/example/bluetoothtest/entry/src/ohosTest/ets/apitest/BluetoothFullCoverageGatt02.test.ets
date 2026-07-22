@@ -1554,17 +1554,29 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_off_BLEMtuChange_x', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('gattc_off_BLEMtuChange_x', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.off('BLEMtuChange');
-          expect(true).assertTrue();
-          gattClient.off('BLEMtuChange');
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.off('BLEMtuChange');
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        gattClient.off('BLEMtuChange');
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -1576,16 +1588,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_off_BLEMtuChange_c', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('gattc_off_BLEMtuChange_c', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.off('BLEMtuChange');
-          expect(true).assertTrue();
-          console.info('[c] condition path');
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.off('BLEMtuChange');
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('gattc_onBlePhyUpdate', () => {
@@ -1599,15 +1613,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_onBlePhyUpdate_n', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('gattc_onBlePhyUpdate_n', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.onBlePhyUpdate(() => {});
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.onBlePhyUpdate(() => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -1619,22 +1636,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_onBlePhyUpdate_e', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('gattc_onBlePhyUpdate_e', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          let threw = false;
-          try {
-            gattClient.onBlePhyUpdate(() => {});
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.onBlePhyUpdate(() => {});
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -1646,22 +1661,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_onBlePhyUpdate_b', 0, () => {
+      const gattClient = ble.createGattClientDevice(EMPTY_MAC);
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('gattc_onBlePhyUpdate_b', () => {
-          const gattClient = ble.createGattClientDevice(EMPTY_MAC);
-          let threw = false;
-          try {
-            gattClient.onBlePhyUpdate(() => {});
-          } catch (err) {
-            threw = true;
-            console.info('[b] ' + JSON.stringify(err));
-          }
-          console.info('[b] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.onBlePhyUpdate(() => {});
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -1673,20 +1686,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_onBlePhyUpdate_r', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('gattc_onBlePhyUpdate_r', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          try {
-            const value = gattClient.onBlePhyUpdate(() => {});
-            expect(value !== undefined || true).assertTrue();
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.onBlePhyUpdate(() => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -1698,17 +1709,29 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_onBlePhyUpdate_x', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('gattc_onBlePhyUpdate_x', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.onBlePhyUpdate(() => {});
-          expect(true).assertTrue();
-          gattClient.onBlePhyUpdate(() => {});
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.onBlePhyUpdate(() => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        gattClient.onBlePhyUpdate(() => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -1720,16 +1743,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_onBlePhyUpdate_c', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('gattc_onBlePhyUpdate_c', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.onBlePhyUpdate(() => {});
-          expect(true).assertTrue();
-          console.info('[c] condition path');
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.onBlePhyUpdate(() => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('gattc_offBlePhyUpdate', () => {
@@ -1743,15 +1768,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_offBlePhyUpdate_n', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('gattc_offBlePhyUpdate_n', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.offBlePhyUpdate();
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.offBlePhyUpdate();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -1763,22 +1791,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_offBlePhyUpdate_e', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('gattc_offBlePhyUpdate_e', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          let threw = false;
-          try {
-            gattClient.offBlePhyUpdate();
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.offBlePhyUpdate();
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -1790,22 +1816,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_offBlePhyUpdate_b', 0, () => {
+      const gattClient = ble.createGattClientDevice(EMPTY_MAC);
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('gattc_offBlePhyUpdate_b', () => {
-          const gattClient = ble.createGattClientDevice(EMPTY_MAC);
-          let threw = false;
-          try {
-            gattClient.offBlePhyUpdate();
-          } catch (err) {
-            threw = true;
-            console.info('[b] ' + JSON.stringify(err));
-          }
-          console.info('[b] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.offBlePhyUpdate();
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -1817,20 +1841,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_offBlePhyUpdate_r', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('gattc_offBlePhyUpdate_r', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          try {
-            const value = gattClient.offBlePhyUpdate();
-            expect(value !== undefined || true).assertTrue();
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.offBlePhyUpdate();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -1842,17 +1864,29 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_offBlePhyUpdate_x', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('gattc_offBlePhyUpdate_x', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.offBlePhyUpdate();
-          expect(true).assertTrue();
-          gattClient.offBlePhyUpdate();
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.offBlePhyUpdate();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        gattClient.offBlePhyUpdate();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -1864,16 +1898,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_offBlePhyUpdate_c', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('gattc_offBlePhyUpdate_c', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.offBlePhyUpdate();
-          expect(true).assertTrue();
-          console.info('[c] condition path');
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.offBlePhyUpdate();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('gattc_on_serviceChange', () => {
@@ -1887,15 +1923,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_on_serviceChange_n', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('gattc_on_serviceChange_n', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.on('serviceChange', () => {});
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.on('serviceChange', () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -1907,22 +1946,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_on_serviceChange_e', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('gattc_on_serviceChange_e', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          let threw = false;
-          try {
-            gattClient.on('serviceChange', () => {});
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.on('serviceChange', () => {});
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -1934,22 +1971,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_on_serviceChange_b', 0, () => {
+      const gattClient = ble.createGattClientDevice(EMPTY_MAC);
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('gattc_on_serviceChange_b', () => {
-          const gattClient = ble.createGattClientDevice(EMPTY_MAC);
-          let threw = false;
-          try {
-            gattClient.on('serviceChange', () => {});
-          } catch (err) {
-            threw = true;
-            console.info('[b] ' + JSON.stringify(err));
-          }
-          console.info('[b] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.on('serviceChange', () => {});
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -1961,20 +1996,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_on_serviceChange_r', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('gattc_on_serviceChange_r', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          try {
-            const value = gattClient.on('serviceChange', () => {});
-            expect(value !== undefined || true).assertTrue();
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.on('serviceChange', () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -1986,17 +2019,29 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_on_serviceChange_x', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('gattc_on_serviceChange_x', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.on('serviceChange', () => {});
-          expect(true).assertTrue();
-          gattClient.on('serviceChange', () => {});
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.on('serviceChange', () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        gattClient.on('serviceChange', () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2008,16 +2053,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_on_serviceChange_c', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('gattc_on_serviceChange_c', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.on('serviceChange', () => {});
-          expect(true).assertTrue();
-          console.info('[c] condition path');
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.on('serviceChange', () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('gattc_off_serviceChange', () => {
@@ -2031,15 +2078,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_off_serviceChange_n', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('gattc_off_serviceChange_n', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.off('serviceChange');
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.off('serviceChange');
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2051,22 +2101,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_off_serviceChange_e', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('gattc_off_serviceChange_e', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          let threw = false;
-          try {
-            gattClient.off('serviceChange');
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.off('serviceChange');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2078,22 +2126,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_off_serviceChange_b', 0, () => {
+      const gattClient = ble.createGattClientDevice(EMPTY_MAC);
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('gattc_off_serviceChange_b', () => {
-          const gattClient = ble.createGattClientDevice(EMPTY_MAC);
-          let threw = false;
-          try {
-            gattClient.off('serviceChange');
-          } catch (err) {
-            threw = true;
-            console.info('[b] ' + JSON.stringify(err));
-          }
-          console.info('[b] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.off('serviceChange');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2105,20 +2151,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_off_serviceChange_r', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('gattc_off_serviceChange_r', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          try {
-            const value = gattClient.off('serviceChange');
-            expect(value !== undefined || true).assertTrue();
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.off('serviceChange');
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2130,17 +2174,29 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_off_serviceChange_x', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('gattc_off_serviceChange_x', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.off('serviceChange');
-          expect(true).assertTrue();
-          gattClient.off('serviceChange');
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.off('serviceChange');
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        gattClient.off('serviceChange');
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2152,16 +2208,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gattc_off_serviceChange_c', 0, () => {
+      const gattClient = ble.createGattClientDevice(BADDR);
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('gattc_off_serviceChange_c', () => {
-          const gattClient = ble.createGattClientDevice(BADDR);
-          gattClient.off('serviceChange');
-          expect(true).assertTrue();
-          console.info('[c] condition path');
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattClient.off('serviceChange');
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('gatts_addService', () => {
@@ -2175,15 +2233,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_addService_n', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('gatts_addService_n', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.addService(bleGattService());
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.addService(bleGattService());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2195,22 +2256,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_addService_e', 0, () => {
+      const gattServer = ble.createGattServer();
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('gatts_addService_e', () => {
-          const gattServer = ble.createGattServer();
-          let threw = false;
-          try {
-            gattServer.addService(bleGattService());
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.addService(bleGattService());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2222,22 +2281,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_addService_b', 0, () => {
+      const gattServer = ble.createGattServer();
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('gatts_addService_b', () => {
-          const gattServer = ble.createGattServer();
-          let threw = false;
-          try {
-            gattServer.addService(bleGattService());
-          } catch (err) {
-            threw = true;
-            console.info('[b] ' + JSON.stringify(err));
-          }
-          console.info('[b] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.addService(bleGattService());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2249,20 +2306,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_addService_r', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('gatts_addService_r', () => {
-          const gattServer = ble.createGattServer();
-          try {
-            const value = gattServer.addService(bleGattService());
-            expect(value !== undefined || true).assertTrue();
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.addService(bleGattService());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2274,17 +2329,29 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_addService_x', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('gatts_addService_x', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.addService(bleGattService());
-          expect(true).assertTrue();
-          gattServer.addService(bleGattService());
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.addService(bleGattService());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        gattServer.addService(bleGattService());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2296,16 +2363,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_addService_c', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('gatts_addService_c', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.addService(bleGattService());
-          expect(true).assertTrue();
-          console.info('[c] condition path');
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.addService(bleGattService());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('gatts_removeService', () => {
@@ -2319,15 +2388,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_removeService_n', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('gatts_removeService_n', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.removeService(SVC_UUID);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.removeService(SVC_UUID);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2339,22 +2411,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_removeService_e', 0, () => {
+      const gattServer = ble.createGattServer();
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('gatts_removeService_e', () => {
-          const gattServer = ble.createGattServer();
-          let threw = false;
-          try {
-            gattServer.removeService(SVC_UUID);
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.removeService(SVC_UUID);
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2366,22 +2436,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_removeService_b', 0, () => {
+      const gattServer = ble.createGattServer();
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('gatts_removeService_b', () => {
-          const gattServer = ble.createGattServer();
-          let threw = false;
-          try {
-            gattServer.removeService(SVC_UUID);
-          } catch (err) {
-            threw = true;
-            console.info('[b] ' + JSON.stringify(err));
-          }
-          console.info('[b] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.removeService(SVC_UUID);
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2393,20 +2461,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_removeService_r', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('gatts_removeService_r', () => {
-          const gattServer = ble.createGattServer();
-          try {
-            const value = gattServer.removeService(SVC_UUID);
-            expect(value !== undefined || true).assertTrue();
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.removeService(SVC_UUID);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2418,17 +2484,29 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_removeService_x', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('gatts_removeService_x', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.removeService(SVC_UUID);
-          expect(true).assertTrue();
-          gattServer.removeService(SVC_UUID);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.removeService(SVC_UUID);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        gattServer.removeService(SVC_UUID);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2440,16 +2518,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_removeService_c', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('gatts_removeService_c', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.removeService(SVC_UUID);
-          expect(true).assertTrue();
-          console.info('[c] condition path');
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.removeService(SVC_UUID);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('gatts_getService', () => {
@@ -2463,15 +2543,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getService_n', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('gatts_getService_n', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.getService(SVC_UUID);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getService(SVC_UUID);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2483,22 +2566,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getService_e', 0, () => {
+      const gattServer = ble.createGattServer();
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('gatts_getService_e', () => {
-          const gattServer = ble.createGattServer();
-          let threw = false;
-          try {
-            gattServer.getService(SVC_UUID);
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getService(SVC_UUID);
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2510,22 +2591,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getService_b', 0, () => {
+      const gattServer = ble.createGattServer();
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('gatts_getService_b', () => {
-          const gattServer = ble.createGattServer();
-          let threw = false;
-          try {
-            gattServer.getService(SVC_UUID);
-          } catch (err) {
-            threw = true;
-            console.info('[b] ' + JSON.stringify(err));
-          }
-          console.info('[b] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getService(SVC_UUID);
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2537,20 +2616,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getService_r', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('gatts_getService_r', () => {
-          const gattServer = ble.createGattServer();
-          try {
-            const value = gattServer.getService(SVC_UUID);
-            expect(value !== undefined || true).assertTrue();
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getService(SVC_UUID);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2562,17 +2639,29 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getService_x', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('gatts_getService_x', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.getService(SVC_UUID);
-          expect(true).assertTrue();
-          gattServer.getService(SVC_UUID);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getService(SVC_UUID);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        gattServer.getService(SVC_UUID);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2584,16 +2673,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getService_c', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('gatts_getService_c', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.getService(SVC_UUID);
-          expect(true).assertTrue();
-          console.info('[c] condition path');
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getService(SVC_UUID);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('gatts_getServices', () => {
@@ -2607,15 +2698,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getServices_n', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('gatts_getServices_n', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.getServices();
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getServices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2627,22 +2721,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getServices_e', 0, () => {
+      const gattServer = ble.createGattServer();
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('gatts_getServices_e', () => {
-          const gattServer = ble.createGattServer();
-          let threw = false;
-          try {
-            gattServer.getServices();
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getServices();
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2654,22 +2746,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getServices_b', 0, () => {
+      const gattServer = ble.createGattServer();
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('gatts_getServices_b', () => {
-          const gattServer = ble.createGattServer();
-          let threw = false;
-          try {
-            gattServer.getServices();
-          } catch (err) {
-            threw = true;
-            console.info('[b] ' + JSON.stringify(err));
-          }
-          console.info('[b] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getServices();
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2681,20 +2771,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getServices_r', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('gatts_getServices_r', () => {
-          const gattServer = ble.createGattServer();
-          try {
-            const value = gattServer.getServices();
-            expect(value !== undefined || true).assertTrue();
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getServices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2706,17 +2794,29 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getServices_x', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('gatts_getServices_x', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.getServices();
-          expect(true).assertTrue();
-          gattServer.getServices();
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getServices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        gattServer.getServices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2728,16 +2828,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_getServices_c', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('gatts_getServices_c', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.getServices();
-          expect(true).assertTrue();
-          console.info('[c] condition path');
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.getServices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('gatts_close', () => {
@@ -2751,15 +2853,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_close_n', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('gatts_close_n', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.close();
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.close();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2771,22 +2876,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_close_e', 0, () => {
+      const gattServer = ble.createGattServer();
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('gatts_close_e', () => {
-          const gattServer = ble.createGattServer();
-          let threw = false;
-          try {
-            gattServer.close();
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.close();
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2798,22 +2901,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_close_b', 0, () => {
+      const gattServer = ble.createGattServer();
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('gatts_close_b', () => {
-          const gattServer = ble.createGattServer();
-          let threw = false;
-          try {
-            gattServer.close();
-          } catch (err) {
-            threw = true;
-            console.info('[b] ' + JSON.stringify(err));
-          }
-          console.info('[b] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.close();
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2825,20 +2926,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_close_r', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('gatts_close_r', () => {
-          const gattServer = ble.createGattServer();
-          try {
-            const value = gattServer.close();
-            expect(value !== undefined || true).assertTrue();
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.close();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2850,17 +2949,29 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_close_x', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('gatts_close_x', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.close();
-          expect(true).assertTrue();
-          gattServer.close();
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.close();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        gattServer.close();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2872,16 +2983,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_close_c', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('gatts_close_c', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.close();
-          expect(true).assertTrue();
-          console.info('[c] condition path');
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.close();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('gatts_notifyCharacteristicChanged', () => {
@@ -2895,15 +3008,18 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_notifyCharacteristicChanged_n', 0, () => {
+      const gattServer = ble.createGattServer();
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('gatts_notifyCharacteristicChanged_n', () => {
-          const gattServer = ble.createGattServer();
-          gattServer.notifyCharacteristicChanged(BADDR, bleNotifyChar());
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.notifyCharacteristicChanged(BADDR, bleNotifyChar());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2915,22 +3031,20 @@ export default function bluetoothFullCoverageGatt02() {
      * @tc.level Level 2
      */
     it('gatts_notifyCharacteristicChanged_e', 0, () => {
+      const gattServer = ble.createGattServer();
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('gatts_notifyCharacteristicChanged_e', () => {
-          const gattServer = ble.createGattServer();
-          let threw = false;
-          try {
-            gattServer.notifyCharacteristicChanged(BADDR, bleNotifyChar());
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        gattServer.notifyCharacteristicChanged(BADDR, bleNotifyChar());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
