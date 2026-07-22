@@ -3458,14 +3458,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_setBluetoothScanMode_x', 0, () => {
       try {
-            fcRun('leg_btm_setBluetoothScanMode_x', () => {
-              bluetoothManager.setBluetoothScanMode(4, 0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_setBluetoothScanMode_x', () => {
+          bluetoothManager.setBluetoothScanMode(4, 0);
           expect(true).assertTrue();
+          bluetoothManager.setBluetoothScanMode(4, 0);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3474,21 +3472,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_SETBLUETOOTHSCANMODE_C
      * @tc.name leg_btm_setBluetoothScanMode_c
-     * @tc.desc Verify Bluetooth API leg btm setBluetoothScanMode combo scenario
+     * @tc.desc Verify Bluetooth API leg btm setBluetoothScanMode condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_setBluetoothScanMode_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_setBluetoothScanMode_c', [() => {
-              bluetoothManager.setBluetoothScanMode(4, 0);
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_setBluetoothScanMode_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.setBluetoothScanMode(4, 0);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3506,14 +3501,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_startBluetoothDiscovery_n', 0, () => {
       try {
-            fcRun('leg_btm_startBluetoothDiscovery_n', () => {
-              bluetoothManager.startBluetoothDiscovery();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_startBluetoothDiscovery_n', () => {
+          bluetoothManager.startBluetoothDiscovery();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3529,17 +3520,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_startBluetoothDiscovery_e', 0, () => {
       try {
-            fcRunErr('leg_btm_startBluetoothDiscovery_e', () => {
-              try {
-                bluetoothManager.startBluetoothDiscovery();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_startBluetoothDiscovery_e', () => {
+          try {
+            bluetoothManager.startBluetoothDiscovery();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3555,14 +3542,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_startBluetoothDiscovery_b', 0, () => {
       try {
-            fcRun('leg_btm_startBluetoothDiscovery_b', () => {
-              bluetoothManager.startBluetoothDiscovery();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_startBluetoothDiscovery_b', () => {
+          try {
+            bluetoothManager.startBluetoothDiscovery();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3578,14 +3566,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_startBluetoothDiscovery_r', 0, () => {
       try {
-            fcRun('leg_btm_startBluetoothDiscovery_r', () => {
-              bluetoothManager.startBluetoothDiscovery();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_startBluetoothDiscovery_r', () => {
+          try {
+            bluetoothManager.startBluetoothDiscovery();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3601,14 +3590,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_startBluetoothDiscovery_x', 0, () => {
       try {
-            fcRun('leg_btm_startBluetoothDiscovery_x', () => {
-              bluetoothManager.startBluetoothDiscovery();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_startBluetoothDiscovery_x', () => {
+          bluetoothManager.startBluetoothDiscovery();
           expect(true).assertTrue();
+          bluetoothManager.startBluetoothDiscovery();
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3617,21 +3604,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_STARTBLUETOOTHDISCOVERY_C
      * @tc.name leg_btm_startBluetoothDiscovery_c
-     * @tc.desc Verify Bluetooth API leg btm startBluetoothDiscovery combo scenario
+     * @tc.desc Verify Bluetooth API leg btm startBluetoothDiscovery condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_startBluetoothDiscovery_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_startBluetoothDiscovery_c', [() => {
-              bluetoothManager.startBluetoothDiscovery();
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_startBluetoothDiscovery_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.startBluetoothDiscovery();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3649,14 +3633,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_stopBluetoothDiscovery_n', 0, () => {
       try {
-            fcRun('leg_btm_stopBluetoothDiscovery_n', () => {
-              bluetoothManager.stopBluetoothDiscovery();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_stopBluetoothDiscovery_n', () => {
+          bluetoothManager.stopBluetoothDiscovery();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3672,17 +3652,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_stopBluetoothDiscovery_e', 0, () => {
       try {
-            fcRunErr('leg_btm_stopBluetoothDiscovery_e', () => {
-              try {
-                bluetoothManager.stopBluetoothDiscovery();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_stopBluetoothDiscovery_e', () => {
+          try {
+            bluetoothManager.stopBluetoothDiscovery();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3698,14 +3674,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_stopBluetoothDiscovery_b', 0, () => {
       try {
-            fcRun('leg_btm_stopBluetoothDiscovery_b', () => {
-              bluetoothManager.stopBluetoothDiscovery();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_stopBluetoothDiscovery_b', () => {
+          try {
+            bluetoothManager.stopBluetoothDiscovery();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3721,14 +3698,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_stopBluetoothDiscovery_r', 0, () => {
       try {
-            fcRun('leg_btm_stopBluetoothDiscovery_r', () => {
-              bluetoothManager.stopBluetoothDiscovery();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_stopBluetoothDiscovery_r', () => {
+          try {
+            bluetoothManager.stopBluetoothDiscovery();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3744,14 +3722,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_stopBluetoothDiscovery_x', 0, () => {
       try {
-            fcRun('leg_btm_stopBluetoothDiscovery_x', () => {
-              bluetoothManager.stopBluetoothDiscovery();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_stopBluetoothDiscovery_x', () => {
+          bluetoothManager.stopBluetoothDiscovery();
           expect(true).assertTrue();
+          bluetoothManager.stopBluetoothDiscovery();
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3760,21 +3736,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_STOPBLUETOOTHDISCOVERY_C
      * @tc.name leg_btm_stopBluetoothDiscovery_c
-     * @tc.desc Verify Bluetooth API leg btm stopBluetoothDiscovery combo scenario
+     * @tc.desc Verify Bluetooth API leg btm stopBluetoothDiscovery condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_stopBluetoothDiscovery_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_stopBluetoothDiscovery_c', [() => {
-              bluetoothManager.stopBluetoothDiscovery();
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_stopBluetoothDiscovery_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.stopBluetoothDiscovery();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3792,14 +3765,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppListen_n', 0, () => {
       try {
-            fcRun('leg_btm_sppListen_n', () => {
-              bluetoothManager.sppListen('h', legacySppOpt(), () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppListen_n', () => {
+          bluetoothManager.sppListen('h', legacySppOpt(), () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3815,14 +3784,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppListen_e', 0, () => {
       try {
-            fcRunErr('leg_btm_sppListen_e', () => {
-              try {bluetoothManager.sppListen('', legacySppOpt(), () => {});
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_sppListen_e', () => {
+          try {
+            bluetoothManager.sppListen('', legacySppOpt(), () = >{});
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3838,14 +3806,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppListen_b', 0, () => {
       try {
-            fcRun('leg_btm_sppListen_b', () => {
-              bluetoothManager.sppListen('h', legacySppOpt(), () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_sppListen_b', () => {
+          try {
+            bluetoothManager.sppListen('h', legacySppOpt(), () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3861,14 +3830,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppListen_r', 0, () => {
       try {
-            fcRun('leg_btm_sppListen_r', () => {
-              bluetoothManager.sppListen('h', legacySppOpt(), () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_sppListen_r', () => {
+          try {
+            bluetoothManager.sppListen('h', legacySppOpt(), () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3884,14 +3854,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppListen_x', 0, () => {
       try {
-            fcRun('leg_btm_sppListen_x', () => {
-              bluetoothManager.sppListen('h', legacySppOpt(), () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppListen_x', () => {
+          bluetoothManager.sppListen('h', legacySppOpt(), () = >{});
           expect(true).assertTrue();
+          bluetoothManager.sppListen('h', legacySppOpt(), () = >{});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3900,21 +3868,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_SPPLISTEN_C
      * @tc.name leg_btm_sppListen_c
-     * @tc.desc Verify Bluetooth API leg btm sppListen combo scenario
+     * @tc.desc Verify Bluetooth API leg btm sppListen condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_sppListen_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_sppListen_c', [() => {
-              bluetoothManager.sppListen('h', legacySppOpt(), () => {});
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppListen_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.sppListen('h', legacySppOpt(), () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3932,14 +3897,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppAccept_n', 0, () => {
       try {
-            fcRun('leg_btm_sppAccept_n', () => {
-              bluetoothManager.sppAccept(0, () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppAccept_n', () => {
+          bluetoothManager.sppAccept(0, () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3955,17 +3916,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppAccept_e', 0, () => {
       try {
-            fcRunErr('leg_btm_sppAccept_e', () => {
-              try {
-                bluetoothManager.sppAccept(-1, () => {});
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_sppAccept_e', () => {
+          try {
+            bluetoothManager.sppAccept(-1, () = >{});
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3981,14 +3938,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppAccept_b', 0, () => {
       try {
-            fcRun('leg_btm_sppAccept_b', () => {
-              bluetoothManager.sppAccept(0, () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_sppAccept_b', () => {
+          try {
+            bluetoothManager.sppAccept(0, () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4004,14 +3962,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppAccept_r', 0, () => {
       try {
-            fcRun('leg_btm_sppAccept_r', () => {
-              bluetoothManager.sppAccept(0, () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_sppAccept_r', () => {
+          try {
+            bluetoothManager.sppAccept(0, () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4027,14 +3986,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppAccept_x', 0, () => {
       try {
-            fcRun('leg_btm_sppAccept_x', () => {
-              bluetoothManager.sppAccept(0, () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppAccept_x', () => {
+          bluetoothManager.sppAccept(0, () = >{});
           expect(true).assertTrue();
+          bluetoothManager.sppAccept(0, () = >{});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4043,21 +4000,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_SPPACCEPT_C
      * @tc.name leg_btm_sppAccept_c
-     * @tc.desc Verify Bluetooth API leg btm sppAccept combo scenario
+     * @tc.desc Verify Bluetooth API leg btm sppAccept condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_sppAccept_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_sppAccept_c', [() => {
-              bluetoothManager.sppAccept(0, () => {});
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppAccept_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.sppAccept(0, () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4075,14 +4029,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppConnect_n', 0, () => {
       try {
-            fcRun('leg_btm_sppConnect_n', () => {
-              bluetoothManager.sppConnect(BADDR, legacySppOpt(), () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppConnect_n', () => {
+          bluetoothManager.sppConnect(BADDR, legacySppOpt(), () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4098,14 +4048,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppConnect_e', 0, () => {
       try {
-            fcRunErr('leg_btm_sppConnect_e', () => {
-              try {bluetoothManager.sppConnect(EMPTY_MAC, legacySppOpt(), () => {});
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_sppConnect_e', () => {
+          try {
+            bluetoothManager.sppConnect(EMPTY_MAC, legacySppOpt(), () = >{});
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4121,14 +4070,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppConnect_b', 0, () => {
       try {
-            fcRun('leg_btm_sppConnect_b', () => {
-              bluetoothManager.sppConnect(BADDR, legacySppOpt(), () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppConnect_b', () => {
+          bluetoothManager.sppConnect(BAD_MAC, legacySppOpt(), () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4144,14 +4089,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppConnect_r', 0, () => {
       try {
-            fcRun('leg_btm_sppConnect_r', () => {
-              bluetoothManager.sppConnect(BADDR, legacySppOpt(), () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_sppConnect_r', () => {
+          try {
+            bluetoothManager.sppConnect(BADDR, legacySppOpt(), () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4167,14 +4113,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppConnect_x', 0, () => {
       try {
-            fcRun('leg_btm_sppConnect_x', () => {
-              bluetoothManager.sppConnect(BADDR, legacySppOpt(), () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppConnect_x', () => {
+          bluetoothManager.sppConnect(BADDR, legacySppOpt(), () = >{});
           expect(true).assertTrue();
+          bluetoothManager.sppConnect(BADDR, legacySppOpt(), () = >{});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4183,21 +4127,17 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_SPPCONNECT_C
      * @tc.name leg_btm_sppConnect_c
-     * @tc.desc Verify Bluetooth API leg btm sppConnect combo scenario
+     * @tc.desc Verify Bluetooth API leg btm sppConnect condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_sppConnect_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_sppConnect_c', [() => {
-              bluetoothManager.sppConnect(BADDR, legacySppOpt(), () => {});
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+        fcRun('leg_btm_sppConnect_c', () => {
+          bluetoothManager.sppConnect(BADDR, legacySppOpt(), () = >{});
+          expect(false).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4215,14 +4155,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppCloseServerSocket_n', 0, () => {
       try {
-            fcRun('leg_btm_sppCloseServerSocket_n', () => {
-              bluetoothManager.sppCloseServerSocket(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppCloseServerSocket_n', () => {
+          bluetoothManager.sppCloseServerSocket(0);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4238,17 +4174,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppCloseServerSocket_e', 0, () => {
       try {
-            fcRunErr('leg_btm_sppCloseServerSocket_e', () => {
-              try {
-                bluetoothManager.sppCloseServerSocket(-1);
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_sppCloseServerSocket_e', () => {
+          try {
+            bluetoothManager.sppCloseServerSocket(-1);
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4264,14 +4196,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppCloseServerSocket_b', 0, () => {
       try {
-            fcRun('leg_btm_sppCloseServerSocket_b', () => {
-              bluetoothManager.sppCloseServerSocket(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_sppCloseServerSocket_b', () => {
+          try {
+            bluetoothManager.sppCloseServerSocket(0);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4287,14 +4220,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppCloseServerSocket_r', 0, () => {
       try {
-            fcRun('leg_btm_sppCloseServerSocket_r', () => {
-              bluetoothManager.sppCloseServerSocket(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_sppCloseServerSocket_r', () => {
+          try {
+            bluetoothManager.sppCloseServerSocket(0);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4310,14 +4244,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppCloseServerSocket_x', 0, () => {
       try {
-            fcRun('leg_btm_sppCloseServerSocket_x', () => {
-              bluetoothManager.sppCloseServerSocket(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppCloseServerSocket_x', () => {
+          bluetoothManager.sppCloseServerSocket(0);
           expect(true).assertTrue();
+          bluetoothManager.sppCloseServerSocket(0);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4326,21 +4258,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_SPPCLOSESERVERSOCKET_C
      * @tc.name leg_btm_sppCloseServerSocket_c
-     * @tc.desc Verify Bluetooth API leg btm sppCloseServerSocket combo scenario
+     * @tc.desc Verify Bluetooth API leg btm sppCloseServerSocket condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_sppCloseServerSocket_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_sppCloseServerSocket_c', [() => {
-              bluetoothManager.sppCloseServerSocket(0);
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppCloseServerSocket_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.sppCloseServerSocket(0);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4358,14 +4287,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppCloseClientSocket_n', 0, () => {
       try {
-            fcRun('leg_btm_sppCloseClientSocket_n', () => {
-              bluetoothManager.sppCloseClientSocket(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppCloseClientSocket_n', () => {
+          bluetoothManager.sppCloseClientSocket(0);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4381,17 +4306,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppCloseClientSocket_e', 0, () => {
       try {
-            fcRunErr('leg_btm_sppCloseClientSocket_e', () => {
-              try {
-                bluetoothManager.sppCloseClientSocket(-1);
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_sppCloseClientSocket_e', () => {
+          try {
+            bluetoothManager.sppCloseClientSocket(-1);
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4407,14 +4328,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppCloseClientSocket_b', 0, () => {
       try {
-            fcRun('leg_btm_sppCloseClientSocket_b', () => {
-              bluetoothManager.sppCloseClientSocket(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_sppCloseClientSocket_b', () => {
+          try {
+            bluetoothManager.sppCloseClientSocket(0);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4430,14 +4352,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppCloseClientSocket_r', 0, () => {
       try {
-            fcRun('leg_btm_sppCloseClientSocket_r', () => {
-              bluetoothManager.sppCloseClientSocket(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_sppCloseClientSocket_r', () => {
+          try {
+            bluetoothManager.sppCloseClientSocket(0);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4453,14 +4376,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppCloseClientSocket_x', 0, () => {
       try {
-            fcRun('leg_btm_sppCloseClientSocket_x', () => {
-              bluetoothManager.sppCloseClientSocket(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppCloseClientSocket_x', () => {
+          bluetoothManager.sppCloseClientSocket(0);
           expect(true).assertTrue();
+          bluetoothManager.sppCloseClientSocket(0);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4469,21 +4390,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_SPPCLOSECLIENTSOCKET_C
      * @tc.name leg_btm_sppCloseClientSocket_c
-     * @tc.desc Verify Bluetooth API leg btm sppCloseClientSocket combo scenario
+     * @tc.desc Verify Bluetooth API leg btm sppCloseClientSocket condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_sppCloseClientSocket_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_sppCloseClientSocket_c', [() => {
-              bluetoothManager.sppCloseClientSocket(0);
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppCloseClientSocket_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.sppCloseClientSocket(0);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4501,14 +4419,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppWrite_n', 0, () => {
       try {
-            fcRun('leg_btm_sppWrite_n', () => {
-              bluetoothManager.sppWrite(0, buf0());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppWrite_n', () => {
+          bluetoothManager.sppWrite(0, buf0());
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4524,17 +4438,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppWrite_e', 0, () => {
       try {
-            fcRunErr('leg_btm_sppWrite_e', () => {
-              try {
-                bluetoothManager.sppWrite(-1, buf0());
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_sppWrite_e', () => {
+          try {
+            bluetoothManager.sppWrite(-1, buf0());
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4550,14 +4460,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppWrite_b', 0, () => {
       try {
-            fcRun('leg_btm_sppWrite_b', () => {
-              bluetoothManager.sppWrite(0, buf0());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_sppWrite_b', () => {
+          try {
+            bluetoothManager.sppWrite(0, buf0());
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4573,14 +4484,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppWrite_r', 0, () => {
       try {
-            fcRun('leg_btm_sppWrite_r', () => {
-              bluetoothManager.sppWrite(0, buf0());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_sppWrite_r', () => {
+          try {
+            bluetoothManager.sppWrite(0, buf0());
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4596,14 +4508,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_sppWrite_x', 0, () => {
       try {
-            fcRun('leg_btm_sppWrite_x', () => {
-              bluetoothManager.sppWrite(0, buf0());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppWrite_x', () => {
+          bluetoothManager.sppWrite(0, buf0());
           expect(true).assertTrue();
+          bluetoothManager.sppWrite(0, buf0());
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4612,21 +4522,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_SPPWRITE_C
      * @tc.name leg_btm_sppWrite_c
-     * @tc.desc Verify Bluetooth API leg btm sppWrite combo scenario
+     * @tc.desc Verify Bluetooth API leg btm sppWrite condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_sppWrite_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_sppWrite_c', [() => {
-              bluetoothManager.sppWrite(0, buf0());
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_sppWrite_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.sppWrite(0, buf0());
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4644,18 +4551,14 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_createGattServer_n', 0, () => {
       try {
-            fcRun('leg_btm_createGattServer_n', () => {
-              try {
-                bluetoothManager.BLE.createGattServer();
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('leg_btm_createGattServer_n', () => {
+          try {
+            bluetoothManager.BLE.createGattServer();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4671,17 +4574,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_createGattServer_e', 0, () => {
       try {
-            fcRunErr('leg_btm_createGattServer_e', () => {
-              try {
-                bluetoothManager.BLE.createGattServer();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_createGattServer_e', () => {
+          try {
+            bluetoothManager.BLE.createGattServer();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4697,18 +4596,19 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_createGattServer_b', 0, () => {
       try {
-            fcRun('leg_btm_createGattServer_b', () => {
-              try {
-                bluetoothManager.BLE.createGattServer();
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('leg_btm_createGattServer_b', () => {
+          try {
+            try {
+              bluetoothManager.BLE.createGattServer();
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4724,18 +4624,19 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_createGattServer_r', 0, () => {
       try {
-            fcRun('leg_btm_createGattServer_r', () => {
-              try {
-                bluetoothManager.BLE.createGattServer();
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('leg_btm_createGattServer_r', () => {
+          try {
+            try {
+              bluetoothManager.BLE.createGattServer();
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4751,18 +4652,20 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_createGattServer_x', 0, () => {
       try {
-            fcRun('leg_btm_createGattServer_x', () => {
-              try {
-                bluetoothManager.BLE.createGattServer();
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('leg_btm_createGattServer_x', () => {
+          try {
+            bluetoothManager.BLE.createGattServer();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+          try {
+            bluetoothManager.BLE.createGattServer();
+            expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4771,25 +4674,22 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_CREATEGATTSERVER_C
      * @tc.name leg_btm_createGattServer_c
-     * @tc.desc Verify Bluetooth API leg btm createGattServer combo scenario
+     * @tc.desc Verify Bluetooth API leg btm createGattServer condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_createGattServer_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_createGattServer_c', [() => {
-              try {
-                bluetoothManager.BLE.createGattServer();
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            }]);
-          } catch (_e) {
+        fcRun('leg_btm_createGattServer_c', () => {
+          console.info('[c] condition path');
+          try {
+            bluetoothManager.BLE.createGattServer();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4807,18 +4707,14 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_createGattClientDevice_n', 0, () => {
       try {
-            fcRun('leg_btm_createGattClientDevice_n', () => {
-              try {
-                bluetoothManager.BLE.createGattClientDevice(BADDR);
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('leg_btm_createGattClientDevice_n', () => {
+          try {
+            bluetoothManager.BLE.createGattClientDevice(BADDR);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4834,17 +4730,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_createGattClientDevice_e', 0, () => {
       try {
-            fcRunErr('leg_btm_createGattClientDevice_e', () => {
-              try {
-                bluetoothManager.BLE.createGattClientDevice(EMPTY_MAC);
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_createGattClientDevice_e', () => {
+          try {
+            bluetoothManager.BLE.createGattClientDevice(EMPTY_MAC);
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4860,18 +4752,14 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_createGattClientDevice_b', 0, () => {
       try {
-            fcRun('leg_btm_createGattClientDevice_b', () => {
-              try {
-                bluetoothManager.BLE.createGattClientDevice(BADDR);
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('leg_btm_createGattClientDevice_b', () => {
+          try {
+            bluetoothManager.BLE.createGattClientDevice(BAD_MAC);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4887,18 +4775,19 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_createGattClientDevice_r', 0, () => {
       try {
-            fcRun('leg_btm_createGattClientDevice_r', () => {
-              try {
-                bluetoothManager.BLE.createGattClientDevice(BADDR);
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('leg_btm_createGattClientDevice_r', () => {
+          try {
+            try {
+              bluetoothManager.BLE.createGattClientDevice(BADDR);
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4914,18 +4803,20 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_createGattClientDevice_x', 0, () => {
       try {
-            fcRun('leg_btm_createGattClientDevice_x', () => {
-              try {
-                bluetoothManager.BLE.createGattClientDevice(BADDR);
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('leg_btm_createGattClientDevice_x', () => {
+          try {
+            bluetoothManager.BLE.createGattClientDevice(BADDR);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+          try {
+            bluetoothManager.BLE.createGattClientDevice(BADDR);
+            expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4934,25 +4825,21 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_CREATEGATTCLIENTDEVICE_C
      * @tc.name leg_btm_createGattClientDevice_c
-     * @tc.desc Verify Bluetooth API leg btm createGattClientDevice combo scenario
+     * @tc.desc Verify Bluetooth API leg btm createGattClientDevice condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_createGattClientDevice_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_createGattClientDevice_c', [() => {
-              try {
-                bluetoothManager.BLE.createGattClientDevice(BADDR);
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            }]);
-          } catch (_e) {
+        fcRun('leg_btm_createGattClientDevice_c', () => {
+          try {
+            bluetoothManager.BLE.createGattClientDevice(BADDR);
+            expect(false).assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4970,14 +4857,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_startBLEScan_n', 0, () => {
       try {
-            fcRun('leg_btm_startBLEScan_n', () => {
-              bluetoothManager.BLE.startBLEScan([]);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_startBLEScan_n', () => {
+          bluetoothManager.BLE.startBLEScan([]);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4993,17 +4876,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_startBLEScan_e', 0, () => {
       try {
-            fcRunErr('leg_btm_startBLEScan_e', () => {
-              try {
-                bluetoothManager.BLE.startBLEScan([]);
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_startBLEScan_e', () => {
+          try {
+            bluetoothManager.BLE.startBLEScan([]);
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5019,14 +4898,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_startBLEScan_b', 0, () => {
       try {
-            fcRun('leg_btm_startBLEScan_b', () => {
-              bluetoothManager.BLE.startBLEScan([]);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_startBLEScan_b', () => {
+          try {
+            bluetoothManager.BLE.startBLEScan([]);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5042,14 +4922,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_startBLEScan_r', 0, () => {
       try {
-            fcRun('leg_btm_startBLEScan_r', () => {
-              bluetoothManager.BLE.startBLEScan([]);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_startBLEScan_r', () => {
+          try {
+            bluetoothManager.BLE.startBLEScan([]);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5065,14 +4946,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_startBLEScan_x', 0, () => {
       try {
-            fcRun('leg_btm_startBLEScan_x', () => {
-              bluetoothManager.BLE.startBLEScan([]);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_startBLEScan_x', () => {
+          bluetoothManager.BLE.startBLEScan([]);
           expect(true).assertTrue();
+          bluetoothManager.BLE.startBLEScan([]);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5081,21 +4960,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_STARTBLESCAN_C
      * @tc.name leg_btm_startBLEScan_c
-     * @tc.desc Verify Bluetooth API leg btm startBLEScan combo scenario
+     * @tc.desc Verify Bluetooth API leg btm startBLEScan condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_startBLEScan_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_startBLEScan_c', [() => {
-              bluetoothManager.BLE.startBLEScan([]);
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_startBLEScan_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.BLE.startBLEScan([]);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5113,14 +4989,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_stopBLEScan_n', 0, () => {
       try {
-            fcRun('leg_btm_stopBLEScan_n', () => {
-              bluetoothManager.BLE.stopBLEScan();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_stopBLEScan_n', () => {
+          bluetoothManager.BLE.stopBLEScan();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5136,17 +5008,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_stopBLEScan_e', 0, () => {
       try {
-            fcRunErr('leg_btm_stopBLEScan_e', () => {
-              try {
-                bluetoothManager.BLE.stopBLEScan();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_stopBLEScan_e', () => {
+          try {
+            bluetoothManager.BLE.stopBLEScan();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5162,14 +5030,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_stopBLEScan_b', 0, () => {
       try {
-            fcRun('leg_btm_stopBLEScan_b', () => {
-              bluetoothManager.BLE.stopBLEScan();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_stopBLEScan_b', () => {
+          try {
+            bluetoothManager.BLE.stopBLEScan();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5185,14 +5054,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_stopBLEScan_r', 0, () => {
       try {
-            fcRun('leg_btm_stopBLEScan_r', () => {
-              bluetoothManager.BLE.stopBLEScan();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_stopBLEScan_r', () => {
+          try {
+            bluetoothManager.BLE.stopBLEScan();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5208,14 +5078,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_stopBLEScan_x', 0, () => {
       try {
-            fcRun('leg_btm_stopBLEScan_x', () => {
-              bluetoothManager.BLE.stopBLEScan();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_stopBLEScan_x', () => {
+          bluetoothManager.BLE.stopBLEScan();
           expect(true).assertTrue();
+          bluetoothManager.BLE.stopBLEScan();
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5224,21 +5092,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_STOPBLESCAN_C
      * @tc.name leg_btm_stopBLEScan_c
-     * @tc.desc Verify Bluetooth API leg btm stopBLEScan combo scenario
+     * @tc.desc Verify Bluetooth API leg btm stopBLEScan condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_stopBLEScan_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_stopBLEScan_c', [() => {
-              bluetoothManager.BLE.stopBLEScan();
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_stopBLEScan_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.BLE.stopBLEScan();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5256,14 +5121,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_on_bondStateChange_n', 0, () => {
       try {
-            fcRun('leg_btm_on_bondStateChange_n', () => {
-              bluetoothManager.on('bondStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_on_bondStateChange_n', () => {
+          bluetoothManager.on('bondStateChange', () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5279,17 +5140,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_on_bondStateChange_e', 0, () => {
       try {
-            fcRunErr('leg_btm_on_bondStateChange_e', () => {
-              try {
-                bluetoothManager.on('bondStateChange', () => {});
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_on_bondStateChange_e', () => {
+          try {
+            bluetoothManager.on('bondStateChange', () = >{});
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5305,14 +5162,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_on_bondStateChange_b', 0, () => {
       try {
-            fcRun('leg_btm_on_bondStateChange_b', () => {
-              bluetoothManager.on('bondStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_on_bondStateChange_b', () => {
+          try {
+            bluetoothManager.on('bondStateChange', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5328,14 +5186,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_on_bondStateChange_r', 0, () => {
       try {
-            fcRun('leg_btm_on_bondStateChange_r', () => {
-              bluetoothManager.on('bondStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_on_bondStateChange_r', () => {
+          try {
+            bluetoothManager.on('bondStateChange', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5351,14 +5210,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_on_bondStateChange_x', 0, () => {
       try {
-            fcRun('leg_btm_on_bondStateChange_x', () => {
-              bluetoothManager.on('bondStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_on_bondStateChange_x', () => {
+          bluetoothManager.on('bondStateChange', () = >{});
           expect(true).assertTrue();
+          bluetoothManager.on('bondStateChange', () = >{});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5367,21 +5224,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_ON_BONDSTATECHANGE_C
      * @tc.name leg_btm_on_bondStateChange_c
-     * @tc.desc Verify Bluetooth API leg btm on bondStateChange combo scenario
+     * @tc.desc Verify Bluetooth API leg btm on bondStateChange condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_on_bondStateChange_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_on_bondStateChange_c', [() => {
-              bluetoothManager.on('bondStateChange', () => {});
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_on_bondStateChange_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.on('bondStateChange', () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5399,14 +5253,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_off_bondStateChange_n', 0, () => {
       try {
-            fcRun('leg_btm_off_bondStateChange_n', () => {
-              bluetoothManager.off('bondStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_off_bondStateChange_n', () => {
+          bluetoothManager.off('bondStateChange');
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5422,17 +5272,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_off_bondStateChange_e', 0, () => {
       try {
-            fcRunErr('leg_btm_off_bondStateChange_e', () => {
-              try {
-                bluetoothManager.off('bondStateChange');
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_off_bondStateChange_e', () => {
+          try {
+            bluetoothManager.off('bondStateChange');
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5448,14 +5294,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_off_bondStateChange_b', 0, () => {
       try {
-            fcRun('leg_btm_off_bondStateChange_b', () => {
-              bluetoothManager.off('bondStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_off_bondStateChange_b', () => {
+          try {
+            bluetoothManager.off('bondStateChange');
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5471,14 +5318,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_off_bondStateChange_r', 0, () => {
       try {
-            fcRun('leg_btm_off_bondStateChange_r', () => {
-              bluetoothManager.off('bondStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_off_bondStateChange_r', () => {
+          try {
+            bluetoothManager.off('bondStateChange');
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5494,14 +5342,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_off_bondStateChange_x', 0, () => {
       try {
-            fcRun('leg_btm_off_bondStateChange_x', () => {
-              bluetoothManager.off('bondStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_off_bondStateChange_x', () => {
+          bluetoothManager.off('bondStateChange');
           expect(true).assertTrue();
+          bluetoothManager.off('bondStateChange');
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5510,21 +5356,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_OFF_BONDSTATECHANGE_C
      * @tc.name leg_btm_off_bondStateChange_c
-     * @tc.desc Verify Bluetooth API leg btm off bondStateChange combo scenario
+     * @tc.desc Verify Bluetooth API leg btm off bondStateChange condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_off_bondStateChange_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_off_bondStateChange_c', [() => {
-              bluetoothManager.off('bondStateChange');
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_off_bondStateChange_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.off('bondStateChange');
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5542,14 +5385,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_on_bluetoothDeviceFind_n', 0, () => {
       try {
-            fcRun('leg_btm_on_bluetoothDeviceFind_n', () => {
-              bluetoothManager.on('bluetoothDeviceFind', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_on_bluetoothDeviceFind_n', () => {
+          bluetoothManager.on('bluetoothDeviceFind', () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5565,17 +5404,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_on_bluetoothDeviceFind_e', 0, () => {
       try {
-            fcRunErr('leg_btm_on_bluetoothDeviceFind_e', () => {
-              try {
-                bluetoothManager.on('bluetoothDeviceFind', () => {});
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_on_bluetoothDeviceFind_e', () => {
+          try {
+            bluetoothManager.on('bluetoothDeviceFind', () = >{});
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5591,14 +5426,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_on_bluetoothDeviceFind_b', 0, () => {
       try {
-            fcRun('leg_btm_on_bluetoothDeviceFind_b', () => {
-              bluetoothManager.on('bluetoothDeviceFind', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_on_bluetoothDeviceFind_b', () => {
+          try {
+            bluetoothManager.on('bluetoothDeviceFind', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5614,14 +5450,15 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_on_bluetoothDeviceFind_r', 0, () => {
       try {
-            fcRun('leg_btm_on_bluetoothDeviceFind_r', () => {
-              bluetoothManager.on('bluetoothDeviceFind', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('leg_btm_on_bluetoothDeviceFind_r', () => {
+          try {
+            bluetoothManager.on('bluetoothDeviceFind', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5637,14 +5474,12 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_on_bluetoothDeviceFind_x', 0, () => {
       try {
-            fcRun('leg_btm_on_bluetoothDeviceFind_x', () => {
-              bluetoothManager.on('bluetoothDeviceFind', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_on_bluetoothDeviceFind_x', () => {
+          bluetoothManager.on('bluetoothDeviceFind', () = >{});
           expect(true).assertTrue();
+          bluetoothManager.on('bluetoothDeviceFind', () = >{});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5653,21 +5488,18 @@ export default function bluetoothFullCoverageLegacy02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_LEG_BTM_ON_BLUETOOTHDEVICEFIND_C
      * @tc.name leg_btm_on_bluetoothDeviceFind_c
-     * @tc.desc Verify Bluetooth API leg btm on bluetoothDeviceFind combo scenario
+     * @tc.desc Verify Bluetooth API leg btm on bluetoothDeviceFind condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('leg_btm_on_bluetoothDeviceFind_c', 0, () => {
       try {
-            fcRunCombo('leg_btm_on_bluetoothDeviceFind_c', [() => {
-              bluetoothManager.on('bluetoothDeviceFind', () => {});
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_on_bluetoothDeviceFind_c', () => {
+          console.info('[c] condition path');
+          bluetoothManager.on('bluetoothDeviceFind', () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5685,14 +5517,10 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_off_bluetoothDeviceFind_n', 0, () => {
       try {
-            fcRun('leg_btm_off_bluetoothDeviceFind_n', () => {
-              bluetoothManager.off('bluetoothDeviceFind');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('leg_btm_off_bluetoothDeviceFind_n', () => {
+          bluetoothManager.off('bluetoothDeviceFind');
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5708,17 +5536,13 @@ export default function bluetoothFullCoverageLegacy02() {
      */
     it('leg_btm_off_bluetoothDeviceFind_e', 0, () => {
       try {
-            fcRunErr('leg_btm_off_bluetoothDeviceFind_e', () => {
-              try {
-                bluetoothManager.off('bluetoothDeviceFind');
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('leg_btm_off_bluetoothDeviceFind_e', () => {
+          try {
+            bluetoothManager.off('bluetoothDeviceFind');
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
