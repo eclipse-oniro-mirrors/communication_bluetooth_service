@@ -37,8 +37,9 @@ import bluetoothFullCoverageProfile02 from './BluetoothFullCoverageProfile02.tes
 import bluetoothFullCoverageGatt01 from './BluetoothFullCoverageGatt01.test'
 import bluetoothFullCoverageGatt02 from './BluetoothFullCoverageGatt02.test'
 import bluetoothFullCoverageEnterprise01 from './BluetoothFullCoverageEnterprise01.test'
-import bluetoothFullCoverageCombo01 from './BluetoothFullCoverageCombo01.test'
-import bluetoothFullCoverageCombo02 from './BluetoothFullCoverageCombo02.test'
+import bluetoothFullCoverageConnection01 from './BluetoothFullCoverageConnection01.test'
+import bluetoothFullCoverageConnection02 from './BluetoothFullCoverageConnection02.test'
+import bluetoothFullCoverageSocket01 from './BluetoothFullCoverageSocket01.test'
 
 export function registerApitestSuite(): void {
   abilityTest()
@@ -62,8 +63,9 @@ export function registerApitestSuite(): void {
   bluetoothFullCoverageGatt01()
   bluetoothFullCoverageGatt02()
   bluetoothFullCoverageEnterprise01()
-  bluetoothFullCoverageCombo01()
-  bluetoothFullCoverageCombo02()
+  bluetoothFullCoverageConnection01()
+  bluetoothFullCoverageConnection02()
+  bluetoothFullCoverageSocket01()
 }
 
 export default function testsuiteApitestOnly(): void {
