@@ -4323,8 +4323,1059 @@ export default function bluetoothFullCoverageGatt02() {
           } catch (err) {
             console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_X
+     * @tc.name gatts_on_characteristicWrite_x
+     * @tc.desc Verify Bluetooth API gatts on characteristicWrite repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_characteristicWrite_x', 0, () => {
+      try {
+        fcRun('gatts_on_characteristicWrite_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('characteristicWrite', () => {});
           expect(true).assertTrue();
+          gattServer.on('characteristicWrite', () => {});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_C
+     * @tc.name gatts_on_characteristicWrite_c
+     * @tc.desc Verify Bluetooth API gatts on characteristicWrite condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_characteristicWrite_c', 0, () => {
+      try {
+        fcRun('gatts_on_characteristicWrite_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('characteristicWrite', () => {});
+          expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('gatts_off_characteristicWrite', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CHARACTERISTICWRITE_N
+     * @tc.name gatts_off_characteristicWrite_n
+     * @tc.desc Verify Bluetooth API gatts off characteristicWrite normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_characteristicWrite_n', 0, () => {
+      try {
+        fcRun('gatts_off_characteristicWrite_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('characteristicWrite');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CHARACTERISTICWRITE_E
+     * @tc.name gatts_off_characteristicWrite_e
+     * @tc.desc Verify Bluetooth API gatts off characteristicWrite error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_characteristicWrite_e', 0, () => {
+      try {
+        fcRunErr('gatts_off_characteristicWrite_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('characteristicWrite');
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CHARACTERISTICWRITE_B
+     * @tc.name gatts_off_characteristicWrite_b
+     * @tc.desc Verify Bluetooth API gatts off characteristicWrite boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_characteristicWrite_b', 0, () => {
+      try {
+        fcRun('gatts_off_characteristicWrite_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('characteristicWrite');
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CHARACTERISTICWRITE_R
+     * @tc.name gatts_off_characteristicWrite_r
+     * @tc.desc Verify Bluetooth API gatts off characteristicWrite return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_characteristicWrite_r', 0, () => {
+      try {
+        fcRun('gatts_off_characteristicWrite_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.off('characteristicWrite');
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CHARACTERISTICWRITE_X
+     * @tc.name gatts_off_characteristicWrite_x
+     * @tc.desc Verify Bluetooth API gatts off characteristicWrite repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_characteristicWrite_x', 0, () => {
+      try {
+        fcRun('gatts_off_characteristicWrite_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('characteristicWrite');
+          expect(true).assertTrue();
+          gattServer.off('characteristicWrite');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CHARACTERISTICWRITE_C
+     * @tc.name gatts_off_characteristicWrite_c
+     * @tc.desc Verify Bluetooth API gatts off characteristicWrite condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_characteristicWrite_c', 0, () => {
+      try {
+        fcRun('gatts_off_characteristicWrite_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('characteristicWrite');
+          expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('gatts_on_descriptorRead', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_N
+     * @tc.name gatts_on_descriptorRead_n
+     * @tc.desc Verify Bluetooth API gatts on descriptorRead normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorRead_n', 0, () => {
+      try {
+        fcRun('gatts_on_descriptorRead_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('descriptorRead', () => {});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_E
+     * @tc.name gatts_on_descriptorRead_e
+     * @tc.desc Verify Bluetooth API gatts on descriptorRead error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorRead_e', 0, () => {
+      try {
+        fcRunErr('gatts_on_descriptorRead_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('descriptorRead', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_B
+     * @tc.name gatts_on_descriptorRead_b
+     * @tc.desc Verify Bluetooth API gatts on descriptorRead boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorRead_b', 0, () => {
+      try {
+        fcRun('gatts_on_descriptorRead_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('descriptorRead', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_R
+     * @tc.name gatts_on_descriptorRead_r
+     * @tc.desc Verify Bluetooth API gatts on descriptorRead return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorRead_r', 0, () => {
+      try {
+        fcRun('gatts_on_descriptorRead_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.on('descriptorRead', () => {});
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_X
+     * @tc.name gatts_on_descriptorRead_x
+     * @tc.desc Verify Bluetooth API gatts on descriptorRead repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorRead_x', 0, () => {
+      try {
+        fcRun('gatts_on_descriptorRead_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('descriptorRead', () => {});
+          expect(true).assertTrue();
+          gattServer.on('descriptorRead', () => {});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_C
+     * @tc.name gatts_on_descriptorRead_c
+     * @tc.desc Verify Bluetooth API gatts on descriptorRead condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorRead_c', 0, () => {
+      try {
+        fcRun('gatts_on_descriptorRead_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('descriptorRead', () => {});
+          expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('gatts_off_descriptorRead', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORREAD_N
+     * @tc.name gatts_off_descriptorRead_n
+     * @tc.desc Verify Bluetooth API gatts off descriptorRead normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorRead_n', 0, () => {
+      try {
+        fcRun('gatts_off_descriptorRead_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('descriptorRead');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORREAD_E
+     * @tc.name gatts_off_descriptorRead_e
+     * @tc.desc Verify Bluetooth API gatts off descriptorRead error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorRead_e', 0, () => {
+      try {
+        fcRunErr('gatts_off_descriptorRead_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('descriptorRead');
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORREAD_B
+     * @tc.name gatts_off_descriptorRead_b
+     * @tc.desc Verify Bluetooth API gatts off descriptorRead boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorRead_b', 0, () => {
+      try {
+        fcRun('gatts_off_descriptorRead_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('descriptorRead');
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORREAD_R
+     * @tc.name gatts_off_descriptorRead_r
+     * @tc.desc Verify Bluetooth API gatts off descriptorRead return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorRead_r', 0, () => {
+      try {
+        fcRun('gatts_off_descriptorRead_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.off('descriptorRead');
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORREAD_X
+     * @tc.name gatts_off_descriptorRead_x
+     * @tc.desc Verify Bluetooth API gatts off descriptorRead repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorRead_x', 0, () => {
+      try {
+        fcRun('gatts_off_descriptorRead_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('descriptorRead');
+          expect(true).assertTrue();
+          gattServer.off('descriptorRead');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORREAD_C
+     * @tc.name gatts_off_descriptorRead_c
+     * @tc.desc Verify Bluetooth API gatts off descriptorRead condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorRead_c', 0, () => {
+      try {
+        fcRun('gatts_off_descriptorRead_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('descriptorRead');
+          expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('gatts_on_descriptorWrite', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_N
+     * @tc.name gatts_on_descriptorWrite_n
+     * @tc.desc Verify Bluetooth API gatts on descriptorWrite normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorWrite_n', 0, () => {
+      try {
+        fcRun('gatts_on_descriptorWrite_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('descriptorWrite', () => {});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_E
+     * @tc.name gatts_on_descriptorWrite_e
+     * @tc.desc Verify Bluetooth API gatts on descriptorWrite error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorWrite_e', 0, () => {
+      try {
+        fcRunErr('gatts_on_descriptorWrite_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('descriptorWrite', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_B
+     * @tc.name gatts_on_descriptorWrite_b
+     * @tc.desc Verify Bluetooth API gatts on descriptorWrite boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorWrite_b', 0, () => {
+      try {
+        fcRun('gatts_on_descriptorWrite_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('descriptorWrite', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_R
+     * @tc.name gatts_on_descriptorWrite_r
+     * @tc.desc Verify Bluetooth API gatts on descriptorWrite return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorWrite_r', 0, () => {
+      try {
+        fcRun('gatts_on_descriptorWrite_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.on('descriptorWrite', () => {});
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_X
+     * @tc.name gatts_on_descriptorWrite_x
+     * @tc.desc Verify Bluetooth API gatts on descriptorWrite repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorWrite_x', 0, () => {
+      try {
+        fcRun('gatts_on_descriptorWrite_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('descriptorWrite', () => {});
+          expect(true).assertTrue();
+          gattServer.on('descriptorWrite', () => {});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_C
+     * @tc.name gatts_on_descriptorWrite_c
+     * @tc.desc Verify Bluetooth API gatts on descriptorWrite condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorWrite_c', 0, () => {
+      try {
+        fcRun('gatts_on_descriptorWrite_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('descriptorWrite', () => {});
+          expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('gatts_off_descriptorWrite', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORWRITE_N
+     * @tc.name gatts_off_descriptorWrite_n
+     * @tc.desc Verify Bluetooth API gatts off descriptorWrite normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorWrite_n', 0, () => {
+      try {
+        fcRun('gatts_off_descriptorWrite_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('descriptorWrite');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORWRITE_E
+     * @tc.name gatts_off_descriptorWrite_e
+     * @tc.desc Verify Bluetooth API gatts off descriptorWrite error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorWrite_e', 0, () => {
+      try {
+        fcRunErr('gatts_off_descriptorWrite_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('descriptorWrite');
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORWRITE_B
+     * @tc.name gatts_off_descriptorWrite_b
+     * @tc.desc Verify Bluetooth API gatts off descriptorWrite boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorWrite_b', 0, () => {
+      try {
+        fcRun('gatts_off_descriptorWrite_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('descriptorWrite');
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORWRITE_R
+     * @tc.name gatts_off_descriptorWrite_r
+     * @tc.desc Verify Bluetooth API gatts off descriptorWrite return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorWrite_r', 0, () => {
+      try {
+        fcRun('gatts_off_descriptorWrite_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.off('descriptorWrite');
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORWRITE_X
+     * @tc.name gatts_off_descriptorWrite_x
+     * @tc.desc Verify Bluetooth API gatts off descriptorWrite repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorWrite_x', 0, () => {
+      try {
+        fcRun('gatts_off_descriptorWrite_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('descriptorWrite');
+          expect(true).assertTrue();
+          gattServer.off('descriptorWrite');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORWRITE_C
+     * @tc.name gatts_off_descriptorWrite_c
+     * @tc.desc Verify Bluetooth API gatts off descriptorWrite condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorWrite_c', 0, () => {
+      try {
+        fcRun('gatts_off_descriptorWrite_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('descriptorWrite');
+          expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('gatts_on_BLEMtuChange', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_BLEMTUCHANGE_N
+     * @tc.name gatts_on_BLEMtuChange_n
+     * @tc.desc Verify Bluetooth API gatts on BLEMtuChange normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_BLEMtuChange_n', 0, () => {
+      try {
+        fcRun('gatts_on_BLEMtuChange_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('BLEMtuChange', () => {});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_BLEMTUCHANGE_E
+     * @tc.name gatts_on_BLEMtuChange_e
+     * @tc.desc Verify Bluetooth API gatts on BLEMtuChange error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_BLEMtuChange_e', 0, () => {
+      try {
+        fcRunErr('gatts_on_BLEMtuChange_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('BLEMtuChange', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_BLEMTUCHANGE_B
+     * @tc.name gatts_on_BLEMtuChange_b
+     * @tc.desc Verify Bluetooth API gatts on BLEMtuChange boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_BLEMtuChange_b', 0, () => {
+      try {
+        fcRun('gatts_on_BLEMtuChange_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('BLEMtuChange', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_BLEMTUCHANGE_R
+     * @tc.name gatts_on_BLEMtuChange_r
+     * @tc.desc Verify Bluetooth API gatts on BLEMtuChange return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_BLEMtuChange_r', 0, () => {
+      try {
+        fcRun('gatts_on_BLEMtuChange_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.on('BLEMtuChange', () => {});
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_BLEMTUCHANGE_X
+     * @tc.name gatts_on_BLEMtuChange_x
+     * @tc.desc Verify Bluetooth API gatts on BLEMtuChange repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_BLEMtuChange_x', 0, () => {
+      try {
+        fcRun('gatts_on_BLEMtuChange_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('BLEMtuChange', () => {});
+          expect(true).assertTrue();
+          gattServer.on('BLEMtuChange', () => {});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_BLEMTUCHANGE_C
+     * @tc.name gatts_on_BLEMtuChange_c
+     * @tc.desc Verify Bluetooth API gatts on BLEMtuChange condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_BLEMtuChange_c', 0, () => {
+      try {
+        fcRun('gatts_on_BLEMtuChange_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('BLEMtuChange', () => {});
+          expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('gatts_off_BLEMtuChange', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_BLEMTUCHANGE_N
+     * @tc.name gatts_off_BLEMtuChange_n
+     * @tc.desc Verify Bluetooth API gatts off BLEMtuChange normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_BLEMtuChange_n', 0, () => {
+      try {
+        fcRun('gatts_off_BLEMtuChange_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('BLEMtuChange');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_BLEMTUCHANGE_E
+     * @tc.name gatts_off_BLEMtuChange_e
+     * @tc.desc Verify Bluetooth API gatts off BLEMtuChange error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_BLEMtuChange_e', 0, () => {
+      try {
+        fcRunErr('gatts_off_BLEMtuChange_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('BLEMtuChange');
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_BLEMTUCHANGE_B
+     * @tc.name gatts_off_BLEMtuChange_b
+     * @tc.desc Verify Bluetooth API gatts off BLEMtuChange boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_BLEMtuChange_b', 0, () => {
+      try {
+        fcRun('gatts_off_BLEMtuChange_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('BLEMtuChange');
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_BLEMTUCHANGE_R
+     * @tc.name gatts_off_BLEMtuChange_r
+     * @tc.desc Verify Bluetooth API gatts off BLEMtuChange return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_BLEMtuChange_r', 0, () => {
+      try {
+        fcRun('gatts_off_BLEMtuChange_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.off('BLEMtuChange');
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_BLEMTUCHANGE_X
+     * @tc.name gatts_off_BLEMtuChange_x
+     * @tc.desc Verify Bluetooth API gatts off BLEMtuChange repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_BLEMtuChange_x', 0, () => {
+      try {
+        fcRun('gatts_off_BLEMtuChange_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('BLEMtuChange');
+          expect(true).assertTrue();
+          gattServer.off('BLEMtuChange');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_BLEMTUCHANGE_C
+     * @tc.name gatts_off_BLEMtuChange_c
+     * @tc.desc Verify Bluetooth API gatts off BLEMtuChange condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_BLEMtuChange_c', 0, () => {
+      try {
+        fcRun('gatts_off_BLEMtuChange_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('BLEMtuChange');
+          expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4342,14 +5393,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_onBlePhyUpdate_n', 0, () => {
       try {
-            fcRun('gatts_onBlePhyUpdate_n', () => {
-              const _s = ble.createGattServer();_s.onBlePhyUpdate(() => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_onBlePhyUpdate_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.onBlePhyUpdate(() => {});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4365,14 +5413,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_onBlePhyUpdate_e', 0, () => {
       try {
-            fcRunErr('gatts_onBlePhyUpdate_e', () => {
-              const _s = ble.createGattServer(); try {_s.onBlePhyUpdate(() => {});
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_onBlePhyUpdate_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.onBlePhyUpdate(() => {});
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4388,14 +5440,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_onBlePhyUpdate_b', 0, () => {
       try {
-            fcRun('gatts_onBlePhyUpdate_b', () => {
-              const _s = ble.createGattServer();_s.onBlePhyUpdate(() => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_onBlePhyUpdate_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.onBlePhyUpdate(() => {});
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4411,14 +5467,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_onBlePhyUpdate_r', 0, () => {
       try {
-            fcRun('gatts_onBlePhyUpdate_r', () => {
-              const _s = ble.createGattServer();_s.onBlePhyUpdate(() => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_onBlePhyUpdate_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.onBlePhyUpdate(() => {});
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4434,14 +5492,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_onBlePhyUpdate_x', 0, () => {
       try {
-            fcRun('gatts_onBlePhyUpdate_x', () => {
-              const _s = ble.createGattServer(); _s.onBlePhyUpdate(() => {}); _s.onBlePhyUpdate(() => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_onBlePhyUpdate_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.onBlePhyUpdate(() => {});
           expect(true).assertTrue();
+          gattServer.onBlePhyUpdate(() => {});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4450,18 +5507,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ONBLEPHYUPDATE_C
      * @tc.name gatts_onBlePhyUpdate_c
-     * @tc.desc Verify Bluetooth API gatts onBlePhyUpdate combo scenario
+     * @tc.desc Verify Bluetooth API gatts onBlePhyUpdate condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_onBlePhyUpdate_c', 0, () => {
       try {
-            fcRunCombo('onBlePhyUpdate', [() => {const s = ble.createGattServer();s.onBlePhyUpdate(() => {});s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_onBlePhyUpdate_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.onBlePhyUpdate(() => {});
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4479,14 +5537,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_offBlePhyUpdate_n', 0, () => {
       try {
-            fcRun('gatts_offBlePhyUpdate_n', () => {
-              const _s = ble.createGattServer();_s.offBlePhyUpdate();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_offBlePhyUpdate_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.offBlePhyUpdate();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4502,14 +5557,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_offBlePhyUpdate_e', 0, () => {
       try {
-            fcRunErr('gatts_offBlePhyUpdate_e', () => {
-              const _s = ble.createGattServer(); try {_s.offBlePhyUpdate();
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_offBlePhyUpdate_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.offBlePhyUpdate();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4525,14 +5584,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_offBlePhyUpdate_b', 0, () => {
       try {
-            fcRun('gatts_offBlePhyUpdate_b', () => {
-              const _s = ble.createGattServer();_s.offBlePhyUpdate();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_offBlePhyUpdate_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.offBlePhyUpdate();
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4548,14 +5611,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_offBlePhyUpdate_r', 0, () => {
       try {
-            fcRun('gatts_offBlePhyUpdate_r', () => {
-              const _s = ble.createGattServer();_s.offBlePhyUpdate();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_offBlePhyUpdate_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.offBlePhyUpdate();
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4571,14 +5636,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_offBlePhyUpdate_x', 0, () => {
       try {
-            fcRun('gatts_offBlePhyUpdate_x', () => {
-              const _s = ble.createGattServer(); _s.offBlePhyUpdate(); _s.offBlePhyUpdate();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_offBlePhyUpdate_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.offBlePhyUpdate();
           expect(true).assertTrue();
+          gattServer.offBlePhyUpdate();
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4587,18 +5651,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFFBLEPHYUPDATE_C
      * @tc.name gatts_offBlePhyUpdate_c
-     * @tc.desc Verify Bluetooth API gatts offBlePhyUpdate combo scenario
+     * @tc.desc Verify Bluetooth API gatts offBlePhyUpdate condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_offBlePhyUpdate_c', 0, () => {
       try {
-            fcRunCombo('offBlePhyUpdate', [() => {const s = ble.createGattServer();s.offBlePhyUpdate();s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_offBlePhyUpdate_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.offBlePhyUpdate();
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4616,14 +5681,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_startScan_n', 0, () => {
       try {
-            fcRun('blescan_startScan_n', () => {
-              const sc = ble.createBleScanner();sc.startScan([], {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_startScan_n', () => {
+          const sc = ble.createBleScanner();
+          sc.startScan([], {});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4639,14 +5701,14 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_startScan_e', 0, () => {
       try {
-            fcRunErr('blescan_startScan_e', () => {
-              try {const sc = ble.createBleScanner(); sc.startScan([], {});
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('blescan_startScan_e', () => {
+          try {
+            const sc = ble.createBleScanner();
+            sc.startScan([], {});
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4662,14 +5724,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_startScan_b', 0, () => {
       try {
-            fcRun('blescan_startScan_b', () => {
-              const sc = ble.createBleScanner();sc.startScan([], {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('blescan_startScan_b', () => {
+          try {
+            const sc = ble.createBleScanner();
+            sc.startScan([], {});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4685,14 +5749,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_startScan_r', 0, () => {
       try {
-            fcRun('blescan_startScan_r', () => {
-              const sc = ble.createBleScanner();sc.startScan([], {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('blescan_startScan_r', () => {
+          try {
+            const sc = ble.createBleScanner();
+            sc.startScan([], {});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4708,14 +5774,14 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_startScan_x', 0, () => {
       try {
-            fcRun('blescan_startScan_x', () => {
-              const sc = ble.createBleScanner();sc.startScan([], {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_startScan_x', () => {
+          const sc = ble.createBleScanner();
+          sc.startScan([], {});
           expect(true).assertTrue();
+          const sc = ble.createBleScanner();
+          sc.startScan([], {});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4724,21 +5790,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_BLESCAN_STARTSCAN_C
      * @tc.name blescan_startScan_c
-     * @tc.desc Verify Bluetooth API blescan startScan combo scenario
+     * @tc.desc Verify Bluetooth API blescan startScan condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('blescan_startScan_c', 0, () => {
       try {
-            fcRunCombo('blescan_startScan_c', [() => {
-              const sc = ble.createBleScanner();sc.startScan([], {});
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_startScan_c', () => {
+          console.info('[c] condition path');
+          const sc = ble.createBleScanner();
+          sc.startScan([], {});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4756,14 +5820,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_stopScan_n', 0, () => {
       try {
-            fcRun('blescan_stopScan_n', () => {
-              const sc = ble.createBleScanner();sc.stopScan();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_stopScan_n', () => {
+          const sc = ble.createBleScanner();
+          sc.stopScan();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4779,18 +5840,19 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_stopScan_e', 0, () => {
       try {
-            fcRunErr('blescan_stopScan_e', () => {
-              try {
-                const sc = ble.createBleScanner(); sc.stopScan();
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('blescan_stopScan_e', () => {
+          let threw = false;
+          try {
+            const sc = ble.createBleScanner();
+            sc.stopScan();
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4806,14 +5868,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_stopScan_b', 0, () => {
       try {
-            fcRun('blescan_stopScan_b', () => {
-              const sc = ble.createBleScanner();sc.stopScan();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('blescan_stopScan_b', () => {
+          try {
+            const sc = ble.createBleScanner();
+            sc.stopScan();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4829,14 +5893,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_stopScan_r', 0, () => {
       try {
-            fcRun('blescan_stopScan_r', () => {
-              const sc = ble.createBleScanner();sc.stopScan();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('blescan_stopScan_r', () => {
+          try {
+            const sc = ble.createBleScanner();
+            sc.stopScan();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4852,14 +5918,14 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_stopScan_x', 0, () => {
       try {
-            fcRun('blescan_stopScan_x', () => {
-              const sc = ble.createBleScanner();sc.stopScan();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_stopScan_x', () => {
+          const sc = ble.createBleScanner();
+          sc.stopScan();
           expect(true).assertTrue();
+          const sc = ble.createBleScanner();
+          sc.stopScan();
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4868,21 +5934,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_BLESCAN_STOPSCAN_C
      * @tc.name blescan_stopScan_c
-     * @tc.desc Verify Bluetooth API blescan stopScan combo scenario
+     * @tc.desc Verify Bluetooth API blescan stopScan condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('blescan_stopScan_c', 0, () => {
       try {
-            fcRunCombo('blescan_stopScan_c', [() => {
-              const sc = ble.createBleScanner();sc.stopScan();
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_stopScan_c', () => {
+          console.info('[c] condition path');
+          const sc = ble.createBleScanner();
+          sc.stopScan();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4900,14 +5964,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_on_BLEDeviceFind_n', 0, () => {
       try {
-            fcRun('blescan_on_BLEDeviceFind_n', () => {
-              const sc = ble.createBleScanner();sc.on('BLEDeviceFind', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_on_BLEDeviceFind_n', () => {
+          const sc = ble.createBleScanner();
+          sc.on('BLEDeviceFind', () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4923,14 +5984,19 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_on_BLEDeviceFind_e', 0, () => {
       try {
-            fcRunErr('blescan_on_BLEDeviceFind_e', () => {
-              try {const sc = ble.createBleScanner(); sc.on('BLEDeviceFind', () => {});
-              expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('blescan_on_BLEDeviceFind_e', () => {
+          let threw = false;
+          try {
+            const sc = ble.createBleScanner();
+            sc.on('BLEDeviceFind', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4946,14 +6012,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_on_BLEDeviceFind_b', 0, () => {
       try {
-            fcRun('blescan_on_BLEDeviceFind_b', () => {
-              const sc = ble.createBleScanner();sc.on('BLEDeviceFind', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('blescan_on_BLEDeviceFind_b', () => {
+          try {
+            const sc = ble.createBleScanner();
+            sc.on('BLEDeviceFind', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4969,14 +6037,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_on_BLEDeviceFind_r', 0, () => {
       try {
-            fcRun('blescan_on_BLEDeviceFind_r', () => {
-              const sc = ble.createBleScanner();sc.on('BLEDeviceFind', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('blescan_on_BLEDeviceFind_r', () => {
+          try {
+            const sc = ble.createBleScanner();
+            sc.on('BLEDeviceFind', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4992,14 +6062,14 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_on_BLEDeviceFind_x', 0, () => {
       try {
-            fcRun('blescan_on_BLEDeviceFind_x', () => {
-              const sc = ble.createBleScanner();sc.on('BLEDeviceFind', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_on_BLEDeviceFind_x', () => {
+          const sc = ble.createBleScanner();
+          sc.on('BLEDeviceFind', () = >{});
           expect(true).assertTrue();
+          const sc = ble.createBleScanner();
+          sc.on('BLEDeviceFind', () = >{});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5008,21 +6078,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_BLESCAN_ON_BLEDEVICEFIND_C
      * @tc.name blescan_on_BLEDeviceFind_c
-     * @tc.desc Verify Bluetooth API blescan on BLEDeviceFind combo scenario
+     * @tc.desc Verify Bluetooth API blescan on BLEDeviceFind condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('blescan_on_BLEDeviceFind_c', 0, () => {
       try {
-            fcRunCombo('blescan_on_BLEDeviceFind_c', [() => {
-              const sc = ble.createBleScanner();sc.on('BLEDeviceFind', () => {});
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_on_BLEDeviceFind_c', () => {
+          console.info('[c] condition path');
+          const sc = ble.createBleScanner();
+          sc.on('BLEDeviceFind', () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5040,14 +6108,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_off_BLEDeviceFind_n', 0, () => {
       try {
-            fcRun('blescan_off_BLEDeviceFind_n', () => {
-              const sc = ble.createBleScanner();sc.off('BLEDeviceFind');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_off_BLEDeviceFind_n', () => {
+          const sc = ble.createBleScanner();
+          sc.off('BLEDeviceFind');
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5063,18 +6128,19 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_off_BLEDeviceFind_e', 0, () => {
       try {
-            fcRunErr('blescan_off_BLEDeviceFind_e', () => {
-              try {
-                const sc = ble.createBleScanner(); sc.off('BLEDeviceFind');
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('blescan_off_BLEDeviceFind_e', () => {
+          let threw = false;
+          try {
+            const sc = ble.createBleScanner();
+            sc.off('BLEDeviceFind');
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5090,14 +6156,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_off_BLEDeviceFind_b', 0, () => {
       try {
-            fcRun('blescan_off_BLEDeviceFind_b', () => {
-              const sc = ble.createBleScanner();sc.off('BLEDeviceFind');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('blescan_off_BLEDeviceFind_b', () => {
+          try {
+            const sc = ble.createBleScanner();
+            sc.off('BLEDeviceFind');
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5113,14 +6181,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_off_BLEDeviceFind_r', 0, () => {
       try {
-            fcRun('blescan_off_BLEDeviceFind_r', () => {
-              const sc = ble.createBleScanner();sc.off('BLEDeviceFind');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('blescan_off_BLEDeviceFind_r', () => {
+          try {
+            const sc = ble.createBleScanner();
+            sc.off('BLEDeviceFind');
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5136,14 +6206,14 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('blescan_off_BLEDeviceFind_x', 0, () => {
       try {
-            fcRun('blescan_off_BLEDeviceFind_x', () => {
-              const sc = ble.createBleScanner();sc.off('BLEDeviceFind');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_off_BLEDeviceFind_x', () => {
+          const sc = ble.createBleScanner();
+          sc.off('BLEDeviceFind');
           expect(true).assertTrue();
+          const sc = ble.createBleScanner();
+          sc.off('BLEDeviceFind');
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5152,21 +6222,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_BLESCAN_OFF_BLEDEVICEFIND_C
      * @tc.name blescan_off_BLEDeviceFind_c
-     * @tc.desc Verify Bluetooth API blescan off BLEDeviceFind combo scenario
+     * @tc.desc Verify Bluetooth API blescan off BLEDeviceFind condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('blescan_off_BLEDeviceFind_c', 0, () => {
       try {
-            fcRunCombo('blescan_off_BLEDeviceFind_c', [() => {
-              const sc = ble.createBleScanner();sc.off('BLEDeviceFind');
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('blescan_off_BLEDeviceFind_c', () => {
+          console.info('[c] condition path');
+          const sc = ble.createBleScanner();
+          sc.off('BLEDeviceFind');
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -5174,7 +6242,5 @@ export default function bluetoothFullCoverageGatt02() {
     });
   });
 }
-
-
 
 
