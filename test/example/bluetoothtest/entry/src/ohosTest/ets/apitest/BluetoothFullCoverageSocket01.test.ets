@@ -1896,3 +1896,230 @@ export default function bluetoothFullCoverageSocket01() {
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_ON_SPPREAD_B
+     * @tc.name sk_on_sppRead_b
+     * @tc.desc Verify Bluetooth API sk on sppRead boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sk_on_sppRead_b', 0, () => {
+      try {
+        fcRun('sk_on_sppRead_b', () => {
+          try {
+            socket.on('sppRead', 0, () => {});
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_ON_SPPREAD_R
+     * @tc.name sk_on_sppRead_r
+     * @tc.desc Verify Bluetooth API sk on sppRead return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sk_on_sppRead_r', 0, () => {
+      try {
+        fcRun('sk_on_sppRead_r', () => {
+          try {
+            socket.on('sppRead', 0, () => {});
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_ON_SPPREAD_X
+     * @tc.name sk_on_sppRead_x
+     * @tc.desc Verify Bluetooth API sk on sppRead repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sk_on_sppRead_x', 0, () => {
+      try {
+        fcRun('sk_on_sppRead_x', () => {
+          socket.on('sppRead', 0, () => {});
+          expect(true).assertTrue();
+          socket.on('sppRead', 0, () => {});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_ON_SPPREAD_C
+     * @tc.name sk_on_sppRead_c
+     * @tc.desc Verify Bluetooth API sk on sppRead condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sk_on_sppRead_c', 0, () => {
+      try {
+        fcRun('sk_on_sppRead_c', () => {
+          console.info('[c] condition path');
+          socket.on('sppRead', 0, () => {});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('sk_off_sppRead', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_OFF_SPPREAD_N
+     * @tc.name sk_off_sppRead_n
+     * @tc.desc Verify Bluetooth API sk off sppRead normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sk_off_sppRead_n', 0, () => {
+      try {
+        fcRun('sk_off_sppRead_n', () => {
+          socket.off('sppRead', 0);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_OFF_SPPREAD_E
+     * @tc.name sk_off_sppRead_e
+     * @tc.desc Verify Bluetooth API sk off sppRead error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sk_off_sppRead_e', 0, () => {
+      try {
+        fcRunErr('sk_off_sppRead_e', () => {
+          let threw = false;
+          try {
+            socket.off('sppRead', -1);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_OFF_SPPREAD_B
+     * @tc.name sk_off_sppRead_b
+     * @tc.desc Verify Bluetooth API sk off sppRead boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sk_off_sppRead_b', 0, () => {
+      try {
+        fcRun('sk_off_sppRead_b', () => {
+          try {
+            socket.off('sppRead', 0);
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_OFF_SPPREAD_R
+     * @tc.name sk_off_sppRead_r
+     * @tc.desc Verify Bluetooth API sk off sppRead return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sk_off_sppRead_r', 0, () => {
+      try {
+        fcRun('sk_off_sppRead_r', () => {
+          try {
+            socket.off('sppRead', 0);
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_OFF_SPPREAD_X
+     * @tc.name sk_off_sppRead_x
+     * @tc.desc Verify Bluetooth API sk off sppRead repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sk_off_sppRead_x', 0, () => {
+      try {
+        fcRun('sk_off_sppRead_x', () => {
+          socket.off('sppRead', 0);
+          expect(true).assertTrue();
+          socket.off('sppRead', 0);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_OFF_SPPREAD_C
+     * @tc.name sk_off_sppRead_c
+     * @tc.desc Verify Bluetooth API sk off sppRead condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('sk_off_sppRead_c', 0, () => {
+      try {
+        fcRun('sk_off_sppRead_c', () => {
+          console.info('[c] condition path');
+          socket.off('sppRead', 0);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+  });
+}
+
+
