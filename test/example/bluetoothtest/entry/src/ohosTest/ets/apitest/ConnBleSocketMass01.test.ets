@@ -1332,19 +1332,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_09_cancel_pair_cb_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_b: invoke');
       try {
-            tI('cn_09_cancel_pair_cb_b', () => {
-              connection.cancelPairingDevice(BADDR, () => {});
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.cancelPairingDevice(BADDR, () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_09_CANCEL_PAIR_CB_E2
@@ -1355,22 +1354,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_09_cancel_pair_cb_e2', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_e2: invoke expect error');
       try {
-            tI('cn_09_cancel_pair_cb_e2', () => {
-              try {
-                connection.cancelPairingDevice('', () => {});
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.cancelPairingDevice('', () => {});
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_e2: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_09_CANCEL_PAIR_CB_R
@@ -1381,19 +1378,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_09_cancel_pair_cb_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_r: invoke');
       try {
-            tI('cn_09_cancel_pair_cb_r', () => {
-              connection.cancelPairingDevice(BADDR, () => {});
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.cancelPairingDevice(BADDR, () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_09_CANCEL_PAIR_CB_X
@@ -1404,19 +1400,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_09_cancel_pair_cb_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_x: invoke');
       try {
-            tI('cn_09_cancel_pair_cb_x', () => {
-              connection.cancelPairingDevice(BADDR, () => {});
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.cancelPairingDevice(BADDR, () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('cn_10_cancel_pair_p', () => {
 
@@ -1429,19 +1424,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_10_cancel_pair_p_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_n: invoke');
       try {
-            tI('cn_10_cancel_pair_p_n', () => {
-              connection.cancelPairingDevice(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.cancelPairingDevice(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_10_CANCEL_PAIR_P_E
@@ -1452,22 +1446,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_10_cancel_pair_p_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_e: invoke expect error');
       try {
-            tI('cn_10_cancel_pair_p_e', () => {
-              try {
-                connection.cancelPairingDevice('');
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.cancelPairingDevice('');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_10_CANCEL_PAIR_P_B
@@ -1478,19 +1470,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_10_cancel_pair_p_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_b: invoke');
       try {
-            tI('cn_10_cancel_pair_p_b', () => {
-              connection.cancelPairingDevice(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.cancelPairingDevice(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_10_CANCEL_PAIR_P_E2
@@ -1501,22 +1492,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_10_cancel_pair_p_e2', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_e2: invoke expect error');
       try {
-            tI('cn_10_cancel_pair_p_e2', () => {
-              try {
-                connection.cancelPairingDevice('');
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.cancelPairingDevice('');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_e2: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_10_CANCEL_PAIR_P_R
@@ -1527,19 +1516,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_10_cancel_pair_p_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_r: invoke');
       try {
-            tI('cn_10_cancel_pair_p_r', () => {
-              connection.cancelPairingDevice(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.cancelPairingDevice(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_10_CANCEL_PAIR_P_X
@@ -1550,19 +1538,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_10_cancel_pair_p_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_x: invoke');
       try {
-            tI('cn_10_cancel_pair_p_x', () => {
-              connection.cancelPairingDevice(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.cancelPairingDevice(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('cn_11_remote_name_1', () => {
 
@@ -1575,19 +1562,22 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_11_remote_name_1_n', 0, () => {
+      let errCode = 0;
+      let value = '';
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_n: invoke');
       try {
-            tI('cn_11_remote_name_1_n', () => {
-              const n = connection.getRemoteDeviceName(BADDR);
-              expect(typeof n==='string').assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getRemoteDeviceName(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_11_remote_name_1_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('string');
+      expect(value.length >= 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_11_REMOTE_NAME_1_E
@@ -1598,22 +1588,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_11_remote_name_1_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_e: invoke expect error');
       try {
-            tI('cn_11_remote_name_1_e', () => {
-              try {
-                connection.getRemoteDeviceName('');
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceName('');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_11_REMOTE_NAME_1_B
@@ -1624,19 +1612,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_11_remote_name_1_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_b: invoke');
       try {
-            tI('cn_11_remote_name_1_b', () => {
-              connection.getRemoteDeviceName(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceName(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_11_REMOTE_NAME_1_E2
@@ -1647,22 +1634,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_11_remote_name_1_e2', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_e2: invoke expect error');
       try {
-            tI('cn_11_remote_name_1_e2', () => {
-              try {
-                connection.getRemoteDeviceName('');
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceName('');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_e2: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_11_REMOTE_NAME_1_R
@@ -1673,19 +1658,22 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_11_remote_name_1_r', 0, () => {
+      let errCode = 0;
+      let value = '';
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_r: invoke');
       try {
-            tI('cn_11_remote_name_1_r', () => {
-              connection.getRemoteDeviceName(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getRemoteDeviceName(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_11_remote_name_1_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('string');
+      expect(value.length >= 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_11_REMOTE_NAME_1_X
@@ -1696,19 +1684,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_11_remote_name_1_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_x: invoke');
       try {
-            tI('cn_11_remote_name_1_x', () => {
-              connection.getRemoteDeviceName(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceName(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('cn_12_remote_name_2', () => {
 
@@ -1721,19 +1708,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_12_remote_name_2_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_n: invoke');
       try {
-            tI('cn_12_remote_name_2_n', () => {
-              connection.getRemoteDeviceName(BADDR, false);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceName(BADDR, false);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_12_REMOTE_NAME_2_E
@@ -1744,22 +1730,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_12_remote_name_2_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_e: invoke expect error');
       try {
-            tI('cn_12_remote_name_2_e', () => {
-              try {
-                connection.getRemoteDeviceName('', true);
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceName('', true);
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_12_REMOTE_NAME_2_B
@@ -1770,19 +1754,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_12_remote_name_2_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_b: invoke');
       try {
-            tI('cn_12_remote_name_2_b', () => {
-              connection.getRemoteDeviceName(BADDR, true);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceName(BADDR, true);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_12_REMOTE_NAME_2_E2
@@ -1793,22 +1776,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_12_remote_name_2_e2', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_e2: invoke expect error');
       try {
-            tI('cn_12_remote_name_2_e2', () => {
-              try {
-                connection.getRemoteDeviceName('', false);
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceName('', false);
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_e2: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_12_REMOTE_NAME_2_R
@@ -1819,19 +1800,22 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_12_remote_name_2_r', 0, () => {
+      let errCode = 0;
+      let value = '';
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_r: invoke');
       try {
-            tI('cn_12_remote_name_2_r', () => {
-              connection.getRemoteDeviceName(BADDR, false);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getRemoteDeviceName(BADDR, false);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_12_remote_name_2_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('string');
+      expect(value.length >= 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_12_REMOTE_NAME_2_X
@@ -1842,19 +1826,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_12_remote_name_2_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_x: invoke');
       try {
-            tI('cn_12_remote_name_2_x', () => {
-              connection.getRemoteDeviceName(BADDR, true);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceName(BADDR, true);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('cn_13_remote_class', () => {
 
@@ -1867,19 +1850,21 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_13_remote_class_n', 0, () => {
+      let errCode = 0;
+      let value: Object | null = null;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_n: invoke');
       try {
-            tI('cn_13_remote_class_n', () => {
-              const c = connection.getRemoteDeviceClass(BADDR);
-              expect(c!==undefined).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getRemoteDeviceClass(BADDR) as Object;
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_13_remote_class_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(value !== null && value !== undefined).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_13_REMOTE_CLASS_E
@@ -1890,22 +1875,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_13_remote_class_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_e: invoke expect error');
       try {
-            tI('cn_13_remote_class_e', () => {
-              try {
-                connection.getRemoteDeviceClass('');
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceClass('');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_13_REMOTE_CLASS_B
@@ -1916,19 +1899,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_13_remote_class_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_b: invoke');
       try {
-            tI('cn_13_remote_class_b', () => {
-              connection.getRemoteDeviceClass(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceClass(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_13_REMOTE_CLASS_E2
@@ -1939,22 +1921,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_13_remote_class_e2', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_e2: invoke expect error');
       try {
-            tI('cn_13_remote_class_e2', () => {
-              try {
-                connection.getRemoteDeviceClass('');
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceClass('');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_e2: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_13_REMOTE_CLASS_R
@@ -1965,19 +1945,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_13_remote_class_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_r: invoke');
       try {
-            tI('cn_13_remote_class_r', () => {
-              connection.getRemoteDeviceClass(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceClass(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_13_REMOTE_CLASS_X
@@ -1988,19 +1967,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_13_remote_class_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_x: invoke');
       try {
-            tI('cn_13_remote_class_x', () => {
-              connection.getRemoteDeviceClass(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceClass(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('cn_14_remote_transport', () => {
 
@@ -2013,19 +1991,21 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_14_remote_transport_n', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_n: invoke');
       try {
-            tI('cn_14_remote_transport_n', () => {
-              const t = connection.getRemoteDeviceTransport(BADDR);
-              expect(t!==undefined).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getRemoteDeviceTransport(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_14_remote_transport_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_14_REMOTE_TRANSPORT_E
@@ -2036,22 +2016,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_14_remote_transport_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_e: invoke expect error');
       try {
-            tI('cn_14_remote_transport_e', () => {
-              try {
-                connection.getRemoteDeviceTransport('');
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceTransport('');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_14_REMOTE_TRANSPORT_B
@@ -2062,19 +2040,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_14_remote_transport_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_b: invoke');
       try {
-            tI('cn_14_remote_transport_b', () => {
-              connection.getRemoteDeviceTransport(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceTransport(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_14_REMOTE_TRANSPORT_E2
@@ -2085,22 +2062,21 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_14_remote_transport_e2', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_e2: invoke expect error');
       try {
-            tI('cn_14_remote_transport_e2', () => {
-              try {
-                connection.getRemoteDeviceTransport('');
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceTransport('');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_14_remote_transport_e2: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_14_REMOTE_TRANSPORT_R
@@ -2111,19 +2087,21 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_14_remote_transport_r', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_r: invoke');
       try {
-            tI('cn_14_remote_transport_r', () => {
-              connection.getRemoteDeviceTransport(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getRemoteDeviceTransport(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_14_remote_transport_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_14_REMOTE_TRANSPORT_X
@@ -2134,19 +2112,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_14_remote_transport_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_x: invoke');
       try {
-            tI('cn_14_remote_transport_x', () => {
-              connection.getRemoteDeviceTransport(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getRemoteDeviceTransport(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('cn_15_get_local_name', () => {
 
@@ -2159,19 +2136,22 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_15_get_local_name_n', 0, () => {
+      let errCode = 0;
+      let value = '';
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_n: invoke');
       try {
-            tI('cn_15_get_local_name_n', () => {
-              const ln = connection.getLocalName();
-              expect(typeof ln==='string').assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getLocalName();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_15_get_local_name_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('string');
+      expect(value.length >= 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_15_GET_LOCAL_NAME_E
@@ -2182,22 +2162,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_15_get_local_name_e', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_e: invoke');
       try {
-            tI('cn_15_get_local_name_e', () => {
-              try {
-                connection.getLocalName();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getLocalName();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_e: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_15_GET_LOCAL_NAME_B
@@ -2208,19 +2184,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_15_get_local_name_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_b: invoke');
       try {
-            tI('cn_15_get_local_name_b', () => {
-              connection.getLocalName();
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getLocalName();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_15_GET_LOCAL_NAME_E2
@@ -2231,23 +2206,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_15_get_local_name_e2', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_e2: invoke');
       try {
-            tI('cn_15_get_local_name_e2', () => {
-              try {
-                const x = connection.getLocalName();
-                expect(x.length>=0).assertTrue();
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getLocalName();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_e2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_15_GET_LOCAL_NAME_R
@@ -2258,19 +2228,22 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_15_get_local_name_r', 0, () => {
+      let errCode = 0;
+      let value = '';
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_r: invoke');
       try {
-            tI('cn_15_get_local_name_r', () => {
-              connection.getLocalName();
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getLocalName();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_15_get_local_name_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('string');
+      expect(value.length >= 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_15_GET_LOCAL_NAME_X
@@ -2281,19 +2254,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_15_get_local_name_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_x: invoke');
       try {
-            tI('cn_15_get_local_name_x', () => {
-              connection.getLocalName();
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getLocalName();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('cn_16_get_paired', () => {
 
@@ -2306,19 +2278,21 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_16_get_paired_n', 0, () => {
+      let errCode = 0;
+      let value: Array < Object >  = [];
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_n: invoke');
       try {
-            tI('cn_16_get_paired_n', () => {
-              const a = connection.getPairedDevices();
-              expect(Array.isArray(a)).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getPairedDevices() as Array < Object > ;
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_16_get_paired_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(Array.isArray(value)).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_16_GET_PAIRED_E
@@ -2329,22 +2303,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_16_get_paired_e', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_e: invoke');
       try {
-            tI('cn_16_get_paired_e', () => {
-              try {
-                connection.getPairedDevices();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getPairedDevices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_e: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_16_GET_PAIRED_B
@@ -2355,19 +2325,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_16_get_paired_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_b: invoke');
       try {
-            tI('cn_16_get_paired_b', () => {
-              connection.getPairedDevices();
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getPairedDevices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_16_GET_PAIRED_E2
@@ -2378,23 +2347,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_16_get_paired_e2', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_e2: invoke');
       try {
-            tI('cn_16_get_paired_e2', () => {
-              try {
-                const p = connection.getPairedDevices();
-                expect(p!==null).assertTrue();
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getPairedDevices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_e2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_16_GET_PAIRED_R
@@ -2405,19 +2369,21 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_16_get_paired_r', 0, () => {
+      let errCode = 0;
+      let value: Array < Object >  = [];
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_r: invoke');
       try {
-            tI('cn_16_get_paired_r', () => {
-              connection.getPairedDevices();
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getPairedDevices() as Array < Object > ;
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_16_get_paired_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(Array.isArray(value)).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_16_GET_PAIRED_X
@@ -2428,19 +2394,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_16_get_paired_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_x: invoke');
       try {
-            tI('cn_16_get_paired_x', () => {
-              connection.getPairedDevices();
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getPairedDevices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('cn_17_get_pair_state', () => {
 
@@ -2453,19 +2418,21 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_17_get_pair_state_n', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_n: invoke');
       try {
-            tI('cn_17_get_pair_state_n', () => {
-              const s = connection.getPairState(BADDR);
-              expect(s!==undefined).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getPairState(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_17_get_pair_state_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_17_GET_PAIR_STATE_E
@@ -2476,22 +2443,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_17_get_pair_state_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_e: invoke expect error');
       try {
-            tI('cn_17_get_pair_state_e', () => {
-              try {
-                connection.getPairState('');
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getPairState('');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_17_GET_PAIR_STATE_B
@@ -2502,19 +2467,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_17_get_pair_state_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_b: invoke');
       try {
-            tI('cn_17_get_pair_state_b', () => {
-              connection.getPairState(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getPairState(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_17_GET_PAIR_STATE_E2
@@ -2525,22 +2489,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_17_get_pair_state_e2', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_e2: invoke expect error');
       try {
-            tI('cn_17_get_pair_state_e2', () => {
-              try {
-                connection.getPairState('');
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getPairState('');
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_e2: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_17_GET_PAIR_STATE_R
@@ -2551,19 +2513,21 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_17_get_pair_state_r', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_r: invoke');
       try {
-            tI('cn_17_get_pair_state_r', () => {
-              connection.getPairState(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getPairState(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 
+        'cn_17_get_pair_state_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_17_GET_PAIR_STATE_X
@@ -2574,19 +2538,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_17_get_pair_state_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_x: invoke');
       try {
-            tI('cn_17_get_pair_state_x', () => {
-              connection.getPairState(BADDR);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.getPairState(BADDR);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('cn_18_pair_confirm', () => {
 
@@ -2599,19 +2562,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_18_pair_confirm_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_n: invoke');
       try {
-            tI('cn_18_pair_confirm_n', () => {
-              connection.setDevicePairingConfirmation(BADDR, true);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.setDevicePairingConfirmation(BADDR, true);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_18_PAIR_CONFIRM_E
@@ -2622,22 +2584,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_18_pair_confirm_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_e: invoke expect error');
       try {
-            tI('cn_18_pair_confirm_e', () => {
-              try {
-                connection.setDevicePairingConfirmation('', false);
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.setDevicePairingConfirmation('', false);
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_18_PAIR_CONFIRM_B
@@ -2648,19 +2608,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_18_pair_confirm_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_b: invoke');
       try {
-            tI('cn_18_pair_confirm_b', () => {
-              connection.setDevicePairingConfirmation(BADDR, false);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.setDevicePairingConfirmation(BADDR, false);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_18_PAIR_CONFIRM_E2
@@ -2671,22 +2630,20 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_18_pair_confirm_e2', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_e2: invoke expect error');
       try {
-            tI('cn_18_pair_confirm_e2', () => {
-              try {
-                connection.setDevicePairingConfirmation('', true);
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.setDevicePairingConfirmation('', true);
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_e2: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_18_PAIR_CONFIRM_R
@@ -2697,19 +2654,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_18_pair_confirm_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_r: invoke');
       try {
-            tI('cn_18_pair_confirm_r', () => {
-              connection.setDevicePairingConfirmation(BADDR, true);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.setDevicePairingConfirmation(BADDR, true);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_18_PAIR_CONFIRM_X
@@ -2720,19 +2676,18 @@ export default function connBleSocketMass01() {
      * @tc.level Level 2
      */
     it('cn_18_pair_confirm_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_x: invoke');
       try {
-            tI('cn_18_pair_confirm_x', () => {
-              connection.setDevicePairingConfirmation(BADDR, false);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        connection.setDevicePairingConfirmation(BADDR, false);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('cn_19_set_pin_cb', () => {
 
