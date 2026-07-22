@@ -87,6 +87,10 @@ Packet *PacketMalloc(uint16_t headSize, uint16_t tailSize, uint32_t payloadSize)
 
 Packet *PacketRefMalloc(const Packet *pkt)
 {
+    if (pkt == NULL) {
+        return NULL;
+    }
+
     Packet *refPacket = (Packet *)calloc(1, sizeof(Packet));
     if (refPacket == NULL) {
         return NULL;
@@ -122,6 +126,10 @@ Packet *PacketInheritMalloc(const Packet *pkt, uint16_t headSize, uint16_t tailS
     Packet *inheritPacket = PacketRefMalloc(pkt);
     if (inheritPacket != NULL) {
         Payload *tempTail = inheritPacket->tail;
+        if (tempTail == NULL) {
+            PacketFree(inheritPacket);
+            return NULL;
+        }
 
         inheritPacket->payload = inheritPacket->head;
         inheritPacket->head = PayloadNew(headSize);
