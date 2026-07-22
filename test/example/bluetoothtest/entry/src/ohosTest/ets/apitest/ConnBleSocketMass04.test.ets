@@ -1284,19 +1284,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_09_close_cli_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_n: invoke');
       try {
-            tI('sk_09_close_cli_n', () => {
-              socket.sppCloseClientSocket(0);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppCloseClientSocket(0);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_09_close_cli_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_09_CLOSE_CLI_E
@@ -1307,22 +1306,20 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_09_close_cli_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_e: invoke expect error');
       try {
-            tI('sk_09_close_cli_e', () => {
-              try {
-                socket.sppCloseClientSocket(-1);
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppCloseClientSocket(-1);
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_09_close_cli_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_09_CLOSE_CLI_B
@@ -1333,19 +1330,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_09_close_cli_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_b: invoke');
       try {
-            tI('sk_09_close_cli_b', () => {
-              socket.sppCloseClientSocket(1);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppCloseClientSocket(1);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_09_close_cli_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_09_CLOSE_CLI_E2
@@ -1356,22 +1352,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_09_close_cli_e2', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_e2: invoke');
       try {
-            tI('sk_09_close_cli_e2', () => {
-              try {
-                socket.sppCloseClientSocket(0);
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppCloseClientSocket(0);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_09_close_cli_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_e2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_09_CLOSE_CLI_R
@@ -1382,19 +1374,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_09_close_cli_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_r: invoke');
       try {
-            tI('sk_09_close_cli_r', () => {
-              socket.sppCloseClientSocket(0);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppCloseClientSocket(0);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_09_close_cli_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_09_CLOSE_CLI_X
@@ -1405,19 +1396,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_09_close_cli_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_x: invoke');
       try {
-            tI('sk_09_close_cli_x', () => {
-              socket.sppCloseClientSocket(0);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppCloseClientSocket(0);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_09_close_cli_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_09_close_cli_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('sk_10_spp_write', () => {
 
@@ -1430,19 +1420,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_10_spp_write_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_n: invoke');
       try {
-            tI('sk_10_spp_write_n', () => {
-              socket.sppWrite(0, buf0());
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWrite(0, buf0());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_10_spp_write_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_10_SPP_WRITE_E
@@ -1453,22 +1442,20 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_10_spp_write_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_e: invoke expect error');
       try {
-            tI('sk_10_spp_write_e', () => {
-              try {
-                socket.sppWrite(-1, buf0());
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWrite(-1, buf0());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_10_spp_write_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_10_SPP_WRITE_B
@@ -1479,19 +1466,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_10_spp_write_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_b: invoke');
       try {
-            tI('sk_10_spp_write_b', () => {
-              socket.sppWrite(0, buf0());
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWrite(0, buf0());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_10_spp_write_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_10_SPP_WRITE_E2
@@ -1502,22 +1488,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_10_spp_write_e2', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_e2: invoke');
       try {
-            tI('sk_10_spp_write_e2', () => {
-              try {
-                socket.sppWrite(0, buf0());
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWrite(0, buf0());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_10_spp_write_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_e2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_10_SPP_WRITE_R
@@ -1528,19 +1510,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_10_spp_write_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_r: invoke');
       try {
-            tI('sk_10_spp_write_r', () => {
-              socket.sppWrite(0, buf0());
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWrite(0, buf0());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_10_spp_write_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_10_SPP_WRITE_X
@@ -1551,19 +1532,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_10_spp_write_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_x: invoke');
       try {
-            tI('sk_10_spp_write_x', () => {
-              socket.sppWrite(0, buf0());
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWrite(0, buf0());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_10_spp_write_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_10_spp_write_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('sk_11_on_spp_read', () => {
 
@@ -1576,19 +1556,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_11_on_spp_read_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_n: invoke');
       try {
-            tI('sk_11_on_spp_read_n', () => {
-              socket.on('sppRead', 0, () => {});
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.on('sppRead', 0, () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_11_ON_SPP_READ_E
@@ -1599,22 +1578,20 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_11_on_spp_read_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_e: invoke expect error');
       try {
-            tI('sk_11_on_spp_read_e', () => {
-              try {
-                socket.on('sppRead', -1, () => {});
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.on('sppRead', -1, () => {});
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_11_ON_SPP_READ_B
@@ -1625,19 +1602,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_11_on_spp_read_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_b: invoke');
       try {
-            tI('sk_11_on_spp_read_b', () => {
-              socket.on('sppRead', 0, () => {});
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.on('sppRead', 0, () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_11_ON_SPP_READ_E2
@@ -1648,22 +1624,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_11_on_spp_read_e2', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_e2: invoke');
       try {
-            tI('sk_11_on_spp_read_e2', () => {
-              try {
-                socket.on('sppRead', 1, () => {});
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.on('sppRead', 1, () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_e2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_11_ON_SPP_READ_R
@@ -1674,19 +1646,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_11_on_spp_read_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_r: invoke');
       try {
-            tI('sk_11_on_spp_read_r', () => {
-              socket.on('sppRead', 0, () => {});
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.on('sppRead', 0, () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_11_ON_SPP_READ_X
@@ -1697,19 +1668,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_11_on_spp_read_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_x: invoke');
       try {
-            tI('sk_11_on_spp_read_x', () => {
-              socket.on('sppRead', 0, () => {});
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.on('sppRead', 0, () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_11_on_spp_read_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('sk_12_off_spp_read', () => {
 
@@ -1722,19 +1692,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_12_off_spp_read_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_n: invoke');
       try {
-            tI('sk_12_off_spp_read_n', () => {
-              socket.off('sppRead', 0);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.off('sppRead', 0);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_12_OFF_SPP_READ_E
@@ -1745,22 +1714,20 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_12_off_spp_read_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_e: invoke expect error');
       try {
-            tI('sk_12_off_spp_read_e', () => {
-              try {
-                socket.off('sppRead', -1);
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.off('sppRead', -1);
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_12_OFF_SPP_READ_B
@@ -1771,19 +1738,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_12_off_spp_read_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_b: invoke');
       try {
-            tI('sk_12_off_spp_read_b', () => {
-              socket.off('sppRead', 0, () => {});
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.off('sppRead', 0, () => {});
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_12_OFF_SPP_READ_E2
@@ -1794,22 +1760,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_12_off_spp_read_e2', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_e2: invoke');
       try {
-            tI('sk_12_off_spp_read_e2', () => {
-              try {
-                socket.off('sppRead', 1);
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.off('sppRead', 1);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_e2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_12_OFF_SPP_READ_R
@@ -1820,19 +1782,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_12_off_spp_read_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_r: invoke');
       try {
-            tI('sk_12_off_spp_read_r', () => {
-              socket.off('sppRead', 0);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.off('sppRead', 0);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_12_OFF_SPP_READ_X
@@ -1843,19 +1804,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_12_off_spp_read_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_x: invoke');
       try {
-            tI('sk_12_off_spp_read_x', () => {
-              socket.off('sppRead', 0);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.off('sppRead', 0);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_12_off_spp_read_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('sk_13_write_async', () => {
 
@@ -1868,19 +1828,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_13_write_async_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_n: invoke');
       try {
-            tI('sk_13_write_async_n', () => {
-              socket.sppWriteAsync(0, buf0());
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWriteAsync(0, buf0());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_13_write_async_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_13_WRITE_ASYNC_E
@@ -1891,22 +1850,20 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_13_write_async_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_e: invoke expect error');
       try {
-            tI('sk_13_write_async_e', () => {
-              try {
-                socket.sppWriteAsync(-1, buf0());
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWriteAsync(-1, buf0());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_13_write_async_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_13_WRITE_ASYNC_B
@@ -1917,19 +1874,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_13_write_async_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_b: invoke');
       try {
-            tI('sk_13_write_async_b', () => {
-              socket.sppWriteAsync(0, buf0());
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWriteAsync(0, buf0());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_13_write_async_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_13_WRITE_ASYNC_E2
@@ -1940,22 +1896,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_13_write_async_e2', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_e2: invoke');
       try {
-            tI('sk_13_write_async_e2', () => {
-              try {
-                socket.sppWriteAsync(0, buf0());
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWriteAsync(0, buf0());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_13_write_async_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_e2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_13_WRITE_ASYNC_R
@@ -1966,19 +1918,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_13_write_async_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_r: invoke');
       try {
-            tI('sk_13_write_async_r', () => {
-              socket.sppWriteAsync(0, buf0());
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWriteAsync(0, buf0());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_13_write_async_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_13_WRITE_ASYNC_X
@@ -1989,19 +1940,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_13_write_async_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_x: invoke');
       try {
-            tI('sk_13_write_async_x', () => {
-              socket.sppWriteAsync(0, buf0());
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppWriteAsync(0, buf0());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_13_write_async_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_13_write_async_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
     describe('sk_14_read_async', () => {
 
@@ -2014,19 +1964,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_14_read_async_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_n: invoke');
       try {
-            tI('sk_14_read_async_n', () => {
-              socket.sppReadAsync(0);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppReadAsync(0);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_14_read_async_n: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_14_READ_ASYNC_E
@@ -2037,22 +1986,20 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_14_read_async_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_e: invoke expect error');
       try {
-            tI('sk_14_read_async_e', () => {
-              try {
-                socket.sppReadAsync(-1);
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppReadAsync(-1);
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_14_read_async_e: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_14_READ_ASYNC_B
@@ -2063,19 +2010,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_14_read_async_b', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_b: invoke');
       try {
-            tI('sk_14_read_async_b', () => {
-              socket.sppReadAsync(1);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppReadAsync(1);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_14_read_async_b: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_b: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_14_READ_ASYNC_E2
@@ -2086,22 +2032,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_14_read_async_e2', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_e2: invoke');
       try {
-            tI('sk_14_read_async_e2', () => {
-              try {
-                socket.sppReadAsync(0);
-              } catch (_e2) {
-                expect(true).assertTrue();
-              }
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppReadAsync(0);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_14_read_async_e2: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_e2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_14_READ_ASYNC_R
@@ -2112,19 +2054,18 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_14_read_async_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_r: invoke');
       try {
-            tI('sk_14_read_async_r', () => {
-              socket.sppReadAsync(0);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppReadAsync(0);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_14_read_async_r: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_SK_14_READ_ASYNC_X
@@ -2135,23 +2076,21 @@ export default function connBleSocketMass04() {
      * @tc.level Level 2
      */
     it('sk_14_read_async_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_x: invoke');
       try {
-            tI('sk_14_read_async_x', () => {
-              socket.sppReadAsync(0);
-              expect(true).assertTrue();
-              });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        socket.sppReadAsync(0);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ConnBleSocket', 'sk_14_read_async_x: ' + JSON.stringify(err));
       }
-      });
+      hilog.info(0x0000, 'ConnBleSocket', 'sk_14_read_async_x: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+    });
     });
   });
 }
-
 
 
 
