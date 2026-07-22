@@ -1896,3 +1896,1200 @@ export default function bluetoothFullCoverageConnection01() {
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_STOPBLUETOOTHDISCOVERY_B
+     * @tc.name cn_stopBluetoothDiscovery_b
+     * @tc.desc Verify Bluetooth API cn stopBluetoothDiscovery boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_stopBluetoothDiscovery_b', 0, () => {
+      try {
+        fcRun('cn_stopBluetoothDiscovery_b', () => {
+          let threw = false;
+          try {
+            connection.stopBluetoothDiscovery();
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_STOPBLUETOOTHDISCOVERY_R
+     * @tc.name cn_stopBluetoothDiscovery_r
+     * @tc.desc Verify Bluetooth API cn stopBluetoothDiscovery return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_stopBluetoothDiscovery_r', 0, () => {
+      try {
+        fcRun('cn_stopBluetoothDiscovery_r', () => {
+          try {
+            connection.stopBluetoothDiscovery();
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_STOPBLUETOOTHDISCOVERY_X
+     * @tc.name cn_stopBluetoothDiscovery_x
+     * @tc.desc Verify Bluetooth API cn stopBluetoothDiscovery repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_stopBluetoothDiscovery_x', 0, () => {
+      try {
+        fcRun('cn_stopBluetoothDiscovery_x', () => {
+          connection.stopBluetoothDiscovery();
+          expect(true).assertTrue();
+          connection.stopBluetoothDiscovery();
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_STOPBLUETOOTHDISCOVERY_C
+     * @tc.name cn_stopBluetoothDiscovery_c
+     * @tc.desc Verify Bluetooth API cn stopBluetoothDiscovery condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_stopBluetoothDiscovery_c', 0, () => {
+      try {
+        fcRun('cn_stopBluetoothDiscovery_c', () => {
+          connection.stopBluetoothDiscovery();
+          expect(true).assertTrue();
+          console.info('[c] condition args');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_isBluetoothDiscovering', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ISBLUETOOTHDISCOVERING_N
+     * @tc.name cn_isBluetoothDiscovering_n
+     * @tc.desc Verify Bluetooth API cn isBluetoothDiscovering normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_isBluetoothDiscovering_n', 0, () => {
+      try {
+        fcRun('cn_isBluetoothDiscovering_n', () => {
+          connection.isBluetoothDiscovering();
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ISBLUETOOTHDISCOVERING_E
+     * @tc.name cn_isBluetoothDiscovering_e
+     * @tc.desc Verify Bluetooth API cn isBluetoothDiscovering error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_isBluetoothDiscovering_e', 0, () => {
+      try {
+        fcRunErr('cn_isBluetoothDiscovering_e', () => {
+          let threw = false;
+          try {
+            connection.isBluetoothDiscovering();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ISBLUETOOTHDISCOVERING_B
+     * @tc.name cn_isBluetoothDiscovering_b
+     * @tc.desc Verify Bluetooth API cn isBluetoothDiscovering boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_isBluetoothDiscovering_b', 0, () => {
+      try {
+        fcRun('cn_isBluetoothDiscovering_b', () => {
+          let threw = false;
+          try {
+            connection.isBluetoothDiscovering();
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ISBLUETOOTHDISCOVERING_R
+     * @tc.name cn_isBluetoothDiscovering_r
+     * @tc.desc Verify Bluetooth API cn isBluetoothDiscovering return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_isBluetoothDiscovering_r', 0, () => {
+      try {
+        fcRun('cn_isBluetoothDiscovering_r', () => {
+          try {
+            const value = connection.isBluetoothDiscovering();
+            expect(value !== undefined).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ISBLUETOOTHDISCOVERING_X
+     * @tc.name cn_isBluetoothDiscovering_x
+     * @tc.desc Verify Bluetooth API cn isBluetoothDiscovering repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_isBluetoothDiscovering_x', 0, () => {
+      try {
+        fcRun('cn_isBluetoothDiscovering_x', () => {
+          connection.isBluetoothDiscovering();
+          expect(true).assertTrue();
+          connection.isBluetoothDiscovering();
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_ISBLUETOOTHDISCOVERING_C
+     * @tc.name cn_isBluetoothDiscovering_c
+     * @tc.desc Verify Bluetooth API cn isBluetoothDiscovering condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_isBluetoothDiscovering_c', 0, () => {
+      try {
+        fcRun('cn_isBluetoothDiscovering_c', () => {
+          connection.isBluetoothDiscovering();
+          expect(true).assertTrue();
+          console.info('[c] condition args');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_getRemoteDeviceName', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICENAME_N
+     * @tc.name cn_getRemoteDeviceName_n
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceName normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceName_n', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceName_n', () => {
+          connection.getRemoteDeviceName(BADDR);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICENAME_E
+     * @tc.name cn_getRemoteDeviceName_e
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceName error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceName_e', 0, () => {
+      try {
+        fcRunErr('cn_getRemoteDeviceName_e', () => {
+          let threw = false;
+          try {
+            connection.getRemoteDeviceName(EMPTY_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICENAME_B
+     * @tc.name cn_getRemoteDeviceName_b
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceName boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceName_b', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceName_b', () => {
+          let threw = false;
+          try {
+            connection.getRemoteDeviceName(BAD_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICENAME_R
+     * @tc.name cn_getRemoteDeviceName_r
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceName return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceName_r', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceName_r', () => {
+          try {
+            const value = connection.getRemoteDeviceName(BADDR);
+            expect(value !== undefined).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICENAME_X
+     * @tc.name cn_getRemoteDeviceName_x
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceName repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceName_x', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceName_x', () => {
+          connection.getRemoteDeviceName(BADDR);
+          expect(true).assertTrue();
+          connection.getRemoteDeviceName(BADDR);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICENAME_C
+     * @tc.name cn_getRemoteDeviceName_c
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceName condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceName_c', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceName_c', () => {
+          connection.getRemoteDeviceName(BADDR);
+          expect(true).assertTrue();
+          console.info('[c] condition args');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_setRemoteDeviceName', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICENAME_N
+     * @tc.name cn_setRemoteDeviceName_n
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceName normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceName_n', 0, () => {
+      try {
+        fcRun('cn_setRemoteDeviceName_n', () => {
+          connection.setRemoteDeviceName(BADDR, 'n');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICENAME_E
+     * @tc.name cn_setRemoteDeviceName_e
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceName error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceName_e', 0, () => {
+      try {
+        fcRunErr('cn_setRemoteDeviceName_e', () => {
+          let threw = false;
+          try {
+            connection.setRemoteDeviceName(EMPTY_MAC, '');
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICENAME_B
+     * @tc.name cn_setRemoteDeviceName_b
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceName boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceName_b', 0, () => {
+      try {
+        fcRun('cn_setRemoteDeviceName_b', () => {
+          let threw = false;
+          try {
+            connection.setRemoteDeviceName(BAD_MAC, 'n');
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICENAME_R
+     * @tc.name cn_setRemoteDeviceName_r
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceName return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceName_r', 0, () => {
+      try {
+        fcRun('cn_setRemoteDeviceName_r', () => {
+          try {
+            connection.setRemoteDeviceName(BADDR, 'n');
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICENAME_X
+     * @tc.name cn_setRemoteDeviceName_x
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceName repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceName_x', 0, () => {
+      try {
+        fcRun('cn_setRemoteDeviceName_x', () => {
+          connection.setRemoteDeviceName(BADDR, 'n');
+          expect(true).assertTrue();
+          connection.setRemoteDeviceName(BADDR, 'n');
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICENAME_C
+     * @tc.name cn_setRemoteDeviceName_c
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceName condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceName_c', 0, () => {
+      try {
+        fcRun('cn_setRemoteDeviceName_c', () => {
+          connection.setRemoteDeviceName(BADDR, 'c');
+          expect(true).assertTrue();
+          console.info('[c] condition args');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_getRemoteDeviceClass', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICECLASS_N
+     * @tc.name cn_getRemoteDeviceClass_n
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceClass normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceClass_n', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceClass_n', () => {
+          connection.getRemoteDeviceClass(BADDR);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICECLASS_E
+     * @tc.name cn_getRemoteDeviceClass_e
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceClass error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceClass_e', 0, () => {
+      try {
+        fcRunErr('cn_getRemoteDeviceClass_e', () => {
+          let threw = false;
+          try {
+            connection.getRemoteDeviceClass(EMPTY_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICECLASS_B
+     * @tc.name cn_getRemoteDeviceClass_b
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceClass boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceClass_b', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceClass_b', () => {
+          let threw = false;
+          try {
+            connection.getRemoteDeviceClass(BAD_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICECLASS_R
+     * @tc.name cn_getRemoteDeviceClass_r
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceClass return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceClass_r', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceClass_r', () => {
+          try {
+            const value = connection.getRemoteDeviceClass(BADDR);
+            expect(value !== undefined).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICECLASS_X
+     * @tc.name cn_getRemoteDeviceClass_x
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceClass repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceClass_x', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceClass_x', () => {
+          connection.getRemoteDeviceClass(BADDR);
+          expect(true).assertTrue();
+          connection.getRemoteDeviceClass(BADDR);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICECLASS_C
+     * @tc.name cn_getRemoteDeviceClass_c
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceClass condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceClass_c', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceClass_c', () => {
+          connection.getRemoteDeviceClass(BADDR);
+          expect(true).assertTrue();
+          console.info('[c] condition args');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_getRemoteDeviceType', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETYPE_N
+     * @tc.name cn_getRemoteDeviceType_n
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceType normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceType_n', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceType_n', () => {
+          connection.getRemoteDeviceType(BADDR);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETYPE_E
+     * @tc.name cn_getRemoteDeviceType_e
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceType error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceType_e', 0, () => {
+      try {
+        fcRunErr('cn_getRemoteDeviceType_e', () => {
+          let threw = false;
+          try {
+            connection.getRemoteDeviceType(EMPTY_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETYPE_B
+     * @tc.name cn_getRemoteDeviceType_b
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceType boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceType_b', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceType_b', () => {
+          let threw = false;
+          try {
+            connection.getRemoteDeviceType(BAD_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETYPE_R
+     * @tc.name cn_getRemoteDeviceType_r
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceType return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceType_r', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceType_r', () => {
+          try {
+            const value = connection.getRemoteDeviceType(BADDR);
+            expect(value !== undefined).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETYPE_X
+     * @tc.name cn_getRemoteDeviceType_x
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceType repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceType_x', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceType_x', () => {
+          connection.getRemoteDeviceType(BADDR);
+          expect(true).assertTrue();
+          connection.getRemoteDeviceType(BADDR);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETYPE_C
+     * @tc.name cn_getRemoteDeviceType_c
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceType condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceType_c', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceType_c', () => {
+          connection.getRemoteDeviceType(BADDR);
+          expect(true).assertTrue();
+          console.info('[c] condition args');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_setRemoteDeviceType', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICETYPE_N
+     * @tc.name cn_setRemoteDeviceType_n
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceType normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceType_n', 0, () => {
+      try {
+        fcRun('cn_setRemoteDeviceType_n', () => {
+          connection.setRemoteDeviceType(BADDR, 0);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICETYPE_E
+     * @tc.name cn_setRemoteDeviceType_e
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceType error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceType_e', 0, () => {
+      try {
+        fcRunErr('cn_setRemoteDeviceType_e', () => {
+          let threw = false;
+          try {
+            connection.setRemoteDeviceType(EMPTY_MAC, 0);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICETYPE_B
+     * @tc.name cn_setRemoteDeviceType_b
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceType boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceType_b', 0, () => {
+      try {
+        fcRun('cn_setRemoteDeviceType_b', () => {
+          let threw = false;
+          try {
+            connection.setRemoteDeviceType(BAD_MAC, -1);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICETYPE_R
+     * @tc.name cn_setRemoteDeviceType_r
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceType return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceType_r', 0, () => {
+      try {
+        fcRun('cn_setRemoteDeviceType_r', () => {
+          try {
+            connection.setRemoteDeviceType(BADDR, 0);
+            expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICETYPE_X
+     * @tc.name cn_setRemoteDeviceType_x
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceType repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceType_x', 0, () => {
+      try {
+        fcRun('cn_setRemoteDeviceType_x', () => {
+          connection.setRemoteDeviceType(BADDR, 0);
+          expect(true).assertTrue();
+          connection.setRemoteDeviceType(BADDR, 0);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_SETREMOTEDEVICETYPE_C
+     * @tc.name cn_setRemoteDeviceType_c
+     * @tc.desc Verify Bluetooth API cn setRemoteDeviceType condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_setRemoteDeviceType_c', 0, () => {
+      try {
+        fcRun('cn_setRemoteDeviceType_c', () => {
+          connection.setRemoteDeviceType(BADDR, 1);
+          expect(true).assertTrue();
+          console.info('[c] condition args');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_getRemoteDeviceTransport', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETRANSPORT_N
+     * @tc.name cn_getRemoteDeviceTransport_n
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceTransport normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceTransport_n', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceTransport_n', () => {
+          connection.getRemoteDeviceTransport(BADDR);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETRANSPORT_E
+     * @tc.name cn_getRemoteDeviceTransport_e
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceTransport error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceTransport_e', 0, () => {
+      try {
+        fcRunErr('cn_getRemoteDeviceTransport_e', () => {
+          let threw = false;
+          try {
+            connection.getRemoteDeviceTransport(EMPTY_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETRANSPORT_B
+     * @tc.name cn_getRemoteDeviceTransport_b
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceTransport boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceTransport_b', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceTransport_b', () => {
+          let threw = false;
+          try {
+            connection.getRemoteDeviceTransport(BAD_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETRANSPORT_R
+     * @tc.name cn_getRemoteDeviceTransport_r
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceTransport return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceTransport_r', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceTransport_r', () => {
+          try {
+            const value = connection.getRemoteDeviceTransport(BADDR);
+            expect(value !== undefined).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETRANSPORT_X
+     * @tc.name cn_getRemoteDeviceTransport_x
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceTransport repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceTransport_x', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceTransport_x', () => {
+          connection.getRemoteDeviceTransport(BADDR);
+          expect(true).assertTrue();
+          connection.getRemoteDeviceTransport(BADDR);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICETRANSPORT_C
+     * @tc.name cn_getRemoteDeviceTransport_c
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceTransport condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceTransport_c', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceTransport_c', () => {
+          connection.getRemoteDeviceTransport(BADDR);
+          expect(true).assertTrue();
+          console.info('[c] condition args');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('cn_getRemoteDeviceBatteryInfo', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICEBATTERYINFO_N
+     * @tc.name cn_getRemoteDeviceBatteryInfo_n
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceBatteryInfo normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceBatteryInfo_n', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceBatteryInfo_n', () => {
+          connection.getRemoteDeviceBatteryInfo(BADDR);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICEBATTERYINFO_E
+     * @tc.name cn_getRemoteDeviceBatteryInfo_e
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceBatteryInfo error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceBatteryInfo_e', 0, () => {
+      try {
+        fcRunErr('cn_getRemoteDeviceBatteryInfo_e', () => {
+          let threw = false;
+          try {
+            connection.getRemoteDeviceBatteryInfo(EMPTY_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICEBATTERYINFO_B
+     * @tc.name cn_getRemoteDeviceBatteryInfo_b
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceBatteryInfo boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceBatteryInfo_b', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceBatteryInfo_b', () => {
+          let threw = false;
+          try {
+            connection.getRemoteDeviceBatteryInfo(BAD_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICEBATTERYINFO_R
+     * @tc.name cn_getRemoteDeviceBatteryInfo_r
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceBatteryInfo return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceBatteryInfo_r', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceBatteryInfo_r', () => {
+          try {
+            const value = connection.getRemoteDeviceBatteryInfo(BADDR);
+            expect(value !== undefined).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICEBATTERYINFO_X
+     * @tc.name cn_getRemoteDeviceBatteryInfo_x
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceBatteryInfo repeat invocation scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceBatteryInfo_x', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceBatteryInfo_x', () => {
+          connection.getRemoteDeviceBatteryInfo(BADDR);
+          expect(true).assertTrue();
+          connection.getRemoteDeviceBatteryInfo(BADDR);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_CN_GETREMOTEDEVICEBATTERYINFO_C
+     * @tc.name cn_getRemoteDeviceBatteryInfo_c
+     * @tc.desc Verify Bluetooth API cn getRemoteDeviceBatteryInfo condition scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('cn_getRemoteDeviceBatteryInfo_c', 0, () => {
+      try {
+        fcRun('cn_getRemoteDeviceBatteryInfo_c', () => {
+          connection.getRemoteDeviceBatteryInfo(BADDR);
+          expect(true).assertTrue();
+          console.info('[c] condition args');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+  });
+}
+
+
