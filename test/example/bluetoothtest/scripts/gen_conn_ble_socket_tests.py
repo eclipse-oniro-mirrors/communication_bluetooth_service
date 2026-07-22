@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import os
+import re
 import sys
 import textwrap
 
@@ -26,7 +27,7 @@ OUT_DIR = os.path.join(
     "src",
     "ohosTest",
     "ets",
-    "test",
+    "apitest",
 )
 
 # fmt: off — template keys match CONN_KEYS order (59 connection overloads from SDK grep)
@@ -67,49 +68,179 @@ SK_KEYS = [
 ]
 
 
-def wrap_body(inner: str, max_len: int = 96) -> list[str]:
-    """Break inner into lines under max_len (byte-safe for ASCII)."""
-    inner = inner.strip()
-    if len(inner) <= max_len:
-        return [inner]
-    parts = inner.replace(";", ";\n").split("\n")
-    lines: list[str] = []
-    cur = ""
-    for p in parts:
-        p = p.strip()
-        if not p:
-            continue
-        if not cur:
-            cur = p
-        elif len(cur) + 1 + len(p) <= max_len:
-            cur = cur + " " + p
-        else:
-            lines.append(cur)
-            cur = p
-    if cur:
-        lines.append(cur)
-    return lines
+HILOG_DOMAIN = "0x0000"
+HILOG_TAG = "'ConnBleSocket'"
+_ASSERT_ERR_KNOWN_LINES = [
+    "expect(errCode === 0 || errCode === 201 || errCode === 801 ||",
+    "  errCode === 2900001 || errCode === 2900099).assertTrue();",
+]
 
 
-def emit_it(tag: str, body_inner: str) -> list[str]:
-    """One it() block; body may be multi-line inside tI callback."""
-    body_lines = wrap_body(body_inner)
-    ind = "        "
-    cb = "\n".join(ind + bl for bl in body_lines)
+def _strip_expects(code: str) -> str:
+    code = re.sub(r"expect\(true\)\.assertTrue\(\);?", "", code)
+    code = re.sub(r"expect\([^;]+?\)\.assert\w+\(\);?", "", code)
+    return code.strip().rstrip(";").strip()
+
+
+def _extract_call(compact: str) -> tuple[str, str]:
+    """Return (kind, call) where kind is void|throws|return."""
+    compact = compact.strip()
+    # unwrap try { ... } catch (...) { ... }
+    m = re.match(r"^try\{(.+)\}catch\([^)]*\)\{.*\}$", compact)
+    if m:
+        inner = _strip_expects(m.group(1))
+        rm = re.match(r"^const\s+\w+\s*=\s*(.+)$", inner)
+        if rm:
+            return "throws", rm.group(1).strip().rstrip(";")
+        return "throws", inner
+    compact = _strip_expects(compact)
+    rm = re.match(r"^const\s+\w+\s*=\s*(.+)$", compact)
+    if rm:
+        return "return", rm.group(1).strip().rstrip(";")
+    return "void", compact
+
+
+def _infer_return_kind(call: str) -> str:
+    c = call.lower()
+    if any(k in c for k in ("isbluetooth", "isconnected", "isdiscovering", "isbluetoothdiscovering")):
+        return "bool"
+    if any(k in c for k in ("getlocalname", "getremotedevicename", "getdeviceid", "getproduct")):
+        return "string"
+    if any(
+        k in c
+        for k in (
+            "getprofileconnectionstate",
+            "getpairstate",
+            "getbluetoothscanmode",
+            "getremotedevicetransport",
+            "getl2cappsm",
+            "getmax",
+            "getstate",
+        )
+    ):
+        return "number"
+    if any(
+        k in c
+        for k in (
+            "getpaireddevices",
+            "getconnectedbledevices",
+            "getlocalprofileuuids",
+            "getremoteprofileuuids",
+        )
+    ):
+        return "array"
+    if "create" in c or "creatble" in c or "creategatt" in c or "createscanner" in c:
+        return "any"
+    return "any"
+
+
+def _looks_invalid_args(call: str) -> bool:
+    """Heuristic: empty MAC / negative ids / null callback-style bad args."""
+    s = call.replace(" ", "")
+    return (
+        "''" in s
+        or '""' in s
+        or ",-1" in s
+        or "(-1" in s
+        or "=-1" in s
+        or ".on(" in s and "null" in s
+    )
+
+
+def expand_compact_body(tag: str, compact: str, scenario: str) -> list[str]:
+    """Turn legacy compact template into step-by-step hilog + real asserts."""
+    kind, call = _extract_call(compact)
+    call = call.strip().rstrip(";")
+    if not call:
+        call = "undefined"
+    want_throw = (scenario in ("e", "e2") or kind == "throws") and _looks_invalid_args(call)
+    if want_throw:
+        return [
+            "let threw = false;",
+            "let errCode = 0;",
+            f"hilog.info({HILOG_DOMAIN}, {HILOG_TAG}, '{tag}: invoke expect error');",
+            "try {",
+            f"  {call};",
+            "} catch (err) {",
+            "  threw = true;",
+            "  errCode = (err as BusinessError).code;",
+            f"  hilog.error({HILOG_DOMAIN}, {HILOG_TAG}, '{tag}: ' + JSON.stringify(err));",
+            "}",
+            f"hilog.info({HILOG_DOMAIN}, {HILOG_TAG}, '{tag}: threw=' + threw + ' errCode=' + errCode);",
+            "expect(threw).assertTrue();",
+            "expect(errCode !== 0).assertTrue();",
+        ]
+    if kind == "return" or scenario == "r" and _infer_return_kind(call) != "any" and call.startswith(
+        ("connection.get", "ble.get", "socket.get", "ble.create")
+    ):
+        rk = _infer_return_kind(call)
+        init = {
+            "bool": "let value = false;",
+            "string": "let value = '';",
+            "number": "let value = -1;",
+            "array": "let value: Array<Object> = [];",
+            "any": "let value: Object | null = null;",
+        }[rk]
+        assign = f"  value = {call};"
+        if rk == "array":
+            assign = f"  value = {call} as Array<Object>;"
+        elif rk == "any":
+            assign = f"  value = {call} as Object;"
+        checks = {
+            "bool": ["expect(typeof value).assertEqual('boolean');"],
+            "string": [
+                "expect(typeof value).assertEqual('string');",
+                "expect(value.length >= 0).assertTrue();",
+            ],
+            "number": ["expect(typeof value).assertEqual('number');"],
+            "array": ["expect(Array.isArray(value)).assertTrue();"],
+            "any": ["expect(value !== null && value !== undefined).assertTrue();"],
+        }[rk]
+        return [
+            "let errCode = 0;",
+            init,
+            f"hilog.info({HILOG_DOMAIN}, {HILOG_TAG}, '{tag}: invoke');",
+            "try {",
+            assign,
+            "} catch (err) {",
+            "  errCode = (err as BusinessError).code;",
+            f"  hilog.error({HILOG_DOMAIN}, {HILOG_TAG}, '{tag}: ' + JSON.stringify(err));",
+            "}",
+            f"hilog.info({HILOG_DOMAIN}, {HILOG_TAG}, '{tag}: errCode=' + errCode + ' value=' + JSON.stringify(value));",
+            *_ASSERT_ERR_KNOWN_LINES,
+            *checks,
+        ]
+    # void / soft success path
     return [
-        f"    it('{tag}', 0, () => {{",
-        f"      tI('{tag}', () => {{",
-        cb,
-        "      });",
-        "    });",
+        "let errCode = 0;",
+        f"hilog.info({HILOG_DOMAIN}, {HILOG_TAG}, '{tag}: invoke');",
+        "try {",
+        f"  {call};",
+        "} catch (err) {",
+        "  errCode = (err as BusinessError).code;",
+        f"  hilog.error({HILOG_DOMAIN}, {HILOG_TAG}, '{tag}: ' + JSON.stringify(err));",
+        "}",
+        f"hilog.info({HILOG_DOMAIN}, {HILOG_TAG}, '{tag}: errCode=' + errCode);",
+        *_ASSERT_ERR_KNOWN_LINES,
     ]
+
+
+def emit_it(tag: str, body_inner: str, scenario: str = "n") -> list[str]:
+    """One it() block with direct API call + real assertions (no tI wrapper)."""
+    body_lines = expand_compact_body(tag, body_inner, scenario)
+    out = [f"    it('{tag}', 0, () => {{"]
+    for ln in body_lines:
+        for part in str(ln).splitlines():
+            out.append(f"      {part}" if part.strip() else part)
+    out.append("    });")
+    return out
 
 
 def scenario_triple(prefix: str, n_body: str, e_body: str, b_body: str) -> list[str]:
     out: list[str] = []
-    out.extend(emit_it(f"{prefix}_n", n_body))
-    out.extend(emit_it(f"{prefix}_e", e_body))
-    out.extend(emit_it(f"{prefix}_b", b_body))
+    out.extend(emit_it(f"{prefix}_n", n_body, "n"))
+    out.extend(emit_it(f"{prefix}_e", e_body, "e"))
+    out.extend(emit_it(f"{prefix}_b", b_body, "b"))
     return out
 
 
@@ -117,7 +248,7 @@ def scenario_six(prefix: str, bodies: tuple[str, str, str, str, str, str]) -> li
     out: list[str] = []
     sfx = ("n", "e", "b", "e2", "r", "x")
     for s, body in zip(sfx, bodies):
-        out.extend(emit_it(f"{prefix}_{s}", body))
+        out.extend(emit_it(f"{prefix}_{s}", body, s))
     return out
 
 
@@ -965,15 +1096,18 @@ def gen_file(
         "/**",
         " * Auto-generated by scripts/gen_conn_ble_socket_tests.py (do not edit by hand).",
         f" * Part: {part_name}",
-        " * connection / ble / socket: 6 scenarios per overload (n,e,b,e2,r,x).",
+        " * connection / ble / socket: 6 scenarios per overload (n, e, b, e2, r, x).",
+        " * Direct API calls only (no tI wrappers); hilog + real return/error assertions.",
         " */",
         "import { describe, it, expect } from '@ohos/hypium';",
+        "import hilog from '@ohos.hilog';",
+        "import { BusinessError } from '@ohos.base';",
         "import connection from '@ohos.bluetooth.connection';",
         "import ble from '@ohos.bluetooth.ble';",
         "import socket from '@ohos.bluetooth.socket';",
         "import constant from '@ohos.bluetooth.constant';",
         "import common from '@ohos.bluetooth.common';",
-        "import { tI, buf0, sppOpt, bleAd, bleAs, bleAp, BADDR } from './ConnBleSocketShared';",
+        "import { buf0, sppOpt, bleAd, bleAs, bleAp, BADDR } from './ConnBleSocketShared';",
         "",
         f"export default function {part_name}() {{",
         f"  describe('{desc}', () => {{",
@@ -983,40 +1117,25 @@ def gen_file(
         lines.append(f"    describe('{prefix}', () => {{")
         for sfx, body in zip(("n", "e", "b", "e2", "r", "x"), bodies):
             tag = f"{prefix}_{sfx}"
-            lines.append(f"    it('{tag}', 0, () => {{")
-            lines.append(f"      tI('{tag}', () => {{")
-            for seg in body.split("\n"):
-                seg = seg.strip()
-                if not seg:
-                    continue
-                for bl in wrap_body(seg, 90):
-                    lines.append(f"        {bl}")
-            lines.append("      });")
-            lines.append("    });")
+            lines.extend(emit_it(tag, body, sfx))
             n_cases += 1
         lines.append("    });")
     lines.append("  });")
     lines.append("}")
     lines.append("")
-    text = "\n".join(lines)
-    # enforce max line length 100 bytes (ASCII)
-    out_lines = []
-    for ln in text.split("\n"):
-        if len(ln.encode("utf-8")) <= 100:
-            out_lines.append(ln)
-        else:
-            out_lines.extend(textwrap.wrap(ln, width=96, break_long_words=False, replace_whitespace=False))
-    with open(path, "w", encoding="utf-8") as f:
-        content = "\n".join(out_lines) + "\n"
+    content = "\n".join(lines) + "\n"
     _repo = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
     _skill = os.path.join(_repo, "skills", "ohtest")
     if os.path.isdir(_skill) and _skill not in sys.path:
         sys.path.insert(0, _skill)
     try:
         from apitest_format import format_apitest_source
-        content = format_apitest_source(content)
+        content = format_apitest_source(content, wrap_outer_try=False)
     except ImportError:
         pass
+    for banned in ("tI(", "expect(true).assertTrue()", "matrixTryRun("):
+        if banned in content:
+            raise RuntimeError(f"banned pattern {banned!r} in {path}")
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
     return n_cases

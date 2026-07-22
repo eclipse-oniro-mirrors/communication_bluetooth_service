@@ -35,15 +35,7 @@ export default function pageRoutesTest() {
      * @tc.level Level 2
      */
     it('route_count_matches_main_pages', 0, () => {
-      try {
-            expect(BLUETOOTHTEST_ENTRY_PAGE_ROUTES.length).assertEqual(BLUETOOTHTEST_ENTRY_PAGE_COUNT);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      expect(BLUETOOTHTEST_ENTRY_PAGE_ROUTES.length).assertEqual(BLUETOOTHTEST_ENTRY_PAGE_COUNT);
     });
 
     /**
@@ -55,17 +47,9 @@ export default function pageRoutesTest() {
      * @tc.level Level 2
      */
     it('each_route_starts_with_pages_prefix', 0, () => {
-      try {
-            for (let i = 0; i < BLUETOOTHTEST_ENTRY_PAGE_ROUTES.length; i++) {
-              const r = BLUETOOTHTEST_ENTRY_PAGE_ROUTES[i];
-              expect(r.indexOf('pages/') === 0).assertTrue();
-            }
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+      for (let i = 0; i < BLUETOOTHTEST_ENTRY_PAGE_ROUTES.length; i++) {
+        const r = BLUETOOTHTEST_ENTRY_PAGE_ROUTES[i];
+        expect(r.indexOf('pages/') === 0).assertTrue();
       }
     });
 
@@ -78,18 +62,10 @@ export default function pageRoutesTest() {
      * @tc.level Level 2
      */
     it('no_duplicate_routes', 0, () => {
-      try {
-            for (let i = 0; i < BLUETOOTHTEST_ENTRY_PAGE_ROUTES.length; i++) {
-              for (let j = i + 1; j < BLUETOOTHTEST_ENTRY_PAGE_ROUTES.length; j++) {
-                expect(BLUETOOTHTEST_ENTRY_PAGE_ROUTES[i] === BLUETOOTHTEST_ENTRY_PAGE_ROUTES[j]).assertFalse();
-              }
-            }
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+      for (let i = 0; i < BLUETOOTHTEST_ENTRY_PAGE_ROUTES.length; i++) {
+        for (let j = i + 1; j < BLUETOOTHTEST_ENTRY_PAGE_ROUTES.length; j++) {
+          expect(BLUETOOTHTEST_ENTRY_PAGE_ROUTES[i] === BLUETOOTHTEST_ENTRY_PAGE_ROUTES[j]).assertFalse();
+        }
       }
     });
 
@@ -102,18 +78,12 @@ export default function pageRoutesTest() {
      * @tc.level Level 2
      */
     it('homePage_is_first', 0, () => {
-      try {
-            expect(BLUETOOTHTEST_ENTRY_PAGE_ROUTES[0]).assertEqual('pages/homePage');
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      expect(BLUETOOTHTEST_ENTRY_PAGE_ROUTES[0]).assertEqual('pages/homePage');
     });
   });
 }
+
+
 
 
 
