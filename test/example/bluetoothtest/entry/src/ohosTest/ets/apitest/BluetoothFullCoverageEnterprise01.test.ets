@@ -2677,18 +2677,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceBound_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('pa_isDeviceBound_n', () => {
-          try {
-            const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-            expect(typeof v === 'boolean').assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.isDeviceBound(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2700,26 +2699,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceBound_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('pa_isDeviceBound_e', () => {
-          let threw = false;
-          try {
-            try {
-              const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-              expect(typeof v === 'boolean').assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2731,23 +2723,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceBound_b', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('pa_isDeviceBound_b', () => {
-          try {
-            try {
-              const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-              expect(typeof v === 'boolean').assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            console.info('[b] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.isDeviceBound(partnerDeviceAddr());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2759,23 +2747,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceBound_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('pa_isDeviceBound_r', () => {
-          try {
-            try {
-              const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-              expect(typeof v === 'boolean').assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.isDeviceBound(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2787,24 +2769,28 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceBound_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('pa_isDeviceBound_x', () => {
-          try {
-            const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-            expect(typeof v === 'boolean').assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-          try {
-            const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-            expect(typeof v === 'boolean').assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2816,19 +2802,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceBound_c', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('pa_isDeviceBound_c', () => {
-          console.info('[c] condition path');
-          try {
-            const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-            expect(typeof v === 'boolean').assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.isDeviceBound(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('pa_getBoundDevices', () => {
@@ -2842,18 +2826,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_getBoundDevices_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('pa_getBoundDevices_n', () => {
-          try {
-            const a = partnerAgent.getBoundDevices();
-            expect(Array.isArray(a)).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.getBoundDevices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2865,26 +2848,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_getBoundDevices_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('pa_getBoundDevices_e', () => {
-          let threw = false;
-          try {
-            try {
-              const a = partnerAgent.getBoundDevices();
-              expect(Array.isArray(a)).assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        const a = partnerAgent.getBoundDevices();
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2896,23 +2872,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_getBoundDevices_b', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('pa_getBoundDevices_b', () => {
-          try {
-            try {
-              const a = partnerAgent.getBoundDevices();
-              expect(Array.isArray(a)).assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            console.info('[b] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.getBoundDevices();
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -2924,23 +2896,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_getBoundDevices_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('pa_getBoundDevices_r', () => {
-          try {
-            try {
-              const a = partnerAgent.getBoundDevices();
-              expect(Array.isArray(a)).assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.getBoundDevices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2952,24 +2918,28 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_getBoundDevices_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('pa_getBoundDevices_x', () => {
-          try {
-            const a = partnerAgent.getBoundDevices();
-            expect(Array.isArray(a)).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-          try {
-            const a = partnerAgent.getBoundDevices();
-            expect(Array.isArray(a)).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        const a = partnerAgent.getBoundDevices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        const a = partnerAgent.getBoundDevices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -2981,19 +2951,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_getBoundDevices_c', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('pa_getBoundDevices_c', () => {
-          console.info('[c] condition path');
-          try {
-            const a = partnerAgent.getBoundDevices();
-            expect(Array.isArray(a)).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.getBoundDevices();
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('pa_enableDeviceControl', () => {
@@ -3007,18 +2975,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_enableDeviceControl_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('pa_enableDeviceControl_n', () => {
-          try {
-            partnerAgent.enableDeviceControl(partnerDeviceAddr());
-            expect(true).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.enableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -3030,26 +2997,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_enableDeviceControl_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('pa_enableDeviceControl_e', () => {
-          let threw = false;
-          try {
-            try {
-              partnerAgent.enableDeviceControl(partnerDeviceAddr());
-              expect(true).assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.enableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -3061,23 +3021,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_enableDeviceControl_b', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('pa_enableDeviceControl_b', () => {
-          try {
-            try {
-              partnerAgent.enableDeviceControl(partnerDeviceAddr());
-              expect(true).assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            console.info('[b] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.enableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -3089,23 +3045,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_enableDeviceControl_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('pa_enableDeviceControl_r', () => {
-          try {
-            try {
-              partnerAgent.enableDeviceControl(partnerDeviceAddr());
-              expect(true).assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.enableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -3117,24 +3067,28 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_enableDeviceControl_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('pa_enableDeviceControl_x', () => {
-          try {
-            partnerAgent.enableDeviceControl(partnerDeviceAddr());
-            expect(true).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-          try {
-            partnerAgent.enableDeviceControl(partnerDeviceAddr());
-            expect(true).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.enableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        partnerAgent.enableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -3146,19 +3100,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_enableDeviceControl_c', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('pa_enableDeviceControl_c', () => {
-          console.info('[c] condition path');
-          try {
-            partnerAgent.enableDeviceControl(partnerDeviceAddr());
-            expect(true).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.enableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('pa_disableDeviceControl', () => {
@@ -3172,18 +3124,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_disableDeviceControl_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('pa_disableDeviceControl_n', () => {
-          try {
-            partnerAgent.disableDeviceControl(partnerDeviceAddr());
-            expect(true).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.disableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -3195,26 +3146,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_disableDeviceControl_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('pa_disableDeviceControl_e', () => {
-          let threw = false;
-          try {
-            try {
-              partnerAgent.disableDeviceControl(partnerDeviceAddr());
-              expect(true).assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.disableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -3226,23 +3170,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_disableDeviceControl_b', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('pa_disableDeviceControl_b', () => {
-          try {
-            try {
-              partnerAgent.disableDeviceControl(partnerDeviceAddr());
-              expect(true).assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            console.info('[b] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.disableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -3254,23 +3194,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_disableDeviceControl_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('pa_disableDeviceControl_r', () => {
-          try {
-            try {
-              partnerAgent.disableDeviceControl(partnerDeviceAddr());
-              expect(true).assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.disableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -3282,24 +3216,28 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_disableDeviceControl_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('pa_disableDeviceControl_x', () => {
-          try {
-            partnerAgent.disableDeviceControl(partnerDeviceAddr());
-            expect(true).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-          try {
-            partnerAgent.disableDeviceControl(partnerDeviceAddr());
-            expect(true).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.disableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        partnerAgent.disableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -3311,19 +3249,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_disableDeviceControl_c', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('pa_disableDeviceControl_c', () => {
-          console.info('[c] condition path');
-          try {
-            partnerAgent.disableDeviceControl(partnerDeviceAddr());
-            expect(true).assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.disableDeviceControl(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
     describe('pa_isDeviceControlEnabled', () => {
@@ -3337,18 +3273,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceControlEnabled_n', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        fcRun('pa_isDeviceControlEnabled_n', () => {
-          try {
-            const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-            expect(typeof v === 'boolean').assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -3360,26 +3295,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceControlEnabled_e', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        fcRunErr('pa_isDeviceControlEnabled_e', () => {
-          let threw = false;
-          try {
-            try {
-              const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-              expect(typeof v === 'boolean').assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            threw = true;
-            console.info('[e] ' + JSON.stringify(err));
-          }
-          console.info('[e] threw=' + threw);
-          expect(true).assertTrue();
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -3391,23 +3319,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceControlEnabled_b', 0, () => {
+      let threw = false;
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        fcRun('pa_isDeviceControlEnabled_b', () => {
-          try {
-            try {
-              const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-              expect(typeof v === 'boolean').assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            console.info('[b] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+      } catch (err) {
+        threw = true;
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
+      expect(threw).assertTrue();
+      expect(errCode !== 0).assertTrue();
     });
 
     /**
@@ -3419,23 +3343,17 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceControlEnabled_r', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        fcRun('pa_isDeviceControlEnabled_r', () => {
-          try {
-            try {
-              const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-              expect(typeof v === 'boolean').assertTrue();
-            } catch (err) {
-              expect(true).assertTrue();
-            }
-          } catch (err) {
-            console.info('[r] ' + JSON.stringify(err));
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -3447,24 +3365,28 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceControlEnabled_x', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        fcRun('pa_isDeviceControlEnabled_x', () => {
-          try {
-            const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-            expect(typeof v === 'boolean').assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-          try {
-            const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-            expect(typeof v === 'boolean').assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
+      try {
+        const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
+      }
+      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
 
     /**
@@ -3476,22 +3398,21 @@ export default function bluetoothFullCoverageEnterprise01() {
      * @tc.level Level 2
      */
     it('pa_isDeviceControlEnabled_c', 0, () => {
+      let errCode = 0;
+      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        fcRun('pa_isDeviceControlEnabled_c', () => {
-          console.info('[c] condition path');
-          try {
-            const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-            expect(typeof v === 'boolean').assertTrue();
-          } catch (err) {
-            expect(true).assertTrue();
-          }
-        });
-      } catch (_e) {
-        expect(true).assertTrue();
+        partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
+      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
     });
     });
   });
 }
+
 
 
