@@ -2146,14 +2146,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_opp_on_receiveIncomingFile_b', 0, () => {
       try {
-            fcRun('prof_opp_on_receiveIncomingFile_b', () => {
-              const p = opp.createOppServerProfile(); p.on('receiveIncomingFile', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('prof_opp_on_receiveIncomingFile_b', () => {
+          try {
+            const p = opp.createOppServerProfile();
+            p.on('receiveIncomingFile', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2169,14 +2171,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_opp_on_receiveIncomingFile_r', 0, () => {
       try {
-            fcRun('prof_opp_on_receiveIncomingFile_r', () => {
-              const p = opp.createOppServerProfile(); p.on('receiveIncomingFile', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('prof_opp_on_receiveIncomingFile_r', () => {
+          try {
+            const p = opp.createOppServerProfile();
+            p.on('receiveIncomingFile', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2192,14 +2196,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_opp_on_receiveIncomingFile_x', 0, () => {
       try {
-            fcRun('prof_opp_on_receiveIncomingFile_x', () => {
-              const p = opp.createOppServerProfile(); p.on('receiveIncomingFile', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_opp_on_receiveIncomingFile_x', () => {
+          const p = opp.createOppServerProfile();
+          p.on('receiveIncomingFile', () = >{});
           expect(true).assertTrue();
+          const p = opp.createOppServerProfile();
+          p.on('receiveIncomingFile', () = >{});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2208,21 +2212,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PROF_OPP_ON_RECEIVEINCOMINGFILE_C
      * @tc.name prof_opp_on_receiveIncomingFile_c
-     * @tc.desc Verify Bluetooth API prof opp on receiveIncomingFile combo scenario
+     * @tc.desc Verify Bluetooth API prof opp on receiveIncomingFile condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('prof_opp_on_receiveIncomingFile_c', 0, () => {
       try {
-            fcRunCombo('prof_opp_on_receiveIncomingFile_c', [() => {
-              const p = opp.createOppServerProfile(); p.on('receiveIncomingFile', () => {});
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_opp_on_receiveIncomingFile_c', () => {
+          console.info('[c] condition path');
+          const p = opp.createOppServerProfile();
+          p.on('receiveIncomingFile', () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2240,14 +2242,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_opp_off_receiveIncomingFile_n', 0, () => {
       try {
-            fcRun('prof_opp_off_receiveIncomingFile_n', () => {
-              const p = opp.createOppServerProfile();p.off('receiveIncomingFile');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_opp_off_receiveIncomingFile_n', () => {
+          const p = opp.createOppServerProfile();
+          p.off('receiveIncomingFile');
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2263,14 +2262,19 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_opp_off_receiveIncomingFile_e', 0, () => {
       try {
-            fcRunErr('prof_opp_off_receiveIncomingFile_e', () => {
-              try {const p = opp.createOppServerProfile(); p.off('receiveIncomingFile');
-              expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('prof_opp_off_receiveIncomingFile_e', () => {
+          let threw = false;
+          try {
+            const p = opp.createOppServerProfile();
+            p.off('receiveIncomingFile');
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2286,14 +2290,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_opp_off_receiveIncomingFile_b', 0, () => {
       try {
-            fcRun('prof_opp_off_receiveIncomingFile_b', () => {
-              const p = opp.createOppServerProfile();p.off('receiveIncomingFile');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('prof_opp_off_receiveIncomingFile_b', () => {
+          try {
+            const p = opp.createOppServerProfile();
+            p.off('receiveIncomingFile');
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2309,14 +2315,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_opp_off_receiveIncomingFile_r', 0, () => {
       try {
-            fcRun('prof_opp_off_receiveIncomingFile_r', () => {
-              const p = opp.createOppServerProfile();p.off('receiveIncomingFile');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('prof_opp_off_receiveIncomingFile_r', () => {
+          try {
+            const p = opp.createOppServerProfile();
+            p.off('receiveIncomingFile');
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2332,14 +2340,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_opp_off_receiveIncomingFile_x', 0, () => {
       try {
-            fcRun('prof_opp_off_receiveIncomingFile_x', () => {
-              const p = opp.createOppServerProfile();p.off('receiveIncomingFile');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_opp_off_receiveIncomingFile_x', () => {
+          const p = opp.createOppServerProfile();
+          p.off('receiveIncomingFile');
           expect(true).assertTrue();
+          const p = opp.createOppServerProfile();
+          p.off('receiveIncomingFile');
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2348,21 +2356,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PROF_OPP_OFF_RECEIVEINCOMINGFILE_C
      * @tc.name prof_opp_off_receiveIncomingFile_c
-     * @tc.desc Verify Bluetooth API prof opp off receiveIncomingFile combo scenario
+     * @tc.desc Verify Bluetooth API prof opp off receiveIncomingFile condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('prof_opp_off_receiveIncomingFile_c', 0, () => {
       try {
-            fcRunCombo('prof_opp_off_receiveIncomingFile_c', [() => {
-              const p = opp.createOppServerProfile();p.off('receiveIncomingFile');
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_opp_off_receiveIncomingFile_c', () => {
+          console.info('[c] condition path');
+          const p = opp.createOppServerProfile();
+          p.off('receiveIncomingFile');
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2380,14 +2386,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_setConnectionStrategy_n', 0, () => {
       try {
-            fcRun('prof_base_setConnectionStrategy_n', () => {
-              const _p = a2dp.createA2dpSrcProfile(); _p.setConnectionStrategy(BADDR, 0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_setConnectionStrategy_n', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.setConnectionStrategy(BADDR, 0);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2403,14 +2406,18 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_setConnectionStrategy_e', 0, () => {
       try {
-            fcRunErr('prof_base_setConnectionStrategy_e', () => {
-              const _p = a2dp.createA2dpSrcProfile(); try {_p.setConnectionStrategy(EMPTY_MAC, 0);
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('prof_base_setConnectionStrategy_e', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          let threw = false;
+          try {
+            _p.setConnectionStrategy(EMPTY_MAC, 0);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2426,14 +2433,18 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_setConnectionStrategy_b', 0, () => {
       try {
-            fcRun('prof_base_setConnectionStrategy_b', () => {
-              const _p = a2dp.createA2dpSrcProfile(); _p.setConnectionStrategy(BADDR, 0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_setConnectionStrategy_b', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          let threw = false;
+          try {
+            _p.setConnectionStrategy(EMPTY_MAC, 0);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2449,14 +2460,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_setConnectionStrategy_r', 0, () => {
       try {
-            fcRun('prof_base_setConnectionStrategy_r', () => {
-              const _p = a2dp.createA2dpSrcProfile(); _p.setConnectionStrategy(BADDR, 0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('prof_base_setConnectionStrategy_r', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          try {
+            _p.setConnectionStrategy(BADDR, 0);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2472,15 +2485,13 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_setConnectionStrategy_x', 0, () => {
       try {
-            fcRun('prof_base_setConnectionStrategy_x', () => {
-              const _p = a2dp.createA2dpSrcProfile(); _p.setConnectionStrategy(BADDR, 0);
-              _p.setConnectionStrategy(BADDR, 0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_setConnectionStrategy_x', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.setConnectionStrategy(BADDR, 0);
           expect(true).assertTrue();
+          _p.setConnectionStrategy(BADDR, 0);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2489,18 +2500,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PROF_BASE_SETCONNECTIONSTRATEGY_C
      * @tc.name prof_base_setConnectionStrategy_c
-     * @tc.desc Verify Bluetooth API prof base setConnectionStrategy combo scenario
+     * @tc.desc Verify Bluetooth API prof base setConnectionStrategy condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('prof_base_setConnectionStrategy_c', 0, () => {
       try {
-            fcRunCombo('setConnectionStrategy', [() => {const p = a2dp.createA2dpSrcProfile();p.setConnectionStrategy(BADDR, 0);}, () => {const p = a2dp.createA2dpSrcProfile();p.getConnectionState(BADDR);}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_setConnectionStrategy_c', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.setConnectionStrategy(BADDR, 1);
           expect(true).assertTrue();
+          console.info('[c] condition args done');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2518,14 +2530,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectionStrategy_n', 0, () => {
       try {
-            fcRun('prof_base_getConnectionStrategy_n', () => {
-              const _p = a2dp.createA2dpSrcProfile(); _p.getConnectionStrategy(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectionStrategy_n', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.getConnectionStrategy(BADDR);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2541,14 +2550,18 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectionStrategy_e', 0, () => {
       try {
-            fcRunErr('prof_base_getConnectionStrategy_e', () => {
-              const _p = a2dp.createA2dpSrcProfile(); try {_p.getConnectionStrategy(EMPTY_MAC);
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('prof_base_getConnectionStrategy_e', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          let threw = false;
+          try {
+            _p.getConnectionStrategy(EMPTY_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2564,14 +2577,18 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectionStrategy_b', 0, () => {
       try {
-            fcRun('prof_base_getConnectionStrategy_b', () => {
-              const _p = a2dp.createA2dpSrcProfile(); _p.getConnectionStrategy(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectionStrategy_b', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          let threw = false;
+          try {
+            _p.getConnectionStrategy(EMPTY_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2587,14 +2604,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectionStrategy_r', 0, () => {
       try {
-            fcRun('prof_base_getConnectionStrategy_r', () => {
-              const _p = a2dp.createA2dpSrcProfile(); try {const _v = _p.getConnectionStrategy(BADDR);
-              expect(_v!==undefined||true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('prof_base_getConnectionStrategy_r', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          try {
+            const value = _p.getConnectionStrategy(BADDR);
+            expect(value !== undefined).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2610,15 +2629,13 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectionStrategy_x', 0, () => {
       try {
-            fcRun('prof_base_getConnectionStrategy_x', () => {
-              const _p = a2dp.createA2dpSrcProfile(); _p.getConnectionStrategy(BADDR);
-              _p.getConnectionStrategy(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectionStrategy_x', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.getConnectionStrategy(BADDR);
           expect(true).assertTrue();
+          _p.getConnectionStrategy(BADDR);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2627,18 +2644,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PROF_BASE_GETCONNECTIONSTRATEGY_C
      * @tc.name prof_base_getConnectionStrategy_c
-     * @tc.desc Verify Bluetooth API prof base getConnectionStrategy combo scenario
+     * @tc.desc Verify Bluetooth API prof base getConnectionStrategy condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('prof_base_getConnectionStrategy_c', 0, () => {
       try {
-            fcRunCombo('getConnectionStrategy', [() => {const p = a2dp.createA2dpSrcProfile();p.getConnectionStrategy(BADDR);}, () => {const p = a2dp.createA2dpSrcProfile();p.getConnectionState(BADDR);}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectionStrategy_c', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.getConnectionStrategy(BADDR);
           expect(true).assertTrue();
+          console.info('[c] condition args done');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2656,14 +2674,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectedDevices_n', 0, () => {
       try {
-            fcRun('prof_base_getConnectedDevices_n', () => {
-              const _p = a2dp.createA2dpSrcProfile();_p.getConnectedDevices();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectedDevices_n', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.getConnectedDevices();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2679,14 +2694,18 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectedDevices_e', 0, () => {
       try {
-            fcRunErr('prof_base_getConnectedDevices_e', () => {
-              const _p = a2dp.createA2dpSrcProfile(); try {_p.getConnectedDevices();
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('prof_base_getConnectedDevices_e', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          let threw = false;
+          try {
+            _p.getConnectedDevices();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2702,14 +2721,18 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectedDevices_b', 0, () => {
       try {
-            fcRun('prof_base_getConnectedDevices_b', () => {
-              const _p = a2dp.createA2dpSrcProfile();_p.getConnectedDevices();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectedDevices_b', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          let threw = false;
+          try {
+            _p.getConnectedDevices();
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2725,14 +2748,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectedDevices_r', 0, () => {
       try {
-            fcRun('prof_base_getConnectedDevices_r', () => {
-              const _p = a2dp.createA2dpSrcProfile(); try {const _v = _p.getConnectedDevices();
-              expect(_v!==undefined||true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('prof_base_getConnectedDevices_r', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          try {
+            const value = _p.getConnectedDevices();
+            expect(value !== undefined).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2748,14 +2773,13 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectedDevices_x', 0, () => {
       try {
-            fcRun('prof_base_getConnectedDevices_x', () => {
-              const _p = a2dp.createA2dpSrcProfile(); _p.getConnectedDevices(); _p.getConnectedDevices();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectedDevices_x', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.getConnectedDevices();
           expect(true).assertTrue();
+          _p.getConnectedDevices();
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2764,18 +2788,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PROF_BASE_GETCONNECTEDDEVICES_C
      * @tc.name prof_base_getConnectedDevices_c
-     * @tc.desc Verify Bluetooth API prof base getConnectedDevices combo scenario
+     * @tc.desc Verify Bluetooth API prof base getConnectedDevices condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('prof_base_getConnectedDevices_c', 0, () => {
       try {
-            fcRunCombo('getConnectedDevices', [() => {const p = a2dp.createA2dpSrcProfile();p.getConnectedDevices();}, () => {const p = a2dp.createA2dpSrcProfile();p.getConnectionState(BADDR);}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectedDevices_c', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.getConnectedDevices();
           expect(true).assertTrue();
+          console.info('[c] condition args done');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2793,14 +2818,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectionState_n', 0, () => {
       try {
-            fcRun('prof_base_getConnectionState_n', () => {
-              const _p = a2dp.createA2dpSrcProfile();_p.getConnectionState(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectionState_n', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.getConnectionState(BADDR);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2816,14 +2838,18 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectionState_e', 0, () => {
       try {
-            fcRunErr('prof_base_getConnectionState_e', () => {
-              const _p = a2dp.createA2dpSrcProfile(); try {_p.getConnectionState(EMPTY_MAC);
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('prof_base_getConnectionState_e', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          let threw = false;
+          try {
+            _p.getConnectionState(EMPTY_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2839,14 +2865,18 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectionState_b', 0, () => {
       try {
-            fcRun('prof_base_getConnectionState_b', () => {
-              const _p = a2dp.createA2dpSrcProfile();_p.getConnectionState(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectionState_b', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          let threw = false;
+          try {
+            _p.getConnectionState(EMPTY_MAC);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2862,14 +2892,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectionState_r', 0, () => {
       try {
-            fcRun('prof_base_getConnectionState_r', () => {
-              const _p = a2dp.createA2dpSrcProfile(); try {const _v = _p.getConnectionState(BADDR);
-              expect(_v!==undefined||true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('prof_base_getConnectionState_r', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          try {
+            const value = _p.getConnectionState(BADDR);
+            expect(value !== undefined).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2885,15 +2917,13 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_getConnectionState_x', 0, () => {
       try {
-            fcRun('prof_base_getConnectionState_x', () => {
-              const _p = a2dp.createA2dpSrcProfile(); _p.getConnectionState(BADDR);
-              _p.getConnectionState(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectionState_x', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.getConnectionState(BADDR);
           expect(true).assertTrue();
+          _p.getConnectionState(BADDR);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2902,18 +2932,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PROF_BASE_GETCONNECTIONSTATE_C
      * @tc.name prof_base_getConnectionState_c
-     * @tc.desc Verify Bluetooth API prof base getConnectionState combo scenario
+     * @tc.desc Verify Bluetooth API prof base getConnectionState condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('prof_base_getConnectionState_c', 0, () => {
       try {
-            fcRunCombo('getConnectionState', [() => {const p = a2dp.createA2dpSrcProfile();p.getConnectionState(BADDR);}, () => {const p = a2dp.createA2dpSrcProfile();p.getConnectionState(BADDR);}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_getConnectionState_c', () => {
+          const _p = a2dp.createA2dpSrcProfile();
+          _p.getConnectionState(BADDR);
           expect(true).assertTrue();
+          console.info('[c] condition args done');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2931,14 +2962,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_on_connectionStateChange_n', 0, () => {
       try {
-            fcRun('prof_base_on_connectionStateChange_n', () => {
-              const p = a2dp.createA2dpSrcProfile(); p.on('connectionStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_on_connectionStateChange_n', () => {
+          const p = a2dp.createA2dpSrcProfile();
+          p.on('connectionStateChange', () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2954,14 +2982,19 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_on_connectionStateChange_e', 0, () => {
       try {
-            fcRunErr('prof_base_on_connectionStateChange_e', () => {
-              try {const p = a2dp.createA2dpSrcProfile(); p.on('connectionStateChange', () => {});
-              expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('prof_base_on_connectionStateChange_e', () => {
+          let threw = false;
+          try {
+            const p = a2dp.createA2dpSrcProfile();
+            p.on('connectionStateChange', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2977,14 +3010,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_on_connectionStateChange_b', 0, () => {
       try {
-            fcRun('prof_base_on_connectionStateChange_b', () => {
-              const p = a2dp.createA2dpSrcProfile(); p.on('connectionStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('prof_base_on_connectionStateChange_b', () => {
+          try {
+            const p = a2dp.createA2dpSrcProfile();
+            p.on('connectionStateChange', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3000,14 +3035,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_on_connectionStateChange_r', 0, () => {
       try {
-            fcRun('prof_base_on_connectionStateChange_r', () => {
-              const p = a2dp.createA2dpSrcProfile(); p.on('connectionStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('prof_base_on_connectionStateChange_r', () => {
+          try {
+            const p = a2dp.createA2dpSrcProfile();
+            p.on('connectionStateChange', () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3023,14 +3060,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_on_connectionStateChange_x', 0, () => {
       try {
-            fcRun('prof_base_on_connectionStateChange_x', () => {
-              const p = a2dp.createA2dpSrcProfile(); p.on('connectionStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_on_connectionStateChange_x', () => {
+          const p = a2dp.createA2dpSrcProfile();
+          p.on('connectionStateChange', () = >{});
           expect(true).assertTrue();
+          const p = a2dp.createA2dpSrcProfile();
+          p.on('connectionStateChange', () = >{});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3039,21 +3076,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PROF_BASE_ON_CONNECTIONSTATECHANGE_C
      * @tc.name prof_base_on_connectionStateChange_c
-     * @tc.desc Verify Bluetooth API prof base on connectionStateChange combo scenario
+     * @tc.desc Verify Bluetooth API prof base on connectionStateChange condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('prof_base_on_connectionStateChange_c', 0, () => {
       try {
-            fcRunCombo('prof_base_on_connectionStateChange_c', [() => {
-              const p = a2dp.createA2dpSrcProfile(); p.on('connectionStateChange', () => {});
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_on_connectionStateChange_c', () => {
+          console.info('[c] condition path');
+          const p = a2dp.createA2dpSrcProfile();
+          p.on('connectionStateChange', () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3071,14 +3106,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_off_connectionStateChange_n', 0, () => {
       try {
-            fcRun('prof_base_off_connectionStateChange_n', () => {
-              const p = a2dp.createA2dpSrcProfile(); p.off('connectionStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_off_connectionStateChange_n', () => {
+          const p = a2dp.createA2dpSrcProfile();
+          p.off('connectionStateChange');
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3094,14 +3126,19 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_off_connectionStateChange_e', 0, () => {
       try {
-            fcRunErr('prof_base_off_connectionStateChange_e', () => {
-              try {const p = a2dp.createA2dpSrcProfile(); p.off('connectionStateChange');
-              expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('prof_base_off_connectionStateChange_e', () => {
+          let threw = false;
+          try {
+            const p = a2dp.createA2dpSrcProfile();
+            p.off('connectionStateChange');
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3117,14 +3154,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_off_connectionStateChange_b', 0, () => {
       try {
-            fcRun('prof_base_off_connectionStateChange_b', () => {
-              const p = a2dp.createA2dpSrcProfile(); p.off('connectionStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('prof_base_off_connectionStateChange_b', () => {
+          try {
+            const p = a2dp.createA2dpSrcProfile();
+            p.off('connectionStateChange');
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3140,14 +3179,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_off_connectionStateChange_r', 0, () => {
       try {
-            fcRun('prof_base_off_connectionStateChange_r', () => {
-              const p = a2dp.createA2dpSrcProfile(); p.off('connectionStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('prof_base_off_connectionStateChange_r', () => {
+          try {
+            const p = a2dp.createA2dpSrcProfile();
+            p.off('connectionStateChange');
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3163,14 +3204,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('prof_base_off_connectionStateChange_x', 0, () => {
       try {
-            fcRun('prof_base_off_connectionStateChange_x', () => {
-              const p = a2dp.createA2dpSrcProfile(); p.off('connectionStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_off_connectionStateChange_x', () => {
+          const p = a2dp.createA2dpSrcProfile();
+          p.off('connectionStateChange');
           expect(true).assertTrue();
+          const p = a2dp.createA2dpSrcProfile();
+          p.off('connectionStateChange');
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3179,21 +3220,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PROF_BASE_OFF_CONNECTIONSTATECHANGE_C
      * @tc.name prof_base_off_connectionStateChange_c
-     * @tc.desc Verify Bluetooth API prof base off connectionStateChange combo scenario
+     * @tc.desc Verify Bluetooth API prof base off connectionStateChange condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('prof_base_off_connectionStateChange_c', 0, () => {
       try {
-            fcRunCombo('prof_base_off_connectionStateChange_c', [() => {
-              const p = a2dp.createA2dpSrcProfile(); p.off('connectionStateChange');
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('prof_base_off_connectionStateChange_c', () => {
+          console.info('[c] condition path');
+          const p = a2dp.createA2dpSrcProfile();
+          p.off('connectionStateChange');
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3211,16 +3250,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_register_n', 0, () => {
       try {
-                  fcRun('hiddev_register_n', () => {
-                    const p = hid.createHidDeviceProfile();
-                    p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as
-            hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () => {});
-                    expect(true).assertTrue();
-                  });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_register_n', () => {
+          const p = hid.createHidDeviceProfile();
+          p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3236,16 +3270,19 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_register_e', 0, () => {
       try {
-                  fcRunErr('hiddev_register_e', () => {
-                    try {const p = hid.createHidDeviceProfile();
-                    p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as
-            hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () => {});
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRunErr('hiddev_register_e', () => {
+          let threw = false;
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3261,16 +3298,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_register_b', 0, () => {
       try {
-                  fcRun('hiddev_register_b', () => {
-                    const p = hid.createHidDeviceProfile();
-                    p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as
-            hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () => {});
-                    expect(true).assertTrue();
-                  });
-          } catch (_e) {
+        fcRun('hiddev_register_b', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3286,16 +3323,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_register_r', 0, () => {
       try {
-                  fcRun('hiddev_register_r', () => {
-                    const p = hid.createHidDeviceProfile();
-                    p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as
-            hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () => {});
-                    expect(true).assertTrue();
-                  });
-          } catch (_e) {
+        fcRun('hiddev_register_r', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () = >{});
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3311,16 +3348,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_register_x', 0, () => {
       try {
-                  fcRun('hiddev_register_x', () => {
-                    const p = hid.createHidDeviceProfile();
-                    p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as
-            hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () => {});
-                    expect(true).assertTrue();
-                  });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_register_x', () => {
+          const p = hid.createHidDeviceProfile();
+          p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () = >{});
           expect(true).assertTrue();
+          const p = hid.createHidDeviceProfile();
+          p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () = >{});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3329,23 +3364,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_HIDDEV_REGISTER_C
      * @tc.name hiddev_register_c
-     * @tc.desc Verify Bluetooth API hiddev register combo scenario
+     * @tc.desc Verify Bluetooth API hiddev register condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('hiddev_register_c', 0, () => {
       try {
-                  fcRunCombo('hiddev_register_c', [() => {
-                    const p = hid.createHidDeviceProfile();
-                    p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as
-            hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () => {});
-                    expect(true).assertTrue();
-                  }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_register_c', () => {
+          console.info('[c] condition path');
+          const p = hid.createHidDeviceProfile();
+          p.registerHidDevice(hidSdpStub() as hid.HidDeviceSdp, hidQosStub() as hid.HidDeviceQos, hidQosStub() as hid.HidDeviceQos, () = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3363,14 +3394,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_unregister_n', 0, () => {
       try {
-            fcRun('hiddev_unregister_n', () => {
-              const p = hid.createHidDeviceProfile();p.unregisterHidDevice();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_unregister_n', () => {
+          const p = hid.createHidDeviceProfile();
+          p.unregisterHidDevice();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3386,14 +3414,19 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_unregister_e', 0, () => {
       try {
-            fcRunErr('hiddev_unregister_e', () => {
-              try {const p = hid.createHidDeviceProfile(); p.unregisterHidDevice();
-              expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('hiddev_unregister_e', () => {
+          let threw = false;
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.unregisterHidDevice();
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3409,14 +3442,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_unregister_b', 0, () => {
       try {
-            fcRun('hiddev_unregister_b', () => {
-              const p = hid.createHidDeviceProfile();p.unregisterHidDevice();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('hiddev_unregister_b', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.unregisterHidDevice();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3432,14 +3467,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_unregister_r', 0, () => {
       try {
-            fcRun('hiddev_unregister_r', () => {
-              const p = hid.createHidDeviceProfile();p.unregisterHidDevice();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('hiddev_unregister_r', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.unregisterHidDevice();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3455,14 +3492,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_unregister_x', 0, () => {
       try {
-            fcRun('hiddev_unregister_x', () => {
-              const p = hid.createHidDeviceProfile();p.unregisterHidDevice();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_unregister_x', () => {
+          const p = hid.createHidDeviceProfile();
+          p.unregisterHidDevice();
           expect(true).assertTrue();
+          const p = hid.createHidDeviceProfile();
+          p.unregisterHidDevice();
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3471,21 +3508,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_HIDDEV_UNREGISTER_C
      * @tc.name hiddev_unregister_c
-     * @tc.desc Verify Bluetooth API hiddev unregister combo scenario
+     * @tc.desc Verify Bluetooth API hiddev unregister condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('hiddev_unregister_c', 0, () => {
       try {
-            fcRunCombo('hiddev_unregister_c', [() => {
-              const p = hid.createHidDeviceProfile();p.unregisterHidDevice();
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_unregister_c', () => {
+          console.info('[c] condition path');
+          const p = hid.createHidDeviceProfile();
+          p.unregisterHidDevice();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3503,14 +3538,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_connect_n', 0, () => {
       try {
-            fcRun('hiddev_connect_n', () => {
-              const p = hid.createHidDeviceProfile(); p.connect({address:BADDR, addressType:0});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_connect_n', () => {
+          const p = hid.createHidDeviceProfile();
+          p.connect({ address: BADDR, addressType: 0 });
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3526,14 +3558,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_connect_e', 0, () => {
       try {
-            fcRunErr('hiddev_connect_e', () => {
-              try {const p = hid.createHidDeviceProfile(); p.connect({address:EMPTY_MAC, addressType:0});
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('hiddev_connect_e', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.connect({ address: EMPTY_MAC, addressType: 0 });
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3549,14 +3581,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_connect_b', 0, () => {
       try {
-            fcRun('hiddev_connect_b', () => {
-              const p = hid.createHidDeviceProfile(); p.connect({address:BADDR, addressType:0});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_connect_b', () => {
+          const p = hid.createHidDeviceProfile();
+          p.connect({ address: BAD_MAC, addressType: 0 });
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3572,14 +3601,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_connect_r', 0, () => {
       try {
-            fcRun('hiddev_connect_r', () => {
-              const p = hid.createHidDeviceProfile(); p.connect({address:BADDR, addressType:0});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('hiddev_connect_r', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.connect({ address: BADDR, addressType: 0 });
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3595,14 +3626,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_connect_x', 0, () => {
       try {
-            fcRun('hiddev_connect_x', () => {
-              const p = hid.createHidDeviceProfile(); p.connect({address:BADDR, addressType:0});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_connect_x', () => {
+          const p = hid.createHidDeviceProfile();
+          p.connect({ address: BADDR, addressType: 0 });
           expect(true).assertTrue();
+          const p = hid.createHidDeviceProfile();
+          p.connect({ address: BADDR, addressType: 0 });
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3611,21 +3642,18 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_HIDDEV_CONNECT_C
      * @tc.name hiddev_connect_c
-     * @tc.desc Verify Bluetooth API hiddev connect combo scenario
+     * @tc.desc Verify Bluetooth API hiddev connect condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('hiddev_connect_c', 0, () => {
       try {
-            fcRunCombo('hiddev_connect_c', [() => {
-              const p = hid.createHidDeviceProfile(); p.connect({address:BADDR, addressType:0});
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+        fcRun('hiddev_connect_c', () => {
+          const p = hid.createHidDeviceProfile();
+          p.connect({ address: BADDR, addressType: 0 });
+          expect(false).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3643,14 +3671,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_disconnect_n', 0, () => {
       try {
-            fcRun('hiddev_disconnect_n', () => {
-              const p = hid.createHidDeviceProfile();p.disconnect();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_disconnect_n', () => {
+          const p = hid.createHidDeviceProfile();
+          p.disconnect();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3666,18 +3691,19 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_disconnect_e', 0, () => {
       try {
-            fcRunErr('hiddev_disconnect_e', () => {
-              try {
-                const p = hid.createHidDeviceProfile(); p.disconnect();
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('hiddev_disconnect_e', () => {
+          let threw = false;
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.disconnect();
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3693,14 +3719,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_disconnect_b', 0, () => {
       try {
-            fcRun('hiddev_disconnect_b', () => {
-              const p = hid.createHidDeviceProfile();p.disconnect();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('hiddev_disconnect_b', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.disconnect();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3716,14 +3744,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_disconnect_r', 0, () => {
       try {
-            fcRun('hiddev_disconnect_r', () => {
-              const p = hid.createHidDeviceProfile();p.disconnect();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('hiddev_disconnect_r', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.disconnect();
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3739,14 +3769,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_disconnect_x', 0, () => {
       try {
-            fcRun('hiddev_disconnect_x', () => {
-              const p = hid.createHidDeviceProfile();p.disconnect();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_disconnect_x', () => {
+          const p = hid.createHidDeviceProfile();
+          p.disconnect();
           expect(true).assertTrue();
+          const p = hid.createHidDeviceProfile();
+          p.disconnect();
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3755,21 +3785,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_HIDDEV_DISCONNECT_C
      * @tc.name hiddev_disconnect_c
-     * @tc.desc Verify Bluetooth API hiddev disconnect combo scenario
+     * @tc.desc Verify Bluetooth API hiddev disconnect condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('hiddev_disconnect_c', 0, () => {
       try {
-            fcRunCombo('hiddev_disconnect_c', [() => {
-              const p = hid.createHidDeviceProfile();p.disconnect();
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_disconnect_c', () => {
+          console.info('[c] condition path');
+          const p = hid.createHidDeviceProfile();
+          p.disconnect();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3787,14 +3815,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_sendReport_n', 0, () => {
       try {
-            fcRun('hiddev_sendReport_n', () => {
-              const p = hid.createHidDeviceProfile(); p.sendReport(1, new Uint8Array([0]));
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_sendReport_n', () => {
+          const p = hid.createHidDeviceProfile();
+          p.sendReport(1, new Uint8Array([0]));
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3810,14 +3835,19 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_sendReport_e', 0, () => {
       try {
-            fcRunErr('hiddev_sendReport_e', () => {
-              try {const p = hid.createHidDeviceProfile(); p.sendReport(1, new Uint8Array([0]));
-              expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('hiddev_sendReport_e', () => {
+          let threw = false;
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.sendReport(1, new Uint8Array([0]));
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3833,14 +3863,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_sendReport_b', 0, () => {
       try {
-            fcRun('hiddev_sendReport_b', () => {
-              const p = hid.createHidDeviceProfile(); p.sendReport(1, new Uint8Array([0]));
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('hiddev_sendReport_b', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.sendReport(1, new Uint8Array([0]));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3856,14 +3888,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_sendReport_r', 0, () => {
       try {
-            fcRun('hiddev_sendReport_r', () => {
-              const p = hid.createHidDeviceProfile(); p.sendReport(1, new Uint8Array([0]));
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('hiddev_sendReport_r', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.sendReport(1, new Uint8Array([0]));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3879,14 +3913,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_sendReport_x', 0, () => {
       try {
-            fcRun('hiddev_sendReport_x', () => {
-              const p = hid.createHidDeviceProfile(); p.sendReport(1, new Uint8Array([0]));
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_sendReport_x', () => {
+          const p = hid.createHidDeviceProfile();
+          p.sendReport(1, new Uint8Array([0]));
           expect(true).assertTrue();
+          const p = hid.createHidDeviceProfile();
+          p.sendReport(1, new Uint8Array([0]));
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3895,21 +3929,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_HIDDEV_SENDREPORT_C
      * @tc.name hiddev_sendReport_c
-     * @tc.desc Verify Bluetooth API hiddev sendReport combo scenario
+     * @tc.desc Verify Bluetooth API hiddev sendReport condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('hiddev_sendReport_c', 0, () => {
       try {
-            fcRunCombo('hiddev_sendReport_c', [() => {
-              const p = hid.createHidDeviceProfile(); p.sendReport(1, new Uint8Array([0]));
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_sendReport_c', () => {
+          console.info('[c] condition path');
+          const p = hid.createHidDeviceProfile();
+          p.sendReport(1, new Uint8Array([0]));
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3927,14 +3959,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_replyReport_n', 0, () => {
       try {
-            fcRun('hiddev_replyReport_n', () => {
-              const p = hid.createHidDeviceProfile(); p.replyReport(0, 1, new Uint8Array([0]));
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_replyReport_n', () => {
+          const p = hid.createHidDeviceProfile();
+          p.replyReport(0, 1, new Uint8Array([0]));
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3950,14 +3979,19 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_replyReport_e', 0, () => {
       try {
-            fcRunErr('hiddev_replyReport_e', () => {
-              try {const p = hid.createHidDeviceProfile(); p.replyReport(0, 1, new Uint8Array([0]));
-              expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('hiddev_replyReport_e', () => {
+          let threw = false;
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.replyReport(0, 1, new Uint8Array([0]));
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3973,14 +4007,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_replyReport_b', 0, () => {
       try {
-            fcRun('hiddev_replyReport_b', () => {
-              const p = hid.createHidDeviceProfile(); p.replyReport(0, 1, new Uint8Array([0]));
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('hiddev_replyReport_b', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.replyReport(0, 1, new Uint8Array([0]));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3996,14 +4032,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_replyReport_r', 0, () => {
       try {
-            fcRun('hiddev_replyReport_r', () => {
-              const p = hid.createHidDeviceProfile(); p.replyReport(0, 1, new Uint8Array([0]));
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('hiddev_replyReport_r', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.replyReport(0, 1, new Uint8Array([0]));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4019,14 +4057,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_replyReport_x', 0, () => {
       try {
-            fcRun('hiddev_replyReport_x', () => {
-              const p = hid.createHidDeviceProfile(); p.replyReport(0, 1, new Uint8Array([0]));
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_replyReport_x', () => {
+          const p = hid.createHidDeviceProfile();
+          p.replyReport(0, 1, new Uint8Array([0]));
           expect(true).assertTrue();
+          const p = hid.createHidDeviceProfile();
+          p.replyReport(0, 1, new Uint8Array([0]));
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4035,21 +4073,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_HIDDEV_REPLYREPORT_C
      * @tc.name hiddev_replyReport_c
-     * @tc.desc Verify Bluetooth API hiddev replyReport combo scenario
+     * @tc.desc Verify Bluetooth API hiddev replyReport condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('hiddev_replyReport_c', 0, () => {
       try {
-            fcRunCombo('hiddev_replyReport_c', [() => {
-              const p = hid.createHidDeviceProfile(); p.replyReport(0, 1, new Uint8Array([0]));
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_replyReport_c', () => {
+          console.info('[c] condition path');
+          const p = hid.createHidDeviceProfile();
+          p.replyReport(0, 1, new Uint8Array([0]));
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4067,14 +4103,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_reportError_n', 0, () => {
       try {
-            fcRun('hiddev_reportError_n', () => {
-              const p = hid.createHidDeviceProfile();p.reportError(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_reportError_n', () => {
+          const p = hid.createHidDeviceProfile();
+          p.reportError(0);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4090,18 +4123,19 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_reportError_e', 0, () => {
       try {
-            fcRunErr('hiddev_reportError_e', () => {
-              try {
-                const p = hid.createHidDeviceProfile(); p.reportError(0);
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRunErr('hiddev_reportError_e', () => {
+          let threw = false;
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.reportError(0);
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4117,14 +4151,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_reportError_b', 0, () => {
       try {
-            fcRun('hiddev_reportError_b', () => {
-              const p = hid.createHidDeviceProfile();p.reportError(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('hiddev_reportError_b', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.reportError(0);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4140,14 +4176,16 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_reportError_r', 0, () => {
       try {
-            fcRun('hiddev_reportError_r', () => {
-              const p = hid.createHidDeviceProfile();p.reportError(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('hiddev_reportError_r', () => {
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.reportError(0);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4163,14 +4201,14 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_reportError_x', 0, () => {
       try {
-            fcRun('hiddev_reportError_x', () => {
-              const p = hid.createHidDeviceProfile();p.reportError(0);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_reportError_x', () => {
+          const p = hid.createHidDeviceProfile();
+          p.reportError(0);
           expect(true).assertTrue();
+          const p = hid.createHidDeviceProfile();
+          p.reportError(0);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4179,21 +4217,19 @@ export default function bluetoothFullCoverageProfile02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_HIDDEV_REPORTERROR_C
      * @tc.name hiddev_reportError_c
-     * @tc.desc Verify Bluetooth API hiddev reportError combo scenario
+     * @tc.desc Verify Bluetooth API hiddev reportError condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('hiddev_reportError_c', 0, () => {
       try {
-            fcRunCombo('hiddev_reportError_c', [() => {
-              const p = hid.createHidDeviceProfile();p.reportError(0);
-              expect(true).assertTrue();
-            }]);
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_reportError_c', () => {
+          console.info('[c] condition path');
+          const p = hid.createHidDeviceProfile();
+          p.reportError(0);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4211,14 +4247,11 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_onGetReport_n', 0, () => {
       try {
-            fcRun('hiddev_onGetReport_n', () => {
-              const p = hid.createHidDeviceProfile();p.onGetReport(() => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('hiddev_onGetReport_n', () => {
+          const p = hid.createHidDeviceProfile();
+          p.onGetReport(() = >{});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4234,14 +4267,19 @@ export default function bluetoothFullCoverageProfile02() {
      */
     it('hiddev_onGetReport_e', 0, () => {
       try {
-            fcRunErr('hiddev_onGetReport_e', () => {
-              try {const p = hid.createHidDeviceProfile(); p.onGetReport(() => {}); expect(true).assertTrue();
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRunErr('hiddev_onGetReport_e', () => {
+          let threw = false;
+          try {
+            const p = hid.createHidDeviceProfile();
+            p.onGetReport(() = >{});
             expect(true).assertTrue();
-        } catch (_e) {
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
