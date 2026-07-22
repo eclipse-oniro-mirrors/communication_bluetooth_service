@@ -39,7 +39,7 @@ const PROFILE_HID_HOST = 6;
 const PROFILE_PAN_NETWORK = 7;
 const PROFILE_INVALID = -1;
 
-const tryInvoke = (tag: string, fn: () => void): void => {
+const invokeApiLogOnError = (tag: string, fn: () => void): void => {
   try {
     fn();
   } catch (e) {
@@ -59,18 +59,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('getState', 0, () => {
-      try {
-            tryInvoke('getState', () => {
-              const s = bluetooth.getState();
-              expect(s !== null && s !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('getState', () => {
+        const s = bluetooth.getState();
+        expect(s !== null && s !== undefined).assertTrue();
+      });
     });
 
     /**
@@ -82,18 +74,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('getBtConnectionState', 0, () => {
-      try {
-            tryInvoke('getBtConnectionState', () => {
-              const s = bluetooth.getBtConnectionState();
-              expect(s !== null && s !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('getBtConnectionState', () => {
+        const s = bluetooth.getBtConnectionState();
+        expect(s !== null && s !== undefined).assertTrue();
+      });
     });
 
     /**
@@ -105,18 +89,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('getLocalName', 0, () => {
-      try {
-            tryInvoke('getLocalName', () => {
-              const n = bluetooth.getLocalName();
-              expect(typeof n === 'string').assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('getLocalName', () => {
+        const n = bluetooth.getLocalName();
+        expect(typeof n === 'string').assertTrue();
+      });
     });
 
     /**
@@ -128,18 +104,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('getPairedDevices', 0, () => {
-      try {
-            tryInvoke('getPairedDevices', () => {
-              const a = bluetooth.getPairedDevices();
-              expect(Array.isArray(a)).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('getPairedDevices', () => {
+        const a = bluetooth.getPairedDevices();
+        expect(Array.isArray(a)).assertTrue();
+      });
     });
 
     /**
@@ -151,18 +119,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('getBluetoothScanMode', 0, () => {
-      try {
-            tryInvoke('getBluetoothScanMode', () => {
-              const m = bluetooth.getBluetoothScanMode();
-              expect(m !== null && m !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('getBluetoothScanMode', () => {
+        const m = bluetooth.getBluetoothScanMode();
+        expect(m !== null && m !== undefined).assertTrue();
+      });
     });
 
     /**
@@ -174,18 +134,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('getProfileConnState_a2dp', 0, () => {
-      try {
-            tryInvoke('getProfileConnState', () => {
-              const s = bluetooth.getProfileConnState(PROFILE_A2DP_SOURCE);
-              expect(s !== null && s !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('getProfileConnState', () => {
+        const s = bluetooth.getProfileConnState(PROFILE_A2DP_SOURCE);
+        expect(s !== null && s !== undefined).assertTrue();
+      });
     });
 
     /**
@@ -197,20 +149,12 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('getProfileConnState_hid_pan_profiles', 0, () => {
-      try {
-            tryInvoke('getProfileConnState_6_7', () => {
-              const s6 = bluetooth.getProfileConnState(PROFILE_HID_HOST);
-              const s7 = bluetooth.getProfileConnState(PROFILE_PAN_NETWORK);
-              expect(s6 !== null && s6 !== undefined).assertTrue();
-              expect(s7 !== null && s7 !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('getProfileConnState_6_7', () => {
+        const s6 = bluetooth.getProfileConnState(PROFILE_HID_HOST);
+        const s7 = bluetooth.getProfileConnState(PROFILE_PAN_NETWORK);
+        expect(s6 !== null && s6 !== undefined).assertTrue();
+        expect(s7 !== null && s7 !== undefined).assertTrue();
+      });
     });
 
     /**
@@ -222,21 +166,9 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('getProfileConnState_invalid_profile_boundary', 0, () => {
-      try {
-            tryInvoke('getProfileConnState_invalid', () => {
-              try {
-                bluetooth.getProfileConnState(PROFILE_INVALID);
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('getProfileConnState_invalid', () => {
+        bluetooth.getProfileConnState(PROFILE_INVALID);
+      });
     });
 
     /**
@@ -248,28 +180,20 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('getProfile_a2dp_hfp_opp', 0, () => {
-      try {
-            tryInvoke('getProfile_1_4_10', () => {
-              const p1 = bluetooth.getProfile(PROFILE_A2DP_SOURCE);
-              const p4 = bluetooth.getProfile(PROFILE_HFP_AG);
-              const p10 = bluetooth.getProfile(PROFILE_OPP);
-              expect(p1 !== null && p1 !== undefined).assertTrue();
-              expect(p4 !== null && p4 !== undefined).assertTrue();
-              // 部分机型/镜像未暴露 OPP，不强制 p10 非空，避免阻塞全量用例
-              if (p10 === null || p10 === undefined) {
-                console.info('[BluetoothApiCoverage] getProfile(PROFILE_OPP) unavailable on device, skip strict assert');
-                expect(true).assertTrue();
-              } else {
-                expect(p10 !== null && p10 !== undefined).assertTrue();
-              }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('getProfile_1_4_10', () => {
+        const p1 = bluetooth.getProfile(PROFILE_A2DP_SOURCE);
+        const p4 = bluetooth.getProfile(PROFILE_HFP_AG);
+        const p10 = bluetooth.getProfile(PROFILE_OPP);
+        expect(p1 !== null && p1 !== undefined).assertTrue();
+        expect(p4 !== null && p4 !== undefined).assertTrue();
+        // 部分机型/镜像未暴露 OPP，不强制 p10 非空，避免阻塞全量用例
+        if (p10 === null || p10 === undefined) {
+          console.info('[BluetoothApiCoverage] getProfile(PROFILE_OPP) unavailable on device, ' +
+            'skip strict assert');
+        } else {
+          expect(p10 !== null && p10 !== undefined).assertTrue();
+        }
+      });
     });
   });
 
@@ -284,18 +208,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('BLE_getConnectedBLEDevices', 0, () => {
-      try {
-            tryInvoke('BLE.getConnectedBLEDevices', () => {
-              const a = bluetooth.BLE.getConnectedBLEDevices();
-              expect(Array.isArray(a)).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('BLE.getConnectedBLEDevices', () => {
+        const a = bluetooth.BLE.getConnectedBLEDevices();
+        expect(Array.isArray(a)).assertTrue();
+      });
     });
 
     /**
@@ -307,18 +223,9 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('BLE_stopBLEScan_idempotent', 0, () => {
-      try {
-            tryInvoke('BLE.stopBLEScan', () => {
-              bluetooth.BLE.stopBLEScan();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('BLE.stopBLEScan', () => {
+        bluetooth.BLE.stopBLEScan();
+      });
     });
   });
 
@@ -333,18 +240,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('btm_getState', 0, () => {
-      try {
-            tryInvoke('btm.getState', () => {
-              const s = btm.getState();
-              expect(s !== null && s !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('btm.getState', () => {
+        const s = btm.getState();
+        expect(s !== null && s !== undefined).assertTrue();
+      });
     });
 
     /**
@@ -356,18 +255,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('btm_getPairedDevices', 0, () => {
-      try {
-            tryInvoke('btm.getPairedDevices', () => {
-              const a = btm.getPairedDevices();
-              expect(Array.isArray(a)).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('btm.getPairedDevices', () => {
+        const a = btm.getPairedDevices();
+        expect(Array.isArray(a)).assertTrue();
+      });
     });
 
     /**
@@ -379,20 +270,12 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('btm_getProfileInstance_a2dp_hfp', 0, () => {
-      try {
-            tryInvoke('btm.getProfileInstance', () => {
-              const p1 = btm.getProfileInstance(PROFILE_A2DP_SOURCE);
-              const p4 = btm.getProfileInstance(PROFILE_HFP_AG);
-              expect(p1 !== null && p1 !== undefined).assertTrue();
-              expect(p4 !== null && p4 !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('btm.getProfileInstance', () => {
+        const p1 = btm.getProfileInstance(PROFILE_A2DP_SOURCE);
+        const p4 = btm.getProfileInstance(PROFILE_HFP_AG);
+        expect(p1 !== null && p1 !== undefined).assertTrue();
+        expect(p4 !== null && p4 !== undefined).assertTrue();
+      });
     });
 
     /**
@@ -404,18 +287,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('btm_getProfileConnectionState', 0, () => {
-      try {
-            tryInvoke('btm.getProfileConnectionState', () => {
-              const s = btm.getProfileConnectionState(PROFILE_A2DP_SOURCE);
-              expect(s !== null && s !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('btm.getProfileConnectionState', () => {
+        const s = btm.getProfileConnectionState(PROFILE_A2DP_SOURCE);
+        expect(s !== null && s !== undefined).assertTrue();
+      });
     });
 
     /**
@@ -427,18 +302,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('btm_getBtConnectionState', 0, () => {
-      try {
-            tryInvoke('btm.getBtConnectionState', () => {
-              const s = btm.getBtConnectionState();
-              expect(s !== null && s !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('btm.getBtConnectionState', () => {
+        const s = btm.getBtConnectionState();
+        expect(s !== null && s !== undefined).assertTrue();
+      });
     });
   });
 
@@ -453,18 +320,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('hid_createHidHostProfile', 0, () => {
-      try {
-            tryInvoke('hid.createHidHostProfile', () => {
-              const p = hid.createHidHostProfile();
-              expect(p !== null && p !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('hid.createHidHostProfile', () => {
+        const p = hid.createHidHostProfile();
+        expect(p !== null && p !== undefined).assertTrue();
+      });
     });
 
     /**
@@ -476,18 +335,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('pan_createPanProfile', 0, () => {
-      try {
-            tryInvoke('pan.createPanProfile', () => {
-              const p = pan.createPanProfile();
-              expect(p !== null && p !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('pan.createPanProfile', () => {
+        const p = pan.createPanProfile();
+        expect(p !== null && p !== undefined).assertTrue();
+      });
     });
 
     /**
@@ -499,18 +350,10 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('opp_createOppServerProfile', 0, () => {
-      try {
-            tryInvoke('opp.createOppServerProfile', () => {
-              const p = opp.createOppServerProfile();
-              expect(p !== null && p !== undefined).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('opp.createOppServerProfile', () => {
+        const p = opp.createOppServerProfile();
+        expect(p !== null && p !== undefined).assertTrue();
+      });
     });
   });
 
@@ -525,18 +368,9 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('getRemoteDeviceName_invalid_mac_may_throw', 0, () => {
-      try {
-            tryInvoke('getRemoteDeviceName', () => {
-              bluetooth.getRemoteDeviceName(DUMMY_MAC);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      invokeApiLogOnError('getRemoteDeviceName', () => {
+        bluetooth.getRemoteDeviceName(DUMMY_MAC);
+      });
     });
   });
 
@@ -551,17 +385,9 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('perf_getState_budget', 0, () => {
-      try {
-            assertPerfBudget('@ohos.bluetooth.getState', 35, 20000, () => {
-              bluetooth.getState();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      assertPerfBudget('@ohos.bluetooth.getState', 35, 20000, () => {
+        bluetooth.getState();
+      });
     });
 
     /**
@@ -573,17 +399,9 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('perf_btm_getPairedDevices_budget', 0, () => {
-      try {
-            assertPerfBudget('bluetoothManager.getPairedDevices', 25, 20000, () => {
-              btm.getPairedDevices();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      assertPerfBudget('bluetoothManager.getPairedDevices', 25, 20000, () => {
+        btm.getPairedDevices();
+      });
     });
   });
 
@@ -598,17 +416,9 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('stress_getBtConnectionState_iterations', 0, () => {
-      try {
-            assertStressHasSuccess('getBtConnectionState', 100, () => {
-              bluetooth.getBtConnectionState();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      assertStressHasSuccess('getBtConnectionState', 100, () => {
+        bluetooth.getBtConnectionState();
+      });
     });
 
     /**
@@ -620,20 +430,14 @@ export default function bluetoothApiCoverageTest() {
      * @tc.level Level 2
      */
     it('stress_BLE_stopBLEScan_iterations', 0, () => {
-      try {
-            assertStressHasSuccess('BLE.stopBLEScan', 100, () => {
-              bluetooth.BLE.stopBLEScan();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      assertStressHasSuccess('BLE.stopBLEScan', 100, () => {
+        bluetooth.BLE.stopBLEScan();
+      });
     });
   });
 }
+
+
 
 
 

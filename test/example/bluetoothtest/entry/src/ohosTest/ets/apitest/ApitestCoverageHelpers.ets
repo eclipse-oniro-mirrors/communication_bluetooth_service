@@ -50,9 +50,11 @@ export function assertStressHasSuccess(tag: string, iterations: number, fn: () =
   }
   console.info(`[ApitestStress] ${tag} iterations=${iterations} successCount=${ok}`);
   if (ok === 0) {
-    console.info(`[ApitestStress] ${tag} note: zero successes (e.g. BT off); stress path still executed`);
+    console.info(`[ApitestStress] ${tag} note: zero successes (e.g. BT off);
+    stress path still executed`);
   }
   expect(iterations > 0).assertTrue();
 }
+
 
 

@@ -17,8 +17,8 @@ import UIAbility from '@ohos.app.ability.UIAbility';
 import { AbilityConstant, Want} from '@kit.AbilityKit';
 import AbilityDelegatorRegistry from '@ohos.app.ability.abilityDelegatorRegistry';
 import { Hypium} from '@ohos/hypium';
-/** 默认：API + UiTest（List.test）。仅跑 apitest 全量时将 import 改为 ../apitest/List.apitest.test */
-import testsuite from '../apitest/List.test';
+/** 仅跑 apitest 全量（List.apitest.test）。API+UiTest 时改回 ../apitest/List.test */
+import testsuite from '../apitest/List.apitest.test';
 import window from '@ohos.window';
 
 export default class TestAbility extends UIAbility {

@@ -14,11 +14,9 @@
  */
 
 /**
- * Shared helpers for generated BluetoothFullCoverage*.test.ets suites.
- * Aligns with jsapi/26/APITEST_COVERAGE.md: param / return / condition / exception paths.
- * Multi-API sequential helpers (fcRunCombo) are not allowed.
+ * Shared stubs for generated BluetoothFullCoverage*.test.ets suites.
+ * Case bodies call APIs directly (no fcRun wrappers) with hilog + real assertions.
  */
-import { expect } from '@ohos/hypium';
 import ble from '@ohos.bluetooth.ble';
 import socket from '@ohos.bluetooth.socket';
 import bluetooth from '@ohos.bluetooth';
@@ -33,50 +31,6 @@ export const EMPTY_MAC = '';
 export const SVC_UUID = '0000180A-0000-1000-8000-00805F9B34FB';
 export const CHAR_UUID = '00002A00-0000-1000-8000-00805F9B34FB';
 export const SPP_UUID = '00001101-0000-1000-8000-00805F9B34FB';
-
-/** Normal path: invoke and assert no throw (errors logged, not fatal on device). */
-export function fcRun(tag: string, fn: () => void): void {
-  try {
-    fn();
-    expect(true).assertTrue();
-  } catch (e) {
-    console.info(`[FullCoverage] ${tag} caught: ${JSON.stringify(e)}`);
-    expect(true).assertTrue();
-  }
-}
-
-/** Error/boundary path: expect throw OR success (implementation-dependent). */
-export function fcRunErr(tag: string, fn: () => void): void {
-  let threw = false;
-  try {
-    fn();
-  } catch (_e) {
-    threw = true;
-  }
-  console.info(`[FullCoverage] ${tag} threw=${threw}`);
-  expect(true).assertTrue();
-}
-
-/** Return path: run fn and apply checker on result; checker failure is non-fatal. */
-export function fcRunRet<T>(tag: string, fn: () => T, check: (v: T) => boolean): void {
-  try {
-    const v = fn();
-    if (check(v)) {
-      expect(true).assertTrue();
-    } else {
-      console.info(`[FullCoverage] ${tag} return check failed`);
-      expect(true).assertTrue();
-    }
-  } catch (e) {
-    console.info(`[FullCoverage] ${tag} ret-caught: ${JSON.stringify(e)}`);
-    expect(true).assertTrue();
-  }
-}
-
-/**
- * fcRunCombo (multi-API sequential calls in one it) is intentionally removed.
- * Each FullCoverage it() must exercise a single primary API for clear return/assert/debug.
- */
 
 export function buf0(): ArrayBuffer {
   return new ArrayBuffer(0);
@@ -160,7 +114,8 @@ export function hidSdpStub(): hid.HidDeviceSdp {
 }
 
 export function hidQosStub(): hid.HidDeviceQos {
-  return { serviceType: 1, tokenRate: 800, tokenBucketSize: 800, peakBandwidth: 0, latency: 0, delayVariation: 0 };
+  return { serviceType: 1, tokenRate: 800, tokenBucketSize: 800, peakBandwidth: 0, latency: 0,
+    delayVariation: 0 };
 }
 
 export function partnerDeviceAddr(): partnerAgent.PartnerDeviceAddress {
@@ -211,5 +166,6 @@ export function bleNotifyChar(): ble.NotifyCharacteristic {
 export function gattServerResponse(): ble.ServerResponse {
   return { deviceId: BADDR, transId: 0, status: 0, offset: 0, value: buf0() };
 }
+
 
 
