@@ -1559,18 +1559,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_61', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(61 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(61 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1582,18 +1584,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_62', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(62 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(62 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1605,18 +1609,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_63', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(63 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(63 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1628,18 +1634,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_64', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(64 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(64 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1651,18 +1659,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_65', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(65 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(65 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1674,18 +1684,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_66', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(66 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(66 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1697,18 +1709,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_67', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(67 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(67 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1720,18 +1734,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_68', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(68 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(68 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1743,18 +1759,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_69', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(69 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(69 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1766,18 +1784,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_70', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(70 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(70 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1789,18 +1809,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_71', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(71 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(71 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1812,18 +1834,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_72', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(72 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(72 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1835,18 +1859,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_73', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(73 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(73 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1858,18 +1884,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_74', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(74 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(74 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1881,18 +1909,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_75', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(75 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(75 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1904,18 +1934,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_76', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(76 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(76 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1927,18 +1959,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_77', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(77 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(77 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1950,18 +1984,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_78', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(78 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(78 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1973,18 +2009,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_79', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(79 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(79 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -1996,18 +2034,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_80', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(80 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(80 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2019,18 +2059,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_81', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(81 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(81 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2042,18 +2084,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_82', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(82 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(82 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2065,18 +2109,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_83', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(83 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(83 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2088,18 +2134,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_84', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(84 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(84 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2111,18 +2159,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_85', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(85 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(85 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2134,18 +2184,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_86', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(86 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(86 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2157,18 +2209,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_87', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(87 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(87 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2180,18 +2234,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_88', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(88 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(88 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2203,18 +2259,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_89', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(89 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(89 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2226,18 +2284,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_90', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(90 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(90 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2249,18 +2309,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_91', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(91 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(91 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2272,18 +2334,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_92', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(92 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(92 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2295,18 +2359,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_93', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(93 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(93 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2318,18 +2384,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_94', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(94 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(94 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2341,18 +2409,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_95', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(95 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(95 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2364,18 +2434,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_96', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(96 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(96 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2387,18 +2459,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_97', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(97 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(97 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2410,18 +2484,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_98', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(98 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(98 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2433,18 +2509,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_99', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(99 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(99 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2456,18 +2534,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_100', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(100 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(100 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2479,18 +2559,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_101', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(101 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(101 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2502,18 +2584,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_102', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(102 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(102 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2525,18 +2609,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_103', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(103 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(103 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2548,18 +2634,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_104', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(104 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(104 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2571,18 +2659,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_105', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(105 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(105 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2594,18 +2684,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_106', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(106 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(106 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2617,18 +2709,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_107', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(107 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(107 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2640,18 +2734,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_108', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(108 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(108 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2663,18 +2759,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_109', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(109 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(109 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2686,18 +2784,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_110', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(110 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(110 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2709,18 +2809,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_111', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(111 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(111 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2732,18 +2834,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_112', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(112 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(112 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2755,18 +2859,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_113', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(113 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(113 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2778,18 +2884,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_114', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(114 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(114 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2801,18 +2909,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_115', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(115 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(115 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2824,18 +2934,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_116', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(116 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(116 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2847,18 +2959,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_117', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(117 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(117 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2870,18 +2984,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_118', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(118 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(118 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2893,18 +3009,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_119', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(119 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(119 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2916,18 +3034,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_120', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(120 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(120 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2939,18 +3059,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_121', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(121 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(121 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2962,18 +3084,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_122', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(122 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(122 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -2985,18 +3109,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_123', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(123 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(123 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -3008,18 +3134,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_124', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(124 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(124 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -3031,18 +3159,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_125', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(125 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(125 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -3054,18 +3184,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_126', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(126 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(126 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -3077,18 +3209,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_127', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(127 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(127 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -3100,18 +3234,20 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_128', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(128 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(128 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
     /**
@@ -3123,22 +3259,23 @@ export default function bluetoothExpandedMatrixConnection01Test() {
      * @tc.level Level 2
      */
     it('expanded_ck_getProfileConnectionState_129', 0, () => {
+      let errCode = 0;
+      let value = -1;
+      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
       try {
-            matrixTryRun(() => {
-              connection.getProfileConnectionState(129 as constant.ProfileId);
-            });
-            expect(true).assertTrue();
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
+        value = connection.getProfileConnectionState(129 as constant.ProfileId);
+      } catch (err) {
+        errCode = (err as BusinessError).code;
+        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
+      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
+        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(typeof value).assertEqual('number');
     });
 
   });
 }
-
 
 
