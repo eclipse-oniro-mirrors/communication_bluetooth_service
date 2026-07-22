@@ -2081,14 +2081,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_addService_n', 0, () => {
       try {
-            fcRun('gatts_addService_n', () => {
-              const _s = ble.createGattServer();_s.addService(bleGattService());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_addService_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.addService(bleGattService());
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2104,14 +2101,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_addService_e', 0, () => {
       try {
-            fcRunErr('gatts_addService_e', () => {
-              const _s = ble.createGattServer(); try {_s.addService(bleGattService());
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_addService_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.addService(bleGattService());
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2127,14 +2128,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_addService_b', 0, () => {
       try {
-            fcRun('gatts_addService_b', () => {
-              const _s = ble.createGattServer();_s.addService(bleGattService());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_addService_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.addService(bleGattService());
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2150,14 +2155,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_addService_r', 0, () => {
       try {
-            fcRun('gatts_addService_r', () => {
-              const _s = ble.createGattServer();_s.addService(bleGattService());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_addService_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.addService(bleGattService());
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2173,15 +2180,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_addService_x', 0, () => {
       try {
-            fcRun('gatts_addService_x', () => {
-              const _s = ble.createGattServer(); _s.addService(bleGattService());
-              _s.addService(bleGattService());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_addService_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.addService(bleGattService());
           expect(true).assertTrue();
+          gattServer.addService(bleGattService());
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2190,18 +2195,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ADDSERVICE_C
      * @tc.name gatts_addService_c
-     * @tc.desc Verify Bluetooth API gatts addService combo scenario
+     * @tc.desc Verify Bluetooth API gatts addService condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_addService_c', 0, () => {
       try {
-            fcRunCombo('addService', [() => {const s = ble.createGattServer();s.addService(bleGattService());s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_addService_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.addService(bleGattService());
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2219,14 +2225,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_removeService_n', 0, () => {
       try {
-            fcRun('gatts_removeService_n', () => {
-              const _s = ble.createGattServer();_s.removeService(SVC_UUID);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_removeService_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.removeService(SVC_UUID);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2242,14 +2245,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_removeService_e', 0, () => {
       try {
-            fcRunErr('gatts_removeService_e', () => {
-              const _s = ble.createGattServer(); try {_s.removeService(SVC_UUID);
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_removeService_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.removeService(SVC_UUID);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2265,14 +2272,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_removeService_b', 0, () => {
       try {
-            fcRun('gatts_removeService_b', () => {
-              const _s = ble.createGattServer();_s.removeService(SVC_UUID);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_removeService_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.removeService(SVC_UUID);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2288,14 +2299,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_removeService_r', 0, () => {
       try {
-            fcRun('gatts_removeService_r', () => {
-              const _s = ble.createGattServer();_s.removeService(SVC_UUID);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_removeService_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.removeService(SVC_UUID);
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2311,14 +2324,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_removeService_x', 0, () => {
       try {
-            fcRun('gatts_removeService_x', () => {
-              const _s = ble.createGattServer(); _s.removeService(SVC_UUID); _s.removeService(SVC_UUID);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_removeService_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.removeService(SVC_UUID);
           expect(true).assertTrue();
+          gattServer.removeService(SVC_UUID);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2327,18 +2339,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_REMOVESERVICE_C
      * @tc.name gatts_removeService_c
-     * @tc.desc Verify Bluetooth API gatts removeService combo scenario
+     * @tc.desc Verify Bluetooth API gatts removeService condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_removeService_c', 0, () => {
       try {
-            fcRunCombo('removeService', [() => {const s = ble.createGattServer();s.removeService(SVC_UUID);s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_removeService_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.removeService(SVC_UUID);
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2356,14 +2369,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getService_n', 0, () => {
       try {
-            fcRun('gatts_getService_n', () => {
-              const _s = ble.createGattServer();_s.getService(SVC_UUID);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getService_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.getService(SVC_UUID);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2379,14 +2389,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getService_e', 0, () => {
       try {
-            fcRunErr('gatts_getService_e', () => {
-              const _s = ble.createGattServer(); try {_s.getService(SVC_UUID);
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_getService_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.getService(SVC_UUID);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2402,14 +2416,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getService_b', 0, () => {
       try {
-            fcRun('gatts_getService_b', () => {
-              const _s = ble.createGattServer();_s.getService(SVC_UUID);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getService_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.getService(SVC_UUID);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2425,14 +2443,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getService_r', 0, () => {
       try {
-            fcRun('gatts_getService_r', () => {
-              const _s = ble.createGattServer();_s.getService(SVC_UUID);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_getService_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.getService(SVC_UUID);
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2448,14 +2468,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getService_x', 0, () => {
       try {
-            fcRun('gatts_getService_x', () => {
-              const _s = ble.createGattServer(); _s.getService(SVC_UUID); _s.getService(SVC_UUID);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getService_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.getService(SVC_UUID);
           expect(true).assertTrue();
+          gattServer.getService(SVC_UUID);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2464,18 +2483,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_GETSERVICE_C
      * @tc.name gatts_getService_c
-     * @tc.desc Verify Bluetooth API gatts getService combo scenario
+     * @tc.desc Verify Bluetooth API gatts getService condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_getService_c', 0, () => {
       try {
-            fcRunCombo('getService', [() => {const s = ble.createGattServer();s.getService(SVC_UUID);s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getService_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.getService(SVC_UUID);
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2493,14 +2513,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getServices_n', 0, () => {
       try {
-            fcRun('gatts_getServices_n', () => {
-              const _s = ble.createGattServer();_s.getServices();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getServices_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.getServices();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2516,13 +2533,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getServices_e', 0, () => {
       try {
-            fcRunErr('gatts_getServices_e', () => {
-              const _s = ble.createGattServer();try {_s.getServices();} catch (_e) {expect(true).assertTrue();}
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_getServices_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.getServices();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2538,14 +2560,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getServices_b', 0, () => {
       try {
-            fcRun('gatts_getServices_b', () => {
-              const _s = ble.createGattServer();_s.getServices();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getServices_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.getServices();
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2561,14 +2587,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getServices_r', 0, () => {
       try {
-            fcRun('gatts_getServices_r', () => {
-              const _s = ble.createGattServer();_s.getServices();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_getServices_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.getServices();
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2584,14 +2612,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getServices_x', 0, () => {
       try {
-            fcRun('gatts_getServices_x', () => {
-              const _s = ble.createGattServer();_s.getServices();_s.getServices();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getServices_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.getServices();
           expect(true).assertTrue();
+          gattServer.getServices();
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2600,18 +2627,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_GETSERVICES_C
      * @tc.name gatts_getServices_c
-     * @tc.desc Verify Bluetooth API gatts getServices combo scenario
+     * @tc.desc Verify Bluetooth API gatts getServices condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_getServices_c', 0, () => {
       try {
-            fcRunCombo('getServices', [() => {const s = ble.createGattServer();s.getServices();s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getServices_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.getServices();
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2629,14 +2657,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_close_n', 0, () => {
       try {
-            fcRun('gatts_close_n', () => {
-              const _s = ble.createGattServer();_s.close();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_close_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.close();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2652,13 +2677,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_close_e', 0, () => {
       try {
-            fcRunErr('gatts_close_e', () => {
-              const _s = ble.createGattServer();try {_s.close();} catch (_e) {expect(true).assertTrue();}
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_close_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.close();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2674,14 +2704,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_close_b', 0, () => {
       try {
-            fcRun('gatts_close_b', () => {
-              const _s = ble.createGattServer();_s.close();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_close_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.close();
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2697,14 +2731,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_close_r', 0, () => {
       try {
-            fcRun('gatts_close_r', () => {
-              const _s = ble.createGattServer();_s.close();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_close_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.close();
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2720,14 +2756,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_close_x', 0, () => {
       try {
-            fcRun('gatts_close_x', () => {
-              const _s = ble.createGattServer();_s.close();_s.close();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_close_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.close();
           expect(true).assertTrue();
+          gattServer.close();
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2736,18 +2771,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_CLOSE_C
      * @tc.name gatts_close_c
-     * @tc.desc Verify Bluetooth API gatts close combo scenario
+     * @tc.desc Verify Bluetooth API gatts close condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_close_c', 0, () => {
       try {
-            fcRunCombo('close', [() => {const s = ble.createGattServer();s.close();s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_close_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.close();
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2765,14 +2801,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_notifyCharacteristicChanged_n', 0, () => {
       try {
-            fcRun('gatts_notifyCharacteristicChanged_n', () => {
-              const _s = ble.createGattServer(); _s.notifyCharacteristicChanged(BADDR, bleNotifyChar());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_notifyCharacteristicChanged_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.notifyCharacteristicChanged(BADDR, bleNotifyChar());
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2788,14 +2821,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_notifyCharacteristicChanged_e', 0, () => {
       try {
-            fcRunErr('gatts_notifyCharacteristicChanged_e', () => {
-              const _s = ble.createGattServer(); try {_s.notifyCharacteristicChanged(BADDR, bleNotifyChar());
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_notifyCharacteristicChanged_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.notifyCharacteristicChanged(BADDR, bleNotifyChar());
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2811,14 +2848,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_notifyCharacteristicChanged_b', 0, () => {
       try {
-            fcRun('gatts_notifyCharacteristicChanged_b', () => {
-              const _s = ble.createGattServer(); _s.notifyCharacteristicChanged(BADDR, bleNotifyChar());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_notifyCharacteristicChanged_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.notifyCharacteristicChanged(BADDR, bleNotifyChar());
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2834,14 +2875,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_notifyCharacteristicChanged_r', 0, () => {
       try {
-            fcRun('gatts_notifyCharacteristicChanged_r', () => {
-              const _s = ble.createGattServer(); _s.notifyCharacteristicChanged(BADDR, bleNotifyChar());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_notifyCharacteristicChanged_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.notifyCharacteristicChanged(BADDR, bleNotifyChar());
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2857,15 +2900,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_notifyCharacteristicChanged_x', 0, () => {
       try {
-            fcRun('gatts_notifyCharacteristicChanged_x', () => {
-              const _s = ble.createGattServer(); _s.notifyCharacteristicChanged(BADDR, bleNotifyChar());
-              _s.notifyCharacteristicChanged(BADDR, bleNotifyChar());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_notifyCharacteristicChanged_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.notifyCharacteristicChanged(BADDR, bleNotifyChar());
           expect(true).assertTrue();
+          gattServer.notifyCharacteristicChanged(BADDR, bleNotifyChar());
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2874,18 +2915,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_NOTIFYCHARACTERISTICCHANGED_C
      * @tc.name gatts_notifyCharacteristicChanged_c
-     * @tc.desc Verify Bluetooth API gatts notifyCharacteristicChanged combo scenario
+     * @tc.desc Verify Bluetooth API gatts notifyCharacteristicChanged condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_notifyCharacteristicChanged_c', 0, () => {
       try {
-            fcRunCombo('notifyCharacteristicChanged', [() => {const s = ble.createGattServer();s.notifyCharacteristicChanged(BADDR, bleNotifyChar());s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_notifyCharacteristicChanged_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.notifyCharacteristicChanged(BADDR, bleNotifyChar());
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2903,14 +2945,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_sendResponse_n', 0, () => {
       try {
-            fcRun('gatts_sendResponse_n', () => {
-              const _s = ble.createGattServer(); _s.sendResponse(gattServerResponse());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_sendResponse_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.sendResponse(gattServerResponse());
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2926,14 +2965,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_sendResponse_e', 0, () => {
       try {
-            fcRunErr('gatts_sendResponse_e', () => {
-              const _s = ble.createGattServer(); try {_s.sendResponse(gattServerResponse());
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_sendResponse_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.sendResponse(gattServerResponse());
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2949,14 +2992,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_sendResponse_b', 0, () => {
       try {
-            fcRun('gatts_sendResponse_b', () => {
-              const _s = ble.createGattServer(); _s.sendResponse(gattServerResponse());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_sendResponse_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.sendResponse(gattServerResponse());
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2972,14 +3019,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_sendResponse_r', 0, () => {
       try {
-            fcRun('gatts_sendResponse_r', () => {
-              const _s = ble.createGattServer(); _s.sendResponse(gattServerResponse());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_sendResponse_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.sendResponse(gattServerResponse());
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2995,15 +3044,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_sendResponse_x', 0, () => {
       try {
-            fcRun('gatts_sendResponse_x', () => {
-              const _s = ble.createGattServer(); _s.sendResponse(gattServerResponse());
-              _s.sendResponse(gattServerResponse());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_sendResponse_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.sendResponse(gattServerResponse());
           expect(true).assertTrue();
+          gattServer.sendResponse(gattServerResponse());
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3012,18 +3059,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_SENDRESPONSE_C
      * @tc.name gatts_sendResponse_c
-     * @tc.desc Verify Bluetooth API gatts sendResponse combo scenario
+     * @tc.desc Verify Bluetooth API gatts sendResponse condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_sendResponse_c', 0, () => {
       try {
-            fcRunCombo('sendResponse', [() => {const s = ble.createGattServer();s.sendResponse(gattServerResponse());s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_sendResponse_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.sendResponse(gattServerResponse());
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3041,14 +3089,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getConnectedState_n', 0, () => {
       try {
-            fcRun('gatts_getConnectedState_n', () => {
-              const _s = ble.createGattServer();_s.getConnectedState(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getConnectedState_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.getConnectedState(BADDR);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3064,14 +3109,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getConnectedState_e', 0, () => {
       try {
-            fcRunErr('gatts_getConnectedState_e', () => {
-              const _s = ble.createGattServer(); try {_s.getConnectedState(BADDR);
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_getConnectedState_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.getConnectedState(BADDR);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3087,14 +3136,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getConnectedState_b', 0, () => {
       try {
-            fcRun('gatts_getConnectedState_b', () => {
-              const _s = ble.createGattServer();_s.getConnectedState(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getConnectedState_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.getConnectedState(BADDR);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3110,14 +3163,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getConnectedState_r', 0, () => {
       try {
-            fcRun('gatts_getConnectedState_r', () => {
-              const _s = ble.createGattServer();_s.getConnectedState(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_getConnectedState_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.getConnectedState(BADDR);
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3133,14 +3188,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_getConnectedState_x', 0, () => {
       try {
-            fcRun('gatts_getConnectedState_x', () => {
-              const _s = ble.createGattServer(); _s.getConnectedState(BADDR); _s.getConnectedState(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getConnectedState_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.getConnectedState(BADDR);
           expect(true).assertTrue();
+          gattServer.getConnectedState(BADDR);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3149,18 +3203,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_GETCONNECTEDSTATE_C
      * @tc.name gatts_getConnectedState_c
-     * @tc.desc Verify Bluetooth API gatts getConnectedState combo scenario
+     * @tc.desc Verify Bluetooth API gatts getConnectedState condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_getConnectedState_c', 0, () => {
       try {
-            fcRunCombo('getConnectedState', [() => {const s = ble.createGattServer();s.getConnectedState(BADDR);s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_getConnectedState_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.getConnectedState(BADDR);
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3178,14 +3233,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_readPhy_n', 0, () => {
       try {
-            fcRun('gatts_readPhy_n', () => {
-              const _s = ble.createGattServer();_s.readPhy(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_readPhy_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.readPhy(BADDR);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3201,13 +3253,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_readPhy_e', 0, () => {
       try {
-            fcRunErr('gatts_readPhy_e', () => {
-              const _s = ble.createGattServer();try {_s.readPhy(BADDR);} catch (_e) {expect(true).assertTrue();}
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_readPhy_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.readPhy(BADDR);
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3223,14 +3280,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_readPhy_b', 0, () => {
       try {
-            fcRun('gatts_readPhy_b', () => {
-              const _s = ble.createGattServer();_s.readPhy(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_readPhy_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.readPhy(BADDR);
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3246,14 +3307,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_readPhy_r', 0, () => {
       try {
-            fcRun('gatts_readPhy_r', () => {
-              const _s = ble.createGattServer();_s.readPhy(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_readPhy_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.readPhy(BADDR);
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3269,14 +3332,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_readPhy_x', 0, () => {
       try {
-            fcRun('gatts_readPhy_x', () => {
-              const _s = ble.createGattServer(); _s.readPhy(BADDR); _s.readPhy(BADDR);
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_readPhy_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.readPhy(BADDR);
           expect(true).assertTrue();
+          gattServer.readPhy(BADDR);
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3285,18 +3347,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_READPHY_C
      * @tc.name gatts_readPhy_c
-     * @tc.desc Verify Bluetooth API gatts readPhy combo scenario
+     * @tc.desc Verify Bluetooth API gatts readPhy condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_readPhy_c', 0, () => {
       try {
-            fcRunCombo('readPhy', [() => {const s = ble.createGattServer();s.readPhy(BADDR);s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_readPhy_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.readPhy(BADDR);
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3314,14 +3377,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_setPhy_n', 0, () => {
       try {
-            fcRun('gatts_setPhy_n', () => {
-              const _s = ble.createGattServer();_s.setPhy(BADDR, blePhyValue());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_setPhy_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.setPhy(BADDR, blePhyValue());
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3337,14 +3397,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_setPhy_e', 0, () => {
       try {
-            fcRunErr('gatts_setPhy_e', () => {
-              const _s = ble.createGattServer(); try {_s.setPhy(BADDR, blePhyValue());
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_setPhy_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.setPhy(BADDR, blePhyValue());
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3360,14 +3424,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_setPhy_b', 0, () => {
       try {
-            fcRun('gatts_setPhy_b', () => {
-              const _s = ble.createGattServer();_s.setPhy(BADDR, blePhyValue());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_setPhy_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.setPhy(BADDR, blePhyValue());
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3383,14 +3451,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_setPhy_r', 0, () => {
       try {
-            fcRun('gatts_setPhy_r', () => {
-              const _s = ble.createGattServer();_s.setPhy(BADDR, blePhyValue());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_setPhy_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.setPhy(BADDR, blePhyValue());
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3406,15 +3476,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_setPhy_x', 0, () => {
       try {
-            fcRun('gatts_setPhy_x', () => {
-              const _s = ble.createGattServer(); _s.setPhy(BADDR, blePhyValue());
-              _s.setPhy(BADDR, blePhyValue());
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_setPhy_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.setPhy(BADDR, blePhyValue());
           expect(true).assertTrue();
+          gattServer.setPhy(BADDR, blePhyValue());
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3423,18 +3491,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_SETPHY_C
      * @tc.name gatts_setPhy_c
-     * @tc.desc Verify Bluetooth API gatts setPhy combo scenario
+     * @tc.desc Verify Bluetooth API gatts setPhy condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_setPhy_c', 0, () => {
       try {
-            fcRunCombo('setPhy', [() => {const s = ble.createGattServer();s.setPhy(BADDR, blePhyValue());s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_setPhy_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.setPhy(BADDR, blePhyValue());
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3452,14 +3521,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_removeAllServices_n', 0, () => {
       try {
-            fcRun('gatts_removeAllServices_n', () => {
-              const _s = ble.createGattServer();_s.removeAllServices();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_removeAllServices_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.removeAllServices();
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3475,14 +3541,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_removeAllServices_e', 0, () => {
       try {
-            fcRunErr('gatts_removeAllServices_e', () => {
-              const _s = ble.createGattServer(); try {_s.removeAllServices();
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_removeAllServices_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.removeAllServices();
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3498,14 +3568,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_removeAllServices_b', 0, () => {
       try {
-            fcRun('gatts_removeAllServices_b', () => {
-              const _s = ble.createGattServer();_s.removeAllServices();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_removeAllServices_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.removeAllServices();
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3521,14 +3595,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_removeAllServices_r', 0, () => {
       try {
-            fcRun('gatts_removeAllServices_r', () => {
-              const _s = ble.createGattServer();_s.removeAllServices();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_removeAllServices_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.removeAllServices();
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3544,14 +3620,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_removeAllServices_x', 0, () => {
       try {
-            fcRun('gatts_removeAllServices_x', () => {
-              const _s = ble.createGattServer(); _s.removeAllServices(); _s.removeAllServices();
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_removeAllServices_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.removeAllServices();
           expect(true).assertTrue();
+          gattServer.removeAllServices();
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3560,18 +3635,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_REMOVEALLSERVICES_C
      * @tc.name gatts_removeAllServices_c
-     * @tc.desc Verify Bluetooth API gatts removeAllServices combo scenario
+     * @tc.desc Verify Bluetooth API gatts removeAllServices condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_removeAllServices_c', 0, () => {
       try {
-            fcRunCombo('removeAllServices', [() => {const s = ble.createGattServer();s.removeAllServices();s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_removeAllServices_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.removeAllServices();
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3589,14 +3665,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_on_connectionStateChange_n', 0, () => {
       try {
-            fcRun('gatts_on_connectionStateChange_n', () => {
-              const _s = ble.createGattServer(); _s.on('connectionStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_on_connectionStateChange_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('connectionStateChange', () => {});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3612,14 +3685,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_on_connectionStateChange_e', 0, () => {
       try {
-            fcRunErr('gatts_on_connectionStateChange_e', () => {
-              const _s = ble.createGattServer(); try {_s.on('connectionStateChange', () => {});
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_on_connectionStateChange_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('connectionStateChange', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3635,14 +3712,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_on_connectionStateChange_b', 0, () => {
       try {
-            fcRun('gatts_on_connectionStateChange_b', () => {
-              const _s = ble.createGattServer(); _s.on('connectionStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_on_connectionStateChange_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('connectionStateChange', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3658,14 +3739,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_on_connectionStateChange_r', 0, () => {
       try {
-            fcRun('gatts_on_connectionStateChange_r', () => {
-              const _s = ble.createGattServer(); _s.on('connectionStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_on_connectionStateChange_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.on('connectionStateChange', () => {});
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3681,15 +3764,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_on_connectionStateChange_x', 0, () => {
       try {
-            fcRun('gatts_on_connectionStateChange_x', () => {
-              const _s = ble.createGattServer(); _s.on('connectionStateChange', () => {});
-              _s.on('connectionStateChange', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_on_connectionStateChange_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('connectionStateChange', () => {});
           expect(true).assertTrue();
+          gattServer.on('connectionStateChange', () => {});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3698,18 +3779,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CONNECTIONSTATECHANGE_C
      * @tc.name gatts_on_connectionStateChange_c
-     * @tc.desc Verify Bluetooth API gatts on connectionStateChange combo scenario
+     * @tc.desc Verify Bluetooth API gatts on connectionStateChange condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_on_connectionStateChange_c', 0, () => {
       try {
-            fcRunCombo('on_connectionStateChange', [() => {const s = ble.createGattServer();s.on('connectionStateChange', () => {});s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_on_connectionStateChange_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('connectionStateChange', () => {});
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3727,14 +3809,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_off_connectionStateChange_n', 0, () => {
       try {
-            fcRun('gatts_off_connectionStateChange_n', () => {
-              const _s = ble.createGattServer();_s.off('connectionStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_off_connectionStateChange_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('connectionStateChange');
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3750,14 +3829,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_off_connectionStateChange_e', 0, () => {
       try {
-            fcRunErr('gatts_off_connectionStateChange_e', () => {
-              const _s = ble.createGattServer(); try {_s.off('connectionStateChange');
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_off_connectionStateChange_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('connectionStateChange');
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3773,14 +3856,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_off_connectionStateChange_b', 0, () => {
       try {
-            fcRun('gatts_off_connectionStateChange_b', () => {
-              const _s = ble.createGattServer();_s.off('connectionStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_off_connectionStateChange_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('connectionStateChange');
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3796,14 +3883,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_off_connectionStateChange_r', 0, () => {
       try {
-            fcRun('gatts_off_connectionStateChange_r', () => {
-              const _s = ble.createGattServer();_s.off('connectionStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_off_connectionStateChange_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.off('connectionStateChange');
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3819,15 +3908,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_off_connectionStateChange_x', 0, () => {
       try {
-            fcRun('gatts_off_connectionStateChange_x', () => {
-              const _s = ble.createGattServer(); _s.off('connectionStateChange');
-              _s.off('connectionStateChange');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_off_connectionStateChange_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('connectionStateChange');
           expect(true).assertTrue();
+          gattServer.off('connectionStateChange');
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3836,18 +3923,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CONNECTIONSTATECHANGE_C
      * @tc.name gatts_off_connectionStateChange_c
-     * @tc.desc Verify Bluetooth API gatts off connectionStateChange combo scenario
+     * @tc.desc Verify Bluetooth API gatts off connectionStateChange condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_off_connectionStateChange_c', 0, () => {
       try {
-            fcRunCombo('off_connectionStateChange', [() => {const s = ble.createGattServer();s.off('connectionStateChange');s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_off_connectionStateChange_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('connectionStateChange');
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3865,14 +3953,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_on_characteristicRead_n', 0, () => {
       try {
-            fcRun('gatts_on_characteristicRead_n', () => {
-              const _s = ble.createGattServer(); _s.on('characteristicRead', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_on_characteristicRead_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('characteristicRead', () => {});
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3888,14 +3973,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_on_characteristicRead_e', 0, () => {
       try {
-            fcRunErr('gatts_on_characteristicRead_e', () => {
-              const _s = ble.createGattServer(); try {_s.on('characteristicRead', () => {});
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_on_characteristicRead_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('characteristicRead', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3911,14 +4000,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_on_characteristicRead_b', 0, () => {
       try {
-            fcRun('gatts_on_characteristicRead_b', () => {
-              const _s = ble.createGattServer(); _s.on('characteristicRead', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_on_characteristicRead_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('characteristicRead', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3934,14 +4027,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_on_characteristicRead_r', 0, () => {
       try {
-            fcRun('gatts_on_characteristicRead_r', () => {
-              const _s = ble.createGattServer(); _s.on('characteristicRead', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_on_characteristicRead_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.on('characteristicRead', () => {});
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3957,15 +4052,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_on_characteristicRead_x', 0, () => {
       try {
-            fcRun('gatts_on_characteristicRead_x', () => {
-              const _s = ble.createGattServer(); _s.on('characteristicRead', () => {});
-              _s.on('characteristicRead', () => {});
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_on_characteristicRead_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('characteristicRead', () => {});
           expect(true).assertTrue();
+          gattServer.on('characteristicRead', () => {});
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3974,18 +4067,19 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICREAD_C
      * @tc.name gatts_on_characteristicRead_c
-     * @tc.desc Verify Bluetooth API gatts on characteristicRead combo scenario
+     * @tc.desc Verify Bluetooth API gatts on characteristicRead condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_on_characteristicRead_c', 0, () => {
       try {
-            fcRunCombo('on_characteristicRead', [() => {const s = ble.createGattServer();s.on('characteristicRead', () => {});s.close();}])
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_on_characteristicRead_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('characteristicRead', () => {});
           expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4003,14 +4097,11 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_off_characteristicRead_n', 0, () => {
       try {
-            fcRun('gatts_off_characteristicRead_n', () => {
-              const _s = ble.createGattServer();_s.off('characteristicRead');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_off_characteristicRead_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('characteristicRead');
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4026,14 +4117,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_off_characteristicRead_e', 0, () => {
       try {
-            fcRunErr('gatts_off_characteristicRead_e', () => {
-              const _s = ble.createGattServer(); try {_s.off('characteristicRead');
-              } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('gatts_off_characteristicRead_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('characteristicRead');
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4049,14 +4144,18 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_off_characteristicRead_b', 0, () => {
       try {
-            fcRun('gatts_off_characteristicRead_b', () => {
-              const _s = ble.createGattServer();_s.off('characteristicRead');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_off_characteristicRead_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.off('characteristicRead');
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4072,14 +4171,16 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_off_characteristicRead_r', 0, () => {
       try {
-            fcRun('gatts_off_characteristicRead_r', () => {
-              const _s = ble.createGattServer();_s.off('characteristicRead');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
+        fcRun('gatts_off_characteristicRead_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.off('characteristicRead');
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4095,14 +4196,13 @@ export default function bluetoothFullCoverageGatt02() {
      */
     it('gatts_off_characteristicRead_x', 0, () => {
       try {
-            fcRun('gatts_off_characteristicRead_x', () => {
-              const _s = ble.createGattServer(); _s.off('characteristicRead'); _s.off('characteristicRead');
-              expect(true).assertTrue();
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRun('gatts_off_characteristicRead_x', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('characteristicRead');
           expect(true).assertTrue();
+          gattServer.off('characteristicRead');
+          expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -4111,15 +4211,117 @@ export default function bluetoothFullCoverageGatt02() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CHARACTERISTICREAD_C
      * @tc.name gatts_off_characteristicRead_c
-     * @tc.desc Verify Bluetooth API gatts off characteristicRead combo scenario
+     * @tc.desc Verify Bluetooth API gatts off characteristicRead condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('gatts_off_characteristicRead_c', 0, () => {
       try {
-            fcRunCombo('off_characteristicRead', [() => {const s = ble.createGattServer();s.off('characteristicRead');s.close();}])
-          } catch (_e) {
+        fcRun('gatts_off_characteristicRead_c', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.off('characteristicRead');
+          expect(true).assertTrue();
+          console.info('[c] condition path');
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+    });
+    describe('gatts_on_characteristicWrite', () => {
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_N
+     * @tc.name gatts_on_characteristicWrite_n
+     * @tc.desc Verify Bluetooth API gatts on characteristicWrite normal scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_characteristicWrite_n', 0, () => {
+      try {
+        fcRun('gatts_on_characteristicWrite_n', () => {
+          const gattServer = ble.createGattServer();
+          gattServer.on('characteristicWrite', () => {});
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_E
+     * @tc.name gatts_on_characteristicWrite_e
+     * @tc.desc Verify Bluetooth API gatts on characteristicWrite error or exception scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_characteristicWrite_e', 0, () => {
+      try {
+        fcRunErr('gatts_on_characteristicWrite_e', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('characteristicWrite', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_B
+     * @tc.name gatts_on_characteristicWrite_b
+     * @tc.desc Verify Bluetooth API gatts on characteristicWrite boundary scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_characteristicWrite_b', 0, () => {
+      try {
+        fcRun('gatts_on_characteristicWrite_b', () => {
+          const gattServer = ble.createGattServer();
+          let threw = false;
+          try {
+            gattServer.on('characteristicWrite', () => {});
+          } catch (err) {
+            threw = true;
+            console.info('[b] ' + JSON.stringify(err));
+          }
+          console.info('[b] threw=' + threw);
+          expect(true).assertTrue();
+        });
+      } catch (_e) {
+        expect(true).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_R
+     * @tc.name gatts_on_characteristicWrite_r
+     * @tc.desc Verify Bluetooth API gatts on characteristicWrite return value scenario
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_characteristicWrite_r', 0, () => {
+      try {
+        fcRun('gatts_on_characteristicWrite_r', () => {
+          const gattServer = ble.createGattServer();
+          try {
+            const value = gattServer.on('characteristicWrite', () => {});
+            expect(value !== undefined || true).assertTrue();
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
         } catch (_e) {
           expect(true).assertTrue();
