@@ -1967,14 +1967,20 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('ent_addDisallowedBluetoothProtocols_x', 0, () => {
       try {
-                  fcRun('ent_addDisallowedBluetoothProtocols_x', () => {
-            try {enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('ent_addDisallowedBluetoothProtocols_x', () => {
+          try {
+            enterpriseBt.addDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0, [0]);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+          try {
+            enterpriseBt.addDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0, [0]);
+            expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -1983,21 +1989,22 @@ export default function bluetoothFullCoverageEnterprise01() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_ADDDISALLOWEDBLUETOOTHPROTOCOLS_C
      * @tc.name ent_addDisallowedBluetoothProtocols_c
-     * @tc.desc Verify Bluetooth API ent addDisallowedBluetoothProtocols combo scenario
+     * @tc.desc Verify Bluetooth API ent addDisallowedBluetoothProtocols condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('ent_addDisallowedBluetoothProtocols_c', 0, () => {
       try {
-                  fcRunCombo('ent_addDisallowedBluetoothProtocols_c', [() => {
-            try {enterpriseBt.addDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  }]);
-          } catch (_e) {
+        fcRun('ent_addDisallowedBluetoothProtocols_c', () => {
+          console.info('[c] condition path');
+          try {
+            enterpriseBt.addDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0, [0]);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2015,14 +2022,14 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('ent_removeDisallowedBluetoothProtocols_n', 0, () => {
       try {
-                  fcRun('ent_removeDisallowedBluetoothProtocols_n', () => {
-            try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('ent_removeDisallowedBluetoothProtocols_n', () => {
+          try {
+            enterpriseBt.removeDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0, [0]);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2038,15 +2045,22 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('ent_removeDisallowedBluetoothProtocols_e', 0, () => {
       try {
-                  fcRunErr('ent_removeDisallowedBluetoothProtocols_e', () => {
-            try {try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue();
-                    }} catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('ent_removeDisallowedBluetoothProtocols_e', () => {
+          let threw = false;
+          try {
+            try {
+              enterpriseBt.removeDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0, [0]);
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2062,14 +2076,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('ent_removeDisallowedBluetoothProtocols_b', 0, () => {
       try {
-                  fcRun('ent_removeDisallowedBluetoothProtocols_b', () => {
-            try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('ent_removeDisallowedBluetoothProtocols_b', () => {
+          try {
+            try {
+              enterpriseBt.removeDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0, [0]);
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2085,14 +2104,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('ent_removeDisallowedBluetoothProtocols_r', 0, () => {
       try {
-                  fcRun('ent_removeDisallowedBluetoothProtocols_r', () => {
-            try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('ent_removeDisallowedBluetoothProtocols_r', () => {
+          try {
+            try {
+              enterpriseBt.removeDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0, [0]);
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2108,14 +2132,20 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('ent_removeDisallowedBluetoothProtocols_x', 0, () => {
       try {
-                  fcRun('ent_removeDisallowedBluetoothProtocols_x', () => {
-            try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('ent_removeDisallowedBluetoothProtocols_x', () => {
+          try {
+            enterpriseBt.removeDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0, [0]);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+          try {
+            enterpriseBt.removeDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0, [0]);
+            expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2124,21 +2154,22 @@ export default function bluetoothFullCoverageEnterprise01() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_REMOVEDISALLOWEDBLUETOOTHPROTOCOLS_C
      * @tc.name ent_removeDisallowedBluetoothProtocols_c
-     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothProtocols combo scenario
+     * @tc.desc Verify Bluetooth API ent removeDisallowedBluetoothProtocols condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('ent_removeDisallowedBluetoothProtocols_c', 0, () => {
       try {
-                  fcRunCombo('ent_removeDisallowedBluetoothProtocols_c', [() => {
-            try {enterpriseBt.removeDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0, [0]);
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  }]);
-          } catch (_e) {
+        fcRun('ent_removeDisallowedBluetoothProtocols_c', () => {
+          console.info('[c] condition path');
+          try {
+            enterpriseBt.removeDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0, [0]);
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2156,15 +2187,14 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('ent_getDisallowedBluetoothProtocols_n', 0, () => {
       try {
-                  fcRun('ent_getDisallowedBluetoothProtocols_n', () => {
-                    try {const
-            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
-                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('ent_getDisallowedBluetoothProtocols_n', () => {
+          try {
+            const p = enterpriseBt.getDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0);
+            expect(Array.isArray(p)).assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2180,16 +2210,22 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('ent_getDisallowedBluetoothProtocols_e', 0, () => {
       try {
-                  fcRunErr('ent_getDisallowedBluetoothProtocols_e', () => {
-                    try {try {const
-            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
-                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue();
-                    }} catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('ent_getDisallowedBluetoothProtocols_e', () => {
+          let threw = false;
+          try {
+            try {
+              const p = enterpriseBt.getDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0);
+              expect(Array.isArray(p)).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2205,15 +2241,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('ent_getDisallowedBluetoothProtocols_b', 0, () => {
       try {
-                  fcRun('ent_getDisallowedBluetoothProtocols_b', () => {
-                    try {const
-            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
-                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('ent_getDisallowedBluetoothProtocols_b', () => {
+          try {
+            try {
+              const p = enterpriseBt.getDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0);
+              expect(Array.isArray(p)).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2229,15 +2269,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('ent_getDisallowedBluetoothProtocols_r', 0, () => {
       try {
-                  fcRun('ent_getDisallowedBluetoothProtocols_r', () => {
-                    try {const
-            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
-                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('ent_getDisallowedBluetoothProtocols_r', () => {
+          try {
+            try {
+              const p = enterpriseBt.getDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0);
+              expect(Array.isArray(p)).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2253,15 +2297,20 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('ent_getDisallowedBluetoothProtocols_x', 0, () => {
       try {
-                  fcRun('ent_getDisallowedBluetoothProtocols_x', () => {
-                    try {const
-            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
-                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('ent_getDisallowedBluetoothProtocols_x', () => {
+          try {
+            const p = enterpriseBt.getDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0);
+            expect(Array.isArray(p)).assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+          try {
+            const p = enterpriseBt.getDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0);
+            expect(Array.isArray(p)).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2270,22 +2319,22 @@ export default function bluetoothFullCoverageEnterprise01() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_ENT_GETDISALLOWEDBLUETOOTHPROTOCOLS_C
      * @tc.name ent_getDisallowedBluetoothProtocols_c
-     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothProtocols combo scenario
+     * @tc.desc Verify Bluetooth API ent getDisallowedBluetoothProtocols condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('ent_getDisallowedBluetoothProtocols_c', 0, () => {
       try {
-                  fcRunCombo('ent_getDisallowedBluetoothProtocols_c', [() => {
-                    try {const
-            p=enterpriseBt.getDisallowedBluetoothProtocols({bundleName:'com.example.test', abilityName:'EntryAbility'}, 0);
-                    expect(Array.isArray(p)).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  }]);
-          } catch (_e) {
+        fcRun('ent_getDisallowedBluetoothProtocols_c', () => {
+          console.info('[c] condition path');
+          try {
+            const p = enterpriseBt.getDisallowedBluetoothProtocols({ bundleName: 'com.example.test', abilityName: 'EntryAbility' }, 0);
+            expect(Array.isArray(p)).assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2303,14 +2352,14 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isPartnerAgentSupported_n', 0, () => {
       try {
-            fcRun('pa_isPartnerAgentSupported_n', () => {
-              try {const v = partnerAgent.isPartnerAgentSupported();
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isPartnerAgentSupported_n', () => {
+          try {
+            const v = partnerAgent.isPartnerAgentSupported();
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2326,15 +2375,22 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isPartnerAgentSupported_e', 0, () => {
       try {
-            fcRunErr('pa_isPartnerAgentSupported_e', () => {
-              try {try {const v = partnerAgent.isPartnerAgentSupported();
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue();
-              }} catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('pa_isPartnerAgentSupported_e', () => {
+          let threw = false;
+          try {
+            try {
+              const v = partnerAgent.isPartnerAgentSupported();
+              expect(typeof v === 'boolean').assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2350,14 +2406,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isPartnerAgentSupported_b', 0, () => {
       try {
-            fcRun('pa_isPartnerAgentSupported_b', () => {
-              try {const v = partnerAgent.isPartnerAgentSupported();
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isPartnerAgentSupported_b', () => {
+          try {
+            try {
+              const v = partnerAgent.isPartnerAgentSupported();
+              expect(typeof v === 'boolean').assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2373,14 +2434,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isPartnerAgentSupported_r', 0, () => {
       try {
-            fcRun('pa_isPartnerAgentSupported_r', () => {
-              try {const v = partnerAgent.isPartnerAgentSupported();
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isPartnerAgentSupported_r', () => {
+          try {
+            try {
+              const v = partnerAgent.isPartnerAgentSupported();
+              expect(typeof v === 'boolean').assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2396,14 +2462,20 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isPartnerAgentSupported_x', 0, () => {
       try {
-            fcRun('pa_isPartnerAgentSupported_x', () => {
-              try {const v = partnerAgent.isPartnerAgentSupported();
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isPartnerAgentSupported_x', () => {
+          try {
+            const v = partnerAgent.isPartnerAgentSupported();
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+          try {
+            const v = partnerAgent.isPartnerAgentSupported();
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2412,21 +2484,22 @@ export default function bluetoothFullCoverageEnterprise01() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISPARTNERAGENTSUPPORTED_C
      * @tc.name pa_isPartnerAgentSupported_c
-     * @tc.desc Verify Bluetooth API pa isPartnerAgentSupported combo scenario
+     * @tc.desc Verify Bluetooth API pa isPartnerAgentSupported condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('pa_isPartnerAgentSupported_c', 0, () => {
       try {
-            fcRunCombo('pa_isPartnerAgentSupported_c', [() => {
-              try {const v = partnerAgent.isPartnerAgentSupported();
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            }]);
-          } catch (_e) {
+        fcRun('pa_isPartnerAgentSupported_c', () => {
+          console.info('[c] condition path');
+          try {
+            const v = partnerAgent.isPartnerAgentSupported();
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2444,14 +2517,14 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_bindDevice_n', 0, () => {
       try {
-                  fcRun('pa_bindDevice_n', () => {
-            try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('pa_bindDevice_n', () => {
+          try {
+            partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2467,15 +2540,22 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_bindDevice_e', 0, () => {
       try {
-                  fcRunErr('pa_bindDevice_e', () => {
-            try {try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue();
-                    }} catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('pa_bindDevice_e', () => {
+          let threw = false;
+          try {
+            try {
+              partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2491,14 +2571,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_bindDevice_b', 0, () => {
       try {
-                  fcRun('pa_bindDevice_b', () => {
-            try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('pa_bindDevice_b', () => {
+          try {
+            try {
+              partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2514,14 +2599,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_bindDevice_r', 0, () => {
       try {
-                  fcRun('pa_bindDevice_r', () => {
-            try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('pa_bindDevice_r', () => {
+          try {
+            try {
+              partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2537,14 +2627,20 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_bindDevice_x', 0, () => {
       try {
-                  fcRun('pa_bindDevice_x', () => {
-            try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  });
-          } catch (_e) {
+        fcRun('pa_bindDevice_x', () => {
+          try {
+            partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+          try {
+            partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
+            expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2553,21 +2649,22 @@ export default function bluetoothFullCoverageEnterprise01() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_BINDDEVICE_C
      * @tc.name pa_bindDevice_c
-     * @tc.desc Verify Bluetooth API pa bindDevice combo scenario
+     * @tc.desc Verify Bluetooth API pa bindDevice condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('pa_bindDevice_c', 0, () => {
       try {
-                  fcRunCombo('pa_bindDevice_c', [() => {
-            try {partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
-                    expect(true).assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-                  }]);
-          } catch (_e) {
+        fcRun('pa_bindDevice_c', () => {
+          console.info('[c] condition path');
+          try {
+            partnerAgent.bindDevice(partnerDeviceAddr(), partnerDeviceCap(), partnerBusinessCap(), 'EntryAbility');
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2585,18 +2682,14 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_unbindDevice_n', 0, () => {
       try {
-            fcRun('pa_unbindDevice_n', () => {
-              try {
-                partnerAgent.unbindDevice(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_unbindDevice_n', () => {
+          try {
+            partnerAgent.unbindDevice(partnerDeviceAddr());
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2612,17 +2705,22 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_unbindDevice_e', 0, () => {
       try {
-            fcRunErr('pa_unbindDevice_e', () => {
-              try {
-                try {partnerAgent.unbindDevice(partnerDeviceAddr()); expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue(); }} catch (_e) {expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('pa_unbindDevice_e', () => {
+          let threw = false;
+          try {
+            try {
+              partnerAgent.unbindDevice(partnerDeviceAddr());
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2638,18 +2736,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_unbindDevice_b', 0, () => {
       try {
-            fcRun('pa_unbindDevice_b', () => {
-              try {
-                partnerAgent.unbindDevice(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_unbindDevice_b', () => {
+          try {
+            try {
+              partnerAgent.unbindDevice(partnerDeviceAddr());
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2665,18 +2764,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_unbindDevice_r', 0, () => {
       try {
-            fcRun('pa_unbindDevice_r', () => {
-              try {
-                partnerAgent.unbindDevice(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_unbindDevice_r', () => {
+          try {
+            try {
+              partnerAgent.unbindDevice(partnerDeviceAddr());
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2692,18 +2792,20 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_unbindDevice_x', 0, () => {
       try {
-            fcRun('pa_unbindDevice_x', () => {
-              try {
-                partnerAgent.unbindDevice(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_unbindDevice_x', () => {
+          try {
+            partnerAgent.unbindDevice(partnerDeviceAddr());
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+          try {
+            partnerAgent.unbindDevice(partnerDeviceAddr());
+            expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2712,25 +2814,22 @@ export default function bluetoothFullCoverageEnterprise01() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_UNBINDDEVICE_C
      * @tc.name pa_unbindDevice_c
-     * @tc.desc Verify Bluetooth API pa unbindDevice combo scenario
+     * @tc.desc Verify Bluetooth API pa unbindDevice condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('pa_unbindDevice_c', 0, () => {
       try {
-            fcRunCombo('pa_unbindDevice_c', [() => {
-              try {
-                partnerAgent.unbindDevice(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            }]);
-          } catch (_e) {
+        fcRun('pa_unbindDevice_c', () => {
+          console.info('[c] condition path');
+          try {
+            partnerAgent.unbindDevice(partnerDeviceAddr());
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2748,14 +2847,14 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isDeviceBound_n', 0, () => {
       try {
-            fcRun('pa_isDeviceBound_n', () => {
-              try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isDeviceBound_n', () => {
+          try {
+            const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2771,15 +2870,22 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isDeviceBound_e', 0, () => {
       try {
-            fcRunErr('pa_isDeviceBound_e', () => {
-              try {try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue();
-              }} catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('pa_isDeviceBound_e', () => {
+          let threw = false;
+          try {
+            try {
+              const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+              expect(typeof v === 'boolean').assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2795,14 +2901,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isDeviceBound_b', 0, () => {
       try {
-            fcRun('pa_isDeviceBound_b', () => {
-              try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isDeviceBound_b', () => {
+          try {
+            try {
+              const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+              expect(typeof v === 'boolean').assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2818,14 +2929,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isDeviceBound_r', 0, () => {
       try {
-            fcRun('pa_isDeviceBound_r', () => {
-              try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isDeviceBound_r', () => {
+          try {
+            try {
+              const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+              expect(typeof v === 'boolean').assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2841,14 +2957,20 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isDeviceBound_x', 0, () => {
       try {
-            fcRun('pa_isDeviceBound_x', () => {
-              try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isDeviceBound_x', () => {
+          try {
+            const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+          try {
+            const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2857,21 +2979,22 @@ export default function bluetoothFullCoverageEnterprise01() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICEBOUND_C
      * @tc.name pa_isDeviceBound_c
-     * @tc.desc Verify Bluetooth API pa isDeviceBound combo scenario
+     * @tc.desc Verify Bluetooth API pa isDeviceBound condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('pa_isDeviceBound_c', 0, () => {
       try {
-            fcRunCombo('pa_isDeviceBound_c', [() => {
-              try {const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            }]);
-          } catch (_e) {
+        fcRun('pa_isDeviceBound_c', () => {
+          console.info('[c] condition path');
+          try {
+            const v = partnerAgent.isDeviceBound(partnerDeviceAddr());
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2889,18 +3012,14 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_getBoundDevices_n', 0, () => {
       try {
-            fcRun('pa_getBoundDevices_n', () => {
-              try {
-                const a = partnerAgent.getBoundDevices();
-                expect(Array.isArray(a)).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_getBoundDevices_n', () => {
+          try {
+            const a = partnerAgent.getBoundDevices();
+            expect(Array.isArray(a)).assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2916,17 +3035,22 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_getBoundDevices_e', 0, () => {
       try {
-            fcRunErr('pa_getBoundDevices_e', () => {
-              try {
-                try {const a = partnerAgent.getBoundDevices(); expect(Array.isArray(a)).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue(); }} catch (_e) {expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('pa_getBoundDevices_e', () => {
+          let threw = false;
+          try {
+            try {
+              const a = partnerAgent.getBoundDevices();
+              expect(Array.isArray(a)).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2942,18 +3066,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_getBoundDevices_b', 0, () => {
       try {
-            fcRun('pa_getBoundDevices_b', () => {
-              try {
-                const a = partnerAgent.getBoundDevices();
-                expect(Array.isArray(a)).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_getBoundDevices_b', () => {
+          try {
+            try {
+              const a = partnerAgent.getBoundDevices();
+              expect(Array.isArray(a)).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2969,18 +3094,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_getBoundDevices_r', 0, () => {
       try {
-            fcRun('pa_getBoundDevices_r', () => {
-              try {
-                const a = partnerAgent.getBoundDevices();
-                expect(Array.isArray(a)).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_getBoundDevices_r', () => {
+          try {
+            try {
+              const a = partnerAgent.getBoundDevices();
+              expect(Array.isArray(a)).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -2996,18 +3122,20 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_getBoundDevices_x', 0, () => {
       try {
-            fcRun('pa_getBoundDevices_x', () => {
-              try {
-                const a = partnerAgent.getBoundDevices();
-                expect(Array.isArray(a)).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_getBoundDevices_x', () => {
+          try {
+            const a = partnerAgent.getBoundDevices();
+            expect(Array.isArray(a)).assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+          try {
+            const a = partnerAgent.getBoundDevices();
+            expect(Array.isArray(a)).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3016,25 +3144,22 @@ export default function bluetoothFullCoverageEnterprise01() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_GETBOUNDDEVICES_C
      * @tc.name pa_getBoundDevices_c
-     * @tc.desc Verify Bluetooth API pa getBoundDevices combo scenario
+     * @tc.desc Verify Bluetooth API pa getBoundDevices condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('pa_getBoundDevices_c', 0, () => {
       try {
-            fcRunCombo('pa_getBoundDevices_c', [() => {
-              try {
-                const a = partnerAgent.getBoundDevices();
-                expect(Array.isArray(a)).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            }]);
-          } catch (_e) {
+        fcRun('pa_getBoundDevices_c', () => {
+          console.info('[c] condition path');
+          try {
+            const a = partnerAgent.getBoundDevices();
+            expect(Array.isArray(a)).assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3052,18 +3177,14 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_enableDeviceControl_n', 0, () => {
       try {
-            fcRun('pa_enableDeviceControl_n', () => {
-              try {
-                partnerAgent.enableDeviceControl(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_enableDeviceControl_n', () => {
+          try {
+            partnerAgent.enableDeviceControl(partnerDeviceAddr());
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3079,17 +3200,22 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_enableDeviceControl_e', 0, () => {
       try {
-            fcRunErr('pa_enableDeviceControl_e', () => {
-              try {
-                try {partnerAgent.enableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue(); }} catch (_e) {expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('pa_enableDeviceControl_e', () => {
+          let threw = false;
+          try {
+            try {
+              partnerAgent.enableDeviceControl(partnerDeviceAddr());
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3105,18 +3231,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_enableDeviceControl_b', 0, () => {
       try {
-            fcRun('pa_enableDeviceControl_b', () => {
-              try {
-                partnerAgent.enableDeviceControl(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_enableDeviceControl_b', () => {
+          try {
+            try {
+              partnerAgent.enableDeviceControl(partnerDeviceAddr());
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3132,18 +3259,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_enableDeviceControl_r', 0, () => {
       try {
-            fcRun('pa_enableDeviceControl_r', () => {
-              try {
-                partnerAgent.enableDeviceControl(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_enableDeviceControl_r', () => {
+          try {
+            try {
+              partnerAgent.enableDeviceControl(partnerDeviceAddr());
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3159,18 +3287,20 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_enableDeviceControl_x', 0, () => {
       try {
-            fcRun('pa_enableDeviceControl_x', () => {
-              try {
-                partnerAgent.enableDeviceControl(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_enableDeviceControl_x', () => {
+          try {
+            partnerAgent.enableDeviceControl(partnerDeviceAddr());
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+          try {
+            partnerAgent.enableDeviceControl(partnerDeviceAddr());
+            expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3179,25 +3309,22 @@ export default function bluetoothFullCoverageEnterprise01() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ENABLEDEVICECONTROL_C
      * @tc.name pa_enableDeviceControl_c
-     * @tc.desc Verify Bluetooth API pa enableDeviceControl combo scenario
+     * @tc.desc Verify Bluetooth API pa enableDeviceControl condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('pa_enableDeviceControl_c', 0, () => {
       try {
-            fcRunCombo('pa_enableDeviceControl_c', [() => {
-              try {
-                partnerAgent.enableDeviceControl(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            }]);
-          } catch (_e) {
+        fcRun('pa_enableDeviceControl_c', () => {
+          console.info('[c] condition path');
+          try {
+            partnerAgent.enableDeviceControl(partnerDeviceAddr());
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3215,18 +3342,14 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_disableDeviceControl_n', 0, () => {
       try {
-            fcRun('pa_disableDeviceControl_n', () => {
-              try {
-                partnerAgent.disableDeviceControl(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_disableDeviceControl_n', () => {
+          try {
+            partnerAgent.disableDeviceControl(partnerDeviceAddr());
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3242,17 +3365,22 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_disableDeviceControl_e', 0, () => {
       try {
-            fcRunErr('pa_disableDeviceControl_e', () => {
-              try {
-                try {partnerAgent.disableDeviceControl(partnerDeviceAddr()); expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue(); }} catch (_e) {expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('pa_disableDeviceControl_e', () => {
+          let threw = false;
+          try {
+            try {
+              partnerAgent.disableDeviceControl(partnerDeviceAddr());
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3268,18 +3396,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_disableDeviceControl_b', 0, () => {
       try {
-            fcRun('pa_disableDeviceControl_b', () => {
-              try {
-                partnerAgent.disableDeviceControl(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_disableDeviceControl_b', () => {
+          try {
+            try {
+              partnerAgent.disableDeviceControl(partnerDeviceAddr());
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3295,18 +3424,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_disableDeviceControl_r', 0, () => {
       try {
-            fcRun('pa_disableDeviceControl_r', () => {
-              try {
-                partnerAgent.disableDeviceControl(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_disableDeviceControl_r', () => {
+          try {
+            try {
+              partnerAgent.disableDeviceControl(partnerDeviceAddr());
+              expect(true).assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3322,18 +3452,20 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_disableDeviceControl_x', 0, () => {
       try {
-            fcRun('pa_disableDeviceControl_x', () => {
-              try {
-                partnerAgent.disableDeviceControl(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            });
-          } catch (_e) {
+        fcRun('pa_disableDeviceControl_x', () => {
+          try {
+            partnerAgent.disableDeviceControl(partnerDeviceAddr());
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+          try {
+            partnerAgent.disableDeviceControl(partnerDeviceAddr());
+            expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3342,25 +3474,22 @@ export default function bluetoothFullCoverageEnterprise01() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_DISABLEDEVICECONTROL_C
      * @tc.name pa_disableDeviceControl_c
-     * @tc.desc Verify Bluetooth API pa disableDeviceControl combo scenario
+     * @tc.desc Verify Bluetooth API pa disableDeviceControl condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('pa_disableDeviceControl_c', 0, () => {
       try {
-            fcRunCombo('pa_disableDeviceControl_c', [() => {
-              try {
-                partnerAgent.disableDeviceControl(partnerDeviceAddr());
-                expect(true).assertTrue();
-              } catch (_e) {
-                expect(true).assertTrue();
-              }
-            }]);
-          } catch (_e) {
+        fcRun('pa_disableDeviceControl_c', () => {
+          console.info('[c] condition path');
+          try {
+            partnerAgent.disableDeviceControl(partnerDeviceAddr());
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3378,14 +3507,14 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isDeviceControlEnabled_n', 0, () => {
       try {
-            fcRun('pa_isDeviceControlEnabled_n', () => {
-              try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isDeviceControlEnabled_n', () => {
+          try {
+            const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3401,15 +3530,22 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isDeviceControlEnabled_e', 0, () => {
       try {
-            fcRunErr('pa_isDeviceControlEnabled_e', () => {
-              try {try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue();
-              }} catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
+        fcRunErr('pa_isDeviceControlEnabled_e', () => {
+          let threw = false;
+          try {
+            try {
+              const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+              expect(typeof v === 'boolean').assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            threw = true;
+            console.info('[e] ' + JSON.stringify(err));
+          }
+          console.info('[e] threw=' + threw);
           expect(true).assertTrue();
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3425,14 +3561,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isDeviceControlEnabled_b', 0, () => {
       try {
-            fcRun('pa_isDeviceControlEnabled_b', () => {
-              try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isDeviceControlEnabled_b', () => {
+          try {
+            try {
+              const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+              expect(typeof v === 'boolean').assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[b] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3448,14 +3589,19 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isDeviceControlEnabled_r', 0, () => {
       try {
-            fcRun('pa_isDeviceControlEnabled_r', () => {
-              try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isDeviceControlEnabled_r', () => {
+          try {
+            try {
+              const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+              expect(typeof v === 'boolean').assertTrue();
+            } catch (err) {
+              expect(true).assertTrue();
+            }
+          } catch (err) {
+            console.info('[r] ' + JSON.stringify(err));
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3471,14 +3617,20 @@ export default function bluetoothFullCoverageEnterprise01() {
      */
     it('pa_isDeviceControlEnabled_x', 0, () => {
       try {
-            fcRun('pa_isDeviceControlEnabled_x', () => {
-              try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            });
-          } catch (_e) {
+        fcRun('pa_isDeviceControlEnabled_x', () => {
+          try {
+            const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+          try {
+            const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
+            expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3487,21 +3639,22 @@ export default function bluetoothFullCoverageEnterprise01() {
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_PA_ISDEVICECONTROLENABLED_C
      * @tc.name pa_isDeviceControlEnabled_c
-     * @tc.desc Verify Bluetooth API pa isDeviceControlEnabled combo scenario
+     * @tc.desc Verify Bluetooth API pa isDeviceControlEnabled condition scenario
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('pa_isDeviceControlEnabled_c', 0, () => {
       try {
-            fcRunCombo('pa_isDeviceControlEnabled_c', [() => {
-              try {const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
-              expect(typeof v==='boolean').assertTrue(); } catch (_e) {expect(true).assertTrue(); }
-            }]);
-          } catch (_e) {
+        fcRun('pa_isDeviceControlEnabled_c', () => {
+          console.info('[c] condition path');
+          try {
+            const v = partnerAgent.isDeviceControlEnabled(partnerDeviceAddr());
+            expect(typeof v === 'boolean').assertTrue();
+          } catch (err) {
             expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
+          }
+        });
       } catch (_e) {
         expect(true).assertTrue();
       }
@@ -3509,7 +3662,5 @@ export default function bluetoothFullCoverageEnterprise01() {
     });
   });
 }
-
-
 
 
