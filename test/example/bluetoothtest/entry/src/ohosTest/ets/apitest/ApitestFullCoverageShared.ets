@@ -15,7 +15,8 @@
 
 /**
  * Shared helpers for generated BluetoothFullCoverage*.test.ets suites.
- * Aligns with jsapi/26/APITEST_COVERAGE.md: param / return / combo / exception paths.
+ * Aligns with jsapi/26/APITEST_COVERAGE.md: param / return / condition / exception paths.
+ * Multi-API sequential helpers (fcRunCombo) are not allowed.
  */
 import { expect } from '@ohos/hypium';
 import ble from '@ohos.bluetooth.ble';
@@ -57,7 +58,7 @@ export function fcRunErr(tag: string, fn: () => void): void {
 }
 
 /** Return path: run fn and apply checker on result; checker failure is non-fatal. */
-export function fcRunRet < T > (tag: string, fn: () => T, check: (v: T) => boolean): void {
+export function fcRunRet<T>(tag: string, fn: () => T, check: (v: T) => boolean): void {
   try {
     const v = fn();
     if (check(v)) {
@@ -72,17 +73,10 @@ export function fcRunRet < T > (tag: string, fn: () => T, check: (v: T) => boole
   }
 }
 
-/** Combo: sequential API calls in one it(). */
-export function fcRunCombo(tag: string, steps: Array < () => void > ): void {
-  for (let i = 0; i < steps.length; i++) {
-    try {
-      steps[i]();
-    } catch (e) {
-      console.info(`[FullCoverage] ${tag} step${i} caught: ${JSON.stringify(e)}`);
-    }
-  }
-  expect(steps.length > 0).assertTrue();
-}
+/**
+ * fcRunCombo (multi-API sequential calls in one it) is intentionally removed.
+ * Each FullCoverage it() must exercise a single primary API for clear return/assert/debug.
+ */
 
 export function buf0(): ArrayBuffer {
   return new ArrayBuffer(0);
