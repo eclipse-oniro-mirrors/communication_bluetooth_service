@@ -167,5 +167,8 @@ export function gattServerResponse(): ble.ServerResponse {
   return { deviceId: BADDR, transId: 0, status: 0, offset: 0, value: buf0() };
 }
 
-
-
+/** Acceptable BT smoke err codes (env / BT-off / unsupported). */
+export function isAcceptableBtErrCode(errCode: number): boolean {
+  return errCode === 0 || errCode === 201 || errCode === 202 || errCode === 401 ||
+    errCode === 801 || (errCode >= 2900000 && errCode <= 2900999);
+}
