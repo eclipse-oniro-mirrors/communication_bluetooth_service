@@ -14,10 +14,7 @@
  */
 
 /**
- * 仅注册 apitest/ 下套件（不含 ../uitest）。全量验证时可让 TestAbility 指向本文件 default export。
- *
- * 注意：真机单进程跑满 ~2927 例易触发 THREAD_BLOCK_6S 被杀。
- * 建议按 List.apitest.part1a/1b/1c/part2.test 分段执行（合计 1187+918+474+348=2927）。
+ * apitest 分段1：Ability ~ Enterprise（避开单进程 THREAD_BLOCK 杀软）
  */
 import abilityTest from './Ability.test'
 import pageRoutesTest from './PageRoutes.test'
@@ -40,11 +37,8 @@ import bluetoothFullCoverageProfile02 from './BluetoothFullCoverageProfile02.tes
 import bluetoothFullCoverageGatt01 from './BluetoothFullCoverageGatt01.test'
 import bluetoothFullCoverageGatt02 from './BluetoothFullCoverageGatt02.test'
 import bluetoothFullCoverageEnterprise01 from './BluetoothFullCoverageEnterprise01.test'
-import bluetoothFullCoverageConnection01 from './BluetoothFullCoverageConnection01.test'
-import bluetoothFullCoverageConnection02 from './BluetoothFullCoverageConnection02.test'
-import bluetoothFullCoverageSocket01 from './BluetoothFullCoverageSocket01.test'
 
-export function registerApitestSuite(): void {
+export default function testsuiteApitestPart1(): void {
   abilityTest()
   pageRoutesTest()
   bluetoothApiCoverageTest()
@@ -66,15 +60,4 @@ export function registerApitestSuite(): void {
   bluetoothFullCoverageGatt01()
   bluetoothFullCoverageGatt02()
   bluetoothFullCoverageEnterprise01()
-  bluetoothFullCoverageConnection01()
-  bluetoothFullCoverageConnection02()
-  bluetoothFullCoverageSocket01()
 }
-
-export default function testsuiteApitestOnly(): void {
-  registerApitestSuite()
-}
-
-
-
-

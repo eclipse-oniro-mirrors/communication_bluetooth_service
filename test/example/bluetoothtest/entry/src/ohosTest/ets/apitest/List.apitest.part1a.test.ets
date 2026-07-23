@@ -13,12 +13,7 @@
  * limitations under the License.
  */
 
-/**
- * 仅注册 apitest/ 下套件（不含 ../uitest）。全量验证时可让 TestAbility 指向本文件 default export。
- *
- * 注意：真机单进程跑满 ~2927 例易触发 THREAD_BLOCK_6S 被杀。
- * 建议按 List.apitest.part1a/1b/1c/part2.test 分段执行（合计 1187+918+474+348=2927）。
- */
+/** apitest 分段1a：Ability ~ ExpandedMatrix（单进程防 THREAD_BLOCK） */
 import abilityTest from './Ability.test'
 import pageRoutesTest from './PageRoutes.test'
 import bluetoothApiCoverageTest from './BluetoothApiCoverage.test'
@@ -32,19 +27,8 @@ import bluetoothExpandedMatrixConnection02 from './BluetoothExpandedMatrixConnec
 import bluetoothExpandedMatrixLegacy01 from './BluetoothExpandedMatrixLegacy01.test'
 import bluetoothExpandedMatrixLegacy02 from './BluetoothExpandedMatrixLegacy02.test'
 import bluetoothExpandedMatrixRotate from './BluetoothExpandedMatrixRotate.test'
-import bluetoothFullCoverageAccess01 from './BluetoothFullCoverageAccess01.test'
-import bluetoothFullCoverageLegacy01 from './BluetoothFullCoverageLegacy01.test'
-import bluetoothFullCoverageLegacy02 from './BluetoothFullCoverageLegacy02.test'
-import bluetoothFullCoverageProfile01 from './BluetoothFullCoverageProfile01.test'
-import bluetoothFullCoverageProfile02 from './BluetoothFullCoverageProfile02.test'
-import bluetoothFullCoverageGatt01 from './BluetoothFullCoverageGatt01.test'
-import bluetoothFullCoverageGatt02 from './BluetoothFullCoverageGatt02.test'
-import bluetoothFullCoverageEnterprise01 from './BluetoothFullCoverageEnterprise01.test'
-import bluetoothFullCoverageConnection01 from './BluetoothFullCoverageConnection01.test'
-import bluetoothFullCoverageConnection02 from './BluetoothFullCoverageConnection02.test'
-import bluetoothFullCoverageSocket01 from './BluetoothFullCoverageSocket01.test'
 
-export function registerApitestSuite(): void {
+export default function testsuiteApitestPart1a(): void {
   abilityTest()
   pageRoutesTest()
   bluetoothApiCoverageTest()
@@ -58,23 +42,4 @@ export function registerApitestSuite(): void {
   bluetoothExpandedMatrixLegacy01()
   bluetoothExpandedMatrixLegacy02()
   bluetoothExpandedMatrixRotate()
-  bluetoothFullCoverageAccess01()
-  bluetoothFullCoverageLegacy01()
-  bluetoothFullCoverageLegacy02()
-  bluetoothFullCoverageProfile01()
-  bluetoothFullCoverageProfile02()
-  bluetoothFullCoverageGatt01()
-  bluetoothFullCoverageGatt02()
-  bluetoothFullCoverageEnterprise01()
-  bluetoothFullCoverageConnection01()
-  bluetoothFullCoverageConnection02()
-  bluetoothFullCoverageSocket01()
 }
-
-export default function testsuiteApitestOnly(): void {
-  registerApitestSuite()
-}
-
-
-
-
