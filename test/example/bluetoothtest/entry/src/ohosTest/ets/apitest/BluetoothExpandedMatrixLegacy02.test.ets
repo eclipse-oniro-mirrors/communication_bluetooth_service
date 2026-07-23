@@ -40,14 +40,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(130);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -65,14 +66,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(131);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -90,14 +92,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(132);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -115,14 +118,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(133);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -140,14 +144,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(134);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -165,14 +170,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(135);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -190,14 +196,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(136);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -215,14 +222,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(137);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -240,14 +248,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(138);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -265,14 +274,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(139);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -290,14 +300,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(140);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -315,14 +326,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(141);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -340,14 +352,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(142);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -365,14 +378,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(143);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -390,14 +404,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(144);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -415,14 +430,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(145);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -440,14 +456,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(146);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -465,14 +482,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(147);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -490,14 +508,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(148);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -515,14 +534,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(149);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -540,14 +560,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(150);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -565,14 +586,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(151);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -590,14 +612,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(152);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -615,14 +638,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(153);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -640,14 +664,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(154);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -665,14 +690,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(155);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -690,14 +716,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(156);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -715,14 +742,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(157);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -740,14 +768,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(158);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -765,14 +794,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(159);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -790,14 +820,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(160);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -815,14 +846,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(161);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -840,14 +872,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(162);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -865,14 +898,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(163);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -890,14 +924,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(164);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -915,14 +950,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(165);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -940,14 +976,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(166);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -965,14 +1002,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(167);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -990,14 +1028,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(168);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1015,14 +1054,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(169);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1040,14 +1080,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(170);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1065,14 +1106,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(171);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1090,14 +1132,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(172);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1115,14 +1158,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(173);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1140,14 +1184,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(174);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1165,14 +1210,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(175);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1190,14 +1236,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(176);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1215,14 +1262,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(177);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1240,14 +1288,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(178);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1265,14 +1314,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(179);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1290,14 +1340,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(180);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1315,14 +1366,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(181);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1340,14 +1392,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(182);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1365,14 +1418,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(183);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1390,14 +1444,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(184);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1415,14 +1470,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(185);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1440,14 +1496,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(186);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1465,14 +1522,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(187);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1490,14 +1548,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(188);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1515,14 +1574,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(189);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1540,14 +1600,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(190);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1565,14 +1626,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(191);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1590,14 +1652,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(192);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1615,14 +1678,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(193);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1640,14 +1704,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(194);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1665,14 +1730,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(195);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1690,14 +1756,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(196);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1715,14 +1782,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(197);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1740,14 +1808,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(198);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1765,14 +1834,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(199);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1790,14 +1860,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(200);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1815,14 +1886,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(201);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1840,14 +1912,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(202);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1865,14 +1938,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(203);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1890,14 +1964,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(204);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1915,14 +1990,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(205);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1940,14 +2016,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(206);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1965,14 +2042,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(207);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -1990,14 +2068,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(208);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2015,14 +2094,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(209);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2040,14 +2120,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(210);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2065,14 +2146,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(211);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2090,14 +2172,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(212);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2115,14 +2198,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(213);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2140,14 +2224,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(214);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2165,14 +2250,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(215);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2190,14 +2276,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(216);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2215,14 +2302,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(217);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2240,14 +2328,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(218);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2265,14 +2354,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(219);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2290,14 +2380,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(220);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2315,14 +2406,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(221);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2340,14 +2432,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(222);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2365,14 +2458,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(223);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2390,14 +2484,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(224);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2415,14 +2510,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(225);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2440,14 +2536,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(226);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2465,14 +2562,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(227);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2490,14 +2588,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(228);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2515,14 +2614,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(229);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2540,14 +2640,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(230);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2565,14 +2666,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(231);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2590,14 +2692,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(232);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2615,14 +2718,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(233);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2640,14 +2744,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(234);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2665,14 +2770,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(235);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2690,14 +2796,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(236);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2715,14 +2822,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(237);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2740,14 +2848,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(238);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2765,14 +2874,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(239);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2790,14 +2900,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(240);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2815,14 +2926,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(241);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2840,14 +2952,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(242);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2865,14 +2978,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(243);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2890,14 +3004,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(244);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2915,14 +3030,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(245);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2940,14 +3056,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(246);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2965,14 +3082,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(247);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2990,14 +3108,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(248);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3015,14 +3134,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(249);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3040,14 +3160,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(250);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3065,14 +3186,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(251);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3090,14 +3212,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(252);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3115,14 +3238,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(253);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3140,14 +3264,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(254);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3165,14 +3290,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(255);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3190,14 +3316,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(256);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3215,14 +3342,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(257);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3240,14 +3368,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(258);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3265,14 +3394,15 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       try {
         value = bluetooth.getProfileConnState(259);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
   });

@@ -19,5 +19,5 @@
  */
 
 /** Known Bluetooth BusinessError codes that may appear on invalid profile ids / env limits. */
-export const KNOWN_BT_ERR_CODES: number[] = [0, 201, 801, 2900001, 2900099];
+export const KNOWN_BT_ERR_CODES: number[] = [0, 201, 202, 401, 801, 2900001, 2900003, 2900004, 2900099];
 

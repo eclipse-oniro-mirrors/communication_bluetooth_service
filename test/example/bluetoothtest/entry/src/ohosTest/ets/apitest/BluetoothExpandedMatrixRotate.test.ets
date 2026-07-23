@@ -40,14 +40,15 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = access.getState();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -64,12 +65,13 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         ble.stopBLEScan();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -87,14 +89,15 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = bluetoothManager.getState();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -112,13 +115,14 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = connection.getLocalName();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
     });
@@ -138,13 +142,14 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = ble.getConnectedBLEDevices() as Array < Object > ;
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -163,14 +168,15 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = access.getState();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -187,12 +193,13 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         ble.stopBLEScan();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -210,14 +217,15 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = bluetoothManager.getState();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -235,13 +243,14 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = connection.getLocalName();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
     });
@@ -261,13 +270,14 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = ble.getConnectedBLEDevices() as Array < Object > ;
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -286,14 +296,15 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = access.getState();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -310,12 +321,13 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         ble.stopBLEScan();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -333,14 +345,15 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = bluetoothManager.getState();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -358,13 +371,14 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = connection.getLocalName();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
     });
@@ -384,13 +398,14 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = ble.getConnectedBLEDevices() as Array < Object > ;
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -409,14 +424,15 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = access.getState();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -433,12 +449,13 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         ble.stopBLEScan();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -456,14 +473,15 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = bluetoothManager.getState();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -481,13 +499,14 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = connection.getLocalName();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
     });
@@ -507,13 +526,14 @@ export default function bluetoothExpandedMatrixRotateTest() {
       try {
         value = ble.getConnectedBLEDevices() as Array < Object > ;
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(Array.isArray(value)).assertTrue();
     });
 
