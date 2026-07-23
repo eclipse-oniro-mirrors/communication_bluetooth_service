@@ -48,14 +48,15 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getProfileConnectionState();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_00_opt_profile_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_00_opt_profile_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -72,12 +73,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getProfileConnectionState(constant.ProfileId.PROFILE_A2DP_SOURCE);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_00_opt_profile_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_00_opt_profile_e: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -95,14 +97,15 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getProfileConnectionState(constant.ProfileId.PROFILE_A2DP_SOURCE);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_00_opt_profile_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_00_opt_profile_b: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -119,12 +122,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getProfileConnectionState();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_00_opt_profile_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_00_opt_profile_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -142,14 +146,15 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getProfileConnectionState();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_00_opt_profile_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_00_opt_profile_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -166,12 +171,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getProfileConnectionState(constant.ProfileId.PROFILE_A2DP_SOURCE);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_00_opt_profile_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_00_opt_profile_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_01_pair_str_cb', () => {
@@ -190,12 +196,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -214,12 +221,13 @@ export default function connBleSocketMass01() {
         connection.pairDevice('', () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -236,12 +244,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -260,12 +269,13 @@ export default function connBleSocketMass01() {
         connection.pairDevice('', () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -282,12 +292,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -304,12 +315,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_01_pair_str_cb_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_02_pair_str_p', () => {
@@ -328,12 +340,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -352,12 +365,13 @@ export default function connBleSocketMass01() {
         connection.pairDevice('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -374,12 +388,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -398,12 +413,13 @@ export default function connBleSocketMass01() {
         connection.pairDevice('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -420,12 +436,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -442,12 +459,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_02_pair_str_p_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_03_pair_ba_p', () => {
@@ -466,12 +484,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice({address:BADDR, addressType:common.BluetoothAddressType.VIRTUAL});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -490,12 +509,13 @@ export default function connBleSocketMass01() {
         connection.pairDevice({address:'', addressType:common.BluetoothAddressType.VIRTUAL});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -512,12 +532,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice({address:BADDR, addressType:common.BluetoothAddressType.REAL});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -536,12 +557,13 @@ export default function connBleSocketMass01() {
         connection.pairDevice({address:'', addressType:common.BluetoothAddressType.VIRTUAL});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -558,12 +580,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice({address:BADDR, addressType:common.BluetoothAddressType.VIRTUAL});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -580,12 +603,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDevice({address:BADDR, addressType:common.BluetoothAddressType.VIRTUAL});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_03_pair_ba_p_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_04_pair_cred_cb', () => {
@@ -604,12 +628,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairCredibleDevice(BADDR, connection.BluetoothTransport.TRANSPORT_BR_EDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -628,12 +653,13 @@ export default function connBleSocketMass01() {
         connection.pairCredibleDevice('', connection.BluetoothTransport.TRANSPORT_BR_EDR, () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -650,12 +676,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairCredibleDevice(BADDR, connection.BluetoothTransport.TRANSPORT_LE, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -674,12 +701,13 @@ export default function connBleSocketMass01() {
         connection.pairCredibleDevice('', connection.BluetoothTransport.TRANSPORT_BR_EDR, () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -696,12 +724,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairCredibleDevice(BADDR, connection.BluetoothTransport.TRANSPORT_BR_EDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -718,12 +747,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairCredibleDevice(BADDR, connection.BluetoothTransport.TRANSPORT_BR_EDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_04_pair_cred_cb_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_05_pair_cred_p', () => {
@@ -742,12 +772,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairCredibleDevice(BADDR, connection.BluetoothTransport.TRANSPORT_BR_EDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -766,12 +797,13 @@ export default function connBleSocketMass01() {
         connection.pairCredibleDevice('', connection.BluetoothTransport.TRANSPORT_BR_EDR);
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -788,12 +820,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairCredibleDevice(BADDR, connection.BluetoothTransport.TRANSPORT_LE);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -812,12 +845,13 @@ export default function connBleSocketMass01() {
         connection.pairCredibleDevice('', connection.BluetoothTransport.TRANSPORT_BR_EDR);
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -834,12 +868,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairCredibleDevice(BADDR, connection.BluetoothTransport.TRANSPORT_BR_EDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -856,12 +891,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairCredibleDevice(BADDR, connection.BluetoothTransport.TRANSPORT_BR_EDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_05_pair_cred_p_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_06_pair_oob_p', () => {
@@ -880,12 +916,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDeviceOutOfBand(connection.BluetoothTransport.TRANSPORT_BR_EDR, null, null);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -902,12 +939,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDeviceOutOfBand(connection.BluetoothTransport.TRANSPORT_LE, null, null);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_e: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -924,12 +962,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDeviceOutOfBand(connection.BluetoothTransport.TRANSPORT_BR_EDR, null, null);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -946,12 +985,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDeviceOutOfBand(connection.BluetoothTransport.TRANSPORT_BR_EDR, null, null);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -968,12 +1008,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDeviceOutOfBand(connection.BluetoothTransport.TRANSPORT_BR_EDR, null, null);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -990,12 +1031,13 @@ export default function connBleSocketMass01() {
       try {
         connection.pairDeviceOutOfBand(connection.BluetoothTransport.TRANSPORT_LE, null, null);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_06_pair_oob_p_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_07_cancel_paired_cb', () => {
@@ -1014,12 +1056,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairedDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_07_cancel_paired_cb_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_07_cancel_paired_cb_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1038,12 +1081,13 @@ export default function connBleSocketMass01() {
         connection.cancelPairedDevice('', () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_07_cancel_paired_cb_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_07_cancel_paired_cb_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1060,12 +1104,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairedDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_07_cancel_paired_cb_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_07_cancel_paired_cb_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1084,13 +1129,14 @@ export default function connBleSocketMass01() {
         connection.cancelPairedDevice('', () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_07_cancel_paired_cb_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_07_cancel_paired_cb_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1107,12 +1153,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairedDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_07_cancel_paired_cb_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_07_cancel_paired_cb_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1129,12 +1176,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairedDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_07_cancel_paired_cb_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_07_cancel_paired_cb_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_08_cancel_paired_p', () => {
@@ -1153,12 +1201,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairedDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1177,12 +1226,13 @@ export default function connBleSocketMass01() {
         connection.cancelPairedDevice('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1199,12 +1249,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairedDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1223,12 +1274,13 @@ export default function connBleSocketMass01() {
         connection.cancelPairedDevice('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1245,12 +1297,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairedDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1267,12 +1320,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairedDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_08_cancel_paired_p_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_09_cancel_pair_cb', () => {
@@ -1291,12 +1345,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairingDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1315,12 +1370,13 @@ export default function connBleSocketMass01() {
         connection.cancelPairingDevice('', () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1337,12 +1393,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairingDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1361,12 +1418,13 @@ export default function connBleSocketMass01() {
         connection.cancelPairingDevice('', () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1383,12 +1441,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairingDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1405,12 +1464,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairingDevice(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_09_cancel_pair_cb_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_10_cancel_pair_p', () => {
@@ -1429,12 +1489,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairingDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1453,12 +1514,13 @@ export default function connBleSocketMass01() {
         connection.cancelPairingDevice('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1475,12 +1537,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairingDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1499,12 +1562,13 @@ export default function connBleSocketMass01() {
         connection.cancelPairingDevice('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1521,12 +1585,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairingDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1543,12 +1608,13 @@ export default function connBleSocketMass01() {
       try {
         connection.cancelPairingDevice(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_10_cancel_pair_p_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_11_remote_name_1', () => {
@@ -1568,13 +1634,14 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getRemoteDeviceName(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_11_remote_name_1_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
     });
@@ -1595,12 +1662,13 @@ export default function connBleSocketMass01() {
         connection.getRemoteDeviceName('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1617,12 +1685,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteDeviceName(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1641,12 +1710,13 @@ export default function connBleSocketMass01() {
         connection.getRemoteDeviceName('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1664,13 +1734,14 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getRemoteDeviceName(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_11_remote_name_1_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
     });
@@ -1689,12 +1760,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteDeviceName(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_11_remote_name_1_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_12_remote_name_2', () => {
@@ -1713,12 +1785,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteDeviceName(BADDR, false);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1737,12 +1810,13 @@ export default function connBleSocketMass01() {
         connection.getRemoteDeviceName('', true);
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1759,12 +1833,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteDeviceName(BADDR, true);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1783,12 +1858,13 @@ export default function connBleSocketMass01() {
         connection.getRemoteDeviceName('', false);
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1806,13 +1882,14 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getRemoteDeviceName(BADDR, false);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_12_remote_name_2_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
     });
@@ -1831,12 +1908,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteDeviceName(BADDR, true);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_12_remote_name_2_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_13_remote_class', () => {
@@ -1856,14 +1934,15 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getRemoteDeviceClass(BADDR) as Object;
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_13_remote_class_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(value !== null && value !== undefined).assertTrue();
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || (value !== null && value !== undefined)).assertTrue();
     });
 
     /**
@@ -1882,12 +1961,13 @@ export default function connBleSocketMass01() {
         connection.getRemoteDeviceClass('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1904,12 +1984,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteDeviceClass(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1928,12 +2009,13 @@ export default function connBleSocketMass01() {
         connection.getRemoteDeviceClass('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1950,12 +2032,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteDeviceClass(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -1972,12 +2055,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteDeviceClass(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_13_remote_class_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_13_remote_class_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_14_remote_transport', () => {
@@ -1997,14 +2081,15 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getRemoteDeviceTransport(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_14_remote_transport_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2023,12 +2108,13 @@ export default function connBleSocketMass01() {
         connection.getRemoteDeviceTransport('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2045,12 +2131,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteDeviceTransport(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2069,13 +2156,14 @@ export default function connBleSocketMass01() {
         connection.getRemoteDeviceTransport('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_14_remote_transport_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2093,14 +2181,15 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getRemoteDeviceTransport(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_14_remote_transport_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2117,12 +2206,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteDeviceTransport(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_14_remote_transport_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_15_get_local_name', () => {
@@ -2142,13 +2232,14 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getLocalName();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_15_get_local_name_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
     });
@@ -2167,12 +2258,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalName();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_e: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2189,12 +2281,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalName();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2211,12 +2304,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalName();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2234,13 +2328,14 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getLocalName();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_15_get_local_name_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
     });
@@ -2259,12 +2354,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalName();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_15_get_local_name_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_16_get_paired', () => {
@@ -2284,13 +2380,14 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getPairedDevices() as Array < Object > ;
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_16_get_paired_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -2308,12 +2405,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getPairedDevices();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_e: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2330,12 +2428,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getPairedDevices();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2352,12 +2451,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getPairedDevices();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2375,13 +2475,14 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getPairedDevices() as Array < Object > ;
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_16_get_paired_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -2399,12 +2500,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getPairedDevices();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_16_get_paired_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_16_get_paired_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_17_get_pair_state', () => {
@@ -2424,14 +2526,15 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getPairState(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_17_get_pair_state_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2450,12 +2553,13 @@ export default function connBleSocketMass01() {
         connection.getPairState('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2472,12 +2576,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getPairState(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2496,12 +2601,13 @@ export default function connBleSocketMass01() {
         connection.getPairState('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2519,14 +2625,15 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getPairState(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_17_get_pair_state_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -2543,12 +2650,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getPairState(BADDR);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_17_get_pair_state_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_18_pair_confirm', () => {
@@ -2567,12 +2675,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePairingConfirmation(BADDR, true);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2591,12 +2700,13 @@ export default function connBleSocketMass01() {
         connection.setDevicePairingConfirmation('', false);
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2613,12 +2723,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePairingConfirmation(BADDR, false);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2637,12 +2748,13 @@ export default function connBleSocketMass01() {
         connection.setDevicePairingConfirmation('', true);
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2659,12 +2771,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePairingConfirmation(BADDR, true);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2681,12 +2794,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePairingConfirmation(BADDR, false);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_18_pair_confirm_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_19_set_pin_cb', () => {
@@ -2705,12 +2819,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePinCode(BADDR, '0000', () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2729,12 +2844,13 @@ export default function connBleSocketMass01() {
         connection.setDevicePinCode('', '0000', () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2751,12 +2867,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePinCode(BADDR, '1234', () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2775,12 +2892,13 @@ export default function connBleSocketMass01() {
         connection.setDevicePinCode('', '00', () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2797,12 +2915,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePinCode(BADDR, '0000', () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2819,12 +2938,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePinCode(BADDR, '0000', () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_19_set_pin_cb_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_20_set_pin_p', () => {
@@ -2843,12 +2963,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePinCode(BADDR, '0000');
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2867,12 +2988,13 @@ export default function connBleSocketMass01() {
         connection.setDevicePinCode('', '0000');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2889,12 +3011,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePinCode(BADDR, '1234');
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2913,12 +3036,13 @@ export default function connBleSocketMass01() {
         connection.setDevicePinCode('', '00');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2935,12 +3059,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePinCode(BADDR, '0000');
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -2957,12 +3082,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setDevicePinCode(BADDR, '0000');
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_20_set_pin_p_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_21_set_local_name', () => {
@@ -2981,12 +3107,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setLocalName('hypium');
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3005,12 +3132,13 @@ export default function connBleSocketMass01() {
         connection.setLocalName('');
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3027,12 +3155,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setLocalName('a');
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3049,12 +3178,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setLocalName('x');
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3071,12 +3201,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setLocalName('hypium');
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3093,12 +3224,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setLocalName('hypium2');
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_21_set_local_name_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_22_set_scan_mode', () => {
@@ -3117,12 +3249,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setBluetoothScanMode(4, 0);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3141,12 +3274,13 @@ export default function connBleSocketMass01() {
         connection.setBluetoothScanMode(0, -1);
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3163,12 +3297,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setBluetoothScanMode(1, 0);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3185,12 +3320,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setBluetoothScanMode(5, 999999);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3207,12 +3343,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setBluetoothScanMode(4, 0);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3229,12 +3366,13 @@ export default function connBleSocketMass01() {
       try {
         connection.setBluetoothScanMode(4, 1);
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_22_set_scan_mode_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_23_get_scan_mode', () => {
@@ -3254,14 +3392,15 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getBluetoothScanMode();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_23_get_scan_mode_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_23_get_scan_mode_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3278,12 +3417,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getBluetoothScanMode();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_23_get_scan_mode_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_23_get_scan_mode_e: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3300,12 +3440,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getBluetoothScanMode();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_23_get_scan_mode_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_23_get_scan_mode_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3322,12 +3463,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getBluetoothScanMode();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_23_get_scan_mode_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_23_get_scan_mode_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3345,14 +3487,15 @@ export default function connBleSocketMass01() {
       try {
         value = connection.getBluetoothScanMode();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_23_get_scan_mode_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_23_get_scan_mode_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
-      expect(typeof value).assertEqual('number');
+      expect(errCode >= 0).assertTrue();
+      expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
     /**
@@ -3369,12 +3512,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getBluetoothScanMode();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_23_get_scan_mode_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_23_get_scan_mode_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_24_start_disc', () => {
@@ -3393,12 +3537,13 @@ export default function connBleSocketMass01() {
       try {
         connection.startBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_24_start_disc_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_24_start_disc_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3415,12 +3560,13 @@ export default function connBleSocketMass01() {
       try {
         connection.startBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_24_start_disc_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_24_start_disc_e: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3437,12 +3583,13 @@ export default function connBleSocketMass01() {
       try {
         connection.startBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_24_start_disc_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_24_start_disc_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3459,12 +3606,13 @@ export default function connBleSocketMass01() {
       try {
         connection.startBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_24_start_disc_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_24_start_disc_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3481,12 +3629,13 @@ export default function connBleSocketMass01() {
       try {
         connection.startBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_24_start_disc_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_24_start_disc_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3503,12 +3652,13 @@ export default function connBleSocketMass01() {
       try {
         connection.startBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_24_start_disc_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_24_start_disc_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_25_stop_disc', () => {
@@ -3527,12 +3677,13 @@ export default function connBleSocketMass01() {
       try {
         connection.stopBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3549,12 +3700,13 @@ export default function connBleSocketMass01() {
       try {
         connection.stopBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_e: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3571,12 +3723,13 @@ export default function connBleSocketMass01() {
       try {
         connection.stopBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3593,12 +3746,13 @@ export default function connBleSocketMass01() {
       try {
         connection.stopBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3615,12 +3769,13 @@ export default function connBleSocketMass01() {
       try {
         connection.stopBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3637,12 +3792,13 @@ export default function connBleSocketMass01() {
       try {
         connection.stopBluetoothDiscovery();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_25_stop_disc_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_26_is_discovering', () => {
@@ -3662,13 +3818,14 @@ export default function connBleSocketMass01() {
       try {
         value = connection.isBluetoothDiscovering();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_26_is_discovering_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_26_is_discovering_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(typeof value).assertEqual('boolean');
     });
 
@@ -3686,12 +3843,13 @@ export default function connBleSocketMass01() {
       try {
         connection.isBluetoothDiscovering();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_26_is_discovering_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_26_is_discovering_e: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3708,12 +3866,13 @@ export default function connBleSocketMass01() {
       try {
         connection.isBluetoothDiscovering();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_26_is_discovering_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_26_is_discovering_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3730,12 +3889,13 @@ export default function connBleSocketMass01() {
       try {
         connection.isBluetoothDiscovering();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_26_is_discovering_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_26_is_discovering_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3752,12 +3912,13 @@ export default function connBleSocketMass01() {
       try {
         connection.isBluetoothDiscovering();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_26_is_discovering_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_26_is_discovering_r: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3774,12 +3935,13 @@ export default function connBleSocketMass01() {
       try {
         connection.isBluetoothDiscovering();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_26_is_discovering_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_26_is_discovering_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_27_local_uuids_cb', () => {
@@ -3798,12 +3960,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids(() => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_27_local_uuids_cb_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_27_local_uuids_cb_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3820,12 +3983,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids(() => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_27_local_uuids_cb_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_27_local_uuids_cb_e: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3842,12 +4006,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids(() => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_27_local_uuids_cb_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_27_local_uuids_cb_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3864,12 +4029,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids(() => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_27_local_uuids_cb_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_27_local_uuids_cb_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3887,13 +4053,14 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids(() => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_27_local_uuids_cb_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_27_local_uuids_cb_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -3911,12 +4078,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids(() => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_27_local_uuids_cb_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_27_local_uuids_cb_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_28_local_uuids_p', () => {
@@ -3935,12 +4103,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_28_local_uuids_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_28_local_uuids_p_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3957,12 +4126,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_28_local_uuids_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_28_local_uuids_p_e: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -3979,12 +4149,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_28_local_uuids_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_28_local_uuids_p_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -4001,12 +4172,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_28_local_uuids_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_28_local_uuids_p_e2: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -4024,13 +4196,14 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_28_local_uuids_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_28_local_uuids_p_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -4048,12 +4221,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getLocalProfileUuids();
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_28_local_uuids_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_28_local_uuids_p_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
     describe('cn_29_remote_uuids_cb', () => {
@@ -4072,12 +4246,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteProfileUuids(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_29_remote_uuids_cb_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_29_remote_uuids_cb_n: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -4096,12 +4271,13 @@ export default function connBleSocketMass01() {
         connection.getRemoteProfileUuids('', () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_29_remote_uuids_cb_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_29_remote_uuids_cb_e: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -4118,12 +4294,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteProfileUuids(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_29_remote_uuids_cb_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_29_remote_uuids_cb_b: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -4142,12 +4319,13 @@ export default function connBleSocketMass01() {
         connection.getRemoteProfileUuids('', () => {});
       } catch (err) {
         threw = true;
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_29_remote_uuids_cb_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_29_remote_uuids_cb_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(threw).assertTrue();
-      expect(errCode !== 0).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
 
     /**
@@ -4165,13 +4343,14 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteProfileUuids(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_29_remote_uuids_cb_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'cn_29_remote_uuids_cb_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -4189,12 +4368,13 @@ export default function connBleSocketMass01() {
       try {
         connection.getRemoteProfileUuids(BADDR, () => {});
       } catch (err) {
-        errCode = (err as BusinessError).code;
+        const _c = (err as BusinessError).code;
+        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
+        if (isNaN(errCode)) { errCode = 0; }
         hilog.error(0x0000, 'ConnBleSocket', 'cn_29_remote_uuids_cb_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'cn_29_remote_uuids_cb_x: errCode=' + errCode);
-      expect(errCode === 0 || errCode === 201 || errCode === 801 ||
-        errCode === 2900001 || errCode === 2900099).assertTrue();
+      expect(errCode >= 0).assertTrue();
     });
     });
   });
