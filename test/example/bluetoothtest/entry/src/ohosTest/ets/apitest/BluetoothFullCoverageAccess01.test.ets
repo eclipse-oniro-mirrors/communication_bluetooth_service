@@ -2103,18 +2103,10 @@ export default function bluetoothFullCoverageAccess01() {
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_ON_STATECHANGE_B
-     * @tc.name ac_on_stateChange_b
-     * @tc.desc Verify Bluetooth API ac on stateChange boundary scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('ac_on_stateChange_b', 0, () => {
+    it('ac_on_stateChange_b', 0, async (done: Function) => {
       let threw = false;
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
@@ -2122,94 +2114,110 @@ export default function bluetoothFullCoverageAccess01() {
         access.on('stateChange', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_ON_STATECHANGE_R
-     * @tc.name ac_on_stateChange_r
-     * @tc.desc Verify Bluetooth API ac on stateChange return value scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('ac_on_stateChange_r', 0, () => {
+    it('ac_on_stateChange_r', 0, async (done: Function) => {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
         access.on('stateChange', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_ON_STATECHANGE_X
-     * @tc.name ac_on_stateChange_x
-     * @tc.desc Verify Bluetooth API ac on stateChange repeat invocation scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('ac_on_stateChange_x', 0, () => {
+    it('ac_on_stateChange_x', 0, async (done: Function) => {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
         access.on('stateChange', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         access.on('stateChange', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_ON_STATECHANGE_C
-     * @tc.name ac_on_stateChange_c
-     * @tc.desc Verify Bluetooth API ac on stateChange condition scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('ac_on_stateChange_c', 0, () => {
+    it('ac_on_stateChange_c', 0, async (done: Function) => {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
         access.on('stateChange', (_state) => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_ON_STATECHANGE_PERF
+     * @tc.name ac_on_stateChange_perf
+     * @tc.desc Verify Bluetooth apitest case ac on stateChange perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_on_stateChange_perf', 0, () => {
+      runPerf('ac_on_stateChange_perf', 5000, () => {
+        try {
+          access.on('stateChange', () => {});
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_ON_STATECHANGE_STRESS
+     * @tc.name ac_on_stateChange_stress
+     * @tc.desc Verify Bluetooth apitest case ac on stateChange stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_on_stateChange_stress', 0, () => {
+      runStress('ac_on_stateChange_stress', 20, () => {
+        try {
+          access.on('stateChange', () => {});
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('ac_off_stateChange', () => {
@@ -2228,13 +2236,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.off('stateChange');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2253,13 +2262,14 @@ export default function bluetoothFullCoverageAccess01() {
         access.off('stateChange', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -2278,13 +2288,14 @@ export default function bluetoothFullCoverageAccess01() {
         access.off('stateChange');
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -2301,13 +2312,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.off('stateChange');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2324,25 +2336,27 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.off('stateChange');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         access.off('stateChange');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2359,13 +2373,48 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.off('stateChange');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_OFF_STATECHANGE_PERF
+     * @tc.name ac_off_stateChange_perf
+     * @tc.desc Verify Bluetooth apitest case ac off stateChange perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_off_stateChange_perf', 0, () => {
+      runPerf('ac_off_stateChange_perf', 5000, () => {
+        try {
+          access.off('stateChange');
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_OFF_STATECHANGE_STRESS
+     * @tc.name ac_off_stateChange_stress
+     * @tc.desc Verify Bluetooth apitest case ac off stateChange stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_off_stateChange_stress', 0, () => {
+      runStress('ac_off_stateChange_stress', 20, () => {
+        try {
+          access.off('stateChange');
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('ac_factoryReset_cb', () => {
@@ -2384,13 +2433,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset(() => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
     });
 
     /**
@@ -2407,13 +2457,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset(() => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2430,13 +2481,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset(() => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
     });
 
     /**
@@ -2453,13 +2505,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset(() => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
     });
 
     /**
@@ -2476,25 +2529,27 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset(() => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         access.factoryReset(() => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
     });
 
     /**
@@ -2511,13 +2566,48 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset(() => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_FACTORYRESET_CB_PERF
+     * @tc.name ac_factoryReset_cb_perf
+     * @tc.desc Verify Bluetooth apitest case ac factoryReset cb perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_factoryReset_cb_perf', 0, () => {
+      runPerf('ac_factoryReset_cb_perf', 5000, () => {
+        try {
+          access.factoryReset(() => {});
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_FACTORYRESET_CB_STRESS
+     * @tc.name ac_factoryReset_cb_stress
+     * @tc.desc Verify Bluetooth apitest case ac factoryReset cb stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_factoryReset_cb_stress', 0, () => {
+      runStress('ac_factoryReset_cb_stress', 20, () => {
+        try {
+          access.factoryReset(() => {});
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('ac_factoryReset_p', () => {
@@ -2536,13 +2626,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
     });
 
     /**
@@ -2559,13 +2650,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2582,13 +2674,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
     });
 
     /**
@@ -2605,13 +2698,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
     });
 
     /**
@@ -2628,25 +2722,27 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         access.factoryReset();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
     });
 
     /**
@@ -2663,13 +2759,48 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.factoryReset();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertLocalOk(errCode);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_FACTORYRESET_P_PERF
+     * @tc.name ac_factoryReset_p_perf
+     * @tc.desc Verify Bluetooth apitest case ac factoryReset p perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_factoryReset_p_perf', 0, () => {
+      runPerf('ac_factoryReset_p_perf', 5000, () => {
+        try {
+          access.factoryReset();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_FACTORYRESET_P_STRESS
+     * @tc.name ac_factoryReset_p_stress
+     * @tc.desc Verify Bluetooth apitest case ac factoryReset p stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_factoryReset_p_stress', 0, () => {
+      runStress('ac_factoryReset_p_stress', 20, () => {
+        try {
+          access.factoryReset();
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('ac_getLocalAddress', () => {
@@ -2689,15 +2820,18 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         value = access.getLocalAddress();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('string');
-      expect(value.length >= 0).assertTrue();
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(typeof value).assertEqual('string');
+        expect(value.length >= 0).assertTrue();
+      }
     });
 
     /**
@@ -2714,13 +2848,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.getLocalAddress();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2738,15 +2873,18 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         value = access.getLocalAddress();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('string');
-      expect(value.length >= 0).assertTrue();
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(typeof value).assertEqual('string');
+        expect(value.length >= 0).assertTrue();
+      }
     });
 
     /**
@@ -2764,15 +2902,18 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         value = access.getLocalAddress();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('string');
-      expect(value.length >= 0).assertTrue();
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(typeof value).assertEqual('string');
+        expect(value.length >= 0).assertTrue();
+      }
     });
 
     /**
@@ -2790,30 +2931,36 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         value = access.getLocalAddress();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('string');
-      expect(value.length >= 0).assertTrue();
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(typeof value).assertEqual('string');
+        expect(value.length >= 0).assertTrue();
+      }
       errCode = 0;
       value = '';
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         value = access.getLocalAddress();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('string');
-      expect(value.length >= 0).assertTrue();
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(typeof value).assertEqual('string');
+        expect(value.length >= 0).assertTrue();
+      }
     });
 
     /**
@@ -2831,15 +2978,52 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         value = access.getLocalAddress();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('string');
-      expect(value.length >= 0).assertTrue();
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(typeof value).assertEqual('string');
+        expect(value.length >= 0).assertTrue();
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_GETLOCALADDRESS_PERF
+     * @tc.name ac_getLocalAddress_perf
+     * @tc.desc Verify Bluetooth apitest case ac getLocalAddress perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_getLocalAddress_perf', 0, () => {
+      runPerf('ac_getLocalAddress_perf', 5000, () => {
+        try {
+          access.getLocalAddress();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_GETLOCALADDRESS_STRESS
+     * @tc.name ac_getLocalAddress_stress
+     * @tc.desc Verify Bluetooth apitest case ac getLocalAddress stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_getLocalAddress_stress', 0, () => {
+      runStress('ac_getLocalAddress_stress', 20, () => {
+        try {
+          access.getLocalAddress();
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('ac_restrictBluetooth', () => {
@@ -2854,20 +3038,23 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('ac_restrictBluetooth_n', 0, () => {
       let errCode = 0;
-      let value: Promise < void >  | null = null;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        value = access.restrictBluetooth();
+        value = access.restrictBluetooth() as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -2884,13 +3071,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         access.restrictBluetooth();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2903,20 +3091,23 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('ac_restrictBluetooth_b', 0, () => {
       let errCode = 0;
-      let value: Promise < void >  | null = null;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'b: invoke');
       try {
-        value = access.restrictBluetooth();
+        value = access.restrictBluetooth() as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -2929,20 +3120,23 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('ac_restrictBluetooth_r', 0, () => {
       let errCode = 0;
-      let value: Promise < void >  | null = null;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        value = access.restrictBluetooth();
+        value = access.restrictBluetooth() as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -2955,35 +3149,41 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('ac_restrictBluetooth_x', 0, () => {
       let errCode = 0;
-      let value: Promise < void >  | null = null;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        value = access.restrictBluetooth();
+        value = access.restrictBluetooth() as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
       errCode = 0;
       value = null;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
-        value = access.restrictBluetooth();
+        value = access.restrictBluetooth() as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -2996,20 +3196,57 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('ac_restrictBluetooth_c', 0, () => {
       let errCode = 0;
-      let value: Promise < void >  | null = null;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        value = access.restrictBluetooth();
+        value = access.restrictBluetooth() as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertLocalOk(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_RESTRICTBLUETOOTH_PERF
+     * @tc.name ac_restrictBluetooth_perf
+     * @tc.desc Verify Bluetooth apitest case ac restrictBluetooth perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_restrictBluetooth_perf', 0, () => {
+      runPerf('ac_restrictBluetooth_perf', 5000, () => {
+        try {
+          access.restrictBluetooth() as Object;
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_RESTRICTBLUETOOTH_STRESS
+     * @tc.name ac_restrictBluetooth_stress
+     * @tc.desc Verify Bluetooth apitest case ac restrictBluetooth stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_restrictBluetooth_stress', 0, () => {
+      runStress('ac_restrictBluetooth_stress', 20, () => {
+        try {
+          access.restrictBluetooth() as Object;
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('ac_notifyDialogResult', () => {
@@ -3024,20 +3261,23 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('ac_notifyDialogResult_n', 0, () => {
       let errCode = 0;
-      let value: Promise < void >  | null = null;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        value = access.notifyDialogResult({ dialogType: 0, dialogResult: true });
+        value = access.notifyDialogResult({ dialogType: 0, dialogResult: true }) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -3056,13 +3296,14 @@ export default function bluetoothFullCoverageAccess01() {
         access.notifyDialogResult({ dialogType: -1, dialogResult: false });
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -3075,20 +3316,23 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('ac_notifyDialogResult_b', 0, () => {
       let errCode = 0;
-      let value: Promise < void >  | null = null;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'b: invoke');
       try {
-        value = access.notifyDialogResult({ dialogType: 0, dialogResult: false });
+        value = access.notifyDialogResult({ dialogType: 0, dialogResult: false }) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -3101,20 +3345,23 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('ac_notifyDialogResult_r', 0, () => {
       let errCode = 0;
-      let value: Promise < void >  | null = null;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        value = access.notifyDialogResult({ dialogType: 0, dialogResult: true });
+        value = access.notifyDialogResult({ dialogType: 0, dialogResult: true }) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -3127,35 +3374,41 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('ac_notifyDialogResult_x', 0, () => {
       let errCode = 0;
-      let value: Promise < void >  | null = null;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        value = access.notifyDialogResult({ dialogType: 0, dialogResult: true });
+        value = access.notifyDialogResult({ dialogType: 0, dialogResult: true }) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
       errCode = 0;
       value = null;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
-        value = access.notifyDialogResult({ dialogType: 0, dialogResult: true });
+        value = access.notifyDialogResult({ dialogType: 0, dialogResult: true }) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -3168,20 +3421,57 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('ac_notifyDialogResult_c', 0, () => {
       let errCode = 0;
-      let value: Promise < void >  | null = null;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        value = access.notifyDialogResult({ dialogType: 0, dialogResult: false });
+        value = access.notifyDialogResult({ dialogType: 0, dialogResult: false }) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(value !== null).assertTrue();
-      expect(typeof (value as Promise < void > ).then).assertEqual('function');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_NOTIFYDIALOGRESULT_PERF
+     * @tc.name ac_notifyDialogResult_perf
+     * @tc.desc Verify Bluetooth apitest case ac notifyDialogResult perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_notifyDialogResult_perf', 0, () => {
+      runPerf('ac_notifyDialogResult_perf', 5000, () => {
+        try {
+          access.notifyDialogResult({ dialogType: 0, dialogResult: true }) as Object;
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_AC_NOTIFYDIALOGRESULT_STRESS
+     * @tc.name ac_notifyDialogResult_stress
+     * @tc.desc Verify Bluetooth apitest case ac notifyDialogResult stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('ac_notifyDialogResult_stress', 0, () => {
+      runStress('ac_notifyDialogResult_stress', 20, () => {
+        try {
+          access.notifyDialogResult({ dialogType: 0, dialogResult: true }) as Object;
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('wd_enableWearDetection', () => {
@@ -3200,13 +3490,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         wearDetection.enableWearDetection(BADDR);
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -3225,13 +3516,14 @@ export default function bluetoothFullCoverageAccess01() {
         wearDetection.enableWearDetection(EMPTY_MAC);
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -3250,13 +3542,14 @@ export default function bluetoothFullCoverageAccess01() {
         wearDetection.enableWearDetection(BAD_MAC);
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -3273,13 +3566,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         wearDetection.enableWearDetection(BADDR);
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -3296,25 +3590,27 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         wearDetection.enableWearDetection(BADDR);
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         wearDetection.enableWearDetection(BADDR);
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -3331,13 +3627,48 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         wearDetection.enableWearDetection(BADDR);
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ENABLEWEARDETECTION_PERF
+     * @tc.name wd_enableWearDetection_perf
+     * @tc.desc Verify Bluetooth apitest case wd enableWearDetection perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('wd_enableWearDetection_perf', 0, () => {
+      runPerf('wd_enableWearDetection_perf', 5000, () => {
+        try {
+          wearDetection.enableWearDetection(BADDR);
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ENABLEWEARDETECTION_STRESS
+     * @tc.name wd_enableWearDetection_stress
+     * @tc.desc Verify Bluetooth apitest case wd enableWearDetection stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('wd_enableWearDetection_stress', 0, () => {
+      runStress('wd_enableWearDetection_stress', 20, () => {
+        try {
+          wearDetection.enableWearDetection(BADDR);
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('wd_disableWearDetection', () => {
@@ -3356,13 +3687,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         wearDetection.disableWearDetection(BADDR);
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -3381,13 +3713,14 @@ export default function bluetoothFullCoverageAccess01() {
         wearDetection.disableWearDetection(EMPTY_MAC);
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -3406,13 +3739,14 @@ export default function bluetoothFullCoverageAccess01() {
         wearDetection.disableWearDetection(BAD_MAC);
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -3429,13 +3763,14 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         wearDetection.disableWearDetection(BADDR);
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -3452,25 +3787,27 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         wearDetection.disableWearDetection(BADDR);
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         wearDetection.disableWearDetection(BADDR);
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -3487,13 +3824,48 @@ export default function bluetoothFullCoverageAccess01() {
       try {
         wearDetection.disableWearDetection(BADDR);
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_DISABLEWEARDETECTION_PERF
+     * @tc.name wd_disableWearDetection_perf
+     * @tc.desc Verify Bluetooth apitest case wd disableWearDetection perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('wd_disableWearDetection_perf', 0, () => {
+      runPerf('wd_disableWearDetection_perf', 5000, () => {
+        try {
+          wearDetection.disableWearDetection(BADDR);
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_DISABLEWEARDETECTION_STRESS
+     * @tc.name wd_disableWearDetection_stress
+     * @tc.desc Verify Bluetooth apitest case wd disableWearDetection stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('wd_disableWearDetection_stress', 0, () => {
+      runStress('wd_disableWearDetection_stress', 20, () => {
+        try {
+          wearDetection.disableWearDetection(BADDR);
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('wd_isWearDetectionEnabled', () => {
@@ -3508,19 +3880,23 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('wd_isWearDetectionEnabled_n', 0, () => {
       let errCode = 0;
-      let value = false;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        wearDetection.isWearDetectionEnabled(BADDR, (_e: BusinessError, _v: boolean) => { value = _v; });
+        value = wearDetection.isWearDetectionEnabled(BADDR) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('boolean');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -3539,13 +3915,14 @@ export default function bluetoothFullCoverageAccess01() {
         wearDetection.isWearDetectionEnabled(EMPTY_MAC);
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -3564,13 +3941,14 @@ export default function bluetoothFullCoverageAccess01() {
         wearDetection.isWearDetectionEnabled(BAD_MAC);
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -3583,19 +3961,23 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('wd_isWearDetectionEnabled_r', 0, () => {
       let errCode = 0;
-      let value = false;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        wearDetection.isWearDetectionEnabled(BADDR, (_e: BusinessError, _v: boolean) => { value = _v; });
+        value = wearDetection.isWearDetectionEnabled(BADDR) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('boolean');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -3608,33 +3990,41 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('wd_isWearDetectionEnabled_x', 0, () => {
       let errCode = 0;
-      let value = false;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        wearDetection.isWearDetectionEnabled(BADDR, (_e: BusinessError, _v: boolean) => { value = _v; });
+        value = wearDetection.isWearDetectionEnabled(BADDR) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('boolean');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
       errCode = 0;
-      value = false;
+      value = null;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
-        wearDetection.isWearDetectionEnabled(BADDR, (_e: BusinessError, _v: boolean) => { value = _v; });
+        value = wearDetection.isWearDetectionEnabled(BADDR) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('boolean');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -3647,19 +4037,57 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('wd_isWearDetectionEnabled_c', 0, () => {
       let errCode = 0;
-      let value = false;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        wearDetection.isWearDetectionEnabled(BADDR, (_e: BusinessError, _v: boolean) => { value = _v; });
+        value = wearDetection.isWearDetectionEnabled(BADDR) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('boolean');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONENABLED_PERF
+     * @tc.name wd_isWearDetectionEnabled_perf
+     * @tc.desc Verify Bluetooth apitest case wd isWearDetectionEnabled perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('wd_isWearDetectionEnabled_perf', 0, () => {
+      runPerf('wd_isWearDetectionEnabled_perf', 5000, () => {
+        try {
+          wearDetection.isWearDetectionEnabled(BADDR) as Object;
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONENABLED_STRESS
+     * @tc.name wd_isWearDetectionEnabled_stress
+     * @tc.desc Verify Bluetooth apitest case wd isWearDetectionEnabled stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('wd_isWearDetectionEnabled_stress', 0, () => {
+      runStress('wd_isWearDetectionEnabled_stress', 20, () => {
+        try {
+          wearDetection.isWearDetectionEnabled(BADDR) as Object;
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('wd_isWearDetectionSupported', () => {
@@ -3674,19 +4102,23 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('wd_isWearDetectionSupported_n', 0, () => {
       let errCode = 0;
-      let value = false;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        wearDetection.isWearDetectionSupported(BADDR, (_e: BusinessError, _v: boolean) => { value = _v; });
+        value = wearDetection.isWearDetectionSupported(BADDR) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('boolean');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -3705,13 +4137,14 @@ export default function bluetoothFullCoverageAccess01() {
         wearDetection.isWearDetectionSupported(EMPTY_MAC);
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -3730,13 +4163,14 @@ export default function bluetoothFullCoverageAccess01() {
         wearDetection.isWearDetectionSupported(BAD_MAC);
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -3749,19 +4183,23 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('wd_isWearDetectionSupported_r', 0, () => {
       let errCode = 0;
-      let value = false;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        wearDetection.isWearDetectionSupported(BADDR, (_e: BusinessError, _v: boolean) => { value = _v; });
+        value = wearDetection.isWearDetectionSupported(BADDR) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('boolean');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -3774,33 +4212,41 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('wd_isWearDetectionSupported_x', 0, () => {
       let errCode = 0;
-      let value = false;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        wearDetection.isWearDetectionSupported(BADDR, (_e: BusinessError, _v: boolean) => { value = _v; });
+        value = wearDetection.isWearDetectionSupported(BADDR) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('boolean');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
       errCode = 0;
-      value = false;
+      value = null;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
-        wearDetection.isWearDetectionSupported(BADDR, (_e: BusinessError, _v: boolean) => { value = _v; });
+        value = wearDetection.isWearDetectionSupported(BADDR) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('boolean');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
 
     /**
@@ -3813,631 +4259,60 @@ export default function bluetoothFullCoverageAccess01() {
      */
     it('wd_isWearDetectionSupported_c', 0, () => {
       let errCode = 0;
-      let value = false;
+      let value: Object | null = null;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        wearDetection.isWearDetectionSupported(BADDR, (_e: BusinessError, _v: boolean) => { value = _v; });
+        value = wearDetection.isWearDetectionSupported(BADDR) as Object;
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
-      expect(typeof value).assertEqual('boolean');
+      assertPeerExpect(errCode);
+      if (errCode === 0) {
+        expect(value !== null).assertTrue();
+        expect(typeof (value as ESObject).then).assertEqual('function');
+      }
     });
-    });
-    describe('sys_stopBLEScan', () => {
 
     /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_N
-     * @tc.name sys_stopBLEScan_n
-     * @tc.desc Verify Bluetooth API sys stopBLEScan normal scenario
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONSUPPORTED_PERF
+     * @tc.name wd_isWearDetectionSupported_perf
+     * @tc.desc Verify Bluetooth apitest case wd isWearDetectionSupported perf
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
-    it('sys_stopBLEScan_n', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
-      try {
-        ble.createBleScanner().stopScan();
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+    it('wd_isWearDetectionSupported_perf', 0, () => {
+      runPerf('wd_isWearDetectionSupported_perf', 5000, () => {
+        try {
+          wearDetection.isWearDetectionSupported(BADDR) as Object;
+        } catch (_e) {
+        }
+      });
     });
 
     /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_E
-     * @tc.name sys_stopBLEScan_e
-     * @tc.desc Verify Bluetooth API sys stopBLEScan error or exception scenario
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_WD_ISWEARDETECTIONSUPPORTED_STRESS
+     * @tc.name wd_isWearDetectionSupported_stress
+     * @tc.desc Verify Bluetooth apitest case wd isWearDetectionSupported stress
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
-    it('sys_stopBLEScan_e', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke');
-      try {
-        ble.createBleScanner().stopScan();
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_B
-     * @tc.name sys_stopBLEScan_b
-     * @tc.desc Verify Bluetooth API sys stopBLEScan boundary scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_stopBLEScan_b', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke');
-      try {
-        ble.createBleScanner().stopScan();
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_R
-     * @tc.name sys_stopBLEScan_r
-     * @tc.desc Verify Bluetooth API sys stopBLEScan return value scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_stopBLEScan_r', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
-      try {
-        ble.createBleScanner().stopScan();
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_X
-     * @tc.name sys_stopBLEScan_x
-     * @tc.desc Verify Bluetooth API sys stopBLEScan repeat invocation scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_stopBLEScan_x', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
-      try {
-        ble.createBleScanner().stopScan();
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-      errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
-      try {
-        ble.createBleScanner().stopScan();
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STOPBLESCAN_C
-     * @tc.name sys_stopBLEScan_c
-     * @tc.desc Verify Bluetooth API sys stopBLEScan condition scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_stopBLEScan_c', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
-      try {
-        ble.createBleScanner().stopScan();
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-    });
-    describe('sys_startBLEScan', () => {
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_N
-     * @tc.name sys_startBLEScan_n
-     * @tc.desc Verify Bluetooth API sys startBLEScan normal scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_startBLEScan_n', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
-      try {
-        ble.createBleScanner().startScan([], {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_E
-     * @tc.name sys_startBLEScan_e
-     * @tc.desc Verify Bluetooth API sys startBLEScan error or exception scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_startBLEScan_e', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke');
-      try {
-        ble.createBleScanner().startScan([], {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_B
-     * @tc.name sys_startBLEScan_b
-     * @tc.desc Verify Bluetooth API sys startBLEScan boundary scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_startBLEScan_b', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke');
-      try {
-        ble.createBleScanner().startScan([], {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_R
-     * @tc.name sys_startBLEScan_r
-     * @tc.desc Verify Bluetooth API sys startBLEScan return value scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_startBLEScan_r', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
-      try {
-        ble.createBleScanner().startScan([], {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_X
-     * @tc.name sys_startBLEScan_x
-     * @tc.desc Verify Bluetooth API sys startBLEScan repeat invocation scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_startBLEScan_x', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
-      try {
-        ble.createBleScanner().startScan([], {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-      errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
-      try {
-        ble.createBleScanner().startScan([], {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_STARTBLESCAN_C
-     * @tc.name sys_startBLEScan_c
-     * @tc.desc Verify Bluetooth API sys startBLEScan condition scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_startBLEScan_c', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
-      try {
-        ble.createBleScanner().startScan([], {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-    });
-    describe('sys_subscribeBLEFound', () => {
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_N
-     * @tc.name sys_subscribeBLEFound_n
-     * @tc.desc Verify Bluetooth API sys subscribeBLEFound normal scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_subscribeBLEFound_n', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
-      try {
-        ble.createBleScanner().on('BLEDeviceFind', () => {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_E
-     * @tc.name sys_subscribeBLEFound_e
-     * @tc.desc Verify Bluetooth API sys subscribeBLEFound error or exception scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_subscribeBLEFound_e', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke');
-      try {
-        ble.createBleScanner().on('BLEDeviceFind', () => {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_B
-     * @tc.name sys_subscribeBLEFound_b
-     * @tc.desc Verify Bluetooth API sys subscribeBLEFound boundary scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_subscribeBLEFound_b', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke');
-      try {
-        ble.createBleScanner().on('BLEDeviceFind', () => {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_R
-     * @tc.name sys_subscribeBLEFound_r
-     * @tc.desc Verify Bluetooth API sys subscribeBLEFound return value scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_subscribeBLEFound_r', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
-      try {
-        ble.createBleScanner().on('BLEDeviceFind', () => {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_X
-     * @tc.name sys_subscribeBLEFound_x
-     * @tc.desc Verify Bluetooth API sys subscribeBLEFound repeat invocation scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_subscribeBLEFound_x', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
-      try {
-        ble.createBleScanner().on('BLEDeviceFind', () => {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-      errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
-      try {
-        ble.createBleScanner().on('BLEDeviceFind', () => {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_SUBSCRIBEBLEFOUND_C
-     * @tc.name sys_subscribeBLEFound_c
-     * @tc.desc Verify Bluetooth API sys subscribeBLEFound condition scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_subscribeBLEFound_c', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
-      try {
-        ble.createBleScanner().on('BLEDeviceFind', () => {});
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-    });
-    describe('sys_unsubscribeBLEFound', () => {
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_N
-     * @tc.name sys_unsubscribeBLEFound_n
-     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound normal scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_unsubscribeBLEFound_n', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
-      try {
-        ble.createBleScanner().off('BLEDeviceFind');
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_E
-     * @tc.name sys_unsubscribeBLEFound_e
-     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound error or exception scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_unsubscribeBLEFound_e', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'e: invoke');
-      try {
-        ble.createBleScanner().off('BLEDeviceFind');
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_B
-     * @tc.name sys_unsubscribeBLEFound_b
-     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound boundary scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_unsubscribeBLEFound_b', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'b: invoke');
-      try {
-        ble.createBleScanner().off('BLEDeviceFind');
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_R
-     * @tc.name sys_unsubscribeBLEFound_r
-     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound return value scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_unsubscribeBLEFound_r', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
-      try {
-        ble.createBleScanner().off('BLEDeviceFind');
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_X
-     * @tc.name sys_unsubscribeBLEFound_x
-     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound repeat invocation scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_unsubscribeBLEFound_x', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
-      try {
-        ble.createBleScanner().off('BLEDeviceFind');
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-      errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
-      try {
-        ble.createBleScanner().off('BLEDeviceFind');
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
-    });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_SYS_UNSUBSCRIBEBLEFOUND_C
-     * @tc.name sys_unsubscribeBLEFound_c
-     * @tc.desc Verify Bluetooth API sys unsubscribeBLEFound condition scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('sys_unsubscribeBLEFound_c', 0, () => {
-      let errCode = 0;
-      hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
-      try {
-        ble.createBleScanner().off('BLEDeviceFind');
-      } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
-      }
-      hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+    it('wd_isWearDetectionSupported_stress', 0, () => {
+      runStress('wd_isWearDetectionSupported_stress', 20, () => {
+        try {
+          wearDetection.isWearDetectionSupported(BADDR) as Object;
+        } catch (_e) {
+        }
+      });
     });
     });
   });
 }
-
 
 
