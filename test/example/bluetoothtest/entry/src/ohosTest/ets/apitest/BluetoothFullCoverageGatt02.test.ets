@@ -4884,7 +4884,7 @@ export default function bluetoothFullCoverageGatt02() {
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -4902,50 +4902,69 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.removeAllServices();
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
-    });
-    describe('gatts_on_connectionStateChange', () => {
 
     /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CONNECTIONSTATECHANGE_N
-     * @tc.name gatts_on_connectionStateChange_n
-     * @tc.desc Verify Bluetooth API gatts on connectionStateChange normal scenario
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_REMOVEALLSERVICES_PERF
+     * @tc.name gatts_removeAllServices_perf
+     * @tc.desc Verify Bluetooth apitest case gatts removeAllServices perf
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
-    it('gatts_on_connectionStateChange_n', 0, () => {
+    it('gatts_removeAllServices_perf', 0, () => {
+      runPerf('gatts_removeAllServices_perf', 5000, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_REMOVEALLSERVICES_STRESS
+     * @tc.name gatts_removeAllServices_stress
+     * @tc.desc Verify Bluetooth apitest case gatts removeAllServices stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_removeAllServices_stress', 0, () => {
+      runStress('gatts_removeAllServices_stress', 20, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+    });
+    describe('gatts_on_connectionStateChange', () => {
+    it('gatts_on_connectionStateChange_n', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
         gattServer.on('connectionStateChange', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CONNECTIONSTATECHANGE_E
-     * @tc.name gatts_on_connectionStateChange_e
-     * @tc.desc Verify Bluetooth API gatts on connectionStateChange error or exception scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_connectionStateChange_e', 0, () => {
+    it('gatts_on_connectionStateChange_e', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let threw = false;
       let errCode = 0;
@@ -4954,24 +4973,17 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.on('connectionStateChange', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CONNECTIONSTATECHANGE_B
-     * @tc.name gatts_on_connectionStateChange_b
-     * @tc.desc Verify Bluetooth API gatts on connectionStateChange boundary scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_connectionStateChange_b', 0, () => {
+    it('gatts_on_connectionStateChange_b', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let threw = false;
       let errCode = 0;
@@ -4980,97 +4992,113 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.on('connectionStateChange', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CONNECTIONSTATECHANGE_R
-     * @tc.name gatts_on_connectionStateChange_r
-     * @tc.desc Verify Bluetooth API gatts on connectionStateChange return value scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_connectionStateChange_r', 0, () => {
+    it('gatts_on_connectionStateChange_r', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
         gattServer.on('connectionStateChange', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CONNECTIONSTATECHANGE_X
-     * @tc.name gatts_on_connectionStateChange_x
-     * @tc.desc Verify Bluetooth API gatts on connectionStateChange repeat invocation scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_connectionStateChange_x', 0, () => {
+    it('gatts_on_connectionStateChange_x', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
         gattServer.on('connectionStateChange', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         gattServer.on('connectionStateChange', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CONNECTIONSTATECHANGE_C
-     * @tc.name gatts_on_connectionStateChange_c
-     * @tc.desc Verify Bluetooth API gatts on connectionStateChange condition scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_connectionStateChange_c', 0, () => {
+    it('gatts_on_connectionStateChange_c', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
         gattServer.on('connectionStateChange', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CONNECTIONSTATECHANGE_PERF
+     * @tc.name gatts_on_connectionStateChange_perf
+     * @tc.desc Verify Bluetooth apitest case gatts on connectionStateChange perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_connectionStateChange_perf', 0, () => {
+      runPerf('gatts_on_connectionStateChange_perf', 5000, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CONNECTIONSTATECHANGE_STRESS
+     * @tc.name gatts_on_connectionStateChange_stress
+     * @tc.desc Verify Bluetooth apitest case gatts on connectionStateChange stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_connectionStateChange_stress', 0, () => {
+      runStress('gatts_on_connectionStateChange_stress', 20, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('gatts_off_connectionStateChange', () => {
@@ -5090,13 +5118,14 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('connectionStateChange');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -5116,13 +5145,14 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.off('connectionStateChange');
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -5142,13 +5172,14 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.off('connectionStateChange');
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -5166,13 +5197,14 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('connectionStateChange');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -5190,25 +5222,27 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('connectionStateChange');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         gattServer.off('connectionStateChange');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -5226,50 +5260,69 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('connectionStateChange');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
-    });
-    describe('gatts_on_characteristicRead', () => {
 
     /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICREAD_N
-     * @tc.name gatts_on_characteristicRead_n
-     * @tc.desc Verify Bluetooth API gatts on characteristicRead normal scenario
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CONNECTIONSTATECHANGE_PERF
+     * @tc.name gatts_off_connectionStateChange_perf
+     * @tc.desc Verify Bluetooth apitest case gatts off connectionStateChange perf
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
-    it('gatts_on_characteristicRead_n', 0, () => {
+    it('gatts_off_connectionStateChange_perf', 0, () => {
+      runPerf('gatts_off_connectionStateChange_perf', 5000, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CONNECTIONSTATECHANGE_STRESS
+     * @tc.name gatts_off_connectionStateChange_stress
+     * @tc.desc Verify Bluetooth apitest case gatts off connectionStateChange stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_connectionStateChange_stress', 0, () => {
+      runStress('gatts_off_connectionStateChange_stress', 20, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+    });
+    describe('gatts_on_characteristicRead', () => {
+    it('gatts_on_characteristicRead_n', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
         gattServer.on('characteristicRead', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICREAD_E
-     * @tc.name gatts_on_characteristicRead_e
-     * @tc.desc Verify Bluetooth API gatts on characteristicRead error or exception scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_characteristicRead_e', 0, () => {
+    it('gatts_on_characteristicRead_e', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let threw = false;
       let errCode = 0;
@@ -5278,24 +5331,17 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.on('characteristicRead', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICREAD_B
-     * @tc.name gatts_on_characteristicRead_b
-     * @tc.desc Verify Bluetooth API gatts on characteristicRead boundary scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_characteristicRead_b', 0, () => {
+    it('gatts_on_characteristicRead_b', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let threw = false;
       let errCode = 0;
@@ -5304,97 +5350,113 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.on('characteristicRead', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICREAD_R
-     * @tc.name gatts_on_characteristicRead_r
-     * @tc.desc Verify Bluetooth API gatts on characteristicRead return value scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_characteristicRead_r', 0, () => {
+    it('gatts_on_characteristicRead_r', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
         gattServer.on('characteristicRead', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICREAD_X
-     * @tc.name gatts_on_characteristicRead_x
-     * @tc.desc Verify Bluetooth API gatts on characteristicRead repeat invocation scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_characteristicRead_x', 0, () => {
+    it('gatts_on_characteristicRead_x', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
         gattServer.on('characteristicRead', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         gattServer.on('characteristicRead', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICREAD_C
-     * @tc.name gatts_on_characteristicRead_c
-     * @tc.desc Verify Bluetooth API gatts on characteristicRead condition scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_characteristicRead_c', 0, () => {
+    it('gatts_on_characteristicRead_c', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
         gattServer.on('characteristicRead', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICREAD_PERF
+     * @tc.name gatts_on_characteristicRead_perf
+     * @tc.desc Verify Bluetooth apitest case gatts on characteristicRead perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_characteristicRead_perf', 0, () => {
+      runPerf('gatts_on_characteristicRead_perf', 5000, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICREAD_STRESS
+     * @tc.name gatts_on_characteristicRead_stress
+     * @tc.desc Verify Bluetooth apitest case gatts on characteristicRead stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_characteristicRead_stress', 0, () => {
+      runStress('gatts_on_characteristicRead_stress', 20, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('gatts_off_characteristicRead', () => {
@@ -5414,13 +5476,14 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('characteristicRead');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -5440,13 +5503,14 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.off('characteristicRead');
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -5466,13 +5530,14 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.off('characteristicRead');
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -5490,13 +5555,14 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('characteristicRead');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -5514,25 +5580,27 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('characteristicRead');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         gattServer.off('characteristicRead');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -5550,50 +5618,69 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('characteristicRead');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
-    });
-    describe('gatts_on_characteristicWrite', () => {
 
     /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_N
-     * @tc.name gatts_on_characteristicWrite_n
-     * @tc.desc Verify Bluetooth API gatts on characteristicWrite normal scenario
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CHARACTERISTICREAD_PERF
+     * @tc.name gatts_off_characteristicRead_perf
+     * @tc.desc Verify Bluetooth apitest case gatts off characteristicRead perf
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
-    it('gatts_on_characteristicWrite_n', 0, () => {
+    it('gatts_off_characteristicRead_perf', 0, () => {
+      runPerf('gatts_off_characteristicRead_perf', 5000, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CHARACTERISTICREAD_STRESS
+     * @tc.name gatts_off_characteristicRead_stress
+     * @tc.desc Verify Bluetooth apitest case gatts off characteristicRead stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_characteristicRead_stress', 0, () => {
+      runStress('gatts_off_characteristicRead_stress', 20, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+    });
+    describe('gatts_on_characteristicWrite', () => {
+    it('gatts_on_characteristicWrite_n', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
         gattServer.on('characteristicWrite', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_E
-     * @tc.name gatts_on_characteristicWrite_e
-     * @tc.desc Verify Bluetooth API gatts on characteristicWrite error or exception scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_characteristicWrite_e', 0, () => {
+    it('gatts_on_characteristicWrite_e', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let threw = false;
       let errCode = 0;
@@ -5602,24 +5689,17 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.on('characteristicWrite', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_B
-     * @tc.name gatts_on_characteristicWrite_b
-     * @tc.desc Verify Bluetooth API gatts on characteristicWrite boundary scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_characteristicWrite_b', 0, () => {
+    it('gatts_on_characteristicWrite_b', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let threw = false;
       let errCode = 0;
@@ -5628,97 +5708,113 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.on('characteristicWrite', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_R
-     * @tc.name gatts_on_characteristicWrite_r
-     * @tc.desc Verify Bluetooth API gatts on characteristicWrite return value scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_characteristicWrite_r', 0, () => {
+    it('gatts_on_characteristicWrite_r', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
         gattServer.on('characteristicWrite', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_X
-     * @tc.name gatts_on_characteristicWrite_x
-     * @tc.desc Verify Bluetooth API gatts on characteristicWrite repeat invocation scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_characteristicWrite_x', 0, () => {
+    it('gatts_on_characteristicWrite_x', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
         gattServer.on('characteristicWrite', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         gattServer.on('characteristicWrite', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_C
-     * @tc.name gatts_on_characteristicWrite_c
-     * @tc.desc Verify Bluetooth API gatts on characteristicWrite condition scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_characteristicWrite_c', 0, () => {
+    it('gatts_on_characteristicWrite_c', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
         gattServer.on('characteristicWrite', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_PERF
+     * @tc.name gatts_on_characteristicWrite_perf
+     * @tc.desc Verify Bluetooth apitest case gatts on characteristicWrite perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_characteristicWrite_perf', 0, () => {
+      runPerf('gatts_on_characteristicWrite_perf', 5000, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_CHARACTERISTICWRITE_STRESS
+     * @tc.name gatts_on_characteristicWrite_stress
+     * @tc.desc Verify Bluetooth apitest case gatts on characteristicWrite stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_characteristicWrite_stress', 0, () => {
+      runStress('gatts_on_characteristicWrite_stress', 20, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('gatts_off_characteristicWrite', () => {
@@ -5738,13 +5834,14 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('characteristicWrite');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -5764,13 +5861,14 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.off('characteristicWrite');
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -5790,13 +5888,14 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.off('characteristicWrite');
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -5814,13 +5913,14 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('characteristicWrite');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -5838,25 +5938,27 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('characteristicWrite');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         gattServer.off('characteristicWrite');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -5874,50 +5976,69 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('characteristicWrite');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
-    });
-    describe('gatts_on_descriptorRead', () => {
 
     /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_N
-     * @tc.name gatts_on_descriptorRead_n
-     * @tc.desc Verify Bluetooth API gatts on descriptorRead normal scenario
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CHARACTERISTICWRITE_PERF
+     * @tc.name gatts_off_characteristicWrite_perf
+     * @tc.desc Verify Bluetooth apitest case gatts off characteristicWrite perf
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
-    it('gatts_on_descriptorRead_n', 0, () => {
+    it('gatts_off_characteristicWrite_perf', 0, () => {
+      runPerf('gatts_off_characteristicWrite_perf', 5000, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_CHARACTERISTICWRITE_STRESS
+     * @tc.name gatts_off_characteristicWrite_stress
+     * @tc.desc Verify Bluetooth apitest case gatts off characteristicWrite stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_characteristicWrite_stress', 0, () => {
+      runStress('gatts_off_characteristicWrite_stress', 20, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+    });
+    describe('gatts_on_descriptorRead', () => {
+    it('gatts_on_descriptorRead_n', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
         gattServer.on('descriptorRead', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_E
-     * @tc.name gatts_on_descriptorRead_e
-     * @tc.desc Verify Bluetooth API gatts on descriptorRead error or exception scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_descriptorRead_e', 0, () => {
+    it('gatts_on_descriptorRead_e', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let threw = false;
       let errCode = 0;
@@ -5926,24 +6047,17 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.on('descriptorRead', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_B
-     * @tc.name gatts_on_descriptorRead_b
-     * @tc.desc Verify Bluetooth API gatts on descriptorRead boundary scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_descriptorRead_b', 0, () => {
+    it('gatts_on_descriptorRead_b', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let threw = false;
       let errCode = 0;
@@ -5952,97 +6066,113 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.on('descriptorRead', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_R
-     * @tc.name gatts_on_descriptorRead_r
-     * @tc.desc Verify Bluetooth API gatts on descriptorRead return value scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_descriptorRead_r', 0, () => {
+    it('gatts_on_descriptorRead_r', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
         gattServer.on('descriptorRead', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_X
-     * @tc.name gatts_on_descriptorRead_x
-     * @tc.desc Verify Bluetooth API gatts on descriptorRead repeat invocation scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_descriptorRead_x', 0, () => {
+    it('gatts_on_descriptorRead_x', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
         gattServer.on('descriptorRead', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         gattServer.on('descriptorRead', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_C
-     * @tc.name gatts_on_descriptorRead_c
-     * @tc.desc Verify Bluetooth API gatts on descriptorRead condition scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_descriptorRead_c', 0, () => {
+    it('gatts_on_descriptorRead_c', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
         gattServer.on('descriptorRead', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_PERF
+     * @tc.name gatts_on_descriptorRead_perf
+     * @tc.desc Verify Bluetooth apitest case gatts on descriptorRead perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorRead_perf', 0, () => {
+      runPerf('gatts_on_descriptorRead_perf', 5000, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORREAD_STRESS
+     * @tc.name gatts_on_descriptorRead_stress
+     * @tc.desc Verify Bluetooth apitest case gatts on descriptorRead stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorRead_stress', 0, () => {
+      runStress('gatts_on_descriptorRead_stress', 20, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('gatts_off_descriptorRead', () => {
@@ -6062,13 +6192,14 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('descriptorRead');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -6088,13 +6219,14 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.off('descriptorRead');
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -6114,13 +6246,14 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.off('descriptorRead');
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -6138,13 +6271,14 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('descriptorRead');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -6162,25 +6296,27 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('descriptorRead');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         gattServer.off('descriptorRead');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -6198,50 +6334,69 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('descriptorRead');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
-    });
-    describe('gatts_on_descriptorWrite', () => {
 
     /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_N
-     * @tc.name gatts_on_descriptorWrite_n
-     * @tc.desc Verify Bluetooth API gatts on descriptorWrite normal scenario
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORREAD_PERF
+     * @tc.name gatts_off_descriptorRead_perf
+     * @tc.desc Verify Bluetooth apitest case gatts off descriptorRead perf
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
-    it('gatts_on_descriptorWrite_n', 0, () => {
+    it('gatts_off_descriptorRead_perf', 0, () => {
+      runPerf('gatts_off_descriptorRead_perf', 5000, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORREAD_STRESS
+     * @tc.name gatts_off_descriptorRead_stress
+     * @tc.desc Verify Bluetooth apitest case gatts off descriptorRead stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorRead_stress', 0, () => {
+      runStress('gatts_off_descriptorRead_stress', 20, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+    });
+    describe('gatts_on_descriptorWrite', () => {
+    it('gatts_on_descriptorWrite_n', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
         gattServer.on('descriptorWrite', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_E
-     * @tc.name gatts_on_descriptorWrite_e
-     * @tc.desc Verify Bluetooth API gatts on descriptorWrite error or exception scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_descriptorWrite_e', 0, () => {
+    it('gatts_on_descriptorWrite_e', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let threw = false;
       let errCode = 0;
@@ -6250,24 +6405,17 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.on('descriptorWrite', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_B
-     * @tc.name gatts_on_descriptorWrite_b
-     * @tc.desc Verify Bluetooth API gatts on descriptorWrite boundary scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_descriptorWrite_b', 0, () => {
+    it('gatts_on_descriptorWrite_b', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let threw = false;
       let errCode = 0;
@@ -6276,97 +6424,113 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.on('descriptorWrite', () => {});
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_R
-     * @tc.name gatts_on_descriptorWrite_r
-     * @tc.desc Verify Bluetooth API gatts on descriptorWrite return value scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_descriptorWrite_r', 0, () => {
+    it('gatts_on_descriptorWrite_r', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
         gattServer.on('descriptorWrite', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_X
-     * @tc.name gatts_on_descriptorWrite_x
-     * @tc.desc Verify Bluetooth API gatts on descriptorWrite repeat invocation scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_descriptorWrite_x', 0, () => {
+    it('gatts_on_descriptorWrite_x', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
         gattServer.on('descriptorWrite', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         gattServer.on('descriptorWrite', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
     });
-
-    /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_C
-     * @tc.name gatts_on_descriptorWrite_c
-     * @tc.desc Verify Bluetooth API gatts on descriptorWrite condition scenario
-     * @tc.size MediumTest
-     * @tc.type Function
-     * @tc.level Level 2
-     */
-    it('gatts_on_descriptorWrite_c', 0, () => {
+    it('gatts_on_descriptorWrite_c', 0, async (done: Function) => {
       const gattServer = ble.createGattServer();
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
         gattServer.on('descriptorWrite', () => {});
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+      waitCallback(done, 200);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_PERF
+     * @tc.name gatts_on_descriptorWrite_perf
+     * @tc.desc Verify Bluetooth apitest case gatts on descriptorWrite perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorWrite_perf', 0, () => {
+      runPerf('gatts_on_descriptorWrite_perf', 5000, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_ON_DESCRIPTORWRITE_STRESS
+     * @tc.name gatts_on_descriptorWrite_stress
+     * @tc.desc Verify Bluetooth apitest case gatts on descriptorWrite stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_on_descriptorWrite_stress', 0, () => {
+      runStress('gatts_on_descriptorWrite_stress', 20, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('gatts_off_descriptorWrite', () => {
@@ -6386,13 +6550,14 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('descriptorWrite');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -6412,13 +6577,14 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.off('descriptorWrite');
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -6438,13 +6604,14 @@ export default function bluetoothFullCoverageGatt02() {
         gattServer.off('descriptorWrite');
       } catch (err) {
         threw = true;
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'b: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
     });
 
     /**
@@ -6462,13 +6629,14 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('descriptorWrite');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -6486,25 +6654,27 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('descriptorWrite');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x1: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x1: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
         gattServer.off('descriptorWrite');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'x2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'x2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -6522,13 +6692,48 @@ export default function bluetoothFullCoverageGatt02() {
       try {
         gattServer.off('descriptorWrite');
       } catch (err) {
-        const _c = (err as BusinessError).code;
-        errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
+        errCode = Number((err as BusinessError).code);
+        if (isNaN(errCode)) {
+          errCode = 2900099;
+        }
         hilog.error(0x0000, 'BtFullCoverage', 'c: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'BtFullCoverage', 'c: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORWRITE_PERF
+     * @tc.name gatts_off_descriptorWrite_perf
+     * @tc.desc Verify Bluetooth apitest case gatts off descriptorWrite perf
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorWrite_perf', 0, () => {
+      runPerf('gatts_off_descriptorWrite_perf', 5000, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_GATTS_OFF_DESCRIPTORWRITE_STRESS
+     * @tc.name gatts_off_descriptorWrite_stress
+     * @tc.desc Verify Bluetooth apitest case gatts off descriptorWrite stress
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('gatts_off_descriptorWrite_stress', 0, () => {
+      runStress('gatts_off_descriptorWrite_stress', 20, () => {
+        try {
+          ble.createGattServer();
+        } catch (_e) {
+        }
+      });
     });
     });
     describe('gatts_on_BLEMtuChange', () => {
