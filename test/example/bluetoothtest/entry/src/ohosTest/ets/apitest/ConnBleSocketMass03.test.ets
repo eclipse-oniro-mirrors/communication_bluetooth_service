@@ -19,7 +19,7 @@
  * connection / ble / socket: 6 scenarios per overload (n, e, b, e2, r, x).
  * Direct API calls only (no tI wrappers); hilog + real return/error assertions.
  */
-import { describe, it, expect } from '@ohos/hypium';
+import { describe, beforeEach, it, expect } from '@ohos/hypium';
 import hilog from '@ohos.hilog';
 import { BusinessError } from '@ohos.base';
 import connection from '@ohos.bluetooth.connection';
@@ -27,10 +27,24 @@ import ble from '@ohos.bluetooth.ble';
 import socket from '@ohos.bluetooth.socket';
 import constant from '@ohos.bluetooth.constant';
 import common from '@ohos.bluetooth.common';
-import { buf0, sppOpt, bleAd, bleAs, bleAp, BADDR } from './ConnBleSocketShared';
+import {
+  buf0,
+  sppOpt,
+  bleAd,
+  bleAs,
+  bleAp,
+  BADDR,
+  assertPeerExpect,
+  assertThrownErrIn,
+  BT_DOC_ERR_CODES,
+  ensureBtOn
+} from './ConnBleSocketShared';
 
 export default function connBleSocketMass03() {
   describe('ConnBleSocket_mass_ble', () => {
+  beforeEach(() => {
+    ensureBtOn();
+  });
     describe('bl_00_create_gatt_srv', () => {
 
     /**
@@ -55,7 +69,7 @@ export default function connBleSocketMass03() {
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'bl_00_create_gatt_srv_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || (value !== null && value !== undefined)).assertTrue();
     });
 
@@ -79,7 +93,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_00_create_gatt_srv_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_00_create_gatt_srv_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -102,7 +116,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_00_create_gatt_srv_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_00_create_gatt_srv_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -125,7 +139,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_00_create_gatt_srv_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_00_create_gatt_srv_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -148,7 +162,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_00_create_gatt_srv_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_00_create_gatt_srv_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -171,7 +185,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_00_create_gatt_srv_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_00_create_gatt_srv_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_01_create_gatt_cli', () => {
@@ -198,7 +212,7 @@ export default function connBleSocketMass03() {
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'bl_01_create_gatt_cli_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || (value !== null && value !== undefined)).assertTrue();
     });
 
@@ -224,7 +238,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_01_create_gatt_cli_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_01_create_gatt_cli_e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -247,7 +261,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_01_create_gatt_cli_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_01_create_gatt_cli_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -272,7 +286,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_01_create_gatt_cli_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_01_create_gatt_cli_e2: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -295,7 +309,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_01_create_gatt_cli_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_01_create_gatt_cli_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -318,7 +332,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_01_create_gatt_cli_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_01_create_gatt_cli_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_02_create_scanner', () => {
@@ -345,7 +359,7 @@ export default function connBleSocketMass03() {
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'bl_02_create_scanner_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || (value !== null && value !== undefined)).assertTrue();
     });
 
@@ -369,7 +383,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_02_create_scanner_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_02_create_scanner_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -392,7 +406,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_02_create_scanner_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_02_create_scanner_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -415,7 +429,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_02_create_scanner_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_02_create_scanner_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -438,7 +452,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_02_create_scanner_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_02_create_scanner_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -461,7 +475,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_02_create_scanner_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_02_create_scanner_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_03_ble_devs_0', () => {
@@ -488,7 +502,7 @@ export default function connBleSocketMass03() {
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'bl_03_ble_devs_0_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -512,7 +526,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_03_ble_devs_0_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_03_ble_devs_0_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -535,7 +549,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_03_ble_devs_0_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_03_ble_devs_0_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -558,7 +572,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_03_ble_devs_0_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_03_ble_devs_0_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -583,7 +597,7 @@ export default function connBleSocketMass03() {
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'bl_03_ble_devs_0_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -607,7 +621,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_03_ble_devs_0_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_03_ble_devs_0_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_04_ble_devs_prof', () => {
@@ -634,7 +648,7 @@ export default function connBleSocketMass03() {
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'bl_04_ble_devs_prof_n: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -658,7 +672,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_04_ble_devs_prof_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_04_ble_devs_prof_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -681,7 +695,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_04_ble_devs_prof_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_04_ble_devs_prof_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -704,7 +718,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_04_ble_devs_prof_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_04_ble_devs_prof_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -729,7 +743,7 @@ export default function connBleSocketMass03() {
       }
       hilog.info(0x0000, 'ConnBleSocket', 
         'bl_04_ble_devs_prof_r: errCode=' + errCode + ' value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(Array.isArray(value)).assertTrue();
     });
 
@@ -753,7 +767,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_04_ble_devs_prof_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_04_ble_devs_prof_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_05_start_scan', () => {
@@ -778,7 +792,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_05_start_scan_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_05_start_scan_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -801,7 +815,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_05_start_scan_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_05_start_scan_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -824,7 +838,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_05_start_scan_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_05_start_scan_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -847,7 +861,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_05_start_scan_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_05_start_scan_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -870,7 +884,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_05_start_scan_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_05_start_scan_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -893,7 +907,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_05_start_scan_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_05_start_scan_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_06_stop_scan', () => {
@@ -918,7 +932,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -941,7 +955,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -964,7 +978,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -987,7 +1001,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1010,7 +1024,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1033,7 +1047,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_06_stop_scan_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_07_start_adv_legacy', () => {
@@ -1058,7 +1072,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1081,7 +1095,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1104,7 +1118,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1127,7 +1141,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1150,7 +1164,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1173,7 +1187,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_07_start_adv_legacy_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_08_stop_adv_legacy', () => {
@@ -1198,7 +1212,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1221,7 +1235,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1244,7 +1258,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1267,7 +1281,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1290,7 +1304,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1313,7 +1327,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_08_stop_adv_legacy_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_09_start_adv_cb', () => {
@@ -1338,7 +1352,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1361,7 +1375,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1384,7 +1398,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1407,7 +1421,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1430,7 +1444,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1453,7 +1467,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_09_start_adv_cb_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_10_start_adv_p', () => {
@@ -1478,7 +1492,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1501,7 +1515,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1524,7 +1538,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1547,7 +1561,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1570,7 +1584,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1593,7 +1607,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_10_start_adv_p_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_11_en_adv_cb', () => {
@@ -1618,7 +1632,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1641,7 +1655,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1664,7 +1678,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1687,7 +1701,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1710,7 +1724,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1733,7 +1747,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_11_en_adv_cb_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_12_en_adv_p', () => {
@@ -1758,7 +1772,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1781,7 +1795,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1804,7 +1818,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1827,7 +1841,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1850,7 +1864,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1873,7 +1887,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_12_en_adv_p_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_13_dis_adv_cb', () => {
@@ -1898,7 +1912,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1921,7 +1935,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1944,7 +1958,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1967,7 +1981,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -1990,7 +2004,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2013,7 +2027,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_13_dis_adv_cb_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_14_dis_adv_p', () => {
@@ -2038,7 +2052,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2061,7 +2075,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2084,7 +2098,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2107,7 +2121,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2130,7 +2144,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2153,7 +2167,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_14_dis_adv_p_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_15_stop_adv_id_cb', () => {
@@ -2178,7 +2192,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2203,7 +2217,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2226,7 +2240,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2249,7 +2263,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2272,7 +2286,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2295,7 +2309,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_15_stop_adv_id_cb_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_16_stop_adv_id_p', () => {
@@ -2320,7 +2334,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2345,7 +2359,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_e: threw=' + threw + ' errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2368,7 +2382,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2391,7 +2405,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2414,7 +2428,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2437,7 +2451,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_16_stop_adv_id_p_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_17_on_adv_chg', () => {
@@ -2462,7 +2476,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2485,7 +2499,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2508,7 +2522,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2531,7 +2545,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2554,7 +2568,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2577,7 +2591,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_17_on_adv_chg_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_18_off_adv_chg', () => {
@@ -2602,7 +2616,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2625,7 +2639,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2648,7 +2662,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2671,7 +2685,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2694,7 +2708,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2717,7 +2731,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_18_off_adv_chg_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_19_on_ble_find', () => {
@@ -2742,7 +2756,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2765,7 +2779,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2788,7 +2802,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2811,7 +2825,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2834,7 +2848,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2857,7 +2871,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_19_on_ble_find_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
     describe('bl_20_off_ble_find', () => {
@@ -2882,7 +2896,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_n: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_n: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2905,7 +2919,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_e: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_e: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2928,7 +2942,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_b: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_b: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2951,7 +2965,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_e2: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_e2: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2974,7 +2988,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_r: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_r: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
 
     /**
@@ -2997,7 +3011,7 @@ export default function connBleSocketMass03() {
         hilog.error(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_x: ' + JSON.stringify(err));
       }
       hilog.info(0x0000, 'ConnBleSocket', 'bl_20_off_ble_find_x: errCode=' + errCode);
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
     });
     });
   });

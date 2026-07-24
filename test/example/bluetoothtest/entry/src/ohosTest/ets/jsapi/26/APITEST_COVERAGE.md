@@ -34,14 +34,14 @@
 | `@ohos.backgroundTaskManager.d.ts` | — | 0 | 否 | 同上 |
 | `@ohos.batteryStatistics.d.ts` | — | 0 | 否 | 同上 |
 | `@ohos.bluetooth.a2dp.d.ts` | `ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageProfile01.test.ets` | 127 | 否 | **正/异/返/组**：FullCoverage 对 A2dpSrcProfile 全方法 6 场景（含 `setCurrentCodecInfo`/`disableAutoPlay` 参数组合）；CK 入口 1 条；**性/压**：无 |
-| `@ohos.bluetooth.access.d.ts` | `ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageAccess01.test.ets`；`BluetoothFullCoverageConnection01.test.ets`～`Connection02.test.ets` | 见 FullCoverage 统计 | 否 | **正/异/返/条件**：FullCoverage 对 access 全 API 6 场景（`c`=单接口条件，无 `fcRunCombo`）；CK 入口；**性**：`design_perf`；相对 `.d.ts` 全 API：**未**达严格完全覆盖 |
+| `@ohos.bluetooth.access.d.ts` | `ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageAccess01.test.ets`；`BluetoothFullCoverageConnection01.test.ets`～`Connection02.test.ets` | 见 FullCoverage 统计 | 是（1A） | **1A**：BT ON 无对端；本地 `assertLocalOk`；非法参 `assertThrownErrIn`；每 API `_perf`/`_stress`；`ensureBtOn` |
 | `@ohos.bluetooth.baseProfile.d.ts` | `ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageProfile01.test.ets` | 26 | 否 | **正/异/返/组**：FullCoverage 对 baseProfile 方法（`setConnectionStrategy`/`getConnectedDevices` 等）6 场景；CK 枚举 2 条 |
-| `@ohos.bluetooth.ble.d.ts` | `ConnectivityKitBluetooth.test.ets`；`ConnBleSocketMass01.test.ets`～`ConnBleSocketMass04.test.ets`；`BluetoothFullCoverageGatt01.test.ets`～`Gatt02.test.ets` | Mass+FC | 否 | **正/异/返/条件**：FullCoverage GattClient/GattServer/BleScanner（含补齐 `serviceChange`/`characteristicWrite`/`descriptorRead`/`descriptorWrite`/`BLEMtuChange`）6 场景；Mass + CK；**性/压**：`design_perf`/`design_stress` |
+| `@ohos.bluetooth.ble.d.ts` | `ConnectivityKitBluetooth.test.ets`；`ConnBleSocketMass01.test.ets`～`ConnBleSocketMass04.test.ets`；`BluetoothFullCoverageGatt01.test.ets`～`Gatt02.test.ets` | Mass+FC | 是（1A） | **1A**：GATT 对端路径 `assertPeerExpect`；Advertise/Scan 本地路径；事件含 `serviceChange` 等；每 API perf/stress |
 | `@ohos.bluetooth.common.d.ts` | `ConnectivityKitBluetooth.test.ets`；`ConnBleSocketMass01.test.ets`～`ConnBleSocketMass04.test.ets` | 572 | 否 | **正**：`BluetoothAddressType` 含 VIRTUAL/REAL + Mass；**性/压**：无专项 |
-| `@ohos.bluetooth.connection.d.ts` | `ConnectivityKitBluetooth.test.ets`；`ConnBleSocketMass01.test.ets`～`ConnBleSocketMass04.test.ets`；`BluetoothFullCoverageConnection01.test.ets`～`Connection02.test.ets` | Mass+FC | 否 | **正/异/返/条件**：FullCoverage 对 connection 按 API 独立 6 场景（已替代 Combo 连调）；Mass + CK |
+| `@ohos.bluetooth.connection.d.ts` | `ConnectivityKitBluetooth.test.ets`；`ConnBleSocketMass01.test.ets`～`ConnBleSocketMass04.test.ets`；`BluetoothFullCoverageConnection01.test.ets`～`Connection02.test.ets` | Mass+FC | 是（1A） | **1A**：无对端主路径断言文档错误码；本地查询类 `assertLocalOk`；Mass 同口径 |
 | `@ohos.bluetooth.constant.d.ts` | `ConnectivityKitBluetooth.test.ets`；`ConnBleSocketMass01.test.ets`～`ConnBleSocketMass04.test.ets` | Mass+CK | 否 | **正**：`ProfileId` / `ProfileConnectionState` 枚举补全 + Mass；**性/压**：无专项 |
-| `@ohos.bluetooth.socket.d.ts` | `ConnectivityKitBluetooth.test.ets`；`ConnBleSocketMass01.test.ets`～`ConnBleSocketMass04.test.ets`；`BluetoothFullCoverageSocket01.test.ets` | Mass+FC | 否 | **正/异/返/条件**：FullCoverage Socket 按 API 独立 6 场景（已替代 Combo 连调）；Mass + CK |
-| `@ohos.bluetooth.d.ts` | `BluetoothApiCoverage.test.ets`；`ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageLegacy01.test.ets`～`Legacy02.test.ets` | 389 | 否 | **正/异/返/条件**：FullCoverage 对 legacy `@ohos.bluetooth` 全 API（含 `BLE.*` 与缺口 `getConnectionDevices`/`getDeviceState`/`setNotifyCharacteristicChanged`）6 场景；CK + ApiCoverage |
+| `@ohos.bluetooth.socket.d.ts` | `ConnectivityKitBluetooth.test.ets`；`ConnBleSocketMass01.test.ets`～`ConnBleSocketMass04.test.ets`；`BluetoothFullCoverageSocket01.test.ets` | Mass+FC | 是（1A） | **1A**：listen 本地 vs connect 对端错误码分离；perf/stress |
+| `@ohos.bluetooth.d.ts` | `BluetoothApiCoverage.test.ets`；`ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageLegacy01.test.ets`～`Legacy02.test.ets` | 见 FC | 是（1A） | **1A**：含 `connectStateChange` on/off；legacy 全 API 8 场景 |
 | `@ohos.bluetooth.hfp.d.ts` | `ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageProfile01.test.ets` | 13 | 否 | **正/异/返/组**：FullCoverage HfpAgProfile connect/disconnect 6 场景；CK 1 条 |
 | `@ohos.bluetooth.hid.d.ts` | `BluetoothApiCoverage.test.ets`；`ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageProfile01.test.ets`～`Profile02.test.ets` | 98 | 否 | **正/异/返/组**：FullCoverage HidHost + HidDevice 全 API 6 场景；CK/ApiCoverage 2 条 |
 | `@ohos.bluetooth.map.d.ts` | `ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageProfile01.test.ets` | 19 | 否 | **正/异/返/组**：FullCoverage MapMseProfile 6 场景；CK 1 条 |
@@ -49,7 +49,7 @@
 | `@ohos.bluetooth.pan.d.ts` | `BluetoothApiCoverage.test.ets`；`ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageProfile01.test.ets` | 20 | 否 | **正/异/返/组**：FullCoverage PanProfile 6 场景；CK/ApiCoverage 2 条 |
 | `@ohos.bluetooth.pbap.d.ts` | `ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageProfile02.test.ets` | 31 | 否 | **正/异/返/条件**：FullCoverage PbapServerProfile 6 场景；CK 1 条 |
 | `@ohos.bluetooth.wearDetection.d.ts` | `ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageAccess01.test.ets` | 14 | 否 | **正/异/返/条件**：FullCoverage 4 API × 6 场景；CK 2 条 |
-| `@ohos.bluetoothManager.d.ts` | `BluetoothApiCoverage.test.ets`；`ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageLegacy02.test.ets` | 201 | 否 | **正/异/返/组**：FullCoverage legacy bluetoothManager 全 API 6 场景；CK/ApiCoverage 9 条 |
+| `@ohos.bluetoothManager.d.ts` | `BluetoothApiCoverage.test.ets`；`ConnectivityKitBluetooth.test.ets`；`BluetoothFullCoverageLegacy02.test.ets` | 见 FC | 是（1A） | **1A**：与 legacy 对称；含 `connectStateChange`；perf/stress |
 | `@ohos.commonEvent.d.ts` | — | 0 | 否 | 无 apitest；**参/返/正/异/组/性/压**均未实施 |
 | `@ohos.commonEventManager.d.ts` | — | 0 | 否 | 同上 |
 | `@ohos.distributedDeviceManager.d.ts` | — | 0 | 否 | 同上 |
@@ -86,8 +86,9 @@
 | `ConnectivityKitBluetooth.test.ets` | `constant`：`ProfileId` / `ProfileConnectionState` 枚举取值补全；`common`：`BluetoothAddressType.REAL`；`baseProfile`：`DisconnectCause` 全量取值断言；`access`：`convertUuid('')`、非法 MAC 形态；`connection`：按 `ProfileId` 矩阵调用 `getProfileConnectionState`、非法 profile 边界；`socket`：补充 `SppType.SPP_L2CAP`；`wearDetection` / `@system.bluetooth`：回调标记用例；**`ConnectivityKit_design_perf`** / **`ConnectivityKit_design_stress`**：性能与压力循环 |
 | `BluetoothApiCoverage.test.ets` | `@ohos.bluetooth`：`getProfileConnState` 对 HID/PAN profile、非法 profile；**`BluetoothApiCoverage_design_perf`** / **`BluetoothApiCoverage_design_stress`**：`getState` / `getPairedDevices` 性能预算，`getBtConnectionState` / `BLE.stopBLEScan` 压力迭代 |
 | 扩展矩阵（多文件） | **540** 条 `it`：`BluetoothExpandedMatrixConnection01/02.test`（各 130 条 CK `getProfileConnectionState`）+ `BluetoothExpandedMatrixLegacy01/02.test`（各 130 条 `@ohos.bluetooth.getProfileConnState`）+ `BluetoothExpandedMatrixRotate.test`（20 条）+ `BluetoothExpandedMatrixShared.ets`；单文件少于 **1500** 行；由 `registerApitestSuite` 注册 |
-| **FullCoverage 全量补强（2026-07）** | **1740** 条 `it`：`Access01`（150）+ `Legacy01`（102）+ `Legacy02`（306）+ `Profile01`（126）+ `Profile02`（234）+ `Gatt01`（84）+ `Gatt02`（258）+ `Enterprise01`（132）+ **`Connection01`（132）+ `Connection02`（126）+ `Socket01`（90）**；辅助 `ApitestFullCoverageShared.ets`；生成脚本 `skills/ohtest/bluetooth_full_coverage.py`；每 API **6 场景**：`n` 正常 / `e` 异常 / `b` 边界 / `r` 返回值 / `x` 重复 / **`c` 条件（单接口，禁止多接口连调）**；**已移除** `BluetoothFullCoverageCombo*` 与 `fcRunCombo` |
-| 未改 | `ConnBleSocketMass01`～`Mass04` 仍为生成/大体量套件；若需同等级「设计标准」需单独评审生成脚本或拆分模块 |
+| **FullCoverage 全量补强（2026-07）** | **2352** 条 `it`（每 API **8** 场景：`n/e/b/r/x/c` + **`_perf`/`_stress`**）：`Access01`（200）+ `Legacy01`（144）+ `Legacy02`（432）+ `Profile01`（168）+ `Profile02`（312）+ `Gatt01`（112）+ `Gatt02`（344）+ `Enterprise01`（176）+ `Connection01`（176）+ `Connection02`（168）+ `Socket01`（120）；辅助 `ApitestFullCoverageShared.ets` + **`ApitestRealAssert.ets`**（`ensureBtOn`/`assertLocalOk`/`assertPeerExpect`）；生成脚本 `skills/ohtest/bluetooth_full_coverage.py`；catalog `BluetoothCoreApi.catalog.json`；**禁止** `errCode >= 0` / `expect(true)` / `fcRunCombo` |
+| **核心模块真实逻辑（1A+2B，2026-07-23）** | 约束：**单板 + 蓝牙 ON、无对端**。本地 API 用 `assertLocalOk`（`{0,201,801}`）；需对端 API 用 `assertPeerExpect`（文档 `@throws` 白名单）。范围：`access`/`connection`/`ble`/`socket`/`@ohos.bluetooth`+`bluetoothManager`。分段 List：`List.apitest.coreA/coreB.test.ets`。Mass 已改为同口径 `assertPeerExpect`（冒烟补充，非独立五维证据）。 |
+| 未改（非本期） | Profile/Enterprise/partner 等仍为生成套件，**未**按 1A 完全标准收口 |
 
 ---
 
@@ -107,22 +108,22 @@
 | `@ohos.backgroundTaskManager.d.ts` | 无 | 无 | 无 | 无 | 无 | 无 | 无 |
 | `@ohos.batteryStatistics.d.ts` | 无 | 无 | 无 | 无 | 无 | 无 | 无 |
 | `@ohos.bluetooth.a2dp.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
-| `@ohos.bluetooth.access.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 部分 | 无 |
+| `@ohos.bluetooth.access.d.ts` | 是 | 是 | 部分 | 是 | 是 | 是 | 是 |
 | `@ohos.bluetooth.baseProfile.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
-| `@ohos.bluetooth.ble.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 部分 | 部分 |
+| `@ohos.bluetooth.ble.d.ts` | 是 | 是 | 部分 | 是 | 是 | 是 | 是 |
 | `@ohos.bluetooth.common.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
-| `@ohos.bluetooth.connection.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 部分 |
+| `@ohos.bluetooth.connection.d.ts` | 是 | 是 | 部分 | 是 | 是 | 是 | 是 |
 | `@ohos.bluetooth.constant.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
-| `@ohos.bluetooth.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 部分 | 部分 |
+| `@ohos.bluetooth.d.ts` | 是 | 是 | 部分 | 是 | 是 | 是 | 是 |
 | `@ohos.bluetooth.hfp.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
 | `@ohos.bluetooth.hid.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
 | `@ohos.bluetooth.map.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
 | `@ohos.bluetooth.opp.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
 | `@ohos.bluetooth.pan.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
 | `@ohos.bluetooth.pbap.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
-| `@ohos.bluetooth.socket.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
+| `@ohos.bluetooth.socket.d.ts` | 是 | 是 | 部分 | 是 | 是 | 是 | 是 |
 | `@ohos.bluetooth.wearDetection.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 无 | 无 |
-| `@ohos.bluetoothManager.d.ts` | 部分 | 部分 | 部分 | 部分 | 部分 | 部分 | 无 |
+| `@ohos.bluetoothManager.d.ts` | 是 | 是 | 部分 | 是 | 是 | 是 | 是 |
 | `@ohos.commonEvent.d.ts` | 无 | 无 | 无 | 无 | 无 | 无 | 无 |
 | `@ohos.commonEventManager.d.ts` | 无 | 无 | 无 | 无 | 无 | 无 | 无 |
 | `@ohos.distributedDeviceManager.d.ts` | 无 | 无 | 无 | 无 | 无 | 无 | 无 |

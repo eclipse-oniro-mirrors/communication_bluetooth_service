@@ -20,10 +20,21 @@
 import ble from '@ohos.bluetooth.ble';
 import socket from '@ohos.bluetooth.socket';
 
+export {
+  assertErrIn,
+  assertLocalOk,
+  assertPeerExpect,
+  BT_PEER_EXPECT,
+  BT_DOC_ERR_CODES,
+  ensureBtOn
+} from './ApitestRealAssert';
+
 const SPP_UUID = '00001101-0000-1000-8000-00805F9B34FB';
 
 /** Sample device address used by mass connection/socket cases. */
 export const BADDR = '00:11:22:33:44:55';
+export const BAD_MAC = 'ZZ:ZZ:ZZ:ZZ:ZZ:ZZ';
+export const EMPTY_MAC = '';
 
 export function buf0(): ArrayBuffer {
   return new ArrayBuffer(0);
