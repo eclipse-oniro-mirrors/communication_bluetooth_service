@@ -1,4 +1,4 @@
-total_cases=1740
+total_cases=2320
 file=BluetoothFullCoverageAccess01.test.ets
 file=BluetoothFullCoverageLegacy01.test.ets
 file=BluetoothFullCoverageLegacy02.test.ets

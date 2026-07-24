@@ -17,7 +17,7 @@ import UIAbility from '@ohos.app.ability.UIAbility';
 import { AbilityConstant, Want} from '@kit.AbilityKit';
 import AbilityDelegatorRegistry from '@ohos.app.ability.abilityDelegatorRegistry';
 import { Hypium} from '@ohos/hypium';
-/** 全量 List.apitest.test；分段请改 part1a/1b/1c/part2 */
+/** 全量 List.apitest.test；分段请改 part1a/1b/1c/part2 或 coreA/coreB */
 import testsuite from '../apitest/List.apitest.test';
 import window from '@ohos.window';
 

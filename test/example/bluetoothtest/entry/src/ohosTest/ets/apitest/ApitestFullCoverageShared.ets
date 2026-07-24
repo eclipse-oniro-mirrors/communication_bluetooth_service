@@ -24,6 +24,33 @@ import hid from '@ohos.bluetooth.hid';
 import partnerAgent from '@ohos.FusionConnectivity.partnerAgent';
 import common from '@ohos.bluetooth.common';
 import { StartBLEScanOptions, StopBLEScanOptions, SubscribeBLEFoundOptions } from '@system.bluetooth';
+import {
+  BT_DOC_ERR_CODES,
+  BT_LOCAL_OR_CAP,
+  BT_PEER_EXPECT,
+  assertErrIn,
+  assertLocalOk,
+  assertPeerExpect,
+  assertThrownErrIn,
+  ensureBtOn,
+  runPerf,
+  runStress,
+  waitCallback
+} from './ApitestRealAssert';
+
+export {
+  BT_DOC_ERR_CODES,
+  BT_LOCAL_OR_CAP,
+  BT_PEER_EXPECT,
+  assertErrIn,
+  assertLocalOk,
+  assertPeerExpect,
+  assertThrownErrIn,
+  ensureBtOn,
+  runPerf,
+  runStress,
+  waitCallback
+};
 
 export const BADDR = '00:11:22:33:44:55';
 export const BAD_MAC = 'ZZ:ZZ:ZZ:ZZ:ZZ:ZZ';
@@ -167,8 +194,12 @@ export function gattServerResponse(): ble.ServerResponse {
   return { deviceId: BADDR, transId: 0, status: 0, offset: 0, value: buf0() };
 }
 
-/** Acceptable BT smoke err codes (env / BT-off / unsupported). */
+/** @deprecated Prefer assertErrIn / assertLocalOk / assertPeerExpect (no open 2900xxx range). */
 export function isAcceptableBtErrCode(errCode: number): boolean {
-  return errCode === 0 || errCode === 201 || errCode === 202 || errCode === 401 ||
-    errCode === 801 || (errCode >= 2900000 && errCode <= 2900999);
+  for (let i = 0; i < BT_DOC_ERR_CODES.length; i++) {
+    if (errCode === BT_DOC_ERR_CODES[i]) {
+      return true;
+    }
+  }
+  return false;
 }

@@ -17,13 +17,17 @@
  * @ohos.bluetooth.getProfileConnState sweep 130..259.
  * Direct API calls; hilog + errCode/return assertions (no matrixTryRun / tautology).
  */
-import { describe, it, expect } from '@ohos/hypium';
+import { describe, beforeEach, it, expect } from '@ohos/hypium';
+import { assertPeerExpect, ensureBtOn } from './ApitestRealAssert';
 import hilog from '@ohos.hilog';
 import { BusinessError } from '@ohos.base';
 import bluetooth from '@ohos.bluetooth';
 
 export default function bluetoothExpandedMatrixLegacy02Test() {
   describe('ExpandedMatrix_legacy_getProfileConnState_130_259', () => {
+  beforeEach(() => {
+    ensureBtOn();
+  });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_EXPANDED_LEGACY_GETPROFILECONNSTATE_130
@@ -47,7 +51,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -73,7 +77,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -99,7 +103,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -125,7 +129,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -151,7 +155,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -177,7 +181,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -203,7 +207,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -229,7 +233,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -255,7 +259,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -281,7 +285,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -307,7 +311,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -333,7 +337,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -359,7 +363,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -385,7 +389,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -411,7 +415,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -437,7 +441,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -463,7 +467,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -489,7 +493,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -515,7 +519,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -541,7 +545,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -567,7 +571,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -593,7 +597,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -619,7 +623,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -645,7 +649,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -671,7 +675,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -697,7 +701,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -723,7 +727,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -749,7 +753,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -775,7 +779,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -801,7 +805,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -827,7 +831,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -853,7 +857,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -879,7 +883,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -905,7 +909,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -931,7 +935,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -957,7 +961,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -983,7 +987,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1009,7 +1013,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1035,7 +1039,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1061,7 +1065,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1087,7 +1091,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1113,7 +1117,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1139,7 +1143,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1165,7 +1169,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1191,7 +1195,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1217,7 +1221,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1243,7 +1247,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1269,7 +1273,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1295,7 +1299,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1321,7 +1325,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1347,7 +1351,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1373,7 +1377,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1399,7 +1403,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1425,7 +1429,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1451,7 +1455,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1477,7 +1481,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1503,7 +1507,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1529,7 +1533,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1555,7 +1559,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1581,7 +1585,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1607,7 +1611,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1633,7 +1637,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1659,7 +1663,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1685,7 +1689,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1711,7 +1715,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1737,7 +1741,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1763,7 +1767,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1789,7 +1793,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1815,7 +1819,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1841,7 +1845,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1867,7 +1871,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1893,7 +1897,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1919,7 +1923,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1945,7 +1949,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1971,7 +1975,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -1997,7 +2001,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2023,7 +2027,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2049,7 +2053,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2075,7 +2079,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2101,7 +2105,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2127,7 +2131,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2153,7 +2157,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2179,7 +2183,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2205,7 +2209,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2231,7 +2235,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2257,7 +2261,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2283,7 +2287,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2309,7 +2313,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2335,7 +2339,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2361,7 +2365,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2387,7 +2391,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2413,7 +2417,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2439,7 +2443,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2465,7 +2469,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2491,7 +2495,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2517,7 +2521,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2543,7 +2547,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2569,7 +2573,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2595,7 +2599,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2621,7 +2625,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2647,7 +2651,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2673,7 +2677,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2699,7 +2703,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2725,7 +2729,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2751,7 +2755,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2777,7 +2781,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2803,7 +2807,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2829,7 +2833,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2855,7 +2859,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2881,7 +2885,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2907,7 +2911,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2933,7 +2937,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2959,7 +2963,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -2985,7 +2989,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3011,7 +3015,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3037,7 +3041,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3063,7 +3067,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3089,7 +3093,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3115,7 +3119,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3141,7 +3145,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3167,7 +3171,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3193,7 +3197,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3219,7 +3223,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3245,7 +3249,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3271,7 +3275,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3297,7 +3301,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3323,7 +3327,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3349,7 +3353,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3375,7 +3379,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
@@ -3401,7 +3405,7 @@ export default function bluetoothExpandedMatrixLegacy02Test() {
       }
       hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
       hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
-      expect(errCode >= 0).assertTrue();
+      assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
 
