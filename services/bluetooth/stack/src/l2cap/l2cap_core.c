@@ -2227,6 +2227,9 @@ int L2capConnectComplete(const BtAddr *addr, uint16_t handle, uint8_t status)
     conn = L2capGetConnection2(addr);
     if (conn == NULL) {
         conn = L2capNewConnection(addr, handle);
+        if (conn == NULL) {
+            return BT_BAD_STATUS;
+        }
     }
 
     conn->aclHandle = handle;

@@ -1218,6 +1218,9 @@ static int L2capLeConnectComplete(const BtAddr *addr, uint16_t handle, uint8_t r
     conn = L2capLeGetConnection2(addr);
     if (conn == NULL) {
         conn = L2capLeNewConnection(addr, handle, role);
+        if (conn == NULL) {
+            return BT_BAD_STATUS;
+        }
     }
 
     conn->aclHandle = handle;
