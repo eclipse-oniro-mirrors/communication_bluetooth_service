@@ -1343,6 +1343,24 @@ void SdpSendSearchFragmentResponse(uint16_t lcid, uint16_t transactionId, uint16
     sendPacket = NULL;
 }
 
+static bool SdpAllocSendPacket(Packet *srcPacket, Packet **sendPacket, uint8_t **header, uint8_t **tail)
+{
+    *sendPacket = PacketInheritMalloc(srcPacket, SDP_PDU_HEADER_LENGTH + SDP_UINT32_LENGTH, 1);
+    if (*sendPacket == NULL) {
+        return false;
+    }
+
+    *header = BufferPtr(PacketHead(*sendPacket));
+    *tail = BufferPtr(PacketTail(*sendPacket));
+    if (*header == NULL || *tail == NULL) {
+        PacketFree(*sendPacket);
+        *sendPacket = NULL;
+        return false;
+    }
+
+    return true;
+}
+
 void SdpSendSearchResponse(uint16_t lcid, uint16_t transactionId, uint16_t offset, uint8_t *buffer, uint16_t maxCount)
 {
     SdpConnectInfo *connect = NULL;
@@ -1380,12 +1398,13 @@ void SdpSendSearchResponse(uint16_t lcid, uint16_t transactionId, uint16_t offse
 
     /// Single packet
     length = totalServiceRecordCount * SDP_SERVICE_RECORD_HANDLE_BYTE + SDP_UINT32_LENGTH + 1;
-    sendPacket = PacketInheritMalloc(packet, SDP_PDU_HEADER_LENGTH + SDP_UINT32_LENGTH, 1);
-    header = BufferPtr(PacketHead(sendPacket));
-    tail = BufferPtr(PacketTail(sendPacket));
+    if (!SdpAllocSendPacket(packet, &sendPacket, &header, &tail)) {
+        PacketFree(packet);
+        packet = NULL;
+        return;
+    }
     /// PduID
-    header[pos] = SDP_SERVICE_SEARCH_RESPONSE;
-    pos++;
+    header[pos++] = SDP_SERVICE_SEARCH_RESPONSE;
     /// Transaction ID
     *(uint16_t *)(header + pos) = H2BE_16(transactionId);
     pos += SDP_UINT16_LENGTH;
