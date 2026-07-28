@@ -6985,13 +6985,13 @@ export default function bluetoothFullCoverageGatt02() {
       assertPeerExpect(errCode);
       waitCallback(done, 200);
     });
-    it('gatts_on_characteristicWrite_e', 0, async (done: Function) => {
-      const gattServer = ble.createGattServer();
+    it('blescan_on_BLEDeviceFind_e', 0, async (done: Function) => {
+      const sc = ble.createBleScanner();
       let threw = false;
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        gattServer.on('characteristicWrite', () => {});
+        sc.on('BLEDeviceFind', () => {});
       } catch (err) {
         threw = true;
         errCode = Number((err as BusinessError).code);
@@ -7004,8 +7004,8 @@ export default function bluetoothFullCoverageGatt02() {
       assertThrownErrIn(threw, errCode, BT_DOC_ERR_CODES);
       waitCallback(done, 200);
     });
-    it('gatts_on_characteristicWrite_b', 0, async (done: Function) => {
-      const gattServer = ble.createGattServer();
+    it('blescan_on_BLEDeviceFind_b', 0, async (done: Function) => {
+      const sc = ble.createBleScanner();
       let threw = false;
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
