@@ -15,11 +15,11 @@
 
 /**
  * Kit idempotent entry rotation (20 cases).
- * Direct API calls; hilog + errCode/return assertions.
+ * Direct API calls; LogUtil + errCode/return assertions.
  */
 import { describe, beforeEach, it, expect } from '@ohos/hypium';
 import { assertPeerExpect, ensureBtOn } from './ApitestRealAssert';
-import hilog from '@ohos.hilog';
+import LogUtil from '../../../main/ets/Utils/LogUtil';
 import { BusinessError } from '@ohos.base';
 import { access, ble, bluetoothManager, connection } from '@kit.ConnectivityKit';
 
@@ -40,17 +40,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_0', 0, () => {
       let errCode = 0;
       let value = -1;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = access.getState();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
@@ -65,16 +67,18 @@ export default function bluetoothExpandedMatrixRotateTest() {
      */
     it('expanded_kit_rotate_1', 0, () => {
       let errCode = 0;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         ble.stopBLEScan();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      LogUtil.info('errCode=' + errCode);
       assertPeerExpect(errCode);
     });
 
@@ -89,17 +93,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_2', 0, () => {
       let errCode = 0;
       let value = -1;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = bluetoothManager.getState();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
@@ -115,17 +121,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_3', 0, () => {
       let errCode = 0;
       let value = '';
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = connection.getLocalName();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
@@ -142,17 +150,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_4', 0, () => {
       let errCode = 0;
       let value: Array < Object >  = [];
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = ble.getConnectedBLEDevices() as Array < Object > ;
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(Array.isArray(value)).assertTrue();
     });
@@ -168,17 +178,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_5', 0, () => {
       let errCode = 0;
       let value = -1;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = access.getState();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
@@ -193,16 +205,18 @@ export default function bluetoothExpandedMatrixRotateTest() {
      */
     it('expanded_kit_rotate_6', 0, () => {
       let errCode = 0;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         ble.stopBLEScan();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      LogUtil.info('errCode=' + errCode);
       assertPeerExpect(errCode);
     });
 
@@ -217,17 +231,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_7', 0, () => {
       let errCode = 0;
       let value = -1;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = bluetoothManager.getState();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
@@ -243,17 +259,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_8', 0, () => {
       let errCode = 0;
       let value = '';
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = connection.getLocalName();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
@@ -270,17 +288,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_9', 0, () => {
       let errCode = 0;
       let value: Array < Object >  = [];
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = ble.getConnectedBLEDevices() as Array < Object > ;
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(Array.isArray(value)).assertTrue();
     });
@@ -296,17 +316,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_10', 0, () => {
       let errCode = 0;
       let value = -1;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = access.getState();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
@@ -321,16 +343,18 @@ export default function bluetoothExpandedMatrixRotateTest() {
      */
     it('expanded_kit_rotate_11', 0, () => {
       let errCode = 0;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         ble.stopBLEScan();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      LogUtil.info('errCode=' + errCode);
       assertPeerExpect(errCode);
     });
 
@@ -345,17 +369,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_12', 0, () => {
       let errCode = 0;
       let value = -1;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = bluetoothManager.getState();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
@@ -371,17 +397,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_13', 0, () => {
       let errCode = 0;
       let value = '';
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = connection.getLocalName();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
@@ -398,17 +426,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_14', 0, () => {
       let errCode = 0;
       let value: Array < Object >  = [];
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = ble.getConnectedBLEDevices() as Array < Object > ;
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(Array.isArray(value)).assertTrue();
     });
@@ -424,17 +454,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_15', 0, () => {
       let errCode = 0;
       let value = -1;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = access.getState();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
@@ -449,16 +481,18 @@ export default function bluetoothExpandedMatrixRotateTest() {
      */
     it('expanded_kit_rotate_16', 0, () => {
       let errCode = 0;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         ble.stopBLEScan();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
+      LogUtil.info('errCode=' + errCode);
       assertPeerExpect(errCode);
     });
 
@@ -473,17 +507,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_17', 0, () => {
       let errCode = 0;
       let value = -1;
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = bluetoothManager.getState();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(errCode !== 0 || typeof value === 'number').assertTrue();
     });
@@ -499,17 +535,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_18', 0, () => {
       let errCode = 0;
       let value = '';
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = connection.getLocalName();
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(typeof value).assertEqual('string');
       expect(value.length >= 0).assertTrue();
@@ -526,17 +564,19 @@ export default function bluetoothExpandedMatrixRotateTest() {
     it('expanded_kit_rotate_19', 0, () => {
       let errCode = 0;
       let value: Array < Object >  = [];
-      hilog.info(0x0000, 'ExpandedMatrix', 'invoke');
+      LogUtil.info('invoke');
       try {
         value = ble.getConnectedBLEDevices() as Array < Object > ;
       } catch (err) {
         const _c = (err as BusinessError).code;
         errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-        if (isNaN(errCode)) { errCode = 0; }
-        hilog.error(0x0000, 'ExpandedMatrix', JSON.stringify(err));
+        if (isNaN(errCode)) {
+          errCode = 0;
+        }
+        LogUtil.error(JSON.stringify(err));
       }
-      hilog.info(0x0000, 'ExpandedMatrix', 'errCode=' + errCode);
-      hilog.info(0x0000, 'ExpandedMatrix', 'value=' + JSON.stringify(value));
+      LogUtil.info('errCode=' + errCode);
+      LogUtil.info('value=' + JSON.stringify(value));
       assertPeerExpect(errCode);
       expect(Array.isArray(value)).assertTrue();
     });
