@@ -47,8 +47,7 @@ import {
   opp,
   socket,
   wearDetection,
-  bluetoothManager,
-  Bluetooth
+  bluetoothManager
 } from '@kit.ConnectivityKit';
 import { assertPerfBudget, assertStressHasSuccess } from './ApitestCoverageHelpers';
 
@@ -733,34 +732,62 @@ export default function connectivityKitBluetoothTest() {
   });
 
   describe('ConnectivityKit_systemBluetooth_lite', () => {
+    // @system.bluetooth is FA-only in Stage (11706008). Stage equivalents below map:
+    // startBLEScan/stopBLEScan -> ble.*; subscribe/unsubscribeBLEFound -> BleScanner on/off.
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_BLUETOOTH_STARTBLESCAN_STATIC
+     * @tc.name Bluetooth_startBLEScan_static
+     * @tc.desc Stage-eq for @system.bluetooth startBLEScan via ble.startBLEScan
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('Bluetooth_startBLEScan_static', 0, () => {
+      invokeApiAssertErrCode('Bluetooth.startBLEScan', () => {
+        ble.startBLEScan([]);
+      });
+    });
 
     /**
      * @tc.number SUB_BLUETOOTHTEST_APITEST_BLUETOOTH_STOPBLESCAN_STATIC
      * @tc.name Bluetooth_stopBLEScan_static
-     * @tc.desc Verify Bluetooth apitest case Bluetooth stopBLEScan static
+     * @tc.desc Stage-eq for @system.bluetooth stopBLEScan via ble.stopBLEScan
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
     it('Bluetooth_stopBLEScan_static', 0, () => {
       invokeApiAssertErrCode('Bluetooth.stopBLEScan', () => {
-        ble.createBleScanner().stopScan();
+        ble.stopBLEScan();
       });
     });
 
     /**
-     * @tc.number SUB_BLUETOOTHTEST_APITEST_BLUETOOTH_STOPBLESCAN_SUCCESS_CALLBACK_INVOKED
-     * @tc.name Bluetooth_stopBLEScan_success_callback_invoked
-     * @tc.desc Verify Bluetooth apitest case Bluetooth stopBLEScan success callback invoked
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_BLUETOOTH_SUBSCRIBEBLEFOUND_STATIC
+     * @tc.name Bluetooth_subscribeBLEFound_static
+     * @tc.desc Stage-eq for @system.bluetooth subscribeBLEFound via BleScanner.on
      * @tc.size MediumTest
      * @tc.type Function
      * @tc.level Level 2
      */
-    it('Bluetooth_stopBLEScan_success_callback_invoked', 0, () => {
-      invokeApiAssertErrCode('Bluetooth.stopBLEScan_success', () => {
-        let successCalled = false;
-        ble.createBleScanner().stopScan();
-        expect(typeof successCalled === 'boolean').assertTrue();
+    it('Bluetooth_subscribeBLEFound_static', 0, () => {
+      invokeApiAssertErrCode('Bluetooth.subscribeBLEFound', () => {
+        ble.createBleScanner().on('BLEDeviceFind', () => {});
+      });
+    });
+
+    /**
+     * @tc.number SUB_BLUETOOTHTEST_APITEST_BLUETOOTH_UNSUBSCRIBEBLEFOUND_STATIC
+     * @tc.name Bluetooth_unsubscribeBLEFound_static
+     * @tc.desc Stage-eq for @system.bluetooth unsubscribeBLEFound via BleScanner.off
+     * @tc.size MediumTest
+     * @tc.type Function
+     * @tc.level Level 2
+     */
+    it('Bluetooth_unsubscribeBLEFound_static', 0, () => {
+      invokeApiAssertErrCode('Bluetooth.unsubscribeBLEFound', () => {
+        ble.createBleScanner().off('BLEDeviceFind');
       });
     });
   });

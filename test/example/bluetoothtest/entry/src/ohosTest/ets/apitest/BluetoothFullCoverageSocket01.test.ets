@@ -40,11 +40,15 @@ import {
   sppOpt,
   legacySppOpt,
   bleAp,
+  bleAd,
+  bleAs,
   buf0,
   partnerDeviceAddr,
   partnerDeviceCap,
   partnerBusinessCap,
   gattServerResponse,
+  ctrlDeviceActionParams,
+  trustedPairedDevices,
   sysBleStartOpt,
   sysBleStopOpt,
   sysBleFoundOpt,
@@ -77,7 +81,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        socket.sppListen('h', sppOpt(), () => {{}});
+        socket.sppListen('h', sppOpt(), () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -102,7 +106,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        socket.sppListen('', sppOpt(), () => {{}});
+        socket.sppListen('', sppOpt(), () => {});
       } catch (err) {
         threw = true;
         errCode = Number((err as BusinessError).code);
@@ -128,7 +132,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        socket.sppListen('h', sppOpt(), () => {{}});
+        socket.sppListen('h', sppOpt(), () => {});
       } catch (err) {
         threw = true;
         errCode = Number((err as BusinessError).code);
@@ -153,7 +157,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        socket.sppListen('h', sppOpt(), () => {{}});
+        socket.sppListen('h', sppOpt(), () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -177,7 +181,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        socket.sppListen('h', sppOpt(), () => {{}});
+        socket.sppListen('h', sppOpt(), () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -190,7 +194,7 @@ export default function bluetoothFullCoverageSocket01() {
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
-        socket.sppListen('h', sppOpt(), () => {{}});
+        socket.sppListen('h', sppOpt(), () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -214,7 +218,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        socket.sppListen('h2', sppOpt(), () => {{}});
+        socket.sppListen('h2', sppOpt(), () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -237,7 +241,7 @@ export default function bluetoothFullCoverageSocket01() {
     it('sk_sppListen_perf', 0, () => {
       runPerf('sk_sppListen_perf', 5000, () => {
         try {
-          socket.sppListen('h', sppOpt(), () => {{}});
+          socket.sppListen('h', sppOpt(), () => {});
         } catch (_e) {
         }
       });
@@ -254,7 +258,7 @@ export default function bluetoothFullCoverageSocket01() {
     it('sk_sppListen_stress', 0, () => {
       runStress('sk_sppListen_stress', 20, () => {
         try {
-          socket.sppListen('h', sppOpt(), () => {{}});
+          socket.sppListen('h', sppOpt(), () => {});
         } catch (_e) {
         }
       });
@@ -274,7 +278,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        socket.sppAccept(0, () => {{}});
+        socket.sppAccept(0, () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -299,7 +303,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        socket.sppAccept(-1, () => {{}});
+        socket.sppAccept(-1, () => {});
       } catch (err) {
         threw = true;
         errCode = Number((err as BusinessError).code);
@@ -325,7 +329,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        socket.sppAccept(0, () => {{}});
+        socket.sppAccept(0, () => {});
       } catch (err) {
         threw = true;
         errCode = Number((err as BusinessError).code);
@@ -350,7 +354,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        socket.sppAccept(0, () => {{}});
+        socket.sppAccept(0, () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -374,7 +378,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        socket.sppAccept(0, () => {{}});
+        socket.sppAccept(0, () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -387,7 +391,7 @@ export default function bluetoothFullCoverageSocket01() {
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
-        socket.sppAccept(0, () => {{}});
+        socket.sppAccept(0, () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -411,7 +415,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        socket.sppAccept(0, () => {{}});
+        socket.sppAccept(0, () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -434,7 +438,7 @@ export default function bluetoothFullCoverageSocket01() {
     it('sk_sppAccept_perf', 0, () => {
       runPerf('sk_sppAccept_perf', 5000, () => {
         try {
-          socket.sppAccept(0, () => {{}});
+          socket.sppAccept(0, () => {});
         } catch (_e) {
         }
       });
@@ -451,7 +455,7 @@ export default function bluetoothFullCoverageSocket01() {
     it('sk_sppAccept_stress', 0, () => {
       runStress('sk_sppAccept_stress', 20, () => {
         try {
-          socket.sppAccept(0, () => {{}});
+          socket.sppAccept(0, () => {});
         } catch (_e) {
         }
       });
@@ -471,7 +475,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'n: invoke');
       try {
-        socket.sppConnect(BADDR, sppOpt(), () => {{}});
+        socket.sppConnect(BADDR, sppOpt(), () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -496,7 +500,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'e: invoke expect error');
       try {
-        socket.sppConnect(EMPTY_MAC, sppOpt(), () => {{}});
+        socket.sppConnect(EMPTY_MAC, sppOpt(), () => {});
       } catch (err) {
         threw = true;
         errCode = Number((err as BusinessError).code);
@@ -522,7 +526,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        socket.sppConnect(BAD_MAC, sppOpt(), () => {{}});
+        socket.sppConnect(BAD_MAC, sppOpt(), () => {});
       } catch (err) {
         threw = true;
         errCode = Number((err as BusinessError).code);
@@ -547,7 +551,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'r: invoke');
       try {
-        socket.sppConnect(BADDR, sppOpt(), () => {{}});
+        socket.sppConnect(BADDR, sppOpt(), () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -571,7 +575,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x1: invoke');
       try {
-        socket.sppConnect(BADDR, sppOpt(), () => {{}});
+        socket.sppConnect(BADDR, sppOpt(), () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -584,7 +588,7 @@ export default function bluetoothFullCoverageSocket01() {
       errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'x2: invoke');
       try {
-        socket.sppConnect(BADDR, sppOpt(), () => {{}});
+        socket.sppConnect(BADDR, sppOpt(), () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -608,7 +612,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'c: invoke');
       try {
-        socket.sppConnect(BADDR, sppOpt(), () => {{}});
+        socket.sppConnect(BADDR, sppOpt(), () => {});
       } catch (err) {
         errCode = Number((err as BusinessError).code);
         if (isNaN(errCode)) {
@@ -631,7 +635,7 @@ export default function bluetoothFullCoverageSocket01() {
     it('sk_sppConnect_perf', 0, () => {
       runPerf('sk_sppConnect_perf', 5000, () => {
         try {
-          socket.sppConnect(BADDR, sppOpt(), () => {{}});
+          socket.sppConnect(BADDR, sppOpt(), () => {});
         } catch (_e) {
         }
       });
@@ -648,7 +652,7 @@ export default function bluetoothFullCoverageSocket01() {
     it('sk_sppConnect_stress', 0, () => {
       runStress('sk_sppConnect_stress', 20, () => {
         try {
-          socket.sppConnect(BADDR, sppOpt(), () => {{}});
+          socket.sppConnect(BADDR, sppOpt(), () => {});
         } catch (_e) {
         }
       });
@@ -2688,7 +2692,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        socket.on('sppRead', 0, () => {});
+        socket.on('sppRead', -1, () => {});
       } catch (err) {
         threw = true;
         errCode = Number((err as BusinessError).code);
@@ -2862,7 +2866,7 @@ export default function bluetoothFullCoverageSocket01() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
-        socket.off('sppRead', 0);
+        socket.off('sppRead', -1);
       } catch (err) {
         threw = true;
         errCode = Number((err as BusinessError).code);

@@ -44,6 +44,7 @@ import bluetoothFullCoverageConnection01 from './BluetoothFullCoverageConnection
 import bluetoothFullCoverageConnection02 from './BluetoothFullCoverageConnection02.test'
 import bluetoothFullCoverageSocket01 from './BluetoothFullCoverageSocket01.test'
 
+import bluetoothFullCoverageConstant01 from './BluetoothFullCoverageConstant01.test'
 export function registerApitestSuite(): void {
   abilityTest()
   pageRoutesTest()
@@ -69,6 +70,7 @@ export function registerApitestSuite(): void {
   bluetoothFullCoverageConnection01()
   bluetoothFullCoverageConnection02()
   bluetoothFullCoverageSocket01()
+  bluetoothFullCoverageConstant01()
 }
 
 export default function testsuiteApitestOnly(): void {

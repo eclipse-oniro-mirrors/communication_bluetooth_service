@@ -24,6 +24,7 @@ export {
   assertErrIn,
   assertLocalOk,
   assertPeerExpect,
+  assertThrownErrIn,
   BT_PEER_EXPECT,
   BT_DOC_ERR_CODES,
   ensureBtOn
