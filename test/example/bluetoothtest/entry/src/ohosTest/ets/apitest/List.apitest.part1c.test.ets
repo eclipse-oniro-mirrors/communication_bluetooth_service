@@ -14,12 +14,27 @@
  */
 
 /** apitest 分段1c：Gatt + Enterprise */
-import bluetoothFullCoverageGatt01 from './BluetoothFullCoverageGatt01.test'
-import bluetoothFullCoverageGatt02 from './BluetoothFullCoverageGatt02.test'
-import bluetoothFullCoverageEnterprise01 from './BluetoothFullCoverageEnterprise01.test'
-
+import bluetoothFullCoverageGatt01_p1 from './BluetoothFullCoverageGatt01_p1.test'
+import bluetoothFullCoverageGatt01_p2 from './BluetoothFullCoverageGatt01_p2.test'
+import bluetoothFullCoverageGatt02_p1 from './BluetoothFullCoverageGatt02_p1.test'
+import bluetoothFullCoverageGatt02_p2 from './BluetoothFullCoverageGatt02_p2.test'
+import bluetoothFullCoverageGatt02_p3 from './BluetoothFullCoverageGatt02_p3.test'
+import bluetoothFullCoverageGatt02_p4 from './BluetoothFullCoverageGatt02_p4.test'
+import bluetoothFullCoverageGatt02_p5 from './BluetoothFullCoverageGatt02_p5.test'
+import bluetoothFullCoverageGatt02_p6 from './BluetoothFullCoverageGatt02_p6.test'
+import bluetoothFullCoverageEnterprise01_p1 from './BluetoothFullCoverageEnterprise01_p1.test'
+import bluetoothFullCoverageEnterprise01_p2 from './BluetoothFullCoverageEnterprise01_p2.test'
+import bluetoothFullCoverageEnterprise01_p3 from './BluetoothFullCoverageEnterprise01_p3.test'
 export default function testsuiteApitestPart1c(): void {
-  bluetoothFullCoverageGatt01()
-  bluetoothFullCoverageGatt02()
-  bluetoothFullCoverageEnterprise01()
+  bluetoothFullCoverageGatt01_p1()
+  bluetoothFullCoverageGatt01_p2()
+  bluetoothFullCoverageGatt02_p1()
+  bluetoothFullCoverageGatt02_p2()
+  bluetoothFullCoverageGatt02_p3()
+  bluetoothFullCoverageGatt02_p4()
+  bluetoothFullCoverageGatt02_p5()
+  bluetoothFullCoverageGatt02_p6()
+  bluetoothFullCoverageEnterprise01_p1()
+  bluetoothFullCoverageEnterprise01_p2()
+  bluetoothFullCoverageEnterprise01_p3()
 }

@@ -16,12 +16,21 @@
 /**
  * apitest 分段2：Connection + Socket（单进程后半段）
  */
-import bluetoothFullCoverageConnection01 from './BluetoothFullCoverageConnection01.test'
-import bluetoothFullCoverageConnection02 from './BluetoothFullCoverageConnection02.test'
-import bluetoothFullCoverageSocket01 from './BluetoothFullCoverageSocket01.test'
-
+import bluetoothFullCoverageConnection01_p1 from './BluetoothFullCoverageConnection01_p1.test'
+import bluetoothFullCoverageConnection01_p2 from './BluetoothFullCoverageConnection01_p2.test'
+import bluetoothFullCoverageConnection01_p3 from './BluetoothFullCoverageConnection01_p3.test'
+import bluetoothFullCoverageConnection02_p1 from './BluetoothFullCoverageConnection02_p1.test'
+import bluetoothFullCoverageConnection02_p2 from './BluetoothFullCoverageConnection02_p2.test'
+import bluetoothFullCoverageConnection02_p3 from './BluetoothFullCoverageConnection02_p3.test'
+import bluetoothFullCoverageSocket01_p1 from './BluetoothFullCoverageSocket01_p1.test'
+import bluetoothFullCoverageSocket01_p2 from './BluetoothFullCoverageSocket01_p2.test'
 export default function testsuiteApitestPart2(): void {
-  bluetoothFullCoverageConnection01()
-  bluetoothFullCoverageConnection02()
-  bluetoothFullCoverageSocket01()
+  bluetoothFullCoverageConnection01_p1()
+  bluetoothFullCoverageConnection01_p2()
+  bluetoothFullCoverageConnection01_p3()
+  bluetoothFullCoverageConnection02_p1()
+  bluetoothFullCoverageConnection02_p2()
+  bluetoothFullCoverageConnection02_p3()
+  bluetoothFullCoverageSocket01_p1()
+  bluetoothFullCoverageSocket01_p2()
 }

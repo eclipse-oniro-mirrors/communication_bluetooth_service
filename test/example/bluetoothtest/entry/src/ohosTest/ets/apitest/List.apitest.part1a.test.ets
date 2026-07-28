@@ -18,14 +18,24 @@ import abilityTest from './Ability.test'
 import pageRoutesTest from './PageRoutes.test'
 import bluetoothApiCoverageTest from './BluetoothApiCoverage.test'
 import connectivityKitBluetoothTest from './ConnectivityKitBluetooth.test'
-import connBleSocketMass01 from './ConnBleSocketMass01.test'
-import connBleSocketMass02 from './ConnBleSocketMass02.test'
-import connBleSocketMass03 from './ConnBleSocketMass03.test'
-import connBleSocketMass04 from './ConnBleSocketMass04.test'
-import bluetoothExpandedMatrixConnection01 from './BluetoothExpandedMatrixConnection01.test'
-import bluetoothExpandedMatrixConnection02 from './BluetoothExpandedMatrixConnection02.test'
-import bluetoothExpandedMatrixLegacy01 from './BluetoothExpandedMatrixLegacy01.test'
-import bluetoothExpandedMatrixLegacy02 from './BluetoothExpandedMatrixLegacy02.test'
+import connBleSocketMass01_p1 from './ConnBleSocketMass01_p1.test'
+import connBleSocketMass01_p2 from './ConnBleSocketMass01_p2.test'
+import connBleSocketMass01_p3 from './ConnBleSocketMass01_p3.test'
+import connBleSocketMass02_p1 from './ConnBleSocketMass02_p1.test'
+import connBleSocketMass02_p2 from './ConnBleSocketMass02_p2.test'
+import connBleSocketMass02_p3 from './ConnBleSocketMass02_p3.test'
+import connBleSocketMass03_p1 from './ConnBleSocketMass03_p1.test'
+import connBleSocketMass03_p2 from './ConnBleSocketMass03_p2.test'
+import connBleSocketMass04_p1 from './ConnBleSocketMass04_p1.test'
+import connBleSocketMass04_p2 from './ConnBleSocketMass04_p2.test'
+import bluetoothExpandedMatrixConnection01_p1 from './BluetoothExpandedMatrixConnection01_p1.test'
+import bluetoothExpandedMatrixConnection01_p2 from './BluetoothExpandedMatrixConnection01_p2.test'
+import bluetoothExpandedMatrixConnection02_p1 from './BluetoothExpandedMatrixConnection02_p1.test'
+import bluetoothExpandedMatrixConnection02_p2 from './BluetoothExpandedMatrixConnection02_p2.test'
+import bluetoothExpandedMatrixLegacy01_p1 from './BluetoothExpandedMatrixLegacy01_p1.test'
+import bluetoothExpandedMatrixLegacy01_p2 from './BluetoothExpandedMatrixLegacy01_p2.test'
+import bluetoothExpandedMatrixLegacy02_p1 from './BluetoothExpandedMatrixLegacy02_p1.test'
+import bluetoothExpandedMatrixLegacy02_p2 from './BluetoothExpandedMatrixLegacy02_p2.test'
 import bluetoothExpandedMatrixRotate from './BluetoothExpandedMatrixRotate.test'
 
 export default function testsuiteApitestPart1a(): void {
@@ -33,13 +43,23 @@ export default function testsuiteApitestPart1a(): void {
   pageRoutesTest()
   bluetoothApiCoverageTest()
   connectivityKitBluetoothTest()
-  connBleSocketMass01()
-  connBleSocketMass02()
-  connBleSocketMass03()
-  connBleSocketMass04()
-  bluetoothExpandedMatrixConnection01()
-  bluetoothExpandedMatrixConnection02()
-  bluetoothExpandedMatrixLegacy01()
-  bluetoothExpandedMatrixLegacy02()
+  connBleSocketMass01_p1()
+  connBleSocketMass01_p2()
+  connBleSocketMass01_p3()
+  connBleSocketMass02_p1()
+  connBleSocketMass02_p2()
+  connBleSocketMass02_p3()
+  connBleSocketMass03_p1()
+  connBleSocketMass03_p2()
+  connBleSocketMass04_p1()
+  connBleSocketMass04_p2()
+  bluetoothExpandedMatrixConnection01_p1()
+  bluetoothExpandedMatrixConnection01_p2()
+  bluetoothExpandedMatrixConnection02_p1()
+  bluetoothExpandedMatrixConnection02_p2()
+  bluetoothExpandedMatrixLegacy01_p1()
+  bluetoothExpandedMatrixLegacy01_p2()
+  bluetoothExpandedMatrixLegacy02_p1()
+  bluetoothExpandedMatrixLegacy02_p2()
   bluetoothExpandedMatrixRotate()
 }

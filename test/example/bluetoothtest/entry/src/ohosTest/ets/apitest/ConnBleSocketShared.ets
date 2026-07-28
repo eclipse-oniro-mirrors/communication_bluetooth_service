@@ -15,7 +15,7 @@
 
 /**
  * Shared stubs for generated ConnBleSocketMass*.test.ets suites.
- * Case bodies call APIs directly with hilog + real return/error assertions.
+ * Case bodies call APIs directly with LogUtil + real return/error assertions.
  */
 import ble from '@ohos.bluetooth.ble';
 import socket from '@ohos.bluetooth.socket';
@@ -58,7 +58,11 @@ export function bleAd(): ble.AdvertiseData {
 }
 
 export function bleAs(): ble.AdvertiseSetting {
-  return { interval: 1600, txPower: -7, connectable: true };
+  return {
+    interval: 1600,
+    txPower: -7,
+    connectable: true
+  };
 }
 
 export function bleAp(): ble.AdvertisingParams {

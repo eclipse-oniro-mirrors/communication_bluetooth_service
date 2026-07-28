@@ -28,7 +28,7 @@
  * 可量化性能（assertPerfBudget）与压力（assertStressHasSuccess）循环。
  */
 import { describe, it, expect } from '@ohos/hypium';
-import hilog from '@ohos.hilog';
+import LogUtil from '../../../main/ets/Utils/LogUtil';
 import { BusinessError } from '@ohos.base';
 import {
   a2dp,
@@ -57,16 +57,18 @@ const SPP_UUID = '00001101-0000-1000-8000-00805F9B34FB';
 
 const invokeApiAssertErrCode = (tag: string, fn: () => void): void => {
   let errCode = 0;
-  hilog.info(0x0000, 'ConnectivityKitBluetooth', tag + ': invoke');
+  LogUtil.info(tag + ': invoke');
   try {
     fn();
   } catch (err) {
     const _c = (err as BusinessError).code;
     errCode = (_c === undefined || _c === null) ? 0 : Number(_c);
-    if (isNaN(errCode)) { errCode = 0; }
-    hilog.error(0x0000, 'ConnectivityKitBluetooth', tag + ': ' + JSON.stringify(err));
+    if (isNaN(errCode)) {
+      errCode = 0;
+    }
+    LogUtil.error(tag + ': ' + JSON.stringify(err));
   }
-  hilog.info(0x0000, 'ConnectivityKitBluetooth', tag + ': errCode=' + errCode);
+  LogUtil.info(tag + ': errCode=' + errCode);
   expect(errCode >= 0).assertTrue();
 };
 
