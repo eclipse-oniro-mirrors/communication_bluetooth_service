@@ -21,6 +21,7 @@
 import { expect } from '@ohos/hypium';
 import access from '@ohos.bluetooth.access';
 import { assertPerfBudget, assertStressHasSuccess } from './ApitestCoverageHelpers';
+import LogUtil from '../../../main/ets/Utils/LogUtil';
 
 /** Documented Bluetooth BusinessError codes commonly listed in jsapi/26 @throws. */
 export const BT_DOC_ERR_CODES: number[] = [
@@ -92,11 +93,13 @@ export function ensureBtOn(): void {
       return;
     }
   } catch (_e) {
+    LogUtil.error(JSON.stringify(_e));
     // fall through to enable
   }
   try {
     access.enableBluetooth();
   } catch (_e2) {
+    LogUtil.error(JSON.stringify(_e2));
     // permission / already enabling
   }
   const deadline = Date.now() + 8000;
@@ -106,6 +109,7 @@ export function ensureBtOn(): void {
         return;
       }
     } catch (_e3) {
+      LogUtil.error(JSON.stringify(_e3));
       // continue poll
     }
   }

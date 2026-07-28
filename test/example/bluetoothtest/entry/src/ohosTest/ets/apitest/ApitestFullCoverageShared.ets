@@ -15,7 +15,7 @@
 
 /**
  * Shared stubs for generated BluetoothFullCoverage*.test.ets suites.
- * Case bodies call APIs directly (no fcRun wrappers) with hilog + real assertions.
+ * Case bodies call APIs directly (no fcRun wrappers) with LogUtil + real assertions.
  */
 import ble from '@ohos.bluetooth.ble';
 import socket from '@ohos.bluetooth.socket';
@@ -24,7 +24,11 @@ import connection from '@ohos.bluetooth.connection';
 import hid from '@ohos.bluetooth.hid';
 import partnerAgent from '@ohos.FusionConnectivity.partnerAgent';
 import common from '@ohos.bluetooth.common';
-import { StartBLEScanOptions, StopBLEScanOptions, SubscribeBLEFoundOptions } from '@system.bluetooth';
+import {
+  StartBLEScanOptions,
+  StopBLEScanOptions,
+  SubscribeBLEFoundOptions
+} from '@system.bluetooth';
 import {
   BT_DOC_ERR_CODES,
   BT_LOCAL_OR_CAP,
@@ -89,7 +93,11 @@ export function bleAd(): ble.AdvertiseData {
 }
 
 export function bleAs(): ble.AdvertiseSetting {
-  return { interval: 1600, txPower: -7, connectable: true };
+  return {
+    interval: 1600,
+    txPower: -7,
+    connectable: true
+  };
 }
 
 export function bleAp(): ble.AdvertisingParams {
@@ -111,7 +119,9 @@ export function ctrlDeviceActionParams(deviceId: string = BADDR): connection.Con
 
 /** connection.updateCloudBluetoothDevice stub. */
 export function trustedPairedDevices(): connection.TrustedPairedDevices {
-  return { trustedPairedDevices: [] };
+  return {
+    trustedPairedDevices: []
+  };
 }
 
 export function bleCharRef(): ble.BLECharacteristic {
@@ -157,40 +167,72 @@ export function hidSdpStub(): hid.HidDeviceSdp {
 }
 
 export function hidQosStub(): hid.HidDeviceQos {
-  return { serviceType: 1, tokenRate: 800, tokenBucketSize: 800, peakBandwidth: 0, latency: 0,
-    delayVariation: 0 };
+  return {
+    serviceType: 1,
+    tokenRate: 800,
+    tokenBucketSize: 800,
+    peakBandwidth: 0,
+    latency: 0,
+    delayVariation: 0
+  };
 }
 
 export function partnerDeviceAddr(): partnerAgent.PartnerDeviceAddress {
-  const addr: common.BluetoothAddress = { address: BADDR, addressType: common.BluetoothAddressType.REAL };
-  return { bluetoothAddress: addr };
+  const addr: common.BluetoothAddress = {
+    address: BADDR,
+    addressType: common.BluetoothAddressType.REAL
+  };
+  return {
+    bluetoothAddress: addr
+  };
 }
 
 export function partnerDeviceCap(): partnerAgent.DeviceCapability {
-  return { supportBR: true, supportBleAdvertiser: false };
+  return {
+    supportBR: true,
+    supportBleAdvertiser: false
+  };
 }
 
 export function partnerBusinessCap(): partnerAgent.BusinessCapability {
-  return { supportMediaControl: true, supportTelephonyControl: false };
+  return {
+    supportMediaControl: true,
+    supportTelephonyControl: false
+  };
 }
 
 /** @system.bluetooth StartBLEScanOptions stub. */
 export function sysBleStartOpt(): StartBLEScanOptions {
-  return { interval: 0, success: () => {}, fail: () => {}, complete: () => {} };
+  return {
+    interval: 0,
+    success: () => {},
+    fail: () => {},
+    complete: () => {}
+  };
 }
 
 /** @system.bluetooth StopBLEScanOptions stub. */
 export function sysBleStopOpt(): StopBLEScanOptions {
-  return { success: () => {}, fail: () => {}, complete: () => {} };
+  return {
+    success: () => {},
+    fail: () => {},
+    complete: () => {}
+  };
 }
 
 /** @system.bluetooth SubscribeBLEFoundOptions stub. */
 export function sysBleFoundOpt(): SubscribeBLEFoundOptions {
-  return { success: () => {}, fail: () => {} };
+  return {
+    success: () => {},
+    fail: () => {}
+  };
 }
 
 export function blePhyValue(): ble.PhyValue {
-  return { txPhy: ble.BlePhy.BLE_PHY_1M, rxPhy: ble.BlePhy.BLE_PHY_1M };
+  return {
+    txPhy: ble.BlePhy.BLE_PHY_1M,
+    rxPhy: ble.BlePhy.BLE_PHY_1M
+  };
 }
 
 export function gattConnParam(): ble.ConnectionParam {
@@ -207,7 +249,13 @@ export function bleNotifyChar(): ble.NotifyCharacteristic {
 }
 
 export function gattServerResponse(): ble.ServerResponse {
-  return { deviceId: BADDR, transId: 0, status: 0, offset: 0, value: buf0() };
+  return {
+    deviceId: BADDR,
+    transId: 0,
+    status: 0,
+    offset: 0,
+    value: buf0()
+  };
 }
 
 /** @deprecated Prefer assertErrIn / assertLocalOk / assertPeerExpect (no open 2900xxx range). */

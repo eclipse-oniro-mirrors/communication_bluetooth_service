@@ -13,6 +13,7 @@
 | 能否在一份 List 里一次跑完全部用例？ | **不建议。** `List.apitest.test.ets` 聚合约 **3500+** 个 `it`，真机一次执行易触发 `THREAD_BLOCK_6S` / `App died`。 |
 | 全量是否“等价可过”？ | **可以（分段）。** coreA+coreB+profiles 近期实测合计 **2808** FullCoverage Pass（见 §6）；Mass **570** 已绿跑（`List.apitest.mass`）。 |
 | 日常回归怎么跑？ | 用 `List.apitest.coreA` / `coreB` / `profiles` 三包即可覆盖 Access+Legacy、GATT+Conn+Socket、各 Profile+Enterprise+Partner；Mass-only 场景用 `List.apitest.mass`。 |
+| 单文件行数？ | **≤2000 行**（超限的 FullCoverage/Mass/ExpandedMatrix/jsapi `.d.ts` 已拆为 `*_pN` / `*.partN.d.ts`）。 |
 
 **推荐执行策略：分段跑全量，不要一键全 List。**
 
@@ -31,11 +32,11 @@ test/example/bluetoothtest/
 │   │   ├── List.apitest.coreA.test.ets    ← Access + Constant/Common + Legacy
 │   │   ├── List.apitest.coreB.test.ets    ← GattClient/Server + Conn + Socket
 │   │   ├── List.apitest.profiles.test.ets ← a2dp/hfp/hid/map/opp/pan/pbap/wear/enterprise/partner
-│   │   ├── List.apitest.mass.test.ets     ← ConnBleSocketMass01～04（~570）
+│   │   ├── List.apitest.mass.test.ets     ← ConnBleSocketMass*_pN（~570）
 │   │   ├── List.apitest.part1a.test.ets   ← Mass + ExpandedMatrix（体量大，单独段）
 │   │   ├── ApitestRealAssert.ets          ← 1A 断言助手
 │   │   ├── ApitestFullCoverageShared.ets  ← 公共常量 / runPerf / runStress
-│   │   └── BluetoothFullCoverage*.test.ets
+│   │   └── BluetoothFullCoverage*_pN.test.ets  ← 单文件 ≤2000 行
 │   └── jsapi/26/
 │       ├── APITEST_COVERAGE.md            ← API 覆盖清单
 │       └── BluetoothCoreApi.catalog.json
