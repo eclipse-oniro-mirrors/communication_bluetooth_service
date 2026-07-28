@@ -40,11 +40,15 @@ import {
   sppOpt,
   legacySppOpt,
   bleAp,
+  bleAd,
+  bleAs,
   buf0,
   partnerDeviceAddr,
   partnerDeviceCap,
   partnerBusinessCap,
   gattServerResponse,
+  ctrlDeviceActionParams,
+  trustedPairedDevices,
   sysBleStartOpt,
   sysBleStopOpt,
   sysBleFoundOpt,
@@ -243,7 +247,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_connect_perf', 0, () => {
       runPerf('gattc_connect_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.connect();
         } catch (_e) {
         }
       });
@@ -260,7 +265,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_connect_stress', 0, () => {
       runStress('gattc_connect_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.connect();
         } catch (_e) {
         }
       });
@@ -446,7 +452,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_disconnect_perf', 0, () => {
       runPerf('gattc_disconnect_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.disconnect();
         } catch (_e) {
         }
       });
@@ -463,7 +470,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_disconnect_stress', 0, () => {
       runStress('gattc_disconnect_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.disconnect();
         } catch (_e) {
         }
       });
@@ -649,7 +657,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_close_perf', 0, () => {
       runPerf('gattc_close_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.close();
         } catch (_e) {
         }
       });
@@ -666,7 +675,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_close_stress', 0, () => {
       runStress('gattc_close_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.close();
         } catch (_e) {
         }
       });
@@ -852,7 +862,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_getDeviceName_perf', 0, () => {
       runPerf('gattc_getDeviceName_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.getDeviceName();
         } catch (_e) {
         }
       });
@@ -869,7 +880,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_getDeviceName_stress', 0, () => {
       runStress('gattc_getDeviceName_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.getDeviceName();
         } catch (_e) {
         }
       });
@@ -1055,7 +1067,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_getServices_perf', 0, () => {
       runPerf('gattc_getServices_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.getServices();
         } catch (_e) {
         }
       });
@@ -1072,7 +1085,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_getServices_stress', 0, () => {
       runStress('gattc_getServices_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.getServices();
         } catch (_e) {
         }
       });
@@ -1258,7 +1272,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_readCharacteristicValue_perf', 0, () => {
       runPerf('gattc_readCharacteristicValue_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.readCharacteristicValue(bleCharRef());
         } catch (_e) {
         }
       });
@@ -1275,7 +1290,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_readCharacteristicValue_stress', 0, () => {
       runStress('gattc_readCharacteristicValue_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.readCharacteristicValue(bleCharRef());
         } catch (_e) {
         }
       });
@@ -1461,7 +1477,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_readDescriptorValue_perf', 0, () => {
       runPerf('gattc_readDescriptorValue_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.readDescriptorValue(bleDescRef());
         } catch (_e) {
         }
       });
@@ -1478,7 +1495,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_readDescriptorValue_stress', 0, () => {
       runStress('gattc_readDescriptorValue_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.readDescriptorValue(bleDescRef());
         } catch (_e) {
         }
       });
@@ -1664,7 +1682,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_writeCharacteristicValue_perf', 0, () => {
       runPerf('gattc_writeCharacteristicValue_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.writeCharacteristicValue(bleCharRef(), ble.GattWriteType.WRITE);
         } catch (_e) {
         }
       });
@@ -1681,7 +1700,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_writeCharacteristicValue_stress', 0, () => {
       runStress('gattc_writeCharacteristicValue_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.writeCharacteristicValue(bleCharRef(), ble.GattWriteType.WRITE);
         } catch (_e) {
         }
       });
@@ -1867,7 +1887,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_writeCharacteristicValueWithContext_perf', 0, () => {
       runPerf('gattc_writeCharacteristicValueWithContext_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.writeCharacteristicValueWithContext(bleCharRef(), ble.GattWriteType.WRITE);
         } catch (_e) {
         }
       });
@@ -1884,7 +1905,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_writeCharacteristicValueWithContext_stress', 0, () => {
       runStress('gattc_writeCharacteristicValueWithContext_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.writeCharacteristicValueWithContext(bleCharRef(), ble.GattWriteType.WRITE);
         } catch (_e) {
         }
       });
@@ -2070,7 +2092,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_writeDescriptorValue_perf', 0, () => {
       runPerf('gattc_writeDescriptorValue_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.writeDescriptorValue(bleDescRef());
         } catch (_e) {
         }
       });
@@ -2087,7 +2110,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_writeDescriptorValue_stress', 0, () => {
       runStress('gattc_writeDescriptorValue_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.writeDescriptorValue(bleDescRef());
         } catch (_e) {
         }
       });
@@ -2273,7 +2297,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_getRssiValue_perf', 0, () => {
       runPerf('gattc_getRssiValue_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.getRssiValue();
         } catch (_e) {
         }
       });
@@ -2290,7 +2315,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_getRssiValue_stress', 0, () => {
       runStress('gattc_getRssiValue_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.getRssiValue();
         } catch (_e) {
         }
       });
@@ -2476,7 +2502,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_setBLEMtuSize_perf', 0, () => {
       runPerf('gattc_setBLEMtuSize_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.setBLEMtuSize(512);
         } catch (_e) {
         }
       });
@@ -2493,7 +2520,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_setBLEMtuSize_stress', 0, () => {
       runStress('gattc_setBLEMtuSize_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.setBLEMtuSize(512);
         } catch (_e) {
         }
       });
@@ -2679,7 +2707,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_setCharacteristicChangeNotification_perf', 0, () => {
       runPerf('gattc_setCharacteristicChangeNotification_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.setCharacteristicChangeNotification(bleCharRef(), true);
         } catch (_e) {
         }
       });
@@ -2696,7 +2725,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_setCharacteristicChangeNotification_stress', 0, () => {
       runStress('gattc_setCharacteristicChangeNotification_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.setCharacteristicChangeNotification(bleCharRef(), true);
         } catch (_e) {
         }
       });
@@ -2882,7 +2912,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_setCharacteristicChangeIndication_perf', 0, () => {
       runPerf('gattc_setCharacteristicChangeIndication_perf', 5000, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.setCharacteristicChangeIndication(bleCharRef(), true);
         } catch (_e) {
         }
       });
@@ -2899,7 +2930,8 @@ export default function bluetoothFullCoverageGatt01() {
     it('gattc_setCharacteristicChangeIndication_stress', 0, () => {
       runStress('gattc_setCharacteristicChangeIndication_stress', 20, () => {
         try {
-          ble.createGattClientDevice(BADDR);
+          const gattClient = ble.createGattClientDevice(BADDR);
+          gattClient.setCharacteristicChangeIndication(bleCharRef(), true);
         } catch (_e) {
         }
       });
