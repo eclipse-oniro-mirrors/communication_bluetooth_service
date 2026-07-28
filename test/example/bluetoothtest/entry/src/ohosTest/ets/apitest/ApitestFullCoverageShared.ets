@@ -20,6 +20,7 @@
 import ble from '@ohos.bluetooth.ble';
 import socket from '@ohos.bluetooth.socket';
 import bluetooth from '@ohos.bluetooth';
+import connection from '@ohos.bluetooth.connection';
 import hid from '@ohos.bluetooth.hid';
 import partnerAgent from '@ohos.FusionConnectivity.partnerAgent';
 import common from '@ohos.bluetooth.common';
@@ -96,6 +97,21 @@ export function bleAp(): ble.AdvertisingParams {
     advertisingSettings: bleAs(),
     advertisingData: bleAd()
   };
+}
+
+/** connection.controlDeviceAction stub (no peer). */
+export function ctrlDeviceActionParams(deviceId: string = BADDR): connection.ControlDeviceActionParams {
+  return {
+    deviceId: deviceId,
+    type: connection.ControlType.PLAY,
+    typeValue: connection.ControlTypeValue.ENABLE,
+    controlObject: connection.ControlObject.LEFT_EAR
+  };
+}
+
+/** connection.updateCloudBluetoothDevice stub. */
+export function trustedPairedDevices(): connection.TrustedPairedDevices {
+  return { trustedPairedDevices: [] };
 }
 
 export function bleCharRef(): ble.BLECharacteristic {

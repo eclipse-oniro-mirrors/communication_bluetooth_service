@@ -1,7 +1,7 @@
 {
   "constraint": "1A_single_board_bt_on_no_peer",
-  "scope": "2B_core_modules",
-  "count": 269,
+  "scope": "2B_core_plus_profiles_enterprise_partner",
+  "count": 388,
   "apis": [
     {
       "module": "@ohos.bluetooth.access.d.ts",
@@ -220,6 +220,13 @@
         2900001,
         2900099
       ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.access.d.ts",
+      "api": "BluetoothState",
+      "kind": "enum",
+      "throws": [],
       "needsPeer": false
     },
     {
@@ -3507,6 +3514,1375 @@
         2900001,
         2900099
       ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.constant.d.ts",
+      "api": "ProfileId",
+      "kind": "enum",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.constant.d.ts",
+      "api": "ProfileUuids",
+      "kind": "enum",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.constant.d.ts",
+      "api": "ProfileConnectionState",
+      "kind": "enum",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.constant.d.ts",
+      "api": "MajorClass",
+      "kind": "enum",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.constant.d.ts",
+      "api": "MajorMinorClass",
+      "kind": "enum",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.constant.d.ts",
+      "api": "AccessAuthorization",
+      "kind": "enum",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.common.d.ts",
+      "api": "BluetoothAddress",
+      "kind": "interface",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.common.d.ts",
+      "api": "BluetoothAddressType",
+      "kind": "enum",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.common.d.ts",
+      "api": "BluetoothRawAddressType",
+      "kind": "enum",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@system.bluetooth.d.ts",
+      "api": "startBLEScan",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@system.bluetooth.d.ts",
+      "api": "stopBLEScan",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@system.bluetooth.d.ts",
+      "api": "subscribeBLEFound",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@system.bluetooth.d.ts",
+      "api": "unsubscribeBLEFound",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@system.bluetooth.d.ts",
+      "api": "StartBLEScanOptions",
+      "kind": "interface",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@system.bluetooth.d.ts",
+      "api": "StopBLEScanOptions",
+      "kind": "interface",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@system.bluetooth.d.ts",
+      "api": "BluetoothDevice",
+      "kind": "interface",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@system.bluetooth.d.ts",
+      "api": "BLEFoundResponse",
+      "kind": "interface",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@system.bluetooth.d.ts",
+      "api": "SubscribeBLEFoundOptions",
+      "kind": "interface",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "createA2dpSrcProfile",
+      "kind": "function",
+      "throws": [
+        401,
+        801
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "connect",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "disconnect",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "getPlayingState",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "isAbsoluteVolumeSupported",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "isAbsoluteVolumeEnabled",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "enableAbsoluteVolume",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "disableAbsoluteVolume",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "getCurrentFullCodecInfo",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "getCurrentCodecInfo",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "setCurrentCodecInfo",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "disableAutoPlay",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "enableAutoPlay",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.a2dp.d.ts",
+      "api": "getAutoPlayDisabledDuration",
+      "kind": "method",
+      "throws": [
+        401
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hfp.d.ts",
+      "api": "createHfpAgProfile",
+      "kind": "function",
+      "throws": [
+        401,
+        801
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hfp.d.ts",
+      "api": "connect",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.hfp.d.ts",
+      "api": "disconnect",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "createHidHostProfile",
+      "kind": "function",
+      "throws": [
+        401,
+        801
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "createHidDeviceProfile",
+      "kind": "function",
+      "throws": [
+        201,
+        202,
+        401,
+        801,
+        2900001,
+        2900003,
+        2900004,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "connect",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "disconnect",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "registerHidDevice",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "unregisterHidDevice",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "sendReport",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "replyReport",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "reportError",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "onGetReport",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "offGetReport",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "onSetReport",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "offSetReport",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "onInterruptDataReceived",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "offInterruptDataReceived",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "onSetProtocol",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "offSetProtocol",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "onVirtualCableUnplug",
+      "kind": "method",
+      "throws": [
+        401
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.hid.d.ts",
+      "api": "offVirtualCableUnplug",
+      "kind": "method",
+      "throws": [
+        401
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.map.d.ts",
+      "api": "createMapMseProfile",
+      "kind": "function",
+      "throws": [
+        401,
+        801
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.map.d.ts",
+      "api": "disconnect",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.map.d.ts",
+      "api": "setMessageAccessAuthorization",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.map.d.ts",
+      "api": "getMessageAccessAuthorization",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.opp.d.ts",
+      "api": "createOppServerProfile",
+      "kind": "function",
+      "throws": [
+        202,
+        801
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.opp.d.ts",
+      "api": "on",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.opp.d.ts",
+      "api": "off",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.opp.d.ts",
+      "api": "sendFile",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.opp.d.ts",
+      "api": "setIncomingFileConfirmation",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.opp.d.ts",
+      "api": "cancelTransfer",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.opp.d.ts",
+      "api": "getCurrentTransferInformation",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.opp.d.ts",
+      "api": "setLastReceivedFileUri",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.opp.d.ts",
+      "api": "transferStateChange",
+      "kind": "onOff",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.opp.d.ts",
+      "api": "receiveIncomingFile",
+      "kind": "onOff",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.pan.d.ts",
+      "api": "createPanProfile",
+      "kind": "function",
+      "throws": [
+        401,
+        801
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.pan.d.ts",
+      "api": "disconnect",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.pan.d.ts",
+      "api": "setTethering",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.pan.d.ts",
+      "api": "isTetheringOn",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.pbap.d.ts",
+      "api": "createPbapServerProfile",
+      "kind": "function",
+      "throws": [
+        401,
+        801
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.pbap.d.ts",
+      "api": "disconnect",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.pbap.d.ts",
+      "api": "setShareType",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.pbap.d.ts",
+      "api": "getShareType",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.pbap.d.ts",
+      "api": "setPhoneBookAccessAuthorization",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.pbap.d.ts",
+      "api": "getPhoneBookAccessAuthorization",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.baseProfile.d.ts",
+      "api": "setConnectionStrategy",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.baseProfile.d.ts",
+      "api": "getConnectionStrategy",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.baseProfile.d.ts",
+      "api": "getConnectedDevices",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.baseProfile.d.ts",
+      "api": "getConnectionState",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": true
+    },
+    {
+      "module": "@ohos.bluetooth.baseProfile.d.ts",
+      "api": "on",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.baseProfile.d.ts",
+      "api": "off",
+      "kind": "method",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.baseProfile.d.ts",
+      "api": "connectionStateChange",
+      "kind": "onOff",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.baseProfile.d.ts",
+      "api": "ConnectionStrategy",
+      "kind": "enum",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.baseProfile.d.ts",
+      "api": "StateChangeParam",
+      "kind": "interface",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.baseProfile.d.ts",
+      "api": "BaseProfile",
+      "kind": "interface",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.wearDetection.d.ts",
+      "api": "enableWearDetection",
+      "kind": "function",
+      "throws": [
+        201,
+        202,
+        401,
+        801,
+        2900001,
+        2900003,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.wearDetection.d.ts",
+      "api": "disableWearDetection",
+      "kind": "function",
+      "throws": [
+        201,
+        202,
+        401,
+        801,
+        2900001,
+        2900003,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.wearDetection.d.ts",
+      "api": "isWearDetectionSupported",
+      "kind": "function",
+      "throws": [
+        201,
+        202,
+        401,
+        801,
+        2900001,
+        2900003,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.bluetooth.wearDetection.d.ts",
+      "api": "isWearDetectionEnabled",
+      "kind": "function",
+      "throws": [
+        201,
+        202,
+        401,
+        801,
+        2900001,
+        2900003,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "getBluetoothInfo",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201,
+        401
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "setBluetoothDisabled",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201,
+        202,
+        401
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "isBluetoothDisabled",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201,
+        202,
+        401
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "addAllowedBluetoothDevices",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        9200010,
+        201,
+        401
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "removeAllowedBluetoothDevices",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201,
+        401
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "getAllowedBluetoothDevices",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201,
+        401
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "turnOnBluetooth",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201,
+        203
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "turnOffBluetooth",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201,
+        203
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "addDisallowedBluetoothDevices",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        9200010,
+        201
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "removeDisallowedBluetoothDevices",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "getDisallowedBluetoothDevices",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "addDisallowedBluetoothProtocols",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "removeDisallowedBluetoothProtocols",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "getDisallowedBluetoothProtocols",
+      "kind": "function",
+      "throws": [
+        9200001,
+        9200002,
+        201
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "BluetoothInfo",
+      "kind": "interface",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.enterprise.bluetoothManager.d.ts",
+      "api": "Protocol",
+      "kind": "enum",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.FusionConnectivity.partnerAgent.d.ts",
+      "api": "isPartnerAgentSupported",
+      "kind": "function",
+      "throws": [
+        201,
+        401,
+        801,
+        2900001,
+        2900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.FusionConnectivity.partnerAgent.d.ts",
+      "api": "bindDevice",
+      "kind": "function",
+      "throws": [
+        201,
+        801,
+        34900003,
+        34900004,
+        34900005,
+        34900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.FusionConnectivity.partnerAgent.d.ts",
+      "api": "unbindDevice",
+      "kind": "function",
+      "throws": [
+        34900004,
+        34900005,
+        34900099,
+        201,
+        801,
+        34900001
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.FusionConnectivity.partnerAgent.d.ts",
+      "api": "isDeviceBound",
+      "kind": "function",
+      "throws": [
+        201,
+        801,
+        34900001,
+        34900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.FusionConnectivity.partnerAgent.d.ts",
+      "api": "getBoundDevices",
+      "kind": "function",
+      "throws": [
+        201,
+        801,
+        34900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.FusionConnectivity.partnerAgent.d.ts",
+      "api": "enableDeviceControl",
+      "kind": "function",
+      "throws": [
+        201,
+        801,
+        34900099,
+        202,
+        34900001
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.FusionConnectivity.partnerAgent.d.ts",
+      "api": "disableDeviceControl",
+      "kind": "function",
+      "throws": [
+        801,
+        34900001,
+        34900099,
+        201,
+        202
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.FusionConnectivity.partnerAgent.d.ts",
+      "api": "isDeviceControlEnabled",
+      "kind": "function",
+      "throws": [
+        201,
+        202,
+        801,
+        34900001,
+        34900099
+      ],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.FusionConnectivity.partnerAgent.d.ts",
+      "api": "PartnerDeviceAddress",
+      "kind": "interface",
+      "throws": [],
+      "needsPeer": false
+    },
+    {
+      "module": "@ohos.FusionConnectivity.partnerAgent.d.ts",
+      "api": "PartnerAgentExtensionAbilityDestroyReason",
+      "kind": "enum",
+      "throws": [],
       "needsPeer": false
     }
   ]

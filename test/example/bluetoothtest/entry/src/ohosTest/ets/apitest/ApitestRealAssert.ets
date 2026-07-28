@@ -24,9 +24,10 @@ import { assertPerfBudget, assertStressHasSuccess } from './ApitestCoverageHelpe
 
 /** Documented Bluetooth BusinessError codes commonly listed in jsapi/26 @throws. */
 export const BT_DOC_ERR_CODES: number[] = [
-  0, 201, 202, 401, 801,
+  0, 201, 202, 203, 401, 801,
   2900001, 2900003, 2900004, 2900007, 2900008, 2900009, 2900010,
-  2900011, 2900013, 2900014, 2900099
+  2900011, 2900013, 2900014, 2900099,
+  9200001, 9200002, 9200010
 ];
 
 /**
@@ -34,13 +35,15 @@ export const BT_DOC_ERR_CODES: number[] = [
  * documented service/BT-disabled/operation failures — NOT an open 2900xxx range.
  */
 export const BT_LOCAL_OR_CAP: number[] = [
-  0, 201, 202, 401, 801, 2900001, 2900003, 2900099
+  0, 201, 202, 203, 401, 801, 2900001, 2900003, 2900099,
+  9200001, 9200002, 9200010
 ];
 
 /** Peer / remote path: documented env failures (no open-ended range). */
 export const BT_PEER_EXPECT: number[] = [
-  0, 201, 202, 401, 801, 2900001, 2900003, 2900004, 2900007, 2900008,
-  2900009, 2900010, 2900011, 2900013, 2900014, 2900099
+  0, 201, 202, 203, 401, 801, 2900001, 2900003, 2900004, 2900007, 2900008,
+  2900009, 2900010, 2900011, 2900013, 2900014, 2900099,
+  9200001, 9200002, 9200010
 ];
 
 export function assertErrIn(errCode: number, allowed: number[]): void {
