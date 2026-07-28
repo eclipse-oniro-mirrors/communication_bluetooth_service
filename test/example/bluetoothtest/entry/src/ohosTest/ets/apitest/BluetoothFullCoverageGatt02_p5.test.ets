@@ -111,7 +111,6 @@ describe('blescan_on_BLEDeviceFind', () => {
       LogUtil.info('b: invoke expect error');
       try {
         sc.on('BLEDeviceFind', () => {});
-        gattServer.on('characteristicWrite', () => {});
       } catch (err) {
         threw = true;
         errCode = Number((err as BusinessError).code);

@@ -83,8 +83,8 @@ export function assertThrownErrIn(threw: boolean, errCode: number, allowed: numb
 }
 
 /**
- * Ensure Bluetooth is STATE_ON (1A precondition). Best-effort enable + poll.
- * Does not fail the suite if enable is denied (assertLocalOk still applies per case).
+ * Ensure Bluetooth is STATE_ON (1A precondition). Best-effort enable + short poll.
+ * Avoid long busy-wait (THREAD_BLOCK_6S / App died on Hypium main thread).
  */
 export function ensureBtOn(): void {
   try {
@@ -94,23 +94,21 @@ export function ensureBtOn(): void {
     }
   } catch (_e) {
     LogUtil.error(JSON.stringify(_e));
-    // fall through to enable
   }
   try {
     access.enableBluetooth();
   } catch (_e2) {
     LogUtil.error(JSON.stringify(_e2));
-    // permission / already enabling
   }
-  const deadline = Date.now() + 8000;
-  while (Date.now() < deadline) {
+  // Bounded retries only — do not spin for seconds on the JS thread.
+  for (let i = 0; i < 5; i++) {
     try {
       if (access.getState() === access.BluetoothState.STATE_ON) {
         return;
       }
     } catch (_e3) {
       LogUtil.error(JSON.stringify(_e3));
-      // continue poll
+      return;
     }
   }
 }
