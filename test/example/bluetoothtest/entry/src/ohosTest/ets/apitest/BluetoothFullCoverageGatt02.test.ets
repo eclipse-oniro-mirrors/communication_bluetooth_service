@@ -7010,6 +7010,7 @@ export default function bluetoothFullCoverageGatt02() {
       let errCode = 0;
       hilog.info(0x0000, 'BtFullCoverage', 'b: invoke expect error');
       try {
+        sc.on('BLEDeviceFind', () => {});
         gattServer.on('characteristicWrite', () => {});
       } catch (err) {
         threw = true;
