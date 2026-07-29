@@ -165,6 +165,8 @@ void AttGapSignatureGenerationResult(GAP_SignatureResult result, uint8_t signatu
     attGapSignaturePtr = MEM_MALLOC.alloc(sizeof(AttGapSignatureGenerationContext));
     if (attGapSignaturePtr == NULL) {
         LOG_ERROR("point to NULL");
+        MEM_MALLOC.free(signatureResultPtr);
+        signatureResultPtr = NULL;
         return;
     }
     attGapSignaturePtr->result = result;

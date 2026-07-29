@@ -911,6 +911,8 @@ void ATT_ReadBlobResponse(uint16_t connectHandle, const Buffer *attReadBlobResOb
     readBlobResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadResponseAsync));
     if (readBlobResAsyncPtr == NULL) {
         LOG_ERROR("point to NULL");
+        BufferFree(bufferPtr);
+        bufferPtr = NULL;
         return;
     }
     readBlobResAsyncPtr->connectHandle = connectHandle;
