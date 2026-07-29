@@ -590,12 +590,6 @@ void A2dpSbcEncoder::EnqueuePacketFragment(
             LOG_INFO("[EnqueuePacket] [pktLen:%u] [sFrameNum:%u] [remain:%u]", pktLen, frameNum, PacketSize(pkt));
             Buffer *header = PacketHead(mediaPacket);
             uint8_t *p = static_cast<uint8_t*>(BufferPtr(header));
-            if (p == nullptr) {
-                LOG_ERROR("[EnqueuePacket] BufferPtr failed");
-                PacketFree(mediaPacket);
-                mediaPacket = nullptr;
-                return;
-            }
             *p = frameNum;
             uint8_t bufferFra[1024];
             size_t encoded = pktLen;
