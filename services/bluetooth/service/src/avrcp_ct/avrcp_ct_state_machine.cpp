@@ -419,6 +419,11 @@ void AvrcCtStateMachineManager::StateMachine::CtConnecting::Entry(void)
     HILOGI("enter");
 
     const AvrcCtConnectInfo *info = AvrcCtConnectManager::GetInstance()->GetConnectInfo(rawAddr_);
+    if (info == nullptr) {
+        HILOGE("Failed to get connect info for address: %{public}s",
+               GET_ENCRYPT_AVRCP_ADDR(rawAddr_));
+        return;
+    }
 
     AVCT_Register(info->controlMtu_, info->browseMtu_, AVCT_CT);
 
@@ -558,6 +563,11 @@ void AvrcCtStateMachineManager::StateMachine::CtDisconnecting::Entry(void)
     HILOGI("enter");
 
     const AvrcCtConnectInfo *info = AvrcCtConnectManager::GetInstance()->GetConnectInfo(rawAddr_);
+    if (info == nullptr) {
+        HILOGE("Failed to get connect info for address: %{public}s",
+               GET_ENCRYPT_AVRCP_ADDR(rawAddr_));
+        return;
+    }
 
     if (AVCT_DisconnectReq(info->connectId_) != AVCT_SUCCESS) {
         BtAddr btAddr = {{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 0x00};
@@ -684,6 +694,11 @@ void AvrcCtStateMachineManager::StateMachine::CtDisable::Entry(void)
     AVCT_Deregister();
 
     const AvrcCtConnectInfo *info = AvrcCtConnectManager::GetInstance()->GetConnectInfo(rawAddr_);
+    if (info == nullptr) {
+        HILOGE("Failed to get connect info for address: %{public}s",
+               GET_ENCRYPT_AVRCP_ADDR(rawAddr_));
+        return;
+    }
 
     if (AVCT_DisconnectReq(info->connectId_) != AVCT_SUCCESS) {
         BtAddr btAddr = {{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 0x00};
@@ -730,6 +745,11 @@ void AvrcCtStateMachineManager::StateMachine::BrConnecting::Entry(void)
     HILOGI("enter");
 
     const AvrcCtConnectInfo *info = AvrcCtConnectManager::GetInstance()->GetConnectInfo(rawAddr_);
+    if (info == nullptr) {
+        HILOGE("Failed to get connect info for address: %{public}s",
+               GET_ENCRYPT_AVRCP_ADDR(rawAddr_));
+        return;
+    }
 
     if (AVCT_BrConnectReq(info->connectId_, info->role_) != AVCT_SUCCESS) {
         BtAddr btAddr = {{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 0x00};
@@ -834,6 +854,11 @@ void AvrcCtStateMachineManager::StateMachine::BrDisconnecting::Entry(void)
     HILOGI("enter");
 
     const AvrcCtConnectInfo *info = AvrcCtConnectManager::GetInstance()->GetConnectInfo(rawAddr_);
+    if (info == nullptr) {
+        HILOGE("Failed to get connect info for address: %{public}s",
+            GET_ENCRYPT_AVRCP_ADDR(rawAddr_));
+        return;
+    }
 
     if (AVCT_BrDisconnectReq(info->connectId_) != AVCT_SUCCESS) {
         BtAddr btAddr = {{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 0x00};
