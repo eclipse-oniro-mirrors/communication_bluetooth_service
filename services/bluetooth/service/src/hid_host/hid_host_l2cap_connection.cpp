@@ -316,9 +316,6 @@ void HidHostL2capConnection::SendSetReport(SendHidData sendData, int length, uin
         LOG_ERROR("[HIDH L2CAP] %{public}s:memcpy error.", __func__);
         PacketFree(packet);
         packet = nullptr;
-        HidHostMessage event(HID_HOST_INT_HANDSK_EVT, HID_HOST_HANDSHAKE_ERROR);
-        event.dev_ = address_;
-        HidHostService::GetService()->PostEvent(event);
         return;
     }
     lcid = ctrlLcid_;
