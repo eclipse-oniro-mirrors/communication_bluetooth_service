@@ -314,6 +314,8 @@ void HidHostL2capConnection::SendSetReport(SendHidData sendData, int length, uin
     buf[0] = static_cast<uint8_t>(sendData.type << HID_HOST_SHIFT_OPRATURN_4) | (sendData.param & 0x0f);
     if (memcpy_s(buf + 1, length, pkt, length) != EOK) {
         LOG_ERROR("[HIDH L2CAP] %{public}s:memcpy error.", __func__);
+        PacketFree(packet);
+        packet = nullptr;
         return;
     }
     lcid = ctrlLcid_;
