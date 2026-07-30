@@ -578,6 +578,10 @@ void A2dpSbcEncoder::EnqueuePacketFragment(
         uint16_t offset = 0;
         do {
             Packet *mediaPacket = PacketMalloc(A2DP_SBC_FRAGMENT_HEADER, 0, 0);
+            if (mediaPacket == nullptr) {
+                LOG_ERROR("[EnqueuePacket] PacketMalloc failed");
+                return;
+            }
             if (count == 1) {
                 frameNum = remainFrames;
                 pktLen = frameNum * frameSize;
@@ -592,7 +596,17 @@ void A2dpSbcEncoder::EnqueuePacketFragment(
             PacketPayloadRead(pkt, bufferFra, offset, pktLen);
             offset += pktLen;
             Buffer *encBuf = BufferMalloc(encoded);
+            if (encBuf == nullptr) {
+                LOG_ERROR("[EnqueuePacket] BufferMalloc failed");
+                PacketFree(mediaPacket);
+                mediaPacket = nullptr;
+                return;
+            }
             if (memcpy_s(BufferPtr(encBuf), encoded, bufferFra, encoded) != EOK) {
+                BufferFree(encBuf);
+                encBuf = nullptr;
+                PacketFree(mediaPacket);
+                mediaPacket = nullptr;
                 LOG_ERROR("[EnqueuePacket] memcpy_s fail");
                 return;
             }

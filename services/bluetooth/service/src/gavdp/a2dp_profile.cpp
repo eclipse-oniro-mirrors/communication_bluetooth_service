@@ -408,6 +408,8 @@ void A2dpProfile::EnqueuePacket(const Packet *packet, size_t frames, uint32_t by
     packetData = (PacketData *)malloc(sizeof(PacketData));
     if (packetData == nullptr) {
         LOG_ERROR("[A2dpProfile] %{public}s, packetData is NULL\n", __func__);
+        PacketFree(refpkt);
+        refpkt = nullptr;
         return;
     }
     packetData->packet = refpkt;
