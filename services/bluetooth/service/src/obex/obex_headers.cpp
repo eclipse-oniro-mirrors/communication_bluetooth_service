@@ -1190,7 +1190,7 @@ ObexOptionalTlvHeader::ObexOptionalTlvHeader(const uint8_t headerId, const uint8
             break;
         }
         const uint8_t len = data[pos++];
-        if (pos + len >= dataSize) {
+        if (pos + len > dataSize) {
             OBEX_LOG_ERROR("ObexOptionalTlvHeader pos&len is overflow");
             break;
         }
