@@ -61,6 +61,10 @@ void ReactorSetThreadId(Reactor *reactor, unsigned long threadId)
 Reactor *ReactorCreate()
 {
     Reactor *reactor = (Reactor *)calloc(1, sizeof(Reactor));
+    if (reactor == NULL) {
+        LOG_ERROR("ReactorCreate: calloc Reactor failed.");
+        return NULL;
+    }
     reactor->epollFd = -1;
     reactor->stopFd = -1;
 
