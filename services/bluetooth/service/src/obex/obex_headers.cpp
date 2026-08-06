@@ -133,6 +133,10 @@ bool ObexHeader::ParseOptionalHeaders(const uint8_t *buf, const uint16_t &size, 
             headerId, GetHeaderName(headerId).c_str(), headerDataType);
         switch (headerDataType) {
             case ObexHdrType::BYTE:
+                if (pos >= size) {
+                    OBEX_LOG_ERROR("ParseOptionalHeaders error, BYTE header overflow");
+                    return false;
+                }
                 AppendByte(headerId, buf[pos++]);
                 break;
             case ObexHdrType::BYTES:
@@ -142,6 +146,10 @@ bool ObexHeader::ParseOptionalHeaders(const uint8_t *buf, const uint16_t &size, 
                 ParseUnicodeText(headerId, buf, pos, size);
                 break;
             case ObexHdrType::WORD:
+                if (pos + UINT32_LENGTH > size) {
+                    OBEX_LOG_ERROR("ParseOptionalHeaders error, WORD header overflow");
+                    return false;
+                }
                 AppendWord(headerId, ObexUtils::GetBufData32(buf, pos));
                 pos += UINT32_LENGTH;
                 break;
