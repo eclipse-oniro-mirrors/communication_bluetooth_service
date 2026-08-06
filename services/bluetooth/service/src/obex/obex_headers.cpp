@@ -136,7 +136,7 @@ bool ObexHeader::ParseOptionalHeaders(const uint8_t *buf, const uint16_t &size, 
                 AppendByte(headerId, buf[pos++]);
                 break;
             case ObexHdrType::BYTES:
-                ParseBytes(headerId, buf, pos);
+                ParseBytes(headerId, buf, pos, size);
                 break;
             case ObexHdrType::UNICODE_TEXT:
                 ParseUnicodeText(headerId, buf, pos, size);
@@ -187,10 +187,24 @@ bool ObexHeader::Parse(const uint8_t *buf, const uint16_t size, bool isRequest, 
     return true;
 }
 
-void ObexHeader::ParseBytes(const uint8_t &headerId, const uint8_t *buf, uint16_t &pos)
+void ObexHeader::ParseBytes(const uint8_t &headerId, const uint8_t *buf, uint16_t &pos, uint16_t size)
 {
-    uint16_t dataLen = ObexUtils::GetBufData16(buf, pos) - HDR_BYTES_PREFIX_LENGTH;
+    if (pos + UINT16_LENGTH > size) {
+        OBEX_LOG_ERROR("ParseBytes error, buffer overflow");
+        pos = size;
+        return;
+    }
+    uint16_t headerLen = ObexUtils::GetBufData16(buf, pos);
     pos += UINT16_LENGTH;
+    if (headerLen < HDR_BYTES_PREFIX_LENGTH) {
+        OBEX_LOG_ERROR("ParseBytes error, invalid header length");
+        return;
+    }
+    uint16_t dataLen = headerLen - HDR_BYTES_PREFIX_LENGTH;
+    if (pos + dataLen > size) {
+        OBEX_LOG_ERROR("ParseBytes error, data overflow");
+        return;
+    }
     std::unique_ptr<ObexOptionalHeader> header = nullptr;
     switch (headerId) {
         case ObexHeader::TYPE:
