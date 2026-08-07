@@ -288,6 +288,11 @@ static void SdpConnectReqCallbackTask(const BtAddr *addr, uint16_t lcid, int res
     }
 
     connect = SdpFindIdleConnectByAddress(addr);
+    if (connect == NULL) {
+        LOG_ERROR("[%{public}s][%{public}d] Connect not found.", __FUNCTION__, __LINE__);
+        SdpNextConnect(addr);
+        return;
+    }
     /// Save channel id
     connect->lcid = lcid;
     /// Set connection state
