@@ -74,15 +74,15 @@ std::vector<Uuid> ClassicUtils::ConvertStringToUuid(const std::string &value)
     if (value.empty()) {
         return uuids;
     }
-
-    size_t index = value.find(',', 0);
-    int startPos = 0;
-    while (index != (value.length() - 1)) {
-        std::string uuidStr = value.substr(startPos, (index - startPos));
-        Uuid uuid = Uuid::ConvertFromString(uuidStr);
-        uuids.push_back(uuid);
-        startPos = index + 1;
-        index = value.find(',', startPos);
+    size_t startPos = 0;
+    while (startPos < value.size()) {
+        size_t comma = value.find(',', startPos);
+        if (comma == std::string::npos) {
+            uuids.push_back(Uuid::ConvertFromString(value.substr(startPos)));
+            break;
+        }
+        uuids.push_back(Uuid::ConvertFromString(value.substr(startPos, comma - startPos)));
+        startPos = comma + 1;
     }
     return uuids;
 }
