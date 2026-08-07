@@ -161,7 +161,7 @@ export PATH=/tmp/hdcwrap:$NODE_HOME/bin:$PATH   # hdcwrap 固定 -t <设备>
 python3 skills/ohhap/hapbuild.py build-test test/example/bluetoothtest
 python3 skills/ohhap/hapbuild.py sign test/example/bluetoothtest
 
-# 安装主包+测试包并 aa test（勿加 -s class，否则嵌套 describe 可能 Tests run: 0）
+# 安装主包+测试包并测试（勿加 -s class，否则嵌套 describe 可能 Tests run: 0）
 python3 skills/ohhdc/ohhdc.py deploy-test test/example/bluetoothtest --timeout 3600000
 ```
 
@@ -218,7 +218,7 @@ Mass 单独段：**570 Pass / 0 Fail / 0 Error**。
 Scenario 分段合计：**239 Pass / 0 Fail / 0 Error**。  
 说明：原 Mass-only API（如 `pairDeviceOutOfBand`、`startAdvertising`、`getConnectedBLEDevices` 等）已并入 FullCoverage；Mass 套件仍作高密度回归。`@system.bluetooth` 为 **FA-only**，Stage 用 `ble`/`BleScanner` 等价覆盖。
 
-`List.apitest.test` 若再聚合 Mass/ExpandedMatrix，体量更大，仍须继续分段，勿一次 `aa test`。Scenario 聚合 `List.apitest.scenario.test` 同理勿一次上板。
+`List.apitest.test` 若再聚合 Mass/ExpandedMatrix，体量更大，仍须继续分段，勿一次测试。Scenario 聚合 `List.apitest.scenario.test` 同理勿一次上板。
 
 > 数字随 `--min-cases` / catalog 变更会浮动；以当次设备报告为准。
 
