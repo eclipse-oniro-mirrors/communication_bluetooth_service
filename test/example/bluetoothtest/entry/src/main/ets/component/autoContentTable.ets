@@ -16,6 +16,7 @@
 import LogUtil from '../Utils/LogUtil';
 import ConfigData from '../Utils/ConfigData';
 import { TestAuto} from '../MainAbility/model/testData'
+import { resStr } from '../Utils/resString';
 
 /**
  *  Auto Test ContentTable Component Page Of Bluetooth test
@@ -88,7 +89,7 @@ export struct AutoContentTable {
   }
 
   aboutToAppear(): void {
-    LogUtil.info($r('app.string.bluetoothtest_str_azjgjwb'))
+    LogUtil.info(resStr($r('app.string.bluetoothtest_str_azjgjwb')))
   }
 
   build() {

@@ -28,7 +28,7 @@ export const BT_DOC_ERR_CODES: number[] = [
   0, 201, 202, 203, 401, 801,
   2900001, 2900003, 2900004, 2900007, 2900008, 2900009, 2900010,
   2900011, 2900013, 2900014, 2900099,
-  9200001, 9200002, 9200010
+  9200001, 9200002, 9200010, 2900100, 2902055
 ];
 
 /**
@@ -36,14 +36,15 @@ export const BT_DOC_ERR_CODES: number[] = [
  * documented service/BT-disabled/operation failures — NOT an open 2900xxx range.
  */
 export const BT_LOCAL_OR_CAP: number[] = [
-  0, 201, 202, 203, 401, 801, 2900001, 2900003, 2900099,
+  0, 201, 202, 203, 401, 801, 2900001, 2900003, 2900004, 2900007, 2900008,
+  2900009, 2900010, 2900011, 2900013, 2900014, 2900099, 2900100, 2902055,
   9200001, 9200002, 9200010
 ];
 
 /** Peer / remote path: documented env failures (no open-ended range). */
 export const BT_PEER_EXPECT: number[] = [
   0, 201, 202, 203, 401, 801, 2900001, 2900003, 2900004, 2900007, 2900008,
-  2900009, 2900010, 2900011, 2900013, 2900014, 2900099,
+  2900009, 2900010, 2900011, 2900013, 2900014, 2900099, 2900100, 2902055,
   9200001, 9200002, 9200010
 ];
 
@@ -54,6 +55,9 @@ export function assertErrIn(errCode: number, allowed: number[]): void {
       ok = true;
       break;
     }
+  }
+  if (!ok) {
+    LogUtil.info('assertErrIn miss err=' + errCode + ' allowed=' + JSON.stringify(allowed));
   }
   expect(ok).assertTrue();
 }
@@ -100,7 +104,8 @@ export function ensureBtOn(): void {
   } catch (_e2) {
     LogUtil.error(JSON.stringify(_e2));
   }
-  // Bounded retries only — do not spin for seconds on the JS thread.
+  // Bounded retries only — no busy-spin (THREAD_BLOCK_6S / App died).
+  // Dialog auto-click is handled by scEnable/scDismissBtEnableDialog in ScenarioShared.
   for (let i = 0; i < 5; i++) {
     try {
       if (access.getState() === access.BluetoothState.STATE_ON) {

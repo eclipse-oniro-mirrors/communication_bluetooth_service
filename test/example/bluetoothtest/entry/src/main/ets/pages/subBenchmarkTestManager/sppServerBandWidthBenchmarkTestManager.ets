@@ -472,7 +472,7 @@ function sppServerAccept(): string {
           let writeArrayBuffer: ArrayBuffer = strToArrayBuffer(writeServerDataBW) as ArrayBuffer;
           LogUtil.info('sppServerWrite  writeServerDataBW: ' + writeServerDataBW);
           bluetoothManager.sppWrite(clientNumber, writeArrayBuffer);
-          LogUtil.info($r('app.string.bluetoothtest_str_xrcg_1'));
+          LogUtil.info(resStr($r('app.string.bluetoothtest_str_xrcg_1')));
           message = resStr($r('app.string.bluetoothtest_str_xrcg'));
           promptAction.showToast({message: message})
         } else {

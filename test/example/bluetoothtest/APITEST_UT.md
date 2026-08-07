@@ -12,7 +12,7 @@
 |------|------|
 | 能否在一份 List 里一次跑完全部用例？ | **不建议。** `List.apitest.test.ets` 聚合约 **3500+** 个 `it`，真机一次执行易触发 `THREAD_BLOCK_6S` / `App died`。 |
 | 全量是否“等价可过”？ | **可以（分段）。** coreA+coreB+profiles 近期实测合计 **2808** FullCoverage Pass（见 §6）；Mass **570** 已绿跑（`List.apitest.mass`）。 |
-| 日常回归怎么跑？ | 用 `List.apitest.coreA` / `coreB` / `profiles` 三包即可覆盖 Access+Legacy、GATT+Conn+Socket、各 Profile+Enterprise+Partner；Mass-only 场景用 `List.apitest.mass`。 |
+| 日常回归怎么跑？ | 用 `List.apitest.coreA` / `coreB` / `profiles` 三包即可覆盖 Access+Legacy、GATT+Conn+Socket、各 Profile+Enterprise+Partner；Mass-only 场景用 `List.apitest.mass`；**场景组合流**分段用 `List.apitest.scenario.core` / `scenario.profiles` / `scenario.legacy` / `scenario.extra`（聚合 `scenario.test` 勿一次上板；设计见 [`APITEST_SCENARIO.md`](./APITEST_SCENARIO.md)）。 |
 | 单文件行数？ | **≤2000 行**（超限的 FullCoverage/Mass/ExpandedMatrix/jsapi `.d.ts` 已拆为 `*_pN` / `*.partN.d.ts`）。 |
 
 **推荐执行策略：分段跑全量，不要一键全 List。**
@@ -33,15 +33,27 @@ test/example/bluetoothtest/
 │   │   ├── List.apitest.coreB.test.ets    ← GattClient/Server + Conn + Socket
 │   │   ├── List.apitest.profiles.test.ets ← a2dp/hfp/hid/map/opp/pan/pbap/wear/enterprise/partner
 │   │   ├── List.apitest.mass.test.ets     ← ConnBleSocketMass*_pN（~570）
+│   │   ├── List.apitest.scenario.test.ets ← 场景聚合（239，勿一次上板）
+│   │   ├── List.apitest.scenario.core.test.ets     ← baseline+Conn/Ble/Socket/Cross（~187）
+│   │   ├── List.apitest.scenario.profiles.test.ets ← ProfileBase01（25）
+│   │   ├── List.apitest.scenario.legacy.test.ets   ← Legacy01（15）
+│   │   ├── List.apitest.scenario.extra.test.ets    ← Extra01（12）
 │   │   ├── List.apitest.part1a.test.ets   ← Mass + ExpandedMatrix（体量大，单独段）
 │   │   ├── ApitestRealAssert.ets          ← 1A 断言助手
+│   │   ├── ApitestScenarioShared.ets      ← Scenario 流程断言 / 参数 fixture
 │   │   ├── ApitestFullCoverageShared.ets  ← 公共常量 / runPerf / runStress
+│   │   ├── BluetoothScenario*.test.ets    ← 场景组合用例（全模块）
 │   │   └── BluetoothFullCoverage*_pN.test.ets  ← 单文件 ≤2000 行
 │   └── jsapi/26/
 │       ├── APITEST_COVERAGE.md            ← API 覆盖清单
 │       └── BluetoothCoreApi.catalog.json
+├── APITEST_SCENARIO.md                    ← Scenario 全量交叉设计稿（正/异常/真实等待/容量）
 └── skills/ohtest/（仓库根）
-    ├── bluetooth_full_coverage.py         ← 用例生成器
+    ├── bluetooth_full_coverage.py         ← FullCoverage 生成器
+    ├── bluetooth_scenario_flow.py         ← Scenario baseline 生成器
+    ├── bluetooth_scenario_modules.py      ← Scenario 全模块 L1–L4 生成器
+    ├── gen_scenario_full_design.py        ← 从 catalog 生成 APITEST_SCENARIO.md 设计稿
+    ├── gen_scenario_doc.py                ← 从已实现用例抽对照表
     └── bluetooth_core_catalog.py          ← API 目录源
 ```
 
@@ -123,10 +135,16 @@ export TARGET=192.168.11.90:8710
 // 全量聚合（不建议一次跑）
 import testsuite from '../apitest/List.apitest.test';
 
-// 或分段：
+// FullCoverage 分段：
 // import testsuite from '../apitest/List.apitest.coreA.test';
 // import testsuite from '../apitest/List.apitest.coreB.test';
 // import testsuite from '../apitest/List.apitest.profiles.test';
+
+// Scenario 分段（当前默认 core）：
+// import testsuite from '../apitest/List.apitest.scenario.core.test';
+// import testsuite from '../apitest/List.apitest.scenario.profiles.test';
+// import testsuite from '../apitest/List.apitest.scenario.legacy.test';
+// import testsuite from '../apitest/List.apitest.scenario.extra.test';
 ```
 
 ### 4.3 编译 / 签名 / 一键上板（推荐）
@@ -162,8 +180,12 @@ Tests run: N, Failure: 0, Error: 0, Pass: N, Ignore: 0
 | 3 | `List.apitest.profiles.test.ets` | Profile / Enterprise / Partner | ~720 |
 | 4 | `List.apitest.mass.test.ets` | ConnBleSocketMass01～04 | ~570 |
 | 5 | `List.apitest.part1a.test.ets`（如需要） | Mass + ExpandedMatrix | 视生成配置 |
+| S1 | `List.apitest.scenario.core.test.ets` | Scenario baseline+Conn/Ble/Socket/Cross | ~187 |
+| S2 | `List.apitest.scenario.profiles.test.ets` | Scenario ProfileBase | 25 |
+| S3 | `List.apitest.scenario.legacy.test.ets` | Scenario Legacy | 15 |
+| S4 | `List.apitest.scenario.extra.test.ets` | Scenario Extra | 12 |
 
-每段独立编译安装跑完、确认 **Fail=0 Error=0** 后再切下一段。
+每段独立编译安装跑完、确认 **Fail=0 Error=0** 后再切下一段。Scenario 设计明细见 [`APITEST_SCENARIO.md`](./APITEST_SCENARIO.md)。
 
 ---
 
@@ -186,12 +208,17 @@ Tests run: N, Failure: 0, Error: 0, Pass: N, Ignore: 0
 | coreB | **960** | **0** | **0** | Gatt+Conn+Socket（含 Mass 并入的 OOB/Advertise/getConnectedBLEDevices 等，2026-07-28） |
 | coreA | **1128** | **0** | **0** | Access + Constant/枚举穷举(304，含 `DialogType`) + Legacy（含 legacy adv，2026-07-28） |
 | mass | **570** | **0** | **0** | ConnBleSocketMass01～04；`ConnBleSocketShared` 导出 `assertThrownErrIn`（2026-07-28） |
+| scenario.core | **187** | **0** | **0** | baseline + Conn02 + BleAdvGatt + Socket + Cross + MultiModule |
+| scenario.profiles | **25** | **0** | **0** | ProfileBase01（含 pan 801 容错） |
+| scenario.legacy | **15** | **0** | **0** | `@ohos.bluetooth` / `bluetoothManager` |
+| scenario.extra | **12** | **0** | **0** | wear / enterprise / partner / system stub / constant |
 
 **分段合计（coreA+coreB+profiles）：2808 Pass / 0 Fail / 0 Error**（与 FullCoverage 生成总量一致）。  
 Mass 单独段：**570 Pass / 0 Fail / 0 Error**。  
+Scenario 分段合计：**239 Pass / 0 Fail / 0 Error**。  
 说明：原 Mass-only API（如 `pairDeviceOutOfBand`、`startAdvertising`、`getConnectedBLEDevices` 等）已并入 FullCoverage；Mass 套件仍作高密度回归。`@system.bluetooth` 为 **FA-only**，Stage 用 `ble`/`BleScanner` 等价覆盖。
 
-`List.apitest.test` 若再聚合 Mass/ExpandedMatrix，体量更大，仍须继续分段，勿一次 `aa test`。
+`List.apitest.test` 若再聚合 Mass/ExpandedMatrix，体量更大，仍须继续分段，勿一次 `aa test`。Scenario 聚合 `List.apitest.scenario.test` 同理勿一次上板。
 
 > 数字随 `--min-cases` / catalog 变更会浮动；以当次设备报告为准。
 
@@ -200,5 +227,6 @@ Mass 单独段：**570 Pass / 0 Fail / 0 Error**。
 ## 7. 相关文档
 
 - API 覆盖：[`entry/src/ohosTest/ets/jsapi/26/APITEST_COVERAGE.md`](entry/src/ohosTest/ets/jsapi/26/APITEST_COVERAGE.md)
+- Scenario 组合设计：[`APITEST_SCENARIO.md`](./APITEST_SCENARIO.md)
 - 断言实现：`entry/src/ohosTest/ets/apitest/ApitestRealAssert.ets`
-- 生成器：`skills/ohtest/bluetooth_full_coverage.py`
+- 生成器：`skills/ohtest/bluetooth_full_coverage.py`、`bluetooth_scenario_flow.py`、`bluetooth_scenario_modules.py`

@@ -390,7 +390,7 @@ export struct ContentTable {
   })
 
   onCancel() {
-    LogUtil.info($r('app.string.bluetoothtest_str_qx'))
+    LogUtil.info(resStr($r('app.string.bluetoothtest_str_qx')))
   }
 
   onAccept(text: string) {

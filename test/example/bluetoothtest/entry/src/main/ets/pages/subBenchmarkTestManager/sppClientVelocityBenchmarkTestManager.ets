@@ -537,7 +537,7 @@ function sppClientWrite(): string {
   let writeArrayBuffer: ArrayBuffer = strToArrayBuffer(writeClientData) as ArrayBuffer;
   let writeStartTime = new Date().getTime()
   bluetoothManager.sppWrite(clientNumber, writeArrayBuffer);
-  LogUtil.info($r('app.string.bluetoothtest_str_d1css'));
+  LogUtil.info(resStr($r('app.string.bluetoothtest_str_d1css')));
   message = resStr($r('app.string.bluetoothtest_str_d1csxrcg'));
   AppStorage.setOrCreate("writeStartTime", writeStartTime)
   sppClientReadOn()
@@ -589,7 +589,7 @@ function sppClientReadOn(): string {
         promptAction.showToast({message: message})
       } else {
         promptAction.showToast({message: resStr($r('app.string.bluetoothtest_str_xhcsdg'))})
-        LogUtil.info($r('app.string.bluetoothtest_str_xhcsdg'))
+        LogUtil.info(resStr($r('app.string.bluetoothtest_str_xhcsdg')))
         let readEndTime: number = new Date().getTime()
         let writeStartTime: number = AppStorage.get("writeStartTime") !
         let sppRunTime = ""

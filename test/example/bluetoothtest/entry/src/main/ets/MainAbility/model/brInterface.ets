@@ -140,7 +140,7 @@ export function testGetState(): string {
       btEnable = true
       LogUtil.info("btEnable = true---------------")
     } else {
-      LogUtil.info($r('app.string.bluetoothtest_str_ckbzt'))
+      LogUtil.info(resStr($r('app.string.bluetoothtest_str_ckbzt')))
     }
     promptAction.showToast({message: message})
     return message

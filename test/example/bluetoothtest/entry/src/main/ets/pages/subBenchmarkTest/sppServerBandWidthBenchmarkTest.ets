@@ -470,10 +470,10 @@ function sppServerAccept(): string {
           LogUtil.info('sppServerWrite  writeServerDataBW: ' + writeServerDataBW);
           const sppWriteSuccess = bluetooth.sppWrite(clientNumber, writeArrayBuffer);
           if (sppWriteSuccess) {
-            LogUtil.info($r('app.string.bluetoothtest_str_xrcg_1'));
+            LogUtil.info(resStr($r('app.string.bluetoothtest_str_xrcg_1')));
             message = resStr($r('app.string.bluetoothtest_str_xrcg'));
           } else {
-            LogUtil.info($r('app.string.bluetoothtest_str_xrsb'));
+            LogUtil.info(resStr($r('app.string.bluetoothtest_str_xrsb')));
             message = resStr($r('app.string.bluetoothtest_str_xrsb'));
           }
           promptAction.showToast({message: message})
