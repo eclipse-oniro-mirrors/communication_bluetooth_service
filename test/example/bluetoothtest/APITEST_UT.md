@@ -51,7 +51,7 @@ test/example/bluetoothtest/
 └── skills/ohtest/（仓库根）
     ├── bluetooth_full_coverage.py         ← FullCoverage 生成器
     ├── bluetooth_scenario_flow.py         ← Scenario baseline 生成器
-    ├── bluetooth_scenario_modules.py      ← Scenario 全模块 L1–L4 生成器
+    ├── bluetooth_scenario_modules.py      ← Scenario 全模块生成器
     ├── gen_scenario_full_design.py        ← 从 catalog 生成 APITEST_SCENARIO.md 设计稿
     ├── gen_scenario_doc.py                ← 从已实现用例抽对照表
     └── bluetooth_core_catalog.py          ← API 目录源
