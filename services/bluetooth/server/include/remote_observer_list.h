@@ -51,7 +51,7 @@ public:
         sptr<T> observer_ {};
         RemoteObserverList<T, Args...> *owner_ {};
     };
-    std::mutex lock_ {};
+    std::recursive_mutex lock_ {};
     using ObserverMap = std::map<sptr<T>, sptr<ObserverDeathRecipient>>;
     ObserverMap observers_ {};
 
@@ -73,7 +73,7 @@ template <typename T, typename... Args>
 RemoteObserverList<T, Args...>::~RemoteObserverList()
 {
     HILOGI("RemoteObserverList<T, Args...>::~RemoteObserverList() called");
-    std::lock_guard<std::mutex> lock(lock_);
+    std::lock_guard<std::recursive_mutex> lock(lock_);
     for (auto it = observers_.begin(); it != observers_.end(); ++it) {
         sptr<ObserverDeathRecipient> dr = it->second;
         if (!dr->GetObserver()->AsObject()->RemoveDeathRecipient(dr)) {
@@ -88,7 +88,7 @@ template <typename T, typename... Args>
 bool RemoteObserverList<T, Args...>::Register(const sptr<T> &observer, DrCallbackFunc func, Args... args)
 {
     HILOGI("RemoteObserverList<T, Args...>::Register called");
-    std::lock_guard<std::mutex> lock(lock_);
+    std::lock_guard<std::recursive_mutex> lock(lock_);
     bool isMatch = false;
     for (const auto &it : observers_) {
         if (it.first != nullptr && it.first->AsObject() == observer->AsObject()) {
@@ -127,6 +127,7 @@ template <typename T, typename... Args>
 bool RemoteObserverList<T, Args...>::Deregister(const sptr<T> &observer)
 {
     HILOGI("RemoteObserverList<T, Args...>::Deregister called");
+    std::lock_guard<std::recursive_mutex> lock(lock_);
     for (auto it = observers_.begin(); it != observers_.end();) {
         if (it->first != nullptr && it->first->AsObject() == observer->AsObject()) {
             UnregisterInternal(it++);
@@ -141,7 +142,7 @@ bool RemoteObserverList<T, Args...>::Deregister(const sptr<T> &observer)
 template <typename T, typename... Args>
 void RemoteObserverList<T, Args...>::ForEach(const std::function<void(sptr<T>)> &observer)
 {
-    std::lock_guard<std::mutex> lock(lock_);
+    std::lock_guard<std::recursive_mutex> lock(lock_);
     for (const auto &it : observers_) {
         if (it.first != nullptr) {
             observer(it.first);
@@ -161,7 +162,7 @@ template <typename T, typename... Args>
 void RemoteObserverList<T, Args...>::ObserverDeathRecipient::OnRemoteDied(const wptr<IRemoteObject> &object)
 {
     // Remove the observer but no need to call unlinkToDeath.
-    std::lock_guard<std::mutex> lock(owner_->lock_);
+    std::lock_guard<std::recursive_mutex> lock(owner_->lock_);
     HILOGD("Enter OnRemoteDied");
     for (auto it = owner_->btServers_.begin(); it != owner_->btServers_.end();) {
         if (it->first != nullptr && it->first->AsObject() == object) {

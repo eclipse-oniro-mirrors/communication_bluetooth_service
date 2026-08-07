@@ -486,6 +486,7 @@ int BluetoothGattServerServer::DeregisterApplication(int32_t appId)
 {
     HILOGI("appId: %{public}d", appId);
     std::lock_guard<std::mutex> lck(pimpl->registerMutex_);
+    pimpl->serverService_ = pimpl->GetServicePtr();
     if (!pimpl->serverService_) {
         HILOGE("serverService_ is null");
         return BT_ERR_INTERNAL_ERROR;
