@@ -1482,6 +1482,24 @@ static Packet *SdpBuildAttributeFragmentResponse(
     return sendPacket;
 }
 
+static Packet *SdpGetAttributeResponsePacket(
+    const Packet *attributePacket, SdpConnectInfo *connect, bool *packetOwned)
+{
+    if (attributePacket == NULL) {
+        LOG_ERROR("attributePacket is NULL");
+        if (connect->packet == NULL) {
+            LOG_ERROR("connect->packet is NULL");
+            return NULL;
+        }
+        return connect->packet;
+    }
+    Packet *packet = PacketRefMalloc(attributePacket);
+    if (packet != NULL) {
+        *packetOwned = true;
+    }
+    return packet;
+}
+
 void SdpSendAttributeFragmentResponse(
     uint16_t lcid, SdpPduId pduId, uint16_t transactionId, uint16_t maxCount, const Packet *attributePacket)
 {
@@ -1490,19 +1508,17 @@ void SdpSendAttributeFragmentResponse(
     Packet *fragmentPacket = NULL;
     Packet *sendPacket = NULL;
     size_t size;
+    bool packetOwned = false;
 
     connect = SdpFindConnectByCid(lcid);
     if (connect == NULL) {
         return;
     }
 
-    if (attributePacket == NULL) {
-        if (connect->packet == NULL) {
-            return;
-        }
-        packet = connect->packet;
-    } else {
-        packet = PacketRefMalloc(attributePacket);
+    packet = SdpGetAttributeResponsePacket(attributePacket, connect, &packetOwned);
+    if (packet == NULL) {
+        LOG_ERROR("packet is NULL");
+        return;
     }
 
     fragmentPacket = PacketMalloc(0, 0, 0);
@@ -1511,6 +1527,12 @@ void SdpSendAttributeFragmentResponse(
     sendPacket = SdpBuildAttributeFragmentResponse(pduId, transactionId, size, fragmentPacket);
     if (sendPacket == NULL) {
         SdpSendErrorResponse(lcid, transactionId, SDP_INVALID_CONT_STATE);
+        if (fragmentPacket != NULL) {
+            PacketFree(fragmentPacket);
+        }
+        if (packetOwned && packet != NULL) {
+            PacketFree(packet);
+        }
         return;
     }
 
