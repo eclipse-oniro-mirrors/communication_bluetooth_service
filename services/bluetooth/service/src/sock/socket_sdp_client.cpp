@@ -96,11 +96,15 @@ void SocketSdpClient::SdpSearchCallback(
     uint8_t scn = SearchAttributes(addr, serviceAry, serviceNum);
     LOG_INFO("[sock]%{public}s scn:%hhu", __func__, scn);
 
+    SocketService *socketService =
+        static_cast<SocketService *>(IProfileManager::GetInstance()->GetProfileService(PROFILE_NAME_SPP));
+    if (socketService == nullptr) {
+        LOG_ERROR("[sock]%{public}s: SocketService is nullptr.", __func__);
+        return;
+    }
     utility::Message msg(SOCKET_SDP_DISCOVERY_RESULT);
     msg.arg1_ = scn;
     msg.arg2_ = context;
-    SocketService *socketService =
-        static_cast<SocketService *>(IProfileManager::GetInstance()->GetProfileService(PROFILE_NAME_SPP));
     socketService->GetDispatcher()->PostTask(std::bind(&SocketService::ProcessMessage, socketService, msg));
 }
 }  // namespace bluetooth
