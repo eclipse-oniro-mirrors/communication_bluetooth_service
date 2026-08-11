@@ -357,11 +357,27 @@ void SdpParseServerResponse(const BtAddr *addr, uint16_t lcid, const Packet *dat
     packet = NULL;
 }
 
+static uint16_t SdpParseHandleArray(uint8_t *buffer, uint16_t totalServiceRecordCount, uint32_t *handleArray)
+{
+    uint16_t handleNum = 0;
+
+    for (; handleNum < totalServiceRecordCount; handleNum++) {
+        uint32_t handle = BE2H_32(*(uint32_t *)(buffer + handleNum * SDP_SERVICE_RECORD_HANDLE_BYTE));
+        if (handle <= SDP_MAX_RESERVED_RECORD_HANDLE) {
+            LOG_ERROR(
+                "[%{public}s][%{public}d] Invalid Service Record Handle [0x%08x]", __FUNCTION__, __LINE__, handle);
+            return 0;
+        }
+        handleArray[handleNum] = handle;
+    }
+
+    return handleNum;
+}
+
 static uint16_t SdpParseServiceRecordHandleList(
     const BtAddr *addr, uint16_t transactionId, uint16_t totalServiceRecordCount, Packet *data, uint32_t *handleArray)
 {
     SdpClientRequest *request = NULL;
-    uint16_t handleNum = 0;
 
     Packet *packet = NULL;
     uint8_t *buffer = NULL;
@@ -389,26 +405,28 @@ static uint16_t SdpParseServiceRecordHandleList(
 
     buffer = MEM_MALLOC.alloc(length);
     if (buffer == NULL) {
-        LOG_ERROR("buffer is NULL");
+        LOG_ERROR("buffer NULL, assemblePacket %{public}s", (request->assemblePacket == NULL) ? "NULL" : "not NULL");
+        if (request->assemblePacket == NULL) {
+            PacketFree(packet);
+        }
+        packet = NULL;
+        request->assemblePacket = NULL;
         return 0;
     }
     (void)memset_s(buffer, length, 0, length);
     PacketRead(packet, buffer, 0, length);
 
-    for (; handleNum < totalServiceRecordCount; handleNum++) {
-        uint32_t handle = BE2H_32(*(uint32_t *)(buffer + handleNum * SDP_SERVICE_RECORD_HANDLE_BYTE));
-        if (handle <= SDP_MAX_RESERVED_RECORD_HANDLE) {
-            LOG_ERROR(
-                "[%{public}s][%{public}d] Invalid Service Record Handle [0x%08x]", __FUNCTION__, __LINE__, handle);
-            MEM_MALLOC.free(buffer);
-            buffer = NULL;
-            PacketFree(packet);
-            packet = NULL;
-            request->assemblePacket = NULL;
-            return 0;
-        }
-        handleArray[handleNum] = handle;
+    uint16_t handleNum = SdpParseHandleArray(buffer, totalServiceRecordCount, handleArray);
+    if (handleNum == 0) {
+        MEM_MALLOC.free(buffer);
+        buffer = NULL;
+        PacketFree(packet);
+        packet = NULL;
+        request->assemblePacket = NULL;
+        LOG_ERROR("[%{public}s][%{public}d] handleNum = 0", __FUNCTION__, __LINE__);
+        return 0;
     }
+
     MEM_MALLOC.free(buffer);
     buffer = NULL;
     PacketFree(packet);
