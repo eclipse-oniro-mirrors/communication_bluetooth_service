@@ -538,6 +538,10 @@ Packet *AvctMsgAsmbl(AvctCbCh *cbCh, Packet *pkt)
         LOG_DEBUG("[AVCT] %{public}s:cbCh->rxMsg PacketSize(%u)", __func__, PacketSize(cbCh->rxMsg));
     } else {
         /* continue or end */
+        if (cbCh->rxMsg == NULL) {
+            LOG_ERROR("[AVCT] %{public}s: continue/end without start, drop.", __func__);
+            return ret;
+        }
         /* Extrect continue/end head */
         PacketExtractHead(pkt, sHead, AVCT_PKG_HDR_LEN_CONTINUE);
         /* Add packet playload */

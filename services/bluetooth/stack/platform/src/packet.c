@@ -501,6 +501,10 @@ uint32_t PacketFragment(Packet *uplayer, const Packet *downlayer, uint32_t fragL
 
 void PacketAssemble(const Packet *uplayer, const Packet *downlayer)
 {
+    if (uplayer == NULL || downlayer == NULL) {
+        LOG_ERROR("Failed to execute func PacketAssemble, uplayer or downlayer is NULL.");
+        return;
+    }
     Packet *refPacket = PacketRefMalloc(downlayer);
     if (refPacket == NULL) {
         LOG_ERROR("Failed to execute func PacketRefMalloc in func PacketAssemble");
