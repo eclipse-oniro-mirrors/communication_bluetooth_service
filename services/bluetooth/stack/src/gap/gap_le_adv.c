@@ -374,6 +374,30 @@ int GAP_LeExAdvClearHandle(void)
     return ret;
 }
 
+static int GapLeRemoveAdvertisingSet(uint8_t advHandle)
+{
+    HciLeRemoveAdvertisingSetParam hciCmdParam;
+    hciCmdParam.advertisingHandle = advHandle;
+    return HCI_LeRemoveAdvertisingSet(&hciCmdParam);
+}
+
+int GAP_LeExAdvRemoveSet(uint8_t advHandle)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    int ret;
+
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+    
+    if (GapLeRolesCheck(GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_PREIPHERAL) == false) {
+        ret = GAP_ERR_INVAL_STATE;
+    } else {
+        ret = GapLeRemoveAdvertisingSet(advHandle);
+    }
+    return ret;
+}
+
 void GapOnLeAdvertisingSetTerminated(const HciLeAdvertisingSetTerminatedEventParam *eventParam)
 {
     if (eventParam->status == HCI_SUCCESS) {
