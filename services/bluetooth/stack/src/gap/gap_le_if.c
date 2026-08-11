@@ -44,6 +44,11 @@ typedef struct {
 typedef struct {
     int result;
     uint8_t advHandle;
+} GAPLeExAdvRemoveSetInfo;
+
+typedef struct {
+    int result;
+    uint8_t advHandle;
     uint8_t properties;
     int8_t txPower;
     GapLeExAdvParam advExParam;
@@ -590,6 +595,33 @@ int GAPIF_LeExAdvClearHandle(void)
     (void)memset_s(ctx, sizeof(GapGeneralVoidInfo), 0x00, sizeof(GapGeneralVoidInfo));
 
     int ret = GapRunTaskBlockProcess(GapLeExAdvClearHandleTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapLeExAdvRemoveSetTask(void *ctx)
+{
+    GAPLeExAdvRemoveSetInfo *info = ctx;
+    info->result = GAP_LeExAdvRemoveSet(info->advHandle);
+}
+
+int GAPIF_LeExAdvRemoveSet(uint8_t advHandle)
+{
+    LOG_INFO("%{public}s: advHandle:%hhu", __FUNCTION__, advHandle);
+    GAPLeExAdvRemoveSetInfo *ctx = MEM_MALLOC.alloc(sizeof(GAPLeExAdvRemoveSetInfo));
+    if (ctx == NULL) {
+        RETURN BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GAPLeExAdvRemoveSetInfo), 0x00, sizeof(GAPLeExAdvRemoveSetInfo));
+
+    ctx->advHandle = advHandle;
+
+    int ret = GapRunTaskBlockProcess(GapLeExAdvRemoveSetTask, ctx);
     if (ret == BT_SUCCESS) {
         ret = ctx->result;
     }
