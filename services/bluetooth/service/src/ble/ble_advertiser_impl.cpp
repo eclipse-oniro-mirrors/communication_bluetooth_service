@@ -933,7 +933,7 @@ int BleAdvertiserImpl::ExAdvDataFragment(const BleAdvertiserDataImpl &data) cons
             if ((i == (payloadLen / maxlen - 1) - 1) && (payloadLen - maxlen * (payloadLen / maxlen) == 0)) {
                 operation = GAP_ADVERTISING_DATA_OPERATION_LAST;
             }
-            uint8_t length = maxlen * (i + 1);
+            uint8_t length = maxlen;
             advData = payload.substr(maxlen * (i + 1), maxlen);
             ret &= GAPIF_LeExAdvSetData(advStartHandle, operation, fragment, length,
                 reinterpret_cast<uint8_t *>(const_cast<char *>(advData.c_str())));
@@ -966,8 +966,8 @@ int BleAdvertiserImpl::ExResDataFragment(const BleAdvertiserDataImpl &data) cons
     } else if (((payloadLen / maxlen == 1) && (payloadLen % maxlen > 0)) ||
                ((payloadLen / maxlen == BLE_DIV_RESULT_TWO) && (payloadLen % maxlen == 0))) {
         uint8_t operation = GAP_ADVERTISING_DATA_OPERATION_FIRST;
-        ret = GAPIF_LeExAdvSetScanRspData(advStartHandle, operation, fragmentPreference, maxlen,
-            reinterpret_cast<uint8_t *>(const_cast<char *>(payload.substr(maxlen).c_str())));
+        ret = GAPIF_LeExAdvSetScanRspData(advStartHandle, operation, fragmentPreference, payloadLen - maxlen,
+            reinterpret_cast<uint8_t *>(const_cast<char *>(payload.substr(maxlen, payloadLen - maxlen).c_str())));
         pimpl->operationLast_ = true;
         operation = GAP_ADVERTISING_DATA_OPERATION_LAST;
         ret &= GAPIF_LeExAdvSetScanRspData(advStartHandle, operation, fragmentPreference, payloadLen - maxlen,
@@ -978,7 +978,7 @@ int BleAdvertiserImpl::ExResDataFragment(const BleAdvertiserDataImpl &data) cons
             reinterpret_cast<uint8_t *>(const_cast<char *>(payload.substr(maxlen).c_str())));
         operation = static_cast<uint8_t>(GAP_ADVERTISING_DATA_OPERATION_INTERMEDIATE);
         for (size_t i = 0; i < (payloadLen / maxlen - 1); i++) {
-            ret &= GAPIF_LeExAdvSetScanRspData(advStartHandle, operation, fragmentPreference, maxlen * (i + 1),
+            ret &= GAPIF_LeExAdvSetScanRspData(advStartHandle, operation, fragmentPreference, maxlen,
                 reinterpret_cast<uint8_t *>(const_cast<char *>(payload.substr(maxlen * (i + 1), maxlen).c_str())));
         }
         pimpl->operationLast_ = true;
