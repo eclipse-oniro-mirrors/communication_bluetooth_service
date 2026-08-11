@@ -87,7 +87,8 @@ Packet *PacketMalloc(uint16_t headSize, uint16_t tailSize, uint32_t payloadSize)
 
 Packet *PacketRefMalloc(const Packet *pkt)
 {
-    if (pkt == NULL) {
+    if (pkt == NULL || pkt->head == NULL || pkt->tail == NULL) {
+        LOG_ERROR("[PACKET] PacketRefMalloc: invalid pkt or internal buffer is NULL.");
         return NULL;
     }
 
