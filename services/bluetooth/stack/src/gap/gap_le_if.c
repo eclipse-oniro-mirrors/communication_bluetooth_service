@@ -614,7 +614,7 @@ int GAPIF_LeExAdvRemoveSet(uint8_t advHandle)
     LOG_INFO("%{public}s: advHandle:%hhu", __FUNCTION__, advHandle);
     GAPLeExAdvRemoveSetInfo *ctx = MEM_MALLOC.alloc(sizeof(GAPLeExAdvRemoveSetInfo));
     if (ctx == NULL) {
-        RETURN BT_NO_MEMORY;
+        return BT_NO_MEMORY;
     }
 
     (void)memset_s(ctx, sizeof(GAPLeExAdvRemoveSetInfo), 0x00, sizeof(GAPLeExAdvRemoveSetInfo));
