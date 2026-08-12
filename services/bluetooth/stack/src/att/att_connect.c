@@ -356,6 +356,10 @@ static void AttClearConnectingInfo(AttConnectingInfo *connecting)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
+    if (connecting == NULL) {
+        LOG_ERROR("%{public}s connecting is NULL.", __FUNCTION__);
+        return;
+    }
     connecting->aclHandle = 0;
     connecting->cid = 0;
     connecting->id = 0;
@@ -500,6 +504,11 @@ static void GAPSecCallbackAsync(const void *context)
     AttBredrConnectCallback bredrConnectCallback;
 
     AttGetConnectingIndexByConnectHandle(gapSecCallbackPtr->connectHandle, &connecting);
+    if (connecting == NULL) {
+        LOG_ERROR("%{public}s connecting not found.", __FUNCTION__);
+        MEM_MALLOC.free(gapSecCallbackPtr);
+        return;
+    }
     attConnectCallback = AttGetATTConnectCallback();
 
     if (gapSecCallbackPtr->result != 0) {
