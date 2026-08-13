@@ -149,6 +149,14 @@ int GAP_LeExAdvSetScanRspData(uint8_t advHandle, uint8_t operation, uint8_t frag
 int GAP_LeExAdvSetEnable(uint8_t enable, uint8_t numberOfSet, const GapExAdvSet *advSet);
 
 /**
+ * @brief       Remove a single advertising set from the Controller.
+ * @param[in]   advHandle           advertising handle
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+int GAP_LeExAdvRemoveSet(uint8_t advHandle);
+
+/**
  * @brief       Remove all advertising set of advertising.
  * @return      @c BT_SUCCESS      : The function is executed successfully.
  *              @c otherwise        : The function is not executed successfully.

@@ -1547,6 +1547,8 @@ void BleAdvertiserImpl::GapExAdvParamSetCompleteEvt(int status, int8_t txPower) 
 
     if (status != BT_SUCCESS) {
         LOG_ERROR("Set ex adv parameter failed! %{public}d", status);
+        GAPIF_LeExAdvRemoveSet(advStartHandle);
+        pimpl->advHandleQue_.pop();
         iter->second.advStatus_ = ADVERTISE_FAILED_INTERNAL_ERROR;
         callback_->OnStartResultEvent(
             ADVERTISE_FAILED_INTERNAL_ERROR, advStartHandle, BLE_ADV_START_FAILED_OP_CODE);
@@ -1581,15 +1583,12 @@ void BleAdvertiserImpl::GapExAdvParamSetCompleteEvt(int status, int8_t txPower) 
 
 void BleAdvertiserImpl::GapExAdvDataSetCompleteEvt(int status, int8_t txPower)
 {
-    LOG_DEBUG("[BleAdvertiserImpl] %{public}s,%{public}zu", __func__, pimpl->advHandleQue_.size());
-
     uint8_t advStartHandle = pimpl->advHandleQue_.front().advHandle;
     auto exAdvDataIter = pimpl->advHandleSettingDatas_.find(advStartHandle);
     if (exAdvDataIter == pimpl->advHandleSettingDatas_.end()) {
         pimpl->advHandleQue_.pop();
         return;
     }
-
     if (status != BT_SUCCESS) {
         LOG_ERROR("Set ex adv data failed! %{public}d", status);
         callback_->OnStartResultEvent(
@@ -1599,7 +1598,6 @@ void BleAdvertiserImpl::GapExAdvDataSetCompleteEvt(int status, int8_t txPower)
         pimpl->advHandleQue_.pop();
         return;
     }
-
     if (exAdvDataIter->second.settings_.IsLegacyMode()) {
         int ret = SetExAdvScanRspDataToGap(exAdvDataIter->second.rspData_, exAdvDataIter->second.settings_, txPower);
         pimpl->advHandleQue_.pop();
@@ -1611,14 +1609,15 @@ void BleAdvertiserImpl::GapExAdvDataSetCompleteEvt(int status, int8_t txPower)
             RemoveAdvHandle(advStartHandle);
         }
     } else {
-        /// Generate rpa address
         if ((BleConfig::GetInstance().GetBleAddrType() == BLE_ADDR_TYPE_RPA) && (pimpl->operationLast_)) {
+            pimpl->operationLast_ = false;
             std::unique_lock<std::mutex> exAdvDataLock(pimpl->rpamutex_);
             int ret = GAPIF_LeGenResPriAddr(&BleAdvertiserImpl::GenResPriAddrResult, this);
             if (ret != BT_SUCCESS) {
                 LOG_ERROR("[BleAdvertiserImpl] %{public}s:GAP_LeGenResPriAddrAsync failed!", __func__);
             }
         } else if (pimpl->operationLast_) {
+            pimpl->operationLast_ = false;
             pimpl->advHandleQue_.pop();
             int ret = SetExAdvEnableToGap(advStartHandle, true);
             if (ret != BT_SUCCESS) {
@@ -1659,6 +1658,7 @@ void BleAdvertiserImpl::GapExAdvScanRspDataSetCompleteEvt(int status)
         return;
     }
     if ((BleConfig::GetInstance().GetBleAddrType() == BLE_ADDR_TYPE_RPA) && (pimpl->operationLast_)) {
+        pimpl->operationLast_ = false;
         /// Generate rpa address
         std::unique_lock<std::mutex> exAdvScanResLock(pimpl->rpamutex_);
         int ret = GAPIF_LeGenResPriAddr(&BleAdvertiserImpl::GenResPriAddrResult, this);
@@ -1666,6 +1666,7 @@ void BleAdvertiserImpl::GapExAdvScanRspDataSetCompleteEvt(int status)
             LOG_ERROR("[BleAdvertiserImpl] %{public}s:GAP_LeGenResPriAddrAsync failed!", __func__);
         }
     } else if (pimpl->operationLast_) {
+        pimpl->operationLast_ = false;
         pimpl->advHandleQue_.pop();
         int ret = SetExAdvEnableToGap(advStartHandle, true);
         if (ret != BT_SUCCESS) {
@@ -1801,6 +1802,10 @@ void BleAdvertiserImpl::GapExAdvStopCompleteEvt(int status) const
         LOG_ERROR("[BleAdvertiserImpl] %{public}s:Stop ex advertising failed! %{public}d", __func__, status);
         return;
     }
+    int ret = GAPIF_LeExAdvRemoveSet(tempHandle);
+    if (ret != BT_SUCCESS) {
+        LOG_ERROR("[BleAdvertiserImpl] %{public}s:Remove adv set from controller failed! %{public}d", __func__, ret);
+    }
     RemoveAdvHandle(tempHandle);
 }
 
@@ -1812,12 +1817,12 @@ void BleAdvertiserImpl::GapExAdvRemoveHandleResultEvt(int status) const
         return;
     }
     uint8_t tempHandle = pimpl->advHandleQue_.front().advHandle;
-    pimpl->advHandleQue_.pop();
     auto exAdvRemoveIter = pimpl->advHandleSettingDatas_.find(tempHandle);
     if (exAdvRemoveIter == pimpl->advHandleSettingDatas_.end()) {
         LOG_ERROR("[BleAdvertiserImpl] %{public}s:invalid handle! %u.", __func__, tempHandle);
         return;
     }
+    pimpl->advHandleQue_.pop();
 
     if (status != BT_SUCCESS) {
         exAdvRemoveIter->second.advStatus_ = ADVERTISE_FAILED_INTERNAL_ERROR;
