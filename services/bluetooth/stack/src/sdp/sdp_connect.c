@@ -1596,6 +1596,12 @@ void SdpSendRequest(uint16_t lcid, uint16_t transactionId, uint8_t continuationS
     uint8_t *header = NULL;
     uint8_t *tail = NULL;
 
+    request = SdpFindRequestByTransactionId(transactionId);
+    if (request == NULL) {
+        LOG_ERROR("SdpSendRequest request not found");
+        return;
+    }
+
     uint16_t length = PacketPayloadSize(packet);
     /// ContinuationState
     if (continuationStateLen == 0) {
@@ -1613,10 +1619,6 @@ void SdpSendRequest(uint16_t lcid, uint16_t transactionId, uint8_t continuationS
 
     header = (uint8_t *)BufferPtr(PacketHead(sendPacket));
     /// PduID
-    request = SdpFindRequestByTransactionId(transactionId);
-    if (request == NULL) {
-        return;
-    }
     header[0] = request->pduId;
     /// Transaction ID
     *(uint16_t *)(header + 1) = H2BE_16(transactionId);
