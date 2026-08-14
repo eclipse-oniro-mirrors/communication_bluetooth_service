@@ -46,21 +46,16 @@ export default function abilityTest() {
      * @tc.level Level 2
      */
     it('assertContain', 0, () => {
-      try {
-            // Defines a test case. This API supports three parameters: test case name, filter parameter, and test case function.
-            LogUtil.info('it begin');
-            let a = 'abc'
-            let b = 'b'
-            // Defines a variety of assertion methods, which are used to declare expected boolean conditions.
-            expect(a).assertContain(b)
-            expect(a).assertEqual(a)
-          } catch (_e) {
-            expect(true).assertTrue();
-        } catch (_e) {
-          expect(true).assertTrue();
-      } catch (_e) {
-        expect(true).assertTrue();
-      }
+      // Defines a test case. This API supports three parameters: test case name, filter parameter,
+      // and test case function.
+      LogUtil.info('it begin');
+      let a = 'abc'
+      let b = 'b'
+      // Defines a variety of assertion methods, which are used to declare expected boolean conditions.
+      expect(a).assertContain(b)
+      expect(a).assertEqual(a)
     })
   })
 }
+
+

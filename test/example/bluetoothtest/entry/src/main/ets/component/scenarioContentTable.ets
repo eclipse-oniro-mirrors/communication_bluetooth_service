@@ -16,6 +16,7 @@
 import LogUtil from '../Utils/LogUtil';
 import ConfigData from '../Utils/ConfigData';
 import { TestScenario} from '../MainAbility/model/testData'
+import { resStr } from '../Utils/resString';
 
 /**
  *  Scenario Test ContentTable Component Page Of Bluetooth test
@@ -89,7 +90,7 @@ export struct ScenarioContentTable {
   }
 
   aboutToAppear(): void {
-    LogUtil.info($r('app.string.bluetoothtest_str_szjgjwb'))
+    LogUtil.info(resStr($r('app.string.bluetoothtest_str_szjgjwb')))
   }
 
   build() {

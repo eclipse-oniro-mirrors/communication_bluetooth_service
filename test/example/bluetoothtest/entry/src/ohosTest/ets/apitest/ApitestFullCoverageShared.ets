@@ -14,17 +14,48 @@
  */
 
 /**
- * Shared helpers for generated BluetoothFullCoverage*.test.ets suites.
- * Aligns with jsapi/26/APITEST_COVERAGE.md: param / return / combo / exception paths.
+ * Shared stubs for generated BluetoothFullCoverage*.test.ets suites.
+ * Case bodies call APIs directly (no fcRun wrappers) with LogUtil + real assertions.
  */
-import { expect } from '@ohos/hypium';
 import ble from '@ohos.bluetooth.ble';
 import socket from '@ohos.bluetooth.socket';
 import bluetooth from '@ohos.bluetooth';
+import connection from '@ohos.bluetooth.connection';
 import hid from '@ohos.bluetooth.hid';
 import partnerAgent from '@ohos.FusionConnectivity.partnerAgent';
 import common from '@ohos.bluetooth.common';
-import { StartBLEScanOptions, StopBLEScanOptions, SubscribeBLEFoundOptions } from '@system.bluetooth';
+import {
+  StartBLEScanOptions,
+  StopBLEScanOptions,
+  SubscribeBLEFoundOptions
+} from '@system.bluetooth';
+import {
+  BT_DOC_ERR_CODES,
+  BT_LOCAL_OR_CAP,
+  BT_PEER_EXPECT,
+  assertErrIn,
+  assertLocalOk,
+  assertPeerExpect,
+  assertThrownErrIn,
+  ensureBtOn,
+  runPerf,
+  runStress,
+  waitCallback
+} from './ApitestRealAssert';
+
+export {
+  BT_DOC_ERR_CODES,
+  BT_LOCAL_OR_CAP,
+  BT_PEER_EXPECT,
+  assertErrIn,
+  assertLocalOk,
+  assertPeerExpect,
+  assertThrownErrIn,
+  ensureBtOn,
+  runPerf,
+  runStress,
+  waitCallback
+};
 
 export const BADDR = '00:11:22:33:44:55';
 export const BAD_MAC = 'ZZ:ZZ:ZZ:ZZ:ZZ:ZZ';
@@ -32,57 +63,6 @@ export const EMPTY_MAC = '';
 export const SVC_UUID = '0000180A-0000-1000-8000-00805F9B34FB';
 export const CHAR_UUID = '00002A00-0000-1000-8000-00805F9B34FB';
 export const SPP_UUID = '00001101-0000-1000-8000-00805F9B34FB';
-
-/** Normal path: invoke and assert no throw (errors logged, not fatal on device). */
-export function fcRun(tag: string, fn: () => void): void {
-  try {
-    fn();
-    expect(true).assertTrue();
-  } catch (e) {
-    console.info(`[FullCoverage] ${tag} caught: ${JSON.stringify(e)}`);
-    expect(true).assertTrue();
-  }
-}
-
-/** Error/boundary path: expect throw OR success (implementation-dependent). */
-export function fcRunErr(tag: string, fn: () => void): void {
-  let threw = false;
-  try {
-    fn();
-  } catch (_e) {
-    threw = true;
-  }
-  console.info(`[FullCoverage] ${tag} threw=${threw}`);
-  expect(true).assertTrue();
-}
-
-/** Return path: run fn and apply checker on result; checker failure is non-fatal. */
-export function fcRunRet < T > (tag: string, fn: () => T, check: (v: T) => boolean): void {
-  try {
-    const v = fn();
-    if (check(v)) {
-      expect(true).assertTrue();
-    } else {
-      console.info(`[FullCoverage] ${tag} return check failed`);
-      expect(true).assertTrue();
-    }
-  } catch (e) {
-    console.info(`[FullCoverage] ${tag} ret-caught: ${JSON.stringify(e)}`);
-    expect(true).assertTrue();
-  }
-}
-
-/** Combo: sequential API calls in one it(). */
-export function fcRunCombo(tag: string, steps: Array < () => void > ): void {
-  for (let i = 0; i < steps.length; i++) {
-    try {
-      steps[i]();
-    } catch (e) {
-      console.info(`[FullCoverage] ${tag} step${i} caught: ${JSON.stringify(e)}`);
-    }
-  }
-  expect(steps.length > 0).assertTrue();
-}
 
 export function buf0(): ArrayBuffer {
   return new ArrayBuffer(0);
@@ -113,13 +93,34 @@ export function bleAd(): ble.AdvertiseData {
 }
 
 export function bleAs(): ble.AdvertiseSetting {
-  return { interval: 1600, txPower: -7, connectable: true };
+  return {
+    interval: 1600,
+    txPower: -7,
+    connectable: true
+  };
 }
 
 export function bleAp(): ble.AdvertisingParams {
   return {
     advertisingSettings: bleAs(),
     advertisingData: bleAd()
+  };
+}
+
+/** connection.controlDeviceAction stub (no peer). */
+export function ctrlDeviceActionParams(deviceId: string = BADDR): connection.ControlDeviceActionParams {
+  return {
+    deviceId: deviceId,
+    type: connection.ControlType.PLAY,
+    typeValue: connection.ControlTypeValue.ENABLE,
+    controlObject: connection.ControlObject.LEFT_EAR
+  };
+}
+
+/** connection.updateCloudBluetoothDevice stub. */
+export function trustedPairedDevices(): connection.TrustedPairedDevices {
+  return {
+    trustedPairedDevices: []
   };
 }
 
@@ -166,39 +167,72 @@ export function hidSdpStub(): hid.HidDeviceSdp {
 }
 
 export function hidQosStub(): hid.HidDeviceQos {
-  return { serviceType: 1, tokenRate: 800, tokenBucketSize: 800, peakBandwidth: 0, latency: 0, delayVariation: 0 };
+  return {
+    serviceType: 1,
+    tokenRate: 800,
+    tokenBucketSize: 800,
+    peakBandwidth: 0,
+    latency: 0,
+    delayVariation: 0
+  };
 }
 
 export function partnerDeviceAddr(): partnerAgent.PartnerDeviceAddress {
-  const addr: common.BluetoothAddress = { address: BADDR, addressType: common.BluetoothAddressType.REAL };
-  return { bluetoothAddress: addr };
+  const addr: common.BluetoothAddress = {
+    address: BADDR,
+    addressType: common.BluetoothAddressType.REAL
+  };
+  return {
+    bluetoothAddress: addr
+  };
 }
 
 export function partnerDeviceCap(): partnerAgent.DeviceCapability {
-  return { supportBR: true, supportBleAdvertiser: false };
+  return {
+    supportBR: true,
+    supportBleAdvertiser: false
+  };
 }
 
 export function partnerBusinessCap(): partnerAgent.BusinessCapability {
-  return { supportMediaControl: true, supportTelephonyControl: false };
+  return {
+    supportMediaControl: true,
+    supportTelephonyControl: false
+  };
 }
 
 /** @system.bluetooth StartBLEScanOptions stub. */
 export function sysBleStartOpt(): StartBLEScanOptions {
-  return { interval: 0, success: () => {}, fail: () => {}, complete: () => {} };
+  return {
+    interval: 0,
+    success: () => {},
+    fail: () => {},
+    complete: () => {}
+  };
 }
 
 /** @system.bluetooth StopBLEScanOptions stub. */
 export function sysBleStopOpt(): StopBLEScanOptions {
-  return { success: () => {}, fail: () => {}, complete: () => {} };
+  return {
+    success: () => {},
+    fail: () => {},
+    complete: () => {}
+  };
 }
 
 /** @system.bluetooth SubscribeBLEFoundOptions stub. */
 export function sysBleFoundOpt(): SubscribeBLEFoundOptions {
-  return { success: () => {}, fail: () => {} };
+  return {
+    success: () => {},
+    fail: () => {}
+  };
 }
 
 export function blePhyValue(): ble.PhyValue {
-  return { txPhy: ble.BlePhy.BLE_PHY_1M, rxPhy: ble.BlePhy.BLE_PHY_1M };
+  return {
+    txPhy: ble.BlePhy.BLE_PHY_1M,
+    rxPhy: ble.BlePhy.BLE_PHY_1M
+  };
 }
 
 export function gattConnParam(): ble.ConnectionParam {
@@ -215,7 +249,21 @@ export function bleNotifyChar(): ble.NotifyCharacteristic {
 }
 
 export function gattServerResponse(): ble.ServerResponse {
-  return { deviceId: BADDR, transId: 0, status: 0, offset: 0, value: buf0() };
+  return {
+    deviceId: BADDR,
+    transId: 0,
+    status: 0,
+    offset: 0,
+    value: buf0()
+  };
 }
 
-
+/** @deprecated Prefer assertErrIn / assertLocalOk / assertPeerExpect (no open 2900xxx range). */
+export function isAcceptableBtErrCode(errCode: number): boolean {
+  for (let i = 0; i < BT_DOC_ERR_CODES.length; i++) {
+    if (errCode === BT_DOC_ERR_CODES[i]) {
+      return true;
+    }
+  }
+  return false;
+}

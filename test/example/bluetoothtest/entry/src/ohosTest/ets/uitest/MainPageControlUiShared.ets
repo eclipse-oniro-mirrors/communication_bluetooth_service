@@ -20,6 +20,7 @@
 import abilityDelegatorRegistry from '@ohos.app.ability.abilityDelegatorRegistry';
 import { Want} from '@kit.AbilityKit';
 import { Component, Driver, ON, On} from '@ohos.UiTest';
+import LogUtil from '../../../main/ets/Utils/LogUtil';
 
 export const MAIN_BUNDLE: string = 'com.example.myapplicationbt';
 /** 与 entry/module.json5 中 module.name 一致；多模块工程下 startAbility 需指定，否则无法正确拉起含页面路由的 entry UIAbility */
@@ -40,7 +41,8 @@ async function tryWaitForControl(driver: Driver, on: On, timeoutMs: number): Pro
   try {
     const c: Component = await driver.waitForComponent(on, timeoutMs);
     return c !== undefined;
-  } catch (_e){
+  } catch (_e) {
+    LogUtil.error(JSON.stringify(_e));
     return false;
   }
 }
@@ -56,13 +58,15 @@ async function tryScrollSearchInScrollables(driver: Driver, controlId: string): 
       for(let i = 0; i<containers.length; i++){
         try {
           const found: Component = await containers[i].scrollSearch(targetOn);
-          if (found !== undefined){
+          if (found !== undefined) {
             return true;
           }
-        } catch (_e){
+        } catch (_e) {
+          LogUtil.error(JSON.stringify(_e));
         }
       }
-    } catch (_e){
+    } catch (_e) {
+      LogUtil.error(JSON.stringify(_e));
     }
   }
   return false;
@@ -95,7 +99,8 @@ export async function startMainPage(route: string): Promise<void> {
         await delayMs(600);
         break;
       }
-    } catch (_e){
+    } catch (_e) {
+      LogUtil.error(JSON.stringify(_e));
     }
   }
   await delayMs(400);
@@ -125,7 +130,8 @@ export async function startUiTestStubAbility(): Promise<void> {
         await delayMs(600);
         break;
       }
-    } catch (_e){
+    } catch (_e) {
+      LogUtil.error(JSON.stringify(_e));
     }
   }
   await delayMs(400);
@@ -139,7 +145,8 @@ export async function assertStubTitleVisible(): Promise<void> {
       await win.focus();
       await delayMs(200);
     }
-  } catch (_e){
+  } catch (_e) {
+    LogUtil.error(JSON.stringify(_e));
   }
   const on = ON.inWindow(MAIN_BUNDLE).id('uitest_stub_title');
   await driver.waitForIdle(200, 8000);
@@ -154,30 +161,31 @@ export async function assertControlVisible(controlId: string): Promise<void> {
       await win.focus();
       await delayMs(300);
     }
-  } catch (_e){
+  } catch (_e) {
+    LogUtil.error(JSON.stringify(_e));
   }
   const onScoped = ON.inWindow(MAIN_BUNDLE).id(controlId);
   const onPlain = ON.id(controlId);
   await driver.waitForIdle(200, 15000);
-  if (await tryWaitForControl(driver, onScoped, 10000)){
+  if (await tryWaitForControl(driver, onScoped, 10000)) {
     return;
   }
-  if (await tryWaitForControl(driver, onPlain, 6000)){
+  if (await tryWaitForControl(driver, onPlain, 6000)) {
     return;
   }
   const mayNeedScroll: boolean =
     controlId.indexOf('__sc_') >= 0 || controlId.indexOf('__li_') >= 0;
   if (mayNeedScroll){
-    if (await tryScrollSearchInScrollables(driver, controlId)){
+    if (await tryScrollSearchInScrollables(driver, controlId)) {
       return;
     }
     await driver.waitForIdle(200, 4000);
-    if (await tryWaitForControl(driver, onScoped, 6000)){
+    if (await tryWaitForControl(driver, onScoped, 6000)) {
       return;
     }
   }
   await delayMs(400);
-  if (await tryWaitForControl(driver, onScoped, 5000)){
+  if (await tryWaitForControl(driver, onScoped, 5000)) {
     return;
   }
   await driver.assertComponentExist(onScoped);

@@ -14,14 +14,26 @@
  */
 
 /**
- * 扩展矩阵用例共享：扫参时实现侧可能抛错，统一吞异常以免阻断全量。
+ * Shared constants for ExpandedMatrix parameter-sweep suites.
+ * Case bodies call APIs directly (no swallow helpers) and assert errCode / return values.
  */
-export function matrixTryRun(fn: () => void): void {
-  try {
-    fn();
-  } catch (_e) {
-  // 参数或能力导致抛错时忽略
-  }
-}
 
+/** Known Bluetooth BusinessError codes that may appear on invalid profile ids / env limits. */
+export const KNOWN_BT_ERR_CODES: number[] = [
+  0,
+  201,
+  202,
+  401,
+  801,
+  2900001,
+  2900003,
+  2900004,
+  2900099
+];
 
+export {
+  assertPeerExpect,
+  BT_DOC_ERR_CODES,
+  assertThrownErrIn,
+  ensureBtOn
+} from './ApitestRealAssert';

@@ -17,9 +17,14 @@ import UIAbility from '@ohos.app.ability.UIAbility';
 import { AbilityConstant, Want} from '@kit.AbilityKit';
 import AbilityDelegatorRegistry from '@ohos.app.ability.abilityDelegatorRegistry';
 import { Hypium} from '@ohos/hypium';
-/** 默认：API + UiTest（List.test）。仅跑 apitest 全量时将 import 改为 ../apitest/List.apitest.test */
-import testsuite from '../apitest/List.test';
+import access from '@ohos.bluetooth.access';
+/** 默认全量 List.apitest.test（勿一次上板）；分段请改 scenario.core / profiles / legacy / extra */
+import testsuite from '../apitest/List.apitest.scenario.core.test';
+import { scDismissBtEnableDialog } from '../apitest/ApitestScenarioShared';
 import window from '@ohos.window';
+
+/** Give enableBluetooth time to settle without busy-spin (avoids THREAD_BLOCK_6S). */
+const BT_PREPARE_MS: number = 2500;
 
 export default class TestAbility extends UIAbility {
     onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -28,8 +33,36 @@ export default class TestAbility extends UIAbility {
         LogUtil.info('launchParam:'+ JSON.stringify(launchParam) ?? '');
         const abilityDelegator = AbilityDelegatorRegistry.getAbilityDelegator();
         const abilityDelegatorArguments = AbilityDelegatorRegistry.getArguments();
-        LogUtil.info('start run testcase!!!');
-        Hypium.hypiumTest(abilityDelegator, abilityDelegatorArguments, testsuite)
+        let needEnable = true;
+        try {
+            needEnable = access.getState() !== access.BluetoothState.STATE_ON;
+        } catch (e0) {
+            LogUtil.error(JSON.stringify(e0));
+        }
+        if (needEnable) {
+            try {
+                access.enableBluetooth();
+                LogUtil.info('TestAbility pre-enableBluetooth ok');
+            } catch (e) {
+                LogUtil.error('TestAbility pre-enableBluetooth ' + JSON.stringify(e));
+            }
+        } else {
+            LogUtil.info('TestAbility skip enableBluetooth (already STATE_ON)');
+        }
+        LogUtil.info('start run testcase after ' + BT_PREPARE_MS + 'ms');
+        setTimeout((): void => {
+            scDismissBtEnableDialog(2000).then((): void => {
+                try {
+                    const st = access.getState();
+                    LogUtil.info('TestAbility pre-state=' + st);
+                } catch (e2) {
+                    LogUtil.error(JSON.stringify(e2));
+                }
+                Hypium.hypiumTest(abilityDelegator, abilityDelegatorArguments, testsuite);
+            }).catch((): void => {
+                Hypium.hypiumTest(abilityDelegator, abilityDelegatorArguments, testsuite);
+            });
+        }, BT_PREPARE_MS);
     }
 
     onDestroy(){

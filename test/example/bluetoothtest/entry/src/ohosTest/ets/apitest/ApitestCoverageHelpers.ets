@@ -18,6 +18,7 @@
  * 阈值偏宽松，避免低配设备或高负载下误杀；日志便于 CI 溯源。
  */
 import { expect } from '@ohos/hypium';
+import LogUtil from '../../../main/ets/Utils/LogUtil';
 
 /** 性能：单次批量调用的总耗时上限（毫秒），含异常路径吞错开销 */
 export function assertPerfBudget(tag: string, iterations: number, maxTotalMs: number, fn: () => void): void {
@@ -26,7 +27,8 @@ export function assertPerfBudget(tag: string, iterations: number, maxTotalMs: nu
     try {
       fn();
     } catch (_e) {
-    // 单机偶发错误仍计入迭代，贴近真实压力场景
+      LogUtil.error(JSON.stringify(_e));
+      // 单机偶发错误仍计入迭代，贴近真实压力场景
     }
   }
   const elapsed = Date.now() - t0;
@@ -45,14 +47,17 @@ export function assertStressHasSuccess(tag: string, iterations: number, fn: () =
       fn();
       ok++;
     } catch (_e) {
-    // continue
+      LogUtil.error(JSON.stringify(_e));
+      // continue
     }
   }
   console.info(`[ApitestStress] ${tag} iterations=${iterations} successCount=${ok}`);
   if (ok === 0) {
-    console.info(`[ApitestStress] ${tag} note: zero successes (e.g. BT off); stress path still executed`);
+    console.info(`[ApitestStress] ${tag} note: zero successes (e.g. BT off);
+    stress path still executed`);
   }
   expect(iterations > 0).assertTrue();
 }
+
 
 

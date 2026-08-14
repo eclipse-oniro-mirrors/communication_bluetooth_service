@@ -248,7 +248,7 @@ export function testSendFile(serverMac: string, fileName: string, fileType: stri
     let fileHolders: Array<opp.FileHolder> = [];
     (btProfileModel.getProfile(profileType) as opp.OppServerProfile).sendFile(
       serverMac, fileHolders).then(() => {
-      LogUtil.info($r('app.string.bluetoothtest_str_ofswjcgr'));
+      LogUtil.info(resStr($r('app.string.bluetoothtest_str_ofswjcgr')));
       textMessage = resStr($r('app.string.bluetoothtest_str_tr'));
       AppStorage.SetOrCreate("textMessage", textMessage)
       message = resStr($r('app.string.bluetoothtest_str_ofswjcgr'))
