@@ -31,6 +31,7 @@ static int L2capStartConnect(const BtAddr *addr, L2capConnection *conn, L2capCha
     if (conn->state == L2CAP_CONNECTION_IDLE) {
         conn->state = L2CAP_CONNECTION_CONNECTING;
         if (L2capConnectBdr(addr) != BT_SUCCESS) {
+            LOG_ERROR("%{public}s: L2capConnectBdr failed.", __FUNCTION__);
             L2capDeleteConnection(conn);
             return BT_OPERATION_FAILED;
         }
