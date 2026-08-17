@@ -1264,6 +1264,7 @@ static int L2capLeStartCreditBasedConnect(const BtAddr *addr, L2capLeConnection 
 
         result = L2capConnectLe(addr);
         if (result != BT_SUCCESS) {
+            LOG_ERROR("%{public}s: L2capConnectLe failed, result = %{public}d.", __FUNCTION__, result);
             L2capLeDeleteConnection(conn);
         }
 
