@@ -383,6 +383,8 @@ private:
     GapExAdvCallback exAdvCallback_ {};
     IAdapterBle *bleAdapter_ = nullptr;
     utility::Dispatcher *dispatcher_ = nullptr;
+    static constexpr const int maxAdvNum = 5;
+    static constexpr const int wukongMaxAdvNum = 7;
 
     BT_DISALLOW_COPY_AND_ASSIGN(BleAdvertiserImpl);
     DECLARE_IMPL();
