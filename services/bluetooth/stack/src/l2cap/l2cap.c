@@ -26,11 +26,37 @@
 #include "l2cap_inst.h"
 #include "l2cap_le.h"
 
+static int L2capStartConnect(const BtAddr *addr, L2capConnection *conn, L2capChannel *chan)
+{
+    if (conn->state == L2CAP_CONNECTION_IDLE) {
+        conn->state = L2CAP_CONNECTION_CONNECTING;
+        if (L2capConnectBdr(addr) != BT_SUCCESS) {
+            LOG_ERROR("%{public}s: L2capConnectBdr failed.", __FUNCTION__);
+            L2capDeleteConnection(conn);
+            return BT_OPERATION_FAILED;
+        }
+        return BT_SUCCESS;
+    }
+
+    if ((conn->state == L2CAP_CONNECTION_CONNECTING) || (conn->state == L2CAP_CONNECTION_DISCONNECTING)) {
+        return BT_SUCCESS;
+    }
+
+    if (conn->info.state == L2CAP_INFO_STATE_NONE) {
+        L2capSendInformationReq(conn, L2CAP_INFORMATION_TYPE_EXTENDED_FEATURE);
+    } else if (conn->info.state == L2CAP_INFO_STATE_DONE) {
+        L2capSendConnectionReq(conn, chan);
+    }
+
+    return BT_SUCCESS;
+}
+
 int L2CAP_ConnectReq(const BtAddr *addr, uint16_t lpsm, uint16_t rpsm, uint16_t *lcid)
 {
     L2capConnection *conn = NULL;
     L2capChannel *chan = NULL;
     L2capPsm *psm = NULL;
+    bool isNewConn = false;
 
     LOG_INFO("%{public}s:%{public}d enter, lpsm = 0x%04X, rpsm = 0x%04X", __FUNCTION__, __LINE__, lpsm, rpsm);
 
@@ -50,32 +76,25 @@ int L2CAP_ConnectReq(const BtAddr *addr, uint16_t lpsm, uint16_t rpsm, uint16_t 
     conn = L2capGetConnection2(addr);
     if (conn == NULL) {
         conn = L2capNewConnection(addr, 0);
+        isNewConn = true;
+    }
+
+    if (conn == NULL) {
+        LOG_ERROR("%{public}s: L2capNewConnection failed", __FUNCTION__);
+        return BT_OPERATION_FAILED;
     }
 
     chan = L2capNewChannel(conn, lpsm, rpsm);
+    if (chan == NULL) {
+        LOG_ERROR("%{public}s: L2capNewChannel failed", __FUNCTION__);
+        if (isNewConn) {
+            L2capDeleteConnection(conn);
+        }
+        return BT_OPERATION_FAILED;
+    }
     *lcid = chan->lcid;
 
-    if (conn->state == L2CAP_CONNECTION_IDLE) {
-        conn->state = L2CAP_CONNECTION_CONNECTING;
-        if (L2capConnectBdr(addr) != BT_SUCCESS) {
-            L2capDeleteConnection(conn);
-            return BT_OPERATION_FAILED;
-        }
-
-        return BT_SUCCESS;
-    }
-
-    if ((conn->state == L2CAP_CONNECTION_CONNECTING) || (conn->state == L2CAP_CONNECTION_DISCONNECTING)) {
-        return BT_SUCCESS;
-    }
-
-    if (conn->info.state == L2CAP_INFO_STATE_NONE) {
-        L2capSendInformationReq(conn, L2CAP_INFORMATION_TYPE_EXTENDED_FEATURE);
-    } else if (conn->info.state == L2CAP_INFO_STATE_DONE) {
-        L2capSendConnectionReq(conn, chan);
-    }
-
-    return BT_SUCCESS;
+    return L2capStartConnect(addr, conn, chan);
 }
 
 int L2CAP_ConnectRsp(uint16_t lcid, uint8_t id, uint16_t result, uint16_t status)

@@ -220,6 +220,10 @@ static void L2capSetDefaultConfigOptions(L2capConfigInfo *cfg)
 
 L2capChannel *L2capNewChannel(L2capConnection *conn, uint16_t lpsm, uint16_t rpsm)
 {
+    if (conn == NULL) {
+        LOG_ERROR("[L2CAP] %s: invalid null connection", __func__);
+        return NULL;
+    }
     L2capChannel *chan = NULL;
 
     chan = L2capAlloc(sizeof(L2capChannel));
