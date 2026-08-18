@@ -163,7 +163,7 @@ void ObexMpClient::HandlePutData(const ObexHeader &resp)
             }
 
             if (nexReqHdr == nullptr) {
-                OBEX_LOG_ERROR("HandlePutData: SendObject done.");
+                OBEX_LOG_ERROR("HandlePutData: GetNextReqHeader return nullptr, SendObject done.");
                 return;
             }
             isProcessing_ = false;
