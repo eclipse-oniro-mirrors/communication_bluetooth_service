@@ -155,6 +155,17 @@ void ObexMpClient::HandlePutData(const ObexHeader &resp)
             clientObserver_.OnActionCompleted(*this, resp);
         } else {
             auto nexReqHdr = sendObject->GetNextReqHeader();
+            if (nexReqHdr == nullptr && !sendObject->IsDone()) {
+                OBEX_LOG_ERROR("HandlePutData: GetNextReqHeader return nullptr but not done.");
+                clientSession_->FreeSendObject();
+                clientObserver_.OnTransportFailed(*this, -1);
+                return;
+            }
+
+            if (nexReqHdr == nullptr) {
+                OBEX_LOG_ERROR("HandlePutData: GetNextReqHeader return nullptr, SendObject done.");
+                return;
+            }
             isProcessing_ = false;
             int ret = SendRequest(*nexReqHdr);
             if (ret != 0) {
