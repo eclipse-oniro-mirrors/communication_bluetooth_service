@@ -227,8 +227,13 @@ Buffer *PacketContinuousPayload(Packet *pkt)
     if (newPayload == NULL) {
         return NULL;
     }
-    Payload *payloadIter = pkt->payload;
     uint8_t *bufPtr = BufferPtr(newPayload->buf);
+    if (bufPtr == NULL) {
+        LOG_ERROR("[PACKET] PacketContinuousPayload: newPayload buffer is NULL.");
+        PayloadFree(newPayload);
+        return NULL;
+    }
+    Payload *payloadIter = pkt->payload;
 
     while (payloadIter != pkt->tail) {
         uint32_t bufSize = BufferGetSize(payloadIter->buf);
