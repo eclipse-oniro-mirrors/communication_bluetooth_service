@@ -1769,6 +1769,7 @@ static void AvdtRecvRemoteDeviceSupport2MbCallback(const BtAddr *addr, bool supp
     int ret = AvdtAsyncProcess(AvdtRemoteDeviceSupport2MbCallbackTask, supportParam);
     if (ret != AVDT_SUCCESS) {
         LOG_ERROR("%{public}s: Task error:%{public}d.", __FUNCTION__, ret);
+        free(supportParam);
     }
 }
 
@@ -1803,6 +1804,7 @@ static void AvdtRecvRemoteDeviceSupport3MbCallback(const BtAddr *addr, bool supp
     int ret = AvdtAsyncProcess(AvdtRemoteDeviceSupport3MbCallbackTask, supportParam);
     if (ret != AVDT_SUCCESS) {
         LOG_ERROR("%{public}s: Task error:%{public}d.", __FUNCTION__, ret);
+        free(supportParam);
     }
 }
 
