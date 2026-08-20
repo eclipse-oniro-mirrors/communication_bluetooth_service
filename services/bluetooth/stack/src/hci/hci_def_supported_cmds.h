@@ -20,16 +20,84 @@
 extern "C" {
 #endif
 
-// BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part C
-// 6.27 SUPPORTED COMMANDS
-#define GET_COMMAND_FLAG(cmds, byteIndex, bitIndex) ((cmds)[(byteIndex)] & 0x01 << (bitIndex))
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
+// 6.27 SUPPORTED COMMANDS (bit positions verified against the spec table;
+// the LE section starts at Octet 25, not Octet 33)
+static inline int HciGetCommandFlag(const uint8_t *cmds, uint8_t byteIndex, uint8_t bitIndex)
+{
+    return cmds[byteIndex] & (0x01 << bitIndex);
+}
 
-#define HCI_SUPPORT_ENHANCED_SETUP_SYNCHRONOUS_CONNECTION(x) !!GET_COMMAND_FLAG(x, 29, 3)
-#define HCI_SUPPORT_ENHANCED_ACCEPT_SYNCHRONOUS_CONNECTION(x) !!GET_COMMAND_FLAG(x, 29, 4)
-#define HCI_SUPPORT_READ_LOCAL_SUPPORTED_CODECS(x) !!GET_COMMAND_FLAG(x, 29, 5)
-#define HCI_SUPPORT_LE_READ_LOCAL_P_256_PUBLIC_KEY(x) !!GET_COMMAND_FLAG(x, 34, 1)
-#define HCI_SUPPORT_LE_GENERATE_DH_KEY(x) !!GET_COMMAND_FLAG(x, 34, 2)
-#define HCI_SUPPORT_LE_SET_PRIVACY_MODE(x) !!GET_COMMAND_FLAG(x, 39, 2)
+// Byte indexes of the Supported Commands bit field (Vol 2, Part E 6.27).
+enum {
+    SUPPORTED_CMDS_OCTET_29 = 29,
+    SUPPORTED_CMDS_OCTET_34 = 34,
+    SUPPORTED_CMDS_OCTET_35 = 35,
+    SUPPORTED_CMDS_OCTET_38 = 38,
+    SUPPORTED_CMDS_OCTET_39 = 39,
+};
+
+// Bit indexes within a Supported Commands octet (Vol 2, Part E 6.27).
+enum {
+    SUPPORTED_CMDS_BIT_0 = 0,
+    SUPPORTED_CMDS_BIT_1 = 1,
+    SUPPORTED_CMDS_BIT_2 = 2,
+    SUPPORTED_CMDS_BIT_3 = 3,
+    SUPPORTED_CMDS_BIT_4 = 4,
+    SUPPORTED_CMDS_BIT_5 = 5,
+    SUPPORTED_CMDS_BIT_6 = 6,
+    SUPPORTED_CMDS_BIT_7 = 7,
+};
+
+static inline int HciSupportEnhancedSetupSynchronousConnection(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_29, SUPPORTED_CMDS_BIT_3);
+}
+
+static inline int HciSupportEnhancedAcceptSynchronousConnection(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_29, SUPPORTED_CMDS_BIT_4);
+}
+
+static inline int HciSupportReadLocalSupportedCodecs(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_29, SUPPORTED_CMDS_BIT_5);
+}
+
+static inline int HciSupportLeReadLocalP256PublicKey(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_34, SUPPORTED_CMDS_BIT_1);
+}
+
+static inline int HciSupportLeGenerateDhKey(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_34, SUPPORTED_CMDS_BIT_2);
+}
+
+static inline int HciSupportLeSetPrivacyMode(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_39, SUPPORTED_CMDS_BIT_2);
+}
+
+static inline int HciSupportLeReadTransmitPower(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_38, SUPPORTED_CMDS_BIT_7);
+}
+
+static inline int HciSupportLeReadRfPathCompensation(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_39, SUPPORTED_CMDS_BIT_0);
+}
+
+static inline int HciSupportLeWriteRfPathCompensation(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_39, SUPPORTED_CMDS_BIT_1);
+}
+
+static inline int HciSupportLeReadPhy(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_35, SUPPORTED_CMDS_BIT_4);
+}
 
 #ifdef __cplusplus
 }

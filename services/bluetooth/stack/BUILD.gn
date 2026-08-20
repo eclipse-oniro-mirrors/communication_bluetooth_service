@@ -68,6 +68,7 @@ StackAvdtpSrc = [
 
 StackBtmSrc = [
   "src/btm/btm_acl.c",
+  "src/btm/btm_acl_features.c",
   "src/btm/btm_controller.c",
   "src/btm/btm_inq_db.c",
   "src/btm/btm_interop.c",
@@ -98,6 +99,7 @@ StackGapSrc = [
   "src/gap/gap_if.c",
   "src/gap/gap_l2cap_receive.c",
   "src/gap/gap_le_if.c",
+  "src/gap/gap_le_if_5_0.c",
   "src/gap/gap_sm_receive.c",
   "src/gap/gap_task_common.c",
 ]
@@ -207,6 +209,15 @@ config("btstack_config") {
   ]
 
   defines = [ "OPENSSL_SUPPRESS_DEPRECATED" ]
+  
+  ldflags = []
+  cflags_cc = []
+  
+  if (defined(enable_coverage) && enable_coverage) {
+    cflags += [ "--coverage" ]
+    ldflags += [ "--coverage" ]
+    cflags_cc += [ "--coverage" ]
+  }
 }
 
 ohos_shared_library("btstack") {

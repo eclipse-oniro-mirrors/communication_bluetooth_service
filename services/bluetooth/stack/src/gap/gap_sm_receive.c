@@ -86,6 +86,7 @@ static void GapFreeLeAuthenticationRequest(void *ctx)
     if (param->displayValue != NULL) {
         MEM_MALLOC.free(param->displayValue);
     }
+    MEM_MALLOC.free(param);
 }
 
 static uint8_t *GapAllocLeAuthenticationRequestValue(uint8_t pairMethod, const uint8_t *displayValue)
@@ -301,6 +302,7 @@ static void GapFreeLeGenerateSignatureResult(void *ctx)
     GapLeGenerateSignatureResultParam *param = ctx;
 
     MEM_MALLOC.free(param->sign);
+    MEM_MALLOC.free(param);
 }
 
 static void GapRecvLeGenerateSignatureResult(uint8_t status, const uint8_t *sign)
@@ -343,6 +345,7 @@ static void GapFreeGenerateRPAResult(void *ctx)
     GapGenerateRPAResultParam *param = ctx;
 
     MEM_MALLOC.free(param->addr);
+    MEM_MALLOC.free(param);
 }
 
 static void GapRecvGenerateRPAResult(uint8_t status, const uint8_t *addr)

@@ -39,6 +39,10 @@
 #include "gap_task_internal.h"
 
 static GapMng g_gapMng;
+/* Set once GapInitializeTask completes; the failure paths of that task
+ * memset_s g_gapMng back to zero, so later GapDisableTask/GapFinalizeTask
+ * must not walk the (NULL) lists - platform ListClear/ListDelete assert. */
+static bool g_gapInitOk = false;
 
 typedef struct {
     int traceLevel;
@@ -61,12 +65,11 @@ static void GapFreeListNode(void *data)
     MEM_MALLOC.free(data);
 }
 
-static void GapInitializeTask(void *ctx)
+// Create the g_gapMng container lists and the ex-adv lock. Returns GAP_SUCCESS
+// or GAP_ERR_OUT_OF_RES when the lock cannot be created (the lists are then
+// cleaned up by GapInitCleanupBlocks in the caller).
+static int GapInitCreateBlocks(void)
 {
-    LOG_DEBUG("%{public}s:", __FUNCTION__);
-
-    (void)memset_s(&g_gapMng, sizeof(GapMng), 0x00, sizeof(GapMng));
-    g_gapMng.traceLevel = ((GapInitializeParam *)ctx)->traceLevel;
 #ifdef GAP_BREDR_SUPPORT
     g_gapMng.bredr.profileSecBlock.registerlist = ListCreate(GapFreeRegSecInfo);
     g_gapMng.bredr.profileSecBlock.requestlist = ListCreate(GapFreeReqSecInfo);
@@ -77,7 +80,68 @@ static void GapInitializeTask(void *ctx)
     g_gapMng.le.signatureBlock.RequestList = ListCreate(GapFreeLeSignatureRequest);
     g_gapMng.le.randomAddressBlock.reportRPAResolveList = ListCreate(GapFreeReportRPAResolveInfo);
     g_gapMng.le.exAdvBlock.exAdvInfoList = ListCreate(GapFreeListNode);
+    g_gapMng.le.exAdvBlock.lock = MutexCreate();
+    if (g_gapMng.le.exAdvBlock.lock == NULL) {
+        LOG_ERROR("%{public}s: exAdvBlock lock creation failed.", __FUNCTION__);
+        return GAP_ERR_OUT_OF_RES;
+    }
 #endif
+    return GAP_SUCCESS;
+}
+
+// Delete the created lists and zero g_gapMng. The ex-adv lock is not deleted
+// here: the caller deletes it first (it may not exist when the lock creation
+// itself failed, and deleting it after zeroing g_gapMng would free garbage).
+static void GapInitCleanupBlocks(void)
+{
+#ifdef GAP_LE_SUPPORT
+    ListDelete(g_gapMng.le.exAdvBlock.exAdvInfoList);
+    ListDelete(g_gapMng.le.randomAddressBlock.reportRPAResolveList);
+    ListDelete(g_gapMng.le.signatureBlock.RequestList);
+    ListDelete(g_gapMng.le.connectionInfoBlock.deviceList);
+#endif
+#ifdef GAP_BREDR_SUPPORT
+    ListDelete(g_gapMng.bredr.profileSecBlock.registerlist);
+    ListDelete(g_gapMng.bredr.profileSecBlock.requestlist);
+    ListDelete(g_gapMng.bredr.connectionInfoBlock.devicelist);
+#endif
+    (void)memset_s(&g_gapMng, sizeof(GapMng), 0x00, sizeof(GapMng));
+}
+
+static void GapInitializeTask(void *ctx)
+{
+    LOG_DEBUG("%{public}s:", __FUNCTION__);
+
+    (void)memset_s(&g_gapMng, sizeof(GapMng), 0x00, sizeof(GapMng));
+    g_gapMng.traceLevel = ((GapInitializeParam *)ctx)->traceLevel;
+
+    int ret = GapInitCreateBlocks();
+    if (ret != GAP_SUCCESS) {
+        GapInitCleanupBlocks();
+        return;
+    }
+
+#ifdef GAP_LE_SUPPORT
+    ret = GapLePeriodicAdvSyncInit();
+    if (ret != GAP_SUCCESS) {
+        LOG_ERROR("%{public}s: GapLePeriodicAdvSyncInit failed: %{public}d.", __FUNCTION__, ret);
+        MutexDelete(g_gapMng.le.exAdvBlock.lock);
+        GapInitCleanupBlocks();
+        return;
+    }
+
+    ret = GapLeCallbackInit();
+    if (ret != GAP_SUCCESS) {
+        LOG_ERROR("%{public}s: GapLeCallbackInit failed: %{public}d.", __FUNCTION__, ret);
+        GapLeCallbackDeinit();
+        GapLePeriodicAdvSyncDeinit();
+        MutexDelete(g_gapMng.le.exAdvBlock.lock);
+        GapInitCleanupBlocks();
+        return;
+    }
+#endif
+
+    g_gapInitOk = true;
 }
 
 static void GapInitialize(int traceLevel)
@@ -170,6 +234,12 @@ static void GapEnable(void)
 static void GapDisableTask(void *ctx)
 {
     LOG_DEBUG("%{public}s:", __FUNCTION__);
+    if (!g_gapInitOk) {
+        /* GapInitializeTask failed: the failure path already released all
+         * resources and zeroed g_gapMng, nothing to disable. */
+        LOG_WARN("%{public}s: GAP was not initialized, skip.", __FUNCTION__);
+        return;
+    }
     GapDeregisterHciEventCallbacks();
     GapDeregisterBtmAclCallbacks();
     if (BTM_IsControllerSupportBrEdr()) {
@@ -196,7 +266,11 @@ static void GapDisableTask(void *ctx)
         ListClear(g_gapMng.le.connectionInfoBlock.deviceList);
         ListClear(g_gapMng.le.signatureBlock.RequestList);
         ListClear(g_gapMng.le.randomAddressBlock.reportRPAResolveList);
-        ListClear(g_gapMng.le.exAdvBlock.exAdvInfoList);
+        if (g_gapMng.le.exAdvBlock.lock != NULL) {
+            MutexLock(g_gapMng.le.exAdvBlock.lock);
+            ListClear(g_gapMng.le.exAdvBlock.exAdvInfoList);
+            MutexUnlock(g_gapMng.le.exAdvBlock.lock);
+        }
         g_gapMng.le.bondBlock.isPairing = false;
         g_gapMng.le.randomAddressBlock.generationInfo.processing = false;
         g_gapMng.le.isEnable = false;
@@ -217,15 +291,38 @@ static void GapFinalizeTask(void *ctx)
 {
     LOG_INFO("%{public}s:", __FUNCTION__);
 
+    if (!g_gapInitOk) {
+        /* GapInitializeTask failed: the failure path already released all
+         * resources and zeroed g_gapMng. Only the processing queue (created
+         * before the task ran) may still exist, so just delete it. */
+        LOG_WARN("%{public}s: GAP was not initialized, skip.", __FUNCTION__);
+        BTM_DeleteProcessingQueue(PROCESSING_QUEUE_ID_GAP);
+        return;
+    }
+    g_gapInitOk = false;
+
 #ifdef GAP_BREDR_SUPPORT
     ListDelete(g_gapMng.bredr.profileSecBlock.registerlist);
     ListDelete(g_gapMng.bredr.profileSecBlock.requestlist);
     ListDelete(g_gapMng.bredr.connectionInfoBlock.devicelist);
 #endif
 #ifdef GAP_LE_SUPPORT
+    /* Deinit routines release callbacks/mutexes before the lists they may
+     * reference are destroyed. Any residual state will be overwritten by
+     * the memset_s below. Tear down in reverse order of initialization. */
+    int ret = GapLeCallbackDeinit();
+    if (ret != GAP_SUCCESS) {
+        LOG_WARN("%{public}s: GapLeCallbackDeinit returned %{public}d", __FUNCTION__, ret);
+    }
+    GapLePeriodicAdvSyncDeinit();
+
     ListDelete(g_gapMng.le.connectionInfoBlock.deviceList);
     ListDelete(g_gapMng.le.signatureBlock.RequestList);
     ListDelete(g_gapMng.le.randomAddressBlock.reportRPAResolveList);
+    if (g_gapMng.le.exAdvBlock.lock != NULL) {
+        MutexDelete(g_gapMng.le.exAdvBlock.lock);
+        g_gapMng.le.exAdvBlock.lock = NULL;
+    }
     ListDelete(g_gapMng.le.exAdvBlock.exAdvInfoList);
 #endif
 
@@ -334,13 +431,18 @@ bool GapLeRolesCheck(uint8_t role)
 {
     return !!(g_gapMng.le.local.role & role);
 }
-
 void GapFreeLeDeviceInfo(void *data)
 {
     LeDeviceInfo *deviceInfo = data;
 
-    AlarmCancel(deviceInfo->alarm);
-    AlarmDelete(deviceInfo->alarm);
+    // The alarm may be NULL when AlarmCreate failed in GapLeAddConnectionDevice;
+    // the device is still tracked so that upper layers stay aware of the link.
+    // AlarmCancel asserts on NULL while AlarmDelete tolerates it, so both calls
+    // must be gated on a non-NULL alarm.
+    if (deviceInfo->alarm != NULL) {
+        AlarmCancel(deviceInfo->alarm);
+        AlarmDelete(deviceInfo->alarm);
+    }
     if (deviceInfo->securityReq != NULL) {
         MEM_MALLOC.free(deviceInfo->securityReq);
         deviceInfo->securityReq = NULL;
@@ -875,10 +977,18 @@ static void GapFreeDeviceInfo(void *data)
 {
     DeviceInfo *devInfo = data;
     if (devInfo != NULL) {
-        AlarmCancel(devInfo->alarm);
-        AlarmDelete(devInfo->alarm);
-        AlarmCancel(devInfo->aclAlarm);
-        AlarmDelete(devInfo->aclAlarm);
+        // The alarms may be NULL when AlarmCreate failed in GapAllocDeviceInfo;
+        // the device is still tracked so that upper layers stay aware of the
+        // link. AlarmCancel asserts on NULL while AlarmDelete tolerates it, so
+        // both calls must be gated on a non-NULL alarm.
+        if (devInfo->alarm != NULL) {
+            AlarmCancel(devInfo->alarm);
+            AlarmDelete(devInfo->alarm);
+        }
+        if (devInfo->aclAlarm != NULL) {
+            AlarmCancel(devInfo->aclAlarm);
+            AlarmDelete(devInfo->aclAlarm);
+        }
         if (devInfo->waitEncryptAlarm != NULL) {
             AlarmCancel(devInfo->waitEncryptAlarm);
             AlarmDelete(devInfo->waitEncryptAlarm);
@@ -1005,7 +1115,10 @@ void GapStopUseAclConnection(void *dev)
 {
     DeviceInfo *device = ListForEachData(GapGetConnectionInfoBlock()->devicelist, GapFindCmpListData, dev);
     if (device != NULL) {
-        AlarmCancel(device->aclAlarm);
+        if (device->aclAlarm != NULL) {
+            // The alarm may be NULL when AlarmCreate failed in GapAllocDeviceInfo.
+            AlarmCancel(device->aclAlarm);
+        }
         BTM_AclRelease(device->handle);
     }
 }
@@ -1037,9 +1150,13 @@ void GapUseAclConnectionTimeout(void *dev)
 void GapStartUseAclConnection(DeviceInfo *device, uint64_t timeMs)
 {
     if (device != NULL) {
-        AlarmCancel(device->aclAlarm);
+        if (device->aclAlarm != NULL) {
+            // The alarm may be NULL when AlarmCreate failed in
+            // GapAllocDeviceInfo; AlarmSet asserts on NULL, so gate it.
+            AlarmCancel(device->aclAlarm);
+            AlarmSet(device->aclAlarm, timeMs, GapUseAclConnectionTimeout, device);
+        }
         BTM_AclAddRef(device->handle);
-        AlarmSet(device->aclAlarm, timeMs, GapUseAclConnectionTimeout, device);
     }
 }
 
@@ -1177,6 +1294,13 @@ static DeviceInfo *GapAllocDeviceInfo(const BtAddr *addr, const uint16_t handle)
         deviceInfo->remoteAuthReq = AUTHENTICATION_UNKNOWN_MITM;
         deviceInfo->alarm = AlarmCreate("gapSec", false);
         deviceInfo->aclAlarm = AlarmCreate("gapAcl", false);
+        if (deviceInfo->alarm == NULL || deviceInfo->aclAlarm == NULL) {
+            // Keep tracking the connection even without the alarms: dropping
+            // deviceInfo here would leave the upper layers blind to the link.
+            // Only the security/ACL timeouts are lost; callers of these
+            // alarms must NULL-check before AlarmSet/AlarmCancel.
+            LOG_ERROR("%{public}s: AlarmCreate failed, device tracked without alarm.", __FUNCTION__);
+        }
     }
 
     return deviceInfo;
@@ -1294,7 +1418,7 @@ int GAP_LeSetRole(uint8_t role)
     }
 
     g_gapMng.le.local.role = role;
-    if (GapLeRolesCheck(GAP_LE_ROLE_PREIPHERAL | GAP_LE_ROLE_CENTRAL) == true) {
+    if (GapLeRolesCheck(GAP_LE_ROLE_PERIPHERAL | GAP_LE_ROLE_CENTRAL) == true) {
         BtmKey key;
         BTM_GetLocalIdentityResolvingKey(&key);
         SMP_SetIRK(key.key);

@@ -1677,10 +1677,10 @@ int BleAdapter::SetBleRoles() const
 
     LOG_DEBUG("[BleAdapter] %{public}s:%{public}d", __func__, roles);
 
-    if (roles > (GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_OBSERVER | GAP_LE_ROLE_PREIPHERAL | GAP_LE_ROLE_CENTRAL) ||
+    if (roles > (GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_OBSERVER | GAP_LE_ROLE_PERIPHERAL | GAP_LE_ROLE_CENTRAL) ||
         roles < GAP_LE_ROLE_BROADCASTER) {
         LOG_ERROR("[BleAdapter] %{public}s:Roles is invalid.", __func__);
-        roles = (GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_OBSERVER | GAP_LE_ROLE_PREIPHERAL | GAP_LE_ROLE_CENTRAL);
+        roles = (GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_OBSERVER | GAP_LE_ROLE_PERIPHERAL | GAP_LE_ROLE_CENTRAL);
     }
     return GAPIF_LeSetRole(roles);
 }

@@ -41,6 +41,8 @@ extern "C" {
 #define GAP_ACCEPT 1      /// accept
 
 #define GAP_LINKKEY_SIZE 0x10           /// bluetooth link key size
+#define GAP_LTK_SIZE     GAP_LINKKEY_SIZE /// bluetooth long term key size (same length as link key)
+#define GAP_RAND_SIZE    0x08           /// bluetooth encryption rand size
 #define GAP_PINCODE_SIZE 0x10           /// bluetooth pin code size
 #define GAP_OOB_DATA_CONFIRM_SIZE 0x10  /// bluetooth OOB data confirm size
 #define GAP_OOB_DATA_RANDOM_SIZE 0x10   /// bluetooth OOB data random size

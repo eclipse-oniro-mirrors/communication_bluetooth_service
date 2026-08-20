@@ -1873,6 +1873,104 @@ SMP_PairMng *SMP_GetPairMng()
     return &g_smpPairMng;
 }
 
+static int SMP_SecureZero(void *buf, size_t len)
+{
+    if (buf == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (memset_s(buf, len, 0x00, len) != EOK) {
+        LOG_ERROR("%{public}s: secure wipe failed", __FUNCTION__);
+        return BT_OPERATION_FAILED;
+    }
+    return BT_SUCCESS;
+}
+
+// Internal helper for cross-transport key derivation (CTKD). h6 is defined in
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part H, 2.2.10.
+// The input/output buffers must be at least CRYPT_H6_OUT_LEN bytes; overlapping
+// buffers are supported by copying the input key to a local buffer before derivation.
+static int SMP_DeriveCrossTransportKey(const uint8_t *inputKey, uint16_t inputKeyLen,
+    uint8_t *outputKey, uint16_t outputKeyLen, const uint8_t tmpKeyId[CRYPT_H6_KEYID_LEN],
+    const uint8_t finalKeyId[CRYPT_H6_KEYID_LEN])
+{
+    if (inputKey == NULL || outputKey == NULL || tmpKeyId == NULL || finalKeyId == NULL ||
+        inputKeyLen != CRYPT_H6_OUT_LEN || outputKeyLen != CRYPT_H6_OUT_LEN) {
+        return BT_BAD_PARAM;
+    }
+
+    uint8_t inputCopy[CRYPT_H6_OUT_LEN] = {0x00};
+    // h6/h7 are defined over standard AES-CMAC (RFC 4493). The LTK/link key
+    // provided by the HCI layer is stored in LSB-first octet order (Bluetooth
+    // protocol convention, Vol 3 Part H 2.2.4), so the input must be reversed
+    // before derivation. The same convention applies to the output: the derived
+    // key must be reversed back to LSB-first octet order before returning it
+    // (verified against Appendix D.10/D.12 official sample data).
+    SMP_MemoryReverseCopy(inputCopy, inputKey, CRYPT_H6_OUT_LEN);
+
+    uint8_t ilk[CRYPT_H6_OUT_LEN] = {0x00};
+    int ret = SMP_CryptographicH6(inputCopy, tmpKeyId, ilk);
+    if (ret != BT_SUCCESS) {
+        bool wipeFailed = false;
+        if (SMP_SecureZero(ilk, CRYPT_H6_OUT_LEN) != BT_SUCCESS) {
+            wipeFailed = true;
+        }
+        if (SMP_SecureZero(inputCopy, CRYPT_H6_OUT_LEN) != BT_SUCCESS) {
+            wipeFailed = true;
+        }
+        if (wipeFailed) {
+            ret = BT_OPERATION_FAILED;
+        }
+        return ret;
+    }
+
+    ret = SMP_CryptographicH6(ilk, finalKeyId, outputKey);
+    bool wipeFailed = false;
+    if (ret == BT_SUCCESS) {
+        // h6 returns the key in AES-CMAC octet order; the derived key must be
+        // reversed back to Bluetooth LSB-first octet order (Appendix D.10/D.12
+        // sample data is shown in that order).
+        SMP_ReverseMemoryOrder(outputKey, CRYPT_H6_OUT_LEN);
+    } else {
+        if (SMP_SecureZero(outputKey, CRYPT_H6_OUT_LEN) != BT_SUCCESS) {
+            wipeFailed = true;
+        }
+    }
+    if (SMP_SecureZero(ilk, CRYPT_H6_OUT_LEN) != BT_SUCCESS) {
+        wipeFailed = true;
+    }
+    if (SMP_SecureZero(inputCopy, CRYPT_H6_OUT_LEN) != BT_SUCCESS) {
+        wipeFailed = true;
+    }
+    if (wipeFailed) {
+        // A failed wipe leaves key material behind; report the failure and also
+        // wipe the derived output so a caller that ignores the return value
+        // cannot keep a key the function claims was never derived.
+        if (ret == BT_SUCCESS) {
+            (void)SMP_SecureZero(outputKey, CRYPT_H6_OUT_LEN);
+        }
+        ret = BT_OPERATION_FAILED;
+    }
+    return ret;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part H
+// Cross-transport key derivation: ILK = h6(LTK, "tmp1"), BR/EDR link key = h6(ILK, "lebr"), h6 see 2.2.10.
+int SMP_DeriveBredrLinkKeyFromLeLtk(
+    const uint8_t *ltk, uint16_t ltkLen, uint8_t *linkKey, uint16_t linkKeyLen)
+{
+    return SMP_DeriveCrossTransportKey(
+        ltk, ltkLen, linkKey, linkKeyLen, CRYPT_H6_KEYID_TMP1, CRYPT_H6_KEYID_LEBR);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part H
+// Cross-transport key derivation: ILK = h6(link key, "tmp2"), LE LTK = h6(ILK, "brle"), h6 see 2.2.10.
+int SMP_DeriveLeLtkFromBredrLinkKey(
+    const uint8_t *linkKey, uint16_t linkKeyLen, uint8_t *ltk, uint16_t ltkLen)
+{
+    return SMP_DeriveCrossTransportKey(
+        linkKey, linkKeyLen, ltk, ltkLen, CRYPT_H6_KEYID_TMP2, CRYPT_H6_KEYID_BRLE);
+}
+
 static Module g_smp = {
     .name = MODULE_NAME_SMP,
     .init = SMP_Initialize,

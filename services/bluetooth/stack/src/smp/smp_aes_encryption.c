@@ -47,7 +47,14 @@ static int SMP_Aes128Internal(
     AES_encrypt(inReverse, outReverse, &aesKey);
 
     SMP_ReverseData(outReverse, out, sizeof(outReverse));
-    (void)memset_s(keyReverse, sizeof(keyReverse), 0x00, sizeof(keyReverse));
+    // A failed wipe leaves key material on the stack; report it as a failure
+    // instead of silently ignoring the return value.
+    if (memset_s(keyReverse, sizeof(keyReverse), 0x00, sizeof(keyReverse)) != EOK ||
+        memset_s(inReverse, sizeof(inReverse), 0x00, sizeof(inReverse)) != EOK ||
+        memset_s(outReverse, sizeof(outReverse), 0x00, sizeof(outReverse)) != EOK ||
+        memset_s(&aesKey, sizeof(aesKey), 0x00, sizeof(aesKey)) != EOK) {
+        return -1;
+    }
 
     return 0;
 }
@@ -75,5 +82,12 @@ int SMP_Aes128(
         (void)memcpy_s(keyInput, AES_BLOCK_SIZE, key, keyLen);
     }
 
-    return SMP_Aes128Internal(&keyInput[0], &input[0], &out[0]);
+    int ret = SMP_Aes128Internal(&keyInput[0], &input[0], &out[0]);
+    // Wipe the stack copies of the key and plaintext; a failed wipe must not be
+    // silently ignored (same policy as SMP_Aes128Internal).
+    if (memset_s(input, sizeof(input), 0x00, sizeof(input)) != EOK ||
+        memset_s(keyInput, sizeof(keyInput), 0x00, sizeof(keyInput)) != EOK) {
+        return -1;
+    }
+    return ret;
 }

@@ -24,6 +24,7 @@ typedef struct {
     Event *event;
     void *ctx;
     void (*func)(void *);
+    uint32_t ref;
 } GapRunTaskBlockInfo;
 
 typedef struct {
@@ -48,7 +49,14 @@ typedef struct {
 } GapGeneralCallbackInfo;
 
 void GapInTaskProcess(void *ctx);
+// GapRunTaskBlockProcess runs |func(ctx)| synchronously on the GAP processing queue and returns
+// after it completes. |ctx| remains owned by the caller; the caller must not release it until
+// the function returns.
 int GapRunTaskBlockProcess(void (*func)(void *), void *ctx);
-int GapRunTaskUnBlockProcess(void (*func)(void *), void *ctx, void (*free)(void *));
+// GapRunTaskUnBlockProcess schedules |func(ctx)| asynchronously on the GAP processing queue.
+// Ownership of |ctx| is transferred to the task framework. |cleanup| (if non-NULL) is called by the
+// framework to release all resources owned by |ctx|, including |ctx| itself. When |cleanup| is NULL,
+// the framework releases |ctx| with MEM_MALLOC.free. |cleanup| must be NULL-safe and idempotent.
+int GapRunTaskUnBlockProcess(void (*func)(void *), void *ctx, void (*cleanup)(void *));
 
 #endif

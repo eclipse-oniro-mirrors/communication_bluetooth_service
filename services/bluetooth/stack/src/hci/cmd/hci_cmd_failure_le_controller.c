@@ -15,6 +15,8 @@
 
 #include "hci_cmd_failure_le_controller.h"
 
+#include <securec.h>
+
 #include "btstack.h"
 #include "platform/include/list.h"
 
@@ -23,6 +25,9 @@
 #include "hci/hci_def.h"
 
 #include "hci_cmd_failure.h"
+#include "log.h"
+
+#define INVALID_CONNECTION_HANDLE 0xFFFF
 
 static void HciCmdOnLeSetEventMaskFailed(uint8_t status, const void *param)
 {
@@ -182,9 +187,17 @@ static void HciCmdOnLeCreateConnectionFailed(uint8_t status, const void *param)
 {
     HciLeConnectionCompleteEventParam eventParam = {
         .status = status,
-        .peerAddress = ((HciLeCreateConnectionParam *)param)->peerAddress,
-        .peerAddressType = ((HciLeCreateConnectionParam *)param)->peerAddressType,
+        .peerAddress = {0},
+        .peerAddressType = 0xFF,
     };
+
+    if (param != NULL) {
+        const HciLeCreateConnectionParam *cmdParam = (const HciLeCreateConnectionParam *)param;
+        eventParam.peerAddress = cmdParam->peerAddress;
+        eventParam.peerAddressType = cmdParam->peerAddressType;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid peer address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -268,10 +281,20 @@ static void HciCmdOnLeConnectionUpdateFailed(uint8_t status, const void *param)
 {
     HciLeConnectionUpdateCompleteEventParam eventParam = {
         .status = status,
-        .connectionHandle = ((HciLeConnectionUpdateParam *)param)->connectionHandle,
-        .connLatency = ((HciLeConnectionUpdateParam *)param)->connLatency,
-        .supervisionTimeout = ((HciLeConnectionUpdateParam *)param)->supervisionTimeout,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
+        .connInterval = 0,
+        .connLatency = 0,
+        .supervisionTimeout = 0,
     };
+
+    if (param != NULL) {
+        const HciLeConnectionUpdateParam *cmdParam = (const HciLeConnectionUpdateParam *)param;
+        eventParam.connectionHandle = cmdParam->connectionHandle;
+        eventParam.connLatency = cmdParam->connLatency;
+        eventParam.supervisionTimeout = cmdParam->supervisionTimeout;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -299,8 +322,15 @@ static void HciCmdOnLeReadChannelMapFailed(uint8_t status, const void *param)
 {
     HciLeReadChannelMapReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciLeReadChannelMapParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
+        .channelMap = {0},
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((const HciLeReadChannelMapParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -314,8 +344,15 @@ static void HciCmdOnLeReadRemoteFeaturesFailed(uint8_t status, const void *param
 {
     HciLeReadRemoteFeaturesCompleteEventParam eventParam = {
         .status = status,
-        .connectionHandle = ((HciLeReadRemoteFeaturesParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
+        .leFeatures = {0},
     };
+
+    if (param != NULL) {
+        eventParam.connectionHandle = ((const HciLeReadRemoteFeaturesParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -357,8 +394,14 @@ static void HciCmdOnLeStartEncryptionFailed(uint8_t status, const void *param)
 {
     HciEncryptionKeyRefreshCompleteEventParam eventParam = {
         .status = status,
-        .connectionHandle = ((HciLeStartEncryptionParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        eventParam.connectionHandle = ((const HciLeStartEncryptionParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -372,8 +415,14 @@ static void HciCmdOnLeLongTermKeyRequestReplyFailed(uint8_t status, const void *
 {
     HciLeLongTermKeyRequestReplyReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciLeLongTermKeyRequestReplyParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((const HciLeLongTermKeyRequestReplyParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -387,8 +436,15 @@ static void HciCmdOnLeLongTermKeyRequestNegativeReplyFailed(uint8_t status, cons
 {
     HciLeLongTermKeyRequestNegativeReplyReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciLeLongTermKeyRequestNegativeReplyParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle =
+            ((const HciLeLongTermKeyRequestNegativeReplyParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -458,8 +514,15 @@ static void HciCmdOnLeRemoteConnectionParameterRequestFailed(uint8_t status, con
 {
     HciLeRemoteConnectionParameterRequestReplyReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciLeRemoteConnectionParameterRequestReplyParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle =
+            ((const HciLeRemoteConnectionParameterRequestReplyParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -473,8 +536,15 @@ static void HciCmdOnLeRemoteConnectionParameterRequestNegativeReplyFailed(uint8_
 {
     HciLeRemoteConnectionParameterRequestNegativeReplyReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciLeRemoteConnectionParameterRequestNegativeReplyParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle =
+            ((const HciLeRemoteConnectionParameterRequestNegativeReplyParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -484,14 +554,21 @@ static void HciCmdOnLeRemoteConnectionParameterRequestNegativeReplyFailed(uint8_
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// These failure callbacks are invoked by HciOnCmdFailed after g_lockProcessingCmds is released.
+// They do not (and must not) hold the event-callback list lock; HCI_FOREACH_EVT_CALLBACKS_START
+// acquires it internally and releases it at END, so no MutexUnlock/MutexLock pairing is needed.
 static void HciCmdOnLeSetDataLengthFailed(uint8_t status, const void *param)
 {
     HciLeSetDataLengthReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciLeSetDataLengthReturnParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
 
-    MutexUnlock(HciGetEventCallbackListLock());
+    if (param != NULL) {
+        returnParam.connectionHandle = ((const HciLeSetDataLengthParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -687,10 +764,16 @@ static void HciCmdOnLeReadPhyFailed(uint8_t status, const void *param)
 {
     HciLeReadPhyReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciLeReadPhyReturnParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
+        .txPhy = 0,
+        .rxPhy = 0,
     };
 
-    MutexUnlock(HciGetEventCallbackListLock());
+    if (param != NULL) {
+        returnParam.connectionHandle = ((const HciLeReadPhyParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -710,6 +793,20 @@ static void HciCmdOnLeSetDefaultPhyFailed(uint8_t status, const void *param)
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
     if (callbacks->leSetDefaultPhyComplete != NULL) {
         callbacks->leSetDefaultPhyComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetPhyFailed(uint8_t status, const void *param)
+{
+    HciLeSetPhyReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPhyComplete != NULL) {
+        callbacks->leSetPhyComplete(&returnParam);
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
@@ -870,7 +967,7 @@ static void HciCmdOnLeClearAdvertisingSetsFailed(uint8_t status, const void *par
 
 static void HciCmdOnLeSetPeriodicAdvertisingParametersFailed(uint8_t status, const void *param)
 {
-    HciLeSetPeriodicAdvertisingParametersReturnParameters returnParam = {
+    HciLeSetPeriodicAdvertisingParametersReturnParam returnParam = {
         .status = status,
     };
 
@@ -884,7 +981,7 @@ static void HciCmdOnLeSetPeriodicAdvertisingParametersFailed(uint8_t status, con
 
 static void HciCmdOnLeSetPeriodicAdvertisingDataFailed(uint8_t status, const void *param)
 {
-    HciLeSetPeriodicAdvertisingDataReturnParameters returnParam = {
+    HciLeSetPeriodicAdvertisingDataReturnParam returnParam = {
         .status = status,
     };
 
@@ -898,7 +995,7 @@ static void HciCmdOnLeSetPeriodicAdvertisingDataFailed(uint8_t status, const voi
 
 static void HciCmdOnLeSetPeriodicAdvertisingEnableFailed(uint8_t status, const void *param)
 {
-    HciLeSetPeriodicAdvertisingEnableReturnParameters returnParam = {
+    HciLeSetPeriodicAdvertisingEnableReturnParam returnParam = {
         .status = status,
     };
 
@@ -940,13 +1037,19 @@ static void HciCmdOnLeSetExtendedScanEnableFailed(uint8_t status, const void *pa
 
 static void HciCmdOnLeExtendedCreateConnectionFailed(uint8_t status, const void *param)
 {
-    const HciLeExtendedCreateConnectionParam *cmdParam = param;
-
     HciLeEnhancedConnectionCompleteEventParam eventParam = {
         .status = status,
-        .peerAddressType = cmdParam->peerAddressType,
-        .peerAddress = cmdParam->peerAddress,
+        .peerAddressType = 0xFF,
+        .peerAddress = {0},
     };
+
+    if (param != NULL) {
+        const HciLeExtendedCreateConnectionParam *cmdParam = (const HciLeExtendedCreateConnectionParam *)param;
+        eventParam.peerAddressType = cmdParam->peerAddressType;
+        eventParam.peerAddress = cmdParam->peerAddress;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid peer address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -966,6 +1069,41 @@ static void HciCmdOnLePeriodicAdvertisingCreateSyncCancelFailed(uint8_t status, 
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
     if (callbacks->lePeriodicAdvertisingCreateSyncCancelComplete != NULL) {
         callbacks->lePeriodicAdvertisingCreateSyncCancelComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLePeriodicAdvertisingCreateSyncFailed(uint8_t status, const void *param)
+{
+    HciLePeriodicAdvertisingSyncEstablishedEventParam eventParam = {
+        .status = status,
+        .syncHandle = 0xFFFF,
+        .advertisingSid = 0xFF,
+        .advertiserAddressType = 0xFF,
+        .advertiserAddress = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
+        .advertiserPhy = 0x00,
+        .periodicAdvertisingInterval = 0xFFFF,
+        .advertiserClockAccuracy = 0xFF,
+    };
+
+    if (param != NULL) {
+        const HciLePeriodicAdvertisingCreateSyncParam *createParam =
+            (const HciLePeriodicAdvertisingCreateSyncParam *)param;
+        eventParam.advertisingSid = createParam->advertisingSid;
+        eventParam.advertiserAddressType = createParam->advertiserAddressType;
+        if (memcpy_s(eventParam.advertiserAddress.raw, sizeof(eventParam.advertiserAddress.raw),
+                 createParam->advertiserAddress.raw, sizeof(createParam->advertiserAddress.raw)) != EOK) {
+            LOG_WARN("%{public}s: memcpy_s advertiserAddress failed", __FUNCTION__);
+        }
+        // HCI LE Periodic Advertising Create Sync command does not carry advertiserPhy; keep the invalid default.
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid target info", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->lePeriodicAdvertisingSyncEstablished != NULL) {
+        callbacks->lePeriodicAdvertisingSyncEstablished(&eventParam);
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
@@ -1147,7 +1285,7 @@ static HciCmdOnFailedFunc g_funcMap[] = {
     HciCmdOnLeReadMaximumDataLengthFailed,                          // 0x002F
     HciCmdOnLeReadPhyFailed,                                        // 0x0030
     HciCmdOnLeSetDefaultPhyFailed,                                  // 0x0031
-    NULL,                                                           // 0x0032
+    HciCmdOnLeSetPhyFailed,                                         // 0x0032
     HciCmdOnLeEnhancedReceiverTestFailed,                           // 0x0033
     HciCmdOnLeEnhancedTransmitterTestFailed,                        // 0x0034
     HciCmdOnLeSetAdvertisingSetRandomAddressFailed,                 // 0x0035
@@ -1165,7 +1303,7 @@ static HciCmdOnFailedFunc g_funcMap[] = {
     HciCmdOnLeSetExtendedScanParametersFailed,                      // 0x0041
     HciCmdOnLeSetExtendedScanEnableFailed,                          // 0x0042
     HciCmdOnLeExtendedCreateConnectionFailed,                       // 0x0043
-    NULL,                                                           // 0x0044
+    HciCmdOnLePeriodicAdvertisingCreateSyncFailed,                  // 0x0044
     HciCmdOnLePeriodicAdvertisingCreateSyncCancelFailed,            // 0x0045
     HciCmdOnLePeriodicAdvertisingTerminateSyncFailed,               // 0x0046
     HciCmdOnLeAddDeviceToPeriodicAdvertiserListFailed,              // 0x0047

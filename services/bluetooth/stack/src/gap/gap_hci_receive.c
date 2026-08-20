@@ -24,18 +24,54 @@
 
 #include "btm/btm_thread.h"
 
-static int GapProcessHciEventInTask(TaskFunc run, const void *ctx, uint32_t ctxLen, TaskFunc free)
+// The copy of |ctx| failed; hand a fresh heap copy to |freeFunc| so it can
+// release the nested resources and the struct itself. When the re-copy also
+// fails the nested resources leak along with the caller's stack object; log
+// for diagnosis (both allocations failed under the same OOM).
+static void GapRunFreeFuncWithHeapCopy(const void *ctx, uint32_t ctxLen, TaskFunc freeFunc)
 {
+    if (freeFunc == NULL) {
+        return;
+    }
+    void *heapCtx = MEM_MALLOC.alloc(ctxLen);
+    if (heapCtx != NULL && memcpy_s(heapCtx, ctxLen, ctx, ctxLen) == EOK) {
+        freeFunc(heapCtx);
+    } else {
+        HILOGE("GapProcessHciEventInTask: could not re-copy ctx for freeFunc, nested resources leak");
+    }
+}
+
+static int GapProcessHciEventInTask(TaskFunc run, const void *ctx, uint32_t ctxLen, TaskFunc freeFunc)
+{
+    // Contract: |freeFunc| (if provided) fully owns the context it receives,
+    // i.e. it releases both the nested resources and the struct itself.
+    // Therefore |freeFunc| must always be invoked with a heap object, never
+    // with the caller's stack copy of |ctx|.
+    // Callers must not release their own nested resources on any non-success
+    // return: on the memcpy_s failure path they are freed via |freeFunc|, and
+    // on the OOM path they leak (a deliberate trade-off, see below).
     void *hciParam = NULL;
     if (ctx != NULL && ctxLen != 0) {
         hciParam = MEM_MALLOC.alloc(ctxLen);
         if (hciParam == NULL) {
+            // OOM: ownership of the caller's |ctx| (and any nested resources it
+            // points to) cannot be transferred to the queue. |freeFunc| must
+            // only be invoked with a heap object (see the contract above), and
+            // a second allocation attempt under OOM would almost certainly fail
+            // again, so return directly; the caller's nested resources leak.
             return BT_NO_MEMORY;
         }
-        (void)memcpy_s(hciParam, ctxLen, ctx, ctxLen);
+        if (memcpy_s(hciParam, ctxLen, ctx, ctxLen) != EOK) {
+            // The copy failed; the locally allocated |hciParam| is released here.
+            MEM_MALLOC.free(hciParam);
+            GapRunFreeFuncWithHeapCopy(ctx, ctxLen, freeFunc);
+            return BT_OPERATION_FAILED;
+        }
     }
 
-    return GapRunTaskUnBlockProcess(run, hciParam, free);
+    // GapRunTaskUnBlockProcess takes ownership of |hciParam|.  On every
+    // failure path it releases |hciParam| and any nested resources via |freeFunc|.
+    return GapRunTaskUnBlockProcess(run, hciParam, freeFunc);
 }
 
 #ifdef GAP_BREDR_SUPPORT
@@ -296,6 +332,7 @@ static void GapFreeInquiryResult(void *ctx)
 {
     HciInquiryResultEventParam *hciParam = ctx;
     MEM_MALLOC.free(hciParam->responses);
+    MEM_MALLOC.free(hciParam);
 }
 
 static void GapRecvInquiryResult(const HciInquiryResultEventParam *eventParam)
@@ -382,6 +419,7 @@ static void GapFreeInquiryResultRssi(void *ctx)
     HciInquiryResultWithRssiEventParam *hciParam = ctx;
 
     MEM_MALLOC.free(hciParam->responses);
+    MEM_MALLOC.free(hciParam);
 }
 
 static void GapRecvInquiryResultRssi(const HciInquiryResultWithRssiEventParam *eventParam)
@@ -729,6 +767,7 @@ static void GapFreeLeAdvertisingReportEvent(void *ctx)
         MEM_MALLOC.free(hciParam->reports[i].data);
     }
     MEM_MALLOC.free(hciParam->reports);
+    MEM_MALLOC.free(hciParam);
 }
 
 static void GapRecvLeAdvertisingReportEvent(const HciLeAdvertisingReportEventParam *eventParam)
@@ -822,6 +861,7 @@ static void GapFreeLeExtendedAdvertisingReportEvent(void *ctx)
         MEM_MALLOC.free(hciParam->reports[i].data);
     }
     MEM_MALLOC.free(hciParam->reports);
+    MEM_MALLOC.free(hciParam);
 }
 
 static void GapRecvLeExtendedAdvertisingReportEvent(const HciLeExtendedAdvertisingReportEventParam *eventParam)
@@ -889,11 +929,458 @@ static void GapRecvLeAdvertisingSetTerminated(const HciLeAdvertisingSetTerminate
 
 static void GapRecvLeScanRequestReceivedEvent(const HciLeScanRequestReceivedEventParam *eventParam)
 {
+    if (eventParam == NULL) {
+        return;
+    }
+
     HILOGI("addr:" BT_ADDR_FMT "advHandle: %{public}hhu",
         BT_ADDR_FMT_OUTPUT(eventParam->scannerAddress.raw),
         eventParam->advertisingHandle);
     int ret =
         GapProcessHciEventInTask((TaskFunc)GapOnLeScanRequestReceivedEvent, eventParam, sizeof(*eventParam), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeReadPhyComplete(const HciLeReadPhyReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    if (param->status != HCI_SUCCESS) {
+        HILOGW("status: 0x%{public}02x, handle: 0x%{public}04x, txPhy: 0x%{public}02x, rxPhy: 0x%{public}02x",
+            param->status,
+            param->connectionHandle,
+            param->txPhy,
+            param->rxPhy);
+    } else {
+        HILOGI("status: 0x%{public}02x, handle: 0x%{public}04x, txPhy: 0x%{public}02x, rxPhy: 0x%{public}02x",
+            param->status,
+            param->connectionHandle,
+            param->txPhy,
+            param->rxPhy);
+    }
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeReadPhyComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeSetDefaultPhyComplete(const HciLeSetDefaultPhyReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    if (param->status != HCI_SUCCESS) {
+        HILOGW("status: 0x%{public}02x", param->status);
+    } else {
+        HILOGI("status: 0x%{public}02x", param->status);
+    }
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeSetDefaultPhyComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeSetPhyComplete(const HciLeSetPhyReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    if (param->status != HCI_SUCCESS) {
+        HILOGW("status: 0x%{public}02x", param->status);
+    } else {
+        HILOGI("status: 0x%{public}02x", param->status);
+    }
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeSetPhyComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLePhyUpdateCompleteEvent(const HciLePhyUpdateCompleteEventParam *eventParam)
+{
+    if (eventParam == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x, handle: 0x%{public}04x, txPhy: 0x%{public}02x, rxPhy: 0x%{public}02x",
+        eventParam->status,
+        eventParam->connectionHandle,
+        eventParam->txPhy,
+        eventParam->rxPhy);
+    int ret =
+        GapProcessHciEventInTask((TaskFunc)GapOnLePhyUpdateCompleteEvent, eventParam, sizeof(*eventParam), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeSetDataLengthComplete(const HciLeSetDataLengthReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x, handle: 0x%{public}04x", param->status, param->connectionHandle);
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeSetDataLengthComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeDataLengthChangeEvent(const HciLeDataLengthChangeEventParam *eventParam)
+{
+    if (eventParam == NULL) {
+        return;
+    }
+
+    HILOGI("handle: 0x%{public}04x, txOctets: %{public}hu, txTime: %{public}hu, "
+        "rxOctets: %{public}hu, rxTime: %{public}hu",
+        eventParam->connectionHandle,
+        eventParam->maxTxOctets,
+        eventParam->maxTxTime,
+        eventParam->maxRxOctets,
+        eventParam->maxRxTime);
+    int ret = GapProcessHciEventInTask((TaskFunc)GapOnLeDataLengthChangeEvent, eventParam, sizeof(*eventParam), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeSetPeriodicAdvertisingParametersComplete(
+    const HciLeSetPeriodicAdvertisingParametersReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLeSetPeriodicAdvertisingParametersComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeSetPeriodicAdvertisingDataComplete(const HciLeSetPeriodicAdvertisingDataReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret =
+        GapProcessHciEventInTask((TaskFunc)GapLeSetPeriodicAdvertisingDataComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeSetPeriodicAdvertisingEnableComplete(
+    const HciLeSetPeriodicAdvertisingEnableReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret =
+        GapProcessHciEventInTask((TaskFunc)GapLeSetPeriodicAdvertisingEnableComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLePeriodicAdvertisingCreateSyncCancelComplete(
+    const HciLePeriodicAdvertisingCreateSyncCancelReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLePeriodicAdvertisingCreateSyncCancelComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLePeriodicAdvertisingTerminateSyncComplete(
+    const HciLePeriodicAdvertisingTerminateSyncReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLePeriodicAdvertisingTerminateSyncComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLePeriodicAdvertisingSyncEstablishedEvent(
+    const HciLePeriodicAdvertisingSyncEstablishedEventParam *eventParam)
+{
+    if (eventParam == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x, syncHandle: 0x%{public}04x, sid: %{public}hhu",
+        eventParam->status,
+        eventParam->syncHandle,
+        eventParam->advertisingSid);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapOnLePeriodicAdvertisingSyncEstablishedEvent, eventParam, sizeof(*eventParam), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapFreeLePeriodicAdvertisingReportEvent(void *ctx)
+{
+    // ctx is always a heap copy of HciLePeriodicAdvertisingReportEventParam
+    // produced by GapProcessHciEventInTask, so it is safe to free the struct
+    // itself here (the cleanup fully owns the context).
+    if (ctx == NULL) {
+        return;
+    }
+    HciLePeriodicAdvertisingReportEventParam *hciParam = ctx;
+    if (hciParam->data != NULL) {
+        uint8_t *data = (uint8_t *)hciParam->data;
+        hciParam->data = NULL;
+        MEM_MALLOC.free(data);
+    }
+    MEM_MALLOC.free(hciParam);
+}
+
+static void GapRecvLePeriodicAdvertisingReportEvent(const HciLePeriodicAdvertisingReportEventParam *eventParam)
+{
+    if (eventParam == NULL) {
+        return;
+    }
+
+    HILOGD("syncHandle: 0x%{public}04x, dataLen: %{public}hhu", eventParam->syncHandle, eventParam->dataLength);
+
+    if (eventParam->dataLength > GAP_PERIODIC_ADV_DATA_LENGTH_MAX) {
+        HILOGE("Periodic advertising report data length too large: %{public}hhu.", eventParam->dataLength);
+        return;
+    }
+
+    if (eventParam->dataLength > 0 && eventParam->data == NULL) {
+        HILOGW("Malformed periodic advertising report: non-zero length but no payload. Dropping.");
+        return;
+    }
+
+    HciLePeriodicAdvertisingReportEventParam hciParam = *eventParam;
+    hciParam.data = NULL;
+
+    if (eventParam->dataLength > 0 && eventParam->data != NULL) {
+        uint8_t *data = MEM_MALLOC.alloc(eventParam->dataLength);
+        if (data == NULL) {
+            HILOGE("Alloc report data error.");
+            return;
+        }
+        if (memcpy_s(data, eventParam->dataLength, eventParam->data, eventParam->dataLength) != EOK) {
+            MEM_MALLOC.free(data);
+            HILOGE("Copy report data error.");
+            return;
+        }
+        hciParam.data = data;
+    }
+
+    int ret = GapProcessHciEventInTask((TaskFunc)GapOnLePeriodicAdvertisingReportEvent,
+        &hciParam,
+        sizeof(hciParam),
+        GapFreeLePeriodicAdvertisingReportEvent);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLePeriodicAdvertisingSyncLostEvent(const HciLePeriodicAdvertisingSyncLostEventParam *eventParam)
+{
+    if (eventParam == NULL) {
+        return;
+    }
+
+    HILOGI("syncHandle: 0x%{public}04x", eventParam->syncHandle);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapOnLePeriodicAdvertisingSyncLostEvent, eventParam, sizeof(*eventParam), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeAddDeviceToPeriodicAdvertiserListComplete(
+    const HciLeAddDeviceToPeriodicAdvertiserListReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLeAddDeviceToPeriodicAdvertiserListComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeRemoveDeviceFromPeriodicAdvertiserListComplete(
+    const HciLeRemoveDeviceFromPeriodicAdvertiserListReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLeRemoveDeviceFromPeriodicAdvertiserListComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeClearPeriodicAdvertiserListComplete(const HciLeClearPeriodicAdvertiserListReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret =
+        GapProcessHciEventInTask((TaskFunc)GapLeClearPeriodicAdvertiserListComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeReadPeriodicAdvertiserListSizeComplete(
+    const HciLeReadPeriodicAdvertiserListSizeReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x, size: %{public}hhu", param->status, param->periodicAdvertiserListSize);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLeReadPeriodicAdvertiserListSizeComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeReadTransmitPowerComplete(const HciLeReadTransmitPowerReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeReadTransmitPowerComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeReadRfPathCompensationComplete(const HciLeReadRfPathCompensationReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeReadRfPathCompensationComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeWriteRfPathCompensationComplete(const HciLeWriteRfPathCompensationReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeWriteRfPathCompensationComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeReadSuggestedDefaultDataLengthComplete(
+    const HciLeReadSuggestedDefaultDataLengthReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLeReadSuggestedDefaultDataLengthComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeWriteSuggestedDefaultDataLengthComplete(
+    const HciLeWriteSuggestedDefaultDataLengthReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLeWriteSuggestedDefaultDataLengthComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeReadMaximumDataLengthComplete(const HciLeReadMaximumDataLengthReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeReadMaximumDataLengthComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeEnhancedReceiverTestComplete(const HciLeEnhancedReceiverTestReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeEnhancedReceiverTestComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeEnhancedTransmitterTestComplete(const HciLeEnhancedTransmitterTestReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeEnhancedTransmitterTestComplete, param, sizeof(*param), NULL);
     if (ret != BT_SUCCESS) {
         HILOGE("Task error: %{public}d.", ret);
     }
@@ -976,6 +1463,27 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .leClearAdvertisingSetsComplete = GapRecvLeClearAdvertisingSetsComplete,
     .leSetExtendedScanParametersComplete = GapRecvLeSetExtendedScanParametersComplete,
     .leSetExtendedScanEnableComplete = GapRecvLeSetExtendedScanEnableComplete,
+    .leReadPhyComplete = GapRecvLeReadPhyComplete,
+    .leSetDefaultPhyComplete = GapRecvLeSetDefaultPhyComplete,
+    .leSetPhyComplete = GapRecvLeSetPhyComplete,
+    .leSetDataLengthComplete = GapRecvLeSetDataLengthComplete,
+    .leSetPeriodicAdvertisingParametersComplete = GapRecvLeSetPeriodicAdvertisingParametersComplete,
+    .leSetPeriodicAdvertisingDataComplete = GapRecvLeSetPeriodicAdvertisingDataComplete,
+    .leSetPeriodicAdvertisingEnableComplete = GapRecvLeSetPeriodicAdvertisingEnableComplete,
+    .lePeriodicAdvertisingCreateSyncCancelComplete = GapRecvLePeriodicAdvertisingCreateSyncCancelComplete,
+    .lePeriodicAdvertisingTerminateSyncComplete = GapRecvLePeriodicAdvertisingTerminateSyncComplete,
+    .leAddDeviceToPeriodicAdvertiserListComplete = GapRecvLeAddDeviceToPeriodicAdvertiserListComplete,
+    .leRemoveDeviceFromPeriodicAdvertiserListComplete = GapRecvLeRemoveDeviceFromPeriodicAdvertiserListComplete,
+    .leClearPeriodicAdvertiserListComplete = GapRecvLeClearPeriodicAdvertiserListComplete,
+    .leReadPeriodicAdvertiserListSizeComplete = GapRecvLeReadPeriodicAdvertiserListSizeComplete,
+    .leReadTransmitPowerComplete = GapRecvLeReadTransmitPowerComplete,
+    .leReadRfPathCompensationComplete = GapRecvLeReadRfPathCompensationComplete,
+    .leWriteRfPathCompensationComplete = GapRecvLeWriteRfPathCompensationComplete,
+    .leReadSuggestedDefaultDataLengthComplete = GapRecvLeReadSuggestedDefaultDataLengthComplete,
+    .leWriteSuggestedDefaultDataLengthComplete = GapRecvLeWriteSuggestedDefaultDataLengthComplete,
+    .leReadMaximumDataLengthComplete = GapRecvLeReadMaximumDataLengthComplete,
+    .leEnhancedReceiverTestComplete = GapRecvLeEnhancedReceiverTestComplete,
+    .leEnhancedTransmitterTestComplete = GapRecvLeEnhancedTransmitterTestComplete,
 
     .leAdvertisingReport = GapRecvLeAdvertisingReportEvent,
     .leConnectionUpdateComplete = GapRecvLeConnectionUpdateCompleteEvent,
@@ -985,6 +1493,12 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .leScanTimeoutComplete = GapRecvLeScanTimeoutEvent,
     .leAdvertisingSetTerminated = GapRecvLeAdvertisingSetTerminated,
     .leScanRequestReceived = GapRecvLeScanRequestReceivedEvent,
+    .lePhyUpdateComplete = GapRecvLePhyUpdateCompleteEvent,
+    .leDataLengthChange = GapRecvLeDataLengthChangeEvent,
+
+    .lePeriodicAdvertisingSyncEstablished = GapRecvLePeriodicAdvertisingSyncEstablishedEvent,
+    .lePeriodicAdvertisingReport = GapRecvLePeriodicAdvertisingReportEvent,
+    .lePeriodicAdvertisingSyncLost = GapRecvLePeriodicAdvertisingSyncLostEvent,
 #endif
 };
 

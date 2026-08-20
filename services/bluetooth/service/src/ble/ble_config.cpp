@@ -127,7 +127,7 @@ int BleConfig::GetBleRoles() const
 {
     LOG_DEBUG("[BleConfig] %{public}s", __func__);
 
-    int roles = (GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_OBSERVER | GAP_LE_ROLE_PREIPHERAL | GAP_LE_ROLE_CENTRAL);
+    int roles = (GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_OBSERVER | GAP_LE_ROLE_PERIPHERAL | GAP_LE_ROLE_CENTRAL);
     bool ret = config_->GetValue(SECTION_HOST, PROPERTY_BLE_ROLES, roles);
     if (!ret) {
         LOG_ERROR("[BleConfig] %{public}s:%{public}s", __func__, "Get ble roles failed!");

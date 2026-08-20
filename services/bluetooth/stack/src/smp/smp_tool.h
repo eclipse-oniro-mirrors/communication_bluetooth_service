@@ -146,6 +146,22 @@ typedef struct {
     uint8_t output[CRYPT_S1_OUT_LEN];
 } SMP_CryptS1Param;
 
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part H
+// 2.2.10 Link key conversion function h6: h6(W, keyID) = AES-CMAC(W, keyID), sample data see Appendix D.
+#define CRYPT_H6_KEYID_LEN 4
+#define CRYPT_H6_W_LEN 16
+#define CRYPT_H6_OUT_LEN 16
+extern const uint8_t CRYPT_H6_KEYID_TMP1[CRYPT_H6_KEYID_LEN]; /* "tmp1" */
+extern const uint8_t CRYPT_H6_KEYID_TMP2[CRYPT_H6_KEYID_LEN]; /* "tmp2" */
+extern const uint8_t CRYPT_H6_KEYID_LEBR[CRYPT_H6_KEYID_LEN]; /* "lebr" */
+extern const uint8_t CRYPT_H6_KEYID_BRLE[CRYPT_H6_KEYID_LEN]; /* "brle" */
+
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part H
+// 2.2.11 Link key conversion function h7: h7(SALT, W) = AES-CMAC(SALT, W).
+#define CRYPT_H7_W_LEN 16
+#define CRYPT_H7_SALT_LEN 16
+#define CRYPT_H7_OUT_LEN 16
+
 void SMP_ConstituteC1Step1Param(uint8_t role, const uint8_t *random, uint8_t randomLen, SMP_CryptC1Step1Param *param);
 int SMP_CryptographicC1Step1(uint16_t step, SMP_CryptC1Step1Param *param);
 int SMP_ConstituteC1Step2Param(const SMP_EncData *encData, uint8_t role, SMP_CryptC1Step2Param *param);
@@ -158,6 +174,19 @@ void SMP_CryptographicF5(SMP_CryptF5Param *param);
 void SMP_ConstituteF6Param(bool isCalculatePeer, SMP_CryptF6Param *cryptF6Param);
 void SMP_CryptographicF6(SMP_CryptF6Param *param);
 void SMP_CryptographicG2(SMP_CryptG2Param *param);
+// Return values for the functions below use BT_SUCCESS / BT_BAD_PARAM / BT_OPERATION_FAILED
+// defined in btstack.h.
+int SMP_CryptographicAesCmac(const uint8_t key[CRYPT_AESCMAC_KEY_LEN], const uint8_t *message, uint16_t messageLen,
+                             uint8_t output[CRYPT_AESCMAC_OUT_LEN]);
+int SMP_CryptographicH6(const uint8_t w[CRYPT_H6_W_LEN], const uint8_t keyId[CRYPT_H6_KEYID_LEN],
+                        uint8_t output[CRYPT_H6_OUT_LEN]);
+int SMP_CryptographicH7(const uint8_t salt[CRYPT_H7_SALT_LEN], const uint8_t w[CRYPT_H7_W_LEN],
+                        uint8_t output[CRYPT_H7_OUT_LEN]);
+
+// Cross-transport key derivation helpers (SMP_DeriveBredrLinkKeyFromLeLtk /
+// SMP_DeriveLeLtkFromBredrLinkKey) are declared in smp.h; include smp.h when using them.
+// AES-CMAC step helpers. Step1/Step2 are synchronous state transitions and therefore return void;
+// the top-level SMP_CryptographicAesCmac and Step3/Step4 helpers return an int status.
 void SMP_CryptographicAesCmacStep1(SMP_CryptAesCmacStep1Param *param);
 void SMP_CryptographicAesCmacStep2(SMP_CryptAesCmacStep2Param *param);
 void SMP_ConstituteAesCmacStep3Param(

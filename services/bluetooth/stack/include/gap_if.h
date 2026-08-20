@@ -22,7 +22,7 @@
  */
 
 /**
- * @file gap.h
+ * @file gap_if.h
  *
  * @brief bluetooth gap interface
  *
@@ -178,6 +178,18 @@ typedef struct {
 } GapSecurityCallback;
 
 /**
+ * @brief       CTKD derived LE LTK metadata.
+ *
+ * For LTKs derived from a BR/EDR link key via h6, Core Spec reserves rand and ediv to 0.
+ */
+typedef struct {
+    uint8_t ltk[GAP_LTK_SIZE];      /// Long Term Key
+    uint8_t rand[GAP_RAND_SIZE];    /// Randomizer (reserved to 0 for derived LTK)
+    uint16_t ediv;                  /// Encrypted Diversifier (reserved to 0 for derived LTK)
+    uint8_t keySize;                /// Encryption key size (octets)
+} GapDerivedLeLtkInfo;
+
+/**
  * @brief       authentication callback structure.
  */
 typedef struct {
@@ -195,6 +207,21 @@ typedef struct {
     void (*IOCapabilityRsp)(const BtAddr *addr, uint8_t ioCapability, void *context);
     void (*authenticationComplete)(const BtAddr *addr, uint8_t status, void *context);
     void (*encryptionChangeCallback)(const BtAddr *addr, uint8_t status, void *context);
+    /// CTKD (Cross-Transport Key Derivation) result: the LE LTK derived from the BR/EDR link key.
+    /// Called after linkKeyNotification when the link key was generated from P-256 (Secure Connections),
+    /// see BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part H 2.2.10 (h6). The upper layer may copy it into
+    /// a protected key store as the LE long term key of this dual-mode peer to skip a second LE pairing.
+    /// Lifetime contract: @a info points to a stack-allocated buffer that is valid only for the duration
+    /// of this callback invocation. The GAP dispatcher zeroizes the structure immediately after the call
+    /// returns. The receiver must copy the LTK into its own protected storage inside the callback and must
+    /// not retain or dereference @a info after returning.
+    /// GAP_LTK_SIZE is defined in gap_comm.h, which this header includes.
+
+    /// Security contract: this callback delivers sensitive key material. The receiver must not log or
+    /// otherwise expose the LTK. It may be copied only into a protected key store; any temporary copy
+    /// should be cleared from memory immediately after use. Register this callback only from a trusted module.
+    /// Optional. GAP dispatcher must verify this is non-NULL before invoking.
+    void (*derivedLeLtk)(const BtAddr *addr, const GapDerivedLeLtkInfo *info, void *context);
 } GapAuthenticationCallback;
 
 /**

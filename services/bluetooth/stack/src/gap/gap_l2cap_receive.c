@@ -117,9 +117,9 @@ void GapLeConnectionParameterUpdateRspResult(uint16_t aclHandle, int result)
     }
 }
 
-void GapLeConnectionParameterUpdateReq(uint16_t aclHandle, const L2capLeConnectionParameter *param)
+int GapLeConnectionParameterUpdateReq(uint16_t aclHandle, const L2capLeConnectionParameter *param)
 {
-    L2CIF_LeConnectionParameterUpdateReq(aclHandle, param, GapLeConnectionParameterUpdateReqResult);
+    return L2CIF_LeConnectionParameterUpdateReq(aclHandle, param, GapLeConnectionParameterUpdateReqResult);
 }
 
 void GapLeConnectionParameterUpdateRsp(uint16_t aclHandle, uint8_t id, uint16_t result)

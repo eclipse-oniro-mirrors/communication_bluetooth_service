@@ -225,6 +225,7 @@ static void HciFreeCmd(void *cmd)
         if (hciCmd->alarm != NULL) {
             AlarmCancel(hciCmd->alarm);
             AlarmDelete(hciCmd->alarm);
+            hciCmd->alarm = NULL;
         }
         if (hciCmd->param != NULL) {
             MEM_MALLOC.free(hciCmd->param);
@@ -232,14 +233,19 @@ static void HciFreeCmd(void *cmd)
         }
         if (hciCmd->packet != NULL) {
             PacketFree(hciCmd->packet);
+            hciCmd->packet = NULL;
         }
+        MEM_MALLOC.free(cmd);
     }
-    MEM_MALLOC.free(cmd);
 }
 
+// Ownership contract: HciSendCmd takes ownership of @p cmd regardless of whether
+// it returns BT_SUCCESS or an error. The caller must not access or free @p cmd
+// after this call.
 int HciSendCmd(HciCmd *cmd)
 {
     int result = BT_SUCCESS;
+    bool push_failed = false;
 
     MutexLock(g_lockNumberOfHciCmd);
 
@@ -252,12 +258,18 @@ int HciSendCmd(HciCmd *cmd)
             AlarmSet(cmd->alarm, CMD_TIMEOUT, HciCmdOnCmdTimeout, cmd);
             ListAddLast(g_processingCmds, cmd);
             MutexUnlock(g_lockProcessingCmds);
+        } else {
+            push_failed = true;
         }
     } else {
         QueueEnqueue(g_cmdCache, cmd);
     }
 
     MutexUnlock(g_lockNumberOfHciCmd);
+
+    if (push_failed) {
+        HciFreeCmd(cmd);
+    }
 
     return result;
 }
