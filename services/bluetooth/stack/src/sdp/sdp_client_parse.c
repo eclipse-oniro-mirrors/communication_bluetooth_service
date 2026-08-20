@@ -574,6 +574,8 @@ static uint16_t SdpParseAttributeListArray(
     uint32_t length = 0;
     uint16_t offset = 0;
     BufferInfo bufferInfo;
+    // Release self-built packet=PacketRefMalloc(data) flag
+    bool packetOwned = false;
 
     SdpClientRequest *request = SdpFindRequestByTransactionId(transactionId);
     if ((request != NULL) && (request->assemblePacket != NULL)) {
@@ -581,12 +583,19 @@ static uint16_t SdpParseAttributeListArray(
         PacketAssemble(packet, data);
     } else {
         packet = PacketRefMalloc(data);
+        if (packet != NULL) {
+            packetOwned = true;
+        }
     }
 
     totalLength = PacketSize(packet);
     uint8_t *buffer = MEM_MALLOC.alloc(totalLength);
     if (buffer == NULL) {
         LOG_ERROR("buffer is NULL");
+        if (packetOwned && packet != NULL) {
+            PacketFree(packet);
+            packet = NULL;
+        }
         return 0;
     }
     (void)memset_s(buffer, totalLength, 0, totalLength);
