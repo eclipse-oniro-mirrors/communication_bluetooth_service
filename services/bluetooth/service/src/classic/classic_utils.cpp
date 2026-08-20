@@ -41,12 +41,36 @@ std::string ClassicUtils::ConvertIntToHexString(const std::vector<uint8_t> &valu
     return strs;
 }
 
-void ClassicUtils::ConvertHexStringToInt(const std::string &str, std::vector<uint8_t> &value)
+static int HexCharToNibble(char c)
 {
-    for (size_t i = 0; i < str.size(); i = i + 2) {  // 2 is the length of str to be truncated
-        long k = std::stol(str.substr(i, 2), nullptr, 16);
-        value.push_back(k);
+    if (c >= '0' && c <= '9') {
+        return c - '0';
+    } else if (c >= 'A' && c <= 'F') {
+        return c - 'A' + HEX_LETTER_OFFSET;
+    } else if (c >= 'a' && c <= 'f') {
+        return c - 'a' + HEX_LETTER_OFFSET;
+    } else {
+        LOG_ERROR("Invalid hex char");
+        return -1;
     }
+}
+
+bool ClassicUtils::ConvertHexStringToInt(const std::string &str, std::vector<uint8_t> &value)
+{
+    if (str.size() % HEX_CHARS_PER_BYTE != 0) {
+        LOG_ERROR("Invalid hex string, odd length");
+        return false;
+    }
+    for (size_t i = 0; i < str.size(); i += HEX_CHARS_PER_BYTE) {
+        int hi = HexCharToNibble(str[i]);
+        int lo = HexCharToNibble(str[i + 1]);
+        if (hi < 0 || lo < 0) {
+            LOG_ERROR("Invalid hex char in string");
+            return false;
+        }
+        value.push_back((uint8_t)((hi << HEX_NIBBLE_SHIFT) | lo));
+    }
+    return true;
 }
 
 std::string ClassicUtils::ConvertUuidToString(const std::vector<Uuid> &uuids)

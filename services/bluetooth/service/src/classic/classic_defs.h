@@ -87,6 +87,9 @@ constexpr int MAC_ADDRESS_LENGTH = 6;
 
 constexpr int SDP_UUDIID_NUM = 1;
 constexpr int HEX_FORMAT_SIZE = 3;
+constexpr int HEX_CHARS_PER_BYTE = 2;
+constexpr int HEX_NIBBLE_SHIFT = 4;
+constexpr int HEX_LETTER_OFFSET = 10;
 
 constexpr int UUID128_BYTES_TYPE = 16;
 constexpr int UUID32_BYTES_TYPE = 4;

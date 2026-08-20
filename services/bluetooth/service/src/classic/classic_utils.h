@@ -46,7 +46,7 @@ public:
      * @param  str: string
      * @return Returns std::vector<uint8_t> value.
      */
-    static void ConvertHexStringToInt(const std::string &str, std::vector<uint8_t> &value);
+    static bool ConvertHexStringToInt(const std::string &str, std::vector<uint8_t> &value);
 
     /**
      * @brief Convert Uuid list to string
