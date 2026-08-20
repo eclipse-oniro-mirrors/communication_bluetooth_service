@@ -75,6 +75,14 @@ Packet *PacketMalloc(uint16_t headSize, uint16_t tailSize, uint32_t payloadSize)
     packet->tail = PayloadNew(tailSize);
     packet->payload = PayloadNew(payloadSize);
 
+    if ((headSize > 0 && (packet->head == NULL || packet->head->buf == NULL)) ||
+        (tailSize > 0 && (packet->tail == NULL || packet->tail->buf == NULL)) ||
+        (payloadSize > 0 && (packet->payload == NULL || packet->payload->buf == NULL))) {
+        LOG_ERROR("[PACKET] PacketMalloc: inner buffer allocation failed.");
+        PacketFree(packet);
+        return NULL;
+    }
+
     if ((packet->head != NULL) && (packet->tail != NULL) && (packet->payload != NULL)) {
         packet->head->next = packet->payload;
         packet->payload->prev = packet->head;
@@ -134,15 +142,19 @@ Packet *PacketInheritMalloc(const Packet *pkt, uint16_t headSize, uint16_t tailS
 
         inheritPacket->payload = inheritPacket->head;
         inheritPacket->head = PayloadNew(headSize);
-        if (inheritPacket->head != NULL) {
-            inheritPacket->head->next = inheritPacket->payload;
-            inheritPacket->payload->prev = inheritPacket->head;
+        if (inheritPacket->head == NULL || (headSize > 0 && inheritPacket->head->buf == NULL)) {
+            PacketFree(inheritPacket);
+            return NULL;
         }
+        inheritPacket->head->next = inheritPacket->payload;
+        inheritPacket->payload->prev = inheritPacket->head;
         inheritPacket->tail = PayloadNew(tailSize);
-        if (inheritPacket->tail != NULL) {
-            tempTail->next = inheritPacket->tail;
-            inheritPacket->tail->prev = tempTail;
+        if (inheritPacket->tail == NULL || (tailSize > 0 && inheritPacket->tail->buf == NULL)) {
+            PacketFree(inheritPacket);
+            return NULL;
         }
+        tempTail->next = inheritPacket->tail;
+        inheritPacket->tail->prev = tempTail;
     }
     return inheritPacket;
 }

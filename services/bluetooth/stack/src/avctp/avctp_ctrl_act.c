@@ -563,6 +563,10 @@ void AvctMakeSignleMsgHead(const Packet *pkt, uint8_t label, uint8_t cr, uint16_
     LOG_DEBUG("[AVCT] %{public}s:", __func__);
     Buffer *buf = PacketHead(pkt);
     uint8_t *p = (uint8_t *)BufferPtr(buf);
+    if (p == NULL) {
+        LOG_ERROR("[AVCT] %{public}s: BufferPtr failed!", __func__);
+        return;
+    }
     do {
         *(p)++ = (((label) << MOVE_4BIT) | (AVCT_PKT_TYPE_SINGLE << MOVE_2BIT) | ((cr) << MOVE_1BIT));
         *(p)++ = (uint8_t)((pid) >> MOVE_8BIT);
@@ -583,6 +587,10 @@ void AvctMakeRejMsgHead(const Packet *pkt, uint8_t label, uint16_t pid)
     LOG_DEBUG("[AVCT] %{public}s:", __func__);
     Buffer *buf = PacketHead(pkt);
     uint8_t *p = (uint8_t *)BufferPtr(buf);
+    if (p == NULL) {
+        LOG_ERROR("[AVCT] %{public}s: BufferPtr failed!", __func__);
+        return;
+    }
     do {
         *(p)++ = (((label) << MOVE_4BIT) | (AVCT_PKT_TYPE_SINGLE << MOVE_2BIT) | AVCT_REJ);
         *(p)++ = (uint8_t)((pid) >> MOVE_8BIT);
@@ -605,6 +613,11 @@ Packet *AvctMakeFrgMsgHeadStart(uint8_t num, uint8_t label, uint8_t cr, uint16_t
     if (pkg != NULL) {
         Buffer *buf = PacketHead(pkg);
         uint8_t *p = (uint8_t *)BufferPtr(buf);
+        if (p == NULL) {
+            LOG_ERROR("[AVCT] %{public}s: head buffer is NULL.", __func__);
+            PacketFree(pkg);
+            return NULL;
+        }
         do {
             *(p)++ = (((label) << MOVE_4BIT) | (AVCT_PKT_TYPE_START << MOVE_2BIT) | ((cr) << MOVE_1BIT));
             *(p)++ = num;
@@ -630,6 +643,11 @@ Packet *AvctMakeFrgMsgHeadContinueEnd(uint8_t label, uint8_t type, uint8_t cr)
     if (pkg != NULL) {
         Buffer *buf = PacketHead(pkg);
         uint8_t *p = (uint8_t *)BufferPtr(buf);
+        if (p == NULL) {
+            LOG_ERROR("[AVCT] %{public}s: head buffer is NULL.", __func__);
+            PacketFree(pkg);
+            return NULL;
+        }
         do {
             *(p)++ = (((label) << MOVE_4BIT) | ((type) << MOVE_2BIT) | ((cr) << MOVE_1BIT));
         } while (0);
