@@ -252,7 +252,10 @@ static uint16_t L2capLeGetNewLcid()
 static L2capLeChannel *L2capLeNewChannel(L2capLeConnection *conn, uint16_t lpsm, uint16_t rpsm)
 {
     L2capLeChannel *chan = NULL;
-
+    if (conn == NULL) {
+        LOG_ERROR("%{public}s: invalid null connection", __FUNCTION__);
+        return NULL;
+    }
     chan = L2capAlloc(sizeof(L2capLeChannel));
     if (chan == NULL) {
         return NULL;
@@ -1254,12 +1257,53 @@ static int L2capLeDisconnectComplete(uint16_t handle, uint8_t status, uint8_t re
     return BT_SUCCESS;
 }
 
+static int L2capLeStartCreditBasedConnect(const BtAddr *addr, L2capLeConnection *conn, L2capLeChannel *chan)
+{
+    if (conn->aclHandle == 0) {
+        int result;
+
+        result = L2capConnectLe(addr);
+        if (result != BT_SUCCESS) {
+            LOG_ERROR("%{public}s: L2capConnectLe failed, result = %{public}d.", __FUNCTION__, result);
+            L2capLeDeleteConnection(conn);
+        }
+
+        return result;
+    }
+
+    L2capSendCreditBasedConnectionReq(conn, chan);
+    return BT_SUCCESS;
+}
+
+static L2capLeChannel *L2capLeCreateChannelForConnectReq(
+    L2capLeConnection *conn, uint16_t lpsm, uint16_t rpsm, const L2capLeConfigInfo *cfg, uint16_t *lcid)
+{
+    L2capLeChannel *chan = L2capLeNewChannel(conn, lpsm, rpsm);
+    if (chan == NULL) {
+        LOG_ERROR("%{public}s: L2capLeNewChannel failed", __FUNCTION__);
+        return NULL;
+    }
+    chan->state = L2CAP_CHANNEL_CONNECT_OUT_REQ;
+
+    chan->lcfg.mtu = cfg->mtu;
+    if (cfg->credit != 0) {
+        chan->lcfg.credit = cfg->credit;
+    }
+    if (chan->lcfg.mps > cfg->mtu) {
+        chan->lcfg.mps = cfg->mtu;
+    }
+
+    *lcid = chan->lcid;
+    return chan;
+}
+
 int L2CAP_LeCreditBasedConnectionReq(
     const BtAddr *addr, uint16_t lpsm, uint16_t rpsm, const L2capLeConfigInfo *cfg, uint16_t *lcid)
 {
     L2capLeConnection *conn = NULL;
     L2capLeChannel *chan = NULL;
     L2capLePsm *psm = NULL;
+    bool isNewConn = false;
 
     LOG_INFO("%{public}s:%{public}d enter, lpsm = 0x%04X, rpsm = 0x%04X", __FUNCTION__, __LINE__, lpsm, rpsm);
 
@@ -1283,34 +1327,22 @@ int L2CAP_LeCreditBasedConnectionReq(
     conn = L2capLeGetConnection2(addr);
     if (conn == NULL) {
         conn = L2capLeNewConnection(addr, 0, 0);
+        isNewConn = true;
+    }
+    if (conn == NULL) {
+        LOG_ERROR("%{public}s: L2capLeNewConnection failed", __FUNCTION__);
+        return BT_OPERATION_FAILED;
     }
 
-    chan = L2capLeNewChannel(conn, lpsm, rpsm);
-    chan->state = L2CAP_CHANNEL_CONNECT_OUT_REQ;
-
-    chan->lcfg.mtu = cfg->mtu;
-    if (cfg->credit != 0) {
-        chan->lcfg.credit = cfg->credit;
-    }
-    if (chan->lcfg.mps > cfg->mtu) {
-        chan->lcfg.mps = cfg->mtu;
-    }
-
-    *lcid = chan->lcid;
-
-    if (conn->aclHandle == 0) {
-        int result;
-
-        result = L2capConnectLe(addr);
-        if (result != BT_SUCCESS) {
+    chan = L2capLeCreateChannelForConnectReq(conn, lpsm, rpsm, cfg, lcid);
+    if (chan == NULL) {
+        if (isNewConn) {
             L2capLeDeleteConnection(conn);
         }
-
-        return result;
+        return BT_OPERATION_FAILED;
     }
 
-    L2capSendCreditBasedConnectionReq(conn, chan);
-    return BT_SUCCESS;
+    return L2capLeStartCreditBasedConnect(addr, conn, chan);
 }
 
 int L2CAP_LeCreditBasedConnectionRsp(uint16_t lcid, uint8_t id, const L2capLeConfigInfo *cfg, uint16_t result)
