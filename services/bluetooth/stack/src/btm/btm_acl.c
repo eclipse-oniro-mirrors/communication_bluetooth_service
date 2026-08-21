@@ -18,6 +18,7 @@
 #include <securec.h>
 
 #include "hci/hci.h"
+#include "hci/hci_le_controller_5_0.h"
 #include "hci/hci_error.h"
 #include "log.h"
 #include "platform/include/alarm.h"
@@ -41,86 +42,7 @@
 
 #define IS_INITIALIZED() (g_status == STATUS_INITIALIZED)
 
-#define COD_SIZE 3
-
 #define CLEANUP_TIMEOUT 5000
-
-#define REQUEST_NOT_COMPLETED 0xff
-
-typedef enum {
-    CONNECTING,
-    CONNECTED,
-    DISCONNECTING,
-    DISCONNECTED,
-} BtmAclConnectionState;
-
-typedef struct {
-    uint16_t connectionHandle;
-    uint8_t transport;
-    BtAddr addr;
-    bool isInitiator;
-    BtmAclConnectionState state;
-    uint8_t refCount;
-    uint8_t encryption;
-    Alarm *timeoutTimer;
-    union {
-        struct {
-            uint8_t featureStatus;
-            HciLmpFeatures lmpFeatures;
-            uint8_t extendedFeatureStatus;
-            uint8_t maxPageNumber;
-            HciExtendedLmpFeatures extendedLmpFeatures;
-        } bredr;
-        struct {
-            uint8_t featureStatus;
-            HciLeFeatures leFeatures;
-        } le;
-    } remoteFeatures;
-    struct {
-        uint8_t version;
-        uint16_t manufactureName;
-        uint16_t subVersion;
-    } remoteVersion;
-    uint8_t remoteCod[COD_SIZE];
-    BtAddr leLocalAddr;
-    BtAddr lePeerAddr;
-} BtmAclConnection;
-
-typedef struct {
-    const BtmAclCallbacks *callbacks;
-    void *context;
-} BtmAclCallbacksBlock;
-
-typedef enum {
-    REMOTE_FEATURE_COMPLETE,
-    REMOTE_EXTENDED_FEATURE_COMPLETE,
-    REMOTE_LE_FEATURE_COMPLETE,
-} BtmRemoteDeviceSupportEvent;
-
-typedef enum {
-    EDR_ACL_2MB_MODE,
-    EDR_ACL_3MB_MODE,
-} BtmRemoteDeviceFeature;
-
-typedef enum {
-    SECURE_SIMPLE_PAIRING_HOST_SUPPORT,
-} BtmRemoteDeviceExtendedFeature;
-
-typedef enum {
-    CONNECTION_PARAMETER_REQUEST,
-} BtmRemoteDeviceLeFeature;
-
-typedef struct {
-    BtAddr addr;
-    uint16_t connectionHandle;
-    BTMRemoteDeviceSupportCallback callback;
-    BtmRemoteDeviceSupportEvent event;
-    union {
-        BtmRemoteDeviceFeature feature;
-        BtmRemoteDeviceExtendedFeature extendedFeature;
-        BtmRemoteDeviceLeFeature leFreature;
-    } feature;
-} BtmRemoteDeviceSupportRequest;
 
 #define ACTION_ADD_TO_WHITE_LIST 1
 #define ACTION_REMOVE_FORM_WHITE_LIST 2
@@ -130,11 +52,16 @@ typedef struct {
     BtAddr addr;
 } BtmWhiteListPendingAction;
 
+typedef struct {
+    const BtmAclCallbacks *callbacks;
+    void *context;
+} BtmAclCallbacksBlock;
+
 static List *g_aclList = NULL;
-static Mutex *g_aclListLock = NULL;
+Mutex *g_aclListLock = NULL;  // shared with btm_acl_features.c
 static List *g_aclCallbackList = NULL;
 static Mutex *g_aclCallbackListLock = NULL;
-static List *g_remoteSupportRequestList = NULL;
+List *g_remoteSupportRequestList = NULL;  // shared with btm_acl_features.c
 
 static HciEventCallbacks g_hciEventCallbacks;
 
@@ -372,7 +299,7 @@ static BtmAclConnection *BtmAclFindLeConnectionByAddr(const BtAddr *addr)
     return connection;
 }
 
-static BtmAclConnection *BtmAclFindConnectionByHandle(uint16_t handle)
+BtmAclConnection *BtmAclFindConnectionByHandle(uint16_t handle)  // shared with btm_acl_features.c
 {
     BtmAclConnection *connection = NULL;
 
@@ -687,7 +614,7 @@ static int BtmLeExtendedCreateConnection()
         .sets = sets,
     };
 
-    int result = HCI_LeExtenedCreateConnection(&param);
+    int result = HCI_LeExtendedCreateConnection(&param);
 
     MEM_MALLOC.free(sets);
 
@@ -967,6 +894,32 @@ static void BtmLeReadRemoteFeatures(uint16_t connectionHandle)
     HCI_LeReadRemoteFeatures(&cmdParam);
 }
 
+static void BtmLeSetDataLength(uint16_t connectionHandle)
+{
+    if (!BTM_IsControllerSupportLeDataPacketLengthExtension()) {
+        return;
+    }
+
+    uint16_t maxTxOctets = 0;
+    uint16_t maxTxTime = 0;
+    // rx octets/time are required by the API but are not needed to configure TX data length.
+    uint16_t maxRxOctets = 0;
+    uint16_t maxRxTime = 0;
+    if (BTM_GetLeMaxDataLength(&maxTxOctets, &maxTxTime, &maxRxOctets, &maxRxTime) != BT_SUCCESS) {
+        return;
+    }
+
+    HciLeSetDataLengthParam cmdParam = {
+        .connectionHandle = connectionHandle,
+        .txOctets = maxTxOctets,
+        .txTime = maxTxTime,
+    };
+    int ret = HCI_LeSetDataLength(&cmdParam);
+    if (ret != BT_SUCCESS) {
+        LOG_WARN("%{public}s: HCI_LeSetDataLength failed:%{public}d", __FUNCTION__, ret);
+    }
+}
+
 NO_SANITIZE("cfi") static void BtmOnLeConnectCallback(
     const BtAddr *addrList, uint8_t addrCount, uint8_t status, uint16_t connectionHandle, uint16_t role)
 {
@@ -1108,6 +1061,7 @@ static void BtmOnLeConnectionComplete(const HciLeConnectionCompleteEventParam *e
 
     if (eventParam->status == HCI_SUCCESS) {
         BtmLeReadRemoteFeatures(eventParam->connectionHandle);
+        BtmLeSetDataLength(eventParam->connectionHandle);
     }
 
     BtmUpdateUpdateWhiteListOnLeConnectionComplete(addrList, addrCount, eventParam);
@@ -1289,6 +1243,7 @@ static void BtmOnLeEnhancedConnectionComplete(const HciLeEnhancedConnectionCompl
 
     if (eventParam->status == HCI_SUCCESS) {
         BtmLeReadRemoteFeatures(eventParam->connectionHandle);
+        BtmLeSetDataLength(eventParam->connectionHandle);
     }
 
     BtmUpdateWhiteListOnLeEnhancedConnectionComplete(addrList, addrCount, eventParam);
@@ -1391,239 +1346,6 @@ NO_SANITIZE("cfi") static void BtmOnDisconnectComplete(const HciDisconnectComple
         node = ListGetNextNode(node);
     }
     MutexUnlock(g_aclCallbackListLock);
-}
-
-static void BtmGetRemoteDeviceSupportRequests(
-    uint16_t connectionHandle, BtmRemoteDeviceSupportEvent event, List *requests)
-{
-    BtmRemoteDeviceSupportRequest *request = NULL;
-    BtmRemoteDeviceSupportRequest *duplicated = NULL;
-
-    ListNode *node = ListGetFirstNode(g_remoteSupportRequestList);
-    while (node != NULL) {
-        request = ListGetNodeData(node);
-        node = ListGetNextNode(node);
-
-        if (request->event == event && request->connectionHandle == connectionHandle) {
-            duplicated = MEM_MALLOC.alloc(sizeof(BtmRemoteDeviceSupportRequest));
-            if (duplicated != NULL) {
-                *duplicated = *request;
-                ListAddLast(requests, duplicated);
-            }
-
-            ListRemoveNode(g_remoteSupportRequestList, request);
-        }
-    }
-}
-
-static void BtmOnLeRemoteFeatureComplete(const BtAddr *addr, const List *requests, const HciLeFeatures *leFeatures)
-{
-    BtmRemoteDeviceSupportRequest *request = NULL;
-    ListNode *node = ListGetFirstNode(requests);
-    while (node != NULL) {
-        request = ListGetNodeData(node);
-
-        switch (request->feature.leFreature) {
-            case CONNECTION_PARAMETER_REQUEST:
-                request->callback(addr, HCI_SUPPORT_CONNECTION_PARAMETERS_REQUEST_PROCEDURE(leFeatures->raw));
-                break;
-            default:
-                break;
-        }
-
-        node = ListGetNextNode(node);
-    }
-}
-
-static void BtmOnLeReadRemoteFeaturesComplete(const HciLeReadRemoteFeaturesCompleteEventParam *eventParam)
-{
-    BtAddr addr = {0};
-    HciLeFeatures leFeatures = {0};
-    List *requests = ListCreate(MEM_MALLOC.free);
-
-    MutexLock(g_aclListLock);
-    BtmAclConnection *connection = BtmAclFindConnectionByHandle(eventParam->connectionHandle);
-    if (connection != NULL) {
-        connection->remoteFeatures.le.featureStatus = eventParam->status;
-        if (eventParam->status == HCI_SUCCESS) {
-            connection->remoteFeatures.le.leFeatures = eventParam->leFeatures;
-        }
-
-        addr = connection->addr;
-        leFeatures = connection->remoteFeatures.le.leFeatures;
-        BtmGetRemoteDeviceSupportRequests(eventParam->connectionHandle, REMOTE_LE_FEATURE_COMPLETE, requests);
-    }
-    MutexUnlock(g_aclListLock);
-
-    if (eventParam->status == HCI_SUCCESS) {
-        HciReadRemoteVersionInformationParam cmdParam = {
-            .connectionHandle = eventParam->connectionHandle,
-        };
-        HCI_ReadRemoteVersionInformation(&cmdParam);
-    }
-
-    if (ListGetSize(requests)) {
-        BtmOnLeRemoteFeatureComplete(&addr, requests, &leFeatures);
-    }
-
-    ListDelete(requests);
-}
-
-static void BtmOnReadRemoteVersionInformationComplete(
-    const HciReadRemoteVersionInformationCompleteEventParam *eventParam)
-{
-    uint8_t transport = 0;
-
-    MutexLock(g_aclListLock);
-    BtmAclConnection *connection = BtmAclFindConnectionByHandle(eventParam->connectionHandle);
-    if (connection != NULL) {
-        if (eventParam->status == HCI_SUCCESS) {
-            connection->remoteVersion.version = eventParam->version;
-            connection->remoteVersion.manufactureName = eventParam->manufacturerName;
-            connection->remoteVersion.subVersion = eventParam->subVersion;
-        }
-
-        transport = connection->transport;
-    }
-    MutexUnlock(g_aclListLock);
-
-    if (transport == TRANSPORT_BREDR_STACK) {
-        HciReadRemoteSupportedFeaturesParam cmdParam = {
-            .connectionHandle = eventParam->connectionHandle,
-        };
-        HCI_ReadRemoteSupportedFeatures(&cmdParam);
-    }
-}
-
-static void BtmOnRemoteFeatureComplete(const BtAddr *addr, const List *requests, const HciLmpFeatures *lmpFeatures)
-{
-    BtmRemoteDeviceSupportRequest *request = NULL;
-    ListNode *node = ListGetFirstNode(requests);
-    while (node != NULL) {
-        request = ListGetNodeData(node);
-
-        switch (request->feature.feature) {
-            case EDR_ACL_2MB_MODE:
-                request->callback(addr, HCI_SUPPORT_EDR_ACL_2MBS_MODE(lmpFeatures->raw));
-                break;
-            case EDR_ACL_3MB_MODE:
-                request->callback(addr, HCI_SUPPORT_EDR_ACL_3MBS_MODE(lmpFeatures->raw));
-                break;
-            default:
-                break;
-        }
-
-        node = ListGetNextNode(node);
-    }
-}
-
-static void BtmOnReadRemoteSupportedFeaturesComplete(const HciReadRemoteSupportedFeaturesCompleteEventParam *eventParam)
-{
-    BtAddr addr = {0};
-    HciLmpFeatures lmpFeatures = {0};
-    List *requests = ListCreate(MEM_MALLOC.free);
-
-    MutexLock(g_aclListLock);
-    BtmAclConnection *connection = BtmAclFindConnectionByHandle(eventParam->connectionHandle);
-    if (connection != NULL) {
-        connection->remoteFeatures.bredr.featureStatus = eventParam->status;
-        if (eventParam->status == HCI_SUCCESS) {
-            connection->remoteFeatures.bredr.lmpFeatures = eventParam->lmpFeatures;
-        }
-
-        addr = connection->addr;
-        lmpFeatures = connection->remoteFeatures.bredr.lmpFeatures;
-        BtmGetRemoteDeviceSupportRequests(eventParam->connectionHandle, REMOTE_FEATURE_COMPLETE, requests);
-    }
-    MutexUnlock(g_aclListLock);
-
-    HciReadRemoteExtendedFeaturesParam cmdParam = {
-        .connectionHandle = eventParam->connectionHandle,
-        .pageNumber = 1,
-    };
-    HCI_ReadRemoteExtendedFeatures(&cmdParam);
-
-    if (ListGetSize(requests)) {
-        BtmOnRemoteFeatureComplete(&addr, requests, &lmpFeatures);
-    }
-
-    ListDelete(requests);
-}
-
-static void BtmOnRemoteExtendedFeatureComplete(
-    const BtAddr *addr, const List *requests, const HciExtendedLmpFeatures *extendedFeatures)
-{
-    BtmRemoteDeviceSupportRequest *request = NULL;
-
-    ListNode *node = ListGetFirstNode(requests);
-    while (node != NULL) {
-        request = ListGetNodeData(node);
-
-        switch (request->feature.extendedFeature) {
-            case SECURE_SIMPLE_PAIRING_HOST_SUPPORT:
-                request->callback(addr, HCI_SUPPORT_SECURE_SIMPLE_PAIRING_HOST(extendedFeatures->page[1]));
-                break;
-            default:
-                break;
-        }
-
-        node = ListGetNextNode(node);
-    }
-}
-
-static void BtmOnReadRemoteExtendedFeaturesComplete(const HciReadRemoteExtendedFeaturesCompleteEventParam *eventParam)
-{
-    uint8_t nextPageNumber = 0;
-    BtAddr addr = {0};
-    HciExtendedLmpFeatures extendedFeatures = {0};
-    List *requests = ListCreate(MEM_MALLOC.free);
-
-    MutexLock(g_aclListLock);
-    BtmAclConnection *connection = BtmAclFindConnectionByHandle(eventParam->connectionHandle);
-    if (connection != NULL) {
-        uint8_t status = REQUEST_NOT_COMPLETED;
-        if (eventParam->status == HCI_SUCCESS) {
-            connection->remoteFeatures.bredr.maxPageNumber = eventParam->maximumPageNumber;
-            if (eventParam->pageNumber <= MAX_EXTENED_FEATURES_PAGE_NUMBER) {
-                (void)memcpy_s(connection->remoteFeatures.bredr.extendedLmpFeatures.page[eventParam->pageNumber],
-                    LMP_FEATURES_SIZE,
-                    eventParam->extendedLMPFeatures,
-                    LMP_FEATURES_SIZE);
-            }
-
-            if (eventParam->pageNumber < eventParam->maximumPageNumber) {
-                nextPageNumber = eventParam->pageNumber + 1;
-            } else {
-                connection->remoteFeatures.bredr.extendedFeatureStatus = eventParam->status;
-                status = eventParam->status;
-            }
-        } else {
-            connection->remoteFeatures.bredr.extendedFeatureStatus = eventParam->status;
-            status = eventParam->status;
-        }
-
-        if (status != REQUEST_NOT_COMPLETED) {
-            BtmGetRemoteDeviceSupportRequests(eventParam->connectionHandle, REMOTE_EXTENDED_FEATURE_COMPLETE, requests);
-
-            addr = connection->addr;
-            extendedFeatures = connection->remoteFeatures.bredr.extendedLmpFeatures;
-        }
-    }
-    MutexUnlock(g_aclListLock);
-
-    if (nextPageNumber > 0) {
-        HciReadRemoteExtendedFeaturesParam cmdParam = {
-            .connectionHandle = eventParam->connectionHandle,
-            .pageNumber = nextPageNumber,
-        };
-        HCI_ReadRemoteExtendedFeatures(&cmdParam);
-    }
-
-    if (ListGetSize(requests)) {
-        BtmOnRemoteExtendedFeatureComplete(&addr, requests, &extendedFeatures);
-    }
-
-    ListDelete(requests);
 }
 
 static void BtmOnReadRssiComplete(const HciReadRssiReturnParam *returnParam)

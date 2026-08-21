@@ -406,6 +406,10 @@ int HCI_LeLongTermKeyRequestReply(const HciLeLongTermKeyRequestReplyParam *param
 int HCI_LeLongTermKeyRequestNegativeReply(const HciLeLongTermKeyRequestNegativeReplyParam *param);
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
+// 7.8.30 LE Test End Command
+int HCI_LeTestEnd(void);
+
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.8.31 LE Remote Connection Parameter Request Reply Command
 int HCI_LeRemoteConnectionParameterRequestReply(const HciLeRemoteConnectionParameterRequestReplyParam *param);
 
@@ -488,7 +492,7 @@ int HCI_LeSetExtendedScanEnable(const HciLeSetExtendedScanEnableParam *param);
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.8.66 LE Extended Create Connection Command
-int HCI_LeExtenedCreateConnection(const HciLeExtendedCreateConnectionParam *param);
+int HCI_LeExtendedCreateConnection(const HciLeExtendedCreateConnectionParam *param);
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.8.77 LE Set Privacy Mode Command
@@ -1294,7 +1298,7 @@ typedef struct {
     void (*leSetDefaultPhyComplete)(const HciLeSetDefaultPhyReturnParam *returnParam);
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.8.49 LE Set PHY Command
-    void (*leSetPhyComplete)();
+    void (*leSetPhyComplete)(const HciLeSetPhyReturnParam *returnParam);
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.8.50 LE Enhanced Receiver Test Command
     void (*leEnhancedReceiverTestComplete)(const HciLeEnhancedReceiverTestReturnParam *returnParam);
@@ -1334,14 +1338,14 @@ typedef struct {
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.8.61 LE Set Periodic Advertising Parameters Command
     void (*leSetPeriodicAdvertisingParametersComplete)(
-        const HciLeSetPeriodicAdvertisingParametersReturnParameters *returnParam);
+        const HciLeSetPeriodicAdvertisingParametersReturnParam *returnParam);
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.8.62 LE Set Periodic Advertising Data Command
-    void (*leSetPeriodicAdvertisingDataComplete)(const HciLeSetPeriodicAdvertisingDataReturnParameters *returnParam);
+    void (*leSetPeriodicAdvertisingDataComplete)(const HciLeSetPeriodicAdvertisingDataReturnParam *returnParam);
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.8.63 LE Set Periodic Advertising Enable Command
     void (*leSetPeriodicAdvertisingEnableComplete)(
-        const HciLeSetPeriodicAdvertisingEnableReturnParameters *returnParam);
+        const HciLeSetPeriodicAdvertisingEnableReturnParam *returnParam);
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.8.64 LE Set Extended Scan Parameters Command
     void (*leSetExtendedScanParametersComplete)(const HciLeSetExtendedScanParametersReturnParam *returnParam);
@@ -1435,7 +1439,7 @@ typedef struct {
     void (*lePeriodicAdvertisingSyncLost)(const HciLePeriodicAdvertisingSyncLostEventParam *eventParam);
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.7.65.17 LE Scan Timeout Event
-    void (*leScanTimeoutComplete)();
+    void (*leScanTimeoutComplete)(void);
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.7.65.18 LE Advertising Set Terminated Event
     void (*leAdvertisingSetTerminated)(const HciLeAdvertisingSetTerminatedEventParam *eventParam);

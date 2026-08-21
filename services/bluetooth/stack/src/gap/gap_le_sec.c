@@ -269,52 +269,93 @@ void GapLeAuthenticationRequest(uint16_t handle, uint8_t pairMethod, const uint8
     }
 }
 
-static void GapLePairKeyConvert(const SMP_PairResult *result, LePairedKeys *keys)
+// Convert the peer keys of the SMP pairing result. Each key slot is filled
+// only when the corresponding key-distribution bit is set; otherwise the slot
+// is cleared to NULL.
+static void GapConvertPeerKeys(const SMP_PairResult *result, LePairedKeys *keys)
 {
-    if (result->peerKeyDist | SMP_KEY_DIST_BIT_ENC_KEY) {
-        (void)memcpy_s(keys->remoteEncKey->ltk, GAP_LTK_SIZE, result->peerLTK, GAP_LTK_SIZE);
-        (void)memcpy_s(&keys->remoteEncKey->rand,
-            sizeof(keys->remoteEncKey->rand),
-            result->peerRandom,
-            sizeof(result->peerRandom));
-        keys->remoteEncKey->ediv = result->peerEdiv;
-        keys->remoteEncKey->keySize = result->encKeySize;
+    if (result->peerKeyDist & SMP_KEY_DIST_BIT_ENC_KEY) {
+        if (keys->remoteEncKey == NULL) {
+            LOG_WARN("%{public}s: remoteEncKey is NULL", __FUNCTION__);
+        } else {
+            (void)memcpy_s(keys->remoteEncKey->ltk, SMP_LTK_LEN, result->peerLTK, SMP_LTK_LEN);
+            (void)memcpy_s(&keys->remoteEncKey->rand,
+                sizeof(keys->remoteEncKey->rand),
+                result->peerRandom,
+                sizeof(result->peerRandom));
+            keys->remoteEncKey->ediv = result->peerEdiv;
+            keys->remoteEncKey->keySize = result->encKeySize;
+        }
     } else {
         keys->remoteEncKey = NULL;
     }
 
-    if (result->peerKeyDist | SMP_KEY_DIST_BIT_ID_KEY) {
-        (void)memcpy_s(&keys->remoteIdKey->identityAddr, sizeof(BtAddr), &result->peerIdentAddr, sizeof(BtAddr));
-        (void)memcpy_s(keys->remoteIdKey->irk, GAP_IRK_SIZE, result->peerIRK, GAP_IRK_SIZE);
+    if (result->peerKeyDist & SMP_KEY_DIST_BIT_ID_KEY) {
+        if (keys->remoteIdKey == NULL) {
+            LOG_WARN("%{public}s: remoteIdKey is NULL", __FUNCTION__);
+        } else {
+            (void)memcpy_s(&keys->remoteIdKey->identityAddr, sizeof(BtAddr), &result->peerIdentAddr, sizeof(BtAddr));
+            (void)memcpy_s(keys->remoteIdKey->irk, SMP_IRK_LEN, result->peerIRK, SMP_IRK_LEN);
+        }
     } else {
         keys->remoteIdKey = NULL;
     }
 
-    if (result->peerKeyDist | SMP_KEY_DIST_BIT_SIGN_KEY) {
-        (void)memcpy_s(keys->remoteSignKey->csrk, GAP_CSRK_SIZE, result->peerCSRK, GAP_CSRK_SIZE);
-        keys->remoteSignKey->counter = 0;
+    if (result->peerKeyDist & SMP_KEY_DIST_BIT_SIGN_KEY) {
+        if (keys->remoteSignKey == NULL) {
+            LOG_WARN("%{public}s: remoteSignKey is NULL", __FUNCTION__);
+        } else {
+            (void)memcpy_s(keys->remoteSignKey->csrk, SMP_CSRK_LEN, result->peerCSRK, SMP_CSRK_LEN);
+            keys->remoteSignKey->counter = 0;
+        }
     } else {
         keys->remoteSignKey = NULL;
     }
+}
 
-    if (result->localKeyDist | SMP_KEY_DIST_BIT_ENC_KEY) {
-        (void)memcpy_s(keys->localEncKey->ltk, GAP_LTK_SIZE, result->localLTK, GAP_LTK_SIZE);
-        (void)memcpy_s(&keys->localEncKey->rand,
-            sizeof(keys->localEncKey->rand),
-            result->localRandom,
-            sizeof(result->localRandom));
-        keys->localEncKey->ediv = result->localEdiv;
-        keys->localEncKey->keySize = result->encKeySize;
+// Convert the local keys of the SMP pairing result, mirroring GapConvertPeerKeys.
+static void GapConvertLocalKeys(const SMP_PairResult *result, LePairedKeys *keys)
+{
+    if (result->localKeyDist & SMP_KEY_DIST_BIT_ENC_KEY) {
+        if (keys->localEncKey == NULL) {
+            LOG_WARN("%{public}s: localEncKey is NULL", __FUNCTION__);
+        } else {
+            (void)memcpy_s(keys->localEncKey->ltk, SMP_LTK_LEN, result->localLTK, SMP_LTK_LEN);
+            (void)memcpy_s(&keys->localEncKey->rand,
+                sizeof(keys->localEncKey->rand),
+                result->localRandom,
+                sizeof(result->localRandom));
+            keys->localEncKey->ediv = result->localEdiv;
+            keys->localEncKey->keySize = result->encKeySize;
+        }
     } else {
         keys->localEncKey = NULL;
     }
 
-    if (result->localKeyDist | SMP_KEY_DIST_BIT_SIGN_KEY) {
-        (void)memcpy_s(keys->localSignKey->csrk, GAP_CSRK_SIZE, result->localCSRK, GAP_CSRK_SIZE);
-        keys->localSignKey->counter = 0;
+    if (result->localKeyDist & SMP_KEY_DIST_BIT_SIGN_KEY) {
+        if (keys->localSignKey == NULL) {
+            LOG_WARN("%{public}s: localSignKey is NULL", __FUNCTION__);
+        } else {
+            (void)memcpy_s(keys->localSignKey->csrk, SMP_CSRK_LEN, result->localCSRK, SMP_CSRK_LEN);
+            keys->localSignKey->counter = 0;
+        }
     } else {
         keys->localSignKey = NULL;
     }
+}
+
+static void GapLePairKeyConvert(const SMP_PairResult *result, LePairedKeys *keys)
+{
+    if (result == NULL || keys == NULL) {
+        LOG_WARN("%{public}s: invalid input pointers", __FUNCTION__);
+        return;
+    }
+
+    // Check each key where it is used instead of requiring all five up front:
+    // callers may allocate keys lazily according to keyDist, and a NULL slot
+    // for a key that was not distributed must not drop the valid ones.
+    GapConvertPeerKeys(result, keys);
+    GapConvertLocalKeys(result, keys);
 }
 
 static void GapCallbackKeyNotify(const BtAddr *addr, const SMP_PairResult *result)
@@ -337,6 +378,49 @@ static void GapCallbackKeyNotify(const BtAddr *addr, const SMP_PairResult *resul
     if (g_lePairCallback.callback.lePairKeyNotify) {
         g_lePairCallback.callback.lePairKeyNotify(addr, keys, g_lePairCallback.context);
     }
+}
+
+// Derive the BR/EDR link key from the LE Secure Connections LTK after pairing success.
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part H
+// Cross-transport key derivation (h6 see 2.2.10): derive the BR/EDR link key from the LESC LTK.
+static void GapCallbackDerivedLinkKey(const BtAddr *addr, const SMP_PairResult *result)
+{
+    GapLeLinkKey linkKey;
+    const uint8_t *ltk = NULL;
+    int ret;
+
+    (void)memset_s(&linkKey, sizeof(GapLeLinkKey), 0x00, sizeof(GapLeLinkKey));
+
+    if (result == NULL || g_lePairCallback.callback.leDerivedLinkKey == NULL) {
+        return;
+    }
+
+    if (result->pairType != SMP_PAIR_TYPE_SECURE_CONNECTION) {
+        return;
+    }
+
+    // In LE Secure Connections both sides derive the same LTK from the shared DHKey,
+    // so peerLTK and localLTK are interchangeable. Prefer peer's copy when available
+    // and fall back to the local copy; either source yields the identical BR/EDR link key.
+    if (result->peerKeyDist & SMP_KEY_DIST_BIT_ENC_KEY) {
+        ltk = result->peerLTK;
+    } else if (result->localKeyDist & SMP_KEY_DIST_BIT_ENC_KEY) {
+        ltk = result->localLTK;
+    }
+
+    if (ltk == NULL) {
+        return;
+    }
+
+    ret = SMP_DeriveBredrLinkKeyFromLeLtk(ltk, SMP_LTK_LEN, linkKey.key, GAP_LINKKEY_SIZE);
+    if (ret != BT_SUCCESS) {
+        LOG_WARN("%{public}s: derive link key failed:%{public}d", __FUNCTION__, ret);
+        (void)memset_s(&linkKey, sizeof(GapLeLinkKey), 0x00, sizeof(GapLeLinkKey));
+        return;
+    }
+
+    g_lePairCallback.callback.leDerivedLinkKey(addr, linkKey, g_lePairCallback.context);
+    (void)memset_s(&linkKey, sizeof(GapLeLinkKey), 0x00, sizeof(GapLeLinkKey));
 }
 
 static void GapSetLeSigningInfo(uint16_t handle, const SMP_PairResult *result)
@@ -364,7 +448,7 @@ static void GapSetLeSigningInfo(uint16_t handle, const SMP_PairResult *result)
 static void GapSetEncryptionStatusForPairEnd(LeDeviceInfo *deviceInfo, uint8_t status, const SMP_PairResult *result)
 {
     if (status == SMP_PAIR_STATUS_SUCCESS) {
-        if (deviceInfo->encryptionStatus == GAP_LE_UNAUTHENTICATED_ENCRYPTION && result->authFlag) {
+        if (result != NULL && deviceInfo->encryptionStatus == GAP_LE_UNAUTHENTICATED_ENCRYPTION && result->authFlag) {
             deviceInfo->encryptionStatus = GAP_LE_AUTHENTICATED_ENCRYPTION;
         }
     } else {
@@ -379,6 +463,16 @@ void GapDoPairResultCallback(const BtAddr *addr, uint8_t status)
     }
 }
 
+static bool GapLeIsLtkAllZeros(const uint8_t *ltk)
+{
+    for (size_t i = 0; i < SMP_LTK_LEN; i++) {
+        if (ltk[i] != 0x00) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void GapLePairResult(uint16_t handle, uint8_t status, const SMP_PairResult *result)
 {
     BtAddr addr = {0};
@@ -390,26 +484,48 @@ void GapLePairResult(uint16_t handle, uint8_t status, const SMP_PairResult *resu
         if (deviceInfo->securityStatus == GAP_LE_SECURITY_STATUS_PAIR) {
             deviceInfo->securityStatus = GAP_LE_SECURITY_STATUS_IDLE;
         }
-        GapSetEncryptionStatusForPairEnd(deviceInfo, status, result);
-        if (deviceInfo->securityReq != NULL) {
-            deviceInfo->securityReq->result = status;
-            GapDoLeSecurityCallback(&deviceInfo->handle);
-        }
     }
     bool isPairing = GapGetLeBondBlock()->isPairing;
     if (deviceInfo == NULL && isPairing == true) {
         (void)memcpy_s(&addr, sizeof(BtAddr), &GapGetLeBondBlock()->addr, sizeof(BtAddr));
     }
 
+    // A distributed all-zero LTK is a spec-invalid value that must be treated as a pairing failure.
+    // This check must run before updating the link encryption status or notifying the security request
+    // so that every downstream observer sees the failed status.
+    if (result != NULL && status == SMP_PAIR_STATUS_SUCCESS && result->bondedFlag == SMP_BONDED_FLAG_YES) {
+        bool peerLtkZero = (result->peerKeyDist & SMP_KEY_DIST_BIT_ENC_KEY) && GapLeIsLtkAllZeros(result->peerLTK);
+        bool localLtkZero = (result->localKeyDist & SMP_KEY_DIST_BIT_ENC_KEY) && GapLeIsLtkAllZeros(result->localLTK);
+        if (peerLtkZero || localLtkZero) {
+            LOG_ERROR("%{public}s: distributed LTK is all zeros, treat pairing as failed", __FUNCTION__);
+            status = SMP_PAIR_STATUS_FAILED;
+        }
+    }
+
+    if (deviceInfo != NULL) {
+        GapSetEncryptionStatusForPairEnd(deviceInfo, status, result);
+        if (deviceInfo->securityReq != NULL) {
+            deviceInfo->securityReq->result = status;
+            GapDoLeSecurityCallback(&deviceInfo->handle);
+        }
+    }
+
     GapClearPairingStatus(&addr);
 
     if (deviceInfo != NULL || isPairing) {
-        if (status == SMP_PAIR_STATUS_SUCCESS && result->bondedFlag == SMP_BONDED_FLAG_YES) {
+        if (status == SMP_PAIR_STATUS_SUCCESS && result != NULL && result->bondedFlag == SMP_BONDED_FLAG_YES) {
             GapCallbackKeyNotify(&addr, result);
+            GapCallbackDerivedLinkKey(&addr, result);
             GapSetLeSigningInfo(handle, result);
         }
         if (g_lePairCallback.callback.lePairComplete) {
-            g_lePairCallback.callback.lePairComplete(&addr, status, result->authFlag, g_lePairCallback.context);
+            uint8_t authFlag = 0;
+            if (result != NULL) {
+                authFlag = result->authFlag;
+            } else {
+                LOG_WARN("%{public}s: pair result is NULL, falling authFlag back to 0", __FUNCTION__);
+            }
+            g_lePairCallback.callback.lePairComplete(&addr, status, authFlag, g_lePairCallback.context);
         }
     }
 }

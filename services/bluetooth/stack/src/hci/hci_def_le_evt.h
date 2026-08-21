@@ -55,7 +55,7 @@ typedef struct {
     HciBdAddr address;
     uint8_t lengthData;
     uint8_t *data;
-    uint8_t rssi;
+    int8_t rssi;
 } HciLeAdvertisingReport;
 
 typedef struct {
@@ -102,7 +102,7 @@ typedef struct {
 typedef struct {
     uint16_t connectionHandle;
     uint16_t intervalMin;
-    uint16_t IntervalMax;
+    uint16_t intervalMax;
     uint16_t latency;
     uint16_t timeout;
 } HciLeRemoteConnectionParameterRequestEventParam;
@@ -112,7 +112,6 @@ typedef struct {
 #define HCI_LE_DATA_LENGTH_CHANGE_EVENT 0x07
 
 typedef struct {
-    uint8_t subeventCode;
     uint16_t connectionHandle;
     uint16_t maxTxOctets;
     uint16_t maxTxTime;
@@ -166,7 +165,7 @@ typedef struct {
     HciBdAddr address;
     uint8_t directAddressType;
     HciBdAddr directAddress;
-    uint8_t rssi;
+    int8_t rssi;
 } HciLeDirectedAdvertisingReport;
 
 typedef struct {
@@ -203,8 +202,8 @@ typedef struct {
     uint8_t primaryPHY;
     uint8_t secondaryPHY;
     uint8_t advertisingSID;
-    uint8_t txPower;
-    uint8_t rssi;
+    int8_t txPower;
+    int8_t rssi;
     uint16_t periodicAdvertisingInterval;
     uint8_t directAddressType;
     HciBdAddr directAddress;
@@ -223,9 +222,13 @@ typedef struct {
 
 typedef struct {
     uint8_t status;
-    uint8_t advertisingHandle;
-    uint16_t connectionHandle;
-    uint8_t numCompletedExtendedAdvertisingEvents;
+    uint16_t syncHandle;
+    uint8_t advertisingSid;
+    uint8_t advertiserAddressType;
+    HciBdAddr advertiserAddress;
+    uint8_t advertiserPhy;
+    uint16_t periodicAdvertisingInterval;
+    uint8_t advertiserClockAccuracy;
 } HciLePeriodicAdvertisingSyncEstablishedEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
@@ -233,14 +236,12 @@ typedef struct {
 #define HCI_LE_PERIODIC_ADVERTISING_REPORT_EVENT 0x0F
 
 typedef struct {
-    uint8_t subeventCode;
     uint16_t syncHandle;
-    uint8_t txPower;
-    uint8_t rssi;
-    uint8_t unused;
+    int8_t txPower;
+    int8_t rssi;
     uint8_t dataStatus;
     uint8_t dataLength;
-    uint8_t *data;
+    const uint8_t *data;
 } HciLePeriodicAdvertisingReportEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
@@ -248,7 +249,6 @@ typedef struct {
 #define HCI_LE_PERIODIC_ADVERTISING_SYNC_LOST_EVENT 0x10
 
 typedef struct {
-    uint8_t subeventCode;
     uint16_t syncHandle;
 } HciLePeriodicAdvertisingSyncLostEventParam;
 

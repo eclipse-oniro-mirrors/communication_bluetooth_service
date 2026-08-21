@@ -602,7 +602,7 @@ static void HciEventOnLeClearAdvertisingSetsComplete(const void *param, uint8_t 
 
 static void HciEventOnLeSetExtendedScanParametersComplete(const void *param, uint8_t length)
 {
-    HciLeClearAdvertisingSetsReturnParam returnParam = {0};
+    HciLeSetExtendedScanParametersReturnParam returnParam = {0};
     (void)memcpy_s(
         &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
 
@@ -768,6 +768,23 @@ static void HciEventOnLeSetDefaultPhyComplete(const void *param, uint8_t length)
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+static void HciEventOnLeSetPhyComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeSetPhyReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPhyComplete != NULL) {
+        callbacks->leSetPhyComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static void HciEventOnLeEnhancedReceiverTestComplete(const void *param, uint8_t length)
 {
     HciLeEnhancedReceiverTestReturnParam returnParam = {0};
@@ -798,21 +815,21 @@ static void HciEventOnLeEnhancedTransmitterTestComplete(const void *param, uint8
 
 static void HciEventOnLeSetPeriodicAdvertisingParametersComplete(const void *param, uint8_t length)
 {
-    HciLeSetPeriodicAdvertisingParametersReturnParameters returnParam = {0};
+    HciLeSetPeriodicAdvertisingParametersReturnParam returnParam = {0};
     (void)memcpy_s(
         &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
     if (callbacks->leSetPeriodicAdvertisingParametersComplete != NULL) {
-        callbacks->leSetPeriodicAdvertisingParametersComplete(param);
+        callbacks->leSetPeriodicAdvertisingParametersComplete(&returnParam);
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
 static void HciEventOnLeSetPeriodicAdvertisingDataComplete(const void *param, uint8_t length)
 {
-    HciLeSetPeriodicAdvertisingDataReturnParameters returnParam = {0};
+    HciLeSetPeriodicAdvertisingDataReturnParam returnParam = {0};
     (void)memcpy_s(
         &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
 
@@ -826,7 +843,7 @@ static void HciEventOnLeSetPeriodicAdvertisingDataComplete(const void *param, ui
 
 static void HciEventOnLeSetPeriodicAdvertisingEnableComplete(const void *param, uint8_t length)
 {
-    HciLeSetPeriodicAdvertisingEnableReturnParameters returnParam = {0};
+    HciLeSetPeriodicAdvertisingEnableReturnParam returnParam = {0};
     (void)memcpy_s(
         &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
 
@@ -1029,7 +1046,7 @@ static HciLeCmdCompleteFunc g_leControllerCommandCompleteMap[] = {
     HciEventOnLeReadMaximumDataLengthComplete,                          // 0x002F
     HciEventOnLeReadPhyComplete,                                        // 0x0030
     HciEventOnLeSetDefaultPhyComplete,                                  // 0x0031
-    NULL,                                                               // 0x0032
+    HciEventOnLeSetPhyComplete,                                         // 0x0032
     HciEventOnLeEnhancedReceiverTestComplete,                           // 0x0033
     HciEventOnLeEnhancedTransmitterTestComplete,                        // 0x0034
     HciEventOnLeSetAdvertisingSetRandomAddressComplete,                 // 0x0035

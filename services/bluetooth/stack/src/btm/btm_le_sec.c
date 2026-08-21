@@ -718,9 +718,9 @@ int BTM_SetLeRandomAddress(const BtAddr *addr)
     BtmStopAutoConnection();
 
     HciLeSetRandomAddressParam param = {
-        .randomAddess = {0},
+        .randomAddress = {0},
     };
-    (void)memcpy_s(param.randomAddess, BT_ADDRESS_SIZE, addr->addr, BT_ADDRESS_SIZE);
+    (void)memcpy_s(param.randomAddress, BT_ADDRESS_SIZE, addr->addr, BT_ADDRESS_SIZE);
 
     int result = HCI_LeSetRandomAddress(&param);
     if (result == BT_SUCCESS) {

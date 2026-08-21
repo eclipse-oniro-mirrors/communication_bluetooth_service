@@ -361,6 +361,43 @@ int SMP_UnregisterCallback();
  */
 int SMP_GenerateScOobData();
 
+/**
+ * @brief Derive the BR/EDR link key from an LE LTK with CTKD (h6).
+ *
+ * @param ltk Point to the LE long term key; @p ltkLen must be exactly
+ *           CRYPT_H6_OUT_LEN (h6 is defined over a 128-bit key).
+ * @param ltkLen Size of the buffer pointed to by @p ltk.
+ * @param linkKey Point to the buffer receiving the derived BR/EDR link key
+ *              (@p linkKeyLen must be exactly CRYPT_H6_OUT_LEN).
+ *              May overlap the buffer of @p ltk; the implementation copies the input first.
+ * @param linkKeyLen Size of the buffer pointed to by @p linkKey.
+ * @return Returns <b>BT_SUCCESS</b> if the operation is successful; returns others if the operation fails.
+ * @note Both the input and the derived output are in Bluetooth LSB-first octet
+ *       order (Vol 3 Part H 2.2.4), i.e. the order keys are stored/received in
+ *       by the HCI layer. AES-CMAC (RFC 4493) internally works over the
+ *       big-endian octet order; the implementation performs the conversion.
+ */
+int SMP_DeriveBredrLinkKeyFromLeLtk(
+    const uint8_t *ltk, uint16_t ltkLen, uint8_t *linkKey, uint16_t linkKeyLen);
+
+/**
+ * @brief Derive the LE LTK from a BR/EDR link key with CTKD (h6).
+ *
+ * @param linkKey Point to the BR/EDR link key (@p linkKeyLen must be exactly CRYPT_H6_OUT_LEN).
+ * @param linkKeyLen Size of the buffer pointed to by @p linkKey.
+ * @param ltk Point to the buffer receiving the derived LE long term key
+ *          (@p ltkLen must be exactly CRYPT_H6_OUT_LEN).
+ *          May overlap the buffer of @p linkKey; the implementation copies the input first.
+ * @param ltkLen Size of the buffer pointed to by @p ltk.
+ * @return Returns <b>BT_SUCCESS</b> if the operation is successful; returns others if the operation fails.
+ * @note Both the input and the derived output are in Bluetooth LSB-first octet
+ *       order (Vol 3 Part H 2.2.4), i.e. the order keys are stored/received in
+ *       by the HCI layer. AES-CMAC (RFC 4493) internally works over the
+ *       big-endian octet order; the implementation performs the conversion.
+ */
+int SMP_DeriveLeLtkFromBredrLinkKey(
+    const uint8_t *linkKey, uint16_t linkKeyLen, uint8_t *ltk, uint16_t ltkLen);
+
 #ifdef __cplusplus
 }
 #endif

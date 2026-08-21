@@ -15,6 +15,7 @@
 
 #include "hci_evt_le.h"
 
+#include <stddef.h>
 #include <securec.h>
 
 #include "btstack.h"
@@ -30,11 +31,19 @@
 #include "hci_evt.h"
 #include "log.h"
 
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.7.65.2
+// A legacy LE Advertising Report data field may contain at most 31 octets.
+#define HCI_LE_ADV_REPORT_DATA_LEN_MAX 31
+
+#define BYTE_BIT_WIDTH 8
+
+/* Event parameters (and any nested data pointer) point into the HCI packet buffer
+ * owned by the caller. Callbacks must copy any data they need to retain. */
 typedef void (*HciLeEventFunc)(const uint8_t *param, size_t length);
 
 static void HciEventOnLeConnectionCompleteEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeConnectionCompleteEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeConnectionCompleteEventParam))) {
         return;
     }
 
@@ -52,13 +61,62 @@ static void HciEventOnLeConnectionCompleteEvent(const uint8_t *param, size_t len
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+static bool HciParseLeAdvertisingReport(
+    HciLeAdvertisingReport *report, const uint8_t *param, size_t length, size_t *offset)
+{
+    report->eventType = param[*offset];
+    *offset += sizeof(uint8_t);
+
+    report->addressType = param[*offset];
+    *offset += sizeof(uint8_t);
+
+    if (memcpy_s(report->address.raw, BT_ADDRESS_SIZE, param + *offset, BT_ADDRESS_SIZE) != EOK) {
+        return false;
+    }
+    *offset += BT_ADDRESS_SIZE;
+
+    report->lengthData = param[*offset];
+    *offset += sizeof(uint8_t);
+
+    // Legacy advertising reports cannot carry more than 31 bytes of data.
+    if (report->lengthData > HCI_LE_ADV_REPORT_DATA_LEN_MAX) {
+        LOG_ERROR("%{public}s: invalid data length, offset(%{public}zu), lengthData(%{public}u), max(%{public}u)",
+            __FUNCTION__,
+            *offset,
+            report->lengthData,
+            HCI_LE_ADV_REPORT_DATA_LEN_MAX);
+        return false;
+    }
+
+    if (*offset + report->lengthData + sizeof(uint8_t) > length) {
+        LOG_ERROR("%{public}s: truncated data field, offset(%{public}zu), lengthData(%{public}u), "
+                  "length(%{public}zu)",
+            __FUNCTION__,
+            *offset,
+            report->lengthData,
+            length);
+        return false;
+    }
+    // Zero-copy view into the event packet buffer. The data is read-only
+    // and its lifetime is limited to the dispatch of this event: consumers
+    // (e.g. GapRecvLeAdvertisingReportEvent) must copy it synchronously in
+    // the callback and must not retain or modify it.
+    report->data = (uint8_t *)(param + *offset);
+    *offset += report->lengthData;
+
+    report->rssi = (int8_t)param[*offset];
+    *offset += sizeof(uint8_t);
+
+    return true;
+}
+
 static void HciEventOnLeAdvertisingReportEvent(const uint8_t *param, size_t length)
 {
     if (param == NULL || length <= 1) {
         return;
     }
 
-    int offset = 0;
+    size_t offset = 0;
     HciLeAdvertisingReportEventParam eventParam = {
         .numReports = param[offset],
         .reports = NULL,
@@ -69,32 +127,28 @@ static void HciEventOnLeAdvertisingReportEvent(const uint8_t *param, size_t leng
         return;
     }
 
-    HciLeAdvertisingReport *reports = MEM_MALLOC.alloc(sizeof(HciLeAdvertisingReport) * eventParam.numReports);
-    if (reports != NULL) {
-        for (uint8_t i = 0; i < eventParam.numReports; i++) {
-            reports[i].eventType = param[offset];
-            offset += sizeof(uint8_t);
-
-            reports[i].addressType = param[offset];
-            offset += sizeof(uint8_t);
-
-            (void)memcpy_s(reports[i].address.raw, BT_ADDRESS_SIZE, param + offset, BT_ADDRESS_SIZE);
-            offset += BT_ADDRESS_SIZE;
-
-            reports[i].lengthData = param[offset];
-            offset += sizeof(uint8_t);
-
-            reports[i].data = (uint8_t *)(param + offset);
-            offset += reports[i].lengthData;
-
-            reports[i].rssi = param[offset];
-            offset += sizeof(uint8_t);
-        }
-
-        eventParam.reports = reports;
-    } else {
+    // Minimum report size: eventType(1) + addressType(1) + address(6) + lengthData(1) + rssi(1).
+    const size_t minReportSize = sizeof(uint8_t) + sizeof(uint8_t) + BT_ADDRESS_SIZE + sizeof(uint8_t) +
+                                 sizeof(uint8_t);
+    if (length < offset + eventParam.numReports * minReportSize) {
+        LOG_ERROR("%{public}s: truncated event, length(%{public}zu)", __FUNCTION__, length);
         return;
     }
+
+    HciLeAdvertisingReport *reports = MEM_MALLOC.alloc(sizeof(HciLeAdvertisingReport) * eventParam.numReports);
+    if (reports == NULL) {
+        return;
+    }
+
+    for (uint8_t i = 0; i < eventParam.numReports; i++) {
+        if (!HciParseLeAdvertisingReport(reports + i, param, length, &offset)) {
+            LOG_ERROR("%{public}s: failed to parse report %{public}u", __FUNCTION__, i);
+            MEM_MALLOC.free(reports);
+            return;
+        }
+    }
+
+    eventParam.reports = reports;
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -103,14 +157,12 @@ static void HciEventOnLeAdvertisingReportEvent(const uint8_t *param, size_t leng
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
 
-    if (reports != NULL) {
-        MEM_MALLOC.free(reports);
-    }
+    MEM_MALLOC.free(reports);
 }
 
 static void HciEventOnLeConnectionUpdateCompleteEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeConnectionUpdateCompleteEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeConnectionUpdateCompleteEventParam))) {
         return;
     }
 
@@ -126,7 +178,7 @@ static void HciEventOnLeConnectionUpdateCompleteEvent(const uint8_t *param, size
 
 static void HciEventOnLeReadRemoteFeaturesCompleteEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeReadRemoteFeaturesCompleteEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeReadRemoteFeaturesCompleteEventParam))) {
         return;
     }
 
@@ -142,7 +194,7 @@ static void HciEventOnLeReadRemoteFeaturesCompleteEvent(const uint8_t *param, si
 
 static void HciEventOnLeLongTermKeyRequestEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeLongTermKeyRequestEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeLongTermKeyRequestEventParam))) {
         return;
     }
 
@@ -158,7 +210,7 @@ static void HciEventOnLeLongTermKeyRequestEvent(const uint8_t *param, size_t len
 
 static void HciEventOnLeRemoteConnectionParameterRequestEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeRemoteConnectionParameterRequestEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeRemoteConnectionParameterRequestEventParam))) {
         return;
     }
 
@@ -175,7 +227,7 @@ static void HciEventOnLeRemoteConnectionParameterRequestEvent(const uint8_t *par
 
 static void HciEventOnLeReadLocalP256PublicKeyCompleteEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeReadLocalP256PublicKeyCompleteEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeReadLocalP256PublicKeyCompleteEventParam))) {
         return;
     }
 
@@ -191,7 +243,7 @@ static void HciEventOnLeReadLocalP256PublicKeyCompleteEvent(const uint8_t *param
 
 static void HciEventOnLeGenerateDHKeyCompleteEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeGenerateDHKeyCompleteEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeGenerateDHKeyCompleteEventParam))) {
         return;
     }
 
@@ -207,7 +259,7 @@ static void HciEventOnLeGenerateDHKeyCompleteEvent(const uint8_t *param, size_t 
 
 static void HciEventOnLeEnhancedConnectionCompleteEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeEnhancedConnectionCompleteEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeEnhancedConnectionCompleteEventParam))) {
         return;
     }
 
@@ -225,28 +277,50 @@ static void HciEventOnLeEnhancedConnectionCompleteEvent(const uint8_t *param, si
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
-static void HciParseLeDirectedAdvertisingReport(
-    HciLeDirectedAdvertisingReport *report, const uint8_t *param, int *offset)
+static bool HciParseLeDirectedAdvertisingReport(
+    HciLeDirectedAdvertisingReport *report, const uint8_t *param, size_t length, size_t *offset)
 {
+    if (*offset + sizeof(uint8_t) > length) {
+        return false;
+    }
     report->eventType = param[*offset];
     *offset += sizeof(uint8_t);
 
+    if (*offset + sizeof(uint8_t) > length) {
+        return false;
+    }
     report->addressType = param[*offset];
     *offset += sizeof(uint8_t);
 
+    if (*offset + BT_ADDRESS_SIZE > length) {
+        return false;
+    }
     if (memcpy_s(report->address.raw, BT_ADDRESS_SIZE, param + *offset, BT_ADDRESS_SIZE) != EOK) {
-        return;
+        return false;
     }
     *offset += BT_ADDRESS_SIZE;
 
+    if (*offset + sizeof(uint8_t) > length) {
+        return false;
+    }
     report->directAddressType = param[*offset];
     *offset += sizeof(uint8_t);
 
-    (void)memcpy_s(report->directAddress.raw, BT_ADDRESS_SIZE, param + *offset, BT_ADDRESS_SIZE);
+    if (*offset + BT_ADDRESS_SIZE > length) {
+        return false;
+    }
+    if (memcpy_s(report->directAddress.raw, BT_ADDRESS_SIZE, param + *offset, BT_ADDRESS_SIZE) != EOK) {
+        return false;
+    }
     *offset += BT_ADDRESS_SIZE;
 
-    report->rssi = param[*offset];
+    if (*offset + sizeof(uint8_t) > length) {
+        return false;
+    }
+    report->rssi = (int8_t)param[*offset];
     *offset += sizeof(uint8_t);
+
+    return true;
 }
 
 static void HciEventOnLeDirectedAdvertisingReportCompleteEvent(const uint8_t *param, size_t length)
@@ -255,25 +329,41 @@ static void HciEventOnLeDirectedAdvertisingReportCompleteEvent(const uint8_t *pa
         return;
     }
 
-    int offset = 0;
+    size_t offset = 0;
     HciLeDirectedAdvertisingReportEventParam eventParam = {
         .numReports = param[offset],
         .reports = NULL,
     };
+    offset += sizeof(uint8_t);
 
     if (eventParam.numReports == 0) {
         return;
     }
 
+    // Minimum report size: eventType(1) + addressType(1) + address(6) + directAddressType(1) +
+    // directAddress(6) + rssi(1).
+    const size_t minReportSize = sizeof(uint8_t) + sizeof(uint8_t) + BT_ADDRESS_SIZE + sizeof(uint8_t) +
+                                 BT_ADDRESS_SIZE + sizeof(uint8_t);
+    if (length < offset + eventParam.numReports * minReportSize) {
+        LOG_ERROR("%{public}s: truncated event, length(%{public}zu)", __FUNCTION__, length);
+        return;
+    }
+
     HciLeDirectedAdvertisingReport *reports =
         MEM_MALLOC.alloc(sizeof(HciLeDirectedAdvertisingReport) * eventParam.numReports);
-    if (reports != NULL) {
-        for (uint8_t i = 0; i < eventParam.numReports; i++) {
-            HciParseLeDirectedAdvertisingReport(reports + i, param, &offset);
-        }
-
-        eventParam.reports = reports;
+    if (reports == NULL) {
+        return;
     }
+
+    for (uint8_t i = 0; i < eventParam.numReports; i++) {
+        if (!HciParseLeDirectedAdvertisingReport(reports + i, param, length, &offset)) {
+            LOG_ERROR("%{public}s: failed to parse report %{public}u", __FUNCTION__, i);
+            MEM_MALLOC.free(reports);
+            return;
+        }
+    }
+
+    eventParam.reports = reports;
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -282,14 +372,12 @@ static void HciEventOnLeDirectedAdvertisingReportCompleteEvent(const uint8_t *pa
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
 
-    if (reports != NULL) {
-        MEM_MALLOC.free(reports);
-    }
+    MEM_MALLOC.free(reports);
 }
 
 static void HciEventOnLePHYUpdateCompleteEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLePhyUpdateCompleteEventParam))) {
+    if (param == NULL || (length < sizeof(HciLePhyUpdateCompleteEventParam))) {
         return;
     }
 
@@ -304,16 +392,16 @@ static void HciEventOnLePHYUpdateCompleteEvent(const uint8_t *param, size_t leng
 }
 
 static bool HciParseLeExtendedAdvertisingReport(
-    HciLeExtendedAdvertisingReport *report, const uint8_t *param, size_t length, int *offset)
+    HciLeExtendedAdvertisingReport *report, const uint8_t *param, size_t length, size_t *offset)
 {
-    const size_t EXT_ADV_COMMON_REPORT_SIZE = 24;  // A extended advertising report size except 'Data' field.
-    if (*offset + EXT_ADV_COMMON_REPORT_SIZE > length) {
-        LOG_ERROR("%{public}s: Error length, offset(%{public}d), length(%{public}zu)",
+    const size_t extAdvCommonReportSize = 24;  // A extended advertising report size except 'Data' field.
+    if (*offset + extAdvCommonReportSize > length) {
+        LOG_ERROR("%{public}s: Error length, offset(%{public}zu), length(%{public}zu)",
             __FUNCTION__, *offset, length);
         return false;
     }
 
-    report->eventType = param[*offset];
+    report->eventType = param[*offset] | ((uint16_t)param[*offset + 1] << BYTE_BIT_WIDTH);
     *offset += sizeof(uint16_t);
 
     report->addressType = param[*offset];
@@ -333,13 +421,13 @@ static bool HciParseLeExtendedAdvertisingReport(
     report->advertisingSID = param[*offset];
     *offset += sizeof(uint8_t);
 
-    report->txPower = param[*offset];
+    report->txPower = (int8_t)param[*offset];
     *offset += sizeof(uint8_t);
 
-    report->rssi = param[*offset];
+    report->rssi = (int8_t)param[*offset];
     *offset += sizeof(uint8_t);
 
-    report->periodicAdvertisingInterval = param[*offset];
+    report->periodicAdvertisingInterval = param[*offset] | ((uint16_t)param[*offset + 1] << BYTE_BIT_WIDTH);
     *offset += sizeof(uint16_t);
 
     report->directAddressType = param[*offset];
@@ -354,7 +442,7 @@ static bool HciParseLeExtendedAdvertisingReport(
     *offset += sizeof(uint8_t);
 
     if (*offset + report->dataLength > length) {
-        LOG_ERROR("%{public}s: Error data length, offset(%{public}d), dataLength(%{public}u), "
+        LOG_ERROR("%{public}s: Error data length, offset(%{public}zu), dataLength(%{public}u), "
         "length(%{public}zu)", __FUNCTION__, *offset, report->dataLength, length);
         return false;
     }
@@ -369,7 +457,7 @@ static void HciEventOnLeExtendedAdvertisingReportEvent(const uint8_t *param, siz
         return;
     }
 
-    int offset = 0;
+    size_t offset = 0;
     HciLeExtendedAdvertisingReportEventParam eventParam = {
         .numReports = param[offset],
         .reports = NULL,
@@ -377,6 +465,13 @@ static void HciEventOnLeExtendedAdvertisingReportEvent(const uint8_t *param, siz
     offset += sizeof(uint8_t);
 
     if (eventParam.numReports == 0) {
+        return;
+    }
+
+    // Each report has at least a 24-byte common header before the variable data payload.
+    const size_t extAdvCommonReportSize = 24;
+    if (length < offset + eventParam.numReports * extAdvCommonReportSize) {
+        LOG_ERROR("%{public}s: truncated event, length(%{public}zu)", __FUNCTION__, length);
         return;
     }
 
@@ -409,7 +504,7 @@ static void HciEventOnLeExtendedAdvertisingReportEvent(const uint8_t *param, siz
 
 static void HciEventOnLeChannelSelectionAlgorithmEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeChannelSelectionAlgorithmEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeChannelSelectionAlgorithmEventParam))) {
         return;
     }
 
@@ -435,7 +530,7 @@ static void HciEventOnLeScanTimeoutEvent(const uint8_t *param, size_t length)
 
 static void HciEventOnLeAdvertisingSetTerminatedEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeAdvertisingSetTerminatedEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeAdvertisingSetTerminatedEventParam))) {
         return;
     }
 
@@ -451,7 +546,7 @@ static void HciEventOnLeAdvertisingSetTerminatedEvent(const uint8_t *param, size
 
 static void HciEventOnLeScanRequestReceivedEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeScanRequestReceivedEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeScanRequestReceivedEventParam))) {
         return;
     }
 
@@ -467,7 +562,7 @@ static void HciEventOnLeScanRequestReceivedEvent(const uint8_t *param, size_t le
 
 static void HciEventOnLEDataLengthChangeEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLeDataLengthChangeEventParam))) {
+    if (param == NULL || (length < sizeof(HciLeDataLengthChangeEventParam))) {
         return;
     }
 
@@ -483,7 +578,7 @@ static void HciEventOnLEDataLengthChangeEvent(const uint8_t *param, size_t lengt
 
 static void HciEventOnLEPeriodicAdvertisingSyncEstablishedEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLePeriodicAdvertisingSyncEstablishedEventParam))) {
+    if (param == NULL || (length < sizeof(HciLePeriodicAdvertisingSyncEstablishedEventParam))) {
         return;
     }
 
@@ -498,25 +593,81 @@ static void HciEventOnLEPeriodicAdvertisingSyncEstablishedEvent(const uint8_t *p
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+static int HciEvtLeReadUint8(const uint8_t *param, size_t length, size_t *offset, uint8_t *dst)
+{
+    if (*offset + sizeof(uint8_t) > length) {
+        LOG_ERROR("%{public}s: truncated UINT8 at offset %{public}zu", __FUNCTION__, *offset);
+        return -1;
+    }
+    *dst = param[*offset];
+    (*offset) += sizeof(uint8_t);
+    return 0;
+}
+
+static int HciEvtLeReadUint16Le(const uint8_t *param, size_t length, size_t *offset, uint16_t *dst)
+{
+    if (*offset + sizeof(uint16_t) > length) {
+        LOG_ERROR("%{public}s: truncated UINT16 at offset %{public}zu", __FUNCTION__, *offset);
+        return -1;
+    }
+    *dst = (uint16_t)param[*offset] | ((uint16_t)param[*offset + 1] << BYTE_BIT_WIDTH);
+    (*offset) += sizeof(uint16_t);
+    return 0;
+}
+
 static void HciEventOnLEPeriodicAdvertisingReportEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLePeriodicAdvertisingReportEventParam))) {
+    // Core Spec 5.0: the fixed-size wire header is
+    // Sync_Handle(2) + TX_Power(1) + RSSI(1) + Data_Status(1) + Data_Length(1),
+    // i.e. 6 bytes. The CTE_Type byte added in 5.1 must not be parsed here,
+    // otherwise dataStatus/dataLength/data shift by one byte on 5.0 controllers.
+    // Only the fixed-size header is parsed byte-by-byte from the HCI event; the
+    // trailing data payload is referenced through the separate |data| pointer
+    // and is valid only for the duration of this callback.
+    const size_t fixedLength = sizeof(uint16_t) + (sizeof(uint8_t) * 4);
+    if (param == NULL || length < fixedLength) {
         return;
     }
 
-    HciLePeriodicAdvertisingReportEventParam *eventParam = (HciLePeriodicAdvertisingReportEventParam *)param;
+    HciLePeriodicAdvertisingReportEventParam eventParam = {0};
+    size_t offset = 0;
+
+    if (HciEvtLeReadUint16Le(param, length, &offset, &eventParam.syncHandle) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, (uint8_t *)&eventParam.txPower) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, (uint8_t *)&eventParam.rssi) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, &eventParam.dataStatus) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, &eventParam.dataLength) != 0) {
+        return;
+    }
+
+    if (eventParam.dataLength > length - offset) {
+        LOG_ERROR("%{public}s: malformed length, got %{public}zu, expected at least %{public}zu",
+                  __FUNCTION__, length, offset + eventParam.dataLength);
+        return;
+    }
+    // eventParam is stack-local and data points into the raw HCI packet buffer.
+    // Both are only valid for the duration of this callback; copy data if it is needed later.
+    eventParam.data = (eventParam.dataLength > 0) ? (param + offset) : NULL;
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
     if (callbacks->lePeriodicAdvertisingReport != NULL) {
-        callbacks->lePeriodicAdvertisingReport(eventParam);
+        callbacks->lePeriodicAdvertisingReport(&eventParam);
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
 static void HciEventOnLEPeriodicAdvertisingSyncLostEvent(const uint8_t *param, size_t length)
 {
-    if (param == NULL || (length != sizeof(HciLePeriodicAdvertisingSyncLostEventParam))) {
+    if (param == NULL || (length < sizeof(HciLePeriodicAdvertisingSyncLostEventParam))) {
         return;
     }
 

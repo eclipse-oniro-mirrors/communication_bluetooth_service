@@ -1,0 +1,67 @@
+# Copyright (C) 2026 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/test.gni")
+
+module_output_path = "bluetooth_service/bluetooth_service"
+
+STACK_DIR = "//foundation/communication/bluetooth_service/services/bluetooth/stack"
+PART_DIR = "//foundation/communication/bluetooth_service/services/bluetooth"
+
+config("module_private_config") {
+  visibility = [ ":*" ]
+  cflags = [ "-Wno-pragma-pack" ]
+  include_dirs = [
+    "$STACK_DIR",
+    "$STACK_DIR/include",
+    "$STACK_DIR/src",
+    "$STACK_DIR/src/smp",
+    "$STACK_DIR/platform",
+    "$STACK_DIR/platform/include",
+    "$PART_DIR/common",
+    "$PART_DIR/hardware/include",
+  ]
+  defines = [
+    "BTFW_LOG_TAG = \"bluetooth_test\"",
+    "BTFW_LOG_DOMAIN = 0xD000103",
+  ]
+}
+
+ohos_unittest("btfw_stack_unit_test") {
+  module_out_path = module_output_path
+
+  sources = [
+    "stack_gap_le_interact_test.cpp",
+    "stack_gap_le_test.cpp",
+    "stack_smp_tool_test.cpp",
+  ]
+
+  configs = [ ":module_private_config" ]
+
+  deps = [ "$STACK_DIR:btstack" ]
+
+  external_deps = [
+    "bounds_checking_function:libsec_shared",
+    "googletest:gtest",
+  ]
+}
+
+group("unittest") {
+  testonly = true
+
+  deps = []
+
+  if (is_phone_product) {
+    deps += [ ":btfw_stack_unit_test" ]
+  }
+}

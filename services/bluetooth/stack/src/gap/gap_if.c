@@ -350,6 +350,7 @@ static void GapFreeRegisterServiceSecurity(void *ctx)
     GapRegisterServiceSecurityInfo *info = ctx;
 
     MEM_MALLOC.free(info->addr);
+    MEM_MALLOC.free(info);
 }
 
 int GAPIF_RegisterServiceSecurityAsync(
@@ -376,19 +377,19 @@ int GAPIF_RegisterServiceSecurityAsync(
     }
 
     if (addr != NULL) {
-        ctx->addr = (BtAddr *)addr;
+        (void)memcpy_s(ctx->addr, sizeof(BtAddr), addr, sizeof(BtAddr));
     } else {
         (void)memset_s(ctx->addr, sizeof(BtAddr), 0x00, sizeof(BtAddr));
     }
     ctx->serviceInfo = *serviceInfo;
     ctx->securityMode = securityMode;
 
-    int ret = GapRunTaskUnBlockProcess(GapRegisterServiceSecurityTask, ctx, GapFreeRegisterServiceSecurity);
-    if (ret == BT_SUCCESS) {
-        ret = ctx->result;
-    }
-
-    return ret;
+    // This is an asynchronous API: the task runs on the GAP queue and the
+    // context is released by the cleanup callback once it completes. Reading
+    // ctx->result after GapRunTaskUnBlockProcess returns would race with that
+    // release (use-after-free) or read the memset initial value, so only the
+    // post result is returned; the real outcome is reported via the callback.
+    return GapRunTaskUnBlockProcess(GapRegisterServiceSecurityTask, ctx, GapFreeRegisterServiceSecurity);
 }
 
 static void GapDeregisterServiceSecurityTask(void *ctx)
@@ -429,6 +430,7 @@ static void GapFreeDeregisterServiceSecurity(void *ctx)
     GapDeregisterServiceSecurityInfo *info = ctx;
 
     MEM_MALLOC.free(info->addr);
+    MEM_MALLOC.free(info);
 }
 
 int GAPIF_DeregisterServiceSecurityAsync(const BtAddr *addr, const GapServiceSecurityInfo *serviceInfo)
@@ -453,18 +455,16 @@ int GAPIF_DeregisterServiceSecurityAsync(const BtAddr *addr, const GapServiceSec
     }
 
     if (addr != NULL) {
-        ctx->addr = (BtAddr *)addr;
+        (void)memcpy_s(ctx->addr, sizeof(BtAddr), addr, sizeof(BtAddr));
     } else {
         (void)memset_s(ctx->addr, sizeof(BtAddr), 0x00, sizeof(BtAddr));
     }
     ctx->serviceInfo = *serviceInfo;
 
-    int ret = GapRunTaskUnBlockProcess(GapDeregisterServiceSecurityTask, ctx, GapFreeDeregisterServiceSecurity);
-    if (ret == BT_SUCCESS) {
-        ret = ctx->result;
-    }
-
-    return ret;
+    // Same asynchronous contract as GAPIF_RegisterServiceSecurityAsync: the
+    // cleanup callback owns and releases |ctx|, so ctx->result must not be
+    // read after the task is posted; only the post result is returned.
+    return GapRunTaskUnBlockProcess(GapDeregisterServiceSecurityTask, ctx, GapFreeDeregisterServiceSecurity);
 }
 
 static void GapRequestSecurityTask(void *ctx)
@@ -518,12 +518,12 @@ int GAPIF_RequestSecurityAsync(const BtAddr *addr, const GapRequestSecurityParam
     (void)memcpy_s(&ctx->addr, sizeof(BtAddr), addr, sizeof(BtAddr));
     (void)memcpy_s(&ctx->param, sizeof(GapRequestSecurityParam), param, sizeof(GapRequestSecurityParam));
 
-    int ret = GapRunTaskUnBlockProcess(GapRequestSecurityTask, ctx, NULL);
-    if (ret == BT_SUCCESS) {
-        ret = ctx->result;
-    }
-
-    return ret;
+    // This is an asynchronous API: the task runs on the GAP queue and, with a
+    // NULL cleanup, the framework releases the context once the task completes.
+    // Reading ctx->result after GapRunTaskUnBlockProcess returns would race
+    // with that release (use-after-free), so only the post result is returned;
+    // the real outcome is reported via the callback.
+    return GapRunTaskUnBlockProcess(GapRequestSecurityTask, ctx, NULL);
 }
 
 static void GapRegisterSecurityCallbackTask(void *ctx)

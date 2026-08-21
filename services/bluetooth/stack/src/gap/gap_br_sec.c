@@ -163,7 +163,8 @@ static void GapDoSecurityAction(RequestSecInfo *reqInfo, DeviceInfo *devInfo)
     if (devInfo->status != GAP_DEV_SEC_STATUS_ACTION) {
         if (devInfo->status == GAP_DEV_SEC_STATUS_IDLE) {
             BTM_AclAddRef(devInfo->handle);
-        } else {
+        } else if (devInfo->alarm != NULL) {
+            // The alarm may be NULL when AlarmCreate failed in GapAllocDeviceInfo.
             AlarmCancel(devInfo->alarm);
         }
         devInfo->status = GAP_DEV_SEC_STATUS_ACTION;
@@ -262,8 +263,12 @@ static void GapCheckConnection(void)
         if (devInfo->status == GAP_DEV_SEC_STATUS_WAIT_DISC) {
             LOG_DEBUG("%{public}s: " BT_ADDR_FMT " 4s disconnect ACL",
                 __FUNCTION__, BT_ADDR_FMT_OUTPUT(devInfo->addr.addr));
-            AlarmCancel(devInfo->alarm);
-            AlarmSet(devInfo->alarm, GAP_DISC_ACL_WAIT_TIME, GapDiscACLTimerTimeout, devInfo);
+            if (devInfo->alarm != NULL) {
+                // The alarm may be NULL when AlarmCreate failed in
+                // GapAllocDeviceInfo; AlarmSet asserts on NULL, so gate it.
+                AlarmCancel(devInfo->alarm);
+                AlarmSet(devInfo->alarm, GAP_DISC_ACL_WAIT_TIME, GapDiscACLTimerTimeout, devInfo);
+            }
             devInfo->status = GAP_DEV_SEC_STATUS_IDLE;
         }
         node = ListGetNextNode(node);
@@ -840,9 +845,15 @@ void GapAuthenticationRetry(DeviceInfo *deviceInfo, RequestSecInfo *reqInfo, uin
 
     if (reqInfo->waitRetryalarm == NULL) {
         reqInfo->waitRetryalarm = AlarmCreate("retry pair", false);
+        if (reqInfo->waitRetryalarm == NULL) {
+            LOG_ERROR("%{public}s: AlarmCreate failed.", __FUNCTION__);
+        }
     }
 
-    if (++reqInfo->retryCount <= GAP_PAIR_RETRY_COUNT) {
+    if (++reqInfo->retryCount <= GAP_PAIR_RETRY_COUNT && reqInfo->waitRetryalarm != NULL) {
+        // The alarm may be NULL when AlarmCreate failed above; AlarmSet
+        // asserts on NULL, so gate it. Without the alarm the retry waits
+        // are skipped and the retry count still advances.
         AlarmCancel(reqInfo->waitRetryalarm);
         AlarmSet(reqInfo->waitRetryalarm, GAP_PAIR_RETRY_WAIT_TIME, GapAuthenticationWaitRetryTimeout, reqInfo);
     } else {
@@ -1542,6 +1553,37 @@ int GAP_PairIsFromLocal(const BtAddr *addr, bool *isLocal)
     return ret;
 }
 
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part H
+// Cross-transport key derivation (h6 see 2.2.10): derive the LE LTK from the BR/EDR link key.
+// CTKD is only allowed for link keys generated with Secure Connections (P-256).
+static void GapCallbackDerivedLeLtk(const BtAddr *addr, const uint8_t *linkKey, uint8_t keyType)
+{
+    if (g_authenticationCallback.callback.derivedLeLtk == NULL) {
+        return;
+    }
+
+    if (keyType != UNAUTHENTICATED_COMBINATION_KEY_GENERATED_FROM_P256 &&
+        keyType != AUTHENTICATED_COMBINATION_KEY_GENERATED_FROM_P256) {
+        return;
+    }
+
+    uint8_t ltk[GAP_LTK_SIZE] = {0x00};
+    int ret = SMP_DeriveLeLtkFromBredrLinkKey(linkKey, GAP_LINKKEY_SIZE, ltk, GAP_LTK_SIZE);
+    if (ret != BT_SUCCESS) {
+        LOG_WARN("%{public}s: derive le ltk failed:%{public}d", __FUNCTION__, ret);
+        (void)memset_s(ltk, GAP_LTK_SIZE, 0x00, GAP_LTK_SIZE);
+        return;
+    }
+
+    GapDerivedLeLtkInfo info = {0};
+    (void)memcpy_s(info.ltk, sizeof(info.ltk), ltk, GAP_LTK_SIZE);
+    info.ediv = 0;
+    info.keySize = GAP_LTK_SIZE;
+    g_authenticationCallback.callback.derivedLeLtk(addr, &info, g_authenticationCallback.context);
+    (void)memset_s(&info, sizeof(info), 0x00, sizeof(info));
+    (void)memset_s(ltk, GAP_LTK_SIZE, 0x00, GAP_LTK_SIZE);
+}
+
 NO_SANITIZE("cfi") void GapOnLinkKeyNotificationEvent(const HciLinkKeyNotificationEventParam *eventParam)
 {
     LOG_DEBUG("%{public}s:" BT_ADDR_FMT, __FUNCTION__, BT_ADDR_FMT_OUTPUT(eventParam->bdAddr.raw));
@@ -1560,6 +1602,8 @@ NO_SANITIZE("cfi") void GapOnLinkKeyNotificationEvent(const HciLinkKeyNotificati
         g_authenticationCallback.callback.linkKeyNotification(
             &addr, (uint8_t *)eventParam->linkKey, eventParam->keyType, g_authenticationCallback.context);
     }
+
+    GapCallbackDerivedLeLtk(&addr, eventParam->linkKey, eventParam->keyType);
 }
 
 NO_SANITIZE("cfi") void GapOnLinkKeyRequestEvent(const HciLinkKeyRequestEventParam *eventParam)

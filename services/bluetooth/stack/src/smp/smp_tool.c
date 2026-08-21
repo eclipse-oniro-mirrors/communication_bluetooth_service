@@ -20,6 +20,7 @@
 #include "log.h"
 #include "platform/include/allocator.h"
 #include "smp.h"
+#include "smp_aes_encryption.h"
 #include "smp_common.h"
 #include "smp_def.h"
 #include "smp_send.h"
@@ -27,6 +28,11 @@
 static const uint8_t CONST_RB[CRYPT_AESCMAC_CONST_RB_LEN] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x87
 };
+
+const uint8_t CRYPT_H6_KEYID_TMP1[CRYPT_H6_KEYID_LEN] = {0x74, 0x6D, 0x70, 0x31}; /* "tmp1" */
+const uint8_t CRYPT_H6_KEYID_TMP2[CRYPT_H6_KEYID_LEN] = {0x74, 0x6D, 0x70, 0x32}; /* "tmp2" */
+const uint8_t CRYPT_H6_KEYID_LEBR[CRYPT_H6_KEYID_LEN] = {0x6C, 0x65, 0x62, 0x72}; /* "lebr" */
+const uint8_t CRYPT_H6_KEYID_BRLE[CRYPT_H6_KEYID_LEN] = {0x62, 0x72, 0x6C, 0x65}; /* "brle" */
 
 static const uint8_t MASTER_LEGACY_IO_TABLE[IO_COUNTS][IO_COUNTS] = {
     {SMP_PAIR_METHOD_JUST_WORK,
@@ -525,9 +531,24 @@ void SMP_CryptographicAesCmacStep2(SMP_CryptAesCmacStep2Param *param)
     SMP_CryptXor128Param cryptXor128param;
     SMP_CryptPaddingParam cryptPaddingParam;
 
+    if (param == NULL) {
+        return;
+    }
+
     (void)memset_s(padded, CRYPT_AESCMAC_PADDED_LEN, 0x00, CRYPT_AESCMAC_PADDED_LEN);
 
-    param->n = (param->length + CRYPT_AESCMAC_NUM) / CRYPT_AESCMAC_TMP_LEN;
+    // An empty, negative-length, or missing message is handled by the top-level CMAC
+    // routine, which builds the final padded block directly. Step2 only operates on
+    // non-empty input. If called with empty/negative input, preserve the legacy
+    // n == 1 convention so Step3 enters the final-block branch instead of looping
+    // on an unsigned wrap-around.
+    if (param->length <= 0x00 || param->input3 == NULL) {
+        (void)memset_s(param->output, CRYPT_AESCMAC_OUT_LEN, 0x00, CRYPT_AESCMAC_OUT_LEN);
+        param->n = 0x01;
+        return;
+    }
+
+    param->n = (param->length + CRYPT_AESCMAC_TMP_LEN - 1) / CRYPT_AESCMAC_TMP_LEN;
 
     if (param->n == 0x00) {
         param->n = 0x01;
@@ -969,4 +990,240 @@ void SMP_LongTermKeyCopy(uint8_t *destLtk, const uint8_t *sourceLtk, uint8_t enc
     if (encKeySize < SMP_LTK_LEN) {
         (void)memset_s(destLtk + encKeySize, (SMP_LTK_LEN - encKeySize), 0x00, (SMP_LTK_LEN - encKeySize));
     }
+}
+
+// SMP_Aes128 operates on Bluetooth little-endian AES-128 blocks: it reverses input
+// bytes before calling the raw AES implementation and reverses the output back.
+// h6/h7 are defined over standard (big-endian) AES-CMAC, so SMP_Aes128Be performs
+// an additional full reversal around SMP_Aes128, yielding the standard big-endian
+// AES-128 used by RFC 4493. Callers must supply key/material in standard big-endian
+// order (as required by RFC 4493 / Bluetooth spec); the result is also returned in
+// big-endian AES-CMAC output.
+static int SMP_Aes128Be(const uint8_t *key, const uint8_t *in, uint8_t *out)
+{
+    uint8_t reverseKey[CRYPT_AESCMAC_KEY_LEN] = {0};
+    uint8_t reverseIn[CRYPT_AESCMAC_IN_LEN] = {0};
+    uint8_t reverseOut[CRYPT_AESCMAC_OUT_LEN] = {0};
+
+    SMP_MemoryReverseCopy(reverseKey, key, CRYPT_AESCMAC_KEY_LEN);
+    SMP_MemoryReverseCopy(reverseIn, in, CRYPT_AESCMAC_IN_LEN);
+
+    int ret = SMP_Aes128(reverseKey, CRYPT_AESCMAC_KEY_LEN, reverseIn, CRYPT_AESCMAC_IN_LEN, reverseOut);
+    if (ret == 0) {
+        SMP_MemoryReverseCopy(out, reverseOut, CRYPT_AESCMAC_OUT_LEN);
+    }
+
+    // Fail the call if any key-material buffer could not be erased, so callers
+    // never treat a partially-wiped secret as successfully used.
+    if (memset_s(reverseKey, CRYPT_AESCMAC_KEY_LEN, 0x00, CRYPT_AESCMAC_KEY_LEN) != EOK ||
+        memset_s(reverseIn, CRYPT_AESCMAC_IN_LEN, 0x00, CRYPT_AESCMAC_IN_LEN) != EOK ||
+        memset_s(reverseOut, CRYPT_AESCMAC_OUT_LEN, 0x00, CRYPT_AESCMAC_OUT_LEN) != EOK) {
+        LOG_ERROR("%{public}s: failed to wipe key material", __FUNCTION__);
+        return BT_OPERATION_FAILED;
+    }
+    return ret;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part H
+// 2.2.5 AES-CMAC: RFC 4493 with a 128-bit key.
+
+// Groups the crypto inputs shared by the CMAC helpers so that each helper
+// stays within the parameter-count and nesting limits.
+typedef struct {
+    const uint8_t *key;
+    const uint8_t *message;
+    uint16_t messageLen;
+    uint8_t *output;
+} SmpCmacCryptoParam;
+
+// Aggregates the intermediate CMAC buffers that are wiped before returning.
+typedef struct {
+    uint8_t x[CRYPT_AESCMAC_TMP_LEN];
+    uint8_t finalBlock[CRYPT_AESCMAC_TMP_LEN];
+    SMP_CryptAesCmacStep1Param step1Param;
+    uint8_t subKeyL[CRYPT_AESCMAC_TMP_LEN];
+    uint8_t zeroBlock[CRYPT_AESCMAC_TMP_LEN];
+} SmpCmacState;
+
+// RFC 4493 subkey generation: L = AES_K(0^128), then Step1 derives K1/K2
+// (output1/output2). Returns BT_SUCCESS or BT_OPERATION_FAILED.
+static int SmpCmacGenerateSubkeys(const uint8_t *key, const uint8_t zeroBlock[CRYPT_AESCMAC_TMP_LEN],
+    uint8_t subKeyL[CRYPT_AESCMAC_TMP_LEN], SMP_CryptAesCmacStep1Param *step1Param)
+{
+    if (SMP_Aes128Be(key, zeroBlock, subKeyL) != 0) {
+        return BT_OPERATION_FAILED;
+    }
+
+    (void)memcpy_s(step1Param->input, CRYPT_AESCMAC_IN_LEN, subKeyL, CRYPT_AESCMAC_TMP_LEN);
+    SMP_CryptographicAesCmacStep1(step1Param);
+    return BT_SUCCESS;
+}
+
+// RFC 4493: an empty message is treated as one final padded block (10* padding)
+// and XORed with subkey K2 (output2 of step 1).
+static int SmpCmacHandleEmptyMessage(const uint8_t *key, const SMP_CryptAesCmacStep1Param *step1Param,
+    uint8_t finalBlock[CRYPT_AESCMAC_TMP_LEN], uint8_t output[CRYPT_AESCMAC_OUT_LEN])
+{
+    finalBlock[0x00] = 0x80;
+    for (int j = 0; j < CRYPT_AESCMAC_TMP_LEN; j++) {
+        finalBlock[j] ^= step1Param->output2[j];
+    }
+    if (SMP_Aes128Be(key, finalBlock, output) != 0) {
+        return BT_OPERATION_FAILED;
+    }
+    return BT_SUCCESS;
+}
+
+// XORs each full message block into x and AES-encrypts it in place, mirroring
+// the RFC 4493 loop over the first (n - 1) message blocks.
+static int SmpCmacXorAndEncryptBlocks(const SmpCmacCryptoParam *param, size_t fullBlocks,
+    uint8_t x[CRYPT_AESCMAC_TMP_LEN])
+{
+    for (size_t i = 0; i < fullBlocks; i++) {
+        for (size_t j = 0; j < CRYPT_AESCMAC_TMP_LEN; j++) {
+            x[j] ^= param->message[i * CRYPT_AESCMAC_TMP_LEN + j];
+        }
+        if (SMP_Aes128Be(param->key, x, x) != 0) {
+            return BT_OPERATION_FAILED;
+        }
+    }
+    return BT_SUCCESS;
+}
+
+// Process the message blocks: Step2 prepares the final (possibly padded) block,
+// then every full block is XORed and AES-encrypted before the final block is
+// combined with K2-derived state. Returns BT_SUCCESS, BT_BAD_PARAM or
+// BT_OPERATION_FAILED; wipes its own step2Param copy before returning.
+static int SmpCmacProcessBlocks(const SmpCmacCryptoParam *param, SmpCmacState *state)
+{
+    SMP_CryptAesCmacStep2Param step2Param = {0};
+    int ret = BT_SUCCESS;
+
+    // Step2 computes the final (possibly padded) message block and the expected
+    // number of full blocks (n - 1). The loop below processes the full blocks
+    // independently so that Step2 only has to prepare the last-block input; this
+    // keeps the number of AES operations identical to a single-pass CMAC while
+    // reusing the existing Step1/Step2 helpers.
+    (void)memcpy_s(step2Param.input1, CRYPT_AESCMAC_IN_LEN, state->step1Param.output1, CRYPT_AESCMAC_IN_LEN);
+    (void)memcpy_s(step2Param.input2, CRYPT_AESCMAC_IN_LEN, state->step1Param.output2, CRYPT_AESCMAC_IN_LEN);
+    step2Param.input3 = param->message;
+    step2Param.length = param->messageLen;
+    SMP_CryptographicAesCmacStep2(&step2Param);
+
+    const size_t fullBlocks = (size_t)(step2Param.n - 1);
+    const size_t expectedBlocks = ((size_t)param->messageLen + CRYPT_AESCMAC_TMP_LEN - 1) / CRYPT_AESCMAC_TMP_LEN;
+
+    if (step2Param.n < 1) {
+        ret = BT_OPERATION_FAILED;
+    } else if ((size_t)step2Param.n != expectedBlocks || param->messageLen < fullBlocks * CRYPT_AESCMAC_TMP_LEN) {
+        ret = BT_BAD_PARAM;
+    } else {
+        ret = SmpCmacXorAndEncryptBlocks(param, fullBlocks, state->x);
+        if (ret == BT_SUCCESS) {
+            for (size_t j = 0; j < CRYPT_AESCMAC_TMP_LEN; j++) {
+                state->x[j] ^= step2Param.output[j];
+            }
+            if (SMP_Aes128Be(param->key, state->x, param->output) != 0) {
+                ret = BT_OPERATION_FAILED;
+            }
+        }
+    }
+
+    if (memset_s(&step2Param, sizeof(step2Param), 0x00, sizeof(step2Param)) != EOK) {
+        LOG_ERROR("%{public}s: failed to wipe step2Param", __FUNCTION__);
+        ret = BT_OPERATION_FAILED;
+    }
+    return ret;
+}
+
+// Wipe one intermediate buffer; a wipe failure is reported as an error so
+// callers never treat a partially-wiped secret as successfully used.
+static int SmpCmacWipeBlock(void *block, size_t len, const char *name)
+{
+    if (memset_s(block, len, 0x00, len) != EOK) {
+        LOG_ERROR("%{public}s: failed to wipe %s", __FUNCTION__, name);
+        return BT_OPERATION_FAILED;
+    }
+    return BT_SUCCESS;
+}
+
+// Wipe all remaining intermediate state in a fixed order. Wipe failures are
+// merged into ret BEFORE deciding whether to wipe output: if a state wipe
+// failed while the crypto succeeded, the function reports failure, so the
+// caller must not receive the full CMAC result either.
+static int SmpCmacWipeAndFinish(int ret, SmpCmacState *state, const SmpCmacCryptoParam *param)
+{
+    if (SmpCmacWipeBlock(state->x, sizeof(state->x), "x") != BT_SUCCESS) {
+        ret = BT_OPERATION_FAILED;
+    }
+    if (SmpCmacWipeBlock(state->finalBlock, sizeof(state->finalBlock), "finalBlock") != BT_SUCCESS) {
+        ret = BT_OPERATION_FAILED;
+    }
+    if (SmpCmacWipeBlock(&state->step1Param, sizeof(state->step1Param), "step1Param") != BT_SUCCESS) {
+        ret = BT_OPERATION_FAILED;
+    }
+    if (SmpCmacWipeBlock(state->subKeyL, sizeof(state->subKeyL), "subKeyL") != BT_SUCCESS) {
+        ret = BT_OPERATION_FAILED;
+    }
+    if (SmpCmacWipeBlock(state->zeroBlock, sizeof(state->zeroBlock), "zeroBlock") != BT_SUCCESS) {
+        ret = BT_OPERATION_FAILED;
+    }
+    if (ret != BT_SUCCESS) {
+        if (SmpCmacWipeBlock(param->output, CRYPT_AESCMAC_OUT_LEN, "output") != BT_SUCCESS) {
+            ret = BT_OPERATION_FAILED;
+        }
+    }
+    return ret;
+}
+
+int SMP_CryptographicAesCmac(const uint8_t key[CRYPT_AESCMAC_KEY_LEN], const uint8_t *message, uint16_t messageLen,
+                             uint8_t output[CRYPT_AESCMAC_OUT_LEN])
+{
+    if (key == NULL || output == NULL || (message == NULL && messageLen != 0)) {
+        return BT_BAD_PARAM;
+    }
+
+    int ret = BT_SUCCESS;
+    SmpCmacCryptoParam param = {
+        .key = key,
+        .message = message,
+        .messageLen = messageLen,
+        .output = output,
+    };
+    SmpCmacState state = {0};
+
+    ret = SmpCmacGenerateSubkeys(param.key, state.zeroBlock, state.subKeyL, &state.step1Param);
+    if (ret == BT_SUCCESS) {
+        if (messageLen == 0) {
+            ret = SmpCmacHandleEmptyMessage(param.key, &state.step1Param, state.finalBlock, param.output);
+        } else {
+            ret = SmpCmacProcessBlocks(&param, &state);
+        }
+    }
+
+    return SmpCmacWipeAndFinish(ret, &state, &param);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part H
+// 2.2.10 Link key conversion function h6
+int SMP_CryptographicH6(const uint8_t w[CRYPT_H6_W_LEN], const uint8_t keyId[CRYPT_H6_KEYID_LEN],
+                        uint8_t output[CRYPT_H6_OUT_LEN])
+{
+    if (w == NULL || keyId == NULL || output == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    return SMP_CryptographicAesCmac(w, keyId, CRYPT_H6_KEYID_LEN, output);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part H
+// 2.2.11 Link key conversion function h7
+int SMP_CryptographicH7(
+    const uint8_t salt[CRYPT_H7_SALT_LEN], const uint8_t w[CRYPT_H7_W_LEN], uint8_t output[CRYPT_H7_OUT_LEN])
+{
+    if (salt == NULL || w == NULL || output == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    return SMP_CryptographicAesCmac(salt, w, CRYPT_H7_W_LEN, output);
 }

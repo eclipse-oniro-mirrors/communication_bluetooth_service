@@ -19,17 +19,30 @@
 
 #include "btstack.h"
 #include "hci/hci.h"
+#include "hci/hci_le_controller_5_0.h"
 #include "hci/hci_def.h"
 #include "hci/hci_error.h"
 #include "log.h"
 #include "platform/include/allocator.h"
 #include "platform/include/event.h"
+#include "platform/include/mutex.h"
 
 #include "btm.h"
 
 #define WAIT_CMD_TIMEOUT 15000
 
 #define EXTENDED_FEATURES_PAGE_2 2
+
+#define LE_DEFAULT_MAX_TX_OCTETS 0x001B
+#define LE_DEFAULT_MAX_TX_TIME 0x0148
+#define LE_DEFAULT_MAX_RX_OCTETS 0x001B
+#define LE_DEFAULT_MAX_RX_TIME 0x0148
+
+// Core Spec v5.0 valid ranges for LE Read Maximum Data Length (HCI_LE_Read_Maximum_Data_Length).
+#define LE_MAX_TX_OCTETS_MAX 0x00FB
+#define LE_MAX_TX_TIME_MAX 0x4290
+#define LE_MAX_RX_OCTETS_MAX 0x00FB
+#define LE_MAX_RX_TIME_MAX 0x4290
 
 #define CHECK_RESULT_BREAK(x) \
     if ((x) != BT_SUCCESS) { \
@@ -51,6 +64,14 @@ static HciReadLocalSupportedFeaturesReturnParam g_readLocalSupportedFeaturesResu
 static HciSetEventMaskReturnParam g_setEventMaskResult;
 static uint8_t g_readLocalSupportedCodecsResult;
 static BtmLocalSupportedCodecs g_localSupportedCodecs;
+// Deep-copy buffers for BTM_GetLocalSupportedCodecs. The getter copies the codec
+// lists under g_btmControllerLock so callers never observe pointers that
+// BtmCloseController may free concurrently. The copy is only valid until the next
+// call to BTM_GetLocalSupportedCodecs. HCI count fields are uint8, so 255 entries
+// (UINT8_MAX) bound both lists.
+#define BTM_LOCAL_SUPPORTED_CODECS_MAX (255)
+static uint8_t g_localSupportedCodecsCopy[BTM_LOCAL_SUPPORTED_CODECS_MAX];
+static BtmVendorSpecificCodec g_localVendorSpecificCodecsCopy[BTM_LOCAL_SUPPORTED_CODECS_MAX];
 static HciReadLocalExtendedFeaturesReturnParam g_readLocalExtendedFeaturesResult[MAX_EXTENED_FEATURES_PAGE_COUNT];
 static HciWriteLeHostSupportReturnParam g_writeLeHostSupportedResult;
 
@@ -59,6 +80,22 @@ static HciLeReadLocalSupportedFeaturesReturnParam g_leReadLocalSupportedFeatures
 static HciLeSetEventMaskReturnParam g_leSetEventMaskResult;
 static HciLeReadWhiteListSizeReturnParam g_leReadWhiteListSizeResult;
 static HciLeReadResolvingListSizeReturnParam g_leReadResolvingListSizeResult;
+
+// Serializes BTM_GetLocalSupportedCodecs against BtmCloseController: both hold
+// this lock while touching g_localSupportedCodecs / its copy buffers, so callers
+// never read codec lists that BtmCloseController is freeing concurrently.
+static Mutex *g_btmControllerLock = NULL;
+
+// Guards the g_leReadMaximumDataLength{Pending,Valid,Result} state so concurrent
+// BTM_LeReadMaximumDataLength callers cannot issue duplicate HCI reads or observe
+// a half-updated result (see BtmLeReadMaximumDataLength).
+static Mutex *g_leReadMaximumDataLengthMutex = NULL;
+static bool g_leReadMaximumDataLengthPending = false;
+static bool g_leReadMaximumDataLengthValid = false;
+// Stores the controller's supported max TX/RX PDU octets and air time.
+static HciLeReadMaximumDataLengthReturnParam g_leReadMaximumDataLengthResult = {
+    .status = HCI_HARDWARE_FAILURE,
+};
 
 static void BtmControllerOnResetComplete(const HciResetReturnParam *returnParam)
 {
@@ -98,7 +135,7 @@ static void BtmControllerOnReadLocalSupportedCommandsComplete(
     EventSet(g_waitSetupController);
 }
 
-static void BtmControllerOnReadLocalSupportedFeaturesComlete(
+static void BtmControllerOnReadLocalSupportedFeaturesComplete(
     const HciReadLocalSupportedFeaturesReturnParam *returnParam)
 {
     g_readLocalSupportedFeaturesResult = *returnParam;
@@ -119,43 +156,104 @@ static void BtmControllerOnSetEventMaskComplete(const HciSetEventMaskReturnParam
     EventSet(g_waitSetupController);
 }
 
+static void BtmControllerClearLocalSupportedCodecs(void)
+{
+    if (g_localSupportedCodecs.supportedCodecs != NULL) {
+        MEM_MALLOC.free(g_localSupportedCodecs.supportedCodecs);
+        g_localSupportedCodecs.supportedCodecs = NULL;
+    }
+    if (g_localSupportedCodecs.vendorSpecificCodecs != NULL) {
+        MEM_MALLOC.free(g_localSupportedCodecs.vendorSpecificCodecs);
+        g_localSupportedCodecs.vendorSpecificCodecs = NULL;
+    }
+    g_localSupportedCodecs.numberOfSupportedCodecs = 0;
+    g_localSupportedCodecs.numberOfSupportedVendorSpecificCodecs = 0;
+    g_readLocalSupportedCodecsResult = HCI_HARDWARE_FAILURE;
+}
+
 static void BtmControllerCopySupportedCodecs(const HciReadLocalSupportedCodecsReturnParam *returnParam)
 {
+    if (returnParam == NULL) {
+        g_readLocalSupportedCodecsResult = HCI_HARDWARE_FAILURE;
+        return;
+    }
+    if (g_localSupportedCodecs.supportedCodecs != NULL) {
+        MEM_MALLOC.free(g_localSupportedCodecs.supportedCodecs);
+    }
+    g_localSupportedCodecs.supportedCodecs = NULL;
+    g_localSupportedCodecs.numberOfSupportedCodecs = 0;
+
+    if (returnParam->numberOfSupportedCodecs == 0) {
+        return;
+    }
+
+    if (returnParam->supportedCodecs == NULL) {
+        g_readLocalSupportedCodecsResult = HCI_HARDWARE_FAILURE;
+        return;
+    }
+
+    g_localSupportedCodecs.supportedCodecs =
+        MEM_MALLOC.alloc(sizeof(uint8_t) * returnParam->numberOfSupportedCodecs);
+    if (g_localSupportedCodecs.supportedCodecs == NULL) {
+        g_readLocalSupportedCodecsResult = HCI_HARDWARE_FAILURE;
+        return;
+    }
     g_localSupportedCodecs.numberOfSupportedCodecs = returnParam->numberOfSupportedCodecs;
-    if (g_localSupportedCodecs.numberOfSupportedCodecs) {
-        g_localSupportedCodecs.supportedCodecs =
-            MEM_MALLOC.alloc(sizeof(uint8_t) * g_localSupportedCodecs.numberOfSupportedCodecs);
-        if (g_localSupportedCodecs.supportedCodecs) {
-            for (uint8_t i = 0; i < g_localSupportedCodecs.numberOfSupportedCodecs; i++) {
-                g_localSupportedCodecs.supportedCodecs[i] = returnParam->supportedCodecs[i];
-            }
-        }
+    for (uint8_t i = 0; i < g_localSupportedCodecs.numberOfSupportedCodecs; i++) {
+        g_localSupportedCodecs.supportedCodecs[i] = returnParam->supportedCodecs[i];
     }
 }
 
 static void BtmControllerCopyVendorSpecificCodecs(const HciReadLocalSupportedCodecsReturnParam *returnParam)
 {
+    if (returnParam == NULL) {
+        g_readLocalSupportedCodecsResult = HCI_HARDWARE_FAILURE;
+        return;
+    }
+    if (g_localSupportedCodecs.vendorSpecificCodecs != NULL) {
+        MEM_MALLOC.free(g_localSupportedCodecs.vendorSpecificCodecs);
+    }
+    g_localSupportedCodecs.vendorSpecificCodecs = NULL;
+    g_localSupportedCodecs.numberOfSupportedVendorSpecificCodecs = 0;
+
+    if (returnParam->numberOfSupportedVendorSpecificCodecs == 0) {
+        return;
+    }
+
+    if (returnParam->vendorSpecificCodecs == NULL) {
+        g_readLocalSupportedCodecsResult = HCI_HARDWARE_FAILURE;
+        return;
+    }
+
+    g_localSupportedCodecs.vendorSpecificCodecs = MEM_MALLOC.alloc(
+        sizeof(BtmVendorSpecificCodec) * returnParam->numberOfSupportedVendorSpecificCodecs);
+    if (g_localSupportedCodecs.vendorSpecificCodecs == NULL) {
+        g_readLocalSupportedCodecsResult = HCI_HARDWARE_FAILURE;
+        return;
+    }
     g_localSupportedCodecs.numberOfSupportedVendorSpecificCodecs = returnParam->numberOfSupportedVendorSpecificCodecs;
-    if (g_localSupportedCodecs.numberOfSupportedVendorSpecificCodecs) {
-        g_localSupportedCodecs.vendorSpecificCodecs = MEM_MALLOC.alloc(
-            sizeof(BtmVendorSpecificCodec) * g_localSupportedCodecs.numberOfSupportedVendorSpecificCodecs);
-        if (g_localSupportedCodecs.vendorSpecificCodecs) {
-            for (uint8_t i = 0; i < g_localSupportedCodecs.numberOfSupportedVendorSpecificCodecs; i++) {
-                g_localSupportedCodecs.vendorSpecificCodecs[i].companyID =
-                    returnParam->vendorSpecificCodecs[i].companyID;
-                g_localSupportedCodecs.vendorSpecificCodecs[i].vendorDefinedCodecID =
-                    returnParam->vendorSpecificCodecs[i].vendorDefinedCodecID;
-            }
-        }
+    for (uint8_t i = 0; i < g_localSupportedCodecs.numberOfSupportedVendorSpecificCodecs; i++) {
+        g_localSupportedCodecs.vendorSpecificCodecs[i].companyID =
+            returnParam->vendorSpecificCodecs[i].companyID;
+        g_localSupportedCodecs.vendorSpecificCodecs[i].vendorDefinedCodecID =
+            returnParam->vendorSpecificCodecs[i].vendorDefinedCodecID;
     }
 }
 
 static void BtmControllerOnReadLocalSupportedCodecs(const HciReadLocalSupportedCodecsReturnParam *returnParam)
 {
+    if (g_btmControllerLock != NULL) {
+        MutexLock(g_btmControllerLock);
+    }
+
     g_readLocalSupportedCodecsResult = returnParam->status;
     if (g_readLocalSupportedCodecsResult == HCI_SUCCESS) {
         BtmControllerCopySupportedCodecs(returnParam);
         BtmControllerCopyVendorSpecificCodecs(returnParam);
+    }
+
+    if (g_btmControllerLock != NULL) {
+        MutexUnlock(g_btmControllerLock);
     }
 
     EventSet(g_waitSetupController);
@@ -180,6 +278,36 @@ static void BtmControllerOnLeSetEventMaskComplete(const HciLeSetEventMaskReturnP
     EventSet(g_waitSetupController);
 }
 
+static void BtmControllerOnLeReadMaximumDataLengthComplete(const HciLeReadMaximumDataLengthReturnParam *returnParam)
+{
+    if (returnParam == NULL) {
+        return;
+    }
+
+    // Hold the controller lifecycle lock while checking and locking the data mutex
+    // so that BtmCloseController cannot delete the mutex between the check and the lock.
+    if (g_btmControllerLock == NULL) {
+        return;
+    }
+    MutexLock(g_btmControllerLock);
+    if (g_leReadMaximumDataLengthMutex == NULL) {
+        MutexUnlock(g_btmControllerLock);
+        return;
+    }
+    MutexLock(g_leReadMaximumDataLengthMutex);
+    MutexUnlock(g_btmControllerLock);
+
+    if (!g_leReadMaximumDataLengthPending) {
+        MutexUnlock(g_leReadMaximumDataLengthMutex);
+        return;
+    }
+    g_leReadMaximumDataLengthResult = *returnParam;
+    g_leReadMaximumDataLengthPending = false;
+    g_leReadMaximumDataLengthValid = (returnParam->status == HCI_SUCCESS);
+    MutexUnlock(g_leReadMaximumDataLengthMutex);
+    EventSet(g_waitSetupController);
+}
+
 static void BtmControllerOnLeReadWhiteListSizeComplete(const HciLeReadWhiteListSizeReturnParam *returnParam)
 {
     g_leReadWhiteListSizeResult = *returnParam;
@@ -200,32 +328,32 @@ static void BtmControllerOnWriteLeHostSupportedComplete(const HciWriteLeHostSupp
 
 bool BtmIsControllerSupportedReadLocalSupportedCodecsCommand()
 {
-    return HCI_SUPPORT_READ_LOCAL_SUPPORTED_CODECS(g_readLocalSupportedCommandsResult.supportedCommands);
+    return HciSupportReadLocalSupportedCodecs(g_readLocalSupportedCommandsResult.supportedCommands);
 }
 
 bool BtmIsControllerSupportedEnhancedSetupSynchronousConnection()
 {
-    return HCI_SUPPORT_ENHANCED_SETUP_SYNCHRONOUS_CONNECTION(g_readLocalSupportedCommandsResult.supportedCommands);
+    return HciSupportEnhancedSetupSynchronousConnection(g_readLocalSupportedCommandsResult.supportedCommands);
 }
 
 bool BtmIsControllerSupportedEnhancedAcceptSynchronousConnection()
 {
-    return HCI_SUPPORT_ENHANCED_ACCEPT_SYNCHRONOUS_CONNECTION(g_readLocalSupportedCommandsResult.supportedCommands);
+    return HciSupportEnhancedAcceptSynchronousConnection(g_readLocalSupportedCommandsResult.supportedCommands);
 }
 
 static bool BtmIsControllerSupportedLeReadLocalP256PublicKey()
 {
-    return HCI_SUPPORT_LE_READ_LOCAL_P_256_PUBLIC_KEY(g_readLocalSupportedCommandsResult.supportedCommands);
+    return HciSupportLeReadLocalP256PublicKey(g_readLocalSupportedCommandsResult.supportedCommands);
 }
 
 static bool BtmIsControllerSupportedLeGenerateDhKey()
 {
-    return HCI_SUPPORT_LE_GENERATE_DH_KEY(g_readLocalSupportedCommandsResult.supportedCommands);
+    return HciSupportLeGenerateDhKey(g_readLocalSupportedCommandsResult.supportedCommands);
 }
 
 bool BtmIsControllerSupportedLeSetPrivacyMode()
 {
-    return HCI_SUPPORT_LE_SET_PRIVACY_MODE(g_readLocalSupportedCommandsResult.supportedCommands);
+    return HciSupportLeSetPrivacyMode(g_readLocalSupportedCommandsResult.supportedCommands);
 }
 
 static HciEventCallbacks g_hciEventCallbacks = {
@@ -235,7 +363,7 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .readLocalVersionInformationComplete = BtmControllerOnReadLocalVersionInformationComplete,
     .readBdAddrComplete = BtmControllerOnReadBdAddrComplete,
     .readLocalSupportedCommandsComplete = BtmControllerOnReadLocalSupportedCommandsComplete,
-    .readLocalSupportedFeaturesComplete = BtmControllerOnReadLocalSupportedFeaturesComlete,
+    .readLocalSupportedFeaturesComplete = BtmControllerOnReadLocalSupportedFeaturesComplete,
     .readLocalExtendedFeaturesComplete = BtmControllerOnReadLocalExtendedFeaturesComplete,
     .setEventMaskComplete = BtmControllerOnSetEventMaskComplete,
     .readLocalSupportedCodecsComplete = BtmControllerOnReadLocalSupportedCodecs,
@@ -244,6 +372,7 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .leSetEventMaskComplete = BtmControllerOnLeSetEventMaskComplete,
     .leReadBufferSizeComplete = BtmControllerOnLeReadBufferSizeComplete,
     .leReadLocalSupportedFeaturesComplete = BtmControllerOnLeReadLocalSupportedFeaturesComplete,
+    .leReadMaximumDataLengthComplete = BtmControllerOnLeReadMaximumDataLengthComplete,
     .leReadWhiteListSizeComplete = BtmControllerOnLeReadWhiteListSizeComplete,
     .leReadResolvingListSizeComplete = BtmControllerOnLeReadResolvingListSizeComplete,
 };
@@ -630,8 +759,80 @@ static int BtmLeReadLocalSupportedFeatures()
     return result;
 }
 
+static void BtmSetDefaultLeMaximumDataLength(void)
+{
+    g_leReadMaximumDataLengthResult.supportedMaxTxOctets = LE_DEFAULT_MAX_TX_OCTETS;
+    g_leReadMaximumDataLengthResult.supportedMaxTxTime = LE_DEFAULT_MAX_TX_TIME;
+    g_leReadMaximumDataLengthResult.supportedMaxRxOctets = LE_DEFAULT_MAX_RX_OCTETS;
+    g_leReadMaximumDataLengthResult.supportedMaxRxTime = LE_DEFAULT_MAX_RX_TIME;
+    // Caller owns the status field; do not overwrite it here.
+}
+
+static int BtmLeReadMaximumDataLength()
+{
+    if (g_btmControllerLock == NULL || g_leReadMaximumDataLengthMutex == NULL) {
+        return BT_OPERATION_FAILED;
+    }
+
+    EventClear(g_waitSetupController);
+
+    // Hold the controller lifecycle lock only while checking and locking the data
+    // mutex, then release it before EventWait: the HCI complete callback
+    // (BtmControllerOnLeReadMaximumDataLengthComplete) must acquire the same
+    // controller lock before it can EventSet, so holding it across the wait would
+    // block the callback and force a 15s timeout every time.
+    MutexLock(g_btmControllerLock);
+    MutexLock(g_leReadMaximumDataLengthMutex);
+    MutexUnlock(g_btmControllerLock);
+
+    g_leReadMaximumDataLengthResult.status = HCI_HARDWARE_FAILURE;
+    g_leReadMaximumDataLengthPending = true;
+    g_leReadMaximumDataLengthValid = false;
+    MutexUnlock(g_leReadMaximumDataLengthMutex);
+
+    int result = HCI_LeReadMaximumDataLength();
+    if (result != BT_SUCCESS) {
+        LOG_ERROR("HCI_LeReadMaximumDataLength failed: %{public}d", result);
+        MutexLock(g_leReadMaximumDataLengthMutex);
+        g_leReadMaximumDataLengthPending = false;
+        BtmSetDefaultLeMaximumDataLength();
+        MutexUnlock(g_leReadMaximumDataLengthMutex);
+        return result;
+    }
+    if (EventWait(g_waitSetupController, WAIT_CMD_TIMEOUT) == 0) {
+        MutexLock(g_leReadMaximumDataLengthMutex);
+        if (g_leReadMaximumDataLengthResult.status != HCI_SUCCESS) {
+            LOG_ERROR("HCI_LeReadMaximumDataLength status: 0x%02x", g_leReadMaximumDataLengthResult.status);
+            // Clear the pending flag like the timeout path: a late completion
+            // callback from this command (rk3568 firmware may never deliver one)
+            // would otherwise leave the flag set and its EventSet would pollute
+            // the next command's EventWait in the init sequence.
+            g_leReadMaximumDataLengthPending = false;
+            BtmSetDefaultLeMaximumDataLength();
+            result = BT_OPERATION_FAILED;
+        }
+        MutexUnlock(g_leReadMaximumDataLengthMutex);
+    } else {
+        LOG_ERROR("HCI_LeReadMaximumDataLength Timeout");
+        MutexLock(g_leReadMaximumDataLengthMutex);
+        if (g_leReadMaximumDataLengthPending) {
+            g_leReadMaximumDataLengthPending = false;
+            BtmSetDefaultLeMaximumDataLength();
+            g_leReadMaximumDataLengthResult.status = HCI_HARDWARE_FAILURE;
+        }
+        MutexUnlock(g_leReadMaximumDataLengthMutex);
+        result = BT_OPERATION_FAILED;
+    }
+    return result;
+}
+
 static int BtmLeReadResolvingListSize()
 {
+    // Clear the event first: a stale signal from a timed-out predecessor command
+    // (e.g. BtmLeReadMaximumDataLength) would otherwise make EventWait return
+    // immediately and this command would consume a zero-initialized result.
+    EventClear(g_waitSetupController);
+
     int result = HCI_LeReadResolvingListSize();
     if (result != BT_SUCCESS) {
         LOG_ERROR("HCI_LeReadResolvingListSize failed: %{public}d", result);
@@ -639,7 +840,7 @@ static int BtmLeReadResolvingListSize()
     }
     if (EventWait(g_waitSetupController, WAIT_CMD_TIMEOUT) == 0) {
         if (g_leReadResolvingListSizeResult.status != HCI_SUCCESS) {
-            LOG_ERROR("HCI_LeReadResolvingListSize status: 0x%02x", g_setEventMaskResult.status);
+            LOG_ERROR("HCI_LeReadResolvingListSize status: 0x%02x", g_leReadResolvingListSizeResult.status);
             result = BT_OPERATION_FAILED;
         }
     } else {
@@ -691,6 +892,18 @@ static int BtmInitLeFeature()
         result = BtmLeReadLocalSupportedFeatures();
         CHECK_RESULT_BREAK(result);
 
+        if (BTM_IsControllerSupportLeDataPacketLengthExtension()) {
+            result = BtmLeReadMaximumDataLength();
+            if (result != BT_SUCCESS) {
+                LOG_WARN("BtmLeReadMaximumDataLength failed, using defaults: %{public}d", result);
+                MutexLock(g_leReadMaximumDataLengthMutex);
+                g_leReadMaximumDataLengthResult.status = HCI_HARDWARE_FAILURE;
+                g_leReadMaximumDataLengthValid = false;
+                MutexUnlock(g_leReadMaximumDataLengthMutex);
+                result = BT_SUCCESS;
+            }
+        }
+
         if (BTM_IsControllerSupportLlPrivacy()) {
             result = BtmLeReadResolvingListSize();
             CHECK_RESULT_BREAK(result);
@@ -702,13 +915,30 @@ static int BtmInitLeFeature()
     return result;
 }
 
-int BtmInitController()
+// On a codec read failure, reset the codec state under the controller lock so
+// a later success can repopulate it from a clean slate.
+static void BtmInitControllerHandleCodecResult(int result)
+{
+    if (result != BT_SUCCESS) {
+        LOG_WARN("%{public}s: BtmReadLocalSupportedCodecs failed, reset codec state: %{public}d",
+            __FUNCTION__, result);
+        g_readLocalSupportedCodecsResult = HCI_HARDWARE_FAILURE;
+        if (g_btmControllerLock != NULL) {
+            MutexLock(g_btmControllerLock);
+        }
+        BtmControllerClearLocalSupportedCodecs();
+        if (g_btmControllerLock != NULL) {
+            MutexUnlock(g_btmControllerLock);
+        }
+    }
+}
+
+// Run the init-time HCI command sequence. Each step checks its result via
+// CHECK_RESULT_BREAK and stops the sequence on the first failure; the final
+// step (LE feature init) keeps its result as the sequence outcome.
+static int BtmInitControllerCommandSequence(void)
 {
     int result;
-
-    HCI_RegisterEventCallbacks(&g_hciEventCallbacks);
-
-    g_waitSetupController = EventCreate(true);
 
     do {
         // Reset Command
@@ -751,7 +981,9 @@ int BtmInitController()
         CHECK_RESULT_BREAK(result);
 
         if (BtmIsControllerSupportedReadLocalSupportedCodecsCommand()) {
-            BtmReadLocalSupportedCodecs();
+            result = BtmReadLocalSupportedCodecs();
+            BtmInitControllerHandleCodecResult(result);
+            result = BT_SUCCESS;
         }
 
         if (BTM_IsControllerSupportLe()) {
@@ -759,10 +991,63 @@ int BtmInitController()
         }
     } while (0);
 
+    return result;
+}
+
+int BtmInitController()
+{
+    int result;
+
+    if (g_btmControllerLock == NULL) {
+        Mutex *newLock = MutexCreate();
+        if (newLock == NULL) {
+            return BT_NO_MEMORY;
+        }
+        Mutex *expected = NULL;
+        if (!__atomic_compare_exchange_n(
+            &g_btmControllerLock, &expected, newLock, false, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST)) {
+            MutexDelete(newLock);
+        }
+    }
+
+    if (g_leReadMaximumDataLengthMutex == NULL) {
+        Mutex *newLock = MutexCreate();
+        if (newLock == NULL) {
+            // Do NOT roll back g_btmControllerLock here: another thread may
+            // already hold a reference to it after this call's CAS publish,
+            // and deleting it would leave that thread locking freed memory
+            // (use-after-free). The lock stays valid and is released once by
+            // BtmCloseController. A subsequent init attempt will succeed.
+            return BT_NO_MEMORY;
+        }
+        Mutex *expected = NULL;
+        if (!__atomic_compare_exchange_n(&g_leReadMaximumDataLengthMutex, &expected, newLock, false,
+            __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST)) {
+            MutexDelete(newLock);
+        }
+    }
+
+    HCI_RegisterEventCallbacks(&g_hciEventCallbacks);
+
+    g_waitSetupController = EventCreate(true);
+
+    result = BtmInitControllerCommandSequence();
+
+    // Deregister BEFORE deleting g_waitSetupController. The event dispatcher invokes
+    // callbacks while holding the same lock as HCI_DeregisterEventCallbacks, so once
+    // deregister returns no setup callback can still run. Otherwise a late
+    // command-complete (e.g. a response to a command whose EventWait timed out) could
+    // call EventSet() on the deleted (or NULL) event and crash the stack.
+    HCI_DeregisterEventCallbacks(&g_hciEventCallbacks);
+
     EventDelete(g_waitSetupController);
     g_waitSetupController = NULL;
 
-    HCI_DeregisterEventCallbacks(&g_hciEventCallbacks);
+    if (result != BT_SUCCESS) {
+        // The deregister above already removed the callbacks; the deregister inside
+        // BtmCloseController is then a harmless no-op.
+        BtmCloseController();
+    }
 
     return result;
 }
@@ -845,6 +1130,11 @@ bool BTM_IsControllerSupportLeCodedPhy()
     return HCI_SUPPORT_LE_CODED_PHY(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
+bool BTM_IsControllerSupportLeReadPhy()
+{
+    return HciSupportLeReadPhy(g_readLocalSupportedCommandsResult.supportedCommands);
+}
+
 bool BTM_IsControllerSupportLeExtendedAdvertising()
 {
     return HCI_SUPPORT_LE_EXTENDED_ADVERTISING(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
@@ -860,6 +1150,21 @@ bool BTM_IsControllerSupportChannelSelectionAlgorithm2()
     return HCI_SUPPURT_CHANNEL_SELECTION_ALGORITHM_2(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
+bool BTM_IsControllerSupportLeReadTransmitPower()
+{
+    return HciSupportLeReadTransmitPower(g_readLocalSupportedCommandsResult.supportedCommands);
+}
+
+bool BTM_IsControllerSupportLeReadRfPathCompensation()
+{
+    return HciSupportLeReadRfPathCompensation(g_readLocalSupportedCommandsResult.supportedCommands);
+}
+
+bool BTM_IsControllerSupportLeWriteRfPathCompensation()
+{
+    return HciSupportLeWriteRfPathCompensation(g_readLocalSupportedCommandsResult.supportedCommands);
+}
+
 bool BTM_IsControllerSupportConnectionParametersRequestProcedure()
 {
     return HCI_SUPPORT_CONNECTION_PARAMETERS_REQUEST_PROCEDURE(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
@@ -868,6 +1173,61 @@ bool BTM_IsControllerSupportConnectionParametersRequestProcedure()
 bool BTM_IsControllerSupportLePeriodicAdvertising()
 {
     return HCI_SUPPORT_LE_PERIODIC_ADVERTISING(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+int BTM_GetLeMaxDataLength(uint16_t *maxTxOctets, uint16_t *maxTxTime, uint16_t *maxRxOctets, uint16_t *maxRxTime)
+{
+    if (maxTxOctets == NULL || maxTxTime == NULL || maxRxOctets == NULL || maxRxTime == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    if (g_btmControllerLock == NULL || g_leReadMaximumDataLengthMutex == NULL) {
+        // Controller has not been initialized yet; return Bluetooth LE default values.
+        *maxTxOctets = LE_DEFAULT_MAX_TX_OCTETS;
+        *maxTxTime = LE_DEFAULT_MAX_TX_TIME;
+        *maxRxOctets = LE_DEFAULT_MAX_RX_OCTETS;
+        *maxRxTime = LE_DEFAULT_MAX_RX_TIME;
+        return BT_SUCCESS;
+    }
+
+    MutexLock(g_btmControllerLock);
+    if (g_leReadMaximumDataLengthMutex == NULL) {
+        MutexUnlock(g_btmControllerLock);
+        *maxTxOctets = LE_DEFAULT_MAX_TX_OCTETS;
+        *maxTxTime = LE_DEFAULT_MAX_TX_TIME;
+        *maxRxOctets = LE_DEFAULT_MAX_RX_OCTETS;
+        *maxRxTime = LE_DEFAULT_MAX_RX_TIME;
+        return BT_SUCCESS;
+    }
+
+    MutexLock(g_leReadMaximumDataLengthMutex);
+    MutexUnlock(g_btmControllerLock);
+
+    if (!BTM_IsControllerSupportLeDataPacketLengthExtension() || !g_leReadMaximumDataLengthValid) {
+        *maxTxOctets = LE_DEFAULT_MAX_TX_OCTETS;
+        *maxTxTime = LE_DEFAULT_MAX_TX_TIME;
+        *maxRxOctets = LE_DEFAULT_MAX_RX_OCTETS;
+        *maxRxTime = LE_DEFAULT_MAX_RX_TIME;
+    } else {
+        *maxTxOctets = g_leReadMaximumDataLengthResult.supportedMaxTxOctets;
+        *maxTxTime = g_leReadMaximumDataLengthResult.supportedMaxTxTime;
+        *maxRxOctets = g_leReadMaximumDataLengthResult.supportedMaxRxOctets;
+        *maxRxTime = g_leReadMaximumDataLengthResult.supportedMaxRxTime;
+
+        if (*maxTxOctets < LE_DEFAULT_MAX_TX_OCTETS || *maxTxOctets > LE_MAX_TX_OCTETS_MAX ||
+            *maxTxTime < LE_DEFAULT_MAX_TX_TIME || *maxTxTime > LE_MAX_TX_TIME_MAX ||
+            *maxRxOctets < LE_DEFAULT_MAX_RX_OCTETS || *maxRxOctets > LE_MAX_RX_OCTETS_MAX ||
+            *maxRxTime < LE_DEFAULT_MAX_RX_TIME || *maxRxTime > LE_MAX_RX_TIME_MAX) {
+            LOG_WARN("%{public}s: controller returned out-of-range data length, using defaults", __FUNCTION__);
+            *maxTxOctets = LE_DEFAULT_MAX_TX_OCTETS;
+            *maxTxTime = LE_DEFAULT_MAX_TX_TIME;
+            *maxRxOctets = LE_DEFAULT_MAX_RX_OCTETS;
+            *maxRxTime = LE_DEFAULT_MAX_RX_TIME;
+        }
+    }
+    MutexUnlock(g_leReadMaximumDataLengthMutex);
+
+    return BT_SUCCESS;
 }
 
 bool BtmGetLocalSupportedFeature(HciLmpFeatures *lmpFeature)
@@ -900,7 +1260,7 @@ int BTM_GetLocalSupportedFeatures(uint8_t features[8])
 {
     int result = BT_SUCCESS;
 
-    if (g_readLocalSupportedFeaturesResult.status == BT_SUCCESS) {
+    if (g_readLocalSupportedFeaturesResult.status == HCI_SUCCESS) {
         errno_t err = memcpy_s(
             features, LMP_FEATURES_SIZE, g_readLocalSupportedFeaturesResult.lmpFeatures.raw, LMP_FEATURES_SIZE);
         if (err != EOK) {
@@ -954,13 +1314,73 @@ int BtmGetResolvingListSize(uint8_t *resolvingListSize)
     return BT_SUCCESS;
 }
 
-int BTM_GetLocalSupportedCodecs(BtmLocalSupportedCodecs **localSupportedCodes)
+// Validate the codec state and deep-copy the lists into the scratch buffers so
+// the returned pointers cannot be freed concurrently by BtmCloseController.
+// The caller must hold g_btmControllerLock. Returns BT_SUCCESS and the copied
+// counts via out-params, or BT_OPERATION_FAILED when the state cannot be copied.
+static int BtmCopyLocalSupportedCodecs(size_t *standardCount, size_t *vendorCount)
 {
     if (g_readLocalSupportedCodecsResult != HCI_SUCCESS) {
         return BT_OPERATION_FAILED;
     }
 
-    *localSupportedCodes = &g_localSupportedCodecs;
+    BtmLocalSupportedCodecs *copy = &g_localSupportedCodecs;
+    size_t stdCount = copy->numberOfSupportedCodecs;
+    size_t venCount = copy->numberOfSupportedVendorSpecificCodecs;
+    if ((stdCount > 0 && copy->supportedCodecs == NULL) ||
+        (venCount > 0 && copy->vendorSpecificCodecs == NULL)) {
+        return BT_OPERATION_FAILED;
+    }
+    if (stdCount > 0 &&
+        memcpy_s(g_localSupportedCodecsCopy, sizeof(g_localSupportedCodecsCopy), copy->supportedCodecs,
+            stdCount) != EOK) {
+        return BT_OPERATION_FAILED;
+    }
+    if (venCount > 0 &&
+        memcpy_s(g_localVendorSpecificCodecsCopy, sizeof(g_localVendorSpecificCodecsCopy),
+            copy->vendorSpecificCodecs, venCount * sizeof(BtmVendorSpecificCodec)) != EOK) {
+        return BT_OPERATION_FAILED;
+    }
+    *standardCount = stdCount;
+    *vendorCount = venCount;
+    return BT_SUCCESS;
+}
+
+int BTM_GetLocalSupportedCodecs(BtmLocalSupportedCodecs **localSupportedCodes)
+{
+    if (localSupportedCodes == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    if (g_btmControllerLock != NULL) {
+        MutexLock(g_btmControllerLock);
+    }
+
+    size_t standardCount = 0;
+    size_t vendorCount = 0;
+    int ret = BtmCopyLocalSupportedCodecs(&standardCount, &vendorCount);
+    if (ret != BT_SUCCESS) {
+        if (g_btmControllerLock != NULL) {
+            MutexUnlock(g_btmControllerLock);
+        }
+        return ret;
+    }
+
+    // Function-local static: one instance shared by all calls, written only under
+    // g_btmControllerLock. The returned pointer stays valid until the next call to
+    // BTM_GetLocalSupportedCodecs, which is the documented API contract.
+    static BtmLocalSupportedCodecs scratch = {
+        .supportedCodecs = g_localSupportedCodecsCopy,
+        .vendorSpecificCodecs = g_localVendorSpecificCodecsCopy,
+    };
+    scratch.numberOfSupportedCodecs = (uint8_t)standardCount;
+    scratch.numberOfSupportedVendorSpecificCodecs = (uint8_t)vendorCount;
+
+    *localSupportedCodes = &scratch;
+
+    if (g_btmControllerLock != NULL) {
+        MutexUnlock(g_btmControllerLock);
+    }
 
     return BT_SUCCESS;
 }
@@ -993,6 +1413,13 @@ int BTM_GetLeAclDataPacketLength(uint16_t *leAclDataPacketLength)
 
 void BtmCloseController()
 {
+    // Invalidate the cached DLE state. The mutexes are intentionally left alive
+    // (and their global pointers are not cleared) to avoid use-after-free races
+    // with API calls or HCI callbacks that may still reference them during teardown.
+    if (g_btmControllerLock != NULL) {
+        MutexLock(g_btmControllerLock);
+    }
+
     if (g_localSupportedCodecs.supportedCodecs) {
         MEM_MALLOC.free(g_localSupportedCodecs.supportedCodecs);
         g_localSupportedCodecs.supportedCodecs = NULL;
@@ -1001,4 +1428,25 @@ void BtmCloseController()
         MEM_MALLOC.free(g_localSupportedCodecs.vendorSpecificCodecs);
         g_localSupportedCodecs.vendorSpecificCodecs = NULL;
     }
+    g_localSupportedCodecs.numberOfSupportedCodecs = 0;
+    g_localSupportedCodecs.numberOfSupportedVendorSpecificCodecs = 0;
+    g_readLocalSupportedCodecsResult = HCI_HARDWARE_FAILURE;
+
+    if (g_leReadMaximumDataLengthMutex != NULL) {
+        MutexLock(g_leReadMaximumDataLengthMutex);
+        g_leReadMaximumDataLengthPending = false;
+        g_leReadMaximumDataLengthValid = false;
+        g_leReadMaximumDataLengthResult.status = HCI_HARDWARE_FAILURE;
+        MutexUnlock(g_leReadMaximumDataLengthMutex);
+    }
+
+    if (g_btmControllerLock != NULL) {
+        MutexUnlock(g_btmControllerLock);
+    }
+
+    // Prevent any in-flight HCI callback from being dispatched after the state is invalidated.
+    // Deregister outside g_btmControllerLock to avoid lock-order inversion with the HCI
+    // event dispatcher, which holds the callback-list lock while invoking callbacks that
+    // acquire g_btmControllerLock.
+    HCI_DeregisterEventCallbacks(&g_hciEventCallbacks);
 }

@@ -17,12 +17,34 @@
 #define GAP_INTERNAL_H
 
 #include "gap_def.h"
+#include "gap_le_if.h"
 
 #include "btm.h"
 #include "hci/hci.h"
+#include "hci/hci_le_controller_5_0.h"
 #include "hci/hci_error.h"
 #include "l2cap_le_if.h"
 #include "smp/smp.h"
+
+// Spec-defined limits for BLE 5.0 periodic advertising, shared across GAP modules.
+// Periodic advertising reuses the public advertising-set handle and SID ranges from gap_le_if.h.
+#define GAP_PERIODIC_ADV_HANDLE_MAX GAP_LE_ADV_HANDLE_MAX
+// Periodic Advertising Sync Handle is a 12-bit value: Range 0x0000-0x0EFF,
+// all other values Reserved (Core Spec 5.0, Vol 2, Part E 7.8.69).
+#define GAP_PERIODIC_ADV_SYNC_HANDLE_MAX 0x0EFF
+#define GAP_PERIODIC_ADV_INTERVAL_MIN 0x0006
+#define GAP_PERIODIC_ADV_INTERVAL_MAX 0xFFFF
+#define GAP_PERIODIC_ADV_DATA_LENGTH_MAX 0xFC
+#define GAP_PERIODIC_ADV_PROPERTIES_MASK 0x0001
+#define GAP_PERIODIC_ADV_OPERATION_MAX 0x04
+#define GAP_PERIODIC_ADV_SID_MAX GAP_LE_ADV_SID_MAX
+#define GAP_PERIODIC_ADV_SKIP_MAX 0x01F3
+#define GAP_PERIODIC_ADV_SYNC_TIMEOUT_MIN 0x000A
+#define GAP_PERIODIC_ADV_SYNC_TIMEOUT_MAX 0x4000
+#define GAP_PERIODIC_ADV_ENABLE_TRUE 0x01
+#define GAP_LE_RF_PATH_COMPENSATION_MIN (-1280)
+#define GAP_LE_RF_PATH_COMPENSATION_MAX (1280)
+#define GAP_LE_TEST_DATA_LENGTH_MAX 0xFF
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,10 +63,20 @@ void GapIsRemoteDeviceSupportHostSecureSimplePairingAsync(const BtAddr *addr);
 
 void GapRegisterSmCallbacks(void);
 void GapDeregisterSmCallbacks(void);
+int GapLePeriodicAdvSyncInit(void);
+void GapLePeriodicAdvSyncDeinit(void);
+// Initialize/destroy LE callback lifecycle mutexes and clear callback state.
+// Covers g_leConnUpdateCallback (connection parameter/PHY/data length events),
+// g_leControllerCallback (controller info/test events), and the advertising callbacks
+// managed by g_leAdvCallback / g_leExAdvCallback.
+int GapLeCallbackInit(void);
+int GapLeCallbackDeinit(void);
+void GapLeAdvCallbackInit(void);
+void GapLeAdvCallbackDeinit(void);
 
 void GapRegisterL2capCallbacks(void);
 void GapDeregisterL2capCallbacks(void);
-void GapLeConnectionParameterUpdateReq(uint16_t aclHandle, const L2capLeConnectionParameter *param);
+int GapLeConnectionParameterUpdateReq(uint16_t aclHandle, const L2capLeConnectionParameter *param);
 void GapLeConnectionParameterUpdateRsp(uint16_t aclHandle, uint8_t id, uint16_t result);
 
 #ifdef GAP_BREDR_SUPPORT
@@ -110,7 +142,6 @@ void GapRemoteOOBDataRequestNegativeReplyComplete(const HciRemoteOobDataRequestN
 void GapReadLocalOobDataComplete(const HciReadLocalOOBDataReturnParam *param);
 void GapOnSimplePairingComplete(const HciSimplePairingCompleteEventParam *eventParam);
 void GapReadLocalOobExtendedDataComplete(const HciReadLocalOobExtendedDataReturnParam *param);
-void GapReadLocalOobDataComplete(const HciReadLocalOOBDataReturnParam *param);
 void GapOnAuthenticationComplete(const HciAuthenticationCompleteEventParam *eventParam);
 void GapOnEncryptionChangeEvent(const HciEncryptionChangeEventParam *eventParam);
 void GapOnPINCodeRequestEvent(const HciPinCodeRequestEventParam *eventParam);
@@ -124,7 +155,6 @@ void GapOnRemoteOOBDataRequestEvent(const HciRemoteOobDataRequestEventParam *eve
 void GapRemoteOOBDataRequestReplyComplete(const HciRemoteOobDataRequestReplyReturnParam *param);
 void GapRemoteOOBExtendedDataRequestReplyComplete(const HciRemoteOobExtendedDataRequestReplyReturnParam *param);
 void GapOnUserPasskeyNotificationEvent(const HciUserPasskeyNotificationEventParam *eventParam);
-void GapOnUserPasskeyRequestEvent(const HciUserPasskeyRequestEventParam *eventParam);
 #endif
 
 #ifdef GAP_LE_SUPPORT
@@ -201,6 +231,37 @@ void GapLeRemoteConnectionParameterRequestNegativeReplyComplete(
     const HciLeRemoteConnectionParameterRequestNegativeReplyReturnParam *param);
 void GapOnLeConnectionUpdateCompleteEvent(const HciLeConnectionUpdateCompleteEventParam *eventParam);
 void GapOnLeRemoteConnectionParameterRequestEvent(const HciLeRemoteConnectionParameterRequestEventParam *eventParam);
+void GapLeReadPhyComplete(const HciLeReadPhyReturnParam *param);
+void GapLeSetDefaultPhyComplete(const HciLeSetDefaultPhyReturnParam *param);
+void GapLeSetPhyComplete(const HciLeSetPhyReturnParam *param);
+void GapOnLePhyUpdateCompleteEvent(const HciLePhyUpdateCompleteEventParam *eventParam);
+void GapLeSetDataLengthComplete(const HciLeSetDataLengthReturnParam *param);
+void GapOnLeDataLengthChangeEvent(const HciLeDataLengthChangeEventParam *eventParam);
+void GapLeSetPeriodicAdvertisingParametersComplete(
+    const HciLeSetPeriodicAdvertisingParametersReturnParam *param);
+void GapLeSetPeriodicAdvertisingDataComplete(const HciLeSetPeriodicAdvertisingDataReturnParam *param);
+void GapLeSetPeriodicAdvertisingEnableComplete(const HciLeSetPeriodicAdvertisingEnableReturnParam *param);
+void GapLePeriodicAdvertisingCreateSyncCancelComplete(
+    const HciLePeriodicAdvertisingCreateSyncCancelReturnParam *param);
+void GapLePeriodicAdvertisingTerminateSyncComplete(const HciLePeriodicAdvertisingTerminateSyncReturnParam *param);
+void GapOnLePeriodicAdvertisingSyncEstablishedEvent(
+    const HciLePeriodicAdvertisingSyncEstablishedEventParam *eventParam);
+void GapOnLePeriodicAdvertisingReportEvent(const HciLePeriodicAdvertisingReportEventParam *eventParam);
+void GapOnLePeriodicAdvertisingSyncLostEvent(const HciLePeriodicAdvertisingSyncLostEventParam *eventParam);
+void GapLeAddDeviceToPeriodicAdvertiserListComplete(
+    const HciLeAddDeviceToPeriodicAdvertiserListReturnParam *param);
+void GapLeRemoveDeviceFromPeriodicAdvertiserListComplete(
+    const HciLeRemoveDeviceFromPeriodicAdvertiserListReturnParam *param);
+void GapLeClearPeriodicAdvertiserListComplete(const HciLeClearPeriodicAdvertiserListReturnParam *param);
+void GapLeReadPeriodicAdvertiserListSizeComplete(const HciLeReadPeriodicAdvertiserListSizeReturnParam *param);
+void GapLeReadTransmitPowerComplete(const HciLeReadTransmitPowerReturnParam *param);
+void GapLeReadRfPathCompensationComplete(const HciLeReadRfPathCompensationReturnParam *param);
+void GapLeWriteRfPathCompensationComplete(const HciLeWriteRfPathCompensationReturnParam *param);
+void GapLeReadSuggestedDefaultDataLengthComplete(const HciLeReadSuggestedDefaultDataLengthReturnParam *param);
+void GapLeWriteSuggestedDefaultDataLengthComplete(const HciLeWriteSuggestedDefaultDataLengthReturnParam *param);
+void GapLeReadMaximumDataLengthComplete(const HciLeReadMaximumDataLengthReturnParam *param);
+void GapLeEnhancedReceiverTestComplete(const HciLeEnhancedReceiverTestReturnParam *param);
+void GapLeEnhancedTransmitterTestComplete(const HciLeEnhancedTransmitterTestReturnParam *param);
 bool GapLeDeviceNeedBond(const LeDeviceInfo *deviceInfo);
 void GapLeConnectionComplete(
     uint8_t status, uint16_t connectionHandle, const BtAddr *addr, uint8_t role, void *context);

@@ -20,6 +20,7 @@
 
 #include "alarm.h"
 #include "list.h"
+#include "platform/include/mutex.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -335,6 +336,9 @@ typedef struct {
 
 typedef struct {
     List *exAdvInfoList;
+    // Serializes access to exAdvInfoList (and the block's config fields below)
+    // across GAP task and other threads, e.g. GAP_LeSetAdvertisingSetRandomAddress.
+    Mutex *lock;
     uint8_t exAdvMaxNumber;
     uint16_t exAdvDataMaxLen;
 } LeExAdvBlock;

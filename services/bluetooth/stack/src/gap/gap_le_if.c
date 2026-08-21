@@ -1705,6 +1705,7 @@ static void GapFreeLeDataSignatureGeneration(void *ctx)
     GapLeDataSignatureGenerationInfo *info = ctx;
 
     MEM_MALLOC.free((void *)info->dataInfo.data);
+    MEM_MALLOC.free(info);
 }
 
 int GAPIF_LeDataSignatureGenerationAsync(
@@ -1731,12 +1732,7 @@ int GAPIF_LeDataSignatureGenerationAsync(
     (void)memcpy_s(data, ctx->dataInfo.dataLen, ctx->dataInfo.data, ctx->dataInfo.dataLen);
     ctx->dataInfo.data = data;
 
-    int ret = GapRunTaskUnBlockProcess(GapLeDataSignatureGenerationTask, ctx, GapFreeLeDataSignatureGeneration);
-    if (ret == BT_SUCCESS) {
-        ret = ctx->result;
-    }
-
-    return ret;
+    return GapRunTaskUnBlockProcess(GapLeDataSignatureGenerationTask, ctx, GapFreeLeDataSignatureGeneration);
 }
 
 static void GapLeDataSignatureConfirmationTask(void *ctx)
@@ -1751,6 +1747,7 @@ static void GapFreeLeDataSignatureConfirmation(void *ctx)
     GapLeDataSignatureConfirmationInfo *info = ctx;
 
     MEM_MALLOC.free((void *)info->dataInfo.data);
+    MEM_MALLOC.free(info);
 }
 
 int GAPIF_LeDataSignatureConfirmationAsync(const BtAddr *addr, GapSignatureData dataInfo,
@@ -1778,12 +1775,7 @@ int GAPIF_LeDataSignatureConfirmationAsync(const BtAddr *addr, GapSignatureData 
     (void)memcpy_s(data, ctx->dataInfo.dataLen, ctx->dataInfo.data, ctx->dataInfo.dataLen);
     ctx->dataInfo.data = data;
 
-    int ret = GapRunTaskUnBlockProcess(GapLeDataSignatureConfirmationTask, ctx, GapFreeLeDataSignatureConfirmation);
-    if (ret == BT_SUCCESS) {
-        ret = ctx->result;
-    }
-
-    return ret;
+    return GapRunTaskUnBlockProcess(GapLeDataSignatureConfirmationTask, ctx, GapFreeLeDataSignatureConfirmation);
 }
 
 #endif

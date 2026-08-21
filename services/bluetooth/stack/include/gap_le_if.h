@@ -22,7 +22,7 @@
  */
 
 /**
- * @file gap.h
+ * @file gap_le_if.h
  *
  * @brief bluetooth gap interface
  *
@@ -40,10 +40,11 @@ extern "C" {
 /// BLE Roles
 #define GAP_LE_ROLE_BROADCASTER (1 << 0)
 #define GAP_LE_ROLE_OBSERVER (1 << 1)
-#define GAP_LE_ROLE_PREIPHERAL (1 << 2)
+#define GAP_LE_ROLE_PERIPHERAL (1 << 2)
 #define GAP_LE_ROLE_CENTRAL (1 << 3)
+// Deprecated: legacy misspelling kept for source compatibility with earlier releases.
+#define GAP_LE_ROLE_PREIPHERAL GAP_LE_ROLE_PERIPHERAL
 
-#define GAP_LTK_SIZE 0x10
 #define GAP_IRK_SIZE 0x10
 #define GAP_CSRK_SIZE 0x10
 #define GAP_SIGNATURE_SIZE 12
@@ -79,11 +80,82 @@ typedef void (*GenResPriAddrResult)(uint8_t result, const uint8_t addr[BT_ADDRES
 #define GAP_ADVERTISING_DATA_OPERATION_COMPLETE (0x03)
 #define GAP_ADVERTISING_DATA_OPERATION_UNCHANGED (0x04)
 
+/// Intended Periodic Advertising data operation
+#define GAP_PERIODIC_ADV_DATA_OPERATION_INTERMEDIATE (0x00)
+#define GAP_PERIODIC_ADV_DATA_OPERATION_FIRST (0x01)
+#define GAP_PERIODIC_ADV_DATA_OPERATION_LAST (0x02)
+#define GAP_PERIODIC_ADV_DATA_OPERATION_COMPLETE (0x03)
+#define GAP_PERIODIC_ADV_DATA_OPERATION_UNCHANGED (0x04)
+
 /// Intended Advertising PHY
 #define GAP_ADVERTISEMENT_PHY_NONE (0x00)
 #define GAP_ADVERTISEMENT_PHY_1M (0x01)
 #define GAP_ADVERTISEMENT_PHY_2M (0x02)
 #define GAP_ADVERTISEMENT_PHY_CODED (0x03)
+
+/// LE PHY bit mask used by GAPIF_LeSetPhy/GAPIF_LeSetDefaultPhy
+#define GAP_LE_PHY_BIT_1M (1 << 0)
+#define GAP_LE_PHY_BIT_2M (1 << 1)
+#define GAP_LE_PHY_BIT_CODED (1 << 2)
+#define GAP_LE_PHY_BIT_ALL (GAP_LE_PHY_BIT_1M | GAP_LE_PHY_BIT_2M | GAP_LE_PHY_BIT_CODED)
+
+/// allPhys parameter used by GAPIF_LeSetPhy/GAPIF_LeSetDefaultPhy
+#define GAP_LE_ALL_PHY_TX_NO_PREFERENCE (1 << 0)
+#define GAP_LE_ALL_PHY_RX_NO_PREFERENCE (1 << 1)
+#define GAP_LE_ALL_PHY_VALID_MASK (GAP_LE_ALL_PHY_TX_NO_PREFERENCE | GAP_LE_ALL_PHY_RX_NO_PREFERENCE)
+
+/// phyOptions parameter used by GAPIF_LeSetPhy when Coded PHY is preferred
+#define GAP_LE_PHY_OPTIONS_CODED_NO_PREFERENCE (0x0000)
+#define GAP_LE_PHY_OPTIONS_CODED_S2 (0x0001)
+#define GAP_LE_PHY_OPTIONS_CODED_S8 (0x0002)
+
+/// Current PHY of a connection reported by lePhyUpdateComplete/leReadPhyResult.
+/// GAP_LE_TEST_PHY_CODED_S2 is not valid for connection PHY; it is only used by
+/// GAPIF_LeEnhancedTransmitterTest.
+#define GAP_LE_PHY_1M (0x01)
+#define GAP_LE_PHY_2M (0x02)
+#define GAP_LE_PHY_CODED (0x03)
+#define GAP_LE_TEST_PHY_CODED_S2 (0x04)
+
+/// LE test channel range (0x00 - 0x27)
+#define GAP_LE_TEST_CHANNEL_MAX (0x27)
+
+/// Advertising set handle range (0x00 - 0xEF)
+#define GAP_LE_ADV_HANDLE_MAX (0xEF)
+
+/// Advertising SID range (0x00 - 0x0F)
+#define GAP_LE_ADV_SID_MAX (0x0F)
+
+/// LE data length range (Vol 6 Part B 4.5.10 / 4.6.6).
+#define GAP_LE_DATA_LENGTH_OCTETS_MIN (0x001B)
+#define GAP_LE_DATA_LENGTH_OCTETS_MAX (0x00FB)
+#define GAP_LE_DATA_LENGTH_TIME_MIN (0x0148)
+#define GAP_LE_DATA_LENGTH_TIME_MAX (0x4290)
+// Minimum txTime (us) required for a given txOctets value in an LE ACL data packet
+// on the LE 1M PHY: preamble(1) + Access Address(4) + LL header(2) + payload(N)
+// + MIC(4) + CRC(3) = 14 octets overhead at 8us/octet = 112 + 8*N us. TxOctets
+// excludes the MIC, but the controller counts the MIC on the air when computing
+// the packet time (Vol 6 Part B 2.1: PDU up to 257 octets incl. MIC; 4.5.10
+// Table 4.3: min 328 us = (27+14)*8; Vol 2 Part E 7.8.33: TxTime min 0x0148).
+// For LE 2M the coefficient is 4 and the overhead is 56; for LE Coded PHY the
+// constants depend on the coding scheme (Vol 6 Part B Table 2.1).
+#define GAP_LE_DATA_LENGTH_TIME_PER_OCTET (8)
+#define GAP_LE_DATA_LENGTH_TIME_OVERHEAD (112)
+
+/// LE enhanced test modulation index (0x00 - 0x01).
+#define GAP_LE_TEST_MODULATION_INDEX_MAX (0x01)
+/// LE enhanced transmitter test packet payload type (0x00 - 0x07).
+#define GAP_LE_TEST_PACKET_PAYLOAD_MAX (0x07)
+
+/// Periodic advertising create sync filter policy. Use of function GAPIF_LePeriodicAdvCreateSync
+#define GAP_PERIODIC_ADV_SYNC_FILTER_POLICY_DISABLED (0x00)
+#define GAP_PERIODIC_ADV_SYNC_FILTER_POLICY_ENABLED (0x01)
+
+/// GapPeriodicAdvSyncCallback(struct) --> syncReport(function pointer) -->dataStatus(parameters)
+/// Periodic advertising report data status.
+#define GAP_PERIODIC_ADV_REPORT_DATA_COMPLETE (0x00)
+#define GAP_PERIODIC_ADV_REPORT_DATA_INCOMPLETE_MORE (0x01)
+#define GAP_PERIODIC_ADV_REPORT_DATA_INCOMPLETE_TRUNCATED (0x02)
 
 /// fragment preference
 #define GAP_CONTROLLER_MAY_FRAGMENT (0x00)
@@ -100,6 +172,11 @@ typedef struct {
 
 /**
  * @brief       Extended Advertising callback function structure
+ *
+ * New fields may be added to the end of this structure in future releases.
+ * Callers should use C99 designated initializers (e.g. { .exAdvSetParamResult = ... })
+ * or assign each member explicitly. C++11/14/17 callers must use explicit per-member
+ * assignment because designated initializers are only available from C++20 onward.
  */
 typedef struct {
     void (*exAdvSetRandAddrResult)(uint8_t status, void *context);
@@ -112,6 +189,9 @@ typedef struct {
     void (*exAdvScanRequestReceived)(uint8_t advHandle, const BtAddr *scannerAddr, void *context);
     void (*exAdvTerminatedAdvSet)(
         uint8_t status, uint8_t advHandle, uint16_t connectionHandle, uint8_t completedNumber, void *context);
+    void (*periodicAdvSetParamResult)(uint8_t status, void *context);
+    void (*periodicAdvSetDataResult)(uint8_t status, void *context);
+    void (*periodicAdvSetEnableResult)(uint8_t status, void *context);
 } GapExAdvCallback;
 
 /**
@@ -242,15 +322,96 @@ typedef struct {
 
 /**
  * @brief       BLE link layer control callback structure
+ *
+ * New fields may be added to the end of this structure in future releases.
+ * Use C99 designated initializers or explicit per-member assignment to keep initialization
+ * aligned with the current layout after renames or additions. C++11/14/17 callers must use
+ * explicit per-member assignment because designated initializers are only available from C++20.
+ * All callbacks in this structure are optional and may be set to NULL.
+ * The implementation checks each pointer before invocation.
+ * Note: earlier releases used the member names GapleSetHostChannelClassificationResult and
+ * GapleReadChannelMapResult; they have been renamed to leSetHostChannelClassificationResult
+ * and leReadChannelMapResult. Existing callers must update their initializer/member references.
+ * Deprecated aliases are available as the UPPER_CASE macros GAPLE_SET_HOST_CHANNEL_CLASSIFICATION_RESULT
+ * and GAPLE_READ_CHANNEL_MAP_RESULT below.
  */
 typedef struct {
     void (*leConnectionParameterReq)(const BtAddr *addr, uint16_t connIntervalMin, uint16_t connIntervalMax,
         uint16_t connLatency, uint16_t timeout, void *context);
     void (*leConnectionUpdateComplete)(uint8_t status, const BtAddr *addr, uint16_t connInterval, uint16_t connLatency,
         uint16_t timeout, void *context);
-    void (*GapleSetHostChannelClassificationResult)(uint8_t result, void *context);
-    void (*GapleReadChannelMapResult)(uint8_t result, const BtAddr *addr, uint64_t channelMap, void *context);
+    void (*leSetHostChannelClassificationResult)(uint8_t result, void *context);
+    void (*leReadChannelMapResult)(uint8_t result, const BtAddr *addr, uint64_t channelMap, void *context);
+    void (*lePhyUpdateComplete)(
+        uint8_t status, const BtAddr *addr, uint8_t txPhy, uint8_t rxPhy, void *context);
+    void (*leReadPhyResult)(uint8_t status, const BtAddr *addr, uint8_t txPhy, uint8_t rxPhy, void *context);
+    void (*leSetDefaultPhyResult)(uint8_t status, void *context);
+    void (*leSetPhyResult)(uint8_t status, void *context);
+    void (*leDataLengthChange)(const BtAddr *addr, uint16_t maxTxOctets, uint16_t maxTxTime, uint16_t maxRxOctets,
+        uint16_t maxRxTime, void *context);
+    void (*leSetDataLengthResult)(uint8_t status, const BtAddr *addr, void *context);
 } GapLeConnCallback;
+
+// Deprecated: legacy member names of GapLeConnCallback kept for source compatibility
+// with earlier releases. New code must use the renamed members.
+#define GAPLE_SET_HOST_CHANNEL_CLASSIFICATION_RESULT leSetHostChannelClassificationResult
+#define GAPLE_READ_CHANNEL_MAP_RESULT leReadChannelMapResult
+
+/**
+ * @brief       Periodic advertising sync callback function structure
+ *
+ * New fields may be added to the end of this structure in future releases.
+ * Callers should use C99 designated initializers or assign each member explicitly
+ * to keep initialization aligned with the current layout after renames or additions.
+ * C++11/14/17 callers must use explicit per-member assignment because designated
+ * initializers are only available from C++20 onward.
+ * All callbacks in this structure are optional and may be set to NULL.
+ * The implementation checks each pointer before invocation.
+ * The @a context supplied to GAPIF_RegisterPeriodicAdvSyncCallback is passed
+ * unchanged to every callback.
+ *
+ * For @a syncReport, @a data is a temporary copy allocated by the GAP layer and
+ * is only valid during the callback; it must not be modified or retained.
+ * Copy the data if it is needed later. @a data may be NULL when @a dataLength is zero.
+ */
+typedef struct {
+    void (*createSyncCancelResult)(uint8_t status, void *context);
+    void (*terminateSyncResult)(uint8_t status, void *context);
+    void (*syncEstablished)(uint8_t status, uint16_t syncHandle, uint8_t advSid, const BtAddr *advAddr, uint8_t advPhy,
+        uint16_t periodicAdvInterval, void *context);
+    void (*syncReport)(uint16_t syncHandle, int8_t txPower, int8_t rssi, uint8_t dataStatus, uint8_t dataLength,
+        const uint8_t *data, void *context);
+    void (*syncLost)(uint16_t syncHandle, void *context);
+    void (*addDeviceToPeriodicAdvertiserListResult)(uint8_t status, void *context);
+    void (*removeDeviceFromPeriodicAdvertiserListResult)(uint8_t status, void *context);
+    void (*clearPeriodicAdvertiserListResult)(uint8_t status, void *context);
+    void (*readPeriodicAdvertiserListSizeResult)(uint8_t status, uint8_t listSize, void *context);
+} GapPeriodicAdvSyncCallback;
+
+/**
+ * @brief       LE controller information callback function structure
+ *
+ * New fields may be added to the end of this structure in future releases.
+ * Callers should use C99 designated initializers (e.g. { .readTransmitPowerResult = ... })
+ * or assign each member explicitly to avoid positional misalignment when the layout changes.
+ * C++11/14/17 callers must use explicit per-member assignment because designated
+ * initializers are only available from C++20 onward.
+ * All callbacks in this structure are optional and may be set to NULL.
+ * The implementation checks each pointer before invocation.
+ */
+typedef struct {
+    void (*readTransmitPowerResult)(uint8_t status, int8_t minTxPower, int8_t maxTxPower, void *context);
+    void (*readRfPathCompensationResult)(
+        uint8_t status, int16_t txPathCompensation, int16_t rxPathCompensation, void *context);
+    void (*writeRfPathCompensationResult)(uint8_t status, void *context);
+    void (*readSuggestedDefaultDataLengthResult)(
+        uint8_t status, uint16_t suggestedMaxTxOctets, uint16_t suggestedMaxTxTime, void *context);
+    void (*writeSuggestedDefaultDataLengthResult)(uint8_t status, void *context);
+    void (*readMaxDataLengthResult)(uint8_t status, uint16_t maxTxOctets, uint16_t maxTxTime, uint16_t maxRxOctets,
+        uint16_t maxRxTime, void *context);
+    void (*enhancedReceiverTestResult)(uint8_t status, void *context);
+    void (*enhancedTransmitterTestResult)(uint8_t status, void *context);
+} GapLeControllerCallback;
 
 /**
  * @brief       BLE connection parameter structure
@@ -379,8 +540,6 @@ typedef enum {
  * @param[in]   result              request result
  * @param[in]   status              security status of le connection
  * @param[in]   context             callback context
- * @return      @c BT_SUCCESS      : The function is executed successfully.
- *              @c otherwise        : The function is not executed successfully.
  */
 typedef void (*GapLeRequestSecurityResult)(
     const BtAddr *addr, uint8_t result, GAP_LeSecurityStatus status, void *context);
@@ -394,7 +553,23 @@ typedef struct {
 } LePairedKeys;
 
 /**
+ * @brief       BLE link key value wrapper used for cross-transport key derivation.
+ *              Passing the key by value avoids exposing a pointer to stack or
+ *              temporary memory and guarantees the callback receives an independent copy.
+ */
+typedef struct {
+    uint8_t key[GAP_LINKKEY_SIZE];
+} GapLeLinkKey;
+
+/**
  * @brief       BLE pair callback structure
+ *
+ * New fields may be added to the end of this structure in future releases.
+ * Use C99 designated initializers or explicit per-member assignment to keep initialization
+ * aligned with the current layout after renames or additions. C++11/14/17 callers must use
+ * explicit per-member assignment because designated initializers are only available from C++20.
+ * All callbacks in this structure are optional and may be set to NULL.
+ * The implementation checks each pointer before invocation.
  */
 typedef struct {
     void (*lePairFeatureReq)(const BtAddr *addr, bool localPair, void *context);
@@ -409,6 +584,11 @@ typedef struct {
     void (*lePairScUserConfirmReq)(const BtAddr *addr, uint32_t number, void *context);
     void (*lePairComplete)(const BtAddr *addr, uint8_t result, uint8_t keyType, void *context);
     void (*lePairKeyNotify)(const BtAddr *addr, LePairedKeys LeKeys, void *context);
+    /* NOTE: linkKey is sensitive key material. The callback is invoked synchronously;
+     * the value is zeroed immediately after the callback returns. Implementers must
+     * copy |linkKey.key| during the callback, must not log or expose it, and must
+     * securely erase any local copy when no longer needed. */
+    void (*leDerivedLinkKey)(const BtAddr *addr, GapLeLinkKey linkKey, void *context);
 } GapLePairCallback;
 
 #define GAP_ENC_KEY_MIN_SIZE 0x07
@@ -488,7 +668,7 @@ BTSTACK_API int GAPIF_LeExAdvGetMaxHandleNum(uint8_t *num);
 BTSTACK_API int GAPIF_RegisterExAdvCallback(const GapExAdvCallback *callback, void *context);
 
 /**
- * @brief       Degegister Extended advertising callback function
+ * @brief       Deregister Extended advertising callback function
  * @return      @c BT_SUCCESS      : The function is executed successfully.
  *              @c otherwise        : The function is not executed successfully.
  */
@@ -565,6 +745,201 @@ BTSTACK_API int GAPIF_LeExAdvRemoveSet(uint8_t advHandle);
  *              @c otherwise        : The function is not executed successfully.
  */
 BTSTACK_API int GAPIF_LeExAdvClearHandle(void);
+
+/**
+ * @brief       Set the periodic advertising parameter of an advertising set.
+ * @param[in]   advHandle           used to identify an advertising set (0x00-0xEF)
+ * @param[in]   intervalMin         minimum periodic advertising interval (N * 1.25ms, 0x0006-0xFFFF)
+ * @param[in]   intervalMax         maximum periodic advertising interval (N * 1.25ms, 0x0006-0xFFFF)
+ * @param[in]   properties          periodic advertising property
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LePeriodicAdvSetParam(uint8_t advHandle, uint16_t intervalMin, uint16_t intervalMax,
+    uint16_t properties);
+
+/**
+ * @brief       Set the periodic advertising data of an advertising set.
+ * @param[in]   advHandle           used to identify an advertising set (0x00-0xEF)
+ * @param[in]   operation           advertising data operation
+ * @param[in]   advDataLength       advertising data length
+ * @param[in]   advData             advertising data
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LePeriodicAdvSetData(
+    uint8_t advHandle, uint8_t operation, uint8_t advDataLength, const uint8_t *advData);
+
+/**
+ * @brief       Enable or disable periodic advertising of an advertising set.
+ * @param[in]   enable              0x00 disable, 0x01 enable
+ * @param[in]   advHandle           used to identify an advertising set (0x00-0xEF)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LePeriodicAdvSetEnable(uint8_t enable, uint8_t advHandle);
+
+/**
+ * @brief       Register periodic advertising sync callback function
+ * @param[in]   callback            periodic advertising sync callback structure
+ * @param[in]   context             periodic advertising sync callback context parameter
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_RegisterPeriodicAdvSyncCallback(const GapPeriodicAdvSyncCallback *callback, void *context);
+
+/**
+ * @brief       Deregister periodic advertising sync callback function
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_DeregisterPeriodicAdvSyncCallback(void);
+
+/**
+ * @brief       Synchronize with a periodic advertising train of an advertiser.
+ * @param[in]   filterPolicy        use the periodic advertiser list or not
+ * @param[in]   advSid              advertising SID (0x00-0x0F)
+ * @param[in]   advAddr             advertiser address
+ * @param[in]   skip                number of periodic advertising packets that may be skipped (0x0000-0x01F3)
+ * @param[in]   syncTimeout         synchronization timeout (N * 10ms, 0x000A-0x4000)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LePeriodicAdvCreateSync(
+    uint8_t filterPolicy, uint8_t advSid, const BtAddr *advAddr, uint16_t skip, uint16_t syncTimeout);
+
+/**
+ * @brief       Cancel the pending periodic advertising create sync.
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LePeriodicAdvCreateSyncCancel(void);
+
+/**
+ * @brief       Terminate a synchronized periodic advertising train.
+ * @param[in]   syncHandle          handle identifying the periodic advertising train
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LePeriodicAdvTerminateSync(uint16_t syncHandle);
+
+/**
+ * @brief       Add a device to the periodic advertiser list.
+ * @param[in]   addrType            advertiser address type
+ * @param[in]   addr                advertiser address
+ * @param[in]   advSid              advertising SID (0x00-0x0F)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeAddDeviceToPeriodicAdvertiserList(uint8_t addrType, const BtAddr *addr, uint8_t advSid);
+
+/**
+ * @brief       Remove a device from the periodic advertiser list.
+ * @param[in]   addrType            advertiser address type
+ * @param[in]   addr                advertiser address
+ * @param[in]   advSid              advertising SID (0x00-0x0F)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeRemoveDeviceFromPeriodicAdvertiserList(uint8_t addrType, const BtAddr *addr, uint8_t advSid);
+
+/**
+ * @brief       Clear the periodic advertiser list.
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeClearPeriodicAdvertiserList(void);
+
+/**
+ * @brief       Read the periodic advertiser list size.
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeReadPeriodicAdvertiserListSize(void);
+
+/**
+ * @brief       Register LE controller information callback function
+ * @param[in]   callback            LE controller information callback structure
+ * @param[in]   context             LE controller information callback context parameter
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_RegisterLeControllerCallback(const GapLeControllerCallback *callback, void *context);
+
+/**
+ * @brief       Deregister LE controller information callback function
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_DeregisterLeControllerCallback(void);
+
+/**
+ * @brief       Read the minimum and maximum transmit powers supported by the LE controller.
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeReadTransmitPower(void);
+
+/**
+ * @brief       Read the RF path compensation values of the LE controller.
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeReadRfPathCompensation(void);
+
+/**
+ * @brief       Write the RF path compensation values of the LE controller.
+ * @param[in]   txPathCompensation  RF TX path compensation value (0.1dB units)
+ * @param[in]   rxPathCompensation  RF RX path compensation value (0.1dB units)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeWriteRfPathCompensation(int16_t txPathCompensation, int16_t rxPathCompensation);
+
+/**
+ * @brief       Read the suggested default data length of the LE controller.
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeReadSuggestedDefaultDataLength(void);
+
+/**
+ * @brief       Write the suggested default data length of the LE controller.
+ * @param[in]   suggestedMaxTxOctets    suggested maximum tx octets
+ * @param[in]   suggestedMaxTxTime      suggested maximum tx time
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeWriteSuggestedDefaultDataLength(uint16_t suggestedMaxTxOctets, uint16_t suggestedMaxTxTime);
+
+/**
+ * @brief       Read the maximum data length supported by the LE controller.
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeReadMaximumDataLength(void);
+
+/**
+ * @brief       Start an enhanced receiver test (BQB certification test only).
+ * @param[in]   rxChannel           rx channel (0x00-0x27)
+ * @param[in]   phy                 PHY to be tested
+ * @param[in]   modulationIndex     modulation index
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeEnhancedReceiverTest(uint8_t rxChannel, uint8_t phy, uint8_t modulationIndex);
+
+/**
+ * @brief       Start an enhanced transmitter test (BQB certification test only).
+ * @param[in]   txChannel           tx channel (0x00-0x27)
+ * @param[in]   lengthOfTestData    length of test data
+ * @param[in]   packetPayload       packet payload type
+ * @param[in]   phy                 PHY to be tested
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeEnhancedTransmitterTest(
+    uint8_t txChannel, uint8_t lengthOfTestData, uint8_t packetPayload, uint8_t phy);
 
 /**
  * @brief       Register legacy advertising result callback
@@ -731,6 +1106,47 @@ BTSTACK_API int GAPIF_LeConnParamUpdate(const BtAddr *addr, const GapLeConnectio
  */
 BTSTACK_API int GAPIF_LeConnectionParameterRsp(
     const BtAddr *addr, uint8_t accept, const GapLeConnectionParameter *connParam);
+
+/**
+ * @brief       Set the PHY preference of a connection.
+ * @param[in]   addr                target device address
+ * @param[in]   allPhys             preference of tx/rx PHY (GAP_LE_ALL_PHY_*)
+ * @param[in]   txPhys              preferred tx PHY bit mask (GAP_LE_PHY_BIT_*)
+ * @param[in]   rxPhys              preferred rx PHY bit mask (GAP_LE_PHY_BIT_*)
+ * @param[in]   phyOptions          coding preference when Coded PHY is preferred (GAP_LE_PHY_OPTIONS_*)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeSetPhy(
+    const BtAddr *addr, uint8_t allPhys, uint8_t txPhys, uint8_t rxPhys, uint16_t phyOptions);
+
+/**
+ * @brief       Read the current PHY of a connection.
+ * @param[in]   addr                target device address
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeReadPhy(const BtAddr *addr);
+
+/**
+ * @brief       Set the default PHY preference used for subsequent connections.
+ * @param[in]   allPhys             preference of tx/rx PHY (GAP_LE_ALL_PHY_*)
+ * @param[in]   txPhys              preferred tx PHY bit mask (GAP_LE_PHY_BIT_*)
+ * @param[in]   rxPhys              preferred rx PHY bit mask (GAP_LE_PHY_BIT_*)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeSetDefaultPhy(uint8_t allPhys, uint8_t txPhys, uint8_t rxPhys);
+
+/**
+ * @brief       Set the maximum data length of a connection.
+ * @param[in]   addr                target device address
+ * @param[in]   txOctets            maximum tx octets (0x001B-0x00FB)
+ * @param[in]   txTime              maximum tx time (0x0148-0x4290 us)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeSetDataLength(const BtAddr *addr, uint16_t txOctets, uint16_t txTime);
 
 /**
  * @brief       Register BLE security callback

@@ -112,12 +112,12 @@ struct GattConnectionManager::impl : public GattServiceBase {
     static void BREDRDisconnectCompleted(uint16_t connectHandle, AttBredrDisconnectCallback *data, void *context);
     static void BREDRConnectInd(uint16_t connectHandle, void *context);
 
-    static void LEConnectionParamterReq(const BtAddr *addr, uint16_t connIntervalMin, uint16_t connIntervalMax,
+    static void LEConnectionParameterReq(const BtAddr *addr, uint16_t connIntervalMin, uint16_t connIntervalMax,
         uint16_t connLatency, uint16_t timeout, void *context);
     static void LEConnectionUpdateComplete(uint8_t status, const BtAddr *addr, uint16_t connInterval,
         uint16_t connLatency, uint16_t timeout, void *context);
 
-    void LEConnectionParamterReqImpl(
+    void LEConnectionParameterReqImpl(
         BtAddr addr, uint16_t connIntervalMin, uint16_t connIntervalMax, uint16_t connLatency, uint16_t timeout);
     void LEConnectionUpdateCompleteImpl(
         uint8_t status, BtAddr addr, uint16_t connInterval, uint16_t connLatency, uint16_t timeout);
@@ -336,7 +336,9 @@ int GattConnectionManager::StartUp(utility::Dispatcher &dispatcher)
             __FILE__, __LINE__, __FUNCTION__);
     }
 
-    GapLeConnCallback callback = {impl::LEConnectionParamterReq, impl::LEConnectionUpdateComplete, nullptr, nullptr};
+    GapLeConnCallback callback = {};
+    callback.leConnectionParameterReq = impl::LEConnectionParameterReq;
+    callback.leConnectionUpdateComplete = impl::LEConnectionUpdateComplete;
     if (GAPIF_RegisterLeConnCallback(&callback, nullptr) != BT_SUCCESS) {
         LOG_WARN("%{public}s:%{public}d:%{public}s GAPIF_RegisterLeConnCallback failed!",
             __FILE__, __LINE__, __FUNCTION__);
@@ -673,7 +675,7 @@ void GattConnectionManager::impl::BREDRConnectInd(uint16_t connectHandle, void *
     ATT_ConnectRsp(connectHandle, BREDR_CONNECT_ACCEPT, 0, &connectionParameter);
 }
 
-void GattConnectionManager::impl::LEConnectionParamterReqImpl(BtAddr addr, uint16_t connIntervalMin,
+void GattConnectionManager::impl::LEConnectionParameterReqImpl(BtAddr addr, uint16_t connIntervalMin,
     uint16_t connIntervalMax, uint16_t connLatency, uint16_t timeout)
 {
     static const std::pair<uint16_t, uint16_t> connIntervalMinRange(0x0006, 0x0C80);
@@ -689,16 +691,17 @@ void GattConnectionManager::impl::LEConnectionParamterReqImpl(BtAddr addr, uint1
         connLatency < connLatencyRange.first || connLatency > connLatencyRange.second ||
         timeout < timeoutRange.first || timeout > timeoutRange.second) {
         GAPIF_LeConnectionParameterRsp(&addr, GAP_NOT_ACCEPT, nullptr);
+        return;
     }
 
     GapLeConnectionParameter connParam = {connIntervalMin, connIntervalMax, connLatency, timeout, 0, 0};
     GAPIF_LeConnectionParameterRsp(&addr, GAP_ACCEPT, &connParam);
 }
 
-void GattConnectionManager::impl::LEConnectionParamterReq(const BtAddr *addr, uint16_t connIntervalMin,
+void GattConnectionManager::impl::LEConnectionParameterReq(const BtAddr *addr, uint16_t connIntervalMin,
     uint16_t connIntervalMax, uint16_t connLatency, uint16_t timeout, void *context)
 {
-    GattConnectionManager::GetInstance().pimpl->dispatcher_->PostTask(std::bind(&impl::LEConnectionParamterReqImpl,
+    GattConnectionManager::GetInstance().pimpl->dispatcher_->PostTask(std::bind(&impl::LEConnectionParameterReqImpl,
         GattConnectionManager::GetInstance().pimpl.get(),
         *addr,
         connIntervalMin,

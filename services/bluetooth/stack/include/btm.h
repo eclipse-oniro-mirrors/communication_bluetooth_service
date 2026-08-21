@@ -440,6 +440,13 @@ bool BTSTACK_API BTM_IsControllerSupportLe2MPhy();
 bool BTSTACK_API BTM_IsControllerSupportLeCodedPhy();
 
 /**
+ * @brief Determine whether the local controller supports LE Read PHY command.
+ *
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeReadPhy();
+
+/**
  * @brief Determine whether the local controller supports LE Extended Advertising.
  *
  * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
@@ -459,6 +466,45 @@ bool BTSTACK_API BTM_IsControllerSupportLePeriodicAdvertising();
  * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
  */
 bool BTSTACK_API BTM_IsControllerSupportChannelSelectionAlgorithm2();
+
+/**
+ * @brief Determine whether the local controller supports LE Read Transmit Power.
+ *
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeReadTransmitPower();
+
+/**
+ * @brief Determine whether the local controller supports LE Read RF Path Compensation.
+ *
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeReadRfPathCompensation();
+
+/**
+ * @brief Determine whether the local controller supports LE Write RF Path Compensation.
+ *
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeWriteRfPathCompensation();
+
+/**
+ * @brief Get the maximum data length supported by the local LE controller.
+ *
+ * If the controller does not support LE Data Packet Length Extension or the HCI
+ * read has not yet completed, the returned values fall back to the Bluetooth spec
+ * defaults (0x001B octets / 0x0148 microseconds).
+ *
+ * @param maxTxOctets Pointer to the maximum supported tx octets.
+ * @param maxTxTime Pointer to the maximum supported tx time.
+ * @param maxRxOctets Pointer to the maximum supported rx octets.
+ * @param maxRxTime Pointer to the maximum supported rx time.
+ * @return Returns <b>BT_SUCCESS</b> if the output parameters were populated;
+ *         returns <b>BT_BAD_PARAM</b> if @p maxTxOctets, @p maxTxTime,
+ *         @p maxRxOctets, or @p maxRxTime is NULL.
+ */
+int BTSTACK_API BTM_GetLeMaxDataLength(uint16_t *maxTxOctets, uint16_t *maxTxTime, uint16_t *maxRxOctets,
+    uint16_t *maxRxTime);
 
 /**
  * @brief Get local address.
@@ -506,6 +552,11 @@ typedef struct {
 
 /**
  * @brief Get local supported codecs.
+ *
+ * The returned structure is a snapshot deep-copied under an internal lock; it is
+ * safe to use after controller teardown has invalidated the cached lists, but it
+ * is only valid until the next call to this function. Do not free this pointer or
+ * the arrays it references.
  *
  * @param localSupportedCodes Point to a <b>BtmLocalSupportedCodecs</b> pointer. Do not free this pointer.
  * @return Returns <b>BT_SUCCESS</b> if the operation is successful; returns others if the operation fails.
