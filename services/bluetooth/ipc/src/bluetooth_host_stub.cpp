@@ -177,6 +177,8 @@ const std::map<uint32_t, BluetoothHostStub::BluetoothHostStubFuncPerm> Bluetooth
     {STUB_FUNC(SET_CONNECTION_PRIORITY, SetConnectionPriorityInner,
         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
     {STUB_FUNC(BT_VERIFY_MULTI_PERMISSIONS, VerifyMultiPermissionsInner, nullptr)},
+    {STUB_FUNC(SET_BT_CHANNEL_SCAN, SetBtChannelScanInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
 };
 
 BluetoothHostStub::BluetoothHostStub(){};
@@ -1450,6 +1452,12 @@ int32_t BluetoothHostStub::SetConnectionPriorityInner(MessageParcel &data, Messa
 }
 
 int32_t BluetoothHostStub::VerifyMultiPermissionsInner(MessageParcel &data, MessageParcel &reply)
+{
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::SetBtChannelScanInner(MessageParcel &data, MessageParcel &reply)
 {
     reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
     return NO_ERROR;
