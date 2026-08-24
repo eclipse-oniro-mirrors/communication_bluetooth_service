@@ -386,46 +386,39 @@ void BleCentralManagerImpl::ExAdvertisingReportTask(uint8_t advType, const BtAdd
         return;
     }
 
-    std::lock_guard<std::recursive_mutex> lk(pimpl->mutex_);
-    RawAddress advAddress(RawAddress::ConvertToString(peerAddr.addr));
-    /// Set whether only legacy advertisments should be returned in scan results.
-    if (pimpl->settings_.GetLegacy()) {
-        if ((advType & BLE_LEGACY_ADV_NONCONN_IND_WITH_EX_ADV) == 0) {
-            HILOGI("Excepted addr: %{public}s, advType = %{public}d",
-                GetEncryptAddr(advAddress.GetAddress()).c_str(), advType);
+    bool needCallback = false;
+    {
+        std::lock_guard<std::recursive_mutex> lk(pimpl->mutex_);
+        RawAddress advAddress(RawAddress::ConvertToString(peerAddr.addr));
+        if (pimpl->settings_.GetLegacy()) {
+            if ((advType & BLE_LEGACY_ADV_NONCONN_IND_WITH_EX_ADV) == 0) {
+                HILOGI("Excepted addr: %{public}s, advType = %{public}d",
+                    GetEncryptAddr(advAddress.GetAddress()).c_str(), advType);
+                return;
+            }
+        }
+
+        RawAddress advCurrentAddress(RawAddress::ConvertToString(peerCurrentAddr.addr));
+        HILOGI("peerAddr: %{public}s, peerCurrentAddr: %{public}s", GetEncryptAddr(advAddress.GetAddress()).c_str(),
+            GetEncryptAddr(advCurrentAddress.GetAddress()).c_str());
+        std::vector<uint8_t> incompleteData(data.begin(), data.end());
+        if (ExtractIncompleteData(advType, advCurrentAddress.GetAddress(), data, incompleteData)) {
             return;
         }
-    }
 
-    /// incomplete data
-    RawAddress advCurrentAddress(RawAddress::ConvertToString(peerCurrentAddr.addr));
-    HILOGI("peerAddr: %{public}s, peerCurrentAddr: %{public}s", GetEncryptAddr(advAddress.GetAddress()).c_str(),
-        GetEncryptAddr(advCurrentAddress.GetAddress()).c_str());
-    std::vector<uint8_t> incompleteData(data.begin(), data.end());
-    if (ExtractIncompleteData(advType, advCurrentAddress.GetAddress(), data, incompleteData)) {
-        return;
-    }
-
-    bool ret = false;
-    BlePeripheralDevice device;
-    if (FindDevice(advAddress.GetAddress(), device)) {
-        ret = AddPeripheralDevice(advType, peerAddr, incompleteData, rssi, device);
-        if (ret) {  /// not discovery
+        BlePeripheralDevice device;
+        (void)FindDevice(advAddress.GetAddress(), device);
+        bool ret = AddPeripheralDevice(advType, peerAddr, incompleteData, rssi, device);
+        if (ret) {
             pimpl->incompleteData_.clear();
             return;
         }
+        needCallback = true;
+        pimpl->incompleteData_.clear();
+    }
+    if (needCallback) {
         HandleGapExScanEvent(BLE_GAP_EX_SCAN_RESULT_EVT, 0);
-        pimpl->incompleteData_.clear();
-        return;
     }
-
-    ret = AddPeripheralDevice(advType, peerAddr, incompleteData, rssi, device);
-    if (ret) {  /// not discovery
-        pimpl->incompleteData_.clear();
-        return;
-    }
-    pimpl->incompleteData_.clear();
-    HandleGapExScanEvent(BLE_GAP_EX_SCAN_RESULT_EVT, 0);
 }
 
 bool BleCentralManagerImpl::AddPeripheralDevice(uint8_t advType, const BtAddr &peerAddr,
@@ -1888,8 +1881,15 @@ void BleCentralManagerImpl::GapExScanResultEvt() const
     LOG_DEBUG("[BleCentralManagerImpl] %{public}s:Scan result", __func__);
 
     if ((centralManagerCallbacks_ != nullptr) && (pimpl->callBackType_ == CALLBACK_TYPE_FIRST_MATCH)) {
-        std::lock_guard<std::recursive_mutex> lk(pimpl->mutex_);
-        centralManagerCallbacks_->OnScanCallback(pimpl->bleScanResult_.back());
+        BleScanResultImpl result;
+        {
+            std::lock_guard<std::recursive_mutex> lk(pimpl->mutex_);
+            if (pimpl->bleScanResult_.empty()) {
+                return;
+            }
+            result = pimpl->bleScanResult_.back();
+        }
+        centralManagerCallbacks_->OnScanCallback(result);
     }
 }
 
