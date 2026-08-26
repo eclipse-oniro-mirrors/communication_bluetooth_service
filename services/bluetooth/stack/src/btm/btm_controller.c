@@ -80,6 +80,15 @@ static HciLeReadLocalSupportedFeaturesReturnParam g_leReadLocalSupportedFeatures
 static HciLeSetEventMaskReturnParam g_leSetEventMaskResult;
 static HciLeReadWhiteListSizeReturnParam g_leReadWhiteListSizeResult;
 static HciLeReadResolvingListSizeReturnParam g_leReadResolvingListSizeResult;
+// Stores the LE Read Antenna Information result (7.8.87). Written exactly once
+// during controller setup (BtmLeReadAntennaInformation, on the Stack thread)
+// when the controller supports antenna switching (Bits 21/22); BtmCloseController
+// never touches it. The Stack-thread write happens-before any other thread can
+// reach the BTM API, so BTM_GetLeAntennaInformation may read it lock-free; it
+// returns BT_BAD_STATUS until a successful read fills it.
+static HciLeReadAntennaInformationReturnParam g_leReadAntennaInformationResult = {
+    .status = HCI_HARDWARE_FAILURE,
+};
 
 // Serializes BTM_GetLocalSupportedCodecs against BtmCloseController: both hold
 // this lock while touching g_localSupportedCodecs / its copy buffers, so callers
@@ -272,6 +281,16 @@ static void BtmControllerOnLeReadLocalSupportedFeaturesComplete(
     EventSet(g_waitSetupController);
 }
 
+static void BtmControllerOnLeReadAntennaInformationComplete(
+    const HciLeReadAntennaInformationReturnParam *returnParam)
+{
+    if (returnParam == NULL) {
+        return;
+    }
+    g_leReadAntennaInformationResult = *returnParam;
+    EventSet(g_waitSetupController);
+}
+
 static void BtmControllerOnLeSetEventMaskComplete(const HciLeSetEventMaskReturnParam *returnParam)
 {
     g_leSetEventMaskResult = *returnParam;
@@ -375,7 +394,10 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .leReadMaximumDataLengthComplete = BtmControllerOnLeReadMaximumDataLengthComplete,
     .leReadWhiteListSizeComplete = BtmControllerOnLeReadWhiteListSizeComplete,
     .leReadResolvingListSizeComplete = BtmControllerOnLeReadResolvingListSizeComplete,
+    .leReadAntennaInformationComplete = BtmControllerOnLeReadAntennaInformationComplete,
 };
+
+static uint64_t BtmGetLe51EventMask(uint64_t leEventMask);
 
 static uint64_t BtmGetLeEventMask()
 {
@@ -430,6 +452,28 @@ static uint64_t BtmGetLeEventMask()
     }
     if (BtmIsControllerSupportedLeGenerateDhKey()) {
         leEventMask |= LE_EVENT_MASK_LE_GENERATE_DHKEY_COMPLETE_EVENT;
+    }
+
+    return BtmGetLe51EventMask(leEventMask);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// Table 3.2 (7.8.1 LE Set Event Mask): enable the four 5.1 direction-finding
+// and PAST events only when the controller supports the corresponding
+// feature bit - the controller shall not generate masked-out events.
+static uint64_t BtmGetLe51EventMask(uint64_t leEventMask)
+{
+    if (BTM_IsControllerSupportConnectionlessCteReceiver()) {                     // Bit 20
+        leEventMask |= LE_EVENT_MASK_LE_CONNECTIONLESS_IQ_REPORT_EVENT;           // Subevent 0x15
+    }
+    if (BTM_IsControllerSupportConnectionCteResponse()) {                         // Bit 18
+        leEventMask |= LE_EVENT_MASK_LE_CONNECTION_IQ_REPORT_EVENT;               // Subevent 0x16
+    }
+    if (BTM_IsControllerSupportConnectionCteRequest()) {                          // Bit 17
+        leEventMask |= LE_EVENT_MASK_LE_CTE_REQUEST_FAILED_EVENT;                 // Subevent 0x17
+    }
+    if (BTM_IsControllerSupportPeriodicAdvertisingSyncTransferRecipient()) {      // Bit 25
+        leEventMask |= LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_TRANSFER_RECEIVED_EVENT;  // Subevent 0x18
     }
 
     return leEventMask;
@@ -826,6 +870,31 @@ static int BtmLeReadMaximumDataLength()
     return result;
 }
 
+static int BtmLeReadAntennaInformation()
+{
+    EventClear(g_waitSetupController);
+
+    // Reset the cache before the read so a timeout leaves no stale result.
+    g_leReadAntennaInformationResult.status = HCI_HARDWARE_FAILURE;
+
+    int result = HCI_LeReadAntennaInformation();
+    if (result != BT_SUCCESS) {
+        LOG_ERROR("HCI_LeReadAntennaInformation failed: %{public}d", result);
+        return result;
+    }
+
+    if (EventWait(g_waitSetupController, WAIT_CMD_TIMEOUT) == 0) {
+        if (g_leReadAntennaInformationResult.status != HCI_SUCCESS) {
+            LOG_ERROR("HCI_LeReadAntennaInformation status: 0x%02x", g_leReadAntennaInformationResult.status);
+            result = BT_OPERATION_FAILED;
+        }
+    } else {
+        LOG_ERROR("HCI_LeReadAntennaInformation Timeout");
+        result = BT_OPERATION_FAILED;
+    }
+    return result;
+}
+
 static int BtmLeReadResolvingListSize()
 {
     // Clear the event first: a stale signal from a timed-out predecessor command
@@ -900,6 +969,17 @@ static int BtmInitLeFeature()
                 g_leReadMaximumDataLengthResult.status = HCI_HARDWARE_FAILURE;
                 g_leReadMaximumDataLengthValid = false;
                 MutexUnlock(g_leReadMaximumDataLengthMutex);
+                result = BT_SUCCESS;
+            }
+        }
+
+        if (BTM_IsControllerSupportAntennaSwitchingDuringCteTransmissionAod() ||
+            BTM_IsControllerSupportAntennaSwitchingDuringCteReceptionAoa()) {
+            // Antenna information is an optional capability (Bits 21/22): a read
+            // failure must not block controller bring-up.
+            result = BtmLeReadAntennaInformation();
+            if (result != BT_SUCCESS) {
+                LOG_WARN("BtmLeReadAntennaInformation failed, antenna info unavailable: %{public}d", result);
                 result = BT_SUCCESS;
             }
         }
@@ -1112,22 +1192,22 @@ bool BTM_IsControllerSupportNonFlushablePacketBoundaryFlag()
 
 bool BTM_IsControllerSupportLePing()
 {
-    return HCI_SUPPORT_LE_PING(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+    return HciSupportLePing(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportLlPrivacy()
 {
-    return HCI_SUPPORT_LL_PRIVACY(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+    return HciSupportLlPrivacy(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportLe2MPhy()
 {
-    return HCI_SUPPORT_LE_2M_PHY(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+    return HciSupportLe2MPhy(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportLeCodedPhy()
 {
-    return HCI_SUPPORT_LE_CODED_PHY(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+    return HciSupportLeCodedPhy(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportLeReadPhy()
@@ -1137,17 +1217,17 @@ bool BTM_IsControllerSupportLeReadPhy()
 
 bool BTM_IsControllerSupportLeExtendedAdvertising()
 {
-    return HCI_SUPPORT_LE_EXTENDED_ADVERTISING(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+    return HciSupportLeExtendedAdvertising(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportLeDataPacketLengthExtension()
 {
-    return HCI_SUPPORT_LE_DATA_PACKET_LENGTH_EXTENSION(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+    return HciSupportLeDataPacketLengthExtension(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportChannelSelectionAlgorithm2()
 {
-    return HCI_SUPPURT_CHANNEL_SELECTION_ALGORITHM_2(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+    return HciSupportChannelSelectionAlgorithm2(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportLeReadTransmitPower()
@@ -1167,12 +1247,100 @@ bool BTM_IsControllerSupportLeWriteRfPathCompensation()
 
 bool BTM_IsControllerSupportConnectionParametersRequestProcedure()
 {
-    return HCI_SUPPORT_CONNECTION_PARAMETERS_REQUEST_PROCEDURE(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+    return HciSupportConnectionParametersRequestProcedure(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportLePeriodicAdvertising()
 {
-    return HCI_SUPPORT_LE_PERIODIC_ADVERTISING(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+    return HciSupportLePeriodicAdvertising(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 6, Part B
+// 4.6.16-4.6.25 FEATURE SUPPORT (Direction Finding / PAST / Sleep Clock Accuracy)
+bool BTM_IsControllerSupportConnectionCteRequest()
+{
+    return HciSupportConnectionCteRequest(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportConnectionCteResponse()
+{
+    return HciSupportConnectionCteResponse(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportConnectionlessCteTransmitter()
+{
+    return HciSupportConnectionlessCteTransmitter(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportConnectionlessCteReceiver()
+{
+    return HciSupportConnectionlessCteReceiver(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportAntennaSwitchingDuringCteTransmissionAod()
+{
+    return HciSupportAntennaSwitchingDuringCteTransmissionAod(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportAntennaSwitchingDuringCteReceptionAoa()
+{
+    return HciSupportAntennaSwitchingDuringCteReceptionAoa(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportReceivingConstantToneExtensions()
+{
+    return HciSupportReceivingConstantToneExtensions(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportPeriodicAdvertisingSyncTransferSender()
+{
+    return HciSupportPeriodicAdvertisingSyncTransferSender(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportPeriodicAdvertisingSyncTransferRecipient()
+{
+    return HciSupportPeriodicAdvertisingSyncTransferRecipient(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportSleepClockAccuracyUpdates()
+{
+    return HciSupportSleepClockAccuracyUpdates(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportRemotePublicKeyValidation()
+{
+    return HciSupportRemotePublicKeyValidation(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+// Returns the cached LE Read Antenna Information (7.8.87) result. Lock-free:
+// the result is written once by the init sequence on the Stack thread and never
+// modified afterwards, so no reader can observe a torn update; callers must not
+// invoke this before controller setup completes (returns BT_BAD_STATUS until a
+// successful read fills the cache).
+int BTM_GetLeAntennaInformation(uint8_t *supportedSwitchingSamplingRates, uint8_t *numberOfAntennae,
+    uint8_t *maxLengthOfSwitchingPattern, uint8_t *maxCteLength)
+{
+    if (g_leReadAntennaInformationResult.status != HCI_SUCCESS) {
+        // Not cached yet: the init sequence only reads it when the controller
+        // reports antenna switching support (Bits 21/22), and a failed read
+        // leaves the status at HCI_HARDWARE_FAILURE.
+        return BT_BAD_STATUS;
+    }
+
+    // Output parameters are optional; callers may query individual fields.
+    if (supportedSwitchingSamplingRates != NULL) {
+        *supportedSwitchingSamplingRates = g_leReadAntennaInformationResult.supportedSwitchingSamplingRates;
+    }
+    if (numberOfAntennae != NULL) {
+        *numberOfAntennae = g_leReadAntennaInformationResult.numberOfAntennae;
+    }
+    if (maxLengthOfSwitchingPattern != NULL) {
+        *maxLengthOfSwitchingPattern = g_leReadAntennaInformationResult.maxLengthOfSwitchingPattern;
+    }
+    if (maxCteLength != NULL) {
+        *maxCteLength = g_leReadAntennaInformationResult.maxCteLength;
+    }
+    return BT_SUCCESS;
 }
 
 int BTM_GetLeMaxDataLength(uint16_t *maxTxOctets, uint16_t *maxTxTime, uint16_t *maxRxOctets, uint16_t *maxRxTime)

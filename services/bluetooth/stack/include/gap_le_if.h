@@ -32,6 +32,7 @@
 #define GAP_LE_IF_H
 
 #include "gap_comm.h"
+#include "gap_le_if_5_1.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -373,14 +374,18 @@ typedef struct {
  * For @a syncReport, @a data is a temporary copy allocated by the GAP layer and
  * is only valid during the callback; it must not be modified or retained.
  * Copy the data if it is needed later. @a data may be NULL when @a dataLength is zero.
+ * @a cteType is the Constant Tone Extension type from the LE Periodic Advertising
+ * Report event. It is meaningful only when the peer controller supports Receiving
+ * Constant Tone Extensions (Bluetooth 5.1, LE Feature Bit 23); otherwise it is
+ * set to HCI_LE_CTE_TYPE_NONE (0xFF).
  */
 typedef struct {
     void (*createSyncCancelResult)(uint8_t status, void *context);
     void (*terminateSyncResult)(uint8_t status, void *context);
     void (*syncEstablished)(uint8_t status, uint16_t syncHandle, uint8_t advSid, const BtAddr *advAddr, uint8_t advPhy,
         uint16_t periodicAdvInterval, void *context);
-    void (*syncReport)(uint16_t syncHandle, int8_t txPower, int8_t rssi, uint8_t dataStatus, uint8_t dataLength,
-        const uint8_t *data, void *context);
+    void (*syncReport)(uint16_t syncHandle, int8_t txPower, int8_t rssi, uint8_t cteType, uint8_t dataStatus,
+        uint8_t dataLength, const uint8_t *data, void *context);
     void (*syncLost)(uint16_t syncHandle, void *context);
     void (*addDeviceToPeriodicAdvertiserListResult)(uint8_t status, void *context);
     void (*removeDeviceFromPeriodicAdvertiserListResult)(uint8_t status, void *context);
@@ -412,6 +417,7 @@ typedef struct {
     void (*enhancedReceiverTestResult)(uint8_t status, void *context);
     void (*enhancedTransmitterTestResult)(uint8_t status, void *context);
 } GapLeControllerCallback;
+
 
 /**
  * @brief       BLE connection parameter structure
@@ -940,6 +946,7 @@ BTSTACK_API int GAPIF_LeEnhancedReceiverTest(uint8_t rxChannel, uint8_t phy, uin
  */
 BTSTACK_API int GAPIF_LeEnhancedTransmitterTest(
     uint8_t txChannel, uint8_t lengthOfTestData, uint8_t packetPayload, uint8_t phy);
+
 
 /**
  * @brief       Register legacy advertising result callback

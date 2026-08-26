@@ -417,6 +417,138 @@ int GAP_LeEnhancedReceiverTest(uint8_t rxChannel, uint8_t phy, uint8_t modulatio
 int GAP_LeEnhancedTransmitterTest(uint8_t txChannel, uint8_t lengthOfTestData, uint8_t packetPayload, uint8_t phy);
 
 /**
+ * @brief       Register LE 5.1 CTE (Constant Tone Extension) callback.
+ * @param[in]   callback            CTE callback structure
+ * @param[in]   context             CTE callback context parameter
+ * @return      @c GAP_SUCCESS     : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeRegisterCteCallback(const GapLeCteCallback *callback, void *context);
+
+/**
+ * @brief       Deregister LE 5.1 CTE callback.
+ * @return      @c GAP_SUCCESS     : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeDeregisterCteCallback(void);
+
+/**
+ * @brief       Start an LE receiver test with CTE (Bluetooth 5.1, Vol 2, Part E, 7.8.78).
+ * @param[in]   param               test parameters (see GapLeReceiverTestV3Param)
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeReceiverTestV3(const GapLeReceiverTestV3Param *param);
+
+/**
+ * @brief       Start an LE transmitter test with CTE (Bluetooth 5.1, Vol 2, Part E, 7.8.79).
+ * @param[in]   param               test parameters (see GapLeTransmitterTestV3Param)
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeTransmitterTestV3(const GapLeTransmitterTestV3Param *param);
+
+/**
+ * @brief       Set the CTE transmit parameters of an advertising set (7.8.80).
+ * @param[in]   param               CTE transmit parameters (see GapLeSetConnectionlessCteTransmitParametersParam)
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetConnectionlessCteTransmitParameters(const GapLeSetConnectionlessCteTransmitParametersParam *param);
+
+/**
+ * @brief       Enable or disable CTE transmission on an advertising set (7.8.81).
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetConnectionlessCteTransmitEnable(uint8_t advHandle, uint8_t cteEnable);
+
+/**
+ * @brief       Enable or disable IQ sampling on a synchronized periodic advertising train (7.8.82).
+ * @param[in]   param               IQ sampling parameters (see GapLeSetConnectionlessIqSamplingEnableParam)
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetConnectionlessIqSamplingEnable(const GapLeSetConnectionlessIqSamplingEnableParam *param);
+
+/**
+ * @brief       Set the CTE receive parameters of a connection (7.8.83).
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetConnectionCteReceiveParameters(uint16_t connectionHandle, uint8_t samplingEnable, uint8_t slotDurations,
+    uint8_t lengthOfSwitchingPattern, const uint8_t *antennaIds);
+
+/**
+ * @brief       Set the CTE transmit parameters of a connection (7.8.84).
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetConnectionCteTransmitParameters(uint16_t connectionHandle, uint8_t cteTypes,
+    uint8_t lengthOfSwitchingPattern, const uint8_t *antennaIds);
+
+/**
+ * @brief       Enable or disable CTE requests on a connection (7.8.85).
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeConnectionCteRequestEnable(
+    uint16_t connectionHandle, uint8_t enable, uint16_t cteRequestInterval, uint8_t requestedCteLength,
+    uint8_t requestedCteType);
+
+/**
+ * @brief       Enable or disable CTE responses on a connection (7.8.86).
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeConnectionCteResponseEnable(uint16_t connectionHandle, uint8_t enable);
+
+/**
+ * @brief       Read the antenna information of the local controller (7.8.87).
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeReadAntennaInformation(void);
+
+/**
+ * @brief       Enable or disable reports of a synchronized periodic advertising train (7.8.88).
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetPeriodicAdvertisingReceiveEnable(uint16_t syncHandle, uint8_t enable);
+
+/**
+ * @brief       Transfer a synchronized periodic advertising train to a connected device (7.8.89).
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LePeriodicAdvertisingSyncTransfer(uint16_t connectionHandle, uint16_t serviceData, uint16_t syncHandle);
+
+/**
+ * @brief       Transfer the periodic advertising set information to a connected device (7.8.90).
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LePeriodicAdvertisingSetInfoTransfer(uint16_t connectionHandle, uint16_t serviceData,
+    uint8_t advertisingHandle);
+
+/**
+ * @brief       Set the PA sync transfer parameters of a connection (7.8.91).
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetPeriodicAdvertisingSyncTransferParameters(
+    uint16_t connectionHandle, uint8_t mode, uint16_t skip, uint16_t syncTimeout, uint8_t cteType);
+
+/**
+ * @brief       Set the default PA sync transfer parameters (7.8.92).
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetDefaultPeriodicAdvertisingSyncTransferParameters(uint8_t mode, uint16_t skip, uint16_t syncTimeout,
+    uint8_t cteType);
+
+/**
  * @brief       Register legacy advertising result callback
  * @param[in]   callback            legacy advertising callback
  * @param[in]   context             legacy advertising callback context parameter

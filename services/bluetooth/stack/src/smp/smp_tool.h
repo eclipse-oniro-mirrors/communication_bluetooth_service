@@ -183,6 +183,12 @@ int SMP_CryptographicH6(const uint8_t w[CRYPT_H6_W_LEN], const uint8_t keyId[CRY
 int SMP_CryptographicH7(const uint8_t salt[CRYPT_H7_SALT_LEN], const uint8_t w[CRYPT_H7_W_LEN],
                         uint8_t output[CRYPT_H7_OUT_LEN]);
 
+// Bluetooth 5.1, Vol 3, Part H, 2.3.5,6,1: validate a 64-byte P-256 public key
+// (X || Y, big-endian). Returns BT_SUCCESS if the point is valid (reduced
+// coordinates, not at infinity, on the curve); BT_BAD_PARAM / BT_OPERATION_FAILED
+// otherwise. The caller must ensure publicKey holds at least SMP_PUBLICKEY_LEN bytes.
+int SMP_ValidateP256PublicKey(const uint8_t *publicKey);
+
 // Cross-transport key derivation helpers (SMP_DeriveBredrLinkKeyFromLeLtk /
 // SMP_DeriveLeLtkFromBredrLinkKey) are declared in smp.h; include smp.h when using them.
 // AES-CMAC step helpers. Step1/Step2 are synchronous state transitions and therefore return void;

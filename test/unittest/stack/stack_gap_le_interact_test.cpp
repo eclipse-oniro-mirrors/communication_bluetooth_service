@@ -33,6 +33,7 @@
 #include "btstack.h"
 #include "gap_if.h"
 #include "gap_le_if.h"
+#include "hci/hci.h"
 #include "l2cap_def.h"
 #include "l2cap_le_if.h"
 
@@ -41,86 +42,38 @@ using namespace testing::ext;
 namespace OHOS {
 namespace Bluetooth {
 namespace {
-// RAII guard that stops the Bluetooth service and toggles SELinux when enabled
-// and restores them on destruction. A static RAII object also runs Cleanup at
-// process exit so a normal process exit will not leave the service stopped or
-// SELinux permissive. Commands are run individually (not chained with &&) so a
-// partial failure is logged instead of producing an asymmetric state.
-//
-// Note: exit cleanup does not run after SIGKILL or unrecoverable crashes.
-// Do not rely on this guard for abnormal termination scenarios.
-// WARNING: BluetoothServiceEnvironmentGuard modifies system-wide state (stops bluetooth_service
-// and sets SELinux to permissive). This is only appropriate when the test binary is run in a
-// dedicated, isolated environment. If the process is killed abnormally the system may be left
-// in an insecure state. Consider replacing this with mock-based tests or a test-framework-level
-// sandbox before production use.
-class BluetoothServiceEnvironmentGuard {
-public:
-    static void Enable()
-    {
-        std::call_once(once_, []() { enabled_.store(true); });
+// The interact tests drive the HCI controller directly, so the bluetooth
+// service must be stopped and SELinux set to permissive (HCI socket access)
+// for the duration of the test process. SetupTestEnvironment runs at the
+// start of main, RestoreTestEnvironment at its end (both exit paths: the
+// regular test run and peer mode). Commands are run individually (not
+// chained with &&) so a partial failure is logged instead of producing an
+// asymmetric state.
+// WARNING: these functions modify system-wide state (stop bluetooth_service,
+// setenforce 0). Only appropriate on a dedicated, isolated test device. If
+// the process dies abnormally (SIGKILL, crash) the system may be left with
+// the service stopped and SELinux permissive; restore manually in that case.
+static void RunEnvCommand(const char *cmd)
+{
+    int ret = std::system(cmd);
+    if (ret != 0) {
+        printf("environment command failed (%d): %s\n", ret, cmd);
     }
+}
 
-    BluetoothServiceEnvironmentGuard()
-    {
-        if (!enabled_.load()) {
-            return;
-        }
-        bool expected = false;
-        if (!active_.compare_exchange_strong(expected, true)) {
-            return;
-        }
-        RunCommand("service_control stop bluetooth_service");
-        RunCommand("setenforce 0");
-    }
+static void SetupTestEnvironment()
+{
+    RunEnvCommand("service_control stop bluetooth_service");
+    RunEnvCommand("setenforce 0");
+}
 
-    ~BluetoothServiceEnvironmentGuard()
-    {
-        Cleanup();
-    }
-
-    BluetoothServiceEnvironmentGuard(const BluetoothServiceEnvironmentGuard &) = delete;
-    BluetoothServiceEnvironmentGuard &operator=(const BluetoothServiceEnvironmentGuard &) = delete;
-
-    static void Cleanup()
-    {
-        if (!active_.load()) {
-            return;
-        }
-        RunCommand("setenforce 1");
-        RunCommand("service_control start bluetooth_service");
-        active_.store(false);
-        enabled_.store(false);
-    }
-
-private:
-    static std::once_flag once_;
-    static std::atomic<bool> enabled_;
-    static std::atomic<bool> active_;
-
-    static void RunCommand(const char *cmd)
-    {
-        int ret = std::system(cmd);
-        if (ret != 0) {
-            printf("BluetoothServiceEnvironmentGuard: command failed (%d): %s\n", ret, cmd);
-        }
-    }
-};
-
-std::once_flag BluetoothServiceEnvironmentGuard::once_;
-std::atomic<bool> BluetoothServiceEnvironmentGuard::enabled_{false};
-std::atomic<bool> BluetoothServiceEnvironmentGuard::active_{false};
-
-// Static RAII object that runs Cleanup at process exit instead of std::atexit.
-static struct EnvCleanupOnExit {
-    ~EnvCleanupOnExit()
-    {
-        BluetoothServiceEnvironmentGuard::Cleanup();
-    }
-} g_envCleanupOnExit;
+static void RestoreTestEnvironment()
+{
+    RunEnvCommand("setenforce 1");
+    RunEnvCommand("service_control start bluetooth_service");
+}
 
 volatile sig_atomic_t g_peerModeExitRequested = 0;
-bool g_envGuardEnabled = false;
 
 void PeerModeSignalHandler(int sig)
 {
@@ -842,10 +795,6 @@ static int EnablePeerAdvertising(PeerAdvContext *ctx, PeerModeState &state)
 
 int RunPeerMode()
 {
-    if (g_envGuardEnabled) {
-        BluetoothServiceEnvironmentGuard::Enable();
-    }
-    static BluetoothServiceEnvironmentGuard envGuard;
     // Construct the callback context before PeerModeState: on scope exit the
     // destructors run in reverse order, so PeerModeState's deregister (which
     // drains pending GAP events) must run while |peerAdvCtx| is still alive.
@@ -899,6 +848,87 @@ int RunPeerMode()
 
     return state.cleanupFailed_ ? 1 : 0;
 }
+
+// ---- HCI_InjectReceivedEvent（测试缝）活栈注入用例的支撑代码 ----
+// HCI 事件回调表是函数指针结构、不带 context 参数，回调运行在栈处理线程上，
+// 故用文件级捕获对象 + 条件变量等待回调（与对端无关的事件可用注入构造 wire
+// 字节确定性测试，无需真实对端设备）。
+
+// Subevent 0x18 LE Periodic Advertising Sync Transfer Received（7.7.65,24），19 字节：
+//   Status(1)=0x00 | Connection_Handle(2)=0x0008 | Service_Data(2)=0x1234 |
+//   Sync_Handle(2)=0x0567 | Advertising_SID(1)=3 | Advertiser_Address_Type(1)=0x00 |
+//   Advertiser_Address(6)=AA:BB:CC:DD:EE:FF（LE 序）| Advertiser_PHY(1)=0x01 |
+//   Periodic_Advertising_Interval(2)=0x00A0 | Advertiser_Clock_Accuracy(1)=1
+constexpr uint8_t PAST_SYNC_TRANSFER_RECEIVED_WIRE[] = {
+    0x3E, 0x14,            // LE Meta, Parameter_Total_Length = 20
+    0x18,                  // Subevent: LE Periodic Advertising Sync Transfer Received
+    0x00,                  // Status
+    0x08, 0x00,            // Connection_Handle
+    0x34, 0x12,            // Service_Data
+    0x67, 0x05,            // Sync_Handle
+    0x03,                  // Advertising_SID
+    0x00,                  // Advertiser_Address_Type = public
+    0xFF, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, // Advertiser_Address = AA:BB:CC:DD:EE:FF
+    0x01,                  // Advertiser_PHY = LE 1M
+    0xA0, 0x00,            // Periodic_Advertising_Interval = 100 ms
+    0x01,                  // Advertiser_Clock_Accuracy
+};
+
+struct PastInjectionResult {
+    std::mutex mtx;
+    std::condition_variable cv;
+    bool received = false;
+    HciLePeriodicAdvertisingSyncTransferReceivedEventParam param = {};
+
+    bool Wait(uint32_t timeoutMs)
+    {
+        std::unique_lock<std::mutex> lock(mtx);
+        return cv.wait_for(lock, std::chrono::milliseconds(timeoutMs), [this] { return received; });
+    }
+
+    void Reset()
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        received = false;
+    }
+
+    void Notify(const HciLePeriodicAdvertisingSyncTransferReceivedEventParam *eventParam)
+    {
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            param = *eventParam;
+            received = true;
+        }
+        cv.notify_all();
+    }
+};
+
+PastInjectionResult g_pastInjectionResult;
+
+static void OnInjectedPastSyncTransferReceived(
+    const HciLePeriodicAdvertisingSyncTransferReceivedEventParam *eventParam)
+{
+    if (eventParam == nullptr) {
+        return;
+    }
+    g_pastInjectionResult.Notify(eventParam);
+}
+
+class HciEventCallbackGuard {
+public:
+    explicit HciEventCallbackGuard(HciEventCallbacks *callbacks) : callbacks_(callbacks) {}
+    ~HciEventCallbackGuard()
+    {
+        if (HCI_DeregisterEventCallbacks(callbacks_) != BT_SUCCESS) {
+            printf("HciEventCallbackGuard: deregister failed; callback may remain registered\n");
+        }
+    }
+    HciEventCallbackGuard(const HciEventCallbackGuard &) = delete;
+    HciEventCallbackGuard &operator=(const HciEventCallbackGuard &) = delete;
+
+private:
+    HciEventCallbacks *callbacks_;
+};
 } // namespace
 
 class StackGapLeInteractTest : public testing::Test {
@@ -914,9 +944,6 @@ public:
 
 void StackGapLeInteractTest::SetUpTestCase(void)
 {
-    BluetoothServiceEnvironmentGuard::Enable();
-    static BluetoothServiceEnvironmentGuard envGuard;
-
     ASSERT_EQ(BTM_Initialize(), BT_SUCCESS);
     g_btmInitialized = true;
     ASSERT_EQ(BTM_Enable(LE_CONTROLLER), BT_SUCCESS);
@@ -1423,6 +1450,40 @@ HWTEST_F(StackGapLeInteractTest, StackGapLe_PeriodicAdvCreateSync_00100, TestSiz
     EXPECT_EQ(ctx->syncResult.status, HCI_STATUS_SUCCESS);
     EXPECT_EQ(ctx->syncResult.advSid, PEER_ADV_SID);
 }
+
+// @tc.number: StackGapLe5_1_Inject_PastSyncTransferReceived_00100
+// @tc.name:  测试缝 HCI_InjectReceivedEvent 活栈注入 0x18 PAST 事件
+// @tc.desc:  不依赖对端设备：向 HCI RX 队列注入手工构造的 wire 字节，事件在栈
+//            处理线程上按生产路径解析，回调异步到达。断言全部 19 字节字段。
+HWTEST_F(StackGapLeInteractTest, StackGapLe5_1_Inject_PastSyncTransferReceived_00100, TestSize.Level1)
+{
+    HciEventCallbacks callbacks = {};
+    callbacks.lePeriodicAdvertisingSyncTransferReceived = OnInjectedPastSyncTransferReceived;
+    ASSERT_EQ(HCI_RegisterEventCallbacks(&callbacks), BT_SUCCESS);
+    HciEventCallbackGuard callbackGuard(&callbacks);
+
+    g_pastInjectionResult.Reset();
+    ASSERT_EQ(HCI_InjectReceivedEvent(PAST_SYNC_TRANSFER_RECEIVED_WIRE, sizeof(PAST_SYNC_TRANSFER_RECEIVED_WIRE)),
+        BT_SUCCESS);
+
+    EXPECT_TRUE(g_pastInjectionResult.Wait(WAIT_CALLBACK_TIMEOUT_MS)) <<
+        "PAST sync transfer received callback not delivered";
+    EXPECT_EQ(g_pastInjectionResult.param.status, 0x00);
+    EXPECT_EQ(g_pastInjectionResult.param.connectionHandle, 0x0008);
+    EXPECT_EQ(g_pastInjectionResult.param.serviceData, 0x1234);
+    EXPECT_EQ(g_pastInjectionResult.param.syncHandle, 0x0567);
+    EXPECT_EQ(g_pastInjectionResult.param.advertisingSid, 0x03);
+    EXPECT_EQ(g_pastInjectionResult.param.advertiserAddressType, 0x00);
+    EXPECT_EQ(g_pastInjectionResult.param.advertiserAddress.raw[0], 0xFF);
+    EXPECT_EQ(g_pastInjectionResult.param.advertiserAddress.raw[1], 0xEE);
+    EXPECT_EQ(g_pastInjectionResult.param.advertiserAddress.raw[2], 0xDD);
+    EXPECT_EQ(g_pastInjectionResult.param.advertiserAddress.raw[3], 0xCC);
+    EXPECT_EQ(g_pastInjectionResult.param.advertiserAddress.raw[4], 0xBB);
+    EXPECT_EQ(g_pastInjectionResult.param.advertiserAddress.raw[5], 0xAA);
+    EXPECT_EQ(g_pastInjectionResult.param.advertiserPhy, 0x01);
+    EXPECT_EQ(g_pastInjectionResult.param.periodicAdvertisingInterval, 0x00A0);
+    EXPECT_EQ(g_pastInjectionResult.param.advertiserClockAccuracy, 0x01);
+}
 } // namespace Bluetooth
 } // namespace OHOS
 
@@ -1456,40 +1517,9 @@ static bool ParsePeerAddrArg(int &argc, char **argv, BtAddr *addr)
     return false;
 }
 
-static bool ParseEnvGuardArg(int &argc, char **argv)
-{
-    const char *flag = "--dangerous-enable-env-guard";
-    size_t flagLen = std::strlen(flag);
-
-    int i = 1;
-    while (i < argc) {
-        if (std::strncmp(argv[i], flag, flagLen) != 0 ||
-            (argv[i][flagLen] != '\0' && argv[i][flagLen] != '=')) {
-            ++i;
-            continue;
-        }
-        if (argv[i][flagLen] == '=') {
-            const char *value = argv[i] + flagLen + 1;
-            if (std::strcmp(value, "1") == 0 || std::strcmp(value, "true") == 0) {
-                OHOS::Bluetooth::g_envGuardEnabled = true;
-            }
-        } else {
-            OHOS::Bluetooth::g_envGuardEnabled = true;
-        }
-        for (int j = i; j < argc - 1; ++j) {
-            argv[j] = argv[j + 1];
-        }
-        --argc;
-        argv[argc] = nullptr;
-        --i;
-        return true;
-    }
-    return false;
-}
-
 int main(int argc, char **argv)
 {
-    (void)ParseEnvGuardArg(argc, argv);
+    OHOS::Bluetooth::SetupTestEnvironment();
 
     bool parsed = ParsePeerAddrArg(argc, argv, &OHOS::Bluetooth::g_state.peerAddr);
     if (!parsed) {
@@ -1498,9 +1528,13 @@ int main(int argc, char **argv)
 
     for (int i = 1; i < argc; i++) {
         if (std::strcmp(argv[i], "server") == 0) {
-            return OHOS::Bluetooth::RunPeerMode();
+            int ret = OHOS::Bluetooth::RunPeerMode();
+            OHOS::Bluetooth::RestoreTestEnvironment();
+            return ret;
         }
     }
     testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    int ret = RUN_ALL_TESTS();
+    OHOS::Bluetooth::RestoreTestEnvironment();
+    return ret;
 }

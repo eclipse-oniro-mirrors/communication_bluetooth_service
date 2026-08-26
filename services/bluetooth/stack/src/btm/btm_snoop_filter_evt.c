@@ -158,7 +158,7 @@ static const HciEventFilterFunc G_EVT_FILTER_FUNC_MAP[HCI_EVENT_MAX_NUM + 1] = {
     {NULL, 0},
     {HciInquiryResultEventFilter, 0},
     {HciCommonFilterAddress, offsetof(HciConnectionCompleteEventParam, bdAddr)},
-    {HciCommonFilterAddress, offsetof(HciConnectionRequestEventParam, bdAddr)},
+    {HciCommonFilterAddress, offsetof(HciConnectionIndicationEventParam, bdAddr)},
     {NULL, 0},
     {NULL, 0},
     {HciCommonFilterAddress, offsetof(HciRemoteNameRequestCompleteEventParam, bdAddr)},

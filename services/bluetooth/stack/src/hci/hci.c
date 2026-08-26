@@ -448,6 +448,29 @@ int HCI_DisableTransmissionCapture()
     return BT_SUCCESS;
 }
 
+// Test seam: inject a raw HCI event packet through the exact production RX
+// path (HciOnReceivedHciPacket - the same entry the HDI transport callback
+// uses), so the event is parsed on the stack processing thread like a real
+// controller event. Only meaningful when the stack is running; without the RX
+// queue the event cannot be processed with production semantics, so the
+// injection is rejected instead of taking a shortcut. See hci.h.
+int HCI_InjectReceivedEvent(const uint8_t *data, uint16_t length)
+{
+    if (data == NULL || length == 0) {
+        return BT_BAD_PARAM;
+    }
+    if (g_hciRxQueue == NULL) {
+        return BT_OPERATION_FAILED;
+    }
+
+    BtPacket packet = {
+        .data = (uint8_t *)data,
+        .size = length,
+    };
+    HciOnReceivedHciPacket(PACKET_TYPE_EVENT, &packet);
+    return BT_SUCCESS;
+}
+
 static BtHciCallbacks g_hdiCallacks = {
     .OnInited = HciOnHDIInited,
     .OnReceivedHciPacket = HciOnReceivedHciPacket,

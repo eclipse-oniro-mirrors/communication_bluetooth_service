@@ -952,6 +952,10 @@ static int GapLeSetPeriodicAdvertisingEnable(uint8_t enable, uint8_t advHandle)
     return HCI_LeSetPeriodicAdvertisingEnable(&hciCmdParam);
 }
 
+// Bluetooth 5.1 behavior clarification (Vol 6, Part B, 4.4.2,11): when periodic
+// advertising is used, enable the periodic advertising before enabling the
+// (extended) advertising, or update the Advertising DID; otherwise a scanner's
+// DID cache may keep it from syncing to the periodic advertising.
 int GAP_LePeriodicAdvSetEnable(uint8_t enable, uint8_t advHandle)
 {
     LOG_INFO("%{public}s:", __FUNCTION__);
@@ -983,5 +987,151 @@ void GapLeSetPeriodicAdvertisingEnableComplete(const HciLeSetPeriodicAdvertising
 
     if (g_leExAdvCallback.callback.periodicAdvSetEnableResult) {
         g_leExAdvCallback.callback.periodicAdvSetEnableResult(param->status, g_leExAdvCallback.context);
+    }
+}
+
+int GapLeCteAntennaIdsCheck(uint8_t lengthOfSwitchingPattern, const uint8_t *antennaIds)
+{
+    if (lengthOfSwitchingPattern > GAP_LE_SWITCHING_PATTERN_LENGTH_MAX) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    // Length 0x00 selects the controller's default switching pattern (no
+    // Antenna_IDs field); an explicit pattern must be 0x02-0x4B and non-NULL.
+    // Rules match HciLeSwitchingPatternCheck in the HCI layer.
+    if (lengthOfSwitchingPattern > 0 &&
+        (lengthOfSwitchingPattern < GAP_LE_SWITCHING_PATTERN_LENGTH_MIN || antennaIds == NULL)) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if (lengthOfSwitchingPattern == 0 && antennaIds != NULL) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    return GAP_SUCCESS;
+}
+
+static int GapLeSetConnectionlessCteTransmitParams(const GapLeSetConnectionlessCteTransmitParametersParam *param)
+{
+    HciLeSetConnectionlessCteTransmitParametersParam hciCmdParam = {
+        .advertisingHandle = param->advHandle,
+        .cteLength = param->cteLength,
+        .cteType = param->cteType,
+        .cteCount = param->cteCount,
+        .lengthOfSwitchingPattern = param->lengthOfSwitchingPattern,
+        .antennaIds = param->antennaIds,
+    };
+
+    return HCI_LeSetConnectionlessCteTransmitParameters(&hciCmdParam);
+}
+
+int GAP_LeSetConnectionlessCteTransmitParameters(
+    const GapLeSetConnectionlessCteTransmitParametersParam *param)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    int ret = GAP_SUCCESS;
+
+    if (param == NULL) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    if (param->advHandle > GAP_PERIODIC_ADV_HANDLE_MAX ||
+        param->cteLength < GAP_LE_CTE_LENGTH_MIN || param->cteLength > GAP_LE_CTE_LENGTH_MAX ||
+        (param->cteType != GAP_LE_CTE_TYPE_AOA && param->cteType != GAP_LE_CTE_TYPE_AOD_1US &&
+         param->cteType != GAP_LE_CTE_TYPE_AOD_2US) ||
+        param->cteCount < GAP_LE_CTE_COUNT_MIN || param->cteCount > GAP_LE_CTE_COUNT_MAX) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    ret = GapLeCteAntennaIdsCheck(param->lengthOfSwitchingPattern, param->antennaIds);
+    if (ret != GAP_SUCCESS) {
+        return ret;
+    }
+
+    if (!BTM_IsControllerSupportConnectionlessCteTransmitter()) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+
+    if (GapLeRolesCheck(GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_PERIPHERAL) == false) {
+        ret = GAP_ERR_INVAL_STATE;
+    } else {
+        ret = GapLeSetConnectionlessCteTransmitParams(param);
+    }
+
+    return ret;
+}
+
+NO_SANITIZE("cfi")
+void GapLeSetConnectionlessCteTransmitParametersComplete(
+    const HciLeSetConnectionlessCteTransmitParametersReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    GapLeCteCallback callback;
+    void *context = NULL;
+    if (GapLeCteCallbackGet(&callback, &context)) {
+        if (callback.setConnectionlessCteTransmitParametersResult) {
+            callback.setConnectionlessCteTransmitParametersResult(param->status, context);
+        }
+        GapLeCteCallbackRelease();
+    }
+}
+
+static int GapLeSetConnectionlessCteTransmitEnableCmd(uint8_t advHandle, uint8_t cteEnable)
+{
+    HciLeSetConnectionlessCteTransmitEnableParam hciCmdParam = {
+        .advertisingHandle = advHandle,
+        .cteEnable = cteEnable,
+    };
+
+    return HCI_LeSetConnectionlessCteTransmitEnable(&hciCmdParam);
+}
+
+int GAP_LeSetConnectionlessCteTransmitEnable(uint8_t advHandle, uint8_t cteEnable)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    int ret = GAP_SUCCESS;
+
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    if (advHandle > GAP_PERIODIC_ADV_HANDLE_MAX || cteEnable > GAP_PERIODIC_ADV_ENABLE_TRUE) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if (!BTM_IsControllerSupportConnectionlessCteTransmitter()) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+
+    if (GapLeRolesCheck(GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_PERIPHERAL) == false) {
+        ret = GAP_ERR_INVAL_STATE;
+    } else {
+        ret = GapLeSetConnectionlessCteTransmitEnableCmd(advHandle, cteEnable);
+    }
+
+    return ret;
+}
+
+NO_SANITIZE("cfi")
+void GapLeSetConnectionlessCteTransmitEnableComplete(const HciLeSetConnectionlessCteTransmitEnableReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    GapLeCteCallback callback;
+    void *context = NULL;
+    if (GapLeCteCallbackGet(&callback, &context)) {
+        if (callback.setConnectionlessCteTransmitEnableResult) {
+            callback.setConnectionlessCteTransmitEnableResult(param->status, context);
+        }
+        GapLeCteCallbackRelease();
     }
 }

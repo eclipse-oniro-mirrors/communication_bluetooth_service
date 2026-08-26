@@ -54,11 +54,21 @@ static void HciEventOnLeReadBufferSizeComplete(const void *param, uint8_t length
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 6, Part B, 4.6.23
+// Caches LE Feature Bit 23 (Receiving Constant Tone Extensions). The LE
+// Periodic Advertising Report parser consults this to decide whether the
+// CTE_Type byte (added in 5.1, Vol 2, Part E, 7.7.65,15) is present on the
+// wire: controllers without Bit 23 never send it, and a length-based heuristic
+// would misparse 5.0 report payloads.
+static bool g_hciLeControllerSupportsCteType = false;
+
 static void HciEventOnLeReadLocalSupportedFeaturesComplete(const void *param, uint8_t length)
 {
     HciLeReadLocalSupportedFeaturesReturnParam returnParam = {0};
     (void)memcpy_s(
         &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    g_hciLeControllerSupportsCteType = HciSupportReceivingConstantToneExtensions(returnParam.leFeatures.raw);
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -66,6 +76,11 @@ static void HciEventOnLeReadLocalSupportedFeaturesComplete(const void *param, ui
         callbacks->leReadLocalSupportedFeaturesComplete(&returnParam);
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+bool HciLeControllerSupportsCteType(void)
+{
+    return g_hciLeControllerSupportsCteType;
 }
 
 static void HciEventOnLeSetRandomAddressComplete(const void *param, uint8_t length)
@@ -995,6 +1010,230 @@ static void HciEventOnLeSetPrivacyModeComplete(const void *param, uint8_t length
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+static void HciEventOnLeReceiverTestV3Complete(const void *param, uint8_t length)
+{
+    HciLeReceiverTestV3ReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReceiverTestV3Complete != NULL) {
+        callbacks->leReceiverTestV3Complete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeTransmitterTestV3Complete(const void *param, uint8_t length)
+{
+    HciLeTransmitterTestV3ReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leTransmitterTestV3Complete != NULL) {
+        callbacks->leTransmitterTestV3Complete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetConnectionlessCteTransmitParametersComplete(const void *param, uint8_t length)
+{
+    HciLeSetConnectionlessCteTransmitParametersReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetConnectionlessCteTransmitParametersComplete != NULL) {
+        callbacks->leSetConnectionlessCteTransmitParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetConnectionlessCteTransmitEnableComplete(const void *param, uint8_t length)
+{
+    HciLeSetConnectionlessCteTransmitEnableReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetConnectionlessCteTransmitEnableComplete != NULL) {
+        callbacks->leSetConnectionlessCteTransmitEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetConnectionlessIqSamplingEnableComplete(const void *param, uint8_t length)
+{
+    HciLeSetConnectionlessIqSamplingEnableReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetConnectionlessIqSamplingEnableComplete != NULL) {
+        callbacks->leSetConnectionlessIqSamplingEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetConnectionCteReceiveParametersComplete(const void *param, uint8_t length)
+{
+    HciLeSetConnectionCteReceiveParametersReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetConnectionCteReceiveParametersComplete != NULL) {
+        callbacks->leSetConnectionCteReceiveParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetConnectionCteTransmitParametersComplete(const void *param, uint8_t length)
+{
+    HciLeSetConnectionCteTransmitParametersReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetConnectionCteTransmitParametersComplete != NULL) {
+        callbacks->leSetConnectionCteTransmitParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeConnectionCteRequestEnableComplete(const void *param, uint8_t length)
+{
+    HciLeConnectionCteRequestEnableReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leConnectionCteRequestEnableComplete != NULL) {
+        callbacks->leConnectionCteRequestEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeConnectionCteResponseEnableComplete(const void *param, uint8_t length)
+{
+    HciLeConnectionCteResponseEnableReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leConnectionCteResponseEnableComplete != NULL) {
+        callbacks->leConnectionCteResponseEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeReadAntennaInformationComplete(const void *param, uint8_t length)
+{
+    HciLeReadAntennaInformationReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReadAntennaInformationComplete != NULL) {
+        callbacks->leReadAntennaInformationComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetPeriodicAdvertisingReceiveEnableComplete(const void *param, uint8_t length)
+{
+    HciLeSetPeriodicAdvertisingReceiveEnableReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicAdvertisingReceiveEnableComplete != NULL) {
+        callbacks->leSetPeriodicAdvertisingReceiveEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLePeriodicAdvertisingSyncTransferComplete(const void *param, uint8_t length)
+{
+    HciLePeriodicAdvertisingSyncTransferReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->lePeriodicAdvertisingSyncTransferComplete != NULL) {
+        callbacks->lePeriodicAdvertisingSyncTransferComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLePeriodicAdvertisingSetInfoTransferComplete(const void *param, uint8_t length)
+{
+    HciLePeriodicAdvertisingSetInfoTransferReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->lePeriodicAdvertisingSetInfoTransferComplete != NULL) {
+        callbacks->lePeriodicAdvertisingSetInfoTransferComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetPeriodicAdvertisingSyncTransferParametersComplete(const void *param, uint8_t length)
+{
+    HciLeSetPeriodicAdvertisingSyncTransferParametersReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicAdvertisingSyncTransferParametersComplete != NULL) {
+        callbacks->leSetPeriodicAdvertisingSyncTransferParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetDefaultPeriodicAdvertisingSyncTransferParametersComplete(const void *param, uint8_t length)
+{
+    HciLeSetDefaultPeriodicAdvertisingSyncTransferParametersReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetDefaultPeriodicAdvertisingSyncTransferParametersComplete != NULL) {
+        callbacks->leSetDefaultPeriodicAdvertisingSyncTransferParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeModifySleepClockAccuracyComplete(const void *param, uint8_t length)
+{
+    HciLeModifySleepClockAccuracyReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leModifySleepClockAccuracyComplete != NULL) {
+        callbacks->leModifySleepClockAccuracyComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciLeCmdCompleteFunc g_leControllerCommandCompleteMap[] = {
     NULL,                                                               // 0x0000
     HciEventOnLeSetEventMaskComplete,                                   // 0x0001
@@ -1075,9 +1314,29 @@ static HciLeCmdCompleteFunc g_leControllerCommandCompleteMap[] = {
     HciEventOnLeReadRFPathCompensationComplete,                         // 0x004C
     HciEventOnLeWriteRFPathCompensationComplete,                        // 0x004D
     HciEventOnLeSetPrivacyModeComplete,                                 // 0x004E
+    HciEventOnLeReceiverTestV3Complete,                                 // 0x004F
+    HciEventOnLeTransmitterTestV3Complete,                              // 0x0050
+    HciEventOnLeSetConnectionlessCteTransmitParametersComplete,         // 0x0051
+    HciEventOnLeSetConnectionlessCteTransmitEnableComplete,             // 0x0052
+    HciEventOnLeSetConnectionlessIqSamplingEnableComplete,              // 0x0053
+    HciEventOnLeSetConnectionCteReceiveParametersComplete,              // 0x0054
+    HciEventOnLeSetConnectionCteTransmitParametersComplete,             // 0x0055
+    HciEventOnLeConnectionCteRequestEnableComplete,                     // 0x0056
+    HciEventOnLeConnectionCteResponseEnableComplete,                    // 0x0057
+    HciEventOnLeReadAntennaInformationComplete,                         // 0x0058
+    HciEventOnLeSetPeriodicAdvertisingReceiveEnableComplete,            // 0x0059
+    HciEventOnLePeriodicAdvertisingSyncTransferComplete,                // 0x005A
+    HciEventOnLePeriodicAdvertisingSetInfoTransferComplete,             // 0x005B
+    HciEventOnLeSetPeriodicAdvertisingSyncTransferParametersComplete,   // 0x005C
+    HciEventOnLeSetDefaultPeriodicAdvertisingSyncTransferParametersComplete,  // 0x005D
+    NULL,                                                               // 0x005E
+    HciEventOnLeModifySleepClockAccuracyComplete,                       // 0x005F
 };
 
-#define LECONTROLLER_OCF_MAX 0x004E
+// 0x005E is 7.8.93 LE Generate DHKey [v2]: asynchronous command, completion is
+// reported by the LE Generate DHKey Complete event (Subevent 0x09, handled in
+// hci_evt_le.c) - no Command Complete is generated, consistent with v1 (0x0026).
+#define LECONTROLLER_OCF_MAX 0x005F
 
 void HciEventOnLeCommandComplete(uint16_t opCode, const void *param, uint8_t length)
 {

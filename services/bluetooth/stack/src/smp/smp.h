@@ -398,6 +398,35 @@ int SMP_DeriveBredrLinkKeyFromLeLtk(
 int SMP_DeriveLeLtkFromBredrLinkKey(
     const uint8_t *linkKey, uint16_t linkKeyLen, uint8_t *ltk, uint16_t ltkLen);
 
+/**
+ * @brief Generate the DHKey for the remote P-256 public key (LE Secure Connections).
+ *
+ * Wraps the LE Generate DHKey command. With @p keyType 0x00 the command behaves
+ * identically to v1 (7.8.22, random private key). With keyType 0x01
+ * (HCI_LE_DHKEY_KEY_TYPE_DEBUG) the controller uses the fixed debug private key
+ * (Bluetooth 5.1, Vol 3, Part H, 2.3.5.6.1) via LE Generate DHKey [v2] (7.8.93).
+ *
+ * Completion is reported asynchronously through the SMP pairing flow (LE
+ * Generate DHKey Complete event); this function only returns the send result.
+ *
+ * @param remoteP256PublicKey The peer's 64-byte P-256 public key (X || Y).
+ * @param keyType HCI_LE_DHKEY_KEY_TYPE_GENERATE (0x00) or HCI_LE_DHKEY_KEY_TYPE_DEBUG (0x01).
+ * @return Returns <b>BT_SUCCESS</b> if the command was sent; returns others if the operation fails.
+ */
+int SMP_GenerateDHKeyWithKeyType(const uint8_t *remoteP256PublicKey, uint8_t keyType);
+
+/**
+ * @brief Generate the DHKey for the remote P-256 public key with the default private key.
+ *
+ * Shorthand for SMP_GenerateDHKeyWithKeyType(remoteP256PublicKey, 0x00); under
+ * the GAP_LE_DEBUG_KEY build switch the debug private key (key type 0x01) is
+ * used instead, for interop/debug testing only.
+ *
+ * @param remoteP256PublicKey The peer's 64-byte P-256 public key (X || Y).
+ * @return Returns <b>BT_SUCCESS</b> if the command was sent; returns others if the operation fails.
+ */
+int SMP_GenerateDHKey(const uint8_t *remoteP256PublicKey);
+
 #ifdef __cplusplus
 }
 #endif

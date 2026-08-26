@@ -399,6 +399,15 @@ static void GapCallbackDerivedLinkKey(const BtAddr *addr, const SMP_PairResult *
         return;
     }
 
+    // Bluetooth 5.1 Erratum 10734 (Vol 6, Part B, 4.6.26): CTKD must not be
+    // performed when the controller does not validate remote public keys (LE
+    // feature bit 27) - an unvalidated peer key would otherwise propagate to
+    // the other transport.
+    if (!BTM_IsControllerSupportRemotePublicKeyValidation()) {
+        LOG_WARN("%{public}s: CTKD skipped, controller does not support remote public key validation", __FUNCTION__);
+        return;
+    }
+
     // In LE Secure Connections both sides derive the same LTK from the shared DHKey,
     // so peerLTK and localLTK are interchangeable. Prefer peer's copy when available
     // and fall back to the local copy; either source yields the identical BR/EDR link key.

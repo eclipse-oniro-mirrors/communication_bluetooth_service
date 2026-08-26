@@ -239,6 +239,12 @@ typedef struct {
     uint16_t syncHandle;
     int8_t txPower;
     int8_t rssi;
+    // BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+    // 7.7.65,15 LE Periodic Advertising Report Event: CTE_Type was added between
+    // RSSI and Data_Status in 5.1. Controllers without the Connectionless CTE
+    // Receiver feature (Bit 20) omit the field; HciEventOnLEPeriodicAdvertisingReportEvent
+    // fills HCI_LE_CTE_TYPE_NONE for them.
+    uint8_t cteType;
     uint8_t dataStatus;
     uint8_t dataLength;
     const uint8_t *data;
@@ -285,6 +291,86 @@ typedef struct {
     uint16_t connectionHandle;
     uint8_t ChannelSelectionAlgorithm;
 } HciLeChannelSelectionAlgorithmEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.7.65,21 LE Connectionless IQ Report Event
+#define HCI_LE_CONNECTIONLESS_IQ_REPORT_EVENT 0x15
+
+// Each I/Q sample is 1 I octet + 1 Q octet, so an IQ report carries
+// 2 * Sample_Count octets as interleaved (I, Q) pairs (I0, Q0, I1, Q1, ...).
+#define HCI_LE_IQ_SAMPLE_OCTETS 2
+
+// Fixed wire part: Sync_Handle(2) + Channel_Index(1) + RSSI(2) + RSSI_Antenna_ID(1) +
+// CTE_Type(1) + Slot_Durations(1) + Packet_Status(1) + paEventCounter(2) + Sample_Count(1) = 12 bytes.
+typedef struct HciLeConnectionlessIqReportEventParamTag {
+    uint16_t syncHandle;  // 0x0FFF = Receiver Test
+    uint8_t channelIndex;
+    int16_t rssi;  // -1270..+200, units of 0.1 dBm
+    uint8_t rssiAntennaId;
+    uint8_t cteType;
+    uint8_t slotDurations;
+    uint8_t packetStatus;  // 0x00 = CRC OK / 0x01 / 0x02 / 0xFF = insufficient resources
+    uint16_t paEventCounter;
+    uint8_t sampleCount;  // 0x00 (only when Packet_Status = 0xFF) or 0x09..0x52
+    // 2 * sampleCount entries as interleaved (I, Q) pairs (I0, Q0, I1, Q1, ...),
+    // 1 octet each per 7.7.65,21. Zero-copy into the event packet; valid only
+    // during the callback.
+    const int8_t *iqSamples;
+} HciLeConnectionlessIqReportEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.7.65,22 LE Connection IQ Report Event
+#define HCI_LE_CONNECTION_IQ_REPORT_EVENT 0x16
+
+// Fixed wire part: Connection_Handle(2) + RX_PHY(1) + Data_Channel_Index(1) + RSSI(2) +
+// RSSI_Antenna_ID(1) + CTE_Type(1) + Slot_Durations(1) + Packet_Status(1) +
+// connEventCounter(2) + Sample_Count(1) = 13 bytes.
+typedef struct HciLeConnectionIqReportEventParamTag {
+    uint16_t connectionHandle;
+    uint8_t rxPhy;  // 0x01 LE 1M / 0x02 LE 2M
+    uint8_t dataChannelIndex;  // 0x00-0x24
+    int16_t rssi;
+    uint8_t rssiAntennaId;
+    uint8_t cteType;
+    uint8_t slotDurations;
+    uint8_t packetStatus;
+    uint16_t connEventCounter;
+    uint8_t sampleCount;
+    // 2 * sampleCount entries as interleaved (I, Q) pairs (I0, Q0, I1, Q1, ...),
+    // 1 octet each per 7.7.65,22. Zero-copy into the event packet; valid only
+    // during the callback.
+    const int8_t *iqSamples;
+} HciLeConnectionIqReportEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.7.65,23 LE CTE Request Failed Event
+#define HCI_LE_CTE_REQUEST_FAILED_EVENT 0x17
+
+typedef struct {
+    uint8_t status;  // 0x00 = LL_CTE_RSP received without CTE; otherwise peer rejected
+    uint16_t connectionHandle;
+} HciLeCteRequestFailedEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.7.65,24 LE Periodic Advertising Sync Transfer Received Event
+#define HCI_LE_PERIODIC_ADVERTISING_SYNC_TRANSFER_RECEIVED_EVENT 0x18
+
+// Fixed wire part = 19 bytes: Status(1) + Connection_Handle(2) + Service_Data(2) +
+// Sync_Handle(2) + Advertising_SID(1) + Advertiser_Address_Type(1) +
+// Advertiser_Address(6) + Advertiser_PHY(1) + Periodic_Advertising_Interval(2) +
+// Advertiser_Clock_Accuracy(1).
+typedef struct HciLePeriodicAdvertisingSyncTransferReceivedEventParamTag {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint16_t serviceData;
+    uint16_t syncHandle;  // ignored when Status != 0
+    uint8_t advertisingSid;
+    uint8_t advertiserAddressType;
+    HciBdAddr advertiserAddress;
+    uint8_t advertiserPhy;  // 0x01 LE 1M / 0x02 LE 2M / 0x03 LE Coded
+    uint16_t periodicAdvertisingInterval;
+    uint8_t advertiserClockAccuracy;
+} HciLePeriodicAdvertisingSyncTransferReceivedEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.7.75 Authenticated Payload Timeout Expired Event

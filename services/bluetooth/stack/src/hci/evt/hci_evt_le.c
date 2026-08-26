@@ -35,6 +35,11 @@
 // A legacy LE Advertising Report data field may contain at most 31 octets.
 #define HCI_LE_ADV_REPORT_DATA_LEN_MAX 31
 
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E, 7.7.65.21/7.7.65.22
+// Per-sample I/Q magnitude, in dB, 1 byte each. Maximum Sample_Count is 0x52;
+// 0x00 occurs only when Packet_Status = 0xFF (insufficient resources).
+#define HCI_LE_IQ_SAMPLE_COUNT_MAX 0x52
+
 #define BYTE_BIT_WIDTH 8
 
 /* Event parameters (and any nested data pointer) point into the HCI packet buffer
@@ -418,6 +423,9 @@ static bool HciParseLeExtendedAdvertisingReport(
     report->secondaryPHY = param[*offset];
     *offset += sizeof(uint8_t);
 
+    // Bluetooth 5.1 semantic extension (7.7.65,13): for a scan response report,
+    // Advertising_SID carries the ADI of the original scannable advertisement;
+    // the controller resolves the value, the host just forwards it.
     report->advertisingSID = param[*offset];
     *offset += sizeof(uint8_t);
 
@@ -619,8 +627,11 @@ static void HciEventOnLEPeriodicAdvertisingReportEvent(const uint8_t *param, siz
 {
     // Core Spec 5.0: the fixed-size wire header is
     // Sync_Handle(2) + TX_Power(1) + RSSI(1) + Data_Status(1) + Data_Length(1),
-    // i.e. 6 bytes. The CTE_Type byte added in 5.1 must not be parsed here,
-    // otherwise dataStatus/dataLength/data shift by one byte on 5.0 controllers.
+    // i.e. 6 bytes. 5.1 inserts CTE_Type between RSSI and Data_Status (7.7.65,15).
+    // Whether the field is present is decided by the cached controller capability
+    // Bit 23 (Receiving Constant Tone Extensions) via HciLeControllerSupportsCteType(),
+    // never by a length heuristic: a 5.0 report's Data_Length can be large enough
+    // to be misread as an extra header byte.
     // Only the fixed-size header is parsed byte-by-byte from the HCI event; the
     // trailing data payload is referenced through the separate |data| pointer
     // and is valid only for the duration of this callback.
@@ -640,6 +651,15 @@ static void HciEventOnLEPeriodicAdvertisingReportEvent(const uint8_t *param, siz
     }
     if (HciEvtLeReadUint8(param, length, &offset, (uint8_t *)&eventParam.rssi) != 0) {
         return;
+    }
+    if (HciLeControllerSupportsCteType()) {
+        if (HciEvtLeReadUint8(param, length, &offset, &eventParam.cteType) != 0) {
+            return;
+        }
+    } else {
+        // 5.0 controllers never send the byte; expose 0xFF ("no CTE") exactly as
+        // a 5.1 controller would when there is no CTE to report.
+        eventParam.cteType = HCI_LE_CTE_TYPE_NONE;
     }
     if (HciEvtLeReadUint8(param, length, &offset, &eventParam.dataStatus) != 0) {
         return;
@@ -681,6 +701,141 @@ static void HciEventOnLEPeriodicAdvertisingSyncLostEvent(const uint8_t *param, s
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.7.65,21 LE Connectionless IQ Report Event
+static void HciEventOnLeConnectionlessIqReportEvent(const uint8_t *param, size_t length)
+{
+    // Fixed wire part is 12 bytes: Sync_Handle(2) + Channel_Index(1) + RSSI(2, 0.1 dBm) +
+    // RSSI_Antenna_ID(1) + CTE_Type(1) + Slot_Durations(1) + Packet_Status(1) +
+    // paEventCounter(2) + Sample_Count(1), then 2 * Sample_Count octets of interleaved
+    // (I, Q) sample pairs (I0, Q0, I1, Q1, ...), 1 octet each. The iqSamples pointer is
+    // a zero-copy view into the event packet; valid only during this callback.
+    const size_t fixedLength =
+        sizeof(uint16_t) + sizeof(int16_t) + (sizeof(uint8_t) * 5) + sizeof(uint16_t) + sizeof(uint8_t);
+    if (param == NULL || length < fixedLength) {
+        return;
+    }
+
+    HciLeConnectionlessIqReportEventParam eventParam = {0};
+    size_t offset = 0;
+
+    if (HciEvtLeReadUint16Le(param, length, &offset, &eventParam.syncHandle) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.channelIndex) != 0 ||
+        HciEvtLeReadUint16Le(param, length, &offset, (uint16_t *)&eventParam.rssi) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.rssiAntennaId) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.cteType) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.slotDurations) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.packetStatus) != 0 ||
+        HciEvtLeReadUint16Le(param, length, &offset, &eventParam.paEventCounter) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.sampleCount) != 0) {
+        return;
+    }
+
+    if (eventParam.sampleCount > HCI_LE_IQ_SAMPLE_COUNT_MAX ||
+        offset + (size_t)eventParam.sampleCount * HCI_LE_IQ_SAMPLE_OCTETS > length) {
+        LOG_ERROR("%{public}s: invalid sample count(%{public}u), length(%{public}zu)",
+            __FUNCTION__, eventParam.sampleCount, length);
+        return;
+    }
+    if (eventParam.sampleCount > 0) {
+        eventParam.iqSamples = (const int8_t *)(param + offset);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leConnectionlessIqReport != NULL) {
+        callbacks->leConnectionlessIqReport(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.7.65,22 LE Connection IQ Report Event
+static void HciEventOnLeConnectionIqReportEvent(const uint8_t *param, size_t length)
+{
+    // Fixed wire part is 13 bytes: Connection_Handle(2) + RX_PHY(1) +
+    // Data_Channel_Index(1) + RSSI(2, 0.1 dBm) + RSSI_Antenna_ID(1) + CTE_Type(1) +
+    // Slot_Durations(1) + Packet_Status(1) + connEventCounter(2) + Sample_Count(1),
+    // then 2 * Sample_Count octets of interleaved (I, Q) sample pairs
+    // (I0, Q0, I1, Q1, ...), 1 octet each. The iqSamples pointer is a zero-copy
+    // view into the event packet; valid only during this callback.
+    const size_t fixedLength =
+        sizeof(uint16_t) + sizeof(int16_t) + (sizeof(uint8_t) * 6) + sizeof(uint16_t) + sizeof(uint8_t);
+    if (param == NULL || length < fixedLength) {
+        return;
+    }
+
+    HciLeConnectionIqReportEventParam eventParam = {0};
+    size_t offset = 0;
+
+    if (HciEvtLeReadUint16Le(param, length, &offset, &eventParam.connectionHandle) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.rxPhy) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.dataChannelIndex) != 0 ||
+        HciEvtLeReadUint16Le(param, length, &offset, (uint16_t *)&eventParam.rssi) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.rssiAntennaId) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.cteType) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.slotDurations) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.packetStatus) != 0 ||
+        HciEvtLeReadUint16Le(param, length, &offset, &eventParam.connEventCounter) != 0 ||
+        HciEvtLeReadUint8(param, length, &offset, &eventParam.sampleCount) != 0) {
+        return;
+    }
+
+    if (eventParam.sampleCount > HCI_LE_IQ_SAMPLE_COUNT_MAX ||
+        offset + (size_t)eventParam.sampleCount * HCI_LE_IQ_SAMPLE_OCTETS > length) {
+        LOG_ERROR("%{public}s: invalid sample count(%{public}u), length(%{public}zu)",
+            __FUNCTION__, eventParam.sampleCount, length);
+        return;
+    }
+    if (eventParam.sampleCount > 0) {
+        eventParam.iqSamples = (const int8_t *)(param + offset);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leConnectionIqReport != NULL) {
+        callbacks->leConnectionIqReport(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.7.65,23 LE CTE Request Failed Event
+static void HciEventOnLeCteRequestFailedEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLeCteRequestFailedEventParam))) {
+        return;
+    }
+
+    HciLeCteRequestFailedEventParam *eventParam = (HciLeCteRequestFailedEventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCteRequestFailed != NULL) {
+        callbacks->leCteRequestFailed(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.7.65,24 LE Periodic Advertising Sync Transfer Received Event
+static void HciEventOnLePeriodicAdvertisingSyncTransferReceivedEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLePeriodicAdvertisingSyncTransferReceivedEventParam))) {
+        return;
+    }
+
+    HciLePeriodicAdvertisingSyncTransferReceivedEventParam *eventParam =
+        (HciLePeriodicAdvertisingSyncTransferReceivedEventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->lePeriodicAdvertisingSyncTransferReceived != NULL) {
+        callbacks->lePeriodicAdvertisingSyncTransferReceived(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciLeEventFunc g_leEventMap[] = {
     NULL,                                                 // 0x00
     HciEventOnLeConnectionCompleteEvent,                  // 0x01
@@ -703,9 +858,17 @@ static HciLeEventFunc g_leEventMap[] = {
     HciEventOnLeAdvertisingSetTerminatedEvent,            // 0x12
     HciEventOnLeScanRequestReceivedEvent,                 // 0x13
     HciEventOnLeChannelSelectionAlgorithmEvent,           // 0x14
+    HciEventOnLeConnectionlessIqReportEvent,              // 0x15
+    HciEventOnLeConnectionIqReportEvent,                  // 0x16
+    HciEventOnLeCteRequestFailedEvent,                    // 0x17
+    HciEventOnLePeriodicAdvertisingSyncTransferReceivedEvent,  // 0x18
 };
 
-#define LESUBEVENTCODE_MAX 0x14
+// 0x19 LE Periodic Advertising Set Info Transfer Received Event and 0x1A LE
+// Periodic Advertising Sync Established (v2) Event (7.7.65,25/7.7.65,26) are
+// added in 5.2, followed by the 5.2 BIG events (0x1B+). They are out of scope
+// of this 5.1 upgrade.
+#define LESUBEVENTCODE_MAX 0x18
 
 void HciEventOnLeMetaEvent(Packet *packet)
 {

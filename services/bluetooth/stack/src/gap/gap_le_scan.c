@@ -1336,9 +1336,12 @@ void GapOnLePeriodicAdvertisingReportEvent(const HciLePeriodicAdvertisingReportE
 
     // dataBuf is borrowed by the callback and remains valid only until
     // cb.syncReport returns. The callback must not take ownership of it.
+    // cteType carries the CTE_Type byte added in Bluetooth 5.1 (7.7.65,15);
+    // it is HCI_LE_CTE_TYPE_NONE when the controller does not support CTE.
     cb.syncReport(eventParam->syncHandle,
         (int8_t)eventParam->txPower,
         (int8_t)eventParam->rssi,
+        eventParam->cteType,
         eventParam->dataStatus,
         eventParam->dataLength,
         dataBuf,
@@ -1544,5 +1547,170 @@ void GapLeReadPeriodicAdvertiserListSizeComplete(const HciLeReadPeriodicAdvertis
             cb.readPeriodicAdvertiserListSizeResult(param->status, param->periodicAdvertiserListSize, ctx);
         }
         GapLePeriodicAdvSyncCallbackRelease();
+    }
+}
+
+static int GapLeSetConnectionlessIqSamplingEnableCmd(const GapLeSetConnectionlessIqSamplingEnableParam *param)
+{
+    HciLeSetConnectionlessIqSamplingEnableParam hciCmdParam = {
+        .syncHandle = param->syncHandle,
+        .samplingEnable = param->samplingEnable,
+        .slotDurations = param->slotDurations,
+        .maxSampledCtes = param->maxSampledCtes,
+        .lengthOfSwitchingPattern = param->lengthOfSwitchingPattern,
+        .antennaIds = param->antennaIds,
+    };
+
+    return HCI_LeSetConnectionlessIqSamplingEnable(&hciCmdParam);
+}
+
+int GAP_LeSetConnectionlessIqSamplingEnable(const GapLeSetConnectionlessIqSamplingEnableParam *param)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    int ret = GAP_SUCCESS;
+
+    if (param == NULL) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    // Sync_Handle 0x0FFF is reserved for the receiver test (7.8.82).
+    // Max_Sampled_CTEs is 0x00 (sample all CTEs) or 0x01-0x10 (7.8.82).
+    if ((param->syncHandle > GAP_PERIODIC_ADV_SYNC_HANDLE_MAX && param->syncHandle != GAP_LE_RX_TEST_SYNC_HANDLE) ||
+        param->samplingEnable > GAP_PERIODIC_ADV_ENABLE_TRUE ||
+        (param->slotDurations != GAP_LE_CTE_SLOT_DURATIONS_1US &&
+         param->slotDurations != GAP_LE_CTE_SLOT_DURATIONS_2US) ||
+        param->maxSampledCtes > GAP_LE_CTE_COUNT_MAX) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    ret = GapLeCteAntennaIdsCheck(param->lengthOfSwitchingPattern, param->antennaIds);
+    if (ret != GAP_SUCCESS) {
+        return ret;
+    }
+
+    if (!BTM_IsControllerSupportConnectionlessCteReceiver()) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+
+    if (GapLeRolesCheck(GAP_LE_ROLE_OBSERVER | GAP_LE_ROLE_CENTRAL) == false) {
+        ret = GAP_ERR_INVAL_STATE;
+    } else {
+        ret = GapLeSetConnectionlessIqSamplingEnableCmd(param);
+    }
+
+    return ret;
+}
+
+NO_SANITIZE("cfi")
+void GapLeSetConnectionlessIqSamplingEnableComplete(const HciLeSetConnectionlessIqSamplingEnableReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    GapLeCteCallback callback;
+    void *context = NULL;
+    if (GapLeCteCallbackGet(&callback, &context)) {
+        if (callback.setConnectionlessIqSamplingEnableResult) {
+            callback.setConnectionlessIqSamplingEnableResult(param->status, context);
+        }
+        GapLeCteCallbackRelease();
+    }
+}
+
+static int GapLeSetPeriodicAdvertisingReceiveEnableCmd(uint16_t syncHandle, uint8_t enable)
+{
+    HciLeSetPeriodicAdvertisingReceiveEnableParam hciCmdParam = {
+        .syncHandle = syncHandle,
+        .enable = enable,
+    };
+
+    return HCI_LeSetPeriodicAdvertisingReceiveEnable(&hciCmdParam);
+}
+
+int GAP_LeSetPeriodicAdvertisingReceiveEnable(uint16_t syncHandle, uint8_t enable)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    int ret = GAP_SUCCESS;
+
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    if (syncHandle > GAP_PERIODIC_ADV_SYNC_HANDLE_MAX || enable > GAP_PERIODIC_ADV_ENABLE_TRUE) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if (!BTM_IsControllerSupportPeriodicAdvertisingSyncTransferRecipient()) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+
+    if (GapLeRolesCheck(GAP_LE_ROLE_OBSERVER | GAP_LE_ROLE_CENTRAL) == false) {
+        ret = GAP_ERR_INVAL_STATE;
+    } else {
+        ret = GapLeSetPeriodicAdvertisingReceiveEnableCmd(syncHandle, enable);
+    }
+
+    return ret;
+}
+
+NO_SANITIZE("cfi")
+void GapLeSetPeriodicAdvertisingReceiveEnableComplete(const HciLeSetPeriodicAdvertisingReceiveEnableReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    GapLeCteCallback callback;
+    void *context = NULL;
+    if (GapLeCteCallbackGet(&callback, &context)) {
+        if (callback.setPeriodicAdvertisingReceiveEnableResult) {
+            callback.setPeriodicAdvertisingReceiveEnableResult(param->status, context);
+        }
+        GapLeCteCallbackRelease();
+    }
+}
+
+void GapOnLeConnectionlessIqReportEvent(const HciLeConnectionlessIqReportEventParam *eventParam)
+{
+    if (eventParam == NULL) {
+        return;
+    }
+
+    LOG_INFO("%{public}s:syncHandle:0x%04x, sampleCount:%hhu", __FUNCTION__, eventParam->syncHandle,
+        eventParam->sampleCount);
+
+    GapLeCteCallback callback;
+    void *context = NULL;
+    if (GapLeCteCallbackGet(&callback, &context)) {
+        if (callback.connectionlessIqReport != NULL) {
+            // The I/Q samples (interleaved (I, Q) pairs in iqSamples) are only
+            // valid during the callback.
+            callback.connectionlessIqReport(eventParam, context);
+        }
+        GapLeCteCallbackRelease();
+    }
+}
+
+void GapOnLePeriodicAdvertisingSyncTransferReceivedEvent(
+    const HciLePeriodicAdvertisingSyncTransferReceivedEventParam *eventParam)
+{
+    if (eventParam == NULL) {
+        return;
+    }
+
+    LOG_INFO("%{public}s:syncHandle:0x%04x", __FUNCTION__, eventParam->syncHandle);
+
+    GapLeCteCallback callback;
+    void *context = NULL;
+    if (GapLeCteCallbackGet(&callback, &context)) {
+        if (callback.pastSyncTransferReceived != NULL) {
+            callback.pastSyncTransferReceived(eventParam, context);
+        }
+        GapLeCteCallbackRelease();
     }
 }

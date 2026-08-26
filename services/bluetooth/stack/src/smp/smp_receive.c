@@ -571,6 +571,18 @@ static void SMP_ReceivePairingPublicKey(uint16_t handle, const Buffer *buffer)
         LOG_ERROR("Connection Handle is error!");
         return;
     }
+
+    // Bluetooth 5.1, Vol 3, Part H, 2.3.5,6,1: the Host MUST validate the peer's
+    // P-256 public key before deriving keys, regardless of whether the controller
+    // supports Remote Public Key Validation (LE feature bit 27). An invalid point
+    // (off-curve / at infinity / out-of-range) terminates pairing with
+    // "Invalid Parameters"; no DHKey derivation is attempted.
+    if (BufferGetSize(buffer) < SMP_PUBLICKEY_LEN ||
+        SMP_ValidateP256PublicKey((const uint8_t *)BufferPtr(buffer)) != BT_SUCCESS) {
+        LOG_ERROR("%{public}s: invalid peer P-256 public key, abort pairing.", __FUNCTION__);
+        SMP_GeneratePairResult(handle, SMP_PAIR_STATUS_FAILED, SMP_PAIR_FAILED_INVALID_PARAM, NULL);
+        return;
+    }
     SMP_RecvPairPubKeyStepDistribution(SMP_GetPairMng()->step, &param);
 }
 

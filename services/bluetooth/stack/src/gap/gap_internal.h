@@ -46,6 +46,13 @@
 #define GAP_LE_RF_PATH_COMPENSATION_MAX (1280)
 #define GAP_LE_TEST_DATA_LENGTH_MAX 0xFF
 
+// Sync_Handle value reserved for the LE receiver test (Bluetooth 5.1, Vol 2,
+// Part E, 7.8.82 Set Connectionless IQ Sampling Enable).
+#define GAP_LE_RX_TEST_SYNC_HANDLE 0x0FFF
+// Connection handle is a 12-bit value (0x0000-0x0EFF); 0x0FFF is reserved
+// (Core Spec 5.1, Vol 2, Part E, 7.8.83-7.8.92).
+#define GAP_LE_CONNECTION_HANDLE_MAX 0x0EFF
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -262,6 +269,54 @@ void GapLeWriteSuggestedDefaultDataLengthComplete(const HciLeWriteSuggestedDefau
 void GapLeReadMaximumDataLengthComplete(const HciLeReadMaximumDataLengthReturnParam *param);
 void GapLeEnhancedReceiverTestComplete(const HciLeEnhancedReceiverTestReturnParam *param);
 void GapLeEnhancedTransmitterTestComplete(const HciLeEnhancedTransmitterTestReturnParam *param);
+
+// Bluetooth 5.1 (Vol 2, Part E, 7.8.78-7.8.92) command completion handlers.
+// GapLeReceiverTestV3Complete and GapLeTransmitterTestV3Complete live in gap_le_conn.c;
+// the connectionless CTE transmit handlers live in gap_le_adv.c; the IQ sampling and
+// PA receive enable handlers live in gap_le_scan.c; the rest live in gap_le_conn.c.
+void GapLeReceiverTestV3Complete(const HciLeReceiverTestV3ReturnParam *param);
+void GapLeTransmitterTestV3Complete(const HciLeTransmitterTestV3ReturnParam *param);
+void GapLeSetConnectionlessCteTransmitParametersComplete(
+    const HciLeSetConnectionlessCteTransmitParametersReturnParam *param);
+void GapLeSetConnectionlessCteTransmitEnableComplete(
+    const HciLeSetConnectionlessCteTransmitEnableReturnParam *param);
+void GapLeSetConnectionlessIqSamplingEnableComplete(
+    const HciLeSetConnectionlessIqSamplingEnableReturnParam *param);
+void GapLeSetConnectionCteReceiveParametersComplete(
+    const HciLeSetConnectionCteReceiveParametersReturnParam *param);
+void GapLeSetConnectionCteTransmitParametersComplete(
+    const HciLeSetConnectionCteTransmitParametersReturnParam *param);
+void GapLeConnectionCteRequestEnableComplete(const HciLeConnectionCteRequestEnableReturnParam *param);
+void GapLeConnectionCteResponseEnableComplete(const HciLeConnectionCteResponseEnableReturnParam *param);
+void GapLeReadAntennaInformationComplete(const HciLeReadAntennaInformationReturnParam *param);
+void GapLeSetPeriodicAdvertisingReceiveEnableComplete(
+    const HciLeSetPeriodicAdvertisingReceiveEnableReturnParam *param);
+void GapLePeriodicAdvertisingSyncTransferComplete(
+    const HciLePeriodicAdvertisingSyncTransferReturnParam *param);
+void GapLePeriodicAdvertisingSetInfoTransferComplete(
+    const HciLePeriodicAdvertisingSetInfoTransferReturnParam *param);
+void GapLeSetPeriodicAdvertisingSyncTransferParametersComplete(
+    const HciLeSetPeriodicAdvertisingSyncTransferParametersReturnParam *param);
+void GapLeSetDefaultPeriodicAdvertisingSyncTransferParametersComplete(
+    const HciLeSetDefaultPeriodicAdvertisingSyncTransferParametersReturnParam *param);
+
+// Bluetooth 5.1 (Vol 2, Part E, 7.7.65,21-7.7.65,24) event handlers.
+void GapOnLeConnectionlessIqReportEvent(const HciLeConnectionlessIqReportEventParam *eventParam);
+void GapOnLeConnectionIqReportEvent(const HciLeConnectionIqReportEventParam *eventParam);
+void GapOnLeCteRequestFailedEvent(const HciLeCteRequestFailedEventParam *eventParam);
+void GapOnLePeriodicAdvertisingSyncTransferReceivedEvent(
+    const HciLePeriodicAdvertisingSyncTransferReceivedEventParam *eventParam);
+
+// CTE callback group lifecycle, owned by gap_le_conn.c. Other gap_le_* files
+// fetch the registered callback through GapLeCteCallbackGet/Release.
+int GapLeCteCallbackInit(void);
+void GapLeCteCallbackDeinit(void);
+bool GapLeCteCallbackGet(GapLeCteCallback *callback, void **context);
+void GapLeCteCallbackRelease(void);
+
+// Validates a 5.1 antenna switching pattern: length 0 with NULL antennaIds, or
+// length 0x02-0x4B with a non-NULL antennaIds array. Defined in gap_le_adv.c.
+int GapLeCteAntennaIdsCheck(uint8_t lengthOfSwitchingPattern, const uint8_t *antennaIds);
 bool GapLeDeviceNeedBond(const LeDeviceInfo *deviceInfo);
 void GapLeConnectionComplete(
     uint8_t status, uint16_t connectionHandle, const BtAddr *addr, uint8_t role, void *context);
