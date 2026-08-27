@@ -132,6 +132,7 @@ private:
     int32_t SetConnectionPriorityInner(MessageParcel &data, MessageParcel &reply);
     int32_t VerifyMultiPermissionsInner(MessageParcel &data, MessageParcel &reply);
     int32_t SetBtChannelScanInner(MessageParcel &data, MessageParcel &reply);
+    int32_t GetBrAddressByBleAddressInner(MessageParcel &data, MessageParcel &reply);
 
 private:
     static const std::map<uint32_t, BluetoothHostStubFuncPerm> memberFuncMap_;

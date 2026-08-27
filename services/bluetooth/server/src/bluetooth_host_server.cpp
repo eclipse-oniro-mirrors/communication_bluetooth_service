@@ -1972,5 +1972,10 @@ int32_t BluetoothHostServer::SetBtChannelScan(bool isEnable, uint32_t interval)
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
+
+int32_t BluetoothHostServer::GetBrAddressByBleAddress(const std::string &bleAddr, std::string &brAddr)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS
