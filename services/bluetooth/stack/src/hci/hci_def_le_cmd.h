@@ -55,6 +55,13 @@ extern "C" {
 #define LE_EVENT_MASK_LE_SCAN_REQUEST_RECEIVED_EVENT 0x0000000000040000
 #define LE_EVENT_MASK_LE_CHANNEL_SELECTION_ALGORITHM_EVENT 0x0000000000080000
 
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.1 LE Set Event Mask Command (subevent code 0x15-0x18)
+#define LE_EVENT_MASK_LE_CONNECTIONLESS_IQ_REPORT_EVENT 0x0000000000100000
+#define LE_EVENT_MASK_LE_CONNECTION_IQ_REPORT_EVENT 0x0000000000200000
+#define LE_EVENT_MASK_LE_CTE_REQUEST_FAILED_EVENT 0x0000000000400000
+#define LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_TRANSFER_RECEIVED_EVENT 0x0000000000800000
+
 #define LE_EVENT_MASK_DEFAULT 0x000000000000001F
 
 #define LE_EVENT_MASK_CORE_4_0 LE_EVENT_MASK_DEFAULT
@@ -73,6 +80,13 @@ extern "C" {
         LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_REPORT_EVENT | LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_LOST_EVENT | \
         LE_EVENT_MASK_LE_EXTENDED_SCAN_TIMEOUT_EVENT | LE_EVENT_MASK_LE_EXTENDED_ADVERTISING_SET_TERMINATED_EVENT |  \
         LE_EVENT_MASK_LE_SCAN_REQUEST_RECEIVED_EVENT | LE_EVENT_MASK_LE_CHANNEL_SELECTION_ALGORITHM_EVENT)
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.1 LE Set Event Mask Command
+#define LE_EVENT_MASK_CORE_5_1                                                                                       \
+    (LE_EVENT_MASK_CORE_5_0 | LE_EVENT_MASK_LE_CONNECTIONLESS_IQ_REPORT_EVENT |                                      \
+        LE_EVENT_MASK_LE_CONNECTION_IQ_REPORT_EVENT | LE_EVENT_MASK_LE_CTE_REQUEST_FAILED_EVENT |                    \
+        LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_TRANSFER_RECEIVED_EVENT)
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.8.33 LE Set Data Length Command / 7.8.35 LE Write Suggested Default Data Length Command
@@ -690,8 +704,9 @@ typedef HciStatusParam HciLeSetAdvertisingSetRandomAddressReturnParam;
 }
 #endif
 
-// Included outside extern "C": the 5.0 definitions own their extern "C"
+// Included outside extern "C": the 5.0/5.1 definitions own their extern "C"
 // wrapper and must not be nested inside another one.
 #include "hci_def_le_cmd_5_0.h"
+#include "hci_def_le_cmd_5_1.h"
 
 #endif

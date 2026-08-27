@@ -1558,6 +1558,15 @@ int GAP_PairIsFromLocal(const BtAddr *addr, bool *isLocal)
 // CTKD is only allowed for link keys generated with Secure Connections (P-256).
 static void GapCallbackDerivedLeLtk(const BtAddr *addr, const uint8_t *linkKey, uint8_t keyType)
 {
+    // Bluetooth 5.1 Erratum 10734 (Vol 6, Part B, 4.6.26): CTKD must not be
+    // performed when the controller does not validate remote public keys (LE
+    // feature bit 27) - an unvalidated peer key would otherwise propagate to
+    // the other transport.
+    if (!BTM_IsControllerSupportRemotePublicKeyValidation()) {
+        LOG_WARN("%{public}s: CTKD skipped, controller does not support remote public key validation", __FUNCTION__);
+        return;
+    }
+
     if (g_authenticationCallback.callback.derivedLeLtk == NULL) {
         return;
     }

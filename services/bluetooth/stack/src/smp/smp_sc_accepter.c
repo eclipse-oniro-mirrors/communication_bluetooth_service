@@ -54,7 +54,6 @@ void SMP_ScPairJustworkOrNumericSlaveStep2(const SMP_StepParam *param)
     if (SMP_ParamIsNULL(param) != SMP_SUCCESS) {
         return;
     }
-    HciLeGenerateDHKeyParam DHKeyParam;
     const HciLeReadLocalP256PublicKeyCompleteEventParam *eventParam =
         (HciLeReadLocalP256PublicKeyCompleteEventParam *)param->data;
 
@@ -63,12 +62,10 @@ void SMP_ScPairJustworkOrNumericSlaveStep2(const SMP_StepParam *param)
         SMP_GetPairMng()->local.publicKey, SMP_PUBLICKEY_LEN, eventParam->localP256PublicKey, SMP_PUBLICKEY_LEN);
     LOG_DEBUG("SMP_SC_PAIR_JUSTWORKORNUMERIC_SLAVE_STEP_3 started.");
     SMP_GetPairMng()->step = SMP_SC_PAIR_JUSTWORKORNUMERIC_SLAVE_STEP_3;
-    (void)memcpy_s(
-        DHKeyParam.remoteP256PublicKey, SMP_PUBLICKEY_LEN, SMP_GetPairMng()->peer.publicKey, SMP_PUBLICKEY_LEN);
     AlarmSet(SMP_GetPairMng()->alarm, SMP_PAIR_WAIT_TIME, SMP_PairTimeout, NULL);
-    int ret = HCI_LeGenerateDHKey(&DHKeyParam);
+    int ret = SMP_GenerateDHKey(SMP_GetPairMng()->peer.publicKey);
     if (ret != SMP_SUCCESS) {
-        LOG_ERROR("HCI_LeGenerateDHKey failed.");
+        LOG_ERROR("SMP_GenerateDHKey failed.");
         SMP_GeneratePairResult(SMP_GetPairMng()->handle,
             SMP_PAIR_STATUS_FAILED,
             SMP_PAIR_FAILED_UNSPECIFIED_REASION,
@@ -385,7 +382,6 @@ void SMP_ScPairPasskeyEntrySlaveStep2(const SMP_StepParam *param)
     if (SMP_ParamIsNULL(param) != SMP_SUCCESS) {
         return;
     }
-    HciLeGenerateDHKeyParam DHKeyParam;
     const HciLeReadLocalP256PublicKeyCompleteEventParam *eventParam =
         (HciLeReadLocalP256PublicKeyCompleteEventParam *)param->data;
 
@@ -394,12 +390,10 @@ void SMP_ScPairPasskeyEntrySlaveStep2(const SMP_StepParam *param)
         SMP_GetPairMng()->local.publicKey, SMP_PUBLICKEY_LEN, eventParam->localP256PublicKey, SMP_PUBLICKEY_LEN);
     LOG_DEBUG("SMP_SC_PAIR_PASSKEYENTRY_SLAVE_STEP_3 started.");
     SMP_GetPairMng()->step = SMP_SC_PAIR_PASSKEYENTRY_SLAVE_STEP_3;
-    (void)memcpy_s(
-        DHKeyParam.remoteP256PublicKey, SMP_PUBLICKEY_LEN, SMP_GetPairMng()->peer.publicKey, SMP_PUBLICKEY_LEN);
     AlarmSet(SMP_GetPairMng()->alarm, SMP_PAIR_WAIT_TIME, SMP_PairTimeout, NULL);
-    int ret = HCI_LeGenerateDHKey(&DHKeyParam);
+    int ret = SMP_GenerateDHKey(SMP_GetPairMng()->peer.publicKey);
     if (ret != SMP_SUCCESS) {
-        LOG_ERROR("HCI_LeGenerateDHKey failed.");
+        LOG_ERROR("SMP_GenerateDHKey failed.");
         SMP_GeneratePairResult(SMP_GetPairMng()->handle,
             SMP_PAIR_STATUS_FAILED,
             SMP_PAIR_FAILED_UNSPECIFIED_REASION,
@@ -763,19 +757,15 @@ void SMP_ScPairOobSlaveStep8(const SMP_StepParam *param)
     if (SMP_ParamIsNULL(param) != SMP_SUCCESS) {
         return;
     }
-    HciLeGenerateDHKeyParam DHKeyParam;
-
     LOG_DEBUG("%{public}s", __FUNCTION__);
     AlarmCancel(SMP_GetPairMng()->alarm);
     (void)memcpy_s(SMP_GetPairMng()->peer.publicKey, SMP_PUBLICKEY_LEN, (uint8_t *)param->data, SMP_PUBLICKEY_LEN);
     SMP_GetPairMng()->step = SMP_SC_PAIR_OOB_SLAVE_STEP_9;
-    (void)memcpy_s(
-        DHKeyParam.remoteP256PublicKey, SMP_PUBLICKEY_LEN, SMP_GetPairMng()->peer.publicKey, SMP_PUBLICKEY_LEN);
     LOG_DEBUG("SMP_SC_PAIR_OOB_SLAVE_STEP_9 started");
     AlarmSet(SMP_GetPairMng()->alarm, SMP_PAIR_WAIT_TIME, SMP_PairTimeout, NULL);
-    int ret = HCI_LeGenerateDHKey(&DHKeyParam);
+    int ret = SMP_GenerateDHKey(SMP_GetPairMng()->peer.publicKey);
     if (ret != SMP_SUCCESS) {
-        LOG_ERROR("HCI_LeGenerateDHKey failed.");
+        LOG_ERROR("SMP_GenerateDHKey failed.");
         SMP_GeneratePairResult(SMP_GetPairMng()->handle,
             SMP_PAIR_STATUS_FAILED,
             SMP_PAIR_FAILED_UNSPECIFIED_REASION,

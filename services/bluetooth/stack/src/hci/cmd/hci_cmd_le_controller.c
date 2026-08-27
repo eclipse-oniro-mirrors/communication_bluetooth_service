@@ -15,6 +15,7 @@
 
 #include "hci/hci.h"
 #include "hci/hci_le_controller_5_0.h"
+#include "hci/hci_le_controller_5_1.h"
 
 #include <securec.h>
 
@@ -119,6 +120,20 @@
 // TxOctets excludes the MIC, but the Controller counts the MIC on the air.
 #define LE_DATA_LENGTH_TIME_PER_OCTET 8
 #define LE_DATA_LENGTH_TIME_OVERHEAD 112
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// Direction Finding / PAST command parameter limits (7.8.78-7.8.92).
+// Max single-value CTE_Type (AoA 0x00 / AoD 1us 0x01 / AoD 2us 0x02).
+#define LE_CTE_TYPE_MAX 0x02
+#define LE_CTE_SLOT_DURATIONS_MAX 0x02
+// 7.8.82 allows Sync_Handle 0x0FFF (Receiver Test) in addition to 0x0000-0x0EFF.
+#define LE_RX_TEST_SYNC_HANDLE 0x0FFF
+// 7.8.91/7.8.92 CTE_Type is a bit mask: bit0 no AoA, bit1 no AoD 1us,
+// bit2 no AoD 2us, bit4 no CTE.
+#define LE_PAST_CTE_TYPES_MASK                                                                                       \
+    (HCI_LE_PAST_CTE_TYPE_NO_AOA | HCI_LE_PAST_CTE_TYPE_NO_AOD_1US | HCI_LE_PAST_CTE_TYPE_NO_AOD_2US |                \
+        HCI_LE_PAST_CTE_TYPE_NO_CTE)
+#define LE_PAST_MODE_MAX 0x02
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.8.1 LE Set Event Mask Command
@@ -366,6 +381,8 @@ int HCI_LeConnectionUpdate(const HciLeConnectionUpdateParam *param)
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.8.19 LE Set Host Channel Classification Command
+// Bluetooth 5.1 semantic extension (Vol 2, Part E, 7.8.19): the classification
+// also applies to secondary advertising channels, command parameters unchanged.
 int HCI_LeSetHostChannelClassification(const HciLeSetHostChannelClassificationParam *param)
 {
     if (param == NULL) {
@@ -549,6 +566,47 @@ int HCI_LeGenerateDHKey(const HciLeGenerateDHKeyParam *param)
     }
 
     HciCmd *cmd = HciAllocCmd(HCI_LE_GENERATE_DHKEY, (void *)param, sizeof(HciLeGenerateDHKeyParam));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.93 LE Generate DHKey Command [v2]
+// Key_Type selects the private key used: 0x00 random (same as v1) or 0x01 the
+// debug private key. Both variants report completion via the LE Generate DHKey
+// Complete event (Subevent 0x09).
+int HCI_LeGenerateDhKeyV2(const HciLeGenerateDhKeyV2Param *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->keyType != HCI_LE_DHKEY_KEY_TYPE_GENERATE && param->keyType != HCI_LE_DHKEY_KEY_TYPE_DEBUG) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_GENERATE_DHKEY_V2, (void *)param, sizeof(HciLeGenerateDhKeyV2Param));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.94 LE Modify Sleep Clock Accuracy Command
+// Test-only command; completion is reported by Command Complete (Status only).
+int HCI_LeModifySleepClockAccuracy(const HciLeModifySleepClockAccuracyParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->action != HCI_LE_SLEEP_CLOCK_ACCURACY_MORE &&
+        param->action != HCI_LE_SLEEP_CLOCK_ACCURACY_LESS) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_MODIFY_SLEEP_CLOCK_ACCURACY, (void *)param, sizeof(*param));
     if (cmd == NULL) {
         return BT_NO_MEMORY;
     }
@@ -1528,6 +1586,484 @@ int HCI_LeWriteRfPathCompensation(const HciLeWriteRfPathCompensationParam *param
 
     HciCmd *cmd =
         HciAllocCmd(HCI_LE_WRITE_RF_PATH_COMPENSATION, (void *)param, sizeof(HciLeWriteRfPathCompensationParam));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// Shared validation for the six 5.1 commands that carry a variable-length
+// Antenna_IDs switching pattern (7.8.78/79/80/82/83/84). Length 0x00 selects
+// the controller's default switching pattern and carries no Antenna_IDs field,
+// so (0x00, NULL) is legal; 0x02-0x4B carries an explicit pattern, which
+// requires a non-NULL Antenna_IDs buffer. Passing a non-NULL buffer with
+// length 0 is caller error: the pattern would be silently ignored. Rules match
+// GapLeCteAntennaIdsCheck in the GAP layer.
+static int HciLeSwitchingPatternCheck(uint8_t lengthOfSwitchingPattern, const uint8_t *antennaIds)
+{
+    if (lengthOfSwitchingPattern != 0 &&
+        (lengthOfSwitchingPattern < HCI_LE_SWITCHING_PATTERN_LENGTH_MIN ||
+            lengthOfSwitchingPattern > HCI_LE_SWITCHING_PATTERN_LENGTH_MAX || antennaIds == NULL)) {
+        return BT_BAD_PARAM;
+    }
+    if (lengthOfSwitchingPattern == 0 && antennaIds != NULL) {
+        return BT_BAD_PARAM;
+    }
+    return BT_SUCCESS;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.78 LE Receiver Test Command [v3]
+int HCI_LeReceiverTestV3(const HciLeReceiverTestV3Param *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->rxChannel > LE_TEST_CHANNEL_MAX || param->phy < LE_TEST_PHY_MIN ||
+        param->phy > LE_TEST_RX_PHY_MAX || param->modulationIndex > LE_TEST_MODULATION_INDEX_MAX ||
+        // Expected_CTE_Length is 0x00 (no CTE expected) or 0x02-0x14.
+        (param->expectedCteLength != 0 &&
+            (param->expectedCteLength < HCI_LE_CTE_LENGTH_MIN || param->expectedCteLength > HCI_LE_CTE_LENGTH_MAX)) ||
+        param->expectedCteType > LE_CTE_TYPE_MAX || param->slotDurations < HCI_LE_CTE_SLOT_DURATIONS_1US ||
+        param->slotDurations > LE_CTE_SLOT_DURATIONS_MAX) {
+        return BT_BAD_PARAM;
+    }
+    if (HciLeSwitchingPatternCheck(param->lengthOfSwitchingPattern, param->antennaIds) != BT_SUCCESS) {
+        return BT_BAD_PARAM;
+    }
+
+    const size_t length =
+        sizeof(uint8_t) * 7 + param->lengthOfSwitchingPattern;
+    uint8_t *buf = MEM_MALLOC.alloc(length);
+    if (buf == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    size_t index = 0;
+    buf[index] = param->rxChannel;
+    index += sizeof(uint8_t);
+    buf[index] = param->phy;
+    index += sizeof(uint8_t);
+    buf[index] = param->modulationIndex;
+    index += sizeof(uint8_t);
+    buf[index] = param->expectedCteLength;
+    index += sizeof(uint8_t);
+    buf[index] = param->expectedCteType;
+    index += sizeof(uint8_t);
+    buf[index] = param->slotDurations;
+    index += sizeof(uint8_t);
+    buf[index] = param->lengthOfSwitchingPattern;
+    index += sizeof(uint8_t);
+    if (param->lengthOfSwitchingPattern > 0) {
+        (void)memcpy_s(buf + index, length - index, param->antennaIds, param->lengthOfSwitchingPattern);
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_RECEIVER_TEST_V3, (void *)buf, length);
+    if (cmd == NULL) {
+        MEM_MALLOC.free(buf);
+        return BT_NO_MEMORY;
+    }
+    int result = HciSendCmd(cmd);
+    MEM_MALLOC.free(buf);
+    return result;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.79 LE Transmitter Test Command [v3]
+int HCI_LeTransmitterTestV3(const HciLeTransmitterTestV3Param *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->txChannel > LE_TEST_CHANNEL_MAX || param->lengthOfTestData > LE_TEST_TX_DATA_LENGTH_MAX ||
+        param->packetPayload > LE_TEST_TX_PAYLOAD_MAX || param->phy < LE_TEST_PHY_MIN ||
+        param->phy > LE_TEST_PHY_MAX || param->cteLength > HCI_LE_CTE_LENGTH_MAX ||
+        param->cteType > LE_CTE_TYPE_MAX) {
+        return BT_BAD_PARAM;
+    }
+    if (HciLeSwitchingPatternCheck(param->lengthOfSwitchingPattern, param->antennaIds) != BT_SUCCESS) {
+        return BT_BAD_PARAM;
+    }
+
+    const size_t length =
+        sizeof(uint8_t) * 7 + param->lengthOfSwitchingPattern;
+    uint8_t *buf = MEM_MALLOC.alloc(length);
+    if (buf == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    size_t index = 0;
+    buf[index] = param->txChannel;
+    index += sizeof(uint8_t);
+    buf[index] = param->lengthOfTestData;
+    index += sizeof(uint8_t);
+    buf[index] = param->packetPayload;
+    index += sizeof(uint8_t);
+    buf[index] = param->phy;
+    index += sizeof(uint8_t);
+    buf[index] = param->cteLength;
+    index += sizeof(uint8_t);
+    buf[index] = param->cteType;
+    index += sizeof(uint8_t);
+    buf[index] = param->lengthOfSwitchingPattern;
+    index += sizeof(uint8_t);
+    if (param->lengthOfSwitchingPattern > 0) {
+        (void)memcpy_s(buf + index, length - index, param->antennaIds, param->lengthOfSwitchingPattern);
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_TRANSMITTER_TEST_V3, (void *)buf, length);
+    if (cmd == NULL) {
+        MEM_MALLOC.free(buf);
+        return BT_NO_MEMORY;
+    }
+    int result = HciSendCmd(cmd);
+    MEM_MALLOC.free(buf);
+    return result;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.80 LE Set Connectionless CTE Transmit Parameters Command
+int HCI_LeSetConnectionlessCteTransmitParameters(const HciLeSetConnectionlessCteTransmitParametersParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->advertisingHandle > PERIODIC_ADV_HANDLE_MAX || param->cteLength > HCI_LE_CTE_LENGTH_MAX ||
+        param->cteType > LE_CTE_TYPE_MAX || param->cteCount < HCI_LE_CTE_COUNT_MIN ||
+        param->cteCount > HCI_LE_CTE_COUNT_MAX) {
+        return BT_BAD_PARAM;
+    }
+    if (HciLeSwitchingPatternCheck(param->lengthOfSwitchingPattern, param->antennaIds) != BT_SUCCESS) {
+        return BT_BAD_PARAM;
+    }
+
+    const size_t length =
+        sizeof(uint8_t) * 5 + param->lengthOfSwitchingPattern;
+    uint8_t *buf = MEM_MALLOC.alloc(length);
+    if (buf == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    size_t index = 0;
+    buf[index] = param->advertisingHandle;
+    index += sizeof(uint8_t);
+    buf[index] = param->cteLength;
+    index += sizeof(uint8_t);
+    buf[index] = param->cteType;
+    index += sizeof(uint8_t);
+    buf[index] = param->cteCount;
+    index += sizeof(uint8_t);
+    buf[index] = param->lengthOfSwitchingPattern;
+    index += sizeof(uint8_t);
+    if (param->lengthOfSwitchingPattern > 0) {
+        (void)memcpy_s(buf + index, length - index, param->antennaIds, param->lengthOfSwitchingPattern);
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_SET_CONNECTIONLESS_CTE_TRANSMIT_PARAMETERS, (void *)buf, length);
+    if (cmd == NULL) {
+        MEM_MALLOC.free(buf);
+        return BT_NO_MEMORY;
+    }
+    int result = HciSendCmd(cmd);
+    MEM_MALLOC.free(buf);
+    return result;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.81 LE Set Connectionless CTE Transmit Enable Command
+int HCI_LeSetConnectionlessCteTransmitEnable(const HciLeSetConnectionlessCteTransmitEnableParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->advertisingHandle > PERIODIC_ADV_HANDLE_MAX || param->cteEnable > LE_ENABLE_MAX) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_SET_CONNECTIONLESS_CTE_TRANSMIT_ENABLE, (void *)param, sizeof(*param));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.82 LE Set Connectionless IQ Sampling Enable Command
+int HCI_LeSetConnectionlessIqSamplingEnable(const HciLeSetConnectionlessIqSamplingEnableParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    // Sync_Handle 0x0FFF (Receiver Test) is valid in addition to 0x0000-0x0EFF.
+    if ((param->syncHandle > PERIODIC_ADV_SYNC_HANDLE_MAX && param->syncHandle != LE_RX_TEST_SYNC_HANDLE) ||
+        param->samplingEnable > LE_ENABLE_MAX || param->slotDurations < HCI_LE_CTE_SLOT_DURATIONS_1US ||
+        param->slotDurations > LE_CTE_SLOT_DURATIONS_MAX || param->maxSampledCtes > HCI_LE_MAX_SAMPLED_CTES_MAX) {
+        return BT_BAD_PARAM;
+    }
+    if (HciLeSwitchingPatternCheck(param->lengthOfSwitchingPattern, param->antennaIds) != BT_SUCCESS) {
+        return BT_BAD_PARAM;
+    }
+
+    const size_t length = sizeof(uint16_t) + sizeof(uint8_t) * 4 + param->lengthOfSwitchingPattern;
+    uint8_t *buf = MEM_MALLOC.alloc(length);
+    if (buf == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    size_t index = 0;
+    buf[index] = (uint8_t)(param->syncHandle & 0x00FF);
+    buf[index + 1] = (uint8_t)((param->syncHandle >> BITS_IN_BYTE) & 0x00FF);
+    index += sizeof(uint16_t);
+    buf[index] = param->samplingEnable;
+    index += sizeof(uint8_t);
+    buf[index] = param->slotDurations;
+    index += sizeof(uint8_t);
+    buf[index] = param->maxSampledCtes;
+    index += sizeof(uint8_t);
+    buf[index] = param->lengthOfSwitchingPattern;
+    index += sizeof(uint8_t);
+    if (param->lengthOfSwitchingPattern > 0) {
+        (void)memcpy_s(buf + index, length - index, param->antennaIds, param->lengthOfSwitchingPattern);
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_SET_CONNECTIONLESS_IQ_SAMPLING_ENABLE, (void *)buf, length);
+    if (cmd == NULL) {
+        MEM_MALLOC.free(buf);
+        return BT_NO_MEMORY;
+    }
+    int result = HciSendCmd(cmd);
+    MEM_MALLOC.free(buf);
+    return result;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.83 LE Set Connection CTE Receive Parameters Command
+int HCI_LeSetConnectionCteReceiveParameters(const HciLeSetConnectionCteReceiveParametersParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->connectionHandle > LE_CONNECTION_HANDLE_MAX || param->samplingEnable > LE_ENABLE_MAX ||
+        param->slotDurations < HCI_LE_CTE_SLOT_DURATIONS_1US || param->slotDurations > LE_CTE_SLOT_DURATIONS_MAX) {
+        return BT_BAD_PARAM;
+    }
+    if (HciLeSwitchingPatternCheck(param->lengthOfSwitchingPattern, param->antennaIds) != BT_SUCCESS) {
+        return BT_BAD_PARAM;
+    }
+
+    const size_t length = sizeof(uint16_t) + sizeof(uint8_t) * 3 + param->lengthOfSwitchingPattern;
+    uint8_t *buf = MEM_MALLOC.alloc(length);
+    if (buf == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    size_t index = 0;
+    buf[index] = (uint8_t)(param->connectionHandle & 0x00FF);
+    buf[index + 1] = (uint8_t)((param->connectionHandle >> BITS_IN_BYTE) & 0x00FF);
+    index += sizeof(uint16_t);
+    buf[index] = param->samplingEnable;
+    index += sizeof(uint8_t);
+    buf[index] = param->slotDurations;
+    index += sizeof(uint8_t);
+    buf[index] = param->lengthOfSwitchingPattern;
+    index += sizeof(uint8_t);
+    if (param->lengthOfSwitchingPattern > 0) {
+        (void)memcpy_s(buf + index, length - index, param->antennaIds, param->lengthOfSwitchingPattern);
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_SET_CONNECTION_CTE_RECEIVE_PARAMETERS, (void *)buf, length);
+    if (cmd == NULL) {
+        MEM_MALLOC.free(buf);
+        return BT_NO_MEMORY;
+    }
+    int result = HciSendCmd(cmd);
+    MEM_MALLOC.free(buf);
+    return result;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.84 LE Set Connection CTE Transmit Parameters Command
+int HCI_LeSetConnectionCteTransmitParameters(const HciLeSetConnectionCteTransmitParametersParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->connectionHandle > LE_CONNECTION_HANDLE_MAX ||
+        (param->cteTypes & ~HCI_LE_CTE_TYPES_VALID_MASK) != 0) {
+        return BT_BAD_PARAM;
+    }
+    if (HciLeSwitchingPatternCheck(param->lengthOfSwitchingPattern, param->antennaIds) != BT_SUCCESS) {
+        return BT_BAD_PARAM;
+    }
+
+    const size_t length = sizeof(uint16_t) + sizeof(uint8_t) * 2 + param->lengthOfSwitchingPattern;
+    uint8_t *buf = MEM_MALLOC.alloc(length);
+    if (buf == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    size_t index = 0;
+    buf[index] = (uint8_t)(param->connectionHandle & 0x00FF);
+    buf[index + 1] = (uint8_t)((param->connectionHandle >> BITS_IN_BYTE) & 0x00FF);
+    index += sizeof(uint16_t);
+    buf[index] = param->cteTypes;
+    index += sizeof(uint8_t);
+    buf[index] = param->lengthOfSwitchingPattern;
+    index += sizeof(uint8_t);
+    if (param->lengthOfSwitchingPattern > 0) {
+        (void)memcpy_s(buf + index, length - index, param->antennaIds, param->lengthOfSwitchingPattern);
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_SET_CONNECTION_CTE_TRANSMIT_PARAMETERS, (void *)buf, length);
+    if (cmd == NULL) {
+        MEM_MALLOC.free(buf);
+        return BT_NO_MEMORY;
+    }
+    int result = HciSendCmd(cmd);
+    MEM_MALLOC.free(buf);
+    return result;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.85 LE Connection CTE Request Enable Command
+int HCI_LeConnectionCteRequestEnable(const HciLeConnectionCteRequestEnableParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->connectionHandle > LE_CONNECTION_HANDLE_MAX || param->enable > LE_ENABLE_MAX ||
+        param->requestedCteLength > HCI_LE_CTE_LENGTH_MAX || param->requestedCteType > LE_CTE_TYPE_MAX) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_CONNECTION_CTE_REQUEST_ENABLE, (void *)param, sizeof(*param));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.86 LE Connection CTE Response Enable Command
+int HCI_LeConnectionCteResponseEnable(const HciLeConnectionCteResponseEnableParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->connectionHandle > LE_CONNECTION_HANDLE_MAX || param->enable > LE_ENABLE_MAX) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_CONNECTION_CTE_RESPONSE_ENABLE, (void *)param, sizeof(*param));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.87 LE Read Antenna Information Command
+int HCI_LeReadAntennaInformation(void)
+{
+    HciCmd *cmd = HciAllocCmd(HCI_LE_READ_ANTENNA_INFORMATION, NULL, 0);
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.88 LE Set Periodic Advertising Receive Enable Command
+int HCI_LeSetPeriodicAdvertisingReceiveEnable(const HciLeSetPeriodicAdvertisingReceiveEnableParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->syncHandle > PERIODIC_ADV_SYNC_HANDLE_MAX || param->enable > LE_ENABLE_MAX) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_SET_PERIODIC_ADVERTISING_RECEIVE_ENABLE, (void *)param, sizeof(*param));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.89 LE Periodic Advertising Sync Transfer Command
+int HCI_LePeriodicAdvertisingSyncTransfer(const HciLePeriodicAdvertisingSyncTransferParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->connectionHandle > LE_CONNECTION_HANDLE_MAX || param->syncHandle > PERIODIC_ADV_SYNC_HANDLE_MAX) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_PERIODIC_ADVERTISING_SYNC_TRANSFER, (void *)param, sizeof(*param));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.90 LE Periodic Advertising Set Info Transfer Command
+int HCI_LePeriodicAdvertisingSetInfoTransfer(const HciLePeriodicAdvertisingSetInfoTransferParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->connectionHandle > LE_CONNECTION_HANDLE_MAX || param->advertisingHandle > PERIODIC_ADV_HANDLE_MAX) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_PERIODIC_ADVERTISING_SET_INFO_TRANSFER, (void *)param, sizeof(*param));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.91 LE Set Periodic Advertising Sync Transfer Parameters Command
+int HCI_LeSetPeriodicAdvertisingSyncTransferParameters(
+    const HciLeSetPeriodicAdvertisingSyncTransferParametersParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->connectionHandle > LE_CONNECTION_HANDLE_MAX || param->mode > LE_PAST_MODE_MAX ||
+        param->skip > PERIODIC_ADV_CREATE_SYNC_SKIP_MAX ||
+        param->syncTimeout < PERIODIC_ADV_CREATE_SYNC_TIMEOUT_MIN ||
+        param->syncTimeout > PERIODIC_ADV_CREATE_SYNC_TIMEOUT_MAX || (param->cteType & ~LE_PAST_CTE_TYPES_MASK) != 0) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_LE_SET_PERIODIC_ADVERTISING_SYNC_TRANSFER_PARAMETERS, (void *)param, sizeof(*param));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.92 LE Set Default Periodic Advertising Sync Transfer Parameters Command
+int HCI_LeSetDefaultPeriodicAdvertisingSyncTransferParameters(
+    const HciLeSetDefaultPeriodicAdvertisingSyncTransferParametersParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if (param->mode > LE_PAST_MODE_MAX || param->skip > PERIODIC_ADV_CREATE_SYNC_SKIP_MAX ||
+        param->syncTimeout < PERIODIC_ADV_CREATE_SYNC_TIMEOUT_MIN ||
+        param->syncTimeout > PERIODIC_ADV_CREATE_SYNC_TIMEOUT_MAX || (param->cteType & ~LE_PAST_CTE_TYPES_MASK) != 0) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd =
+        HciAllocCmd(HCI_LE_SET_DEFAULT_PERIODIC_ADVERTISING_SYNC_TRANSFER_PARAMETERS, (void *)param, sizeof(*param));
     if (cmd == NULL) {
         return BT_NO_MEMORY;
     }

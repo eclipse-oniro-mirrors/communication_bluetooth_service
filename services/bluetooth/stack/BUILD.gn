@@ -13,6 +13,7 @@
 
 import("//build/ohos.gni")
 import("//build/ohos_var.gni")
+import("//foundation/communication/bluetooth_service/bluetooth.gni")
 
 SUBSYSTEM_DIR = "//foundation/communication"
 PART_DIR = "$SUBSYSTEM_DIR/bluetooth_service/services/bluetooth"
@@ -93,6 +94,7 @@ StackGapSrc = [
   "src/gap/gap_le_adv.c",
   "src/gap/gap_le_scan.c",
   "src/gap/gap_le_conn.c",
+  "src/gap/gap_le_cte.c",
   "src/gap/gap_le_sec.c",
   "src/gap/gap_btm_receive.c",
   "src/gap/gap_hci_receive.c",
@@ -100,6 +102,7 @@ StackGapSrc = [
   "src/gap/gap_l2cap_receive.c",
   "src/gap/gap_le_if.c",
   "src/gap/gap_le_if_5_0.c",
+  "src/gap/gap_le_if_5_1.c",
   "src/gap/gap_sm_receive.c",
   "src/gap/gap_task_common.c",
 ]
@@ -209,11 +212,11 @@ config("btstack_config") {
   ]
 
   defines = [ "OPENSSL_SUPPRESS_DEPRECATED" ]
-  
+
   ldflags = []
   cflags_cc = []
-  
-  if (defined(enable_coverage) && enable_coverage) {
+
+  if (defined(bt_enable_coverage) && bt_enable_coverage) {
     cflags += [ "--coverage" ]
     ldflags += [ "--coverage" ]
     cflags_cc += [ "--coverage" ]

@@ -489,6 +489,120 @@ bool BTSTACK_API BTM_IsControllerSupportLeReadRfPathCompensation();
 bool BTSTACK_API BTM_IsControllerSupportLeWriteRfPathCompensation();
 
 /**
+ * @brief Determine whether the local controller supports Connection CTE Request (LE Feature Bit 17).
+ *
+ * Bluetooth 5.1, Vol 6, Part B, 4.6.16.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportConnectionCteRequest();
+
+/**
+ * @brief Determine whether the local controller supports Connection CTE Response (LE Feature Bit 18).
+ *
+ * Bluetooth 5.1, Vol 6, Part B, 4.6.17.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportConnectionCteResponse();
+
+/**
+ * @brief Determine whether the local controller supports Connectionless CTE Transmitter (LE Feature Bit 19).
+ *
+ * Bluetooth 5.1, Vol 6, Part B, 4.6.18.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportConnectionlessCteTransmitter();
+
+/**
+ * @brief Determine whether the local controller supports Connectionless CTE Receiver (LE Feature Bit 20).
+ *
+ * Bluetooth 5.1, Vol 6, Part B, 4.6.19.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportConnectionlessCteReceiver();
+
+/**
+ * @brief Determine whether the local controller supports Antenna Switching during CTE Transmission (AoD)
+ *        (LE Feature Bit 21).
+ *
+ * Bluetooth 5.1, Vol 6, Part B, 4.6.20.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportAntennaSwitchingDuringCteTransmissionAod();
+
+/**
+ * @brief Determine whether the local controller supports Antenna Switching during CTE Reception (AoA)
+ *        (LE Feature Bit 22).
+ *
+ * Bluetooth 5.1, Vol 6, Part B, 4.6.21.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportAntennaSwitchingDuringCteReceptionAoa();
+
+/**
+ * @brief Determine whether the local controller supports Receiving Constant Tone Extensions
+ *        (LE Feature Bit 23).
+ *
+ * Bluetooth 5.1, Vol 6, Part B, 4.6.22. Controllers without this feature omit the
+ * CTE_Type byte in LE Periodic Advertising Report events (Vol 2, Part E, 7.7.65.15).
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportReceivingConstantToneExtensions();
+
+/**
+ * @brief Determine whether the local controller supports Periodic Advertising Sync Transfer Sender
+ *        (LE Feature Bit 24).
+ *
+ * Bluetooth 5.1, Vol 6, Part B, 4.6.23.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportPeriodicAdvertisingSyncTransferSender();
+
+/**
+ * @brief Determine whether the local controller supports Periodic Advertising Sync Transfer Recipient
+ *        (LE Feature Bit 25).
+ *
+ * Bluetooth 5.1, Vol 6, Part B, 4.6.24.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportPeriodicAdvertisingSyncTransferRecipient();
+
+/**
+ * @brief Determine whether the local controller supports Sleep Clock Accuracy Updates (LE Feature Bit 26).
+ *
+ * Bluetooth 5.1, Vol 6, Part B, 4.6.25.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportSleepClockAccuracyUpdates();
+
+/**
+ * @brief Determine whether the local controller supports Remote Public Key Validation (LE Feature Bit 27).
+ *
+ * Bluetooth 5.1, Vol 6, Part B, 4.6.26. When set, the controller validates the
+ * remote P-256 public key and rejects invalid keys with error 0x12 and a DHKey
+ * of all 0xFF. When clear, cross-transport key derivation must not be performed
+ * (Erratum 10734). Note: the Host must validate the remote public key itself
+ * regardless of this bit (Vol 3, Part H, 2.3.5.6.1).
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportRemotePublicKeyValidation();
+
+/**
+ * @brief Get the cached LE Read Antenna Information result (7.8.87).
+ *
+ * The result is read during controller bring-up when the controller supports
+ * antenna switching (Bits 21/22) and cached here. All output parameters are
+ * optional and may be NULL to skip individual fields.
+ *
+ * @param supportedSwitchingSamplingRates Pointer to the cached Supported_Switching_Sampling_Rates.
+ * @param numberOfAntennae Pointer to the cached Number_Of_Antennae.
+ * @param maxLengthOfSwitchingPattern Pointer to the cached Max_Length_Of_Switching_Pattern.
+ * @param maxCteLength Pointer to the cached Max_CTE_Length (in 8 µs units).
+ * @return Returns <b>BT_SUCCESS</b> if the cached result is available; otherwise returns <b>BT_BAD_STATUS</b>.
+ */
+int BTSTACK_API BTM_GetLeAntennaInformation(uint8_t *supportedSwitchingSamplingRates, uint8_t *numberOfAntennae,
+    uint8_t *maxLengthOfSwitchingPattern, uint8_t *maxCteLength);
+
+/**
  * @brief Get the maximum data length supported by the local LE controller.
  *
  * If the controller does not support LE Data Packet Length Extension or the HCI

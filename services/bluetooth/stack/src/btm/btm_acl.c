@@ -486,7 +486,7 @@ NO_SANITIZE("cfi") static void BtmOnConnectionComplete(const HciConnectionComple
     MutexUnlock(g_aclCallbackListLock);
 }
 
-static void BtmOnConnectionrequest(const HciConnectionRequestEventParam *eventParam)
+static void BtmOnConnectionIndication(const HciConnectionIndicationEventParam *eventParam)
 {
     if (eventParam->linkType != HCI_LINK_TYPE_ACL) {
         return;
@@ -1794,7 +1794,7 @@ void BTM_IsRemoteDeviceSupportConnectionParametersRequest(const BtAddr *addr, BT
         if (connection->remoteFeatures.bredr.extendedFeatureStatus != REQUEST_NOT_COMPLETED) {
             callback_ = callback;
             isSupported =
-                HCI_SUPPORT_CONNECTION_PARAMETERS_REQUEST_PROCEDURE(connection->remoteFeatures.le.leFeatures.raw);
+                HciSupportConnectionParametersRequestProcedure(connection->remoteFeatures.le.leFeatures.raw);
         } else {
             BtmRemoteDeviceSupportRequest *request = MEM_MALLOC.alloc(sizeof(BtmRemoteDeviceSupportRequest));
             if (request != NULL) {
@@ -2122,7 +2122,7 @@ int BTM_ChangeConnectionPacketType(const BtAddr *addr, uint16_t packetType)
 
 static HciEventCallbacks g_hciEventCallbacks = {
     .connectionComplete = BtmOnConnectionComplete,
-    .connectionRequest = BtmOnConnectionrequest,
+    .connectionIndication = BtmOnConnectionIndication,
     .disconnectComplete = BtmOnDisconnectComplete,
     .encryptionChange = BtmOnEncryptionChange,
     .readRemoteSupportedFeaturesComplete = BtmOnReadRemoteSupportedFeaturesComplete,

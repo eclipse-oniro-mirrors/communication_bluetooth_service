@@ -955,7 +955,7 @@ static void BtmScoOnWriteVoiceSettingComplete(const HciWriteVoiceSettingParamRet
     MutexUnlock(g_scoCallbackListLock);
 }
 
-static void BtmScoOnConnectionRequest(const HciConnectionRequestEventParam *eventParam)
+static void BtmScoOnConnectionIndication(const HciConnectionIndicationEventParam *eventParam)
 {
     if (eventParam->linkType != HCI_LINK_TYPE_SCO && eventParam->linkType != HCI_LINK_TYPE_ESCO) {
         return;
@@ -1026,7 +1026,7 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .synchronousConnectionComplete = BtmScoOnSynchronousConnectionComplete,
     .synchronousConnectionChanged = BtmScoOnSynchronousConnectionChanged,
 
-    .connectionRequest = BtmScoOnConnectionRequest,
+    .connectionIndication = BtmScoOnConnectionIndication,
     .disconnectComplete = BtmScoOnDisconnectComplete,
 
     .writeVoiceSettingComplete = BtmScoOnWriteVoiceSettingComplete,

@@ -1234,6 +1234,291 @@ static void HciCmdOnLeSetPrivacyModeFailed(uint8_t status, const void *param)
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+static void HciCmdOnLeReceiverTestV3Failed(uint8_t status, const void *param)
+{
+    HciLeReceiverTestV3ReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReceiverTestV3Complete != NULL) {
+        callbacks->leReceiverTestV3Complete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeTransmitterTestV3Failed(uint8_t status, const void *param)
+{
+    HciLeTransmitterTestV3ReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leTransmitterTestV3Complete != NULL) {
+        callbacks->leTransmitterTestV3Complete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetConnectionlessCteTransmitParametersFailed(uint8_t status, const void *param)
+{
+    HciLeSetConnectionlessCteTransmitParametersReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetConnectionlessCteTransmitParametersComplete != NULL) {
+        callbacks->leSetConnectionlessCteTransmitParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetConnectionlessCteTransmitEnableFailed(uint8_t status, const void *param)
+{
+    HciLeSetConnectionlessCteTransmitEnableReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetConnectionlessCteTransmitEnableComplete != NULL) {
+        callbacks->leSetConnectionlessCteTransmitEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetConnectionlessIqSamplingEnableFailed(uint8_t status, const void *param)
+{
+    HciLeSetConnectionlessIqSamplingEnableReturnParam returnParam = {
+        .status = status,
+        .syncHandle = INVALID_CONNECTION_HANDLE,
+    };
+
+    if (param != NULL) {
+        returnParam.syncHandle = ((const HciLeSetConnectionlessIqSamplingEnableParam *)param)->syncHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetConnectionlessIqSamplingEnableComplete != NULL) {
+        callbacks->leSetConnectionlessIqSamplingEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetConnectionCteReceiveParametersFailed(uint8_t status, const void *param)
+{
+    HciLeSetConnectionCteReceiveParametersReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
+    };
+
+    if (param != NULL) {
+        returnParam.connectionHandle =
+            ((const HciLeSetConnectionCteReceiveParametersParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetConnectionCteReceiveParametersComplete != NULL) {
+        callbacks->leSetConnectionCteReceiveParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetConnectionCteTransmitParametersFailed(uint8_t status, const void *param)
+{
+    HciLeSetConnectionCteTransmitParametersReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
+    };
+
+    if (param != NULL) {
+        returnParam.connectionHandle =
+            ((const HciLeSetConnectionCteTransmitParametersParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetConnectionCteTransmitParametersComplete != NULL) {
+        callbacks->leSetConnectionCteTransmitParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeConnectionCteRequestEnableFailed(uint8_t status, const void *param)
+{
+    HciLeConnectionCteRequestEnableReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
+    };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((const HciLeConnectionCteRequestEnableParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leConnectionCteRequestEnableComplete != NULL) {
+        callbacks->leConnectionCteRequestEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeConnectionCteResponseEnableFailed(uint8_t status, const void *param)
+{
+    HciLeConnectionCteResponseEnableReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
+    };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((const HciLeConnectionCteResponseEnableParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leConnectionCteResponseEnableComplete != NULL) {
+        callbacks->leConnectionCteResponseEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeReadAntennaInformationFailed(uint8_t status, const void *param)
+{
+    HciLeReadAntennaInformationReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReadAntennaInformationComplete != NULL) {
+        callbacks->leReadAntennaInformationComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetPeriodicAdvertisingReceiveEnableFailed(uint8_t status, const void *param)
+{
+    HciLeSetPeriodicAdvertisingReceiveEnableReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicAdvertisingReceiveEnableComplete != NULL) {
+        callbacks->leSetPeriodicAdvertisingReceiveEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLePeriodicAdvertisingSyncTransferFailed(uint8_t status, const void *param)
+{
+    HciLePeriodicAdvertisingSyncTransferReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
+    };
+
+    if (param != NULL) {
+        returnParam.connectionHandle =
+            ((const HciLePeriodicAdvertisingSyncTransferParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->lePeriodicAdvertisingSyncTransferComplete != NULL) {
+        callbacks->lePeriodicAdvertisingSyncTransferComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLePeriodicAdvertisingSetInfoTransferFailed(uint8_t status, const void *param)
+{
+    HciLePeriodicAdvertisingSetInfoTransferReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
+    };
+
+    if (param != NULL) {
+        returnParam.connectionHandle =
+            ((const HciLePeriodicAdvertisingSetInfoTransferParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->lePeriodicAdvertisingSetInfoTransferComplete != NULL) {
+        callbacks->lePeriodicAdvertisingSetInfoTransferComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetPeriodicAdvertisingSyncTransferParametersFailed(uint8_t status, const void *param)
+{
+    HciLeSetPeriodicAdvertisingSyncTransferParametersReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
+    };
+
+    if (param != NULL) {
+        returnParam.connectionHandle =
+            ((const HciLeSetPeriodicAdvertisingSyncTransferParametersParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicAdvertisingSyncTransferParametersComplete != NULL) {
+        callbacks->leSetPeriodicAdvertisingSyncTransferParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetDefaultPeriodicAdvertisingSyncTransferParametersFailed(uint8_t status, const void *param)
+{
+    HciLeSetDefaultPeriodicAdvertisingSyncTransferParametersReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetDefaultPeriodicAdvertisingSyncTransferParametersComplete != NULL) {
+        callbacks->leSetDefaultPeriodicAdvertisingSyncTransferParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeModifySleepClockAccuracyFailed(uint8_t status, const void *param)
+{
+    HciLeModifySleepClockAccuracyReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leModifySleepClockAccuracyComplete != NULL) {
+        callbacks->leModifySleepClockAccuracyComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciCmdOnFailedFunc g_funcMap[] = {
     NULL,                                                           // 0x0000
     HciCmdOnLeSetEventMaskFailed,                                   // 0x0001
@@ -1314,9 +1599,28 @@ static HciCmdOnFailedFunc g_funcMap[] = {
     HciCmdOnLeReadRfPathCompensationFailed,                         // 0x004C
     HciCmdOnLeWriteRfPathCompensationParamFailed,                   // 0x004D
     HciCmdOnLeSetPrivacyModeFailed,                                 // 0x004E
+    HciCmdOnLeReceiverTestV3Failed,                                 // 0x004F
+    HciCmdOnLeTransmitterTestV3Failed,                              // 0x0050
+    HciCmdOnLeSetConnectionlessCteTransmitParametersFailed,         // 0x0051
+    HciCmdOnLeSetConnectionlessCteTransmitEnableFailed,             // 0x0052
+    HciCmdOnLeSetConnectionlessIqSamplingEnableFailed,              // 0x0053
+    HciCmdOnLeSetConnectionCteReceiveParametersFailed,              // 0x0054
+    HciCmdOnLeSetConnectionCteTransmitParametersFailed,             // 0x0055
+    HciCmdOnLeConnectionCteRequestEnableFailed,                     // 0x0056
+    HciCmdOnLeConnectionCteResponseEnableFailed,                    // 0x0057
+    HciCmdOnLeReadAntennaInformationFailed,                         // 0x0058
+    HciCmdOnLeSetPeriodicAdvertisingReceiveEnableFailed,            // 0x0059
+    HciCmdOnLePeriodicAdvertisingSyncTransferFailed,                // 0x005A
+    HciCmdOnLePeriodicAdvertisingSetInfoTransferFailed,             // 0x005B
+    HciCmdOnLeSetPeriodicAdvertisingSyncTransferParametersFailed,   // 0x005C
+    HciCmdOnLeSetDefaultPeriodicAdvertisingSyncTransferParametersFailed,  // 0x005D
+    HciCmdOnLeGenerateDhKeyFailed,                                  // 0x005E
+    HciCmdOnLeModifySleepClockAccuracyFailed,                       // 0x005F
 };
 
-#define LECONTROLLER_OCF_MAX 0x004E
+// 0x005E is 7.8.93 LE Generate DHKey [v2] (Key_Type variant): the failure path
+// dispatches the same leGenerateDHKeyComplete callback as v1 (0x0026).
+#define LECONTROLLER_OCF_MAX 0x005F
 
 void HciOnLeControllerCmdFailed(uint16_t opCode, uint8_t status, const void *param)
 {

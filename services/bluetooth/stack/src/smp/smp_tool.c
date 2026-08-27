@@ -18,6 +18,10 @@
 #include <string.h>
 
 #include "log.h"
+#include "openssl/bn.h"
+#include "openssl/ec.h"
+#include "openssl/err.h"
+#include "openssl/obj_mac.h"
 #include "platform/include/allocator.h"
 #include "smp.h"
 #include "smp_aes_encryption.h"
@@ -1226,4 +1230,69 @@ int SMP_CryptographicH7(
     }
 
     return SMP_CryptographicAesCmac(salt, w, CRYPT_H7_W_LEN, output);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 3, Part H
+// 2.3.5,6,1 Remote public key validation (LE Secure Connections)
+// Validate a 64-byte P-256 public key (X || Y, each 32 bytes, big-endian): both
+// coordinates must be in [0, p), the point must not be at infinity, and it must
+// lie on the curve. The Host MUST validate the peer's public key before deriving
+// keys, regardless of whether the controller supports Remote Public Key
+// Validation (LE feature bit 27, Vol 6, Part B, 4.6.26).
+int SMP_ValidateP256PublicKey(const uint8_t *publicKey)
+{
+    if (publicKey == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    int ret = BT_OPERATION_FAILED;
+    EC_GROUP *group = NULL;
+    EC_POINT *point = NULL;
+    BIGNUM *x = NULL;
+    BIGNUM *y = NULL;
+    BIGNUM *p = NULL;
+
+    do {
+        group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
+        if (group == NULL) {
+            LOG_ERROR("%{public}s: EC_GROUP_new_by_curve_name failed", __FUNCTION__);
+            break;
+        }
+
+        x = BN_bin2bn(publicKey, SMP_PUBLICKEY_X_LEN, NULL);
+        y = BN_bin2bn(publicKey + SMP_PUBLICKEY_X_LEN, SMP_PUBLICKEY_Y_LEN, NULL);
+        p = BN_new();
+        if (x == NULL || y == NULL || p == NULL) {
+            break;
+        }
+
+        // Coordinates must be fully reduced (X < p, Y < p). The curve check below
+        // cannot be trusted with out-of-range coordinates.
+        if (EC_GROUP_get_curve(group, p, NULL, NULL, NULL) != 1) {
+            break;
+        }
+        if (BN_cmp(x, p) >= 0 || BN_cmp(y, p) >= 0) {
+            break;
+        }
+
+        point = EC_POINT_new(group);
+        if (point == NULL || EC_POINT_set_affine_coordinates(group, point, x, y, NULL) != 1) {
+            break;
+        }
+
+        // Reject the point at infinity and any off-curve point.
+        if (EC_POINT_is_at_infinity(group, point) == 1 || EC_POINT_is_on_curve(group, point, NULL) != 1) {
+            break;
+        }
+
+        ret = BT_SUCCESS;
+    } while (false);
+
+    ERR_clear_error();
+    BN_free(x);
+    BN_free(y);
+    BN_free(p);
+    EC_POINT_free(point);
+    EC_GROUP_free(group);
+    return ret;
 }

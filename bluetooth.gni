@@ -29,4 +29,5 @@ declare_args() {
   bluetooth_service_hfp_hf_feature = false
   bluetooth_service_hid_host_feature = true
   bluetooth_service_pan_feature = false
+  bt_enable_coverage = false
 }

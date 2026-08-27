@@ -1237,17 +1237,14 @@ static int SMP_AuthReqReplyPasskeyEntrySlave()
 static int SMP_AuthReqReplyOobSlave()
 {
     int ret = SMP_SUCCESS;
-    HciLeGenerateDHKeyParam DHKeyParam;
 
     if (g_smpPairMng.slavePubKeyRecvFlag) {
         g_smpPairMng.step = SMP_SC_PAIR_OOB_SLAVE_STEP_9;
-        (void)memcpy_s(
-            DHKeyParam.remoteP256PublicKey, SMP_PUBLICKEY_LEN, g_smpPairMng.peer.publicKey, SMP_PUBLICKEY_LEN);
         LOG_DEBUG("SMP_SC_PAIR_OOB_SLAVE_STEP_9 started. ");
         AlarmSet(g_smpPairMng.alarm, SMP_PAIR_WAIT_TIME, SMP_PairTimeout, NULL);
-        ret = HCI_LeGenerateDHKey(&DHKeyParam);
+        ret = SMP_GenerateDHKey(g_smpPairMng.peer.publicKey);
         if (ret != SMP_SUCCESS) {
-            LOG_ERROR("HCI_LeGenerateDHKey failed. ");
+            LOG_ERROR("SMP_GenerateDHKey failed. ");
             SMP_GeneratePairResult(
                 g_smpPairMng.handle, SMP_PAIR_STATUS_FAILED, SMP_PAIR_FAILED_UNSPECIFIED_REASION, g_smpPairMng.alarm);
         }
@@ -1969,6 +1966,41 @@ int SMP_DeriveLeLtkFromBredrLinkKey(
 {
     return SMP_DeriveCrossTransportKey(
         linkKey, linkKeyLen, ltk, ltkLen, CRYPT_H6_KEYID_TMP2, CRYPT_H6_KEYID_BRLE);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
+// 7.8.93 LE Generate DHKey Command [v2] / 7.8.37 [v1]
+// Generate the DHKey for the remote P-256 public key. Key_Type 0x00 is
+// equivalent to v1 (random private key); Key_Type 0x01 selects the debug
+// private key (Vol 3, Part H, 2.3.5,6,1) and requires controller 5.1 support.
+// Completion is reported asynchronously via the LE Generate DHKey Complete
+// event (Subevent 0x09); only the send result is returned here.
+int SMP_GenerateDHKeyWithKeyType(const uint8_t *remoteP256PublicKey, uint8_t keyType)
+{
+    if (remoteP256PublicKey == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    if (keyType == HCI_LE_DHKEY_KEY_TYPE_DEBUG) {
+        HciLeGenerateDhKeyV2Param param = {.keyType = HCI_LE_DHKEY_KEY_TYPE_DEBUG};
+        (void)memcpy_s(param.remoteP256PublicKey, SMP_PUBLICKEY_LEN, remoteP256PublicKey, SMP_PUBLICKEY_LEN);
+        return HCI_LeGenerateDhKeyV2(&param);
+    }
+
+    HciLeGenerateDHKeyParam param;
+    (void)memcpy_s(param.remoteP256PublicKey, SMP_PUBLICKEY_LEN, remoteP256PublicKey, SMP_PUBLICKEY_LEN);
+    return HCI_LeGenerateDHKey(&param);
+}
+
+int SMP_GenerateDHKey(const uint8_t *remoteP256PublicKey)
+{
+#ifdef GAP_LE_DEBUG_KEY
+    // Debug key mode (test/debug only): use the controller's fixed debug private
+    // key via LE Generate DHKey [v2] Key_Type=0x01. Do not enable in production.
+    return SMP_GenerateDHKeyWithKeyType(remoteP256PublicKey, HCI_LE_DHKEY_KEY_TYPE_DEBUG);
+#else
+    return SMP_GenerateDHKeyWithKeyType(remoteP256PublicKey, HCI_LE_DHKEY_KEY_TYPE_GENERATE);
+#endif
 }
 
 static Module g_smp = {

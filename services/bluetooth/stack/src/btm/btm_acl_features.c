@@ -65,7 +65,7 @@ static void BtmOnLeRemoteFeatureComplete(const BtAddr *addr, const List *request
         switch (request->feature.leFreature) {
             case CONNECTION_PARAMETER_REQUEST:
                 if (request->callback != NULL) {
-                    request->callback(addr, HCI_SUPPORT_CONNECTION_PARAMETERS_REQUEST_PROCEDURE(leFeatures->raw));
+                    request->callback(addr, HciSupportConnectionParametersRequestProcedure(leFeatures->raw));
                 }
                 break;
             default:

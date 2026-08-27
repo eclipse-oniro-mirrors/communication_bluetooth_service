@@ -16,6 +16,8 @@
 #ifndef HCI_EVT_H
 #define HCI_EVT_H
 
+#include <stdbool.h>
+
 #include "packet.h"
 #include "platform/include/list.h"
 #include "platform/include/mutex.h"
@@ -45,6 +47,11 @@ void HciCloseEvent();
 
 List *HciGetEventCallbackList();
 Mutex *HciGetEventCallbackListLock();
+
+// True when the local controller reports LE Feature Bit 23 (Receiving Constant
+// Tone Extensions, 5.1), i.e. LE Periodic Advertising Report events carry the
+// CTE_Type byte added in 5.1 (Vol 2, Part E, 7.7.65,15).
+bool HciLeControllerSupportsCteType(void);
 
 #ifdef __cplusplus
 }

@@ -74,7 +74,7 @@ typedef struct {
     HciBdAddr bdAddr;
     uint8_t classOfDevice[3];
     uint8_t linkType;
-} HciConnectionRequestEventParam;
+} HciConnectionIndicationEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.7.5 Disconnection Complete Event

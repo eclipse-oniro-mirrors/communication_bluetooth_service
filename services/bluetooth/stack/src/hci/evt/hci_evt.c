@@ -198,25 +198,25 @@ static void HciEventOnConnectionCompleteEvent(Packet *packet)
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
-static void HciEventOnConnectionRequestEvent(Packet *packet)
+static void HciEventOnConnectionIndicationEvent(Packet *packet)
 {
     Buffer *payloadBuffer = PacketContinuousPayload(packet);
     if (payloadBuffer == NULL) {
         return;
     }
-    HciConnectionRequestEventParam *param = (HciConnectionRequestEventParam *)BufferPtr(payloadBuffer);
+    HciConnectionIndicationEventParam *param = (HciConnectionIndicationEventParam *)BufferPtr(payloadBuffer);
     if (param == NULL) {
         return;
     }
     size_t length = BufferGetSize(payloadBuffer);
-    if (length != sizeof(HciConnectionRequestEventParam)) {
+    if (length != sizeof(HciConnectionIndicationEventParam)) {
         return;
     }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
-    if (callbacks->connectionRequest != NULL) {
-        callbacks->connectionRequest(param);
+    if (callbacks->connectionIndication != NULL) {
+        callbacks->connectionIndication(param);
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
@@ -1900,7 +1900,7 @@ static HciEventFunc g_eventFuncMap[] = {
     HciEventOnInquiryCompleteEvent,                               // 0x01
     HciEventOnInquiryResultEvent,                                 // 0x02
     HciEventOnConnectionCompleteEvent,                            // 0x03
-    HciEventOnConnectionRequestEvent,                             // 0x04
+    HciEventOnConnectionIndicationEvent,                             // 0x04
     HciEventOnDisconnectCompeteEvent,                             // 0x05
     HciEventOnAuthencationCompleteEvent,                          // 0x06
     HciEventOnRemoteNameRequestCompleteEvent,                     // 0x07
