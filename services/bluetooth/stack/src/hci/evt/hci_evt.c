@@ -161,7 +161,12 @@ static void HciEventOnCommandStatusEvent(Packet *packet)
     }
 
     HciSetNumberOfHciCmd(param->numHciCommandPackets);
-    HciCmdOnCommandStatus(param->commandOpcode, param->status);
+    // false when the Status is the late answer of a timed-out command (or matches no pending
+    // command): it must not be dispatched, or it would complete a newer command with the same
+    // opcode - mirror of the Command_Complete interception
+    if (!HciCmdOnCommandStatus(param->commandOpcode, param->status)) {
+        return;
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);

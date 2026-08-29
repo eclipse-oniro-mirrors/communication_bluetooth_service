@@ -37,6 +37,7 @@ PlatformSrc = [
 StackAttSrc = [
   "src/att/att_common.c",
   "src/att/att_connect.c",
+  "src/att/att_eatt.c",
   "src/att/att_init.c",
   "src/att/att_receive.c",
   "src/att/att_send_request.c",
@@ -103,8 +104,25 @@ StackGapSrc = [
   "src/gap/gap_le_if.c",
   "src/gap/gap_le_if_5_0.c",
   "src/gap/gap_le_if_5_1.c",
+  "src/gap/gap_le_power.c",
   "src/gap/gap_sm_receive.c",
   "src/gap/gap_task_common.c",
+]
+
+StackIsoSrc = [
+  "src/iso/iso.c",
+  "src/iso/iso_big.c",
+  "src/iso/iso_cig.c",
+  "src/iso/iso_data_path.c",
+  "src/iso/iso_hci_receive.c",
+  "src/iso/iso_if.c",
+  "src/iso/iso_task_common.c",
+  # iso_iso_test.c implements the production ISO test-mode APIs (ISOIF_LeIsoTransmitTest /
+  # ISOIF_LeIsoReceiveTest / ISOIF_LeIsoReadTestCounters / ISOIF_LeIsoTestEnd and their HCI
+  # event handling, Vol 4 Part E 7.8.107-110): it is production code, not test-only code,
+  # and there is no separate test target reference to it, so it must stay in this library.
+  "src/iso/iso_iso_test.c",
+  "src/iso/iso_status_query.c",
 ]
 
 StackHciSrc = [
@@ -122,6 +140,7 @@ StackHciSrc = [
   "src/hci/cmd/hci_cmd_failure_status_params.c",
   "src/hci/cmd/hci_cmd_info_params.c",
   "src/hci/cmd/hci_cmd_le_controller.c",
+  "src/hci/cmd/hci_cmd_le_controller_5_2.c",
   "src/hci/cmd/hci_cmd_link_ctrl.c",
   "src/hci/cmd/hci_cmd_link_policy.c",
   "src/hci/cmd/hci_cmd_status_params.c",
@@ -142,6 +161,7 @@ StackL2capSrc = [
   "src/l2cap/l2cap_cmn.c",
   "src/l2cap/l2cap_crc.c",
   "src/l2cap/l2cap_le.c",
+  "src/l2cap/l2cap_le_eatt.c",
   "src/l2cap/l2cap_inst.c",
   "src/l2cap/l2cap_core.c",
   "src/l2cap/l2cap.c",
@@ -234,7 +254,7 @@ ohos_shared_library("btstack") {
 
   sources = PlatformSrc + StackAttSrc + StackAvctpSrc + StackAvdtpSrc +
             StackBtmSrc + StackGapSrc + StackHciSrc + StackL2capSrc +
-            StackRfcommSrc + StackSdpSrc + StackSmpSrc
+            StackRfcommSrc + StackSdpSrc + StackSmpSrc + StackIsoSrc
 
   deps = [
     "$PART_DIR/external:btdummy",

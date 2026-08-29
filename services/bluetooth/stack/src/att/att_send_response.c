@@ -38,6 +38,45 @@
 
 static AttServerSendDataCallback g_attServerSendDataCB;
 
+/* Resolve the connection a response targets. cid 0 keeps the legacy lookup: prefer the
+ * UATT bearer — the Exchange MTU request only arrives on the fixed channel, and plain
+ * first-match could hit an EATT slot on a multi-bearer connection — then fall back to
+ * first-match for legacy callers on non-LE links; a non-zero cid pins the LE bearer so
+ * the response returns on the request's source bearer (Vol 3 Part F 3.3.3). */
+static AttConnectInfo *AttResponseResolveConnect(uint16_t connectHandle, uint16_t cid)
+{
+    AttConnectInfo *connect = NULL;
+    uint16_t index = 0;
+
+    if (cid == 0) {
+        connect = AttGetConnectInfoByConnectHandleAndLeCid(connectHandle, LE_CID);
+        if (connect == NULL) {
+            AttGetConnectInfoIndexByConnectHandle(connectHandle, &index, &connect);
+        }
+    } else {
+        connect = AttGetConnectInfoByConnectHandleAndLeCid(connectHandle, cid);
+    }
+    return connect;
+}
+
+void ATT_ErrorResponseCid(uint16_t connectHandle, uint16_t cid, const AttError *attErrorPtr);
+void ATT_FindInformationResponseCid(
+    uint16_t connectHandle, uint16_t cid, uint8_t format, AttHandleUuid *handleUUIDPairs, uint16_t pairNum);
+void ATT_FindByTypeValueResponseCid(
+    uint16_t connectHandle, uint16_t cid, const AttHandleInfo *handleInfoList, uint16_t listNum);
+void ATT_ReadByTypeResponseCid(uint16_t connectHandle, uint16_t cid, uint8_t length,
+    const AttReadByTypeRspDataList *valueList, uint16_t attrValueNum);
+void ATT_ReadResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *attValue);
+void ATT_ReadBlobResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *attReadBlobResObj);
+void ATT_ReadMultipleResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *valueList);
+void ATT_ReadMultipleVariableResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *valueList);
+void ATT_ReadByGroupTypeResponseCid(uint16_t connectHandle, uint16_t cid, uint8_t length,
+    const AttReadGoupAttributeData *serviceList, uint16_t serviceNum);
+void ATT_WriteResponseCid(uint16_t connectHandle, uint16_t cid);
+void ATT_PrepareWriteResponseCid(
+    uint16_t connectHandle, uint16_t cid, AttReadBlobReqPrepareWriteValue attReadBlobObj, const Buffer *attValue);
+void ATT_ExecuteWriteResponseCid(uint16_t connectHandle, uint16_t cid);
+
 static void AttAssignMTU(uint16_t *mtu, AttConnectInfo *connect);
 static void AttFindInformationResDataAssign(
     uint8_t format, uint16_t *inforDataLenPtr, uint16_t *dataLenPtr, uint16_t pairNum);
@@ -121,7 +160,6 @@ static void AttErrorResponseAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     uint8_t *data = NULL;
     Packet *packet = NULL;
@@ -130,8 +168,7 @@ static void AttErrorResponseAsync(const void *context)
 
     errorResAsyncPtr = (ErrorResponseAsync *)context;
 
-    AttGetConnectInfoIndexByConnectHandle(errorResAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttResponseResolveConnect(errorResAsyncPtr->connectHandle, errorResAsyncPtr->cid);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL, and goto ATT_ERRORRESPONSE_END", __FUNCTION__);
         goto ATT_ERRORRESPONSE_END;
@@ -184,36 +221,7 @@ static void AttErrorResponseAsyncDestroy(const void *context)
  */
 void ATT_ErrorResponse(uint16_t connectHandle, const AttError *attErrorPtr)
 {
-    LOG_INFO("%{public}s enter, connectHandle = %hu, reqOpcode = %{public}d, "
-        "attHandleInError = %{public}d, errorCode = %{public}d",
-        __FUNCTION__,
-        connectHandle,
-        attErrorPtr->reqOpcode,
-        attErrorPtr->attHandleInError,
-        attErrorPtr->errorCode);
-
-    AttError *attErrorAsyncPtr = NULL;
-    ErrorResponseAsync *errorResAsyncPtr = NULL;
-
-    attErrorAsyncPtr = MEM_MALLOC.alloc(sizeof(AttError));
-    if (attErrorAsyncPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-    attErrorAsyncPtr->reqOpcode = attErrorPtr->reqOpcode;
-    attErrorAsyncPtr->attHandleInError = attErrorPtr->attHandleInError;
-    attErrorAsyncPtr->errorCode = attErrorPtr->errorCode;
-
-    errorResAsyncPtr = MEM_MALLOC.alloc(sizeof(ErrorResponseAsync));
-    if (errorResAsyncPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-    errorResAsyncPtr->connectHandle = connectHandle;
-    errorResAsyncPtr->ATTErrorPtr = attErrorAsyncPtr;
-
-    AttAsyncProcess(AttErrorResponseAsync, AttErrorResponseAsyncDestroy, errorResAsyncPtr);
-
+    ATT_ErrorResponseCid(connectHandle, 0, attErrorPtr);
     return;
 }
 
@@ -227,14 +235,15 @@ static void AttExchangeMTUResponseAsync(const void *context)
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
     int ret;
-    uint16_t index = 0;
     ExchangeMTUAsync *exchangeMtuResPtr = (ExchangeMTUAsync *)context;
     AttConnectInfo *connect = NULL;
     Packet *packet = NULL;
     uint8_t *data = NULL;
 
-    AttGetConnectInfoIndexByConnectHandle(exchangeMtuResPtr->connectHandle, &index, &connect);
-
+    // cid 0 keeps the UATT-first lookup (the Exchange MTU request only arrives on the fixed
+    // channel), the same semantics every other response path uses - plain first-match could
+    // resolve an EATT slot on a multi-bearer connection and answer on the wrong bearer.
+    connect = AttResponseResolveConnect(exchangeMtuResPtr->connectHandle, 0);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTEXCHANGEMTURESPONSE_END", __FUNCTION__);
         goto ATTEXCHANGEMTURESPONSE_END;
@@ -289,9 +298,11 @@ void ATT_ExchangeMTUResponse(uint16_t connectHandle, uint16_t serverRxMTU)
 
     ExchangeMTUAsync *exchangeMtuResPtr = MEM_MALLOC.alloc(sizeof(ExchangeMTUAsync));
     if (exchangeMtuResPtr == NULL) {
-        if (g_attServerSendDataCB.attSendDataCB != NULL) {
-            g_attServerSendDataCB.attSendDataCB(connectHandle, BT_NO_MEMORY, g_attServerSendDataCB.context);
-        }
+        // The send callback is registered for invocation on the ATT processing queue; calling it
+        // directly from this caller thread would violate that contract (same reasoning as the
+        // failure path of ATT_ErrorResponseCid). Report the transient OOM only in the log: the
+        // client's request stays pending and is eventually settled by its own transaction timeout.
+        LOG_ERROR("point to NULL");
         return;
     }
     exchangeMtuResPtr->connectHandle = connectHandle;
@@ -361,7 +372,6 @@ static void AttFindInformationResponseAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     FindInformationResponseAsync *findInforPtr = (FindInformationResponseAsync *)context;
     Packet *packet = NULL;
@@ -371,7 +381,7 @@ static void AttFindInformationResponseAsync(const void *context)
     AttConnectInfo *connect = NULL;
     uint16_t dataLen = 0;
 
-    AttGetConnectInfoIndexByConnectHandle(findInforPtr->connectHandle, &index, &connect);
+    connect = AttResponseResolveConnect(findInforPtr->connectHandle, findInforPtr->cid);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTFINDINFORMATIONRESPONSE_END", __FUNCTION__);
         goto ATTFINDINFORMATIONRESPONSE_END;
@@ -436,40 +446,7 @@ static void AttFindInformationResponseAsyncDestroy(const void *context)
 void ATT_FindInformationResponse(
     uint16_t connectHandle, uint8_t format, AttHandleUuid *handleUUIDPairs, uint16_t pairNum)
 {
-    LOG_INFO("%{public}s enter, connectHandle = %hu, format=%hhu, pairNum=%hu",
-        __FUNCTION__, connectHandle, format, pairNum);
-
-    uint16_t index;
-
-    AttHandleUuid *attHandleUuidPtr = MEM_MALLOC.alloc(sizeof(AttHandleUuid) * pairNum);
-    if (attHandleUuidPtr == NULL) {
-        LOG_WARN("attHandleUuidPtr is null");
-        return;
-    }
-
-    for (index = 0; index < pairNum; ++index) {
-        attHandleUuidPtr[index].attHandle = handleUUIDPairs[index].attHandle;
-        if (format == HANDLEAND16BITBLUETOOTHUUID) {
-            attHandleUuidPtr[index].uuid.uuid16 = handleUUIDPairs[index].uuid.uuid16;
-        } else if (format == HANDLEAND128BITUUID) {
-            (void)memcpy_s(attHandleUuidPtr[index].uuid.uuid128,
-                UUID128BITTYPELEN,
-                handleUUIDPairs[index].uuid.uuid128,
-                UUID128BITTYPELEN);
-        }
-    }
-    FindInformationResponseAsync *findInfor = MEM_MALLOC.alloc(sizeof(FindInformationResponseAsync));
-    if (findInfor == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-    findInfor->connectHandle = connectHandle;
-    findInfor->attFindInformationResContext.format = format;
-    findInfor->attFindInformationResContext.pairNum = pairNum;
-    findInfor->attFindInformationResContext.handleUuidPairs = attHandleUuidPtr;
-
-    AttAsyncProcess(AttFindInformationResponseAsync, AttFindInformationResponseAsyncDestroy, findInfor);
-
+    ATT_FindInformationResponseCid(connectHandle, 0, format, handleUUIDPairs, pairNum);
     return;
 }
 
@@ -482,15 +459,13 @@ static void AttFindByTypeValueResponseAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     uint16_t mtu = 0;
     AttConnectInfo *connect = NULL;
     FindByTypeValueResponseAsync *findByTypeResAsyncPtr = (FindByTypeValueResponseAsync *)context;
     uint16_t handleInfoListLen = (findByTypeResAsyncPtr->attFindByTypeResContext.listNum) * sizeof(AttHandleInfo);
     int ret;
 
-    AttGetConnectInfoIndexByConnectHandle(findByTypeResAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttResponseResolveConnect(findByTypeResAsyncPtr->connectHandle, findByTypeResAsyncPtr->cid);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTFINDBYTYPEVALUERESPONSE_END", __FUNCTION__);
         goto ATTFINDBYTYPEVALUERESPONSE_END;
@@ -551,25 +526,7 @@ static void AttFindByTypeValueResponseAsyncDestroy(const void *context)
  */
 void ATT_FindByTypeValueResponse(uint16_t connectHandle, const AttHandleInfo *handleInfoList, uint16_t listNum)
 {
-    LOG_INFO("%{public}s enter,connectHandle = %hu,listNum=%hu", __FUNCTION__, connectHandle, listNum);
-
-    AttHandleInfo *attHandleInfoPtr = MEM_MALLOC.alloc(sizeof(AttHandleInfo) * listNum);
-    if (attHandleInfoPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-    (void)memcpy_s(attHandleInfoPtr, sizeof(AttHandleInfo) * listNum, handleInfoList, sizeof(AttHandleInfo) * listNum);
-    FindByTypeValueResponseAsync *findByTypeResAsyncPtr = MEM_MALLOC.alloc(sizeof(FindByTypeValueResponseAsync));
-    if (findByTypeResAsyncPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-    findByTypeResAsyncPtr->connectHandle = connectHandle;
-    findByTypeResAsyncPtr->attFindByTypeResContext.listNum = listNum;
-    findByTypeResAsyncPtr->attFindByTypeResContext.handleInfoList = attHandleInfoPtr;
-
-    AttAsyncProcess(AttFindByTypeValueResponseAsync, AttFindByTypeValueResponseAsyncDestroy, findByTypeResAsyncPtr);
-
+    ATT_FindByTypeValueResponseCid(connectHandle, 0, handleInfoList, listNum);
     return;
 }
 
@@ -606,8 +563,7 @@ static void AttReadByTypeResponseAsync(const void *context)
 
     uint8_t len = readByTypeResAsyncPtr->attReadByTypeRspContext.len;
     uint16_t num = readByTypeResAsyncPtr->attReadByTypeRspContext.valueNum;
-    AttGetConnectInfoIndexByConnectHandle(readByTypeResAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttResponseResolveConnect(readByTypeResAsyncPtr->connectHandle, readByTypeResAsyncPtr->cid);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATT_READBYTYPERESPONSE_END", __FUNCTION__);
         goto ATT_READBYTYPERESPONSE_END;
@@ -682,41 +638,7 @@ static void AttReadByTypeResponseAsyncDestroy(const void *context)
 void ATT_ReadByTypeResponse(
     uint16_t connectHandle, uint8_t length, const AttReadByTypeRspDataList *valueList, uint16_t attrValueNum)
 {
-    LOG_INFO("%{public}s enter, connectHandle = %hu, length=%hhu, attrValueNum = %hu",
-        __FUNCTION__,
-        connectHandle,
-        length,
-        attrValueNum);
-
-    uint16_t index = 0;
-    AttReadByTypeRspDataList *attReadByTypeDataPtr = MEM_MALLOC.alloc(sizeof(AttReadByTypeRspDataList) * attrValueNum);
-    if (attReadByTypeDataPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-
-    for (; index < attrValueNum; ++index) {
-        attReadByTypeDataPtr[index].attHandle = valueList[index].attHandle;
-        attReadByTypeDataPtr[index].attributeValue = MEM_MALLOC.alloc(length - STEP_TWO);
-        if (attReadByTypeDataPtr[index].attributeValue == NULL) {
-            LOG_WARN("point is null");
-            return;
-        }
-
-        (void)memcpy_s(attReadByTypeDataPtr[index].attributeValue,
-            length - STEP_TWO,
-            valueList[index].attributeValue,
-            length - STEP_TWO);
-    }
-
-    ReadByTypeResponseAsync *readByTypeResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadByTypeResponseAsync));
-    readByTypeResAsyncPtr->connectHandle = connectHandle;
-    readByTypeResAsyncPtr->attReadByTypeRspContext.len = length;
-    readByTypeResAsyncPtr->attReadByTypeRspContext.valueNum = attrValueNum;
-    readByTypeResAsyncPtr->attReadByTypeRspContext.valueList = attReadByTypeDataPtr;
-
-    AttAsyncProcess(AttReadByTypeResponseAsync, AttReadByTypeResponseAsyncDestroy, readByTypeResAsyncPtr);
-
+    ATT_ReadByTypeResponseCid(connectHandle, 0, length, valueList, attrValueNum);
     return;
 }
 
@@ -729,7 +651,6 @@ static void AttReadResponseAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     uint16_t mtu = 0;
     int ret;
     uint16_t bufferSize;
@@ -739,8 +660,7 @@ static void AttReadResponseAsync(const void *context)
     AttConnectInfo *connect = NULL;
     uint8_t *data = NULL;
 
-    AttGetConnectInfoIndexByConnectHandle(readResAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttResponseResolveConnect(readResAsyncPtr->connectHandle, readResAsyncPtr->cid);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATT_READRESPONSE_END", __FUNCTION__);
         goto ATT_READRESPONSE_END;
@@ -801,22 +721,7 @@ static void AttReadResponseAsyncDestroy(const void *context)
  */
 void ATT_ReadResponse(uint16_t connectHandle, const Buffer *attValue)
 {
-    LOG_INFO("%{public}s enter,connectHandle = %hu", __FUNCTION__, connectHandle);
-
-    Buffer *bufferPtr = NULL;
-    ReadResponseAsync *readResAsyncPtr = NULL;
-
-    bufferPtr = BufferRefMalloc(attValue);
-    readResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadResponseAsync));
-    if (readResAsyncPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-    readResAsyncPtr->connectHandle = connectHandle;
-    readResAsyncPtr->attValue = bufferPtr;
-
-    AttAsyncProcess(AttReadResponseAsync, AttReadResponseAsyncDestroy, readResAsyncPtr);
-
+    ATT_ReadResponseCid(connectHandle, 0, attValue);
     return;
 }
 
@@ -829,7 +734,6 @@ static void AttReadBlobResponseAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     uint16_t mtu = 0;
     uint8_t *data = NULL;
@@ -840,8 +744,7 @@ static void AttReadBlobResponseAsync(const void *context)
     Buffer *bufferNew = NULL;
 
     readBlobResAsyncPtr = (ReadResponseAsync *)context;
-    AttGetConnectInfoIndexByConnectHandle(readBlobResAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttResponseResolveConnect(readBlobResAsyncPtr->connectHandle, readBlobResAsyncPtr->cid);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATT_READBLOBRESPONSE_END", __FUNCTION__);
         goto ATT_READBLOBRESPONSE_END;
@@ -902,24 +805,7 @@ static void AttReadBlobResponseAsyncDestroy(const void *context)
  */
 void ATT_ReadBlobResponse(uint16_t connectHandle, const Buffer *attReadBlobResObj)
 {
-    LOG_INFO("%{public}s enter,connectHandle = %hu", __FUNCTION__, connectHandle);
-
-    Buffer *bufferPtr = NULL;
-    ReadResponseAsync *readBlobResAsyncPtr = NULL;
-
-    bufferPtr = BufferRefMalloc(attReadBlobResObj);
-    readBlobResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadResponseAsync));
-    if (readBlobResAsyncPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        BufferFree(bufferPtr);
-        bufferPtr = NULL;
-        return;
-    }
-    readBlobResAsyncPtr->connectHandle = connectHandle;
-    readBlobResAsyncPtr->attValue = bufferPtr;
-
-    AttAsyncProcess(AttReadBlobResponseAsync, AttReadBlobResponseAsyncDestroy, readBlobResAsyncPtr);
-
+    ATT_ReadBlobResponseCid(connectHandle, 0, attReadBlobResObj);
     return;
 }
 
@@ -932,7 +818,6 @@ static void AttReadMultipleResponseAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     uint16_t bufferSize;
     Packet *packet = NULL;
@@ -944,8 +829,7 @@ static void AttReadMultipleResponseAsync(const void *context)
 
     readMultipleResponseAsyncPtr = (ReadResponseAsync *)context;
 
-    AttGetConnectInfoIndexByConnectHandle(readMultipleResponseAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttResponseResolveConnect(readMultipleResponseAsyncPtr->connectHandle, readMultipleResponseAsyncPtr->cid);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATT_READMULTIPLERESPONSE_END", __FUNCTION__);
         goto ATT_READMULTIPLERESPONSE_END;
@@ -1006,22 +890,7 @@ static void AttReadMultipleResponseAsyncDestroy(const void *context)
  */
 void ATT_ReadMultipleResponse(uint16_t connectHandle, const Buffer *valueList)
 {
-    LOG_INFO("%{public}s enter,connectHandle = %hu", __FUNCTION__, connectHandle);
-
-    Buffer *bufferPtr = NULL;
-    ReadResponseAsync *readMultipleResAsyncPtr = NULL;
-
-    bufferPtr = BufferRefMalloc(valueList);
-    readMultipleResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadResponseAsync));
-    if (readMultipleResAsyncPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-    readMultipleResAsyncPtr->connectHandle = connectHandle;
-    readMultipleResAsyncPtr->attValue = bufferPtr;
-
-    AttAsyncProcess(AttReadMultipleResponseAsync, AttReadMultipleResponseAsyncDestroy, readMultipleResAsyncPtr);
-
+    ATT_ReadMultipleResponseCid(connectHandle, 0, valueList);
     return;
 }
 
@@ -1057,8 +926,8 @@ static void AttReadByGroupTypeResponseAsync(const void *context)
 
     uint8_t len = attReadByGroupResponseAsyncPtr->attReadGroupResContext.length;
     uint16_t num = attReadByGroupResponseAsyncPtr->attReadGroupResContext.num;
-    AttGetConnectInfoIndexByConnectHandle(attReadByGroupResponseAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttResponseResolveConnect(attReadByGroupResponseAsyncPtr->connectHandle,
+        attReadByGroupResponseAsyncPtr->cid);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTREADBYGROUPTYPERESONSE_END", __FUNCTION__);
         goto ATTREADBYGROUPTYPERESONSE_END;
@@ -1138,36 +1007,7 @@ static void AttReadByGroupTypeResponseAsyncDestroy(const void *context)
 void ATT_ReadByGroupTypeResponse(
     uint16_t connectHandle, uint8_t length, const AttReadGoupAttributeData *serviceList, uint16_t serviceNum)
 {
-    LOG_INFO("%{public}s enter, connectHandle = %hu,length = %{public}d,serviceNum = %{public}d",
-        __FUNCTION__, connectHandle, length, serviceNum);
-
-    uint16_t index = 0;
-    AttReadGoupAttributeData *attReadGroupAttrDataPtr = NULL;
-    ReadByGroupTypeResponseAsync *attReadByGroupResAsyncPtr = NULL;
-
-    attReadGroupAttrDataPtr = MEM_MALLOC.alloc(sizeof(AttReadGoupAttributeData) * serviceNum);
-    if (attReadGroupAttrDataPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-    for (; index < serviceNum; ++index) {
-        attReadGroupAttrDataPtr[index].attributeValue = MEM_MALLOC.alloc(length - STEP_FOUR);
-        attReadGroupAttrDataPtr[index].attHandle = serviceList[index].attHandle;
-        attReadGroupAttrDataPtr[index].groupEndHandle = serviceList[index].groupEndHandle;
-        (void)memcpy_s(attReadGroupAttrDataPtr[index].attributeValue,
-            length - STEP_FOUR,
-            serviceList[index].attributeValue,
-            length - STEP_FOUR);
-    }
-
-    attReadByGroupResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadByGroupTypeResponseAsync));
-    attReadByGroupResAsyncPtr->connectHandle = connectHandle;
-    attReadByGroupResAsyncPtr->attReadGroupResContext.length = length;
-    attReadByGroupResAsyncPtr->attReadGroupResContext.num = serviceNum;
-    attReadByGroupResAsyncPtr->attReadGroupResContext.attributeData = attReadGroupAttrDataPtr;
-
-    AttAsyncProcess(AttReadByGroupTypeResponseAsync, AttReadByGroupTypeResponseAsyncDestroy, attReadByGroupResAsyncPtr);
-
+    ATT_ReadByGroupTypeResponseCid(connectHandle, 0, length, serviceList, serviceNum);
     return;
 }
 
@@ -1180,7 +1020,6 @@ static void AttWriteResponseAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     Packet *packet = NULL;
     WriteResponseAsync *writeResponseAsyncPtr = NULL;
@@ -1190,8 +1029,7 @@ static void AttWriteResponseAsync(const void *context)
 
     writeResponseAsyncPtr = (WriteResponseAsync *)context;
 
-    AttGetConnectInfoIndexByConnectHandle(writeResponseAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttResponseResolveConnect(writeResponseAsyncPtr->connectHandle, writeResponseAsyncPtr->cid);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTWRITERESPONSE_END", __FUNCTION__);
         goto ATTWRITERESPONSE_END;
@@ -1240,17 +1078,7 @@ static void AttWriteResponseAsyncDestroy(const void *context)
  */
 void ATT_WriteResponse(uint16_t connectHandle)
 {
-    LOG_INFO("%{public}s enter, connectHandle = %hu", __FUNCTION__, connectHandle);
-
-    WriteResponseAsync *writeResAsyncPtr = MEM_MALLOC.alloc(sizeof(WriteResponseAsync));
-    if (writeResAsyncPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-    writeResAsyncPtr->connectHandle = connectHandle;
-
-    AttAsyncProcess(AttWriteResponseAsync, AttWriteResponseAsyncDestroy, writeResAsyncPtr);
-
+    ATT_WriteResponseCid(connectHandle, 0);
     return;
 }
 
@@ -1263,7 +1091,6 @@ static void AttPrepareWriteResponseAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     uint16_t bufferSize;
     Packet *packet = NULL;
@@ -1275,8 +1102,7 @@ static void AttPrepareWriteResponseAsync(const void *context)
     prepareWriteResAsyncPtr = (PrepareWriteAsync *)context;
     bufferSize = BufferGetSize(prepareWriteResAsyncPtr->attValue);
 
-    AttGetConnectInfoIndexByConnectHandle(prepareWriteResAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttResponseResolveConnect(prepareWriteResAsyncPtr->connectHandle, prepareWriteResAsyncPtr->cid);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTPREPAREWRITERESPONSE_END", __FUNCTION__);
         goto ATTPREPAREWRITERESPONSE_END;
@@ -1342,28 +1168,7 @@ static void AttPrepareWriteResponseAsyncDestroy(const void *context)
 void ATT_PrepareWriteResponse(
     uint16_t connectHandle, AttReadBlobReqPrepareWriteValue attReadBlobObj, const Buffer *attValue)
 {
-    LOG_INFO("%{public}s enter, connectHandle = %hu, attHandle = %{public}d, offset = %{public}d",
-        __FUNCTION__,
-        connectHandle,
-        attReadBlobObj.attHandle,
-        attReadBlobObj.offset);
-
-    Buffer *bufferPtr = NULL;
-    PrepareWriteAsync *prepareWriteResAsyncPtr = NULL;
-
-    bufferPtr = BufferRefMalloc(attValue);
-    prepareWriteResAsyncPtr = MEM_MALLOC.alloc(sizeof(PrepareWriteAsync));
-    if (prepareWriteResAsyncPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-    prepareWriteResAsyncPtr->connectHandle = connectHandle;
-    prepareWriteResAsyncPtr->attReadBlobObj.attHandle = attReadBlobObj.attHandle;
-    prepareWriteResAsyncPtr->attReadBlobObj.offset = attReadBlobObj.offset;
-    prepareWriteResAsyncPtr->attValue = bufferPtr;
-
-    AttAsyncProcess(AttPrepareWriteResponseAsync, AttPrepareWriteResponseAsyncDestroy, prepareWriteResAsyncPtr);
-
+    ATT_PrepareWriteResponseCid(connectHandle, 0, attReadBlobObj, attValue);
     return;
 }
 
@@ -1376,7 +1181,6 @@ static void AttExecuteWriteResponseAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     Packet *packet = NULL;
     uint8_t *data = NULL;
@@ -1384,8 +1188,7 @@ static void AttExecuteWriteResponseAsync(const void *context)
     AttConnectInfo *connect = NULL;
     WriteResponseAsync *executeWriteResAsyncPtr = (WriteResponseAsync *)context;
 
-    AttGetConnectInfoIndexByConnectHandle(executeWriteResAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttResponseResolveConnect(executeWriteResAsyncPtr->connectHandle, executeWriteResAsyncPtr->cid);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTEXECUTEWRITERESPONSE_END", __FUNCTION__);
         goto ATTEXECUTEWRITERESPONSE_END;
@@ -1434,18 +1237,21 @@ static void AttExecuteWriteResponseAsyncDestroy(const void *context)
  */
 void ATT_ExecuteWriteResponse(uint16_t connectHandle)
 {
-    LOG_INFO("%{public}s enter,connectHandle = %hu", __FUNCTION__, connectHandle);
-
-    WriteResponseAsync *executeWriteResAsyncPtr = MEM_MALLOC.alloc(sizeof(WriteResponseAsync));
-    if (executeWriteResAsyncPtr == NULL) {
-        LOG_ERROR("point to NULL");
-        return;
-    }
-    executeWriteResAsyncPtr->connectHandle = connectHandle;
-
-    AttAsyncProcess(AttExecuteWriteResponseAsync, AttExecuteWriteResponseAsyncDestroy, executeWriteResAsyncPtr);
-
+    ATT_ExecuteWriteResponseCid(connectHandle, 0);
     return;
+}
+
+/* Resolve the bearer a server notification or indication targets. cid 0 selects the first idle
+ * EATT bearer (no in-flight client request for a notification, no pending confirmation for an
+ * indication, Vol 3 Part F 3.3.2) and falls back to UATT; the response helper instead pins the
+ * source bearer. */
+static AttConnectInfo *AttNtfIndResolveConnect(uint16_t connectHandle, uint16_t cid, bool isIndication)
+{
+    if (cid == 0) {
+        return isIndication ? AttGetConnectInfoByConnectHandlePreferEattInd(connectHandle)
+                            : AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(connectHandle);
+    }
+    return AttGetConnectInfoByConnectHandleAndLeCid(connectHandle, cid);
 }
 
 /**
@@ -1457,7 +1263,6 @@ static void AttHandleValueNotificationAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     Packet *packet = NULL;
     Buffer *bufferNew = NULL;
@@ -1468,8 +1273,8 @@ static void AttHandleValueNotificationAsync(const void *context)
 
     handleNotificationAsyncPtr = (WriteAsync *)context;
 
-    AttGetConnectInfoIndexByConnectHandle(handleNotificationAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttNtfIndResolveConnect(
+        handleNotificationAsyncPtr->connectHandle, handleNotificationAsyncPtr->cid, false);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATT_HANDLEVALUENOTIFICATION_END", __FUNCTION__);
         goto ATT_HANDLEVALUENOTIFICATION_END;
@@ -1531,7 +1336,20 @@ static void AttHandleValueNotificationAsyncDestroy(const void *context)
  */
 void ATT_HandleValueNotification(uint16_t connectHandle, uint16_t attHandle, const Buffer *attValue)
 {
-    LOG_INFO("%{public}s enter, connectHandle = %hu, attHandle=%{public}d", __FUNCTION__, connectHandle, attHandle);
+    ATT_HandleValueNotificationCid(connectHandle, 0, attHandle, attValue);
+    return;
+}
+
+void ATT_HandleValueNotificationCid(
+    uint16_t connectHandle, uint16_t cid, uint16_t attHandle, const Buffer *attValue)
+{
+    LOG_INFO("%{public}s enter, connectHandle = %hu, cid = %hu, attHandle = %{public}d",
+        __FUNCTION__, connectHandle, cid, attHandle);
+
+    if (attValue == NULL) {
+        LOG_WARN("%{public}s: attValue is NULL", __FUNCTION__);
+        return;
+    }
 
     Buffer *bufferPtr = NULL;
     WriteAsync *handleNotificationAsyncPtr = NULL;
@@ -1540,9 +1358,12 @@ void ATT_HandleValueNotification(uint16_t connectHandle, uint16_t attHandle, con
     handleNotificationAsyncPtr = MEM_MALLOC.alloc(sizeof(WriteAsync));
     if (handleNotificationAsyncPtr == NULL) {
         LOG_ERROR("point to NULL");
+        BufferFree(bufferPtr);
+        bufferPtr = NULL;
         return;
     }
     handleNotificationAsyncPtr->connectHandle = connectHandle;
+    handleNotificationAsyncPtr->cid = cid;
     handleNotificationAsyncPtr->attHandle = attHandle;
     handleNotificationAsyncPtr->attValue = bufferPtr;
 
@@ -1557,49 +1378,78 @@ void ATT_HandleValueNotification(uint16_t connectHandle, uint16_t attHandle, con
  *
  * @param context Indicates the pointer to context.
  */
-static void AttHandleValueIndicationAsync(const void *context)
+/**
+ * @brief build the indication packet: header, handle and a payload limited to the negotiated MTU.
+ *
+ * @param handleIndicationAsyncPtr Indicates the pending indication context.
+ * @param mtu Indicates the negotiated MTU of the bearer.
+ * @return Packet pointer on success, NULL on allocation failure.
+ */
+static Packet *AttBuildIndicationPacket(WriteAsync *handleIndicationAsyncPtr, uint16_t mtu)
 {
-    LOG_INFO("%{public}s enter", __FUNCTION__);
-
-    uint16_t index = 0;
-    int ret;
-    uint16_t bufferSize;
-    Packet *packet = NULL;
-    uint8_t *data = NULL;
-    Buffer *bufferNew = NULL;
-    WriteAsync *handleIndicationAsyncPtr = NULL;
+    uint16_t bufferSize = BufferGetSize(handleIndicationAsyncPtr->attValue);
     uint16_t len;
-    AttConnectInfo *connect = NULL;
-
-    handleIndicationAsyncPtr = (WriteAsync *)context;
-
-    AttGetConnectInfoIndexByConnectHandle(handleIndicationAsyncPtr->connectHandle, &index, &connect);
-
-    if (connect == NULL) {
-        LOG_INFO("%{public}s connect == NULL and goto ATTHANDLEVALUEINDICATION_END", __FUNCTION__);
-        goto ATTHANDLEVALUEINDICATION_END;
-    }
-
-    connect->serverSendFlag = true;
-    bufferSize = BufferGetSize(handleIndicationAsyncPtr->attValue);
-    packet = PacketMalloc(0, 0, sizeof(uint8_t) + sizeof(handleIndicationAsyncPtr->attHandle));
+    Buffer *bufferNew = NULL;
+    uint8_t *data = NULL;
+    Packet *packet = PacketMalloc(0, 0, sizeof(uint8_t) + sizeof(handleIndicationAsyncPtr->attHandle));
     if (packet == NULL) {
         LOG_ERROR("point to NULL");
-        return;
+        return NULL;
     }
     data = BufferPtr(PacketContinuousPayload(packet));
     data[0] = HANDLE_VALUE_INDICATION;
     ((uint16_t *)(data + 1))[0] = handleIndicationAsyncPtr->attHandle;
-    if ((bufferSize > 0) && (bufferSize <= (connect->mtu - STEP_THREE))) {
+    if ((bufferSize > 0) && (bufferSize <= (mtu - STEP_THREE))) {
         PacketPayloadAddLast(packet, handleIndicationAsyncPtr->attValue);
-    } else if (bufferSize > (connect->mtu - STEP_THREE)) {
-        len = connect->mtu - STEP_THREE;
+    } else if (bufferSize > (mtu - STEP_THREE)) {
+        len = mtu - STEP_THREE;
         bufferNew = BufferSliceMalloc(handleIndicationAsyncPtr->attValue, 0, len);
         PacketPayloadAddLast(packet, bufferNew);
         BufferFree(bufferNew);
     }
 
+    return packet;
+}
+
+static void AttHandleValueIndicationAsync(const void *context)
+{
+    LOG_INFO("%{public}s enter", __FUNCTION__);
+
+    int ret;
+    Packet *packet = NULL;
+    WriteAsync *handleIndicationAsyncPtr = NULL;
+    AttConnectInfo *connect = NULL;
+
+    handleIndicationAsyncPtr = (WriteAsync *)context;
+
+    connect = AttNtfIndResolveConnect(
+        handleIndicationAsyncPtr->connectHandle, handleIndicationAsyncPtr->cid, true);
+    if (connect == NULL) {
+        LOG_INFO("%{public}s connect == NULL and goto ATTHANDLEVALUEINDICATION_END", __FUNCTION__);
+        goto ATTHANDLEVALUEINDICATION_END;
+    }
+
+    // Vol 3 Part F 3.3.2: one outstanding indication per bearer until it is confirmed, so an
+    // indication sent while one is pending is rejected.
+    if (connect->serverSendFlag) {
+        LOG_INFO("%{public}s pending indication, reject, connectHandle = %hu", __FUNCTION__,
+            connect->retGattConnectHandle);
+        ServerCallbackReturnValue(BT_ALREADY, connect);
+        goto ATTHANDLEVALUEINDICATION_END;
+    }
+
+    packet = AttBuildIndicationPacket(handleIndicationAsyncPtr, connect->mtu);
+    if (packet == NULL) {
+        goto ATTHANDLEVALUEINDICATION_END;
+    }
+
+    // The indication transaction starts when queued and ends at the confirmation (Vol 3 Part F
+    // 3.3.3); the per-bearer timeout is armed only on a successful queue.
     ret = AttResponseSendData(connect, packet);
+    if (ret == BT_SUCCESS) {
+        connect->serverSendFlag = true;
+        AttStartIndicationAlarm(connect);
+    }
     ServerCallbackReturnValue(ret, connect);
     PacketFree(packet);
 
@@ -1636,7 +1486,20 @@ static void AttHandleValueIndicationAsyncDestroy(const void *context)
  */
 void ATT_HandleValueIndication(uint16_t connectHandle, uint16_t attHandle, const Buffer *attValue)
 {
-    LOG_INFO("%{public}s enter, connectHandle = %hu, attHandle=%{public}d", __FUNCTION__, connectHandle, attHandle);
+    ATT_HandleValueIndicationCid(connectHandle, 0, attHandle, attValue);
+    return;
+}
+
+void ATT_HandleValueIndicationCid(
+    uint16_t connectHandle, uint16_t cid, uint16_t attHandle, const Buffer *attValue)
+{
+    LOG_INFO("%{public}s enter, connectHandle = %hu, cid = %hu, attHandle = %{public}d",
+        __FUNCTION__, connectHandle, cid, attHandle);
+
+    if (attValue == NULL) {
+        LOG_WARN("%{public}s: attValue is NULL", __FUNCTION__);
+        return;
+    }
 
     Buffer *bufferPtr = NULL;
     WriteAsync *handleIndicationAsyncPtr = NULL;
@@ -1645,9 +1508,12 @@ void ATT_HandleValueIndication(uint16_t connectHandle, uint16_t attHandle, const
     handleIndicationAsyncPtr = MEM_MALLOC.alloc(sizeof(WriteAsync));
     if (handleIndicationAsyncPtr == NULL) {
         LOG_ERROR("point to NULL");
+        BufferFree(bufferPtr);
+        bufferPtr = NULL;
         return;
     }
     handleIndicationAsyncPtr->connectHandle = connectHandle;
+    handleIndicationAsyncPtr->cid = cid;
     handleIndicationAsyncPtr->attHandle = attHandle;
     handleIndicationAsyncPtr->attValue = bufferPtr;
 
@@ -1755,6 +1621,476 @@ void ATT_ServerSendDataDeRegister()
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
     AttAsyncProcess(AttServerSendDataDeRegisterAsync, AttServerSendDataDeRegisterAsyncDestroy, NULL);
+
+    return;
+}
+
+void ATT_ErrorResponseCid(uint16_t connectHandle, uint16_t cid, const AttError *attErrorPtr)
+{
+    if (attErrorPtr == NULL) {
+        LOG_WARN("%{public}s: attErrorPtr is NULL", __FUNCTION__);
+        return;
+    }
+
+    LOG_INFO("%{public}s enter, connectHandle = %hu, cid = %hu, reqOpcode = %{public}d, "
+             "attHandleInError = %{public}d, errorCode = %{public}d",
+        __FUNCTION__, connectHandle, cid, attErrorPtr->reqOpcode, attErrorPtr->attHandleInError,
+        attErrorPtr->errorCode);
+
+    AttError *attErrorAsyncPtr = NULL;
+    ErrorResponseAsync *errorResAsyncPtr = NULL;
+
+    attErrorAsyncPtr = MEM_MALLOC.alloc(sizeof(AttError));
+    if (attErrorAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        return;
+    }
+    attErrorAsyncPtr->reqOpcode = attErrorPtr->reqOpcode;
+    attErrorAsyncPtr->attHandleInError = attErrorPtr->attHandleInError;
+    attErrorAsyncPtr->errorCode = attErrorPtr->errorCode;
+
+    errorResAsyncPtr = MEM_MALLOC.alloc(sizeof(ErrorResponseAsync));
+    if (errorResAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        MEM_MALLOC.free(attErrorAsyncPtr);
+        return;
+    }
+    errorResAsyncPtr->connectHandle = connectHandle;
+    errorResAsyncPtr->cid = cid;
+    errorResAsyncPtr->ATTErrorPtr = attErrorAsyncPtr;
+
+    AttAsyncProcess(AttErrorResponseAsync, AttErrorResponseAsyncDestroy, errorResAsyncPtr);
+
+    return;
+}
+
+void ATT_FindInformationResponseCid(
+    uint16_t connectHandle, uint16_t cid, uint8_t format, AttHandleUuid *handleUUIDPairs, uint16_t pairNum)
+{
+    LOG_INFO("%{public}s enter, connectHandle = %hu, cid = %hu, format=%hhu, pairNum=%hu", __FUNCTION__, connectHandle,
+        cid, format, pairNum);
+
+    if (handleUUIDPairs == NULL) {
+        LOG_WARN("%{public}s: handleUUIDPairs is NULL", __FUNCTION__);
+        return;
+    }
+
+    AttHandleUuid *attHandleUuidPtr = MEM_MALLOC.alloc(sizeof(AttHandleUuid) * pairNum);
+    if (attHandleUuidPtr == NULL) {
+        LOG_WARN("attHandleUuidPtr is null");
+        return;
+    }
+
+    for (int index = 0; index < pairNum; ++index) {
+        attHandleUuidPtr[index].attHandle = handleUUIDPairs[index].attHandle;
+        if (format == HANDLEAND16BITBLUETOOTHUUID) {
+            attHandleUuidPtr[index].uuid.uuid16 = handleUUIDPairs[index].uuid.uuid16;
+        } else if (format == HANDLEAND128BITUUID) {
+            (void)memcpy_s(attHandleUuidPtr[index].uuid.uuid128, UUID128BITTYPELEN, handleUUIDPairs[index].uuid.uuid128,
+                UUID128BITTYPELEN);
+        }
+    }
+    FindInformationResponseAsync *findInfor = MEM_MALLOC.alloc(sizeof(FindInformationResponseAsync));
+    if (findInfor == NULL) {
+        LOG_ERROR("point to NULL");
+        MEM_MALLOC.free(attHandleUuidPtr);
+        return;
+    }
+    findInfor->connectHandle = connectHandle;
+    findInfor->cid = cid;
+    findInfor->attFindInformationResContext.format = format;
+    findInfor->attFindInformationResContext.pairNum = pairNum;
+    findInfor->attFindInformationResContext.handleUuidPairs = attHandleUuidPtr;
+
+    AttAsyncProcess(AttFindInformationResponseAsync, AttFindInformationResponseAsyncDestroy, findInfor);
+
+    return;
+}
+
+void ATT_FindByTypeValueResponseCid(
+    uint16_t connectHandle, uint16_t cid, const AttHandleInfo *handleInfoList, uint16_t listNum)
+{
+    LOG_INFO("%{public}s enter,connectHandle = %hu, cid = %hu, listNum=%hu", __FUNCTION__, connectHandle, cid, listNum);
+
+    if (handleInfoList == NULL) {
+        LOG_WARN("%{public}s: handleInfoList is NULL", __FUNCTION__);
+        return;
+    }
+
+    AttHandleInfo *attHandleInfoPtr = MEM_MALLOC.alloc(sizeof(AttHandleInfo) * listNum);
+    if (attHandleInfoPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        return;
+    }
+    (void)memcpy_s(attHandleInfoPtr, sizeof(AttHandleInfo) * listNum, handleInfoList, sizeof(AttHandleInfo) * listNum);
+    FindByTypeValueResponseAsync *findByTypeResAsyncPtr = MEM_MALLOC.alloc(sizeof(FindByTypeValueResponseAsync));
+    if (findByTypeResAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        MEM_MALLOC.free(attHandleInfoPtr);
+        return;
+    }
+    findByTypeResAsyncPtr->connectHandle = connectHandle;
+    findByTypeResAsyncPtr->cid = cid;
+    findByTypeResAsyncPtr->attFindByTypeResContext.listNum = listNum;
+    findByTypeResAsyncPtr->attFindByTypeResContext.handleInfoList = attHandleInfoPtr;
+
+    AttAsyncProcess(AttFindByTypeValueResponseAsync, AttFindByTypeValueResponseAsyncDestroy, findByTypeResAsyncPtr);
+
+    return;
+}
+
+void ATT_ReadByTypeResponseCid(uint16_t connectHandle, uint16_t cid, uint8_t length,
+    const AttReadByTypeRspDataList *valueList, uint16_t attrValueNum)
+{
+    LOG_INFO("%{public}s enter, connectHandle = %hu, cid = %hu, length=%hhu, attrValueNum = %hu", __FUNCTION__,
+        connectHandle, cid, length, attrValueNum);
+
+    // length is the size of each handle-value pair, at least the 2-octet attribute handle
+    // (Vol 3 Part F Table 3.4): below that length - STEP_TWO would underflow the allocation.
+    if ((valueList == NULL) || (length < STEP_TWO)) {
+        LOG_WARN("%{public}s: valueList is NULL or length < STEP_TWO, length = %hhu", __FUNCTION__, length);
+        return;
+    }
+
+    uint16_t index = 0;
+    uint16_t i = 0;
+    AttReadByTypeRspDataList *attReadByTypeDataPtr = MEM_MALLOC.alloc(sizeof(AttReadByTypeRspDataList) * attrValueNum);
+    if (attReadByTypeDataPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        return;
+    }
+
+    for (; index < attrValueNum; ++index) {
+        attReadByTypeDataPtr[index].attHandle = valueList[index].attHandle;
+        attReadByTypeDataPtr[index].attributeValue = MEM_MALLOC.alloc(length - STEP_TWO);
+        if (attReadByTypeDataPtr[index].attributeValue == NULL) {
+            LOG_WARN("point is null");
+            // free the array and the values allocated so far before bailing
+            for (i = 0; i < index; ++i) {
+                MEM_MALLOC.free(attReadByTypeDataPtr[i].attributeValue);
+            }
+            MEM_MALLOC.free(attReadByTypeDataPtr);
+            return;
+        }
+
+        (void)memcpy_s(attReadByTypeDataPtr[index].attributeValue, length - STEP_TWO, valueList[index].attributeValue,
+            length - STEP_TWO);
+    }
+
+    ReadByTypeResponseAsync *readByTypeResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadByTypeResponseAsync));
+    if (readByTypeResAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        for (i = 0; i < attrValueNum; ++i) {
+            MEM_MALLOC.free(attReadByTypeDataPtr[i].attributeValue);
+        }
+        MEM_MALLOC.free(attReadByTypeDataPtr);
+        return;
+    }
+    readByTypeResAsyncPtr->connectHandle = connectHandle;
+    readByTypeResAsyncPtr->cid = cid;
+    readByTypeResAsyncPtr->attReadByTypeRspContext.len = length;
+    readByTypeResAsyncPtr->attReadByTypeRspContext.valueNum = attrValueNum;
+    readByTypeResAsyncPtr->attReadByTypeRspContext.valueList = attReadByTypeDataPtr;
+
+    AttAsyncProcess(AttReadByTypeResponseAsync, AttReadByTypeResponseAsyncDestroy, readByTypeResAsyncPtr);
+
+    return;
+}
+
+void ATT_ReadResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *attValue)
+{
+    LOG_INFO("%{public}s enter,connectHandle = %hu, cid = %hu", __FUNCTION__, connectHandle, cid);
+
+    if (attValue == NULL) {
+        LOG_WARN("%{public}s: attValue is NULL", __FUNCTION__);
+        return;
+    }
+
+    Buffer *bufferPtr = NULL;
+    ReadResponseAsync *readResAsyncPtr = NULL;
+
+    bufferPtr = BufferRefMalloc(attValue);
+    readResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadResponseAsync));
+    if (readResAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        BufferFree(bufferPtr);
+        bufferPtr = NULL;
+        return;
+    }
+    readResAsyncPtr->connectHandle = connectHandle;
+    readResAsyncPtr->cid = cid;
+    readResAsyncPtr->attValue = bufferPtr;
+
+    AttAsyncProcess(AttReadResponseAsync, AttReadResponseAsyncDestroy, readResAsyncPtr);
+
+    return;
+}
+
+void ATT_ReadBlobResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *attReadBlobResObj)
+{
+    LOG_INFO("%{public}s enter,connectHandle = %hu, cid = %hu", __FUNCTION__, connectHandle, cid);
+
+    if (attReadBlobResObj == NULL) {
+        LOG_WARN("%{public}s: attReadBlobResObj is NULL", __FUNCTION__);
+        return;
+    }
+
+    Buffer *bufferPtr = NULL;
+    ReadResponseAsync *readBlobResAsyncPtr = NULL;
+
+    bufferPtr = BufferRefMalloc(attReadBlobResObj);
+    readBlobResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadResponseAsync));
+    if (readBlobResAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        BufferFree(bufferPtr);
+        bufferPtr = NULL;
+        return;
+    }
+    readBlobResAsyncPtr->connectHandle = connectHandle;
+    readBlobResAsyncPtr->cid = cid;
+    readBlobResAsyncPtr->attValue = bufferPtr;
+
+    AttAsyncProcess(AttReadBlobResponseAsync, AttReadBlobResponseAsyncDestroy, readBlobResAsyncPtr);
+
+    return;
+}
+
+void ATT_ReadMultipleResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *valueList)
+{
+    LOG_INFO("%{public}s enter,connectHandle = %hu, cid = %hu", __FUNCTION__, connectHandle, cid);
+
+    if (valueList == NULL) {
+        LOG_WARN("%{public}s: valueList is NULL", __FUNCTION__);
+        return;
+    }
+
+    Buffer *bufferPtr = NULL;
+    ReadResponseAsync *readMultipleResAsyncPtr = NULL;
+
+    bufferPtr = BufferRefMalloc(valueList);
+    readMultipleResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadResponseAsync));
+    if (readMultipleResAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        BufferFree(bufferPtr);
+        bufferPtr = NULL;
+        return;
+    }
+    readMultipleResAsyncPtr->connectHandle = connectHandle;
+    readMultipleResAsyncPtr->cid = cid;
+    readMultipleResAsyncPtr->attValue = bufferPtr;
+
+    AttAsyncProcess(AttReadMultipleResponseAsync, AttReadMultipleResponseAsyncDestroy, readMultipleResAsyncPtr);
+
+    return;
+}
+
+/**
+ * @brief gatt send read multiple variable response to att.
+ *
+ * @param context Indicates the pointer to context.
+ */
+static void AttSendReadMultipleVariableResponseAsync(const void *context)
+{
+    LOG_INFO("%{public}s enter", __FUNCTION__);
+
+    int ret;
+    uint16_t mtu = 0;
+    size_t bufferSize;
+    Packet *packet = NULL;
+    uint8_t *data = NULL;
+    Buffer *bufferNew = NULL;
+    AttConnectInfo *connect = NULL;
+    ReadResponseAsync *readMultipleVariableResponseAsyncPtr = NULL;
+
+    readMultipleVariableResponseAsyncPtr = (ReadResponseAsync *)context;
+
+    connect = AttResponseResolveConnect(
+        readMultipleVariableResponseAsyncPtr->connectHandle, readMultipleVariableResponseAsyncPtr->cid);
+    if (connect == NULL) {
+        LOG_INFO("%{public}s connect == NULL and goto ATT_READMULTIPLEVARIABLERESPONSE_END", __FUNCTION__);
+        goto ATT_READMULTIPLEVARIABLERESPONSE_END;
+    }
+
+    AttAssignMTU(&mtu, connect);
+
+    bufferSize = BufferGetSize(readMultipleVariableResponseAsyncPtr->attValue);
+    packet = PacketMalloc(0, 0, sizeof(uint8_t));
+    if (packet == NULL) {
+        LOG_ERROR("point to NULL");
+        goto ATT_READMULTIPLEVARIABLERESPONSE_END;
+    }
+    data = BufferPtr(PacketContinuousPayload(packet));
+    data[0] = READ_MULTIPLE_VARIABLE_RESPONSE;
+
+    if (bufferSize > (mtu - 1)) {
+        bufferNew = BufferSliceMalloc(readMultipleVariableResponseAsyncPtr->attValue, 0, mtu - 1);
+        PacketPayloadAddLast(packet, bufferNew);
+        BufferFree(bufferNew);
+    } else if ((bufferSize <= (mtu - 1)) && (bufferSize > 0)) {
+        PacketPayloadAddLast(packet, readMultipleVariableResponseAsyncPtr->attValue);
+    }
+
+    ret = AttResponseSendData(connect, packet);
+    ServerCallbackReturnValue(ret, connect);
+    PacketFree(packet);
+
+ATT_READMULTIPLEVARIABLERESPONSE_END:
+    BufferFree(readMultipleVariableResponseAsyncPtr->attValue);
+    MEM_MALLOC.free(readMultipleVariableResponseAsyncPtr);
+    return;
+}
+
+void ATT_ReadMultipleVariableResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *valueList)
+{
+    LOG_INFO("%{public}s enter,connectHandle = %hu, cid = %hu", __FUNCTION__, connectHandle, cid);
+
+    if (valueList == NULL) {
+        LOG_WARN("%{public}s: valueList is NULL", __FUNCTION__);
+        return;
+    }
+
+    Buffer *bufferPtr = NULL;
+    ReadResponseAsync *readMultipleVariableResAsyncPtr = NULL;
+
+    bufferPtr = BufferRefMalloc(valueList);
+    readMultipleVariableResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadResponseAsync));
+    if (readMultipleVariableResAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        BufferFree(bufferPtr);
+        bufferPtr = NULL;
+        return;
+    }
+    readMultipleVariableResAsyncPtr->connectHandle = connectHandle;
+    readMultipleVariableResAsyncPtr->cid = cid;
+    readMultipleVariableResAsyncPtr->attValue = bufferPtr;
+
+    AttAsyncProcess(
+        AttSendReadMultipleVariableResponseAsync, AttReadMultipleResponseAsyncDestroy, readMultipleVariableResAsyncPtr);
+
+    return;
+}
+
+void ATT_ReadByGroupTypeResponseCid(uint16_t connectHandle, uint16_t cid, uint8_t length,
+    const AttReadGoupAttributeData *serviceList, uint16_t serviceNum)
+{
+    LOG_INFO("%{public}s enter, connectHandle = %hu, cid = %hu,length = %{public}d,serviceNum = %{public}d",
+        __FUNCTION__, connectHandle, cid, length, serviceNum);
+
+    if ((serviceList == NULL) || (length < STEP_FOUR)) {
+        LOG_WARN("%{public}s: serviceList is NULL or length < STEP_FOUR, length = %hhu", __FUNCTION__, length);
+        return;
+    }
+
+    uint16_t index = 0;
+    uint16_t i = 0;
+    AttReadGoupAttributeData *attReadGroupAttrDataPtr = NULL;
+    ReadByGroupTypeResponseAsync *attReadByGroupResAsyncPtr = NULL;
+
+    attReadGroupAttrDataPtr = MEM_MALLOC.alloc(sizeof(AttReadGoupAttributeData) * serviceNum);
+    if (attReadGroupAttrDataPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        return;
+    }
+    for (; index < serviceNum; ++index) {
+        attReadGroupAttrDataPtr[index].attributeValue = MEM_MALLOC.alloc(length - STEP_FOUR);
+        if (attReadGroupAttrDataPtr[index].attributeValue == NULL) {
+            LOG_WARN("point is null");
+            // free the array and the values allocated so far before bailing
+            for (i = 0; i < index; ++i) {
+                MEM_MALLOC.free(attReadGroupAttrDataPtr[i].attributeValue);
+            }
+            MEM_MALLOC.free(attReadGroupAttrDataPtr);
+            return;
+        }
+        attReadGroupAttrDataPtr[index].attHandle = serviceList[index].attHandle;
+        attReadGroupAttrDataPtr[index].groupEndHandle = serviceList[index].groupEndHandle;
+        (void)memcpy_s(attReadGroupAttrDataPtr[index].attributeValue, length - STEP_FOUR,
+            serviceList[index].attributeValue, length - STEP_FOUR);
+    }
+
+    attReadByGroupResAsyncPtr = MEM_MALLOC.alloc(sizeof(ReadByGroupTypeResponseAsync));
+    if (attReadByGroupResAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        for (i = 0; i < serviceNum; ++i) {
+            MEM_MALLOC.free(attReadGroupAttrDataPtr[i].attributeValue);
+        }
+        MEM_MALLOC.free(attReadGroupAttrDataPtr);
+        return;
+    }
+    attReadByGroupResAsyncPtr->connectHandle = connectHandle;
+    attReadByGroupResAsyncPtr->cid = cid;
+    attReadByGroupResAsyncPtr->attReadGroupResContext.length = length;
+    attReadByGroupResAsyncPtr->attReadGroupResContext.num = serviceNum;
+    attReadByGroupResAsyncPtr->attReadGroupResContext.attributeData = attReadGroupAttrDataPtr;
+
+    AttAsyncProcess(AttReadByGroupTypeResponseAsync, AttReadByGroupTypeResponseAsyncDestroy, attReadByGroupResAsyncPtr);
+
+    return;
+}
+
+void ATT_WriteResponseCid(uint16_t connectHandle, uint16_t cid)
+{
+    LOG_INFO("%{public}s enter, connectHandle = %hu, cid = %hu", __FUNCTION__, connectHandle, cid);
+
+    WriteResponseAsync *writeResAsyncPtr = MEM_MALLOC.alloc(sizeof(WriteResponseAsync));
+    if (writeResAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        return;
+    }
+    writeResAsyncPtr->connectHandle = connectHandle;
+    writeResAsyncPtr->cid = cid;
+
+    AttAsyncProcess(AttWriteResponseAsync, AttWriteResponseAsyncDestroy, writeResAsyncPtr);
+
+    return;
+}
+
+void ATT_PrepareWriteResponseCid(
+    uint16_t connectHandle, uint16_t cid, AttReadBlobReqPrepareWriteValue attReadBlobObj, const Buffer *attValue)
+{
+    LOG_INFO("%{public}s enter, connectHandle = %hu, cid = %hu, attHandle = %{public}d, offset = %{public}d",
+        __FUNCTION__, connectHandle, cid, attReadBlobObj.attHandle, attReadBlobObj.offset);
+
+    if (attValue == NULL) {
+        LOG_WARN("%{public}s: attValue is NULL", __FUNCTION__);
+        return;
+    }
+
+    Buffer *bufferPtr = NULL;
+    PrepareWriteAsync *prepareWriteResAsyncPtr = NULL;
+
+    bufferPtr = BufferRefMalloc(attValue);
+    prepareWriteResAsyncPtr = MEM_MALLOC.alloc(sizeof(PrepareWriteAsync));
+    if (prepareWriteResAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        BufferFree(bufferPtr);
+        bufferPtr = NULL;
+        return;
+    }
+    prepareWriteResAsyncPtr->connectHandle = connectHandle;
+    prepareWriteResAsyncPtr->cid = cid;
+    prepareWriteResAsyncPtr->attReadBlobObj.attHandle = attReadBlobObj.attHandle;
+    prepareWriteResAsyncPtr->attReadBlobObj.offset = attReadBlobObj.offset;
+    prepareWriteResAsyncPtr->attValue = bufferPtr;
+
+    AttAsyncProcess(AttPrepareWriteResponseAsync, AttPrepareWriteResponseAsyncDestroy, prepareWriteResAsyncPtr);
+
+    return;
+}
+
+void ATT_ExecuteWriteResponseCid(uint16_t connectHandle, uint16_t cid)
+{
+    LOG_INFO("%{public}s enter,connectHandle = %hu, cid = %hu", __FUNCTION__, connectHandle, cid);
+
+    WriteResponseAsync *executeWriteResAsyncPtr = MEM_MALLOC.alloc(sizeof(WriteResponseAsync));
+    if (executeWriteResAsyncPtr == NULL) {
+        LOG_ERROR("point to NULL");
+        return;
+    }
+    executeWriteResAsyncPtr->connectHandle = connectHandle;
+    executeWriteResAsyncPtr->cid = cid;
+
+    AttAsyncProcess(AttExecuteWriteResponseAsync, AttExecuteWriteResponseAsyncDestroy, executeWriteResAsyncPtr);
 
     return;
 }

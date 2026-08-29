@@ -334,6 +334,57 @@ int GAP_LeSetDefaultPhy(uint8_t allPhys, uint8_t txPhys, uint8_t rxPhys);
 int GAP_LeSetDataLength(const BtAddr *addr, uint16_t txOctets, uint16_t txTime);
 
 /**
+ * @brief       Read the transmit power level of the local controller on the specified PHY.
+ *              The result is reported through the GapLePowerControlCallback::enhancedReadTransmitPowerResult.
+ * @param[in]   connectionHandle    connection handle of the LE link
+ * @param[in]   phy                 PHY to read: 0x01 LE 1M / 0x02 LE 2M / 0x03 LE Coded S=8 / 0x04 LE Coded S=2
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeEnhancedReadTransmitPowerLevel(uint16_t connectionHandle, uint8_t phy);
+
+/**
+ * @brief       Read the transmit power level of the remote controller on the specified PHY.
+ *              The result is reported through the GapLePowerControlCallback::transmitPowerReporting
+ *              event with reason 0x02 (Read Remote Transmit Power Level).
+ * @param[in]   connectionHandle    connection handle of the LE link
+ * @param[in]   phy                 PHY to read: 0x01 LE 1M / 0x02 LE 2M / 0x03 LE Coded S=8 / 0x04 LE Coded S=2
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeReadRemoteTransmitPowerLevel(uint16_t connectionHandle, uint8_t phy);
+
+/**
+ * @brief       Set the path loss threshold reporting parameters for the connection.
+ *              Path loss threshold crossing is reported through the
+ *              GapLePowerControlCallback::pathLossThreshold.
+ * @param[in]   params              Pointer to the path loss reporting parameters
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetPathLossReportingParameters(const GapLePathLossReportingParams *params);
+
+/**
+ * @brief       Enable or disable the path loss reporting for the connection.
+ * @param[in]   connectionHandle    connection handle of the LE link
+ * @param[in]   enable              0x00 disable / 0x01 enable path loss reporting
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetPathLossReportingEnable(uint16_t connectionHandle, uint8_t enable);
+
+/**
+ * @brief       Enable or disable the transmit power reporting for the connection.
+ *              The result is reported through the GapLePowerControlCallback::transmitPowerReporting.
+ * @param[in]   connectionHandle    connection handle of the LE link
+ * @param[in]   localEnable         0x00 disable / 0x01 enable local transmit power reporting
+ * @param[in]   remoteEnable        0x00 disable / 0x01 enable remote transmit power reporting
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetTransmitPowerReportingEnable(uint16_t connectionHandle, uint8_t localEnable, uint8_t remoteEnable);
+
+/**
  * @brief       Register LE controller information callback.
  * @param[in]   callback            LE controller callback structure
  * @param[in]   context             callback context parameter
@@ -692,6 +743,25 @@ int GAP_RegisterLeConnCallback(const GapLeConnCallback *callback, void *context)
  *              @c GAP_ERR_*        : The function is not executed successfully.
  */
 int GAP_DeregisterLeConnCallback(void);
+
+/**
+ * @brief       Register the LE power control callback.
+ *              Receives the results of the LE power control operations, including the
+ *              LE Enhanced Read Transmit Power Level, LE Path Loss Threshold and
+ *              LE Transmit Power Reporting.
+ * @param[in]   callback            LE power control callback structure
+ * @param[in]   context             callback context parameter
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_RegisterLePowerControlCallback(const GapLePowerControlCallback *callback, void *context);
+
+/**
+ * @brief       Deregister the LE power control callback.
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_DeregisterLePowerControlCallback(void);
 
 /**
  * @brief       Send Connection parameter update request

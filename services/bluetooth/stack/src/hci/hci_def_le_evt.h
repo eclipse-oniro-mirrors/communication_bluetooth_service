@@ -372,6 +372,159 @@ typedef struct HciLePeriodicAdvertisingSyncTransferReceivedEventParamTag {
     uint8_t advertiserClockAccuracy;
 } HciLePeriodicAdvertisingSyncTransferReceivedEventParam;
 
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.7.65,25 LE CIS Established Event
+#define HCI_LE_CIS_ESTABLISHED_EVENT 0x19
+
+typedef struct HciLeCisEstablishedEventParamTag {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint8_t cigSyncDelay[3];
+    uint8_t cisSyncDelay[3];
+    uint8_t transportLatencyMToS[3];
+    uint8_t transportLatencySToM[3];
+    uint8_t phyMToS;
+    uint8_t phySToM;
+    uint8_t nse;
+    uint8_t bnMToS;
+    uint8_t bnSToM;
+    uint8_t ftMToS;
+    uint8_t ftSToM;
+    uint16_t maxPduMToS;
+    uint16_t maxPduSToM;
+    uint16_t isoInterval;
+} HciLeCisEstablishedEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.7.65,26 LE CIS Request Event
+#define HCI_LE_CIS_REQUEST_EVENT 0x1A
+
+typedef struct {
+    uint16_t aclHandle;
+    uint16_t cisHandle;
+    uint8_t cigId;
+    uint8_t cisId;
+} HciLeCisRequestEventParam;
+
+#ifndef HCI_LE_BIS_COUNT_MAX
+#define HCI_LE_BIS_COUNT_MAX 31
+#endif
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.7.65,27 LE Create BIG Complete Event
+#define HCI_LE_CREATE_BIG_COMPLETE_EVENT 0x1B
+
+typedef struct {
+    uint8_t status;
+    uint8_t bigHandle;
+    uint8_t bigSyncDelay[3];
+    uint8_t transportLatencyBig[3];
+    uint8_t phy;
+    uint8_t nse;
+    uint8_t bn;
+    uint8_t pto;
+    uint8_t irc;
+    uint16_t maxPdu;
+    uint16_t isoInterval;
+    uint8_t numBis;
+    uint16_t bisHandles[HCI_LE_BIS_COUNT_MAX];
+} HciLeCreateBigCompleteEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.7.65,28 LE Terminate BIG Complete Event
+#define HCI_LE_TERMINATE_BIG_COMPLETE_EVENT 0x1C
+
+typedef struct {
+    uint8_t bigHandle;
+    uint8_t status;
+} HciLeTerminateBigCompleteEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.7.65,29 LE BIG Sync Established Event
+#define HCI_LE_BIG_SYNC_ESTABLISHED_EVENT 0x1D
+
+typedef struct {
+    uint8_t status;
+    uint8_t bigHandle;
+    uint8_t transportLatencyBig[3];
+    uint8_t nse;
+    uint8_t bn;
+    uint8_t pto;
+    uint8_t irc;
+    uint16_t maxPdu;
+    uint16_t isoInterval;
+    uint8_t numBis;
+    uint16_t bisHandles[HCI_LE_BIS_COUNT_MAX];
+} HciLeBigSyncEstablishedEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.7.65,30 LE BIG Sync Lost Event
+#define HCI_LE_BIG_SYNC_LOST_EVENT 0x1E
+
+typedef struct {
+    uint8_t bigHandle;
+    uint8_t reason;
+} HciLeBigSyncLostEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.7.65,31 LE Request Peer SCA Complete Event
+#define HCI_LE_REQUEST_PEER_SCA_COMPLETE_EVENT 0x1F
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint8_t peerClockAccuracy;
+} HciLeRequestPeerScaCompleteEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.7.65,32 LE Path Loss Threshold Event
+#define HCI_LE_PATH_LOSS_THRESHOLD_EVENT 0x20
+
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t currentPathLoss;
+    uint8_t zoneEntered;
+} HciLePathLossThresholdEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.7.65,33 LE Transmit Power Reporting Event
+#define HCI_LE_TRANSMIT_POWER_REPORTING_EVENT 0x21
+
+// The event payload is 7 bytes: Handle(2) + Reason(1) + Phy(1) + Power(1) +
+// Flag(1) + Delta(1) (Vol 4 Part E 7.7.65,33). The leading status field is NOT
+// on the wire: it is filled only by synthetic failure paths
+// (HciCmdOnLeReadRemoteTransmitPowerLevelFailed and the 0x0077 Command_Complete
+// error reply) so callers can be woken with an error. Real events leave it 0.
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint8_t reason;
+    uint8_t phy;
+    int8_t transmitPowerLevel;
+    uint8_t transmitPowerLevelFlag;
+    int8_t delta;
+} HciLeTransmitPowerReportingEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.7.65,34 LE BIGInfo Advertising Report Event
+#define HCI_LE_BIGINFO_ADVERTISING_REPORT_EVENT 0x22
+
+typedef struct {
+    uint16_t syncHandle;
+    uint8_t numBis;
+    uint8_t nse;
+    uint16_t isoInterval;
+    uint8_t bn;
+    uint8_t pto;
+    uint8_t irc;
+    uint16_t maxPdu;
+    uint8_t sduInterval[3];
+    uint16_t maxSdu;
+    uint8_t phy;
+    uint8_t framing;
+    uint8_t encryption;
+} HciLeBigInfoAdvertisingReportEventParam;
+
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.7.75 Authenticated Payload Timeout Expired Event
 #define HCI_AUTHENTICATED_PAYLOAD_TIMEOUT_EXPIRED_EVENT 0x57

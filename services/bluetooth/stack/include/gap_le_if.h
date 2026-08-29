@@ -353,6 +353,52 @@ typedef struct {
     void (*leSetDataLengthResult)(uint8_t status, const BtAddr *addr, void *context);
 } GapLeConnCallback;
 
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t phy;
+    int8_t currentTransmitPowerLevel;
+    int8_t maxTransmitPowerLevel;
+} GapLeEnhancedReadTxPowerInfo;
+
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t currentPathLoss;
+    uint8_t zoneEntered;
+} GapLePathLossThresholdInfo;
+
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t highThreshold;
+    uint8_t highHysteresis;
+    uint8_t lowThreshold;
+    uint8_t lowHysteresis;
+    uint16_t minTimeSpent;
+} GapLePathLossReportingParams;
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint8_t reason;
+    uint8_t phy;
+    int8_t transmitPowerLevel;
+    uint8_t transmitPowerLevelFlag;
+    int8_t delta;
+} GapLeTransmitPowerReportingInfo;
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+} GapLeStatusHandleInfo;
+
+typedef struct {
+    void (*enhancedReadTransmitPowerResult)(uint8_t status, const GapLeEnhancedReadTxPowerInfo *info, void *context);
+    void (*setPathLossReportingParamsResult)(uint8_t status, const GapLeStatusHandleInfo *info, void *context);
+    void (*setPathLossReportingEnableResult)(uint8_t status, const GapLeStatusHandleInfo *info, void *context);
+    void (*setTransmitPowerReportingEnableResult)(uint8_t status, const GapLeStatusHandleInfo *info, void *context);
+    void (*pathLossThreshold)(const GapLePathLossThresholdInfo *info, void *context);
+    void (*transmitPowerReporting)(const GapLeTransmitPowerReportingInfo *info, void *context);
+} GapLePowerControlCallback;
+
 // Deprecated: legacy member names of GapLeConnCallback kept for source compatibility
 // with earlier releases. New code must use the renamed members.
 #define GAPLE_SET_HOST_CHANNEL_CLASSIFICATION_RESULT leSetHostChannelClassificationResult
@@ -1132,8 +1178,95 @@ BTSTACK_API int GAPIF_LeSetPhy(
  * @param[in]   addr                target device address
  * @return      @c BT_SUCCESS      : The function is executed successfully.
  *              @c otherwise        : The function is not executed successfully.
+ * @note        Result is delivered asynchronously on the Stack thread (same as the HCI
+ *              events); see the registered power control callback struct.
  */
 BTSTACK_API int GAPIF_LeReadPhy(const BtAddr *addr);
+
+/**
+ * @brief       Read the current and maximum transmit power levels of the local Controller.
+ * @param[in]   connectionHandle    ACL connection handle (0x0000-0x0EFF)
+ * @param[in]   phy                 0x01 LE 1M / 0x02 LE 2M / 0x03 LE Coded S=8 / 0x04 LE Coded S=2
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ * @note        Result is delivered asynchronously on the Stack thread (same as the HCI
+ *              events); see the registered power control callback struct.
+ */
+BTSTACK_API int GAPIF_LeEnhancedReadTransmitPowerLevel(uint16_t connectionHandle, uint8_t phy);
+
+/**
+ * @brief       Read the transmit power level of the remote Controller.
+ * @param[in]   connectionHandle    ACL connection handle (0x0000-0x0EFF)
+ * @param[in]   phy                 0x01 LE 1M / 0x02 LE 2M / 0x03 LE Coded S=8 / 0x04 LE Coded S=2
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ * @note        Completion is delivered by the transmitPowerReporting callback (Reason 0x02)
+ *              asynchronously on the Stack thread.
+ */
+BTSTACK_API int GAPIF_LeReadRemoteTransmitPowerLevel(uint16_t connectionHandle, uint8_t phy);
+
+/**
+ * @brief       Set the path loss reporting parameters for an ACL connection.
+ * @param[in]   params              Pointer to the path loss reporting parameters
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ * @note        Result is delivered asynchronously on the Stack thread (same as the HCI
+ *              events); see the registered power control callback struct.
+ */
+BTSTACK_API int GAPIF_LeSetPathLossReportingParameters(const GapLePathLossReportingParams *params);
+
+/**
+ * @brief       Enable or disable path loss reporting for an ACL connection.
+ * @param[in]   connectionHandle    ACL connection handle (0x0000-0x0EFF)
+ * @param[in]   enable              0x00 Reporting disabled / 0x01 Reporting enabled
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ * @note        Result is delivered asynchronously on the Stack thread (same as the HCI
+ *              events); see the registered power control callback struct.
+ */
+BTSTACK_API int GAPIF_LeSetPathLossReportingEnable(uint16_t connectionHandle, uint8_t enable);
+
+/**
+ * @brief       Enable or disable transmit power reporting for an ACL connection.
+ * @param[in]   connectionHandle    ACL connection handle (0x0000-0x0EFF)
+ * @param[in]   localEnable         0x00 Reporting disabled / 0x01 Reporting enabled
+ * @param[in]   remoteEnable        0x00 Reporting disabled / 0x01 Reporting enabled
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ * @note        Result is delivered asynchronously on the Stack thread (same as the HCI
+ *              events); see the registered power control callback struct.
+ */
+BTSTACK_API int GAPIF_LeSetTransmitPowerReportingEnable(
+    uint16_t connectionHandle, uint8_t localEnable, uint8_t remoteEnable);
+
+/**
+ * @brief       Register LE Power Control callback.
+ * @param[in]   callback            LE Power Control callback
+ * @param[in]   context             callback context parameter
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ * @note        Single-slot registration, the callback structure is copied by value during the
+ *              call (stack-local structures are safe); the context pointer is stored and must
+ *              stay valid until deregistered. All callbacks run on the Stack thread, the same
+ *              thread that processes the HCI events they originate from; callers must not
+ *              block inside a callback on a resource owned by the Stack thread.
+ */
+BTSTACK_API int GAPIF_LeRegisterPowerControlCallback(const GapLePowerControlCallback *callback, void *context);
+
+/**
+ * @brief       Deregister LE Power Control callback.
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ * @note        Safe to call from inside a power-control callback (i.e. from within any
+ *              member of GapLePowerControlCallback): the implementation detects the
+ *              re-entrant call through a thread-local dispatch flag and returns
+ *              immediately, skipping the reference-drain wait that would otherwise
+ *              block the Stack thread (the dispatch has already copied the callback by
+ *              value, so the cleared registration cannot affect the ongoing dispatch).
+ *              A non-success return means the deregistration did not complete cleanly
+ *              (dispatches were still in flight when the wait window elapsed).
+ */
+BTSTACK_API int GAPIF_LeDeregisterPowerControlCallback(void);
 
 /**
  * @brief       Set the default PHY preference used for subsequent connections.

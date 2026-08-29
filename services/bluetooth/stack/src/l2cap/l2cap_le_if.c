@@ -157,6 +157,128 @@ int L2CIF_LeCreditBasedConnectionReq(const BtAddr *addr, uint16_t lpsm, uint16_t
 }
 
 typedef struct {
+    BtAddr addr;
+    L2capLeConfigInfo cfg;
+    uint16_t lcids[L2CAP_LE_EATT_MAX_CHANNEL];
+    uint16_t n;
+    void (*cb)(int result, const uint16_t *lcids, uint16_t n, void *ctx);
+    void *ctx;
+} L2cifLeEattConnectionReqContext;
+
+static void L2cifLeEattConnectionReq(const void *context)
+{
+    L2cifLeEattConnectionReqContext *ctx = NULL;
+    int result;
+
+    ctx = (L2cifLeEattConnectionReqContext *)context;
+
+    result = L2CAP_LeEattConnectionReq(&(ctx->addr), &(ctx->cfg), ctx->lcids, ctx->n);
+    if (ctx->cb != NULL) {
+        ctx->cb(result, ctx->lcids, ctx->n, ctx->ctx);
+    }
+
+    L2capFree(ctx);
+    return;
+}
+
+int L2CIF_LeEattConnectionReq(const BtAddr *addr, const L2capLeConfigInfo *cfg, uint16_t n,
+    void (*cb)(int result, const uint16_t *lcids, uint16_t n, void *ctx), void *ctx)
+{
+    L2cifLeEattConnectionReqContext *eattCtx = NULL;
+
+    if ((addr == NULL) || (cfg == NULL) || (cb == NULL)) {
+        return BT_BAD_PARAM;
+    }
+    if ((n < 1) || (n > L2CAP_LE_EATT_MAX_CHANNEL)) {
+        return BT_BAD_PARAM;
+    }
+
+    eattCtx = L2capAlloc(sizeof(L2cifLeEattConnectionReqContext));
+    if (eattCtx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memcpy_s(&(eattCtx->addr), sizeof(BtAddr), addr, sizeof(BtAddr));
+    (void)memcpy_s(&(eattCtx->cfg), sizeof(L2capLeConfigInfo), cfg, sizeof(L2capLeConfigInfo));
+    eattCtx->n = n;
+    eattCtx->cb = cb;
+    eattCtx->ctx = ctx;
+
+    int result = L2capAsynchronousProcess(L2cifLeEattConnectionReq, L2capFree, eattCtx);
+    if (result != BT_SUCCESS) {
+        // The task was never queued (queue full/OOM) and L2capAsynchronousProcess already released
+        // eattCtx through its destroy callback: propagate the failure instead of claiming success.
+        // cb is not invoked here - it fires exactly once, and only when the request was dispatched
+        // (the file's L2CIF convention, see e.g. L2CIF_LeRegisterService); the caller (AttEattEstablish)
+        // settles its own state on a non-success return and completes its callback exactly once itself.
+        return result;
+    }
+    return BT_SUCCESS;
+}
+
+typedef struct {
+    uint16_t cids[L2CAP_LE_EATT_MAX_CHANNEL];
+    uint16_t n;
+    uint16_t mtu;
+    uint16_t mps;
+    void (*cb)(int result, void *ctx);
+    void *ctx;
+} L2cifLeEattReconfigureReqContext;
+
+static void L2cifLeEattReconfigureReq(const void *context)
+{
+    L2cifLeEattReconfigureReqContext *ctx = NULL;
+    L2capLeEattCidList lcids;
+    int result;
+
+    ctx = (L2cifLeEattReconfigureReqContext *)context;
+
+    lcids.cids = ctx->cids;
+    lcids.n = (uint8_t)ctx->n;
+    result = L2CAP_LeEattReconfigureReq(&lcids, ctx->mtu, ctx->mps);
+    if (ctx->cb != NULL) {
+        ctx->cb(result, ctx->ctx);
+    }
+
+    L2capFree(ctx);
+    return;
+}
+
+int L2CIF_LeEattReconfigureReq(const L2CIF_LeEattReconfigureParams *params)
+{
+    L2cifLeEattReconfigureReqContext *eattCtx = NULL;
+
+    if (params == NULL || params->lcids == NULL) {
+        return BT_BAD_PARAM;
+    }
+    if ((params->n < 1) || (params->n > L2CAP_LE_EATT_MAX_CHANNEL)) {
+        return BT_BAD_PARAM;
+    }
+
+    eattCtx = L2capAlloc(sizeof(L2cifLeEattReconfigureReqContext));
+    if (eattCtx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memcpy_s(eattCtx->cids, sizeof(eattCtx->cids), params->lcids, (size_t)params->n * sizeof(uint16_t));
+    eattCtx->n = params->n;
+    eattCtx->mtu = params->mtu;
+    eattCtx->mps = params->mps;
+    eattCtx->cb = params->cb;
+    eattCtx->ctx = params->ctx;
+
+    int result = L2capAsynchronousProcess(L2cifLeEattReconfigureReq, L2capFree, eattCtx);
+    if (result != BT_SUCCESS) {
+        // The task was never queued (queue full/OOM) and L2capAsynchronousProcess already released
+        // eattCtx through its destroy callback: propagate the failure instead of claiming success.
+        // cb is not invoked here - it fires exactly once, and only when the request was dispatched
+        // (the file's L2CIF convention); a non-success return must settle the caller's state.
+        return result;
+    }
+    return BT_SUCCESS;
+}
+
+typedef struct {
     uint16_t lcid;
     uint8_t id;
     L2capLeConfigInfo cfg;

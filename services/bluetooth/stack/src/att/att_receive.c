@@ -35,7 +35,11 @@
 #include "log.h"
 
 typedef struct SigedWriteCommandConfirmationContext {
-    AttConnectInfo *connect;
+    uint16_t connectHandle; // retGattConnectHandle captured at receive time: the connection
+                            // slot may be cleared or reused while the off-queue signature
+                            // verification runs, so the bearer is re-resolved by handle/cid
+                            // instead of a raw slot pointer
+    uint16_t cid;           // bearer identity: LE_CID / dynamic EATT lcid / 0 for BR/EDR
     Buffer *bufferallPtr;
     uint8_t *data;
     uint16_t bufferSize;
@@ -79,18 +83,12 @@ static void AttGapSignatureConfirmationResultAsync(const void *context)
 
     AttGapSignatureConfirmationAsync *attGapSigConfirmationPtr = (AttGapSignatureConfirmationAsync *)context;
     Buffer *bufferSig = (Buffer *)(attGapSigConfirmationPtr->context);
+    AttConnectInfo *connect = NULL;
     AttWrite attWriteObj;
     Buffer *bufferNew = NULL;
-    AttServerDataCallback *attServerDataCallback = NULL;
     SigedWriteCommandConfirmationContext *sigedWriteCommandConfirmContextPtr = NULL;
 
     if (bufferSig == NULL) {
-        goto GAPSIGNATURECONFIRMATIONRESULT_END;
-    }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
         goto GAPSIGNATURECONFIRMATIONRESULT_END;
     }
 
@@ -103,13 +101,23 @@ static void AttGapSignatureConfirmationResultAsync(const void *context)
         GAPSIGNATURESIZE);
     attWriteObj.signedWriteCommand.authSignatureLen = GAPSIGNATURESIZE;
     attWriteObj.signedWriteCommand.result = (AttSignedWriteCommandResult)attGapSigConfirmationPtr->result;
+
+    // The connection slot captured at receive time may have been cleared or reused while the
+    // signature was verified off-queue: re-resolve the bearer by the captured handle/cid and
+    // drop the result if the connection is gone, instead of dispatching through a stale slot
+    // pointer that could carry a wrong handle or cid to the upper layer.
+    connect = AttGetConnectInfoByConnectHandleAndLeCid(
+        sigedWriteCommandConfirmContextPtr->connectHandle, sigedWriteCommandConfirmContextPtr->cid);
+    if (connect == NULL) {
+        LOG_WARN("%{public}s: connection gone, drop signed write result, handle = %hu", __FUNCTION__,
+            sigedWriteCommandConfirmContextPtr->connectHandle);
+        BufferFree(sigedWriteCommandConfirmContextPtr->bufferallPtr);
+        BufferFree(bufferSig);
+        goto GAPSIGNATURECONFIRMATIONRESULT_END;
+    }
     bufferNew = BufferSliceMalloc(
         sigedWriteCommandConfirmContextPtr->bufferallPtr, STEP_THREE, sigedWriteCommandConfirmContextPtr->bufferSize);
-    attServerDataCallback->attServerCallback(sigedWriteCommandConfirmContextPtr->connect->retGattConnectHandle,
-        ATT_SIGNED_WRITE_COMMAND_ID,
-        &attWriteObj,
-        bufferNew,
-        attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_SIGNED_WRITE_COMMAND_ID, &attWriteObj, bufferNew);
 
     BufferFree(bufferNew);
     BufferFree(sigedWriteCommandConfirmContextPtr->bufferallPtr);
@@ -341,18 +349,11 @@ void AttErrorResponse(AttConnectInfo *connect, const Buffer *buffer)
 
     AttError attErrorTObj;
     uint8_t *data = NULL;
-    AttClientDataCallback *attClientDataCallback = NULL;
 
     AlarmCancel(connect->alarm);
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTERRORRESPONSE_END;
-    }
-
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
         goto ATTERRORRESPONSE_END;
     }
 
@@ -368,8 +369,7 @@ void AttErrorResponse(AttConnectInfo *connect, const Buffer *buffer)
         attErrorTObj.attHandleInError,
         attErrorTObj.errorCode);
 
-    attClientDataCallback->attClientCallback(
-        connect->retGattConnectHandle, ATT_ERROR_RESPONSE_ID, &attErrorTObj, NULL, attClientDataCallback->context);
+    AttClientCallbackDispatch(connect, ATT_ERROR_RESPONSE_ID, &attErrorTObj, NULL);
 
 ATTERRORRESPONSE_END:
     LOG_INFO("%{public}s return connect != NULL, connectHandle = %hu", __FUNCTION__, connect->retGattConnectHandle);
@@ -394,17 +394,10 @@ void AttExchangeMTURequest(AttConnectInfo *connect, const Buffer *buffer)
 
     AttExchangeMTUType attExchangeMTUObj;
     uint8_t *data = NULL;
-    AttServerDataCallback *attServerDataCallback = NULL;
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTEXCHANGEMTUREQUEST_END;
-    }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTEXCHANGEMTUREQUEST_END;
+        return;
     }
 
     data = (uint8_t *)BufferPtr(buffer);
@@ -415,13 +408,8 @@ void AttExchangeMTURequest(AttConnectInfo *connect, const Buffer *buffer)
         connect->retGattConnectHandle,
         attExchangeMTUObj.mtuSize);
 
-    attServerDataCallback->attServerCallback(connect->retGattConnectHandle,
-        ATT_EXCHANGE_MTU_REQUEST_ID,
-        &attExchangeMTUObj,
-        NULL,
-        attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_EXCHANGE_MTU_REQUEST_ID, &attExchangeMTUObj, NULL);
 
-ATTEXCHANGEMTUREQUEST_END:
     return;
 }
 
@@ -441,18 +429,11 @@ void AttExchangeMTUResponse(AttConnectInfo *connect, const Buffer *buffer)
 
     AttExchangeMTUType attExchangeMTUObj;
     uint16_t *data = NULL;
-    AttClientDataCallback *attClientDataCallback = NULL;
 
     AlarmCancel(connect->alarm);
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTEXCHANGEMTURESPONSE_END;
-    }
-
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
         goto ATTEXCHANGEMTURESPONSE_END;
     }
 
@@ -464,11 +445,7 @@ void AttExchangeMTUResponse(AttConnectInfo *connect, const Buffer *buffer)
         connect->retGattConnectHandle,
         attExchangeMTUObj.mtuSize);
 
-    attClientDataCallback->attClientCallback(connect->retGattConnectHandle,
-        ATT_EXCHANGE_MTU_RESPONSE_ID,
-        &attExchangeMTUObj,
-        NULL,
-        attClientDataCallback->context);
+    AttClientCallbackDispatch(connect, ATT_EXCHANGE_MTU_RESPONSE_ID, &attExchangeMTUObj, NULL);
 
 ATTEXCHANGEMTURESPONSE_END:
     LOG_INFO("%{public}s return connect != NULL, connectHandle = %hu", __FUNCTION__, connect->retGattConnectHandle);
@@ -493,22 +470,15 @@ void AttFindInformationRequest(AttConnectInfo *connect, const Buffer *buffer)
 
     AttFind attFindObj;
     uint8_t *data = NULL;
-    AttServerDataCallback *attServerDataCallback = NULL;
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTFINDINFORMATIONREQUEST_END;
+        return;
     }
 
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         ((AttConnectInfo *)connect)->mtuFlag = true;
-    }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTFINDINFORMATIONREQUEST_END;
     }
 
     data = (uint8_t *)BufferPtr(buffer);
@@ -519,13 +489,8 @@ void AttFindInformationRequest(AttConnectInfo *connect, const Buffer *buffer)
         connect->retGattConnectHandle,
         attFindObj.findInformationRequest.startHandle,
         attFindObj.findInformationRequest.endHandle);
-    attServerDataCallback->attServerCallback(connect->retGattConnectHandle,
-        ATT_FIND_INFORMATION_REQUEST_ID,
-        &attFindObj,
-        NULL,
-        attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_FIND_INFORMATION_REQUEST_ID, &attFindObj, NULL);
 
-ATTFINDINFORMATIONREQUEST_END:
     return;
 }
 
@@ -570,18 +535,11 @@ void AttFindInformationResponse(AttConnectInfo *connect, const Buffer *buffer)
     size_t dataLen;
     uint8_t *data = NULL;
     AttError attErrorObj;
-    AttClientDataCallback *attClientDataCallback = NULL;
 
     AlarmCancel(connect->alarm);
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL and goto ATTFINDINFORMATIONRESPONSE_END", __FUNCTION__);
-        goto ATTFINDINFORMATIONRESPONSE_END;
-    }
-
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
         goto ATTFINDINFORMATIONRESPONSE_END;
     }
     dataLen = BufferGetSize(buffer);
@@ -591,19 +549,14 @@ void AttFindInformationResponse(AttConnectInfo *connect, const Buffer *buffer)
 
     if (AttJudgeInfoLen(inforLen, dataLen, &inforNum) < 0) {
         FindInformationResponseErrorAssign(&attErrorObj, connect);
-        attClientDataCallback->attClientCallback(
-            connect->retGattConnectHandle, ATT_ERROR_RESPONSE_ID, &attErrorObj, NULL, attClientDataCallback->context);
+        AttClientCallbackDispatch(connect, ATT_ERROR_RESPONSE_ID, &attErrorObj, NULL);
         goto ATTFINDINFORMATIONRESPONSE_END;
     }
 
     attFindObj.findInforRsponse.handleUuidPairs = MEM_MALLOC.alloc(sizeof(AttHandleUuid) * inforNum);
     attFindObj.findInforRsponse.pairNum = inforNum;
     AttFindInformationResAssign(inforNum, &attFindObj, data, inforLen);
-    attClientDataCallback->attClientCallback(connect->retGattConnectHandle,
-        ATT_FIND_INFORMATION_RESPONSE_ID,
-        &attFindObj,
-        NULL,
-        attClientDataCallback->context);
+    AttClientCallbackDispatch(connect, ATT_FIND_INFORMATION_RESPONSE_ID, &attFindObj, NULL);
 
     MEM_MALLOC.free(attFindObj.findInforRsponse.handleUuidPairs);
 
@@ -632,22 +585,15 @@ void AttFindByTypeValueRequest(AttConnectInfo *connect, const Buffer *buffer)
     Buffer *bufferNew = NULL;
     uint8_t *data = NULL;
     size_t buffSize;
-    AttServerDataCallback *attServerDataCallback = NULL;
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL and goto ATTFINDBYTYPEVALUEREQUEST_END", __FUNCTION__);
-        goto ATTFINDBYTYPEVALUEREQUEST_END;
+        return;
     }
 
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
-    }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTFINDBYTYPEVALUEREQUEST_END;
     }
 
     buffSize = BufferGetSize(buffer);
@@ -662,21 +608,12 @@ void AttFindByTypeValueRequest(AttConnectInfo *connect, const Buffer *buffer)
 
     if (buffSize - STEP_SIX > 0) {
         bufferNew = BufferSliceMalloc(buffer, STEP_SIX, buffSize - STEP_SIX);
-        attServerDataCallback->attServerCallback(connect->retGattConnectHandle,
-            ATT_FIND_BY_TYPE_VALUE_REQUEST_ID,
-            &attFindObj,
-            bufferNew,
-            attServerDataCallback->context);
+        AttServerCallbackDispatch(connect, ATT_FIND_BY_TYPE_VALUE_REQUEST_ID, &attFindObj, bufferNew);
         BufferFree(bufferNew);
     } else {
-        attServerDataCallback->attServerCallback(connect->retGattConnectHandle,
-            ATT_FIND_BY_TYPE_VALUE_REQUEST_ID,
-            &attFindObj,
-            NULL,
-            attServerDataCallback->context);
+        AttServerCallbackDispatch(connect, ATT_FIND_BY_TYPE_VALUE_REQUEST_ID, &attFindObj, NULL);
     }
 
-ATTFINDBYTYPEVALUEREQUEST_END:
     return;
 }
 
@@ -718,22 +655,19 @@ void AttFindByTypeValueResponse(AttConnectInfo *connect, const Buffer *buffer)
     uint16_t inforNum = 0;
     AttFind attFindObj;
     uint8_t *data = NULL;
-    AttClientDataCallback *attClientDataCallback = NULL;
     AttError attErrorObj;
 
     AlarmCancel(connect->alarm);
 
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL) || (buffer == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
+    if (buffer == NULL) {
+        LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
         goto ATTFINDBYTYPEVALUERESPONSE_END;
     }
 
     dataLen = BufferGetSize(buffer);
     if (dataLen % STEP_FOUR) {
         FindByTypeValueResponseErrorAssign(&attErrorObj, connect);
-        attClientDataCallback->attClientCallback(
-            connect->retGattConnectHandle, ATT_ERROR_RESPONSE_ID, &attErrorObj, NULL, attClientDataCallback->context);
+        AttClientCallbackDispatch(connect, ATT_ERROR_RESPONSE_ID, &attErrorObj, NULL);
         goto ATTFINDBYTYPEVALUERESPONSE_END;
     } else {
         inforNum = dataLen / STEP_FOUR;
@@ -749,11 +683,7 @@ void AttFindByTypeValueResponse(AttConnectInfo *connect, const Buffer *buffer)
         handleInfoList[indexNumber].groupEndHandle = ((uint16_t *)(data + STEP_TWO + indexNumber * STEP_FOUR))[0];
     }
 
-    attClientDataCallback->attClientCallback(connect->retGattConnectHandle,
-        ATT_FIND_BY_TYPE_VALUE_RESPONSE_ID,
-        &attFindObj,
-        NULL,
-        attClientDataCallback->context);
+    AttClientCallbackDispatch(connect, ATT_FIND_BY_TYPE_VALUE_RESPONSE_ID, &attFindObj, NULL);
     MEM_MALLOC.free(attFindObj.findByTypeValueResponse.handleInfoList);
 
 ATTFINDBYTYPEVALUERESPONSE_END:
@@ -780,21 +710,14 @@ void AttReadByTypeRequest(AttConnectInfo *connect, const Buffer *buffer)
     AttRead attReadObj;
     uint8_t *data = NULL;
     uint16_t uuidLen;
-    AttServerDataCallback *attServerDataCallback = NULL;
 
     if (buffer == NULL) {
-        goto ATTREADBYTYPEREQUEST_END;
+        return;
     }
 
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
-    }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTREADBYTYPEREQUEST_END;
     }
 
     buffSize = BufferGetSize(buffer);
@@ -816,12 +739,10 @@ void AttReadByTypeRequest(AttConnectInfo *connect, const Buffer *buffer)
         (void)memcpy_s(attReadObj.readHandleRangeUuid.uuid->uuid128, uuidLen, data + STEP_FOUR, uuidLen);
     }
 
-    attServerDataCallback->attServerCallback(
-        connect->retGattConnectHandle, ATT_READ_BY_TYPE_REQUEST_ID, &attReadObj, NULL, attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_READ_BY_TYPE_REQUEST_ID, &attReadObj, NULL);
 
     MEM_MALLOC.free(attReadObj.readHandleRangeUuid.uuid);
 
-ATTREADBYTYPEREQUEST_END:
     return;
 }
 
@@ -844,12 +765,10 @@ void AttReadByTypeResponse(AttConnectInfo *connect, const Buffer *buffer)
     uint8_t len;
     uint16_t indexNum = 0;
     uint8_t *data = NULL;
-    AttClientDataCallback *attClientDataCallback = NULL;
     AttError attErrorObj;
 
     AlarmCancel(connect->alarm);
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL || (buffer == NULL))) {
+    if (buffer == NULL) {
         goto ATTREADBYTYPERESPONSE_END;
     }
 
@@ -862,8 +781,7 @@ void AttReadByTypeResponse(AttConnectInfo *connect, const Buffer *buffer)
         attReadObj.readHandleListNum.valueNum = 0;
     } else if ((dataLen - 1) % len) {
         AttReadByTypeResErrorAssign(&attErrorObj, connect);
-        attClientDataCallback->attClientCallback(
-            connect->retGattConnectHandle, ATT_ERROR_RESPONSE_ID, &attErrorObj, NULL, attClientDataCallback->context);
+        AttClientCallbackDispatch(connect, ATT_ERROR_RESPONSE_ID, &attErrorObj, NULL);
         goto ATTREADBYTYPERESPONSE_END;
     } else {
         attReadObj.readHandleListNum.valueNum = (dataLen - 1) / len;
@@ -882,8 +800,7 @@ void AttReadByTypeResponse(AttConnectInfo *connect, const Buffer *buffer)
             len - STEP_TWO);
         data += len;
     }
-    attClientDataCallback->attClientCallback(
-        connect->retGattConnectHandle, ATT_READ_BY_TYPE_RESPONSE_ID, &attReadObj, NULL, attClientDataCallback->context);
+    AttClientCallbackDispatch(connect, ATT_READ_BY_TYPE_RESPONSE_ID, &attReadObj, NULL);
     AttReadFree(&attReadObj, attReadObj.readHandleListNum.valueNum, READBYTYPERESPONSEFREE);
 
 ATTREADBYTYPERESPONSE_END:
@@ -908,22 +825,15 @@ void AttReadRequest(AttConnectInfo *connect, const Buffer *buffer)
 
     AttRead attReadObj;
     uint8_t *data = NULL;
-    AttServerDataCallback *attServerDataCallback = NULL;
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTREADREQUEST_END;
+        return;
     }
 
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
-    }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTREADREQUEST_END;
     }
 
     data = (uint8_t *)BufferPtr(buffer);
@@ -934,10 +844,8 @@ void AttReadRequest(AttConnectInfo *connect, const Buffer *buffer)
         connect->retGattConnectHandle,
         attReadObj.readHandle.attHandle);
 
-    attServerDataCallback->attServerCallback(
-        connect->retGattConnectHandle, ATT_READ_REQUEST_ID, &attReadObj, NULL, attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_READ_REQUEST_ID, &attReadObj, NULL);
 
-ATTREADREQUEST_END:
     return;
 }
 
@@ -955,24 +863,14 @@ void AttReadResponse(AttConnectInfo *connect, const Buffer *buffer)
         return;
     }
 
-    AttClientDataCallback *attClientDataCallback = NULL;
-
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
     }
 
     AlarmCancel(connect->alarm);
 
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
-        goto ATTREADRESPONSE_END;
-    }
+    AttClientCallbackDispatch(connect, ATT_READ_RESPONSE_ID, NULL, (Buffer *)buffer);
 
-    attClientDataCallback->attClientCallback(
-        connect->retGattConnectHandle, ATT_READ_RESPONSE_ID, NULL, (Buffer *)buffer, attClientDataCallback->context);
-
-ATTREADRESPONSE_END:
     LOG_INFO("%{public}s return connect != NULL, connectHandle = %hu", __FUNCTION__, connect->retGattConnectHandle);
     ListRemoveFirst(connect->instruct);
     AttReceiveSequenceScheduling(connect);
@@ -995,22 +893,15 @@ void AttReadBlobRequest(AttConnectInfo *connect, const Buffer *buffer)
 
     AttRead attReadObj;
     uint8_t *data = NULL;
-    AttServerDataCallback *attServerDataCallback = NULL;
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTREADBLOBREQUEST_END;
+        return;
     }
 
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
-    }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTREADBLOBREQUEST_END;
     }
     data = (uint8_t *)BufferPtr(buffer);
     attReadObj.readBlob.attHandle = ((uint16_t *)data)[0];
@@ -1022,10 +913,8 @@ void AttReadBlobRequest(AttConnectInfo *connect, const Buffer *buffer)
         attReadObj.readBlob.attHandle,
         attReadObj.readBlob.offset);
 
-    attServerDataCallback->attServerCallback(
-        connect->retGattConnectHandle, ATT_READ_BLOB_REQUEST_ID, &attReadObj, NULL, attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_READ_BLOB_REQUEST_ID, &attReadObj, NULL);
 
-ATTREADBLOBREQUEST_END:
     return;
 }
 
@@ -1047,23 +936,10 @@ void AttReadBlobResponse(AttConnectInfo *connect, const Buffer *buffer)
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
     }
 
-    AttClientDataCallback *attClientDataCallback = NULL;
-
     AlarmCancel(connect->alarm);
 
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
-        goto ATTREADBLOBRESPONSE_END;
-    }
+    AttClientCallbackDispatch(connect, ATT_READ_BLOB_RESPONSE_ID, NULL, (Buffer *)buffer);
 
-    attClientDataCallback->attClientCallback(connect->retGattConnectHandle,
-        ATT_READ_BLOB_RESPONSE_ID,
-        NULL,
-        (Buffer *)buffer,
-        attClientDataCallback->context);
-
-ATTREADBLOBRESPONSE_END:
     LOG_INFO("%{public}s return connect != NULL, connectHandle = %hu", __FUNCTION__, connect->retGattConnectHandle);
     ListRemoveFirst(connect->instruct);
     AttReceiveSequenceScheduling(connect);
@@ -1084,31 +960,18 @@ void AttReadMultipleRequest(AttConnectInfo *connect, const Buffer *buffer)
         return;
     }
 
-    AttServerDataCallback *attServerDataCallback = NULL;
-
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTREADMULTIPLEREQUEST_END;
+        return;
     }
 
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
     }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTREADMULTIPLEREQUEST_END;
-    }
     LOG_INFO("%{public}s connectHandle = %hu", __FUNCTION__, connect->retGattConnectHandle);
-    attServerDataCallback->attServerCallback(connect->retGattConnectHandle,
-        ATT_READ_MULTIPLE_REQUEST_ID,
-        NULL,
-        (Buffer *)buffer,
-        attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_READ_MULTIPLE_REQUEST_ID, NULL, (Buffer *)buffer);
 
-ATTREADMULTIPLEREQUEST_END:
     return;
 }
 
@@ -1126,27 +989,14 @@ void AttReadMultipleResponse(AttConnectInfo *connect, const Buffer *buffer)
         return;
     }
 
-    AttClientDataCallback *attClientDataCallback = NULL;
-
     AlarmCancel(connect->alarm);
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
     }
 
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
-        goto ATTREADMULTIPLERESPONSE_END;
-    }
+    AttClientCallbackDispatch(connect, ATT_READ_MULTIPLE_RESPONSE_ID, NULL, (Buffer *)buffer);
 
-    attClientDataCallback->attClientCallback(connect->retGattConnectHandle,
-        ATT_READ_MULTIPLE_RESPONSE_ID,
-        NULL,
-        (Buffer *)buffer,
-        attClientDataCallback->context);
-
-ATTREADMULTIPLERESPONSE_END:
     LOG_INFO("%{public}s return connect != NULL, connectHandle = %hu", __FUNCTION__, connect->retGattConnectHandle);
     ListRemoveFirst(connect->instruct);
     AttReceiveSequenceScheduling(connect);
@@ -1170,17 +1020,15 @@ void AttReadByGroupTypeRequest(AttConnectInfo *connect, const Buffer *buffer)
     AttRead attReadObj;
     uint8_t *data = NULL;
     size_t buffSize;
-    AttServerDataCallback *attServerDataCallback = NULL;
 
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
     }
 
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL) || (buffer == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTREADBYGROUPTYPEREQUEST_END;
+    if (buffer == NULL) {
+        LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
+        return;
     }
 
     data = (uint8_t *)BufferPtr(buffer);
@@ -1202,14 +1050,9 @@ void AttReadByGroupTypeRequest(AttConnectInfo *connect, const Buffer *buffer)
             attReadObj.readGroupRequest.uuid->uuid128, UUID128BITTYPELEN, data + STEP_FOUR, UUID128BITTYPELEN);
     }
 
-    attServerDataCallback->attServerCallback(connect->retGattConnectHandle,
-        ATT_READ_BY_GROUP_TYPE_REQUEST_ID,
-        &attReadObj,
-        NULL,
-        attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_READ_BY_GROUP_TYPE_REQUEST_ID, &attReadObj, NULL);
     MEM_MALLOC.free(attReadObj.readGroupRequest.uuid);
 
-ATTREADBYGROUPTYPEREQUEST_END:
     return;
 }
 
@@ -1251,14 +1094,12 @@ void AttReadByGroupTypeResponse(AttConnectInfo *connect, const Buffer *buffer)
     AttRead attReadObj;
     uint8_t len;
     uint8_t *data = NULL;
-    AttClientDataCallback *attClientDataCallback = NULL;
     AttError attErrorObj;
 
     AlarmCancel(connect->alarm);
 
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL) || (buffer == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
+    if (buffer == NULL) {
+        LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
         goto ATTREADBYGROUPTYPERESPONSE_END;
     }
 
@@ -1271,8 +1112,7 @@ void AttReadByGroupTypeResponse(AttConnectInfo *connect, const Buffer *buffer)
         attReadObj.readGroupResponse.num = 0;
     } else if ((dataLen - 1) % len) {
         ReadByGroupTypeResponseErrorAssign(&attErrorObj, connect);
-        attClientDataCallback->attClientCallback(
-            connect->retGattConnectHandle, ATT_ERROR_RESPONSE_ID, &attErrorObj, NULL, attClientDataCallback->context);
+        AttClientCallbackDispatch(connect, ATT_ERROR_RESPONSE_ID, &attErrorObj, NULL);
         goto ATTREADBYGROUPTYPERESPONSE_END;
     } else {
         attReadObj.readGroupResponse.num = (dataLen - 1) / len;
@@ -1280,11 +1120,7 @@ void AttReadByGroupTypeResponse(AttConnectInfo *connect, const Buffer *buffer)
     attReadObj.readGroupResponse.attributeData = (AttReadGoupAttributeData *)MEM_MALLOC.alloc(
         sizeof(AttReadGoupAttributeData) * attReadObj.readGroupResponse.num);
     AttReadAttrAssign(&attReadObj, len, data);
-    attClientDataCallback->attClientCallback(connect->retGattConnectHandle,
-        ATT_READ_BY_GROUP_TYPE_RESPONSE_ID,
-        &attReadObj,
-        NULL,
-        attClientDataCallback->context);
+    AttClientCallbackDispatch(connect, ATT_READ_BY_GROUP_TYPE_RESPONSE_ID, &attReadObj, NULL);
     AttReadFree(&attReadObj, attReadObj.readGroupResponse.num, READBYGROUPTYPERESPONSEFREE);
 
 ATTREADBYGROUPTYPERESPONSE_END:
@@ -1311,17 +1147,10 @@ void AttWriteRequest(AttConnectInfo *connect, const Buffer *buffer)
     AttWrite attWriteObj;
     uint8_t *data = NULL;
     Buffer *bufferNew = NULL;
-    AttServerDataCallback *attServerDataCallback = NULL;
 
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
-    }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTWRITEREQUEST_END;
     }
 
     buffSize = BufferGetSize(buffer);
@@ -1333,12 +1162,10 @@ void AttWriteRequest(AttConnectInfo *connect, const Buffer *buffer)
         connect->retGattConnectHandle,
         attWriteObj.writeRequest.attHandle);
 
-    attServerDataCallback->attServerCallback(
-        connect->retGattConnectHandle, ATT_WRITE_REQUEST_ID, &attWriteObj, bufferNew, attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_WRITE_REQUEST_ID, &attWriteObj, bufferNew);
 
     BufferFree(bufferNew);
 
-ATTWRITEREQUEST_END:
     return;
 }
 
@@ -1356,20 +1183,10 @@ void AttWriteResponse(AttConnectInfo *connect, const Buffer *buffer)
         return;
     }
 
-    AttClientDataCallback *attClientDataCallback = NULL;
-
     AlarmCancel(connect->alarm);
 
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
-        goto ATTWRITERESPONSE_END;
-    }
+    AttClientCallbackDispatch(connect, ATT_WRITE_RESPONSE_ID, NULL, (Buffer *)buffer);
 
-    attClientDataCallback->attClientCallback(
-        connect->retGattConnectHandle, ATT_WRITE_RESPONSE_ID, NULL, (Buffer *)buffer, attClientDataCallback->context);
-
-ATTWRITERESPONSE_END:
     LOG_INFO("%{public}s return connect != NULL, connectHandle = %hu", __FUNCTION__, connect->retGattConnectHandle);
     ListRemoveFirst(connect->instruct);
     AttReceiveSequenceScheduling(connect);
@@ -1393,17 +1210,10 @@ void AttWriteCommand(AttConnectInfo *connect, const Buffer *buffer)
     size_t buffSize;
     AttWrite attWriteObj;
     uint8_t *data = NULL;
-    AttServerDataCallback *attServerDataCallback = NULL;
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTWRITECOMMAND_END;
-    }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTWRITECOMMAND_END;
+        return;
     }
 
     buffSize = BufferGetSize(buffer);
@@ -1414,12 +1224,10 @@ void AttWriteCommand(AttConnectInfo *connect, const Buffer *buffer)
         __FUNCTION__,
         connect->retGattConnectHandle,
         attWriteObj.writeCommand.attHandle);
-    attServerDataCallback->attServerCallback(
-        connect->retGattConnectHandle, ATT_WRITE_COMMAND_ID, &attWriteObj, bufferNew, attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_WRITE_COMMAND_ID, &attWriteObj, bufferNew);
 
     BufferFree(bufferNew);
 
-ATTWRITECOMMAND_END:
     return;
 }
 
@@ -1466,12 +1274,10 @@ void AttSignedWriteCommand(AttConnectInfo *connect, const Buffer *buffer)
     int ret;
     GapSignatureData gapSignatureDataObj;
     uint8_t signature[12] = {0};
-    AttServerDataCallback *attServerDataCallback = NULL;
     SigedWriteCommandConfirmationContext *sigedWriteCommandConfirmContextPtr = NULL;
 
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL) || (buffer == NULL)) {
-        goto ATTSIGNEDWRITECOMMAND_END;
+    if (buffer == NULL) {
+        return;
     }
 
     dataBuffer = (uint8_t *)BufferPtr(buffer);
@@ -1482,7 +1288,7 @@ void AttSignedWriteCommand(AttConnectInfo *connect, const Buffer *buffer)
     gapSignatureDataObj.data = data;
     if (buffSize < (sizeof(signature) - 1)) {
         LOG_ERROR("%{public}s buffSize is invalid", __FUNCTION__);
-        goto ATTSIGNEDWRITECOMMAND_END;
+        return;
     }
     gapSignatureDataObj.dataLen = buffSize - (sizeof(signature) - 1);
     sigedWriteBuffPtr = BufferMalloc(sizeof(SigedWriteCommandConfirmationContext));
@@ -1500,15 +1306,10 @@ void AttSignedWriteCommand(AttConnectInfo *connect, const Buffer *buffer)
             data + (buffSize - sizeof(signature)),
             sizeof(signature));
         bufferNew = BufferSliceMalloc(buffer, STEP_TWO, buffSize - sizeof(signature) - sizeof(uint16_t));
-        attServerDataCallback->attServerCallback(connect->retGattConnectHandle,
-            ATT_SIGNED_WRITE_COMMAND_ID,
-            &attWriteObj,
-            bufferNew,
-            attServerDataCallback->context);
+        AttServerCallbackDispatch(connect, ATT_SIGNED_WRITE_COMMAND_ID, &attWriteObj, bufferNew);
         AttSignedWriteCommandBufferFree(bufferNew, sigedWriteBuffPtr, bufferallPtr);
     }
 
-ATTSIGNEDWRITECOMMAND_END:
     return;
 }
 
@@ -1530,22 +1331,15 @@ void AttPrepareWriteRequest(AttConnectInfo *connect, const Buffer *buffer)
     AttWrite attWriteObj;
     uint8_t *data = NULL;
     Buffer *bufferNew = NULL;
-    AttServerDataCallback *attServerDataCallback = NULL;
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTPREPAREWRITEREQUEST_END;
+        return;
     }
 
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
-    }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTPREPAREWRITEREQUEST_END;
     }
 
     buffSize = BufferGetSize(buffer);
@@ -1559,15 +1353,10 @@ void AttPrepareWriteRequest(AttConnectInfo *connect, const Buffer *buffer)
         attWriteObj.prepareWrite.handleValue.attHandle,
         attWriteObj.prepareWrite.offset);
 
-    attServerDataCallback->attServerCallback(connect->retGattConnectHandle,
-        ATT_PREPARE_WRITE_REQUEST_ID,
-        &attWriteObj,
-        bufferNew,
-        attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_PREPARE_WRITE_REQUEST_ID, &attWriteObj, bufferNew);
 
     BufferFree(bufferNew);
 
-ATTPREPAREWRITEREQUEST_END:
     return;
 }
 
@@ -1589,16 +1378,9 @@ void AttPrepareWriteResponse(AttConnectInfo *connect, const Buffer *buffer)
     AttWrite attWriteObj;
     uint8_t *data = NULL;
     Buffer *bufferNew = NULL;
-    AttClientDataCallback *attClientDataCallback = NULL;
 
     AlarmCancel(connect->alarm);
     if (buffer == NULL) {
-        goto ATTPREPAREWRITERESPONSE_END;
-    }
-
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
         goto ATTPREPAREWRITERESPONSE_END;
     }
 
@@ -1609,18 +1391,10 @@ void AttPrepareWriteResponse(AttConnectInfo *connect, const Buffer *buffer)
 
     if (buffSize - STEP_FOUR > 0) {
         bufferNew = BufferSliceMalloc(buffer, STEP_FOUR, buffSize - STEP_FOUR);
-        attClientDataCallback->attClientCallback(connect->retGattConnectHandle,
-            ATT_PREPARE_WRITE_RESPONSE_ID,
-            &attWriteObj,
-            bufferNew,
-            attClientDataCallback->context);
+        AttClientCallbackDispatch(connect, ATT_PREPARE_WRITE_RESPONSE_ID, &attWriteObj, bufferNew);
         BufferFree(bufferNew);
     } else {
-        attClientDataCallback->attClientCallback(connect->retGattConnectHandle,
-            ATT_PREPARE_WRITE_RESPONSE_ID,
-            &attWriteObj,
-            NULL,
-            attClientDataCallback->context);
+        AttClientCallbackDispatch(connect, ATT_PREPARE_WRITE_RESPONSE_ID, &attWriteObj, NULL);
     }
 
 ATTPREPAREWRITERESPONSE_END:
@@ -1646,22 +1420,15 @@ void AttExecuteWriteRequest(AttConnectInfo *connect, const Buffer *buffer)
 
     AttWrite attWriteObj;
     uint8_t *data = NULL;
-    AttServerDataCallback *attServerDataCallback = NULL;
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTEXECUTEWRITEREQUEST_END;
+        return;
     }
 
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
-    }
-
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTEXECUTEWRITEREQUEST_END;
     }
 
     data = (uint8_t *)BufferPtr(buffer);
@@ -1672,13 +1439,8 @@ void AttExecuteWriteRequest(AttConnectInfo *connect, const Buffer *buffer)
         connect->retGattConnectHandle,
         attWriteObj.excuteWrite.flag);
 
-    attServerDataCallback->attServerCallback(connect->retGattConnectHandle,
-        ATT_EXECUTE_WRITE_REQUEST_ID,
-        &attWriteObj,
-        NULL,
-        attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_EXECUTE_WRITE_REQUEST_ID, &attWriteObj, NULL);
 
-ATTEXECUTEWRITEREQUEST_END:
     return;
 }
 
@@ -1696,8 +1458,6 @@ void AttExecuteWriteResponse(AttConnectInfo *connect, const Buffer *buffer)
         return;
     }
 
-    AttClientDataCallback *attClientDataCallback = NULL;
-
     AlarmCancel(connect->alarm);
 
     if (buffer == NULL) {
@@ -1705,14 +1465,7 @@ void AttExecuteWriteResponse(AttConnectInfo *connect, const Buffer *buffer)
         goto ATTEXECUTEWRITERESPONSE_END;
     }
 
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
-        goto ATTEXECUTEWRITERESPONSE_END;
-    }
-
-    attClientDataCallback->attClientCallback(
-        connect->retGattConnectHandle, ATT_EXECUTE_WRITE_RESPONSE_ID, NULL, NULL, attClientDataCallback->context);
+    AttClientCallbackDispatch(connect, ATT_EXECUTE_WRITE_RESPONSE_ID, NULL, NULL);
 
 ATTEXECUTEWRITERESPONSE_END:
     LOG_INFO("%{public}s return connect != NULL, connectHandle = %hu", __FUNCTION__, connect->retGattConnectHandle);
@@ -1739,17 +1492,10 @@ void AttHandleValueNotification(AttConnectInfo *connect, const Buffer *buffer)
     AttHandleValue AttHandleValueObj;
     uint8_t *data = NULL;
     Buffer *bufferNew = NULL;
-    AttClientDataCallback *attClientDataCallback = NULL;
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTHANDLEVALUENOTIFICATION_END;
-    }
-
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
-        goto ATTHANDLEVALUENOTIFICATION_END;
+        return;
     }
 
     buffNotiSize = BufferGetSize(buffer);
@@ -1762,15 +1508,10 @@ void AttHandleValueNotification(AttConnectInfo *connect, const Buffer *buffer)
         connect->retGattConnectHandle,
         AttHandleValueObj.attHandle);
 
-    attClientDataCallback->attClientCallback(connect->retGattConnectHandle,
-        ATT_HANDLE_VALUE_NOTIFICATION_ID,
-        &AttHandleValueObj,
-        bufferNew,
-        attClientDataCallback->context);
+    AttClientCallbackDispatch(connect, ATT_HANDLE_VALUE_NOTIFICATION_ID, &AttHandleValueObj, bufferNew);
 
     BufferFree(bufferNew);
 
-ATTHANDLEVALUENOTIFICATION_END:
     return;
 }
 
@@ -1792,17 +1533,10 @@ void AttHandleValueIndication(AttConnectInfo *connect, const Buffer *buffer)
     AttHandleValue AttHandleValueObj;
     uint8_t *data = NULL;
     Buffer *bufferNew = NULL;
-    AttClientDataCallback *attClientDataCallback = NULL;
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
-        goto ATTHANDLEVALUEINDICATION_END;
-    }
-
-    attClientDataCallback = AttGetATTClientCallback();
-    if ((attClientDataCallback == NULL) || (attClientDataCallback->attClientCallback == NULL)) {
-        LOG_WARN("%{public}s attClientDataCallback or attClientDataCallback->attClientCallback is NULL", __FUNCTION__);
-        goto ATTHANDLEVALUEINDICATION_END;
+        return;
     }
 
     buffIndiSize = BufferGetSize(buffer);
@@ -1815,15 +1549,10 @@ void AttHandleValueIndication(AttConnectInfo *connect, const Buffer *buffer)
         connect->retGattConnectHandle,
         AttHandleValueObj.attHandle);
 
-    attClientDataCallback->attClientCallback(connect->retGattConnectHandle,
-        ATT_HANDLE_VALUE_INDICATION_ID,
-        &AttHandleValueObj,
-        bufferNew,
-        attClientDataCallback->context);
+    AttClientCallbackDispatch(connect, ATT_HANDLE_VALUE_INDICATION_ID, &AttHandleValueObj, bufferNew);
 
     BufferFree(bufferNew);
 
-ATTHANDLEVALUEINDICATION_END:
     return;
 }
 
@@ -1841,37 +1570,29 @@ void AttHandleValueConfirmation(AttConnectInfo *connect, const Buffer *buffer)
         return;
     }
 
-    AttServerDataCallback *attServerDataCallback = NULL;
     AttWrite attWrite;
     attWrite.confirmation.attHandle = 0x0000;
 
-    AlarmCancel(connect->alarm);
+    // The confirmation ends the indication-confirmation transaction (Vol 3 Part F 3.3.3): cancel the
+    // server indication timeout and clear the pending gate (also covers a buffer-less confirmation).
+    // Known residual (pre-existing): when the indication timeout already tore the slot down, a
+    // late 0x1E arrives on the cleared/reused slot and dispatches the confirmation with
+    // connectHandle=0 to the upper layer - no crash, and the upper layer rejects the stale
+    // handle; AlarmCancel here is a safe no-op on a cleared alarm slot.
+    AlarmCancel(connect->indicationAlarm);
+    if (connect->serverSendFlag) {
+        connect->serverSendFlag = false;
+    }
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
         goto ATTHANDLEVALUECONFIRMATION_END;
     }
 
-    attServerDataCallback = AttGetATTServerCallback();
-    if ((attServerDataCallback == NULL) || (attServerDataCallback->attServerCallback == NULL)) {
-        LOG_WARN("%{public}s attServerDataCallback or attServerDataCallback->attServerCallback is NULL", __FUNCTION__);
-        goto ATTHANDLEVALUECONFIRMATION_END;
-    }
-
-    if (connect->serverSendFlag) {
-        connect->serverSendFlag = false;
-    }
-
-    attServerDataCallback->attServerCallback(connect->retGattConnectHandle,
-        ATT_HANDLE_VALUE_CONFIRMATION_ID,
-        &attWrite,
-        NULL,
-        attServerDataCallback->context);
+    AttServerCallbackDispatch(connect, ATT_HANDLE_VALUE_CONFIRMATION_ID, &attWrite, NULL);
 
 ATTHANDLEVALUECONFIRMATION_END:
     LOG_INFO("%{public}s return connect != NULL, connectHandle = %hu", __FUNCTION__, connect->retGattConnectHandle);
-    ListRemoveFirst(connect->instruct);
-    AttReceiveSequenceScheduling(connect);
     return;
 }
 
@@ -1893,7 +1614,10 @@ static void AttSignWriteCommConfContextAssign(SigedWriteCommandConfirmationConte
         return;
     }
 
-    sigedWriteCommandConfirmContextPtr->connect = (AttConnectInfo *)connect;
+    sigedWriteCommandConfirmContextPtr->connectHandle = connect->retGattConnectHandle;
+    sigedWriteCommandConfirmContextPtr->cid = (connect->transportType == BT_TRANSPORT_BR_EDR)
+        ? 0
+        : connect->AttConnectID.lecid;
     sigedWriteCommandConfirmContextPtr->data = (uint8_t *)data;
     sigedWriteCommandConfirmContextPtr->bufferallPtr = (Buffer *)bufferallPtr;
     sigedWriteCommandConfirmContextPtr->bufferSize = buffSize - STEP_TWO - GAPSIGNATURESIZE;

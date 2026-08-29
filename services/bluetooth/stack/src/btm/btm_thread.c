@@ -234,8 +234,36 @@ int BTM_RunTaskInProcessingQueue(uint8_t queueId, void (*task)(void *context), v
     BtmProcessingQueue *queue = FindProcessingQueueById(queueId);
     if (queue != NULL) {
         BtmTask *block = AllocTask(task, context);
-        if (task != NULL) {
+        if (block != NULL) {
             QueueEnqueue(queue->queue, block);
+        } else {
+            result = BT_NO_MEMORY;
+        }
+    } else {
+        result = BT_BAD_STATUS;
+    }
+    MutexUnlock(g_processingQueueLock);
+    HILOGD("%{public}d ,end process queueId is ", queueId);
+    return result;
+}
+
+int BTM_RunTaskInProcessingQueueNoBlock(uint8_t queueId, void (*task)(void *context), void *context)
+{
+    HILOGD("%{public}d ,start process queueId is ", queueId);
+    int result = BT_SUCCESS;
+    MutexLock(g_processingQueueLock);
+    BtmProcessingQueue *queue = FindProcessingQueueById(queueId);
+    if (queue != NULL) {
+        BtmTask *block = AllocTask(task, context);
+        if (block != NULL) {
+            if (!QueueTryEnqueue(queue->queue, block)) {
+                // Queue full: drop the task instead of blocking on the enqueue semaphore.
+                // Blocking would deadlock when the caller is the thread that drains the
+                // queue (see the NoBlock declaration in btm_thread.h). On failure the
+                // caller owns the task context and is responsible for its release.
+                FreeTask(block);
+                result = BT_OPERATION_FAILED;
+            }
         } else {
             result = BT_NO_MEMORY;
         }

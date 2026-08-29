@@ -49,7 +49,11 @@ void HciEventOnCommandCompleteEvent(Packet *packet)
         return;
     }
     HciSetNumberOfHciCmd(param->numHciCommandPackets);
-    HciCmdOnCommandComplete(param->commandOpcode);
+    // false when the Complete is the late answer of a timed-out command: it must not be
+    // dispatched, or it would complete a newer command with the same opcode
+    if (!HciCmdOnCommandComplete(param->commandOpcode)) {
+        return;
+    }
 
     uint8_t returnParametesLength = BufferGetSize(payloadBuffer) - sizeof(HciCommandCompleteEventParam);
     if (returnParametesLength == 0) {

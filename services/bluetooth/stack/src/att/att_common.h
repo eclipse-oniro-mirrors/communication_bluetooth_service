@@ -94,6 +94,52 @@ extern "C" {
 #define IMMEDIATELY_WRITE_ALL_PENDING_PREPARED_VALUES 1
 #define CANCEL_ALL_PREPARED_WRITES 0
 
+/* Alternated per-arm snapshot slots. The alarm thread reads the snapshot that was armed at the
+ * firing it answers, so the content must be immutable between the arm and the expiry. Each arm
+ * writes the next slot in rotation, which guarantees immutability without heap allocation: a
+ * slot is rewritten only by the arm two steps later, and the arm in between (other slot) resets
+ * the timerfd, so a notify that read the fd before that reset runs before the rewrite (it only
+ * copies the snapshot to the ATT queue). */
+#define ATT_ALARM_SNAPSHOT_SLOTS 2
+
+/* Snapshot handed to the indication-confirmation timeout alarm (AttStartIndicationAlarm): the
+ * alarm thread never dereferences the shared connection slot, the expiry handler re-validates
+ * this snapshot against the current slots on the ATT processing queue. lecid is 0 for BR/EDR,
+ * LE_CID for UATT, the EATT dynamic CID for an EATT bearer. generation identifies the indication
+ * this timer was armed for: each arm advances connect->indicationGeneration, so an expiry of an
+ * earlier indication is distinguishable from the currently pending one. */
+typedef struct {
+    uint16_t connectHandle;
+    uint16_t lecid;
+    uint16_t generation;
+} AttIndicationAlarmContext;
+
+/* Snapshot handed to the EATT establishment fallback alarm (5.4 collision retry bound): the
+ * alarm thread only reads these two values; batchLcid identifies the deferred batch so a stale
+ * expiry can never settle a newer establishment on a reused slot. */
+typedef struct {
+    uint16_t connectHandle;
+    uint16_t batchLcid;
+} AttEattEstablishAlarmContext;
+
+/* Snapshot handed to the client-request timeout alarm (AttStartTransactionAlarm): the alarm
+ * thread never dereferences the shared connection slot, the expiry handler re-validates this
+ * snapshot against the current slots on the ATT processing queue. lecid is 0 for BR/EDR, LE_CID
+ * for UATT, the EATT dynamic CID for an EATT bearer. seq is the monotonic arm sequence
+ * (connect->transactionSeq) captured at arm time: every arm advances it, so an expiry of an
+ * earlier arm is distinguishable from the currently armed request even when the allocator
+ * reuses a freed packet address (ABA). headPacket is the identity of the in-flight request at
+ * arm time (the instruct head): a stale expiry whose request was already answered and the queue
+ * drained without a re-arm (no seq advance) finds a different head (or an empty queue) and is
+ * dropped, so the expiry can neither tear down a healthy connection nor remove a newer request's
+ * packet (Vol 3 Part F 3.3.3). */
+typedef struct {
+    uint16_t connectHandle;
+    uint16_t lecid;
+    uint32_t seq;
+    Packet *headPacket;
+} AttTransactionAlarmContext;
+
 typedef struct AttConnectInfo {
     uint16_t aclHandle;
     union {
@@ -110,7 +156,54 @@ typedef struct AttConnectInfo {
     uint8_t initPassConnFlag;
     List *instruct;
     Alarm *alarm;
+    Alarm *indicationAlarm;
     bool serverSendFlag;
+    // EATT establishment in flight on this connection (initiator side): the caller's
+    // completion callback and local config, resolved by the 0x18 connection response
+    // (AttEattConnectionRsp) or by an abnormal teardown of the batch channels
+    // (AttEattDisconnected). eattEstablishCb == NULL means no pending request.
+    L2capLeConfigInfo eattLocalCfg;
+    uint16_t eattLcids[L2CAP_LE_EATT_MAX_CHANNEL];
+    uint16_t eattLcidCount;
+    void (*eattEstablishCb)(int result, const uint16_t *lcids, uint16_t n, void *ctx);
+    void *eattEstablishCtx;
+    // Channels of the pending batch that L2CAP established but that could not take a bearer slot
+    // (AttEattConnected dropped them): recorded so AttEattConnectionRsp fails the batch and
+    // disconnects the orphaned channels instead of reporting success for data that would be
+    // silently discarded. eattSlotlessCount == 0 means no orphaned channel.
+    uint16_t eattSlotlessLcids[L2CAP_LE_EATT_MAX_CHANNEL];
+    uint8_t eattSlotlessCount;
+    // Fallback bound of a deferred establishment (collision retry in progress): armed on the
+    // deferral, cancelled by AttEattResolveEstablish and AttClearConnectInfo. The alarm parameter
+    // is one of the alternated immutable snapshots eattEstablishAlarmCtx[], never the connection
+    // state itself (see ATT_ALARM_SNAPSHOT_SLOTS). Inert when no alarm is armed.
+    Alarm *eattEstablishAlarm;
+    AttEattEstablishAlarmContext eattEstablishAlarmCtx[ATT_ALARM_SNAPSHOT_SLOTS];
+    uint8_t eattEstablishAlarmSlot;
+    // Alternated immutable snapshots of the bearer identity + indication generation captured at
+    // AttStartIndicationAlarm; see AttIndicationAlarmContext and ATT_ALARM_SNAPSHOT_SLOTS. The
+    // fields are inert when no alarm is armed; indicationGeneration advances at every arm, so it
+    // also separates indications across connection generations in a slot. It is reset only by the
+    // full shutdown reset (AttShutDownClearConnectInfo): ATT_ShutDownAsync cancels every alarm
+    // first, and the reset clears the snapshot fields with relaxed atomic stores paired with the
+    // alarm thread's relaxed atomic loads (an alarm may still fire after the non-waiting
+    // AlarmCancel, and must never observe a torn snapshot).
+    AttIndicationAlarmContext indicationAlarmCtx[ATT_ALARM_SNAPSHOT_SLOTS];
+    uint8_t indicationAlarmSlot;
+    uint16_t indicationGeneration;
+    // Alternated immutable snapshots of the bearer identity + in-flight request (instruct head)
+    // captured at AttStartTransactionAlarm; see AttTransactionAlarmContext and
+    // ATT_ALARM_SNAPSHOT_SLOTS. The fields are inert when no alarm is armed.
+    AttTransactionAlarmContext transactionAlarmCtx[ATT_ALARM_SNAPSHOT_SLOTS];
+    uint8_t transactionAlarmSlot;
+    // Monotonic arm sequence of AttStartTransactionAlarm: advances at every arm, so a stale
+    // expiry can never match a newer arm by an address-reused head packet (ABA) - the stale
+    // check compares this against the seq captured in the snapshot. It is reset only by the
+    // full shutdown reset (AttShutDownClearConnectInfo), where ATT_ShutDownAsync cancels every
+    // alarm first and the reset clears the snapshot fields with relaxed atomic stores paired with
+    // the alarm thread's relaxed atomic loads: a slot cleared and reused by a fresh connection
+    // must not re-match a stale snapshot's seq (the same reasoning as indicationGeneration).
+    uint32_t transactionSeq;
 } AttConnectInfo;
 
 typedef struct AttConnectingInfo {
@@ -143,6 +236,16 @@ typedef struct {
 } AttServerDataCallback;
 
 typedef struct {
+    AttCallbackCid attClientCallback;
+    void *context;
+} AttClientDataCallbackCid;
+
+typedef struct {
+    AttCallbackCid attServerCallback;
+    void *context;
+} AttServerDataCallbackCid;
+
+typedef struct {
     AttConnectCallback attConnect;
     void *context;
 } AttConnectedCallback;
@@ -150,6 +253,7 @@ typedef struct {
 typedef struct {
     uint16_t connectHandle;
     AttError *ATTErrorPtr;
+    uint16_t cid;
 } ErrorResponseAsync;
 
 typedef struct {
@@ -165,6 +269,7 @@ typedef struct {
 typedef struct {
     uint16_t connectHandle;
     AttFindInformationRsp attFindInformationResContext;
+    uint16_t cid;
 } FindInformationResponseAsync;
 
 typedef struct {
@@ -176,6 +281,7 @@ typedef struct {
 typedef struct {
     uint16_t connectHandle;
     AttFindByTypeValueRsp attFindByTypeResContext;
+    uint16_t cid;
 } FindByTypeValueResponseAsync;
 
 typedef struct {
@@ -186,6 +292,7 @@ typedef struct {
 typedef struct {
     uint16_t connectHandle;
     AttReadByTypeRsp attReadByTypeRspContext;
+    uint16_t cid;
 } ReadByTypeResponseAsync;
 
 typedef struct {
@@ -196,6 +303,7 @@ typedef struct {
 typedef struct {
     uint16_t connectHandle;
     Buffer *attValue;
+    uint16_t cid;
 } ReadResponseAsync;  // readresponse / readblobresponse / readmultipleresponse / readmultiplerequest
 
 typedef struct {
@@ -211,22 +319,26 @@ typedef struct {
 typedef struct {
     uint16_t connectHandle;
     AttReadGroupRes attReadGroupResContext;
+    uint16_t cid;
 } ReadByGroupTypeResponseAsync;
 
 typedef struct {
     uint16_t connectHandle;
+    uint16_t cid;
     uint16_t attHandle;
     Buffer *attValue;
 } WriteAsync;  // writerequest / writecommand / signedwritecommand / handlenotification / handleindication
 
 typedef struct {
     uint16_t connectHandle;
+    uint16_t cid;
 } WriteResponseAsync;  // writeresponse / executewriterresponse / handleconfirmation
 
 typedef struct {
     uint16_t connectHandle;
     AttReadBlobReqPrepareWriteValue attReadBlobObj;
     Buffer *attValue;
+    uint16_t cid;
 } PrepareWriteAsync;  // preparewriterequest / preparewriteresponse
 
 typedef struct {
@@ -234,11 +346,20 @@ typedef struct {
     uint8_t flag;
 } ExecuteWriteRequestAsync;
 
+/* Context of an in-flight signed write (SIGNED_WRITE_CMD): carries the bearer identity and a
+ * private copy of the peer address instead of a raw AttConnectInfo pointer, because the signature
+ * is generated on the GAP thread (GAPIF_LeDataSignatureGenerationAsync keeps the address pointer
+ * for the duration of the request) and the connection slot may be cleared or reused before the
+ * result callback runs on the ATT processing queue; the callback re-resolves the connection by
+ * connectHandle + lecid. lecid is 0 for BR/EDR, LE_CID for UATT (signed writes never ride an EATT
+ * bearer, see AttSignedWriteCommandAsync). */
 typedef struct SigedWriteCommandGenerationContext {
-    AttConnectInfo *connect;
+    uint16_t connectHandle;
+    uint16_t lecid;
     Packet *packet;
     uint8_t *data;
     uint16_t bufferSize;
+    BtAddr addr;
 } SigedWriteCommandGenerationContext;
 
 typedef struct AttGapSignatureGenerationContext {
@@ -256,7 +377,10 @@ typedef struct AttGapSignatureGenerationContext {
 AttConnectInfo *AttGetConnectStart();
 
 /**
- * @brief lookup AttConnectInfo info by aclHandle.
+ * @brief lookup AttConnectInfo info by aclHandle (first match).
+ *
+ * DEPRECATED: with EATT the ACL handle is shared by the UATT bearer and every EATT bearer,
+ * so a bare aclHandle lookup is ambiguous. Use AttGetConnectInfoByAclHandleAndLeCid.
  *
  * @param1 aclHandle Indicates the aclHandle.
  * @param2 connect Indicates the second rank pointer to AttConnectInfo.
@@ -288,6 +412,67 @@ void AttGetConnectInfoIndexByCidOutIndex(uint16_t cid, uint16_t *index, AttConne
  * @param3 connect Indicates second rank pointer to AttConnectInfo.
  */
 void AttGetConnectInfoIndexByConnectHandle(uint16_t connectHandle, uint16_t *index, AttConnectInfo **connect);
+
+/**
+ * @brief lookup AttConnectInfo info by an LE cid.
+ *
+ * @param1 lecid Indicates the LE cid (EATT dynamic CID only).
+ * @return Returns the matched AttConnectInfo pointer, or NULL when absent.
+ */
+AttConnectInfo *AttGetConnectInfoByLeCid(uint16_t lecid);
+
+/**
+ * @brief lookup AttConnectInfo info by ACL handle and LE cid.
+ *
+ * @param1 aclHandle Indicates the ACL handle.
+ * @param2 lecid Indicates the LE cid.
+ * @return Returns the matched AttConnectInfo pointer, or NULL when absent.
+ */
+AttConnectInfo *AttGetConnectInfoByAclHandleAndLeCid(uint16_t aclHandle, uint16_t lecid);
+
+/**
+ * @brief lookup AttConnectInfo info by connectHandle and LE cid.
+ *
+ * @param1 connectHandle Indicates the connectHandle.
+ * @param2 lecid Indicates the LE cid (0 for the BR/EDR bearer, LE_CID for UATT, EATT dynamic CID).
+ * @return Returns the matched AttConnectInfo pointer, or NULL when the connection is absent.
+ */
+AttConnectInfo *AttGetConnectInfoByConnectHandleAndLeCid(uint16_t connectHandle, uint16_t lecid);
+
+/**
+ * @brief pick the EATT-preferred bearer for a client request/command or a server notification.
+ *
+ * The idle criterion is that bearer's client in-flight request queue (one request per bearer,
+ * Vol 3 Part F 3.3.2); commands (WRITE_CMD) and notifications share the heuristic since they
+ * impose no flow control.
+ *
+ * @param1 connectHandle Indicates the connectHandle.
+ * @return Returns the selected bearer pointer, or NULL when the connection is absent.
+ */
+AttConnectInfo *AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(uint16_t connectHandle);
+
+/**
+ * @brief pick the EATT-preferred bearer for a server indication.
+ *
+ * The idle criterion is no outstanding indication awaiting its confirmation on that bearer
+ * (one indication per bearer until confirmed, Vol 3 Part F 3.3.2).
+ *
+ * @param1 connectHandle Indicates the connectHandle.
+ * @return Returns the selected bearer pointer, or NULL when the connection is absent.
+ */
+AttConnectInfo *AttGetConnectInfoByConnectHandlePreferEattInd(uint16_t connectHandle);
+
+/**
+ * @brief pick the bearer that has an unconfirmed indication pending for the confirmation path.
+ *
+ * Serves the legacy confirmation (cid == 0), which carries no bearer identity: the confirmation
+ * must close the indication on the bearer it was sent on (serverSendFlag), or the EATT bearer's
+ * flag never resets and the bearer is torn down at the 3.3.3 timeout.
+ *
+ * @param1 connectHandle Indicates the connectHandle.
+ * @return Returns the matched bearer pointer, or NULL when no bearer has a pending indication.
+ */
+AttConnectInfo *AttGetConnectInfoByConnectHandlePendingInd(uint16_t connectHandle);
 
 /**
  * @brief get AttConnectingInfo information.
@@ -374,6 +559,32 @@ AttClientDataCallback *AttGetATTClientCallback();
 AttServerDataCallback *AttGetATTServerCallback();
 
 /**
+ * @brief get AttClientDataCallbackCid information.
+ *
+ * @return Returns the pointer to AttClientDataCallbackCid.
+ */
+AttClientDataCallbackCid *AttGetATTClientCallbackCid();
+
+/**
+ * @brief get AttServerDataCallbackCid information.
+ *
+ * @return Returns the pointer to AttServerDataCallbackCid.
+ */
+AttServerDataCallbackCid *AttGetATTServerCallbackCid();
+
+/**
+ * @brief dispatch a received event to the registered data callbacks.
+ *
+ * @param1 connect Indicates the pointer to AttConnectInfo.
+ * @param2 event Indicates the event id.
+ * @param3 eventData Indicates the pointer to event data.
+ * @param4 buffer Indicates the pointer to Buffer.
+ */
+void AttClientCallbackDispatch(AttConnectInfo *connect, uint16_t event, void *eventData, Buffer *buffer);
+
+void AttServerCallbackDispatch(AttConnectInfo *connect, uint16_t event, void *eventData, Buffer *buffer);
+
+/**
  * @brief initiative execut instructions by Scheduling.
  *
  * @param connect Indicates the pointer to AttConnectInfo.
@@ -410,6 +621,14 @@ void AttServerCallBackCopyToCommon(attSendDataCallback attSendDataCB, const void
  * @param2 result Indicates the result.
  */
 void LeRecvSendDataCallback(uint16_t aclHandle, int result);
+
+/**
+ * @brief receive EATT senddata callback.
+ *
+ * @param1 lcid Indicates the EATT channel lcid.
+ * @param2 result Indicates the result.
+ */
+void LeEattRecvSendDataCallback(uint16_t lcid, int result);
 
 /**
  * @brief bredr receive senddata callback.
@@ -472,6 +691,16 @@ void ClientCallbackReturnValue(int ret, const AttConnectInfo *connect);
  * @param2 connect Indicates the pointer to AttConnectInfo.
  */
 void ServerCallbackReturnValue(int ret, const AttConnectInfo *connect);
+
+/**
+ * @brief arm the per-bearer indication-confirmation timeout.
+ *
+ * Called after an indication is queued on the bearer; the timer runs until the confirmation or
+ * the Vol 3 Part F 3.3.3 timeout. Exported for AttHandleValueIndicationAsync.
+ *
+ * @param connect Indicates the pointer to AttConnectInfo.
+ */
+void AttStartIndicationAlarm(AttConnectInfo *connect);
 
 /**
  * @brief received bredr connect instructions data information.

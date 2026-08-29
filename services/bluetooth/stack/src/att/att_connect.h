@@ -158,6 +158,13 @@ void AttRecvDisconnectionRsp(uint16_t lcid, const void *ctx);
  */
 void InitiativeDisconnect(uint16_t connectHandle);
 
+/**
+ * @brief clear connected information and release the slot.
+ *
+ * @param connect Indicates the pointer to AttConnectInfo.
+ */
+void AttClearConnectInfo(AttConnectInfo *connect);
+
 #ifdef __cplusplus
 }
 #endif

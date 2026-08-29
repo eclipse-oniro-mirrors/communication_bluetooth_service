@@ -106,6 +106,7 @@ typedef struct {
 #define MODULE_NAME_SDP "sdp"
 #define MODULE_NAME_ATT "att"
 #define MODULE_NAME_SMP "smp"
+#define MODULE_NAME_ISO "iso"
 
 // Transport
 #define TRANSPORT_BREDR_STACK 1

@@ -88,9 +88,11 @@ void ListAddFirst(List *list, void *data);
  *
  * @param list List pointer.
  * @param data Node data.
+ * @return true: The node was appended to the list. false: The node could not be
+ *               allocated (OOM), the data was NOT appended.
  * @since 6
  */
-void ListAddLast(List *list, void *data);
+bool ListAddLast(List *list, void *data);
 
 /**
  * @brief Execute compare-function for each node in the list, until compare-function return true.

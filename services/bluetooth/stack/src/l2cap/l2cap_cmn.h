@@ -61,6 +61,10 @@ extern "C" {
 #define L2CAP_LE_CREDIT_BASED_CONNECTION_REQUEST 0x14
 #define L2CAP_LE_CREDIT_BASED_CONNECTION_RESPONSE 0x15
 #define L2CAP_LE_FLOW_CONTROL_CREDIT 0x16
+#define L2CAP_CREDIT_BASED_CONNECTION_REQUEST 0x17
+#define L2CAP_CREDIT_BASED_CONNECTION_RESPONSE 0x18
+#define L2CAP_CREDIT_BASED_RECONFIGURE_REQUEST 0x19
+#define L2CAP_CREDIT_BASED_RECONFIGURE_RESPONSE 0x1A
 
 #define L2CAP_MIN_CID 0x0080
 #define L2CAP_MAX_CID 0xFFFF
@@ -146,8 +150,26 @@ typedef struct {
     uint16_t lcid;
     uint8_t code;
     uint8_t identifier;
+    // Per-pending-request monotonic sequence, assigned from a never-decrementing counter at
+    // creation. The sequence IS the numeric identity carried by the RTX alarm: the signaling
+    // identifier alone is only 8 bits per connection and wraps (L2capLeGetNewIdentifier), so
+    // within one RTX window (30 s) 255 later allocations could reuse the value and a stale
+    // expiry task of an old request would resolve to - and tear down - a newer batch (ABA).
+    // The 32-bit sequence is unique per entry across all connections (wrap only after 2^32
+    // creations, practically unreachable) and fits the alarm's pointer-width parameter on
+    // every target, including 32-bit ARM builds. It is also stamped on the channels of an
+    // EATT batch (L2capLeChannel::batchSeq) so the timeout and collision-retry cleanup match
+    // their own batch by sequence, not by bare identifier.
+    uint32_t seq;
 
     Alarm *timer;
+    // 0x17 collision marker, Vol 3 Part G 5.4: set when an inbound 0x17 had to be refused with
+    // NO_RESOURCES because this batch was in flight; an all-refused 0x18 for this batch then
+    // retries (5.4) instead of settling as a final refusal. Per-batch, not per-connection: two
+    // 0x17 batches can be in flight at once, and a single connection-level value would be
+    // consumed by the first 0x18 while the later batch misses its 5.4 retry. Meaningful only
+    // for code == L2CAP_CREDIT_BASED_CONNECTION_REQUEST.
+    uint8_t collision;
 } L2capPendingRequest;
 
 typedef struct {
@@ -174,11 +196,15 @@ int L2capAsynchronousProcess(void (*task)(const void *context), void (*destroy)(
 Packet *L2capBuildSignalPacket(uint16_t cid, const L2capSignalHeader *signal, const uint8_t *data);
 int L2capSendCommandReject(uint16_t handle, uint16_t cid, uint8_t ident, uint16_t reason, uint16_t data[2]);
 
-void L2capCreatePendingRequest(
-    List *pendingList, uint16_t lcid, const L2capSignalHeader *signal, uint64_t timeo, AlarmCallback timerExpired);
+// Creates the RTX pending entry of a signaling request and starts its timer. Returns BT_SUCCESS
+// when the entry was created, armed and appended to the pending list, otherwise an error code
+// (the entry is rolled back on timer creation/arming failure and on a list append failure, so no
+// orphaned request - armed or not - is ever left behind).
+int L2capCreatePendingRequest(List *pendingList, uint16_t lcid, const L2capSignalHeader *signal, uint64_t timeo,
+    AlarmCallback timerExpired);
 void L2capDestroyPendingRequest(List *pendingList, uint8_t identifier);
 L2capPendingRequest *L2capGetPendingRequest(List *pendingList, uint8_t identifier);
-L2capPendingRequest *L2capGetPendingRequest2(List *pendingList, const void *request);
+L2capPendingRequest *L2capGetPendingRequestByKey(List *pendingList, uint32_t key);
 void L2capClearPendingRequest(List *pendingList);
 
 int L2capSendPacket(uint16_t handle, uint16_t flushTimeout, Packet *pkt);

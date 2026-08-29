@@ -210,6 +210,20 @@ typedef struct {
 #define L2CAP_LE_INVALID_SOURCE_CID 0x0009
 #define L2CAP_LE_SOURCE_CID_ALREADY_ALLOCATED 0x000A
 #define L2CAP_LE_UNACCEPTABLE_PARAMETERS 0x000B
+#define L2CAP_LE_INVALID_PARAMETERS               0x000C
+
+// EATT Enhanced Credit Based Flow Control mode PSM (Assigned Numbers, Vol 3 Part A Table 4.19 SPSM)
+#define L2CAP_LE_EATT_PSM 0x0027
+
+// Maximum number of channels per 0x17 ECRED connection request, charter 4.25 of Core 5.2
+#define L2CAP_LE_EATT_MAX_CHANNEL 0x05
+
+// LE Credit Based Reconfigure Response result, charter 4.28 Table 4.22 of Core 5.2
+#define L2CAP_LE_RECONFIGURE_SUCCESS    0x0000
+#define L2CAP_LE_RECONFIG_MTU_REDUCTION 0x0001
+#define L2CAP_LE_RECONFIG_MPS_REDUCTION 0x0002
+#define L2CAP_LE_RECONFIG_INVALID_DCID  0x0003
+#define L2CAP_LE_RECONFIG_OTHER         0x0004
 
 typedef struct {
     uint16_t mtu;
@@ -217,6 +231,12 @@ typedef struct {
     uint16_t credit;
 } L2capLeConfigInfo;
 
+// Callback contract: every callback below is invoked on the L2CAP processing queue (the Stack
+// thread, same thread that runs the L2CAP logic), serialized with all other L2CAP operations of
+// this connection. The callback must not call back into the L2CAP LE API synchronously (that
+// would re-enter the queue task); deferred work must be posted back to the L2CAP processing
+// queue (L2capAsynchronousProcess) or to the caller's own queue. The ctx pointer is the
+// registration context, valid until the service is deregistered.
 typedef struct {
     // LE Credit Based Connection Request packet received
     // Refer to charter 4.22 of Core 5.0
@@ -226,6 +246,24 @@ typedef struct {
     // Refer to charter 4.23 of Core 5.0
     void (*recvLeCreditBasedConnectionRsp)(
         uint16_t lcid, const L2capConnectionInfo *info, const L2capLeConfigInfo *cfg, uint16_t result, void *ctx);
+
+    // Enhanced Credit Based (EATT) channel established, invoked once per established channel.
+    // Refer to charter 4.25/4.26 of Core 5.2.
+    void (*recvLeEattConnected)(
+        uint16_t lcid, const L2capConnectionInfo *info, const L2capLeConfigInfo *cfg, void *ctx);
+
+    // Enhanced Credit Based (EATT) connection response received by the initiator, once per 0x18.
+    // Carries the result plus attempted/succeeded channel counts, used for the Vol 3 Part G 5.4
+    // collision-mitigation retry. Refer to charter 4.26 of Core 5.2.
+    void (*recvLeEattConnectionRsp)(
+        const L2capConnectionInfo *info, uint16_t result, uint8_t attempted, uint8_t succeeded, void *ctx);
+
+    // Enhanced Credit Based (EATT) reconfigure completed, invoked once per target channel on both success
+    // and failure. On success newMtu is the new effective ATT_MTU and result is 0x0000; on failure the old
+    // config stays in effect, newMtu is the unchanged effective ATT_MTU and result is the Table 4.22 failure
+    // code (0x0001-0x0004). Refresh the ATT bearer sendMtu. Refer to charter 4.27/4.28 and Vol 3 Part G
+    // 5.3.1 of Core 5.2.
+    void (*recvLeEattReconfigured)(uint16_t lcid, uint16_t newMtu, uint16_t result, void *ctx);
 
     // Disconnection Request packet received
     // Refer to charter 4.6 of Core 5.0

@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-
 #include <gtest/gtest.h>
 
 #include <algorithm>
@@ -22,25 +21,36 @@
 #include <condition_variable>
 #include <csignal>
 #include <cstdio>
-#include <functional>
 #include <cstdlib>
 #include <cstring>
+#include <functional>
 #include <mutex>
 #include <thread>
 
-#include <memory>
 #include "btm.h"
 #include "btstack.h"
 #include "gap_if.h"
 #include "gap_le_if.h"
 #include "hci/hci.h"
+#include "iso_le_if.h"
 #include "l2cap_def.h"
 #include "l2cap_le_if.h"
+#include "src/iso/iso.h"
+#include <memory>
 
 using namespace testing::ext;
 
 namespace OHOS {
 namespace Bluetooth {
+// Defined in stack_att_52_test.cpp with external linkage: EATT companion setup
+// (register PSM 0x0027 + auto-answer pairing). Folded into RunPeerMode below so the
+// "server" mode serves the ISO / power-control / EATT two-device cases together.
+int InitEattPeerSetup();
+int InitAttPeerSetup();
+// Joins the pairing responder thread started by InitAttPeerSetup (server mode only:
+// the gtest DUT path joins it in StackAtt52Test::TearDownTestCase).
+void ShutdownPairResponder();
+
 namespace {
 // The interact tests drive the HCI controller directly, so the bluetooth
 // service must be stopped and SELinux set to permissive (HCI socket access)
@@ -142,7 +152,7 @@ public:
     // GAP task run before it completes), so once it succeeds no callback can
     // touch the context again. On a failed deregister the context is leaked
     // instead of freed - a late event would otherwise write freed memory.
-    explicit PeriodicAdvSyncCallbackGuard(std::function<void()> cleanup = {}) : cleanup_(std::move(cleanup)) {}
+    explicit PeriodicAdvSyncCallbackGuard(std::function<void()> cleanup = { }) : cleanup_(std::move(cleanup)) { }
     ~PeriodicAdvSyncCallbackGuard()
     {
         if (GAPIF_DeregisterPeriodicAdvSyncCallback() != BT_SUCCESS) {
@@ -185,7 +195,9 @@ struct CallbackWaiter {
     bool Wait(uint32_t timeoutMs = WAIT_CALLBACK_TIMEOUT_MS)
     {
         std::unique_lock<std::mutex> lock(mtx);
-        return cv.wait_for(lock, std::chrono::milliseconds(timeoutMs), [this] { return received; });
+        return cv.wait_for(lock, std::chrono::milliseconds(timeoutMs), [this] {
+            return received;
+        });
     }
 
     void Reset()
@@ -237,16 +249,16 @@ void OnExAdvSetParamResult(uint8_t status, uint8_t selectTxPower, void *context)
 struct LeConnContext : CallbackWaiter {
     uint8_t status = 0xFF;
     uint16_t handle = 0xFFFF;
-    BtAddr peerAddr = {};
+    BtAddr peerAddr = { };
     uint8_t role = 0xFF;
 };
 
 struct InteractTestState {
-    BtAddr peerAddr = {};
+    BtAddr peerAddr = { };
     LeConnContext connCtx;
     CallbackWaiter l2capConnectWaiter;
-    std::atomic<int> l2capConnectResult{BT_SUCCESS};
-    std::atomic<bool> connected{false};
+    std::atomic<int> l2capConnectResult { BT_SUCCESS };
+    std::atomic<bool> connected { false };
     // True while EnsureConnected has started an L2CAP connect and is awaiting
     // the LE connection-complete event. A late connection-complete from a
     // previous test (e.g. after an ACL Wait timeout) must not be attributed to
@@ -349,7 +361,10 @@ void OnL2capLeConnectResult(const BtAddr *addr, int result)
     g_state.l2capConnectWaiter.Notify();
 }
 
-void OnL2capLeDisconnectResult(uint16_t aclHandle, int result) { printf("L2CIF_LeDisconnect result = %d\n", result); }
+void OnL2capLeDisconnectResult(uint16_t aclHandle, int result)
+{
+    printf("L2CIF_LeDisconnect result = %d\n", result);
+}
 
 bool ParsePeerAddr(const char *str, BtAddr *addr)
 {
@@ -436,6 +451,22 @@ BtmAclCallbacks g_aclCallbacks = {
     .leDisconnectionComplete = OnLeDisconnectionComplete,
 };
 
+std::atomic<bool> g_peerReAdvRequested = false;
+
+void OnPeerDisconnectionComplete(uint8_t status, uint16_t connectionHandle, uint8_t reason, void *context)
+{
+    (void)status;
+    (void)connectionHandle;
+    (void)reason;
+    (void)context;
+    g_peerReAdvRequested = true;
+}
+
+BtmAclCallbacks g_peerAclCallbacks = {
+    .leConnectionComplete = NULL,
+    .leDisconnectionComplete = OnPeerDisconnectionComplete,
+};
+
 // Clear the awaitingConn flag: a late connection-complete (or events from a
 // failed connect attempt) must not be attributed to the next test's connect.
 static void ClearAwaitingConn()
@@ -451,8 +482,8 @@ static bool CheckReusableConnection(bool &alreadyConnected)
 {
     std::lock_guard<std::mutex> lock(g_stateMutex);
     if (g_state.connected.load()) {
-        BtAddr localAddr = {};
-        BtAddr peerAddr = {};
+        BtAddr localAddr = { };
+        BtAddr peerAddr = { };
         if (BTM_GetLeConnectionAddress(g_state.connCtx.handle, &localAddr, &peerAddr) == BT_SUCCESS) {
             alreadyConnected = true;
             return false;
@@ -538,8 +569,8 @@ bool EnsureConnected()
     constexpr uint16_t CONN_INTERVAL_30MS = 0x0018;
     constexpr uint16_t CONN_LATENCY_0 = 0x0000;
     constexpr uint16_t SUPERVISION_TIMEOUT_5S = 0x01F4;
-    L2capLeConnectionParameter connParam = {CONN_INTERVAL_30MS, CONN_INTERVAL_30MS, CONN_LATENCY_0,
-        SUPERVISION_TIMEOUT_5S};
+    L2capLeConnectionParameter connParam = { CONN_INTERVAL_30MS, CONN_INTERVAL_30MS, CONN_LATENCY_0,
+        SUPERVISION_TIMEOUT_5S };
     if (L2CIF_LeConnect(&peerAddr, &connParam, OnL2capLeConnectResult) != BT_SUCCESS) {
         printf("EnsureConnected: L2CIF_LeConnect failed\n");
         ClearAwaitingConn();
@@ -563,8 +594,8 @@ bool EnsureConnected()
         g_state.connected.store(connected);
     }
     if (!connected) {
-        printf("EnsureConnected: connection failed, aclStatus=0x%02X l2capResult=%d\n",
-               aclStatus, g_state.l2capConnectResult.load());
+        printf("EnsureConnected: connection failed, aclStatus=0x%02X l2capResult=%d\n", aclStatus,
+            g_state.l2capConnectResult.load());
         // If the ACL was established but L2CAP setup failed, disconnect the ACL
         // so the test does not leave a stale connection to the peer.
         if (aclStatus == HCI_STATUS_SUCCESS) {
@@ -588,7 +619,7 @@ int PeerSetExAdvParam(PeerAdvContext &ctx, uint8_t handle, uint16_t properties, 
     constexpr uint8_t secondaryAdvMaxSkip = 0;
     constexpr uint8_t scanRequestNotifyDisable = 0;
 
-    GapLeExAdvParam advParam = {};
+    GapLeExAdvParam advParam = { };
     advParam.advIntervalMin = ADV_INTERVAL_100MS;
     advParam.advIntervalMax = ADV_INTERVAL_100MS;
     advParam.advChannelMap = advChannelMapAll;
@@ -623,6 +654,66 @@ int PeerWaitOp(PeerAdvContext &ctx, int ret, const char *what)
     return BT_SUCCESS;
 }
 
+// ISO CIS peer companion: the slave must configure its own CIG before a CIS can be
+// established (BT 5.2 Vol 6 Part B 4.5.14,3 "The Link Layer shall not create a CIS
+// until the Host has configured the CIG that that CIS will belong to"), and must
+// answer the LE CIS Request (0x1A) with Accept. The fixed CIG parameters mirror the
+// master-side constants in stack_gap_le_52_test.cpp TwoDeviceCisDisconnect_00100;
+// both sides must agree exactly or the CIS will not establish. Called from
+// RunPeerMode on the main thread; the registered callback struct keeps its scope
+// (IsoRegisterCigCallback stores the pointer, iso_cig.c:73).
+// Fixed CIG parameters of the ISO CIS companion; must match the master-side
+// constants (stack_gap_le_52_test.cpp TwoDeviceCisDisconnect_00100) exactly.
+constexpr uint8_t PEER_ISO_CIG_ID = 0x00;
+constexpr uint8_t PEER_ISO_CIS_ID = 0x00;
+constexpr uint32_t PEER_ISO_SDU_INTERVAL = 0x2710; // 10000 us = 10 ms
+constexpr uint16_t PEER_ISO_MAX_LATENCY = 0x000A;  // 10 ms == SDU interval (LL: latency = N x ISO interval)
+constexpr uint16_t PEER_ISO_MAX_SDU = 0x0100;      // 256 bytes
+
+static void InitIsoCisPeerSetup()
+{
+    // IsoRegisterCigCallback stores the pointer (iso_cig.c:73), so the struct must outlive
+    // the registration call; a function-local static keeps it alive for the whole test.
+    static IsoLeCigCallback isoCb = { };
+    isoCb.cisRequestInd = [](uint16_t cisHandle, uint16_t aclHandle, uint8_t cigId, uint8_t cisId, void *context) {
+        (void)aclHandle;
+        (void)cigId;
+        (void)cisId;
+        (void)context;
+        // Auto-accept the incoming CIS request. This callback runs on the ISO processing
+        // queue thread, so ISOIF_LeAcceptCisRequest (block-process, re-posts to the same
+        // queue and waits) would deadlock; use the non-blocking internal command that
+        // only builds the HCI param and sends it.
+        (void)IsoLeAcceptCisRequest(cisHandle);
+    };
+    if (ISOIF_LeRegisterCigCallback(&isoCb, NULL) != BT_SUCCESS) {
+        printf("peer: ISO CIG callback register failed\n");
+        return;
+    }
+
+    IsoLeCigParam cigParam = { };
+    cigParam.sduIntervalMToS = PEER_ISO_SDU_INTERVAL;
+    cigParam.sduIntervalSToM = PEER_ISO_SDU_INTERVAL;
+    cigParam.slaveClockAccuracy = 0x00;
+    cigParam.packing = 0x01; // interleaved
+    cigParam.framing = 0x00; // unframed
+    cigParam.maxTransportLatencyMToS = PEER_ISO_MAX_LATENCY;
+    cigParam.maxTransportLatencySToM = PEER_ISO_MAX_LATENCY;
+
+    IsoLeCisParam cisParam = { };
+    cisParam.cisId = PEER_ISO_CIS_ID;
+    cisParam.maxSduMToS = PEER_ISO_MAX_SDU;
+    cisParam.maxSduSToM = PEER_ISO_MAX_SDU;
+    cisParam.phyMToS = 0x02; // LE 2M
+    cisParam.phySToM = 0x02;
+    cisParam.rtnMToS = 0x02;
+    cisParam.rtnSToM = 0x02;
+
+    if (ISOIF_LeCreateCig(PEER_ISO_CIG_ID, &cigParam, 1, &cisParam) != BT_SUCCESS) {
+        printf("peer: ISO CIG create failed\n");
+    }
+}
+
 class PeerModeState {
 public:
     PeerModeState() = default;
@@ -640,7 +731,10 @@ public:
                 printf("peer cleanup: disable periodic adv failed ret=%d\n", ret);
                 cleanupFailed_ = true;
             }
-            GapExAdvSet sets[] = {{EX_ADV_HANDLE_CONN, 0, 0}, {EX_ADV_HANDLE_PERIODIC, 0, 0}};
+            GapExAdvSet sets[] = {
+                { EX_ADV_HANDLE_CONN,     0, 0 },
+                { EX_ADV_HANDLE_PERIODIC, 0, 0 }
+            };
             constexpr uint8_t advSetCount = 2;
             ret = GAPIF_LeExAdvSetEnable(0x00, advSetCount, sets);
             if (ret != BT_SUCCESS) {
@@ -706,7 +800,7 @@ static int InitPeerStack(PeerModeState &state)
 // success; the callbacks forward events into |ctx| via the PeerAdvContext.
 static int RegisterPeerAdvCallbacks(PeerAdvContext *ctx, PeerModeState &state)
 {
-    GapExAdvCallback callback = {};
+    GapExAdvCallback callback = { };
     callback.exAdvSetParamResult = [](uint8_t status, uint8_t selectTxPower, void *context) {
         auto *c = static_cast<PeerAdvContext *>(context);
         OnExAdvSetParamResult(status, selectTxPower, &c->setParam);
@@ -739,6 +833,36 @@ static int RegisterPeerAdvCallbacks(PeerAdvContext *ctx, PeerModeState &state)
     return 0;
 }
 
+static int EnablePeriodicPeerAdvertising(PeerAdvContext &ctx)
+{
+    ctx.op.Reset();
+    if (PeerWaitOp(ctx,
+        GAPIF_LePeriodicAdvSetParam(
+            EX_ADV_HANDLE_PERIODIC, PERIODIC_ADV_INTERVAL_MIN, PERIODIC_ADV_INTERVAL_MIN, 0x0000),
+        "peer: periodic adv set param") != BT_SUCCESS) {
+        return 1;
+    }
+    const uint8_t periodicData[] = { 0x50, 0x45, 0x52, 0x49, 0x4F, 0x44, 0x49, 0x43 }; // "PERIODIC"
+    ctx.op.Reset();
+    if (PeerWaitOp(ctx,
+        GAPIF_LePeriodicAdvSetData(
+            EX_ADV_HANDLE_PERIODIC, GAP_PERIODIC_ADV_DATA_OPERATION_COMPLETE, sizeof(periodicData), periodicData),
+        "peer: periodic adv set data") != BT_SUCCESS) {
+        return 1;
+    }
+    ctx.op.Reset();
+    if (PeerWaitOp(ctx, GAPIF_LePeriodicAdvSetEnable(0x01, EX_ADV_HANDLE_PERIODIC), "peer: periodic adv enable") !=
+        BT_SUCCESS) {
+        return 1;
+    }
+    GapExAdvSet periodicSet = { EX_ADV_HANDLE_PERIODIC, 0, 0 };
+    ctx.op.Reset();
+    if (PeerWaitOp(ctx, GAPIF_LeExAdvSetEnable(0x01, 1, &periodicSet), "peer: periodic ex adv enable") != BT_SUCCESS) {
+        return 1;
+    }
+    return 0;
+}
+
 // Configure and enable the connectable and the periodic advertising sets.
 // Returns 0 on success.
 static int EnablePeerAdvertising(PeerAdvContext *ctx, PeerModeState &state)
@@ -752,44 +876,77 @@ static int EnablePeerAdvertising(PeerAdvContext *ctx, PeerModeState &state)
         return 1;
     }
 
-    const uint8_t advData[] = {0x02, 0x01, 0x06, 0x07, 0x09, 'B', 'T', 'P', 'E', 'E', 'R'};
+    const uint8_t advData[] = { 0x02, 0x01, 0x06, 0x07, 0x09, 'B', 'T', 'P', 'E', 'E', 'R' };
     ctx->op.Reset();
-    if (PeerWaitOp(*ctx, GAPIF_LeExAdvSetData(EX_ADV_HANDLE_CONN, GAP_ADVERTISING_DATA_OPERATION_COMPLETE,
-                                              GAP_CONTROLLER_SHOULD_NOT_FRAGMENT, sizeof(advData), advData),
-                   "peer: adv set data") != BT_SUCCESS) {
+    if (PeerWaitOp(*ctx,
+        GAPIF_LeExAdvSetData(EX_ADV_HANDLE_CONN, GAP_ADVERTISING_DATA_OPERATION_COMPLETE,
+            GAP_CONTROLLER_SHOULD_NOT_FRAGMENT, sizeof(advData), advData),
+        "peer: adv set data") != BT_SUCCESS) {
         return 1;
     }
-    GapExAdvSet advSet = {EX_ADV_HANDLE_CONN, 0, 0};
+    GapExAdvSet advSet = { EX_ADV_HANDLE_CONN, 0, 0 };
     ctx->op.Reset();
     if (PeerWaitOp(*ctx, GAPIF_LeExAdvSetEnable(0x01, 1, &advSet), "peer: adv enable") != BT_SUCCESS) {
         return 1;
     }
     state.advEnabled_ = true;
+    return EnablePeriodicPeerAdvertising(*ctx);
+}
 
-    ctx->op.Reset();
-    if (PeerWaitOp(*ctx, GAPIF_LePeriodicAdvSetParam(EX_ADV_HANDLE_PERIODIC, PERIODIC_ADV_INTERVAL_MIN,
-                                                     PERIODIC_ADV_INTERVAL_MIN, 0x0000),
-                   "peer: periodic adv set param") != BT_SUCCESS) {
+// Register the ISO/ATT/EATT companion setups after the advertising is enabled;
+// every step must complete before the peer is usable.
+static int SetupPeerCompanions()
+{
+    if (InitEattPeerSetup() != 0) {
+        printf("peer: EATT setup failed\n");
         return 1;
     }
-    const uint8_t periodicData[] = {0x50, 0x45, 0x52, 0x49, 0x4F, 0x44, 0x49, 0x43}; // "PERIODIC"
-    ctx->op.Reset();
-    if (PeerWaitOp(*ctx, GAPIF_LePeriodicAdvSetData(EX_ADV_HANDLE_PERIODIC,
-                                                    GAP_PERIODIC_ADV_DATA_OPERATION_COMPLETE,
-                                                    sizeof(periodicData), periodicData),
-                   "peer: periodic adv set data") != BT_SUCCESS) {
+    // ATT companion setup (register ATT connect/client/server callbacks so the
+    // peer answers incoming indications with a confirmation); serves the ATT UATT
+    // two-device cases (D/E units).
+    if (InitAttPeerSetup() != 0) {
+        printf("peer: ATT setup failed\n");
         return 1;
     }
-    ctx->op.Reset();
-    if (PeerWaitOp(*ctx, GAPIF_LePeriodicAdvSetEnable(0x01, EX_ADV_HANDLE_PERIODIC), "peer: periodic adv enable") !=
-        BT_SUCCESS) {
+
+    // ISO CIS companion: the slave pre-configures its own CIG and auto-accepts the
+    // incoming LE CIS Request (0x1A), per BT 5.2 Vol 6 Part B 4.5.14,3.
+    InitIsoCisPeerSetup();
+    return 0;
+}
+
+// Print the peer's local address and service re-advertise requests until Ctrl+C.
+static int ServePeerRequests(PeerAdvContext *ctx)
+{
+    BtAddr localAddr = { };
+    if (GAPIF_GetLocalAddr(&localAddr) == BT_SUCCESS) {
+        printf("peer: ready\n");
+        printf("peer: run on device A: ./btfw_stack_unit_test --peer-addr=");
+        // Address bytes are stored LSB-first; print them MSB-first.
+        for (size_t i = 0; i < BT_ADDRESS_SIZE; ++i) {
+            printf("%02X%s", localAddr.addr[BT_ADDRESS_SIZE - 1 - i], i + 1 < BT_ADDRESS_SIZE ? ":" : "");
+        }
+        printf("\n");
+    }
+
+    auto previousSigint = std::signal(SIGINT, PeerModeSignalHandler);
+    if (previousSigint == SIG_ERR) {
+        printf("peer: failed to install SIGINT handler\n");
         return 1;
     }
-    GapExAdvSet periodicSet = {EX_ADV_HANDLE_PERIODIC, 0, 0};
-    ctx->op.Reset();
-    if (PeerWaitOp(*ctx, GAPIF_LeExAdvSetEnable(0x01, 1, &periodicSet), "peer: periodic ex adv enable") != BT_SUCCESS) {
-        return 1;
+    printf("peer: press Ctrl+C to exit\n");
+    while (!g_peerModeExitRequested) {
+        std::this_thread::sleep_for(POLL_INTERVAL);
+        if (g_peerReAdvRequested.exchange(false)) {
+            GapExAdvSet advSet = { EX_ADV_HANDLE_CONN, 0, 0 };
+            ctx->op.Reset();
+            if (PeerWaitOp(*ctx, GAPIF_LeExAdvSetEnable(0x01, 1, &advSet), "peer: re-enable adv set 0") != BT_SUCCESS) {
+                printf("peer: re-enable adv set 0 failed, will retry\n");
+                g_peerReAdvRequested = true;
+            }
+        }
     }
+    std::signal(SIGINT, previousSigint);
     return 0;
 }
 
@@ -804,35 +961,30 @@ int RunPeerMode()
     if (InitPeerStack(state) != 0) {
         return 1;
     }
+    if (BTM_RegisterAclCallbacks(&g_peerAclCallbacks, NULL) != BT_SUCCESS) {
+        printf("peer: register acl callbacks failed\n");
+        return 1;
+    }
     if (RegisterPeerAdvCallbacks(ctx, state) != 0) {
         return 1;
     }
     if (EnablePeerAdvertising(ctx, state) != 0) {
         return 1;
     }
-
-    BtAddr localAddr = {};
-    if (GAPIF_GetLocalAddr(&localAddr) == BT_SUCCESS) {
-        printf("peer: ready\n");
-        printf("peer: run on device A: ./btfw_stack_unit_test --peer-addr=");
-        // Address bytes are stored LSB-first; print them MSB-first.
-        for (size_t i = 0; i < BT_ADDRESS_SIZE; ++i) {
-            printf("%02X%s", localAddr.addr[BT_ADDRESS_SIZE - 1 - i],
-                i + 1 < BT_ADDRESS_SIZE ? ":" : "");
-        }
-        printf("\n");
-    }
-
-    auto previousSigint = std::signal(SIGINT, PeerModeSignalHandler);
-    if (previousSigint == SIG_ERR) {
-        printf("peer: failed to install SIGINT handler\n");
+    if (SetupPeerCompanions() != 0) {
+        // InitAttPeerSetup may have started the pairing responder thread before failing;
+        // join it so the global joinable std::thread is not destroyed at process teardown
+        // (std::terminate). ShutdownPairResponder is idempotent when the thread was never
+        // started (joinable() check) and in peer mode the DUT path never joins it.
+        ShutdownPairResponder();
         return 1;
     }
-    printf("peer: press Ctrl+C to exit\n");
-    while (!g_peerModeExitRequested) {
-        std::this_thread::sleep_for(POLL_INTERVAL);
+    if (ServePeerRequests(ctx) != 0) {
+        // Same teardown as the success path below: the responder thread is already running
+        // and the SIGINT-install failure path returns before the join at the end.
+        ShutdownPairResponder();
+        return 1;
     }
-    std::signal(SIGINT, previousSigint);
 
     int deregRet = GAPIF_DeregisterExAdvCallback();
     state.callbackRegistered_ = false;
@@ -845,6 +997,11 @@ int RunPeerMode()
     } else {
         peerAdvCtx.reset();
     }
+
+    // Server mode exits the process after main returns: join the pairing responder
+    // thread started by InitAttPeerSetup, otherwise the joinable std::thread is
+    // destroyed at global teardown and calls std::terminate.
+    ShutdownPairResponder();
 
     return state.cleanupFailed_ ? 1 : 0;
 }
@@ -860,30 +1017,42 @@ int RunPeerMode()
 //   Advertiser_Address(6)=AA:BB:CC:DD:EE:FF（LE 序）| Advertiser_PHY(1)=0x01 |
 //   Periodic_Advertising_Interval(2)=0x00A0 | Advertiser_Clock_Accuracy(1)=1
 constexpr uint8_t PAST_SYNC_TRANSFER_RECEIVED_WIRE[] = {
-    0x3E, 0x14,            // LE Meta, Parameter_Total_Length = 20
-    0x18,                  // Subevent: LE Periodic Advertising Sync Transfer Received
-    0x00,                  // Status
-    0x08, 0x00,            // Connection_Handle
-    0x34, 0x12,            // Service_Data
-    0x67, 0x05,            // Sync_Handle
-    0x03,                  // Advertising_SID
-    0x00,                  // Advertiser_Address_Type = public
-    0xFF, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, // Advertiser_Address = AA:BB:CC:DD:EE:FF
-    0x01,                  // Advertiser_PHY = LE 1M
-    0xA0, 0x00,            // Periodic_Advertising_Interval = 100 ms
-    0x01,                  // Advertiser_Clock_Accuracy
+    0x3E,
+    0x14, // LE Meta, Parameter_Total_Length = 20
+    0x18, // Subevent: LE Periodic Advertising Sync Transfer Received
+    0x00, // Status
+    0x08,
+    0x00, // Connection_Handle
+    0x34,
+    0x12, // Service_Data
+    0x67,
+    0x05, // Sync_Handle
+    0x03, // Advertising_SID
+    0x00, // Advertiser_Address_Type = public
+    0xFF,
+    0xEE,
+    0xDD,
+    0xCC,
+    0xBB,
+    0xAA, // Advertiser_Address = AA:BB:CC:DD:EE:FF
+    0x01, // Advertiser_PHY = LE 1M
+    0xA0,
+    0x00, // Periodic_Advertising_Interval = 100 ms
+    0x01, // Advertiser_Clock_Accuracy
 };
 
 struct PastInjectionResult {
     std::mutex mtx;
     std::condition_variable cv;
     bool received = false;
-    HciLePeriodicAdvertisingSyncTransferReceivedEventParam param = {};
+    HciLePeriodicAdvertisingSyncTransferReceivedEventParam param = { };
 
     bool Wait(uint32_t timeoutMs)
     {
         std::unique_lock<std::mutex> lock(mtx);
-        return cv.wait_for(lock, std::chrono::milliseconds(timeoutMs), [this] { return received; });
+        return cv.wait_for(lock, std::chrono::milliseconds(timeoutMs), [this] {
+            return received;
+        });
     }
 
     void Reset()
@@ -905,8 +1074,7 @@ struct PastInjectionResult {
 
 PastInjectionResult g_pastInjectionResult;
 
-static void OnInjectedPastSyncTransferReceived(
-    const HciLePeriodicAdvertisingSyncTransferReceivedEventParam *eventParam)
+static void OnInjectedPastSyncTransferReceived(const HciLePeriodicAdvertisingSyncTransferReceivedEventParam *eventParam)
 {
     if (eventParam == nullptr) {
         return;
@@ -916,7 +1084,7 @@ static void OnInjectedPastSyncTransferReceived(
 
 class HciEventCallbackGuard {
 public:
-    explicit HciEventCallbackGuard(HciEventCallbacks *callbacks) : callbacks_(callbacks) {}
+    explicit HciEventCallbackGuard(HciEventCallbacks *callbacks) : callbacks_(callbacks) { }
     ~HciEventCallbackGuard()
     {
         if (HCI_DeregisterEventCallbacks(callbacks_) != BT_SUCCESS) {
@@ -933,8 +1101,8 @@ private:
 
 class StackGapLeInteractTest : public testing::Test {
 public:
-    StackGapLeInteractTest() {}
-    ~StackGapLeInteractTest() {}
+    StackGapLeInteractTest() { }
+    ~StackGapLeInteractTest() { }
 
     static void SetUpTestCase(void);
     static void TearDownTestCase(void);
@@ -1005,15 +1173,15 @@ void StackGapLeInteractTest::TearDownTestCase(void)
     }
 }
 
-void StackGapLeInteractTest::SetUp() {}
+void StackGapLeInteractTest::SetUp() { }
 
-void StackGapLeInteractTest::TearDown() {}
+void StackGapLeInteractTest::TearDown() { }
 
 // Register the LE connection callbacks used by the DLE test. Returns the
 // registration result so the caller can ASSERT on it.
 static int RegisterDleCallbacks(const std::shared_ptr<SetDataLengthContext> &ctx)
 {
-    GapLeConnCallback callback = {};
+    GapLeConnCallback callback = { };
     callback.leSetDataLengthResult = [](uint8_t status, const BtAddr *addr, void *context) {
         if (context == nullptr) {
             return;
@@ -1022,7 +1190,7 @@ static int RegisterDleCallbacks(const std::shared_ptr<SetDataLengthContext> &ctx
         OnLeSetDataLengthResult(status, addr, c->setResult.get());
     };
     callback.leDataLengthChange = [](const BtAddr *addr, uint16_t maxTxOctets, uint16_t maxTxTime, uint16_t maxRxOctets,
-                                     uint16_t maxRxTime, void *context) {
+                                      uint16_t maxRxTime, void *context) {
         auto *c = static_cast<SetDataLengthContext *>(context);
         auto *result = static_cast<DataLengthChangeResult *>(c->changeResult.get());
         if (result == nullptr) {
@@ -1046,15 +1214,15 @@ static bool ReadMaxDataLength(uint16_t &maxTxOctets, uint16_t &maxTxTime, uint16
     }
     printf("controller max data length: txOctets=%u txTime=%u rxOctets=%u "
            "rxTime=%u\n",
-           static_cast<unsigned int>(maxTxOctets), static_cast<unsigned int>(maxTxTime),
-           static_cast<unsigned int>(maxRxOctets), static_cast<unsigned int>(maxRxTime));
+        static_cast<unsigned int>(maxTxOctets), static_cast<unsigned int>(maxTxTime),
+        static_cast<unsigned int>(maxRxOctets), static_cast<unsigned int>(maxRxTime));
     return true;
 }
 
 // Discard any auto-DLE negotiation events that arrive during the drain window
 // so they cannot be misattributed to the command issued by the test.
-static void DrainAutoDleEvents(const std::shared_ptr<SetDataLengthResult> &setResult,
-                               const std::shared_ptr<DataLengthChangeResult> &changeResult)
+static void DrainAutoDleEvents(
+    const std::shared_ptr<SetDataLengthResult> &setResult, const std::shared_ptr<DataLengthChangeResult> &changeResult)
 {
     constexpr uint32_t drainTimeoutMs = 1500;
     if (setResult->Wait(drainTimeoutMs)) {
@@ -1063,9 +1231,8 @@ static void DrainAutoDleEvents(const std::shared_ptr<SetDataLengthResult> &setRe
     }
     if (changeResult->Wait(drainTimeoutMs)) {
         printf("auto DLE change: tx=%u/%u rx=%u/%u\n", static_cast<unsigned int>(changeResult->maxTxOctets),
-               static_cast<unsigned int>(changeResult->maxTxTime),
-               static_cast<unsigned int>(changeResult->maxRxOctets),
-               static_cast<unsigned int>(changeResult->maxRxTime));
+            static_cast<unsigned int>(changeResult->maxTxTime), static_cast<unsigned int>(changeResult->maxRxOctets),
+            static_cast<unsigned int>(changeResult->maxRxTime));
     }
 }
 
@@ -1096,9 +1263,8 @@ static bool WaitDleChange(const std::shared_ptr<DataLengthChangeResult> &changeR
     bool changeReceived = changeResult->Wait();
     if (changeReceived) {
         printf("own DLE change: tx=%u/%u rx=%u/%u\n", static_cast<unsigned int>(changeResult->maxTxOctets),
-               static_cast<unsigned int>(changeResult->maxTxTime),
-               static_cast<unsigned int>(changeResult->maxRxOctets),
-               static_cast<unsigned int>(changeResult->maxRxTime));
+            static_cast<unsigned int>(changeResult->maxTxTime), static_cast<unsigned int>(changeResult->maxRxOctets),
+            static_cast<unsigned int>(changeResult->maxRxTime));
     }
     return changeReceived;
 }
@@ -1124,9 +1290,9 @@ struct ScanProbe {
 static PeriodicAdvSyncCtx *RegisterSyncCallbacks()
 {
     auto *ctx = new PeriodicAdvSyncCtx();
-    GapPeriodicAdvSyncCallback callback = {};
+    GapPeriodicAdvSyncCallback callback = { };
     callback.syncEstablished = [](uint8_t status, uint16_t syncHandle, uint8_t advSid, const BtAddr *advAddr,
-                                  uint8_t advPhy, uint16_t periodicAdvInterval, void *context) {
+                                   uint8_t advPhy, uint16_t periodicAdvInterval, void *context) {
         auto *c = static_cast<PeriodicAdvSyncCtx *>(context);
         auto *result = static_cast<SyncEstablishedResult *>(&c->syncResult);
         if (result == nullptr) {
@@ -1160,9 +1326,9 @@ static PeriodicAdvSyncCtx *RegisterSyncCallbacks()
 // the reports that carry a periodic advertising interval.
 static void RunScanProbe(ScanProbe &probe)
 {
-    GapExScanCallback scanCallback = {};
+    GapExScanCallback scanCallback = { };
     scanCallback.exAdvertisingReport = [](uint8_t advType, const BtAddr *addr, GapExAdvReportParam reportParam,
-                                          const BtAddr *currentAddr, void *context) {
+                                           const BtAddr *currentAddr, void *context) {
         (void)currentAddr;
         auto *p = static_cast<ScanProbe *>(context);
         if (addr == nullptr) {
@@ -1173,8 +1339,7 @@ static void RunScanProbe(ScanProbe &probe)
             std::lock_guard<std::mutex> lock(g_stateMutex);
             peerAddr = g_state.peerAddr;
         }
-        if (peerAddr.type == PEER_ADDR_TYPE_INVALID ||
-            std::memcmp(addr->addr, peerAddr.addr, BT_ADDRESS_SIZE) != 0) {
+        if (peerAddr.type == PEER_ADDR_TYPE_INVALID || std::memcmp(addr->addr, peerAddr.addr, BT_ADDRESS_SIZE) != 0) {
             return;
         }
         p->reportsFromPeer++;
@@ -1183,12 +1348,14 @@ static void RunScanProbe(ScanProbe &probe)
         }
         printf("scan probe: report from peer advType=0x%02X sid=%u "
                "periodicInterval=%u rssi=%d\n",
-               static_cast<unsigned int>(advType), static_cast<unsigned int>(reportParam.advertisingSid),
-               static_cast<unsigned int>(reportParam.periodicAdvInterval), reportParam.rssi);
+            static_cast<unsigned int>(advType), static_cast<unsigned int>(reportParam.advertisingSid),
+            static_cast<unsigned int>(reportParam.periodicAdvInterval), reportParam.rssi);
     };
     if (GAPIF_RegisterExScanCallback(&scanCallback, &probe) == BT_SUCCESS) {
         ExScanCallbackGuard scanGuard;
-        GapLeScanParam scanParam = {0x00, {0x0010, 0x0010}};
+        GapLeScanParam scanParam = {
+            0x00, { 0x0010, 0x0010 }
+        };
         EXPECT_EQ(GAPIF_LeExScanSetParam(0x00, GAP_EX_SCAN_PHY_1M, &scanParam), BT_SUCCESS);
         EXPECT_EQ(GAPIF_LeExScanSetEnable(0x01, 0x00, 0, 0), BT_SUCCESS);
         constexpr auto scanProbeDuration = std::chrono::seconds(3);
@@ -1196,11 +1363,11 @@ static void RunScanProbe(ScanProbe &probe)
         EXPECT_EQ(GAPIF_LeExScanSetEnable(0x00, 0x00, 0, 0), BT_SUCCESS);
     }
     printf("scan probe: reportsFromPeer=%d reportsWithPeriodic=%d\n", probe.reportsFromPeer.load(),
-           probe.reportsWithPeriodic.load());
+        probe.reportsWithPeriodic.load());
     if (probe.reportsFromPeer.load() == 0 || probe.reportsWithPeriodic.load() == 0) {
         printf("WARNING: scan probe saw no %s from peer; periodic sync is "
                "unlikely to succeed\n",
-               probe.reportsFromPeer.load() == 0 ? "reports" : "reports with periodic interval");
+            probe.reportsFromPeer.load() == 0 ? "reports" : "reports with periodic interval");
     }
 }
 
@@ -1208,15 +1375,15 @@ static void RunScanProbe(ScanProbe &probe)
 // syncEstablished callback. Returns true when the callback was received.
 static bool WaitForSyncEstablished(PeriodicAdvSyncCtx *ctx, const BtAddr &peerAddr)
 {
-    EXPECT_EQ(GAPIF_LePeriodicAdvCreateSync(0x00, PEER_ADV_SID, &peerAddr, 0x0000, PERIODIC_SYNC_TIMEOUT_2S),
-              BT_SUCCESS);
+    EXPECT_EQ(
+        GAPIF_LePeriodicAdvCreateSync(0x00, PEER_ADV_SID, &peerAddr, 0x0000, PERIODIC_SYNC_TIMEOUT_2S), BT_SUCCESS);
     bool received = ctx->syncResult.Wait();
     printf("syncEstablished: received=%d status=0x%02X syncHandle=0x%04X sid=%u "
            "phy=0x%02X interval=%u\n",
-           static_cast<int>(received), static_cast<unsigned int>(ctx->syncResult.status),
-           static_cast<unsigned int>(ctx->syncResult.syncHandle), static_cast<unsigned int>(ctx->syncResult.advSid),
-           static_cast<unsigned int>(ctx->syncResult.advPhy),
-           static_cast<unsigned int>(ctx->syncResult.periodicAdvInterval));
+        static_cast<int>(received), static_cast<unsigned int>(ctx->syncResult.status),
+        static_cast<unsigned int>(ctx->syncResult.syncHandle), static_cast<unsigned int>(ctx->syncResult.advSid),
+        static_cast<unsigned int>(ctx->syncResult.advPhy),
+        static_cast<unsigned int>(ctx->syncResult.periodicAdvInterval));
     return received;
 }
 
@@ -1227,7 +1394,7 @@ static void CancelPendingSync(PeriodicAdvSyncCtx *ctx)
     int cancelRet = GAPIF_LePeriodicAdvCreateSyncCancel();
     bool cancelReceived = ctx->cancelResult.Wait();
     printf("createSyncCancel: ret=%d received=%d status=0x%02X\n", cancelRet, static_cast<int>(cancelReceived),
-           ctx->cancelResult.status);
+        ctx->cancelResult.status);
     printf("cancel triggered syncEstablished event: status=0x%02X\n", ctx->syncResult.status);
 }
 
@@ -1251,7 +1418,7 @@ HWTEST_F(StackGapLeInteractTest, StackGapLe_SetDataLength_00100, TestSize.Level1
 
     auto setResult = std::make_shared<SetDataLengthResult>();
     auto changeResult = std::make_shared<DataLengthChangeResult>();
-    auto ctx = std::make_shared<SetDataLengthContext>(SetDataLengthContext{setResult, changeResult});
+    auto ctx = std::make_shared<SetDataLengthContext>(SetDataLengthContext { setResult, changeResult });
     ASSERT_EQ(RegisterDleCallbacks(ctx), BT_SUCCESS);
     LeConnCallbackGuard connGuard;
 
@@ -1278,8 +1445,7 @@ HWTEST_F(StackGapLeInteractTest, StackGapLe_SetDataLength_00100, TestSize.Level1
     }
     EXPECT_EQ(GAPIF_LeSetDataLength(&peerAddr, testTxOctets, maxTxTime), BT_SUCCESS);
     bool setReceived = setResult->Wait();
-    printf("own set data length result: received=%d status=0x%02X\n", static_cast<int>(setReceived),
-           setResult->status);
+    printf("own set data length result: received=%d status=0x%02X\n", static_cast<int>(setReceived), setResult->status);
 
     ASSERT_TRUE(setReceived) << "leSetDataLengthResult callback not received";
     EXPECT_TRUE(IsAcceptedSetStatus(setResult->status));
@@ -1316,7 +1482,7 @@ HWTEST_F(StackGapLeInteractTest, StackGapLe_ReadPhy_00100, TestSize.Level1)
     }
 
     auto result = std::make_shared<PhyResult>();
-    GapLeConnCallback callback = {};
+    GapLeConnCallback callback = { };
     callback.leReadPhyResult = [](uint8_t status, const BtAddr *addr, uint8_t txPhy, uint8_t rxPhy, void *context) {
         if (context == nullptr) {
             return;
@@ -1362,7 +1528,7 @@ HWTEST_F(StackGapLeInteractTest, StackGapLe_SetPhy_00100, TestSize.Level1)
     }
 
     auto result = std::make_shared<PhyResult>();
-    GapLeConnCallback callback = {};
+    GapLeConnCallback callback = { };
     callback.lePhyUpdateComplete = [](uint8_t status, const BtAddr *addr, uint8_t txPhy, uint8_t rxPhy, void *context) {
         if (context == nullptr) {
             return;
@@ -1382,8 +1548,8 @@ HWTEST_F(StackGapLeInteractTest, StackGapLe_SetPhy_00100, TestSize.Level1)
 
     ASSERT_TRUE(received) << "lePhyUpdateComplete event not received";
     printf("lePhyUpdateComplete: status = 0x%02X, txPhy = 0x%02X, rxPhy = 0x%02X\n",
-           static_cast<unsigned int>(result->status), static_cast<unsigned int>(result->txPhy),
-           static_cast<unsigned int>(result->rxPhy));
+        static_cast<unsigned int>(result->status), static_cast<unsigned int>(result->txPhy),
+        static_cast<unsigned int>(result->rxPhy));
     // The peer/master may reject the 2M PHY request, so the returned status is
     // informational rather than required to be HCI_STATUS_SUCCESS. The PHY
     // fields are only meaningful when the update succeeded.
@@ -1424,7 +1590,9 @@ HWTEST_F(StackGapLeInteractTest, StackGapLe_PeriodicAdvCreateSync_00100, TestSiz
         FAIL() << "failed to register periodic adv sync callback";
         return;
     }
-    PeriodicAdvSyncCallbackGuard syncGuard([ctx] { delete ctx; });
+    PeriodicAdvSyncCallbackGuard syncGuard([ctx] {
+        delete ctx;
+    });
 
     ScanProbe probe;
     RunScanProbe(probe);
@@ -1457,7 +1625,7 @@ HWTEST_F(StackGapLeInteractTest, StackGapLe_PeriodicAdvCreateSync_00100, TestSiz
 //            处理线程上按生产路径解析，回调异步到达。断言全部 19 字节字段。
 HWTEST_F(StackGapLeInteractTest, StackGapLe5_1_Inject_PastSyncTransferReceived_00100, TestSize.Level1)
 {
-    HciEventCallbacks callbacks = {};
+    HciEventCallbacks callbacks = { };
     callbacks.lePeriodicAdvertisingSyncTransferReceived = OnInjectedPastSyncTransferReceived;
     ASSERT_EQ(HCI_RegisterEventCallbacks(&callbacks), BT_SUCCESS);
     HciEventCallbackGuard callbackGuard(&callbacks);

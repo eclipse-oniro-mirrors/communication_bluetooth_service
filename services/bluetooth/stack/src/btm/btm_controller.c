@@ -16,6 +16,7 @@
 #include "btm_controller.h"
 
 #include <securec.h>
+#include <stdatomic.h>
 
 #include "btstack.h"
 #include "hci/hci.h"
@@ -78,6 +79,21 @@ static HciWriteLeHostSupportReturnParam g_writeLeHostSupportedResult;
 static HciLeReadBufferSizeReturnParam g_leReadBufferSizeResult;
 static HciLeReadLocalSupportedFeaturesReturnParam g_leReadLocalSupportedFeaturesResult;
 static HciLeSetEventMaskReturnParam g_leSetEventMaskResult;
+static HciLeSetHostFeatureReturnParam g_leSetHostFeatureResult;
+// Local monotonic sequence number tagging the setup commands that share g_waitSetupController
+// (BtmLeSetEventMask / BtmLeSetHostFeature). Each send captures its own seq; the completion
+// callbacks tag the result globals with the seq of the command whose answer the HCI layer
+// dispatched (opcode-only, see BtmControllerOnLeSetEventMaskComplete), and the wait loops
+// accept a result only when the seq matches the one captured at send time. A wake-up tagged
+// with a different seq is a stale completion of a predecessor command and is absorbed (the
+// loop keeps waiting) instead of being misattributed to the command in flight.
+// Atomics: the seq is written by the service thread (++ at send time) and read by the Stack
+// thread's completion callbacks, which tag their result with it; the result seqs are written
+// by those callbacks and read by the service thread's wait loops. Plain 32-bit accesses
+// would not tear but could see stale values; atomics keep the tag exchange defined.
+static _Atomic uint32_t g_setupCmdSeq = 0;
+static _Atomic uint32_t g_leSetEventMaskResultSeq = 0;
+static _Atomic uint32_t g_leSetHostFeatureResultSeq = 0;
 static HciLeReadWhiteListSizeReturnParam g_leReadWhiteListSizeResult;
 static HciLeReadResolvingListSizeReturnParam g_leReadResolvingListSizeResult;
 // Stores the LE Read Antenna Information result (7.8.87). Written exactly once
@@ -293,7 +309,23 @@ static void BtmControllerOnLeReadAntennaInformationComplete(
 
 static void BtmControllerOnLeSetEventMaskComplete(const HciLeSetEventMaskReturnParam *returnParam)
 {
+    if (returnParam == NULL) {
+        return;
+    }
     g_leSetEventMaskResult = *returnParam;
+    // Tag the result with the seq of the command currently in flight: the HCI layer dispatches
+    // the Complete by opcode only, so this seq is the only identity the wait loop can check.
+    g_leSetEventMaskResultSeq = g_setupCmdSeq;
+    EventSet(g_waitSetupController);
+}
+
+static void BtmControllerOnLeSetHostFeatureComplete(const HciLeSetHostFeatureReturnParam *returnParam)
+{
+    if (returnParam == NULL) {
+        return;
+    }
+    g_leSetHostFeatureResult = *returnParam;
+    g_leSetHostFeatureResultSeq = g_setupCmdSeq;
     EventSet(g_waitSetupController);
 }
 
@@ -389,6 +421,7 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .writeLeHostSupportComplete = BtmControllerOnWriteLeHostSupportedComplete,
 
     .leSetEventMaskComplete = BtmControllerOnLeSetEventMaskComplete,
+    .leSetHostFeatureComplete = BtmControllerOnLeSetHostFeatureComplete,
     .leReadBufferSizeComplete = BtmControllerOnLeReadBufferSizeComplete,
     .leReadLocalSupportedFeaturesComplete = BtmControllerOnLeReadLocalSupportedFeaturesComplete,
     .leReadMaximumDataLengthComplete = BtmControllerOnLeReadMaximumDataLengthComplete,
@@ -474,6 +507,29 @@ static uint64_t BtmGetLe51EventMask(uint64_t leEventMask)
     }
     if (BTM_IsControllerSupportPeriodicAdvertisingSyncTransferRecipient()) {      // Bit 25
         leEventMask |= LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_TRANSFER_RECEIVED_EVENT;  // Subevent 0x18
+    }
+
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // LE CIS Established / CIS Request events (bit24 / bit25, 7.8.1 Table 3.3)
+    // The controller ignores bits it does not support, so gating on LE support is sufficient.
+    if (BTM_IsControllerSupportLe()) {
+        leEventMask |= (LE_EVENT_MASK_LE_CIS_ESTABLISHED_EVENT | LE_EVENT_MASK_LE_CIS_REQUEST_EVENT);
+    }
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // BIS events: Create BIG Complete / Terminate BIG Complete / BIG Sync Established /
+    // BIG Sync Lost / Request Peer SCA Complete / BIGInfo Advertising Report
+    // (bit26-30, bit33, 7.8.1 Table 3.3)
+    if (BTM_IsControllerSupportLe()) {
+        leEventMask |= (LE_EVENT_MASK_LE_CREATE_BIG_COMPLETE_EVENT | LE_EVENT_MASK_LE_TERMINATE_BIG_COMPLETE_EVENT |
+            LE_EVENT_MASK_LE_BIG_SYNC_ESTABLISHED_EVENT | LE_EVENT_MASK_LE_BIG_SYNC_LOST_EVENT |
+            LE_EVENT_MASK_LE_REQUEST_PEER_SCA_COMPLETE_EVENT | LE_EVENT_MASK_LE_BIGINFO_ADVERTISING_REPORT_EVENT);
+    }
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // LE Path Loss Threshold / LE Transmit Power Reporting events (bit31 / bit32,
+    // 7.8.1 Table 3.3). Without these bits the controller never generates the 0x20
+    // / 0x21 subevents the LE Power Control feature relies on (Vol 6, Part B, 4.5.6/4.5.7).
+    if (BTM_IsControllerSupportLePowerControl()) {
+        leEventMask |= (LE_EVENT_MASK_LE_PATH_LOSS_THRESHOLD_EVENT | LE_EVENT_MASK_LE_TRANSMIT_POWER_REPORTING_EVENT);
     }
 
     return leEventMask;
@@ -924,21 +980,128 @@ static int BtmLeSetEventMask()
     HciLeSetEventMaskParam lsSetEventMaskParam = {
         .leEventMask = BtmGetLeEventMask(),
     };
+    // Clear the shared event, then mark the result as unanswered before sending and capture
+    // the seq of this send. A Command_Complete of a predecessor command that timed out at the
+    // HCI layer may still arrive late while this command is in flight and set the shared
+    // event; its callback tags a different result global (and, if it was for the same opcode,
+    // a seq captured by an earlier send). The seq comparison below accepts only a result
+    // tagged with THIS send's seq; the 0xFF sentinel is kept as a backstop in case a seq
+    // match ever arrives without a status write. No HCI status code equals 0xFF.
+    EventClear(g_waitSetupController);
+    uint32_t mySeq = ++g_setupCmdSeq;
+    g_leSetEventMaskResult.status = 0xFF;
+    g_leSetEventMaskResultSeq = 0;
     int result = HCI_LeSetEventMask(&lsSetEventMaskParam);
     if (result != BT_SUCCESS) {
         LOG_ERROR("HCI_LeSetEventMask failed: %{public}d", result);
         return result;
     }
-    if (EventWait(g_waitSetupController, WAIT_CMD_TIMEOUT) == 0) {
-        if (g_leSetEventMaskResult.status != HCI_SUCCESS) {
-            LOG_ERROR("HCI_LeSetEventMask status: 0x%02x", g_leSetEventMaskResult.status);
-            result = BT_OPERATION_FAILED;
+    // Keep waiting until a completion tagged with this send's seq arrives: a wake-up carrying
+    // a different seq (or still 0xFF) came from a stale predecessor signal and its status must
+    // not be attributed to the command in flight.
+    while (g_leSetEventMaskResultSeq != mySeq) {
+        if (EventWait(g_waitSetupController, WAIT_CMD_TIMEOUT) != 0) {
+            LOG_ERROR("HCI_LeSetEventMask Timeout");
+            return BT_OPERATION_FAILED;
         }
-    } else {
-        LOG_ERROR("HCI_LeSetEventMask Timeout");
+        if (g_leSetEventMaskResultSeq != mySeq) {
+            LOG_WARN("HCI_LeSetEventMask woken by a stale complete of a predecessor command "
+                     "(seq %u != %u), keep waiting", g_leSetEventMaskResultSeq, mySeq);
+        }
+    }
+    if (g_leSetEventMaskResult.status != HCI_SUCCESS) {
+        LOG_ERROR("HCI_LeSetEventMask status: 0x%02x", g_leSetEventMaskResult.status);
         result = BT_OPERATION_FAILED;
     }
     return result;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.115 LE Set Host Feature Command
+// Declare LE host features supported by this stack to the controller.
+// Bit 32 (0x20) = Isochronous Channels (Host Support): the only FeatureSet bit
+// controlled by the Host (Vol 6 Part B, Table 4.6); set by this ISO-enabled stack.
+/**
+ * @brief check whether a LE Set Host Feature command complete status is tolerated.
+ *
+ * 7.8.115 is a best-effort declaration: the spec-defined "decline" codes (0x01 unknown
+ * command / 0x11 bit not host-controlled / 0x0C ACL established) are expected and
+ * tolerated; any other code is treated per Vol 1 Part F, Section 1.3 as Unspecified
+ * Error (0x1F): logged loudly but must not block BTM_Enable.
+ *
+ * @param status Indicates the command complete status code.
+ * @return true if the status is one of the tolerated decline codes.
+ */
+static bool BtmLeSetHostFeatureStatusTolerated(uint8_t status)
+{
+    return status == HCI_UNKNOWN_HCI_COMMAND ||
+        status == HCI_UNSUPPORTED_FEATURE_OR_PARAMETER_VALUE ||
+        status == HCI_COMMAND_DISALLOWED;
+}
+
+static void BtmLogSetHostFeatureStatus(uint8_t status, uint8_t bit)
+{
+    if (BtmLeSetHostFeatureStatusTolerated(status)) {
+        LOG_WARN("HCI_LeSetHostFeature(bit=%{public}d) status: 0x%{public}02x, skipped", bit, status);
+    } else {
+        LOG_ERROR("HCI_LeSetHostFeature(bit=%{public}d) status: 0x%{public}02x, skipped", bit, status);
+    }
+}
+
+static int BtmLeSetHostFeature()
+{
+    static const uint8_t bitsToEnable[] = { 0x20 };
+    for (size_t i = 0; i < sizeof(bitsToEnable) / sizeof(bitsToEnable[0]); i++) {
+        // Clear the event first: a stale signal from a timed-out predecessor
+        // command (or the previous loop iteration) would otherwise make
+        // EventWait return immediately and this command would consume a
+        // zero-initialized result.
+        EventClear(g_waitSetupController);
+        // Mark the result as unanswered before sending and capture the seq of this
+        // send: a Command_Complete of a predecessor command that timed out at the
+        // HCI layer may still arrive late while this command is in flight (HCI
+        // dispatches complete events by opcode without matching a pending command)
+        // and set the shared event. The seq comparison below accepts only a result
+        // tagged with this send's seq; the 0xFF sentinel is kept as a backstop in
+        // case a seq match ever arrives without a status write. No HCI status code
+        // equals 0xFF.
+        uint32_t mySeq = ++g_setupCmdSeq;
+        g_leSetHostFeatureResult.status = 0xFF;
+        g_leSetHostFeatureResultSeq = 0;
+
+        HciLeSetHostFeatureParam param = {
+            .bitNumber = bitsToEnable[i],
+            .bitValue = 0x01,
+        };
+
+        int result = HCI_LeSetHostFeature(&param);
+        if (result != BT_SUCCESS) {
+            LOG_ERROR("HCI_LeSetHostFeature(bit=%{public}d) failed: %{public}d", bitsToEnable[i], result);
+            return result;
+        }
+
+        // Keep waiting until a completion tagged with this send's seq arrives: a
+        // wake-up carrying a different seq (or still 0xFF) came from a stale
+        // predecessor signal, not from this command, and its status must not be
+        // attributed to the command in flight.
+        while (g_leSetHostFeatureResultSeq != mySeq) {
+            if (EventWait(g_waitSetupController, WAIT_CMD_TIMEOUT) != 0) {
+                LOG_ERROR("HCI_LeSetHostFeature(bit=%{public}d) Timeout", bitsToEnable[i]);
+                return BT_OPERATION_FAILED;
+            }
+            if (g_leSetHostFeatureResultSeq != mySeq) {
+                LOG_WARN("HCI_LeSetHostFeature(bit=%{public}d) woken by a stale complete of a "
+                         "predecessor command (seq %u != %u), keep waiting",
+                    bitsToEnable[i], g_leSetHostFeatureResultSeq, mySeq);
+            }
+        }
+
+        if (g_leSetHostFeatureResult.status != HCI_SUCCESS) {
+            BtmLogSetHostFeatureStatus(g_leSetHostFeatureResult.status, bitsToEnable[i]);
+            continue;
+        }
+    }
+    return BT_SUCCESS;
 }
 
 static int BtmInitLeFeature()
@@ -990,6 +1153,10 @@ static int BtmInitLeFeature()
         }
 
         result = BtmLeSetEventMask();
+        CHECK_RESULT_BREAK(result);
+
+        result = BtmLeSetHostFeature();
+        CHECK_RESULT_BREAK(result);
     } while (0);
 
     return result;
@@ -1233,6 +1400,15 @@ bool BTM_IsControllerSupportChannelSelectionAlgorithm2()
 bool BTM_IsControllerSupportLeReadTransmitPower()
 {
     return HciSupportLeReadTransmitPower(g_readLocalSupportedCommandsResult.supportedCommands);
+}
+
+// Reads the LE features global populated during BTM setup (Read Local Supported Features) with
+// no locking: the value is written by the setup path and only read afterwards, so the contract
+// is "call after BTM_Setup() completed and before BTM_Close()", never concurrently with setup.
+// All in-repo call sites satisfy this; a future caller must too.
+bool BTM_IsControllerSupportLePowerControl()
+{
+    return HciSupportLePowerControl(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportLeReadRfPathCompensation()

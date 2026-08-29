@@ -39,12 +39,19 @@ Thread *BTM_GetProcessingThread();
 #define PROCESSING_QUEUE_ID_AVDTP 7
 #define PROCESSING_QUEUE_ID_SDP 8
 #define PROCESSING_QUEUE_ID_SMP 9
+#define PROCESSING_QUEUE_ID_ISO 10
 
 int BTM_CreateProcessingQueue(uint8_t queueId, uint16_t size);
 
 int BTM_DeleteProcessingQueue(uint8_t queueId);
 
 int BTM_RunTaskInProcessingQueue(uint8_t queueId, void (*task)(void *context), void *context);
+
+// Non-blocking variant: enqueue fails with an error code when the queue is full instead of
+// blocking the caller on the enqueue semaphore. Only for callers that run on the very thread
+// that drains the queue (e.g. HCI event dispatch on the Stack thread), where a blocking
+// enqueue would deadlock - the drain can never progress while the thread is blocked.
+int BTM_RunTaskInProcessingQueueNoBlock(uint8_t queueId, void (*task)(void *context), void *context);
 
 #ifdef __cplusplus
 }

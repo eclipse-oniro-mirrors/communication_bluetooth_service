@@ -62,6 +62,19 @@ extern "C" {
 #define LE_EVENT_MASK_LE_CTE_REQUEST_FAILED_EVENT 0x0000000000400000
 #define LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_TRANSFER_RECEIVED_EVENT 0x0000000000800000
 
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.1 LE Set Event Mask Command (subevent code 0x19-0x22)
+#define LE_EVENT_MASK_LE_CIS_ESTABLISHED_EVENT            0x0000000001000000
+#define LE_EVENT_MASK_LE_CIS_REQUEST_EVENT                0x0000000002000000
+#define LE_EVENT_MASK_LE_CREATE_BIG_COMPLETE_EVENT        0x0000000004000000
+#define LE_EVENT_MASK_LE_TERMINATE_BIG_COMPLETE_EVENT     0x0000000008000000
+#define LE_EVENT_MASK_LE_BIG_SYNC_ESTABLISHED_EVENT       0x0000000010000000
+#define LE_EVENT_MASK_LE_BIG_SYNC_LOST_EVENT              0x0000000020000000
+#define LE_EVENT_MASK_LE_REQUEST_PEER_SCA_COMPLETE_EVENT  0x0000000040000000
+#define LE_EVENT_MASK_LE_PATH_LOSS_THRESHOLD_EVENT        0x0000000080000000
+#define LE_EVENT_MASK_LE_TRANSMIT_POWER_REPORTING_EVENT   0x0000000100000000
+#define LE_EVENT_MASK_LE_BIGINFO_ADVERTISING_REPORT_EVENT 0x0000000200000000
+
 #define LE_EVENT_MASK_DEFAULT 0x000000000000001F
 
 #define LE_EVENT_MASK_CORE_4_0 LE_EVENT_MASK_DEFAULT
@@ -697,6 +710,430 @@ typedef struct {
 } HciLeSetAdvertisingSetRandomAddressParam;
 
 typedef HciStatusParam HciLeSetAdvertisingSetRandomAddressReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.96 LE Read ISO TX Sync Command
+#define HCI_LE_READ_ISO_TX_SYNC MAKE_OPCODE(0x0061, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t connectionHandle;
+} HciLeReadIsoTxSyncParam;
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint16_t packetSequenceNumber;
+    // TX_Time_Stamp is a 24-bit value on the wire (Vol 4 Part E 7.8.96): keep the
+    // struct byte-exact (11 octets) and let the consumer widen it to 32 bits.
+    uint8_t timeStamp[3];
+    uint8_t timeOffset[3];
+} HciLeReadIsoTxSyncReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.97 LE Set CIG Parameters Command
+#define HCI_LE_SET_CIG_PARAMETERS MAKE_OPCODE(0x0062, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint8_t cisId;
+    uint16_t maxSduMToS;
+    uint16_t maxSduSToM;
+    uint8_t phyMToS;
+    uint8_t phySToM;
+    uint8_t rtnMToS;
+    uint8_t rtnSToM;
+} HciLeCisConfigParam;
+
+typedef struct {
+    uint8_t cigId;
+    uint8_t sduIntervalMToS[3];
+    uint8_t sduIntervalSToM[3];
+    uint8_t slaveClockAccuracy;
+    uint8_t packing;
+    uint8_t framing;
+    uint8_t maxTransportLatencyMToS[2];
+    uint8_t maxTransportLatencySToM[2];
+    uint8_t cisCount;
+    const HciLeCisConfigParam *cisConfig;
+} HciLeSetCigParametersParam;
+
+#define HCI_LE_CIS_COUNT_MAX 16
+#define HCI_LE_BIS_COUNT_MAX 31
+typedef struct {
+    uint8_t status;
+    uint8_t cigId;
+    uint8_t cisCount;
+    uint16_t cisHandles[HCI_LE_CIS_COUNT_MAX];
+} HciLeSetCigParametersReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.98 LE Set CIG Parameters Test Command
+#define HCI_LE_SET_CIG_PARAMS_TEST MAKE_OPCODE(0x0063, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint8_t cisId;
+    uint8_t nse;
+    uint16_t maxSduMToS;
+    uint16_t maxSduSToM;
+    uint16_t maxPduMToS;
+    uint16_t maxPduSToM;
+    uint8_t phyMToS;
+    uint8_t phySToM;
+    uint8_t bnMToS;
+    uint8_t bnSToM;
+} HciLeSetCigParametersTestCisConfig;
+
+typedef struct {
+    uint8_t cigId;
+    uint8_t sduIntervalMToS[3];
+    uint8_t sduIntervalSToM[3];
+    uint8_t ftMToS;
+    uint8_t ftSToM;
+    uint8_t isoInterval[2];
+    uint8_t slaveClockAccuracy;
+    uint8_t packing;
+    uint8_t framing;
+    uint8_t cisCount;
+    const HciLeSetCigParametersTestCisConfig *cisConfig;
+} HciLeSetCigParametersTestParam;
+
+typedef struct {
+    uint8_t status;
+    uint8_t cigId;
+    uint8_t cisCount;
+    uint16_t cisHandles[HCI_LE_CIS_COUNT_MAX];
+} HciLeSetCigParametersTestReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.99 LE Create CIS Command
+#define HCI_LE_CREATE_CIS MAKE_OPCODE(0x0064, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t cisHandle;
+    uint16_t aclHandle;
+} HciLeCreateCisConfigParam;
+
+typedef struct {
+    uint8_t cisCount;
+    const HciLeCreateCisConfigParam *cisConfig;
+} HciLeCreateCisParam;
+
+typedef HciStatusParam HciLeCreateCisReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.100 LE Remove CIG Command
+#define HCI_LE_REMOVE_CIG MAKE_OPCODE(0x0065, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint8_t cigId; // CIG Identifier
+} HciLeRemoveCigParam;
+
+// Vol 4 Part E 7.8.100: the Command Complete echoes the CIG_ID; it lets the
+// receiver tell a stale Complete of a previous remove from the pending one.
+typedef struct {
+    uint8_t status;
+    uint8_t cigId;
+} HciLeRemoveCigReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.101 LE Accept CIS Request Command
+#define HCI_LE_ACCEPT_CIS_REQUEST MAKE_OPCODE(0x0066, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t cisHandle;
+} HciLeAcceptCisRequestParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.102 LE Reject CIS Request Command
+#define HCI_LE_REJECT_CIS_REQUEST MAKE_OPCODE(0x0067, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t cisHandle;
+    uint8_t reason;
+} HciLeRejectCisRequestParam;
+
+typedef struct {
+    uint8_t status;
+    uint16_t cisHandle;
+} HciLeRejectCisRequestReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.103 LE Create BIG Command
+#define HCI_LE_CREATE_BIG MAKE_OPCODE(0x0068, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint8_t bigHandle;
+    uint8_t advertisingHandle;
+    uint8_t numBis;
+    uint8_t sduInterval[3];
+    uint16_t maxSdu;
+    uint16_t maxTransportLatency;
+    uint8_t rtn;
+    uint8_t phy;
+    uint8_t packing;
+    uint8_t framing;
+    uint8_t encryption;
+    uint8_t broadcastCode[16];
+} HciLeCreateBigParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.104 LE Create BIG Test Command
+#define HCI_LE_CREATE_BIG_TEST MAKE_OPCODE(0x0069, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint8_t bigHandle;
+    uint8_t advertisingHandle;
+    uint8_t numBis;
+    uint8_t sduInterval[3];
+    uint16_t isoInterval;
+    uint8_t numberOfSdu;
+    uint16_t maxSdu;
+    uint16_t maxTransportLatency;
+    uint8_t rtn;
+    uint8_t phy;
+    uint8_t packing;
+    uint8_t framing;
+    uint8_t encryption;
+    uint8_t broadcastCode[16];
+} HciLeCreateBigTestParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.105 LE Terminate BIG Command
+#define HCI_LE_TERMINATE_BIG MAKE_OPCODE(0x006A, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint8_t bigHandle;
+    uint8_t reason;
+} HciLeTerminateBigParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.106 LE BIG Create Sync Command
+#define HCI_LE_BIG_CREATE_SYNC MAKE_OPCODE(0x006B, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint8_t bigHandle;
+    uint16_t syncHandle;
+    uint8_t encryption;
+    uint8_t broadcastCode[16];
+    uint8_t mse;
+    uint8_t bigSyncTimeout[2];
+    uint8_t numBis;
+    // Array of BIS_Handle values of the BISes to synchronize to (Vol 4 Part E 7.8.106).
+    // Each entry occupies sizeof(uint16_t) bytes on the wire, so the array must contain
+    // numBis * 2 bytes total (HCI_LeBigCreateSync builds the command with
+    // sizeof(uint16_t) * numBis bytes). The pointer stays uint8_t to stay assignable from
+    // the ISO-layer API (IsoLeBigCreateSyncParam.bis, "array of BIS indices").
+    const uint8_t *bis;
+} HciLeBigCreateSyncParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.107 LE BIG Terminate Sync Command
+#define HCI_LE_BIG_TERMINATE_SYNC MAKE_OPCODE(0x006C, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint8_t bigHandle;
+} HciLeBigTerminateSyncParam;
+
+typedef struct {
+    uint8_t status;
+    uint8_t bigHandle;
+} HciLeBigTerminateSyncReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.108 LE Request Peer SCA Command
+#define HCI_LE_REQUEST_PEER_SCA MAKE_OPCODE(0x006D, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t connectionHandle;
+} HciLeRequestPeerScaParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.109 LE Setup ISO Data Path Command
+#define HCI_LE_SETUP_ISO_DATA_PATH MAKE_OPCODE(0x006E, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t dataPathDirection;
+    uint8_t dataPathId;
+    uint8_t codecId[5];
+    uint8_t controllerDelay[3];
+    uint8_t codecConfigurationLength;
+    const uint8_t *codecConfiguration;
+} HciLeSetupIsoDataPathParam;
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+} HciLeSetupIsoDataPathReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.110 LE Remove ISO Data Path Command
+#define HCI_LE_REMOVE_ISO_DATA_PATH MAKE_OPCODE(0x006F, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t dataPathDirection;
+} HciLeRemoveIsoDataPathParam;
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+} HciLeRemoveIsoDataPathReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.111 LE ISO Transmit Test Command
+#define HCI_LE_ISO_TRANSMIT_TEST MAKE_OPCODE(0x0070, HCI_COMMAND_OGF_LE_CONTROLLER)
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t payloadType;
+} HciLeIsoTransmitTestParam;
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+} HciLeIsoTransmitTestReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.112 LE ISO Receive Test Command
+#define HCI_LE_ISO_RECEIVE_TEST MAKE_OPCODE(0x0071, HCI_COMMAND_OGF_LE_CONTROLLER)
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t payloadType;
+} HciLeIsoReceiveTestParam;
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+} HciLeIsoReceiveTestReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.113 LE ISO Read Test Counters Command
+#define HCI_LE_ISO_READ_TEST_COUNTERS MAKE_OPCODE(0x0072, HCI_COMMAND_OGF_LE_CONTROLLER)
+typedef struct {
+    uint16_t connectionHandle;
+} HciLeIsoReadTestCountersParam;
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint32_t receivedPacketCount;
+    uint32_t missedPacketCount;
+    uint32_t failedPacketCount;
+} HciLeIsoReadTestCountersReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.114 LE ISO Test End Command
+#define HCI_LE_ISO_TEST_END MAKE_OPCODE(0x0073, HCI_COMMAND_OGF_LE_CONTROLLER)
+typedef struct {
+    uint16_t connectionHandle;
+} HciLeIsoTestEndParam;
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint32_t receivedPacketCount;
+    uint32_t missedPacketCount;
+    uint32_t failedPacketCount;
+} HciLeIsoTestEndReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.115 LE Set Host Feature Command
+#define HCI_LE_SET_HOST_FEATURE MAKE_OPCODE(0x0074, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint8_t bitNumber;
+    uint8_t bitValue;
+} HciLeSetHostFeatureParam;
+
+typedef HciStatusParam HciLeSetHostFeatureReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.116 LE Read ISO Link Quality Command
+#define HCI_LE_READ_ISO_LINK_QUALITY MAKE_OPCODE(0x0075, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t connectionHandle;
+} HciLeReadIsoLinkQualityParam;
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint32_t txUnackedPackets;
+    uint32_t txFlushedPackets;
+    uint32_t txLastSubeventPackets;
+    uint32_t retransmittedPackets;
+    uint32_t crcErrorPackets;
+    uint32_t rxUnreceivedPackets;
+    uint32_t duplicatePackets;
+} HciLeReadIsoLinkQualityReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.117 LE Enhanced Read Transmit Power Level Command
+#define HCI_LE_ENHANCED_READ_TRANSMIT_POWER_LEVEL MAKE_OPCODE(0x0076, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t phy;
+} HciLeEnhancedReadTransmitPowerLevelParam;
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint8_t phy;
+    int8_t currentTransmitPowerLevel;
+    int8_t maxTransmitPowerLevel;
+} HciLeEnhancedReadTransmitPowerLevelReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.118 LE Read Remote Transmit Power Level Command
+#define HCI_LE_READ_REMOTE_TRANSMIT_POWER_LEVEL MAKE_OPCODE(0x0077, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t phy;
+} HciLeReadRemoteTransmitPowerLevelParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.119 LE Set Path Loss Reporting Parameters Command
+#define HCI_LE_SET_PATH_LOSS_REPORTING_PARAMETERS MAKE_OPCODE(0x0078, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t highThreshold;
+    uint8_t highHysteresis;
+    uint8_t lowThreshold;
+    uint8_t lowHysteresis;
+    uint16_t minTimeSpent;
+} HciLeSetPathLossReportingParametersParam;
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+} HciLeSetPathLossReportingParametersReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.120 LE Set Path Loss Reporting Enable Command
+#define HCI_LE_SET_PATH_LOSS_REPORTING_ENABLE MAKE_OPCODE(0x0079, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t enable;
+} HciLeSetPathLossReportingEnableParam;
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+} HciLeSetPathLossReportingEnableReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.121 LE Set Transmit Power Reporting Enable Command
+#define HCI_LE_SET_TRANSMIT_POWER_REPORTING_ENABLE MAKE_OPCODE(0x007A, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t connectionHandle;
+    uint8_t localEnable;
+    uint8_t remoteEnable;
+} HciLeSetTransmitPowerReportingEnableParam;
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+} HciLeSetTransmitPowerReportingEnableReturnParam;
 
 #pragma pack(0)
 

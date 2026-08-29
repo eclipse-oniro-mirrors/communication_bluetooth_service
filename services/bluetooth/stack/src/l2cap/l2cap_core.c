@@ -59,27 +59,36 @@ static void L2capResponseTimeout(const void *parameter)
     L2capInstance *inst = L2capGetInstance();
     L2capConnection *conn = NULL;
     L2capPendingRequest *req = NULL;
-    ListNode *node = NULL;
+    ListNode *connNode = NULL;
+    uint32_t key = (uint32_t)(uintptr_t)parameter;
 
     if (inst->connList == NULL) {
         return;
     }
 
-    node = ListGetFirstNode(inst->connList);
-    while (node != NULL) {
-        conn = ListGetNodeData(node);
-        req = L2capGetPendingRequest2(conn->pendingList, parameter);
+    // The RTX alarm carries the pending entry's own 32-bit sequence, never a raw pointer: the
+    // entry may have been freed by the response (or its connection torn down) between arming
+    // and expiry. The sequence is allocated globally (not per connection) and fits the
+    // pointer-width alarm parameter on every target, 32-bit ARM included, so the connection
+    // cannot be derived from the key and the entry is searched across the connection list.
+    // Resolving by the unique sequence (instead of the wrap-around 8-bit identifier) makes a
+    // stale expiry task resolve to exactly the request whose timer fired, never to a newer
+    // request of the same connection (ABA, see L2capPendingRequest::seq). A miss means the
+    // request already completed, a safe no-op.
+    connNode = ListGetFirstNode(inst->connList);
+    while (connNode != NULL) {
+        conn = ListGetNodeData(connNode);
+        req = L2capGetPendingRequestByKey(conn->pendingList, key);
         if (req != NULL) {
-            ListRemoveNode(conn->pendingList, req);
             break;
         }
 
-        node = ListGetNextNode(node);
+        connNode = ListGetNextNode(connNode);
     }
-
     if (req == NULL) {
         return;
     }
+    ListRemoveNode(conn->pendingList, req);
 
     if (req->code == L2CAP_INFORMATION_REQUEST) {
         L2capDisconnect(conn->aclHandle, 0x13);
@@ -115,7 +124,8 @@ int L2capSendEchoReq(L2capConnection *conn, const uint8_t *data, uint16_t dataLe
 
     pkt = L2capBuildSignalPacket(L2CAP_SIGNALING_CHANNEL, &signal, data);
 
-    L2capCreatePendingRequest(conn->pendingList, 0, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
+    L2capCreatePendingRequest(
+        conn->pendingList, 0, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
     return L2capSendPacket(conn->aclHandle, L2CAP_NONE_FLUSH_PACKET, pkt);
 }
 
@@ -150,7 +160,8 @@ int L2capSendConnectionReq(L2capConnection *conn, L2capChannel *chan)
 
     chan->state = L2CAP_CHANNEL_CONNECT_OUT_REQ;
 
-    L2capCreatePendingRequest(conn->pendingList, chan->lcid, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
+    L2capCreatePendingRequest(
+        conn->pendingList, chan->lcid, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
     return L2capSendPacket(conn->aclHandle, L2CAP_NONE_FLUSH_PACKET, pkt);
 }
 
@@ -223,7 +234,8 @@ int L2capSendConfigurationReq(L2capConnection *conn, const L2capChannel *chan)
     signal.identifier = L2capGetNewIdentifier(conn);
 
     pkt = L2capBuildSignalPacket(L2CAP_SIGNALING_CHANNEL, &signal, buff);
-    L2capCreatePendingRequest(conn->pendingList, chan->lcid, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
+    L2capCreatePendingRequest(
+        conn->pendingList, chan->lcid, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
     return L2capSendPacket(conn->aclHandle, L2CAP_NONE_FLUSH_PACKET, pkt);
 }
 
@@ -341,7 +353,8 @@ int L2capSendDisconnectionReq(L2capConnection *conn, L2capChannel *chan)
     pkt = L2capBuildSignalPacket(L2CAP_SIGNALING_CHANNEL, &signal, buff);
 
     chan->state = L2CAP_CHANNEL_DISCONNECT_OUT_REQ;
-    L2capCreatePendingRequest(conn->pendingList, chan->lcid, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
+    L2capCreatePendingRequest(
+        conn->pendingList, chan->lcid, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
     return L2capSendPacket(conn->aclHandle, L2CAP_NONE_FLUSH_PACKET, pkt);
 }
 
@@ -378,7 +391,8 @@ int L2capSendInformationReq(L2capConnection *conn, uint16_t type)
     pkt = L2capBuildSignalPacket(L2CAP_SIGNALING_CHANNEL, &signal, buff);
 
     conn->info.state = L2CAP_INFO_STATE_PROCESSING;
-    L2capCreatePendingRequest(conn->pendingList, 0, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
+    L2capCreatePendingRequest(
+        conn->pendingList, 0, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
     return L2capSendPacket(conn->aclHandle, L2CAP_NONE_FLUSH_PACKET, pkt);
 }
 
@@ -1499,7 +1513,8 @@ static void L2capConfigurationReqContinuation(L2capConnection *conn, const L2cap
 
     pkt = L2capBuildSignalPacket(L2CAP_SIGNALING_CHANNEL, &signal, buff);
 
-    L2capCreatePendingRequest(conn->pendingList, chan->lcid, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
+    L2capCreatePendingRequest(
+        conn->pendingList, chan->lcid, &signal, L2CAP_DEFAULT_RTX, L2capResponseTimeoutCallback);
     L2capSendPacket(conn->aclHandle, L2CAP_NONE_FLUSH_PACKET, pkt);
     return;
 }

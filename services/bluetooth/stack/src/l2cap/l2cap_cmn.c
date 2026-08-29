@@ -41,6 +41,13 @@ static L2capLeCallback g_l2capLe;
 
 static List *g_fragmentationList;
 
+// Monotonic sequence of the pending requests. Each pending entry carries its own value, and that
+// value doubles as the RTX alarm key (the alarm parameter is pointer-width, so the sequence must
+// fit 32 bits for 32-bit ARM builds - it does): a stale expiry task can never alias a later
+// request after the per-connection signaling identifier wrapped, see L2capPendingRequest::seq.
+// The counter is never decremented and wraps only after 2^32 creations, practically unreachable.
+static uint32_t g_pendingRequestSeq = 0;
+
 static void L2capProcessPacket(uint16_t handle, uint16_t cid, Packet *pkt)
 {
     if (cid >= L2CAP_MIN_CID) {
@@ -509,25 +516,52 @@ int L2capSendCommandReject(uint16_t handle, uint16_t cid, uint8_t ident, uint16_
     return L2capSendPacket(handle, L2CAP_NONE_FLUSH_PACKET, pkt);
 }
 
-void L2capCreatePendingRequest(
-    List *pendingList, uint16_t lcid, const L2capSignalHeader *signal, uint64_t timeo, AlarmCallback timerExpired)
+int L2capCreatePendingRequest(List *pendingList, uint16_t lcid, const L2capSignalHeader *signal, uint64_t timeo,
+    AlarmCallback timerExpired)
 {
     L2capPendingRequest *req = NULL;
 
     req = L2capAlloc(sizeof(L2capPendingRequest));
     if (req == NULL) {
         LOG_WARN("malloc failed");
-        return;
+        return BT_NO_MEMORY;
     }
 
     req->lcid = lcid;
     req->code = signal->code;
     req->identifier = signal->identifier;
     req->timer = AlarmCreate("", false);
-    AlarmSet(req->timer, timeo, timerExpired, req);
+    if (req->timer == NULL) {
+        // OOM: without a timer the request could never be recycled by the RTX expiry; the entry
+        // must not be added (AlarmSet(NULL, ...) would crash), release it and report the failure
+        L2capFree(req);
+        return BT_NO_MEMORY;
+    }
+    // The alarm parameter is the entry's own sequence, never the request pointer: the entry may
+    // be freed by the response or the connection teardown before the expiry runs, and the expiry
+    // task resolves the entry by that sequence on the L2CAP queue (numeric-handle pattern). The
+    // sequence (not the wrap-around identifier) is what makes the alarm identity unique per
+    // entry; it fits the pointer-width alarm parameter on every target, 32-bit ARM included.
+    req->seq = ++g_pendingRequestSeq;
+    if (AlarmSet(req->timer, timeo, timerExpired, (void *)(uintptr_t)req->seq) != 0) {
+        // the timer could not be armed (e.g. timerfd_settime failure): roll the entry back so no
+        // request is left without an RTX (channels would stay in CONNECT_OUT_REQ forever)
+        AlarmDelete(req->timer);
+        L2capFree(req);
+        return BT_OPERATION_FAILED;
+    }
 
-    ListAddLast(pendingList, req);
-    return;
+    if (!ListAddLast(pendingList, req)) {
+        // list append failed (node allocation OOM): the alarm is already armed, and an entry
+        // that never reached the pending list could never be resolved nor recycled by the RTX
+        // expiry; roll it back like the AlarmSet failure above so no request is leaked with an
+        // armed timer
+        AlarmCancel(req->timer);
+        AlarmDelete(req->timer);
+        L2capFree(req);
+        return BT_NO_MEMORY;
+    }
+    return BT_SUCCESS;
 }
 
 void L2capDestroyPendingRequest(List *pendingList, uint8_t identifier)
@@ -563,7 +597,7 @@ L2capPendingRequest *L2capGetPendingRequest(List *pendingList, uint8_t identifie
     return NULL;
 }
 
-L2capPendingRequest *L2capGetPendingRequest2(List *pendingList, const void *request)
+L2capPendingRequest *L2capGetPendingRequestByKey(List *pendingList, uint32_t key)
 {
     L2capPendingRequest *req = NULL;
     ListNode *node = NULL;
@@ -571,7 +605,7 @@ L2capPendingRequest *L2capGetPendingRequest2(List *pendingList, const void *requ
     node = ListGetFirstNode(pendingList);
     while (node != NULL) {
         req = ListGetNodeData(node);
-        if (req == request) {
+        if (req->seq == key) {
             return req;
         }
 

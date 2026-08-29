@@ -95,6 +95,7 @@ void AttGapSignatureGenerationResultAsync(const void *context)
 
     Buffer *bufferSig = (Buffer *)(attGapSignaturePtr->context);
     SigedWriteCommandGenerationContext *sigedWriteCommandGenerContextPtr = NULL;
+    AttConnectInfo *connect = NULL;
 
     if (bufferSig == NULL) {
         LOG_INFO("%{public}s bufferSig == NULL", __FUNCTION__);
@@ -102,15 +103,37 @@ void AttGapSignatureGenerationResultAsync(const void *context)
     }
 
     sigedWriteCommandGenerContextPtr = (SigedWriteCommandGenerationContext *)BufferPtr(bufferSig);
-    g_attClientSendDataCB.attSendDataCB(sigedWriteCommandGenerContextPtr->connect->retGattConnectHandle,
-        attGapSignaturePtr->result,
-        g_attClientSendDataCB.context);
+    // The connection slot may have been cleared or reused while the signature was being generated
+    // on the GAP thread: re-resolve it by the bearer identity captured at arm time instead of
+    // dereferencing a raw slot pointer (same pattern as the receive path, att_receive.c).
+    connect = AttGetConnectInfoByConnectHandleAndLeCid(
+        sigedWriteCommandGenerContextPtr->connectHandle, sigedWriteCommandGenerContextPtr->lecid);
+    if (connect == NULL) {
+        LOG_INFO("%{public}s connect == NULL, drop the stale signed write result", __FUNCTION__);
+        // The connection is gone: the write cannot be sent, so report only the failure (mirrors
+        // AttSignedWriteCommandErrorFree) and release the packet and the buffered context.
+        if (g_attClientSendDataCB.attSendDataCB != NULL) {
+            g_attClientSendDataCB.attSendDataCB(
+                sigedWriteCommandGenerContextPtr->connectHandle, BT_OPERATION_FAILED, g_attClientSendDataCB.context);
+        }
+        PacketFree(sigedWriteCommandGenerContextPtr->packet);
+        BufferFree(bufferSig);
+        goto GAPSIGNATUREGENERATIONRESULT_END;
+    }
+
+    // Same guard as the failure path above: the send callback may have been deregistered
+    // while the signature was being generated on the GAP thread.
+    if (g_attClientSendDataCB.attSendDataCB != NULL) {
+        g_attClientSendDataCB.attSendDataCB(connect->retGattConnectHandle,
+            attGapSignaturePtr->result,
+            g_attClientSendDataCB.context);
+    }
 
     (void)memcpy_s(sigedWriteCommandGenerContextPtr->data + STEP_THREE + sigedWriteCommandGenerContextPtr->bufferSize,
         attGapSignaturePtr->signatureLen,
         attGapSignaturePtr->signaturePtr,
         attGapSignaturePtr->signatureLen);
-    AttResponseSendData(sigedWriteCommandGenerContextPtr->connect, sigedWriteCommandGenerContextPtr->packet);
+    AttResponseSendData(connect, sigedWriteCommandGenerContextPtr->packet);
 
     PacketFree(sigedWriteCommandGenerContextPtr->packet);
     BufferFree(bufferSig);
@@ -188,15 +211,20 @@ void AttGapSignatureGenerationResult(GAP_SignatureResult result, uint8_t signatu
 static void AttExchangeMTURequestAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
-    uint16_t index = 0;
     ExchangeMTUAsync *exchangeMtuReqPtr = (ExchangeMTUAsync *)context;
     AttConnectInfo *connect = NULL;
     Packet *packet = NULL;
     uint8_t *data = NULL;
     int ret;
 
-    AttGetConnectInfoIndexByConnectHandle(exchangeMtuReqPtr->connectHandle, &index, &connect);
-
+    // MTU exchange on LE is only valid on the UATT bearer (fixed CID, Vol 3 Part F 3.2.8);
+    // a BR/EDR connection resolves on its single bearer (lecid == 0) and exchanges MTU the
+    // same way (Vol 3 Part F 5.3.1). Dropping the request silently here would leave the
+    // upper layer waiting for a response that never comes.
+    connect = AttGetConnectInfoByConnectHandleAndLeCid(exchangeMtuReqPtr->connectHandle, LE_CID);
+    if (connect == NULL) {
+        connect = AttGetConnectInfoByConnectHandleAndLeCid(exchangeMtuReqPtr->connectHandle, 0);
+    }
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTEXCHANGEMTUREQUEST_END", __FUNCTION__);
         goto ATTEXCHANGEMTUREQUEST_END;
@@ -277,15 +305,13 @@ static void AttFindInformationRequestAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     FindInformationRequestAsync *findInformReqPtr = (FindInformationRequestAsync *)context;
     AttConnectInfo *connect = NULL;
     Packet *packet = NULL;
     uint8_t *data = NULL;
     int ret;
 
-    AttGetConnectInfoIndexByConnectHandle(findInformReqPtr->connectHandle, &index, &connect);
-
+    connect = AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(findInformReqPtr->connectHandle);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTFINDINFORMATIONREQUEST_END", __FUNCTION__);
         goto ATTFINDINFORMATIONREQUEST_END;
@@ -367,15 +393,13 @@ static void AttFindByTypeValueRequestAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     FindByTypeValueRequestAsync *contextPtr = (FindByTypeValueRequestAsync *)context;
     Packet *packet = NULL;
     AttConnectInfo *connect = NULL;
     uint8_t *data = NULL;
 
-    AttGetConnectInfoIndexByConnectHandle(contextPtr->connectHandle, &index, &connect);
-
+    connect = AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(contextPtr->connectHandle);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATT_FINDBYTYPEVALUEREQUEST_END", __FUNCTION__);
         goto ATT_FINDBYTYPEVALUEREQUEST_END;
@@ -475,7 +499,6 @@ static void AttReadByTypeRequestAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     uint16_t attrTypelen = 0;
     Packet *packet = NULL;
@@ -483,8 +506,7 @@ static void AttReadByTypeRequestAsync(const void *context)
     AttConnectInfo *connect = NULL;
     ReadByTypeRequestAsync *readByTypeReqAsyncPtr = (ReadByTypeRequestAsync *)context;
 
-    AttGetConnectInfoIndexByConnectHandle(readByTypeReqAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(readByTypeReqAsyncPtr->connectHandle);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL goto ATT_READBYTYPEREQUEST_END", __FUNCTION__);
         goto ATT_READBYTYPEREQUEST_END;
@@ -602,10 +624,8 @@ static void AttReadRequestAsync(const void *context)
     ReadRequestAsync *readReqAsyncPtr = (ReadRequestAsync *)context;
     uint8_t *data = NULL;
     AttConnectInfo *connect = NULL;
-    uint16_t index = 0;
 
-    AttGetConnectInfoIndexByConnectHandle(readReqAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(readReqAsyncPtr->connectHandle);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATT_READREQUEST_END", __FUNCTION__);
         goto ATT_READREQUEST_END;
@@ -678,15 +698,13 @@ static void AttReadBlobRequestAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     uint8_t *data = NULL;
     AttConnectInfo *connect = NULL;
     Packet *packet = NULL;
     ReadBlobRequestAsync *readBlobReqAsyncPtr = (ReadBlobRequestAsync *)context;
 
-    AttGetConnectInfoIndexByConnectHandle(readBlobReqAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(readBlobReqAsyncPtr->connectHandle);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATT_READBLOBREQUEST_END", __FUNCTION__);
         goto ATT_READBLOBREQUEST_END;
@@ -766,14 +784,13 @@ static void AttReadMultipleRequestAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     Packet *packet = NULL;
     uint8_t *data = NULL;
     AttConnectInfo *connect = NULL;
     ReadResponseAsync *readMultipleReqAsyncPtr = (ReadResponseAsync *)context;
 
-    AttGetConnectInfoIndexByConnectHandle(readMultipleReqAsyncPtr->connectHandle, &index, &connect);
+    connect = AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(readMultipleReqAsyncPtr->connectHandle);
 
     if (BufferGetSize(readMultipleReqAsyncPtr->attValue) < STEP_FOUR) {
         LOG_WARN("%{public}s BufferGetSize(readMultipleReqAsyncPtr->attValue) < 4", __FUNCTION__);
@@ -843,6 +860,7 @@ void ATT_ReadMultipleRequest(uint16_t connectHandle, const Buffer *handleList)
         return;
     }
     readMultipleReqAsyncPtr->connectHandle = connectHandle;
+    readMultipleReqAsyncPtr->cid = 0;
     readMultipleReqAsyncPtr->attValue = bufferPtr;
 
     AttAsyncProcess(AttReadMultipleRequestAsync, AttReadMultipleRequestAsyncDestroy, readMultipleReqAsyncPtr);
@@ -896,7 +914,6 @@ static void AttReadByGroupTypeRequestAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     uint16_t attrGroupTypeLen = 0;
     AttConnectInfo *connect = NULL;
     int ret;
@@ -906,7 +923,7 @@ static void AttReadByGroupTypeRequestAsync(const void *context)
 
     attReadByGroupRequestAsyncPtr = (ReadByGroupTypeRequesAsync *)context;
 
-    AttGetConnectInfoIndexByConnectHandle(attReadByGroupRequestAsyncPtr->connectHandle, &index, &connect);
+    connect = AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(attReadByGroupRequestAsyncPtr->connectHandle);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTREADBYGROUPTYPEREQUEST_END", __FUNCTION__);
         goto ATTREADBYGROUPTYPEREQUEST_END;
@@ -1014,7 +1031,6 @@ static void AttWriteRequestAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     uint16_t bufferSize;
     int ret;
     Packet *packet = NULL;
@@ -1024,8 +1040,7 @@ static void AttWriteRequestAsync(const void *context)
 
     writeReqAsyncPtr = (WriteAsync *)context;
     bufferSize = BufferGetSize(writeReqAsyncPtr->attValue);
-    AttGetConnectInfoIndexByConnectHandle(writeReqAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(writeReqAsyncPtr->connectHandle);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTWRITEREQUEST_END", __FUNCTION__);
         goto ATTWRITEREQUEST_END;
@@ -1096,6 +1111,7 @@ void ATT_WriteRequest(uint16_t connectHandle, uint16_t attHandle, const Buffer *
         return;
     }
     writeRequestAsyncPtr->connectHandle = connectHandle;
+    writeRequestAsyncPtr->cid = 0;
     writeRequestAsyncPtr->attHandle = attHandle;
     writeRequestAsyncPtr->attValue = bufferPtr;
 
@@ -1113,7 +1129,6 @@ static void AttWriteCommandAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     uint16_t bufferSize;
     AttConnectInfo *connect = NULL;
@@ -1124,8 +1139,7 @@ static void AttWriteCommandAsync(const void *context)
     writeCommandAsyncPtr = (WriteAsync *)context;
     bufferSize = BufferGetSize(writeCommandAsyncPtr->attValue);
 
-    AttGetConnectInfoIndexByConnectHandle(writeCommandAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(writeCommandAsyncPtr->connectHandle);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTWRITECOMMAND_END", __FUNCTION__);
         goto ATTWRITECOMMAND_END;
@@ -1196,6 +1210,7 @@ void ATT_WriteCommand(uint16_t connectHandle, uint16_t attHandle, const Buffer *
         return;
     }
     writeCommandAsyncPtr->connectHandle = connectHandle;
+    writeCommandAsyncPtr->cid = 0;
     writeCommandAsyncPtr->attHandle = attHandle;
     writeCommandAsyncPtr->attValue = bufferPtr;
 
@@ -1251,7 +1266,6 @@ static void AttSignedWriteCommandAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     GapSignatureData gapSignatureDataObj;
     Buffer *sigedWriteBuffPtr = NULL;
@@ -1264,7 +1278,8 @@ static void AttSignedWriteCommandAsync(const void *context)
     signedWriteCommandAsyncPtr = (WriteAsync *)context;
     bufferSize = BufferGetSize(signedWriteCommandAsyncPtr->attValue);
 
-    AttGetConnectInfoIndexByConnectHandle(signedWriteCommandAsyncPtr->connectHandle, &index, &connect);
+    // A signed write shall not be sent on an Enhanced ATT bearer (Vol 3 Part F 3.4.5,4).
+    connect = AttGetConnectInfoByConnectHandleAndLeCid(signedWriteCommandAsyncPtr->connectHandle, LE_CID);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTSIGNEDWRITECOMMAND_END", __FUNCTION__);
         goto ATTSIGNEDWRITECOMMAND_END;
@@ -1289,8 +1304,11 @@ static void AttSignedWriteCommandAsync(const void *context)
     sigedWriteBuffPtr = BufferMalloc(sizeof(SigedWriteCommandGenerationContext));
     sigedWriteCommandGenerContextPtr = (SigedWriteCommandGenerationContext *)BufferPtr(sigedWriteBuffPtr);
     AttSingedWriteCommandContextAssign(sigedWriteCommandGenerContextPtr, connect, data, packet, bufferSize);
-    ret = GAPIF_LeDataSignatureGenerationAsync(
-        &(connect->addr), gapSignatureDataObj, AttGapSignatureGenerationResult, sigedWriteBuffPtr);
+    // The GAP layer stores the address pointer for the duration of the signature generation
+    // (gap_le_if.c keeps it in its own task context), so the context's private copy is passed,
+    // never the connection slot's address, which may be cleared or reused before the callback.
+    ret = GAPIF_LeDataSignatureGenerationAsync(&(sigedWriteCommandGenerContextPtr->addr),
+        gapSignatureDataObj, AttGapSignatureGenerationResult, sigedWriteBuffPtr);
     if (ret != BT_SUCCESS) {
         if (g_attClientSendDataCB.attSendDataCB != NULL) {
             AttSignedWriteCommandErrorFree(connect, ret, sigedWriteBuffPtr, packet);
@@ -1342,6 +1360,7 @@ void ATT_SignedWriteCommand(uint16_t connectHandle, uint16_t attHandle, const Bu
         return;
     }
     signedWriteCommandAsyncPtr->connectHandle = connectHandle;
+    signedWriteCommandAsyncPtr->cid = 0;
     signedWriteCommandAsyncPtr->attHandle = attHandle;
     signedWriteCommandAsyncPtr->attValue = bufferPtr;
 
@@ -1359,7 +1378,6 @@ static void AttPrepareWriteRequestAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     int ret;
     uint16_t bufferSize;
     Packet *packet = NULL;
@@ -1370,8 +1388,7 @@ static void AttPrepareWriteRequestAsync(const void *context)
     prepareWriteReqAsyncPtr = (PrepareWriteAsync *)context;
     bufferSize = BufferGetSize(prepareWriteReqAsyncPtr->attValue);
 
-    AttGetConnectInfoIndexByConnectHandle(prepareWriteReqAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(prepareWriteReqAsyncPtr->connectHandle);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATTPREPAREWRITEREQUEST_END", __FUNCTION__);
         goto ATTPREPAREWRITEREQUEST_END;
@@ -1448,6 +1465,7 @@ void ATT_PrepareWriteRequest(
         return;
     }
     prepareWriteReqAsyncPtr->connectHandle = connectHandle;
+    prepareWriteReqAsyncPtr->cid = 0;
     prepareWriteReqAsyncPtr->attReadBlobObj.attHandle = attReadBlobObj.attHandle;
     prepareWriteReqAsyncPtr->attReadBlobObj.offset = attReadBlobObj.offset;
     prepareWriteReqAsyncPtr->attValue = bufferPtr;
@@ -1466,15 +1484,13 @@ static void AttExecuteWriteRequestAsync(const void *context)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    uint16_t index = 0;
     AttConnectInfo *connect = NULL;
     Packet *packet = NULL;
     uint8_t *data = NULL;
     int ret;
     ExecuteWriteRequestAsync *executeWriteReqAsyncPtr = (ExecuteWriteRequestAsync *)context;
 
-    AttGetConnectInfoIndexByConnectHandle(executeWriteReqAsyncPtr->connectHandle, &index, &connect);
-
+    connect = AttGetConnectInfoByConnectHandlePreferEattRequestOrNtf(executeWriteReqAsyncPtr->connectHandle);
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATT_EXECUTEWRITEREQUEST_END", __FUNCTION__);
         goto ATT_EXECUTEWRITEREQUEST_END;
@@ -1563,7 +1579,20 @@ static void AttHandleValueConfirmationAsync(const void *context)
 
     handleConfirmationAsyncPtr = (WriteResponseAsync *)context;
 
-    AttGetConnectInfoIndexByConnectHandle(handleConfirmationAsyncPtr->connectHandle, &index, &connect);
+    if (handleConfirmationAsyncPtr->cid == 0) {
+        // Legacy confirmation without a cid: prefer the bearer that has the unconfirmed
+        // indication pending (serverSendFlag), so the confirmation closes the indication on the
+        // EATT bearer it was sent on - the EATT serverSendFlag would otherwise never reset and
+        // the bearer would be torn down at the 3.3.3 timeout - then fall back to the legacy
+        // first match.
+        connect = AttGetConnectInfoByConnectHandlePendingInd(handleConfirmationAsyncPtr->connectHandle);
+        if (connect == NULL) {
+            AttGetConnectInfoIndexByConnectHandle(handleConfirmationAsyncPtr->connectHandle, &index, &connect);
+        }
+    } else {
+        connect = AttGetConnectInfoByConnectHandleAndLeCid(
+            handleConfirmationAsyncPtr->connectHandle, handleConfirmationAsyncPtr->cid);
+    }
 
     if (connect == NULL) {
         LOG_INFO("%{public}s connect == NULL and goto ATT_HANDLEVALUECONFIRMATION_END", __FUNCTION__);
@@ -1611,7 +1640,13 @@ static void AttHandleValueConfirmationAsyncDestroy(const void *context)
  */
 void ATT_HandleValueConfirmation(uint16_t connectHandle)
 {
-    LOG_INFO("%{public}s enter, connectHandle = %hu", __FUNCTION__, connectHandle);
+    ATT_HandleValueConfirmationCid(connectHandle, 0);
+    return;
+}
+
+void ATT_HandleValueConfirmationCid(uint16_t connectHandle, uint16_t cid)
+{
+    LOG_INFO("%{public}s enter, connectHandle = %hu, cid = %hu", __FUNCTION__, connectHandle, cid);
 
     WriteResponseAsync *handleConfirmationAsyncPtr = MEM_MALLOC.alloc(sizeof(WriteResponseAsync));
     if (handleConfirmationAsyncPtr == NULL) {
@@ -1619,6 +1654,7 @@ void ATT_HandleValueConfirmation(uint16_t connectHandle)
         return;
     }
     handleConfirmationAsyncPtr->connectHandle = connectHandle;
+    handleConfirmationAsyncPtr->cid = cid;
 
     AttAsyncProcess(
         AttHandleValueConfirmationAsync, AttHandleValueConfirmationAsyncDestroy, handleConfirmationAsyncPtr);
@@ -1743,7 +1779,16 @@ static void AttSingedWriteCommandContextAssign(SigedWriteCommandGenerationContex
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
-    sigedWriteCommandGenerContextPtr->connect = connect;
+    // Capture the bearer identity and a private address copy at arm time (this runs on the ATT
+    // processing queue with a live connection): the result callback re-resolves the connection
+    // by connectHandle + lecid, and the GAP thread only ever touches the private address copy,
+    // so no raw slot pointer crosses the asynchronous boundary (see AttGapSignatureGenerationResultAsync).
+    sigedWriteCommandGenerContextPtr->connectHandle = connect->retGattConnectHandle;
+    // AttConnectID is a union: for LE the CID discriminates the bearer, BR/EDR has none.
+    sigedWriteCommandGenerContextPtr->lecid =
+        (connect->transportType == BT_TRANSPORT_LE) ? connect->AttConnectID.lecid : 0;
+    (void)memcpy_s(
+        &sigedWriteCommandGenerContextPtr->addr, sizeof(BtAddr), &connect->addr, sizeof(BtAddr));
     sigedWriteCommandGenerContextPtr->data = data;
     sigedWriteCommandGenerContextPtr->packet = packet;
     sigedWriteCommandGenerContextPtr->bufferSize = bufferSize;

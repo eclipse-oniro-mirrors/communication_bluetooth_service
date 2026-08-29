@@ -24,6 +24,7 @@
 
 #include <string.h>
 
+#include "att_eatt.h"
 #include "log.h"
 
 #include "platform/include/allocator.h"
@@ -169,7 +170,7 @@ typedef struct GAPSecCallbackContext {
 
 static void AttRecvConfigReqAssignBredrConnect(const L2capConfigInfo *cfg, AttConnectingInfo *connecting);
 static void AttClearConnectingInfo(AttConnectingInfo *connecting);
-static void AttClearConnectInfo(AttConnectInfo *connect);
+void AttClearConnectInfo(AttConnectInfo *connect);
 static int AttBredrConnectStatusChange(uint8_t inputStatus, uint8_t *outStatus, uint8_t flag);
 static void AttCopyToConnectingInfo(
     const BtAddr *addr, uint16_t aclHandle, uint16_t lcid, uint8_t id, AttConnectingInfo *connecting);
@@ -360,6 +361,17 @@ static void AttClearConnectingInfo(AttConnectingInfo *connecting)
         LOG_ERROR("%{public}s connecting is NULL.", __FUNCTION__);
         return;
     }
+    // Cancel both alarms before the fields are cleared: the alarm callbacks (AttBredrConnectTimeOut)
+    // run on the alarm thread and read connecting->connectHandle, so clearing first would race the
+    // armed expiry against the slot reset. AlarmCancel is non-waiting, so the cancellation only
+    // shrinks the window; an expiry that already fired then finds a cleared slot, resolves to NULL
+    // on the ATT processing queue and is dropped.
+    if (connecting->bredrAlarm != NULL) {
+        AlarmCancel(connecting->bredrAlarm);
+    }
+    if (connecting->leAlarm != NULL) {
+        AlarmCancel(connecting->leAlarm);
+    }
     connecting->aclHandle = 0;
     connecting->cid = 0;
     connecting->id = 0;
@@ -376,21 +388,18 @@ static void AttClearConnectingInfo(AttConnectingInfo *connecting)
         sizeof(L2capConfigInfo));
     (void)memset_s(&connecting->addr, sizeof(connecting->addr), 0, sizeof(BtAddr));
 
-    if (connecting->transportType == BT_TRANSPORT_BR_EDR) {
-        if (connecting->bredrAlarm != NULL) {
-            AlarmCancel(connecting->bredrAlarm);
-        }
-    }
-
     return;
 }
 
 /**
  * @brief att clear connected information.
  *
+ * Exported for the EATT bearer release path (AttEattDisconnected); releases a slot that was filled
+ * by an EATT channel or the UATT fixed channel.
+ *
  * @param connect Indicates the pointer to AttConnectInfo.
  */
-static void AttClearConnectInfo(AttConnectInfo *connect)
+void AttClearConnectInfo(AttConnectInfo *connect)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);
 
@@ -410,6 +419,23 @@ static void AttClearConnectInfo(AttConnectInfo *connect)
     if (connect->alarm != NULL) {
         AlarmCancel(connect->alarm);
     }
+    if (connect->indicationAlarm != NULL) {
+        AlarmCancel(connect->indicationAlarm);
+    }
+    if (connect->eattEstablishAlarm != NULL) {
+        AlarmCancel(connect->eattEstablishAlarm);
+    }
+
+    // A pending EATT establishment must not outlive its connection: settle it with a failure
+    // here, or the AttEattEstablish caller's callback would be lost when the slot is cleared
+    // below (a no-op unless an establishment is in flight). Runs after the slot fields above are
+    // cleared, so a re-entrant establish attempted from the callback fails cleanly with
+    // BT_BAD_PARAM instead of re-arming a state this clear is about to wipe.
+    AttEattResolveEstablish(connect, BT_OPERATION_FAILED);
+    connect->eattLcidCount = 0;
+    connect->eattSlotlessCount = 0;
+    connect->eattEstablishCb = NULL;
+    connect->eattEstablishCtx = NULL;
 
     return;
 }
@@ -574,10 +600,23 @@ static void GAPSecCallback(uint16_t result, GapServiceSecurityInfo serviceInfo, 
 {
     LOG_INFO("%{public}s enter,result = %hu", __FUNCTION__, result);
 
-    uint16_t connectHandle = *(uint16_t *)context;
-    GAPSecCallbackContext *gapSecCallbackPtr = MEM_MALLOC.alloc(sizeof(GAPSecCallbackContext));
+    uint16_t *connectHandleSnapshot = (uint16_t *)context;
+    GAPSecCallbackContext *gapSecCallbackPtr = NULL;
+
+    // The context is an immutable snapshot of the connect handle allocated on the ATT processing
+    // queue (AttAssignGAPRequestSecurity), never a pointer into the shared connecting slot, which
+    // this GAP thread must not dereference (AttClearConnectingInfo may clear or reuse it
+    // concurrently). A NULL snapshot means the allocation failed at arm time: drop the result,
+    // the pending connection attempt is then settled by the connect timeout alarm.
+    if (connectHandleSnapshot == NULL) {
+        LOG_ERROR("%{public}s context is NULL, drop the security result", __FUNCTION__);
+        return;
+    }
+
+    gapSecCallbackPtr = MEM_MALLOC.alloc(sizeof(GAPSecCallbackContext));
     if (gapSecCallbackPtr == NULL) {
         LOG_ERROR("point to NULL");
+        MEM_MALLOC.free(connectHandleSnapshot);
         return;
     }
 
@@ -586,7 +625,9 @@ static void GAPSecCallback(uint16_t result, GapServiceSecurityInfo serviceInfo, 
         sizeof(gapSecCallbackPtr->serviceInfo),
         &serviceInfo,
         sizeof(GapServiceSecurityInfo));
-    gapSecCallbackPtr->connectHandle = connectHandle;
+    gapSecCallbackPtr->connectHandle = *connectHandleSnapshot;
+    // The snapshot is owned by this callback: release it now that the value has been captured.
+    MEM_MALLOC.free(connectHandleSnapshot);
 
     AttAsyncProcess(GAPSecCallbackAsync, GAPSecCallbackAsyncDestroy, gapSecCallbackPtr);
 
@@ -615,7 +656,21 @@ static void AttAssignGAPRequestSecurity(
     gapSecurity->info.protocolId = SEC_PROTOCOL_L2CAP;
     gapSecurity->info.channelId.l2capPsm = 0x001F;
     gapSecurity->callback = (void (*)(uint16_t, GapServiceSecurityInfo, void *))GAPSecCallback;
-    gapSecurity->context = &(((AttConnectingInfo *)connecting)->connectHandle);
+    // The security result callback runs on the GAP thread, so the context must not point into the
+    // shared connecting slot, which AttClearConnectingInfo may clear (or a new connection may
+    // reuse) concurrently: hand the callback an immutable snapshot of the connect handle instead.
+    // GAPSecCallback owns the snapshot and frees it after reading it.
+    uint16_t *connectHandleSnapshot = MEM_MALLOC.alloc(sizeof(uint16_t));
+    if (connectHandleSnapshot == NULL) {
+        LOG_ERROR("point to NULL");
+        // Keep the callback armed with a NULL context: GAPSecCallback drops a NULL context instead
+        // of dereferencing a slot pointer, and the pending connection attempt is then settled by
+        // the connect timeout alarm.
+        gapSecurity->context = NULL;
+        return;
+    }
+    *connectHandleSnapshot = connecting->connectHandle;
+    gapSecurity->context = connectHandleSnapshot;
 
     return;
 }
@@ -1785,8 +1840,9 @@ static void AttLeDisconnectedAsync(const void *context)
         leDisConnCallbackObj.status = LE_DISCONNECT_FAIL;
     }
 
-    AttGetConnectInfoIndexByAclHandle(attLeDisconnectedPtr->aclHandle, &connect);
-
+    // ACL teardown reports the UATT bearer only (lecid == LE_CID); EATT bearers close per-channel
+    // via AttEattDisconnected (Vol 3 Part G 5.3).
+    connect = AttGetConnectInfoByAclHandleAndLeCid(attLeDisconnectedPtr->aclHandle, LE_CID);
     if (connect == NULL) {
         goto ATTLEDISCONNECTED_END;
     }
