@@ -1245,6 +1245,13 @@ static int L2capLeDisconnectComplete(uint16_t handle, uint8_t status, uint8_t re
     conn = L2capLeGetConnection(handle);
     if (conn == NULL) {
         LOG_ERROR("L2capLeDisconnectComplete but connection not found");
+        L2capLeInstance *inst = &g_l2capLeInst;
+        if (inst->chanAtt.leDisconnected != NULL) {
+            inst->chanAtt.leDisconnected(handle, status, reason);
+        }
+        if (inst->chanSm.leDisconnected != NULL) {
+            inst->chanSm.leDisconnected(handle, status, reason);
+        }
         return BT_BAD_PARAM;
     }
 
