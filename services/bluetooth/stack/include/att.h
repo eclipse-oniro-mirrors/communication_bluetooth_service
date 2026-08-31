@@ -386,6 +386,8 @@ typedef struct {
 } AttConnectCallback;
 
 typedef void (*attCallback)(uint16_t connectHandle, uint16_t event, void *eventData, Buffer *buffer, void *context);
+typedef void (*AttCallbackCid)(
+    uint16_t connectHandle, uint16_t cid, uint16_t event, void *eventData, Buffer *buffer, void *context);
 typedef void (*attSendDataCallback)(uint16_t retGattConnectHandle, int result, void *context);
 
 typedef struct {
@@ -413,6 +415,20 @@ void BTSTACK_API ATT_ClientDataRegister(attCallback dataCallback, void *context)
 void BTSTACK_API ATT_ClientDataDeregister();
 
 /**
+ * @brief Gatt register the client data cid callback to att.
+ *
+ * @param1 dataCallback Indicates the pointer to callback.
+ * @param2 context Indicates the pointer to context.
+ */
+void BTSTACK_API ATT_ClientDataRegisterCid(AttCallbackCid dataCallback, void *context);
+
+/**
+ * @brief Gatt deregister the client data cid callback to att.
+ *
+ */
+void BTSTACK_API ATT_ClientDataDeregisterCid();
+
+/**
  * @brief Gatt register the server data callback to att.
  *
  * @param1 dataCallback Indicates the pointer to callback.
@@ -425,6 +441,20 @@ void BTSTACK_API ATT_ServerDataRegister(attCallback dataCallback, void *context)
  *
  */
 void BTSTACK_API ATT_ServerDataDeregister();
+
+/**
+ * @brief Gatt register the server data cid callback to att.
+ *
+ * @param1 dataCallback Indicates the pointer to callback.
+ * @param2 context Indicates the pointer to context.
+ */
+void BTSTACK_API ATT_ServerDataRegisterCid(AttCallbackCid dataCallback, void *context);
+
+/**
+ * @brief Gatt deregister the server data cid callback to att.
+ *
+ */
+void BTSTACK_API ATT_ServerDataDeregisterCid();
 
 /**
  * @brief Gatt register the connection callback to att.
@@ -719,6 +749,156 @@ void BTSTACK_API ATT_ExecuteWriteRequest(uint16_t connectHandle, uint8_t flag);
  * @param connectHandle Indicates the connect handle.
  */
 void BTSTACK_API ATT_ExecuteWriteResponse(uint16_t connectHandle);
+
+/**
+ * @brief Send an error response on the bearer pinned by cid.
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ * @param3 attErrorPtr Indicates the pointer to const error response parameter.
+ */
+void BTSTACK_API ATT_ErrorResponseCid(uint16_t connectHandle, uint16_t cid, const AttError *attErrorPtr);
+
+/**
+ * @brief Send a find Information response on the bearer pinned by cid.
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ * @param3 format Indicates the format of the information data.
+ * @param4 handleUUIDPairs Indicates the pointer to const information data.
+ * @param5 pairNum Indicates the paris number of the Information Data.
+ */
+void BTSTACK_API ATT_FindInformationResponseCid(
+    uint16_t connectHandle, uint16_t cid, uint8_t format, AttHandleUuid *handleUUIDPairs, uint16_t pairNum);
+
+/**
+ * @brief Send a find by type value response on the bearer pinned by cid.
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ * @param3 handleInfoList Indicates the pointer to const a list of 1 or more Handle Information.
+ * @param4 listNum Indicates the number of handles information list.
+ */
+void BTSTACK_API ATT_FindByTypeValueResponseCid(
+    uint16_t connectHandle, uint16_t cid, const AttHandleInfo *handleInfoList, uint16_t listNum);
+
+/**
+ * @brief Send a read by type response on the bearer pinned by cid.
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ * @param3 length Indicates the size of each attribute handlevalue pair.
+ * @param4 valueList Indicates the pointer to const a list of attribute data.
+ * @param5 attrValueNum Indicates the value of attribute value number.
+ */
+void BTSTACK_API ATT_ReadByTypeResponseCid(uint16_t connectHandle, uint16_t cid, uint8_t length,
+    const AttReadByTypeRspDataList *valueList, uint16_t attrValueNum);
+
+/**
+ * @brief Send a read response on the bearer pinned by cid.
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ * @param3 attValue Indicates the pointer to the value of the attribute with the handle given.
+ */
+void BTSTACK_API ATT_ReadResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *attValue);
+
+/**
+ * @brief Send a read blob response on the bearer pinned by cid.
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ * @param3 attReadBlobResObj Indicates the pointer to part of the value of the attribute with the handle given.
+ */
+void BTSTACK_API ATT_ReadBlobResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *attReadBlobResObj);
+
+/**
+ * @brief Send a read multiple response on the bearer pinned by cid.
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ * @param3 valueList Indicates the pointer to a set of two or more values.
+ */
+void BTSTACK_API ATT_ReadMultipleResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *valueList);
+
+/**
+ * @brief Send a read multiple variable response on the bearer pinned by cid.
+ *        (BLUETOOTH SPECIFICATION Version 5.1 | Vol 3, Part F 3.4.4.10)
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ * @param3 valueList Indicates the pointer to a set of two or more values.
+ */
+void BTSTACK_API ATT_ReadMultipleVariableResponseCid(uint16_t connectHandle, uint16_t cid, const Buffer *valueList);
+
+/**
+ * @brief Send a read by group type response on the bearer pinned by cid.
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ * @param3 length Indicates the size of each attribute data.
+ * @param4 serviceList Indicates the pointer to const a list of attribute data.
+ * @param5 serviceNum Indicates the number of attribute data.
+ */
+void BTSTACK_API ATT_ReadByGroupTypeResponseCid(uint16_t connectHandle, uint16_t cid, uint8_t length,
+    const AttReadGoupAttributeData *serviceList, uint16_t serviceNum);
+
+/**
+ * @brief Send a write response on the bearer pinned by cid.
+ *
+ * @param connectHandle Indicates the connect handle.
+ * @param cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ */
+void BTSTACK_API ATT_WriteResponseCid(uint16_t connectHandle, uint16_t cid);
+
+/**
+ * @brief Send a prepare write response on the bearer pinned by cid.
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ * @param3 attReadBlobObj Indicates the value of the struct AttReadBlobReqPrepareWriteValue.
+ * @param4 attValue Indicates the pointer to the value of the attribute to be written.
+ */
+void BTSTACK_API ATT_PrepareWriteResponseCid(
+    uint16_t connectHandle, uint16_t cid, AttReadBlobReqPrepareWriteValue attReadBlobObj, const Buffer *attValue);
+
+/**
+ * @brief Send a execute write response on the bearer pinned by cid.
+ *
+ * @param connectHandle Indicates the connect handle.
+ * @param cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ */
+void BTSTACK_API ATT_ExecuteWriteResponseCid(uint16_t connectHandle, uint16_t cid);
+
+/**
+ * @brief Send a handle value notification on the bearer pinned by cid.
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the first idle EATT bearer, else UATT).
+ * @param3 attHandle Indicates the handle of the attribute.
+ * @param4 attValue Indicates the pointer to the current value of the attribute.
+ */
+void BTSTACK_API ATT_HandleValueNotificationCid(
+    uint16_t connectHandle, uint16_t cid, uint16_t attHandle, const Buffer *attValue);
+
+/**
+ * @brief Send a handle value indication on the bearer pinned by cid.
+ *
+ * @param1 connectHandle Indicates the connect handle.
+ * @param2 cid Indicates the bearer cid (0 selects the first idle EATT bearer, else UATT).
+ * @param3 attHandle Indicates the handle of the attribute.
+ * @param4 attValue Indicates the pointer to the current value of the attribute.
+ */
+void BTSTACK_API ATT_HandleValueIndicationCid(
+    uint16_t connectHandle, uint16_t cid, uint16_t attHandle, const Buffer *attValue);
+
+/**
+ * @brief Send a handle value confirmation on the bearer pinned by cid.
+ *
+ * @param connectHandle Indicates the connect handle.
+ * @param cid Indicates the bearer cid (0 selects the connection's legacy bearer).
+ */
+void BTSTACK_API ATT_HandleValueConfirmationCid(uint16_t connectHandle, uint16_t cid);
 
 /**
  * @brief Send a handle value notification.

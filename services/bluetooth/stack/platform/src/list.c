@@ -105,7 +105,7 @@ void ListAddFirst(List *list, void *data)
     }
 }
 
-void ListAddLast(List *list, void *data)
+bool ListAddLast(List *list, void *data)
 {
     ASSERT(list);
     ASSERT(data);
@@ -116,6 +116,9 @@ void ListAddLast(List *list, void *data)
         DL_ListTailInsert(&list->dlList, &node->node);
         list->len++;
     }
+    // false when the node allocation failed: the data was NOT appended, callers must roll back
+    // anything they assumed the list now owns
+    return (node != NULL);
 }
 
 void *ListForEachData(const List *list, const ListCmpFunc cmp, void *parameter)

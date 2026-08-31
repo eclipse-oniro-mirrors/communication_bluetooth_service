@@ -1234,109 +1234,617 @@ static void HciEventOnLeModifySleepClockAccuracyComplete(const void *param, uint
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+static void HciEventOnLeReadIsoTxSyncComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeReadIsoTxSyncReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReadIsoTxSyncComplete != NULL) {
+        callbacks->leReadIsoTxSyncComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetCigParametersComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeSetCigParametersReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetCigParametersComplete != NULL) {
+        callbacks->leSetCigParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetCigParametersTestComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeSetCigParametersTestReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetCigParametersTestComplete != NULL) {
+        callbacks->leSetCigParametersTestComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeRemoveCigComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeRemoveCigReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leRemoveCigComplete != NULL) {
+        callbacks->leRemoveCigComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeRejectCisRequestComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeRejectCisRequestReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leRejectCisRequestComplete != NULL) {
+        callbacks->leRejectCisRequestComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeBigTerminateSyncComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeBigTerminateSyncReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leBigTerminateSyncComplete != NULL) {
+        callbacks->leBigTerminateSyncComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetupIsoDataPathComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeSetupIsoDataPathReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetupIsoDataPathComplete != NULL) {
+        callbacks->leSetupIsoDataPathComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeRemoveIsoDataPathComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeRemoveIsoDataPathReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leRemoveIsoDataPathComplete != NULL) {
+        callbacks->leRemoveIsoDataPathComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeIsoTransmitTestComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeIsoTransmitTestReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leIsoTransmitTestComplete != NULL) {
+        callbacks->leIsoTransmitTestComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeIsoReceiveTestComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeIsoReceiveTestReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leIsoReceiveTestComplete != NULL) {
+        callbacks->leIsoReceiveTestComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeIsoReadTestCountersComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeIsoReadTestCountersReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leIsoReadTestCountersComplete != NULL) {
+        callbacks->leIsoReadTestCountersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeIsoTestEndComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeIsoTestEndReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leIsoTestEndComplete != NULL) {
+        callbacks->leIsoTestEndComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetHostFeatureComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeSetHostFeatureReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetHostFeatureComplete != NULL) {
+        callbacks->leSetHostFeatureComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeReadIsoLinkQualityComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeReadIsoLinkQualityReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReadIsoLinkQualityComplete != NULL) {
+        callbacks->leReadIsoLinkQualityComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x006D normally completes via Command_Status + the LE Request Peer SCA Complete
+// event (7.7.65,31), not Command_Complete. A Controller that does not implement the
+// command replies Command_Complete + error (Vol 1 Part F, Section 2.1); deliver that
+// error through the same complete path so callers do not wait forever on the event.
+static void HciEventOnLeRequestPeerScaCommandComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeRequestPeerScaCompleteEventParam eventParam = { 0 };
+    (void)memcpy_s(&eventParam, sizeof(eventParam), param, (length > sizeof(eventParam)) ? sizeof(eventParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leRequestPeerScaComplete != NULL) {
+        callbacks->leRequestPeerScaComplete(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeEnhancedReadTransmitPowerLevelComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeEnhancedReadTransmitPowerLevelReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leEnhancedReadTransmitPowerLevelComplete != NULL) {
+        callbacks->leEnhancedReadTransmitPowerLevelComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x0077 normally completes via Command_Status + the LE Transmit Power Reporting
+// event (7.7.65,33) with Reason 0x02, not Command_Complete. A Controller that does
+// not implement the command replies Command_Complete + error (Vol 1 Part F, Section 2.1);
+// deliver that error through the same event path so callers do not wait forever.
+static void HciEventOnLeReadRemoteTransmitPowerLevelCommandComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    const uint8_t *payload = (const uint8_t *)param;
+    HciLeTransmitPowerReportingEventParam eventParam = { 0 };
+    // command complete 7.8.77: status(1) + connection handle(2) + phy(1) + power level(1),
+    // the offsets below are derived from the wire layout, Vol 2 Part E 7.8.77
+    const size_t handleOffset = sizeof(eventParam.status);
+    const size_t phyOffset = handleOffset + sizeof(eventParam.connectionHandle);
+    const size_t phyEnd = phyOffset + sizeof(eventParam.phy);
+    const size_t powerEnd = phyEnd + sizeof(eventParam.transmitPowerLevel);
+    eventParam.reason = 0x02;
+    // payload is non-NULL (checked above); each field is parsed independently
+    // against its own end boundary, so a truncated return parameter keeps the
+    // zero-initialized default of the missing tail fields. Note the power level
+    // sits at phyEnd and is guarded by powerEnd (phyEnd + 1).
+    if (length >= sizeof(eventParam.status)) {
+        eventParam.status = payload[0];
+    }
+    if (length >= phyOffset) {
+        (void)memcpy_s(&eventParam.connectionHandle, sizeof(eventParam.connectionHandle), payload + handleOffset,
+            sizeof(eventParam.connectionHandle));
+    }
+    if (length >= phyEnd) {
+        eventParam.phy = payload[phyOffset];
+    }
+    if (length >= powerEnd) {
+        eventParam.transmitPowerLevel = (int8_t)payload[phyEnd];
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leTransmitPowerReporting != NULL) {
+        callbacks->leTransmitPowerReporting(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetPathLossReportingParametersComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeSetPathLossReportingParametersReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPathLossReportingParametersComplete != NULL) {
+        callbacks->leSetPathLossReportingParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetPathLossReportingEnableComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeSetPathLossReportingEnableReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPathLossReportingEnableComplete != NULL) {
+        callbacks->leSetPathLossReportingEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetTransmitPowerReportingEnableComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeSetTransmitPowerReportingEnableReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetTransmitPowerReportingEnableComplete != NULL) {
+        callbacks->leSetTransmitPowerReportingEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x0064 LE Create CIS normally completes via Command_Status + the LE CIS Established
+// event (7.7.65,25), not Command_Complete. A Controller that does not implement the
+// command replies Command_Complete + error (Vol 1 Part F, Section 2.1); deliver that
+// error through the leCreateCisComplete path so callers do not wait forever on the
+// 0x19. The 0x19-style event is NOT fanned out here: a Command_Complete payload only
+// carries the status byte, so a leCisEstablished event synthesized from it would be a
+// half-initialized fake with connectionHandle 0 that no subscriber can correlate; the
+// complete path already carries the status. A Command_Complete + error is strictly
+// the reply to a locally issued LE Create CIS, so this cannot fire for
+// remote-initiated CIS.
+static void HciEventOnLeCreateCisCommandComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    const uint8_t *payload = (const uint8_t *)param;
+    HciEventCallbacks *callbacks = NULL;
+
+    HciLeCreateCisReturnParam returnParam = {
+        .status = (length >= sizeof(returnParam.status)) ? payload[0] : 0,
+    };
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCreateCisComplete != NULL) {
+        callbacks->leCreateCisComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x0066 LE Accept CIS Request: same asynchronous shape as 0x0064 - the outcome is the
+// LE CIS Established event (7.7.65,25), so an unsupported-command Command_Complete +
+// error carries only the status byte and no connection handle. Synthesizing a
+// leCisEstablished event from it would deliver a half-initialized fake with
+// connectionHandle 0 (see HciEventOnLeCreateCisCommandComplete), and unlike 0x0064
+// there is no complete-type callback that could carry the failure instead, so nothing
+// is fanned out here: the failed accept is observable by the remote side, which
+// receives the error response to its CIS request.
+static void HciEventOnLeAcceptCisRequestCommandComplete(const void *param, uint8_t length)
+{
+    (void)param;
+    (void)length;
+}
+
+// 0x0068 LE Create BIG / 0x0069 LE Create BIG Test normally complete via Command_Status +
+// the LE Create BIG Complete event (7.7.65,27), not Command_Complete; the unsupported-
+// command Command_Complete + error is delivered through the same event path.
+static void HciEventOnLeCreateBigCommandComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    const uint8_t *payload = (const uint8_t *)param;
+    HciLeCreateBigCompleteEventParam eventParam = { 0 };
+    HciEventCallbacks *callbacks = NULL;
+
+    if (payload != NULL && length >= sizeof(eventParam.status)) {
+        eventParam.status = payload[0];
+    }
+
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCreateBigComplete != NULL) {
+        callbacks->leCreateBigComplete(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x006A LE Terminate BIG normally completes via Command_Status + the LE Terminate BIG
+// Complete event (7.7.65,28), not Command_Complete; the unsupported-command
+// Command_Complete + error is delivered through the same event path.
+static void HciEventOnLeTerminateBigCommandComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    const uint8_t *payload = (const uint8_t *)param;
+    HciLeTerminateBigCompleteEventParam eventParam = { 0 };
+    HciEventCallbacks *callbacks = NULL;
+
+    if (payload != NULL && length >= sizeof(eventParam.status)) {
+        eventParam.status = payload[0];
+    }
+
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leTerminateBigComplete != NULL) {
+        callbacks->leTerminateBigComplete(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x006B LE Big Create Sync normally completes via Command_Status + the LE BIG Sync
+// Established event (7.7.65,29), not Command_Complete; the unsupported-command
+// Command_Complete + error is delivered through the same event path.
+static void HciEventOnLeBigCreateSyncCommandComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    const uint8_t *payload = (const uint8_t *)param;
+    HciLeBigSyncEstablishedEventParam eventParam = { 0 };
+    HciEventCallbacks *callbacks = NULL;
+
+    if (payload != NULL && length >= sizeof(eventParam.status)) {
+        eventParam.status = payload[0];
+    }
+
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leBigSyncEstablished != NULL) {
+        callbacks->leBigSyncEstablished(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciLeCmdCompleteFunc g_leControllerCommandCompleteMap[] = {
-    NULL,                                                               // 0x0000
-    HciEventOnLeSetEventMaskComplete,                                   // 0x0001
-    HciEventOnLeReadBufferSizeComplete,                                 // 0x0002
-    HciEventOnLeReadLocalSupportedFeaturesComplete,                     // 0x0003
-    NULL,                                                               // 0x0004
-    HciEventOnLeSetRandomAddressComplete,                               // 0x0005
-    HciEventOnLeSetAdvertisingParametersComplete,                       // 0x0006
-    HciEventOnLeReadAdvertisingChannelTxPowerComplete,                  // 0x0007
-    HciEventOnLeSetAdvertisingDataComplete,                             // 0x0008
-    HciEventOnLeSetScanResponseDataComplete,                            // 0x0009
-    HciEventOnLeSetAdvertisingEnableComplete,                           // 0x000A
-    HciEventOnLeSetScanParametersComplete,                              // 0x000B
-    HciEventOnLeSetScanEnableComplete,                                  // 0x000C
-    NULL,                                                               // 0x000D
-    HciEventOnLeCreateConnectionCancelComplete,                         // 0x000E
-    HciEventOnLeReadWhiteListSizeComplete,                              // 0x000F
-    HciEventOnLeClearWhiteListComplete,                                 // 0x0010
-    HciEventOnLeAddDeviceToWhiteListComplete,                           // 0x0011
-    HciEventOnLeRemoveDeviceFromWhiteListComplete,                      // 0x0012
-    NULL,                                                               // 0x0013
-    HciEventOnLeSetHostChannelClassificationComplete,                   // 0x0014
-    HciEventOnLeReadChannelMapComplete,                                 // 0x0015
-    NULL,                                                               // 0x0016
-    HciEventOnLeEncryptComplete,                                        // 0x0017
-    HciEventOnLeRandComplete,                                           // 0x0018
-    NULL,                                                               // 0x0019
-    HciEventOnLeLongTermKeyRequestReplyComplete,                        // 0x001A
-    HciEventOnLeLongTermKeyRequestNegativeReplyComplete,                // 0x001B
-    HciEventOnLeReadSupportedStatesComplete,                            // 0x001C
-    HciEventOnLeReceiverTestComplete,                                   // 0x001D
-    HciEventOnLeTransmitterTestComplete,                                // 0x001E
-    HciEventOnLeTestEndComplete,                                        // 0x001F
-    HciEventOnLeRemoteConnectionParameterRequestReplyComplete,          // 0x0020
-    HciEventOnLeRemoteConnectionParameterRequestNegativeReplyComplete,  // 0x0021
-    HciEventOnLeSetDataLengthComplete,                                  // 0x0022
-    HciEventOnLeReadSuggestedDefaultDataLengthComplete,                 // 0x0023
-    HciEventOnLeWriteSuggestedDefaultDataLengthComplete,                // 0x0024
-    NULL,                                                               // 0x0025
-    NULL,                                                               // 0x0026
-    HciEventOnLeAddDeviceToResolvingListComplete,                       // 0x0027
-    HciEventOnLeRemoveDeviceFromResolvingListComplete,                  // 0x0028
-    HciEventOnLeClearResolvingListComplete,                             // 0x0029
-    HciEventOnLeReadResolvingListSizeComplete,                          // 0x002A
-    HciEventOnLeReadPeerResolvableAddressComplete,                      // 0x002B
-    HciEventOnLeReadLocalResolvableAddressComplete,                     // 0x002C
-    HciEventOnLeSetAddressResolutionEnableComplete,                     // 0x002D
-    HciEventOnSetResolvablePrivateAddressTimeoutComplete,               // 0x002E
-    HciEventOnLeReadMaximumDataLengthComplete,                          // 0x002F
-    HciEventOnLeReadPhyComplete,                                        // 0x0030
-    HciEventOnLeSetDefaultPhyComplete,                                  // 0x0031
-    HciEventOnLeSetPhyComplete,                                         // 0x0032
-    HciEventOnLeEnhancedReceiverTestComplete,                           // 0x0033
-    HciEventOnLeEnhancedTransmitterTestComplete,                        // 0x0034
-    HciEventOnLeSetAdvertisingSetRandomAddressComplete,                 // 0x0035
-    HciEventOnLeSetExtendedAdvertisingParametersComplete,               // 0x0036
-    HciEventOnLeSetExtendedAdvertisingDataComplete,                     // 0x0037
-    HciEventOnLeSetExtendedScanResponseDataComplete,                    // 0x0038
-    HciEventOnLeSetExtendedAdvertisingEnableComplete,                   // 0x0039
-    HciEventOnLeReadMaximumAdvertisingDataLengthComplete,               // 0x003A
-    HciEventOnLeReadNumberofSupportedAdvertisingSetsComplete,           // 0x003B
-    HciEventOnLeRemoveAdvertisingSetComplete,                           // 0x003C
-    HciEventOnLeClearAdvertisingSetsComplete,                           // 0x003D
-    HciEventOnLeSetPeriodicAdvertisingParametersComplete,               // 0x003E
-    HciEventOnLeSetPeriodicAdvertisingDataComplete,                     // 0x003F
-    HciEventOnLeSetPeriodicAdvertisingEnableComplete,                   // 0x0040
-    HciEventOnLeSetExtendedScanParametersComplete,                      // 0x0041
-    HciEventOnLeSetExtendedScanEnableComplete,                          // 0x0042
-    NULL,                                                               // 0x0043
-    NULL,                                                               // 0x0044
-    HciEventOnLePeriodicAdvertisingCreateSyncCancelComplete,            // 0x0045
-    HciEventOnLePeriodicAdvertisingTerminateSyncComplete,               // 0x0046
-    HciEventOnLeAddDeviceToPeriodicAdvertiserListComplete,              // 0x0047
-    HciEventOnLeRemoveDeviceFromPeriodicAdvertiserListComplete,         // 0x0048
-    HciEventOnLeClearPeriodicAdvertiserListComplete,                    // 0x0049
-    HciEventOnLeReadPeriodicAdvertiserListSizeComplete,                 // 0x004A
-    HciEventOnLeReadTransmitPowerComplete,                              // 0x004B
-    HciEventOnLeReadRFPathCompensationComplete,                         // 0x004C
-    HciEventOnLeWriteRFPathCompensationComplete,                        // 0x004D
-    HciEventOnLeSetPrivacyModeComplete,                                 // 0x004E
-    HciEventOnLeReceiverTestV3Complete,                                 // 0x004F
-    HciEventOnLeTransmitterTestV3Complete,                              // 0x0050
-    HciEventOnLeSetConnectionlessCteTransmitParametersComplete,         // 0x0051
-    HciEventOnLeSetConnectionlessCteTransmitEnableComplete,             // 0x0052
-    HciEventOnLeSetConnectionlessIqSamplingEnableComplete,              // 0x0053
-    HciEventOnLeSetConnectionCteReceiveParametersComplete,              // 0x0054
-    HciEventOnLeSetConnectionCteTransmitParametersComplete,             // 0x0055
-    HciEventOnLeConnectionCteRequestEnableComplete,                     // 0x0056
-    HciEventOnLeConnectionCteResponseEnableComplete,                    // 0x0057
-    HciEventOnLeReadAntennaInformationComplete,                         // 0x0058
-    HciEventOnLeSetPeriodicAdvertisingReceiveEnableComplete,            // 0x0059
-    HciEventOnLePeriodicAdvertisingSyncTransferComplete,                // 0x005A
-    HciEventOnLePeriodicAdvertisingSetInfoTransferComplete,             // 0x005B
-    HciEventOnLeSetPeriodicAdvertisingSyncTransferParametersComplete,   // 0x005C
-    HciEventOnLeSetDefaultPeriodicAdvertisingSyncTransferParametersComplete,  // 0x005D
-    NULL,                                                               // 0x005E
-    HciEventOnLeModifySleepClockAccuracyComplete,                       // 0x005F
+    NULL,                                                                    // 0x0000
+    HciEventOnLeSetEventMaskComplete,                                        // 0x0001
+    HciEventOnLeReadBufferSizeComplete,                                      // 0x0002
+    HciEventOnLeReadLocalSupportedFeaturesComplete,                          // 0x0003
+    NULL,                                                                    // 0x0004
+    HciEventOnLeSetRandomAddressComplete,                                    // 0x0005
+    HciEventOnLeSetAdvertisingParametersComplete,                            // 0x0006
+    HciEventOnLeReadAdvertisingChannelTxPowerComplete,                       // 0x0007
+    HciEventOnLeSetAdvertisingDataComplete,                                  // 0x0008
+    HciEventOnLeSetScanResponseDataComplete,                                 // 0x0009
+    HciEventOnLeSetAdvertisingEnableComplete,                                // 0x000A
+    HciEventOnLeSetScanParametersComplete,                                   // 0x000B
+    HciEventOnLeSetScanEnableComplete,                                       // 0x000C
+    NULL,                                                                    // 0x000D
+    HciEventOnLeCreateConnectionCancelComplete,                              // 0x000E
+    HciEventOnLeReadWhiteListSizeComplete,                                   // 0x000F
+    HciEventOnLeClearWhiteListComplete,                                      // 0x0010
+    HciEventOnLeAddDeviceToWhiteListComplete,                                // 0x0011
+    HciEventOnLeRemoveDeviceFromWhiteListComplete,                           // 0x0012
+    NULL,                                                                    // 0x0013
+    HciEventOnLeSetHostChannelClassificationComplete,                        // 0x0014
+    HciEventOnLeReadChannelMapComplete,                                      // 0x0015
+    NULL,                                                                    // 0x0016
+    HciEventOnLeEncryptComplete,                                             // 0x0017
+    HciEventOnLeRandComplete,                                                // 0x0018
+    NULL,                                                                    // 0x0019
+    HciEventOnLeLongTermKeyRequestReplyComplete,                             // 0x001A
+    HciEventOnLeLongTermKeyRequestNegativeReplyComplete,                     // 0x001B
+    HciEventOnLeReadSupportedStatesComplete,                                 // 0x001C
+    HciEventOnLeReceiverTestComplete,                                        // 0x001D
+    HciEventOnLeTransmitterTestComplete,                                     // 0x001E
+    HciEventOnLeTestEndComplete,                                             // 0x001F
+    HciEventOnLeRemoteConnectionParameterRequestReplyComplete,               // 0x0020
+    HciEventOnLeRemoteConnectionParameterRequestNegativeReplyComplete,       // 0x0021
+    HciEventOnLeSetDataLengthComplete,                                       // 0x0022
+    HciEventOnLeReadSuggestedDefaultDataLengthComplete,                      // 0x0023
+    HciEventOnLeWriteSuggestedDefaultDataLengthComplete,                     // 0x0024
+    NULL,                                                                    // 0x0025
+    NULL,                                                                    // 0x0026
+    HciEventOnLeAddDeviceToResolvingListComplete,                            // 0x0027
+    HciEventOnLeRemoveDeviceFromResolvingListComplete,                       // 0x0028
+    HciEventOnLeClearResolvingListComplete,                                  // 0x0029
+    HciEventOnLeReadResolvingListSizeComplete,                               // 0x002A
+    HciEventOnLeReadPeerResolvableAddressComplete,                           // 0x002B
+    HciEventOnLeReadLocalResolvableAddressComplete,                          // 0x002C
+    HciEventOnLeSetAddressResolutionEnableComplete,                          // 0x002D
+    HciEventOnSetResolvablePrivateAddressTimeoutComplete,                    // 0x002E
+    HciEventOnLeReadMaximumDataLengthComplete,                               // 0x002F
+    HciEventOnLeReadPhyComplete,                                             // 0x0030
+    HciEventOnLeSetDefaultPhyComplete,                                       // 0x0031
+    HciEventOnLeSetPhyComplete,                                              // 0x0032
+    HciEventOnLeEnhancedReceiverTestComplete,                                // 0x0033
+    HciEventOnLeEnhancedTransmitterTestComplete,                             // 0x0034
+    HciEventOnLeSetAdvertisingSetRandomAddressComplete,                      // 0x0035
+    HciEventOnLeSetExtendedAdvertisingParametersComplete,                    // 0x0036
+    HciEventOnLeSetExtendedAdvertisingDataComplete,                          // 0x0037
+    HciEventOnLeSetExtendedScanResponseDataComplete,                         // 0x0038
+    HciEventOnLeSetExtendedAdvertisingEnableComplete,                        // 0x0039
+    HciEventOnLeReadMaximumAdvertisingDataLengthComplete,                    // 0x003A
+    HciEventOnLeReadNumberofSupportedAdvertisingSetsComplete,                // 0x003B
+    HciEventOnLeRemoveAdvertisingSetComplete,                                // 0x003C
+    HciEventOnLeClearAdvertisingSetsComplete,                                // 0x003D
+    HciEventOnLeSetPeriodicAdvertisingParametersComplete,                    // 0x003E
+    HciEventOnLeSetPeriodicAdvertisingDataComplete,                          // 0x003F
+    HciEventOnLeSetPeriodicAdvertisingEnableComplete,                        // 0x0040
+    HciEventOnLeSetExtendedScanParametersComplete,                           // 0x0041
+    HciEventOnLeSetExtendedScanEnableComplete,                               // 0x0042
+    NULL,                                                                    // 0x0043
+    NULL,                                                                    // 0x0044
+    HciEventOnLePeriodicAdvertisingCreateSyncCancelComplete,                 // 0x0045
+    HciEventOnLePeriodicAdvertisingTerminateSyncComplete,                    // 0x0046
+    HciEventOnLeAddDeviceToPeriodicAdvertiserListComplete,                   // 0x0047
+    HciEventOnLeRemoveDeviceFromPeriodicAdvertiserListComplete,              // 0x0048
+    HciEventOnLeClearPeriodicAdvertiserListComplete,                         // 0x0049
+    HciEventOnLeReadPeriodicAdvertiserListSizeComplete,                      // 0x004A
+    HciEventOnLeReadTransmitPowerComplete,                                   // 0x004B
+    HciEventOnLeReadRFPathCompensationComplete,                              // 0x004C
+    HciEventOnLeWriteRFPathCompensationComplete,                             // 0x004D
+    HciEventOnLeSetPrivacyModeComplete,                                      // 0x004E
+    HciEventOnLeReceiverTestV3Complete,                                      // 0x004F
+    HciEventOnLeTransmitterTestV3Complete,                                   // 0x0050
+    HciEventOnLeSetConnectionlessCteTransmitParametersComplete,              // 0x0051
+    HciEventOnLeSetConnectionlessCteTransmitEnableComplete,                  // 0x0052
+    HciEventOnLeSetConnectionlessIqSamplingEnableComplete,                   // 0x0053
+    HciEventOnLeSetConnectionCteReceiveParametersComplete,                   // 0x0054
+    HciEventOnLeSetConnectionCteTransmitParametersComplete,                  // 0x0055
+    HciEventOnLeConnectionCteRequestEnableComplete,                          // 0x0056
+    HciEventOnLeConnectionCteResponseEnableComplete,                         // 0x0057
+    HciEventOnLeReadAntennaInformationComplete,                              // 0x0058
+    HciEventOnLeSetPeriodicAdvertisingReceiveEnableComplete,                 // 0x0059
+    HciEventOnLePeriodicAdvertisingSyncTransferComplete,                     // 0x005A
+    HciEventOnLePeriodicAdvertisingSetInfoTransferComplete,                  // 0x005B
+    HciEventOnLeSetPeriodicAdvertisingSyncTransferParametersComplete,        // 0x005C
+    HciEventOnLeSetDefaultPeriodicAdvertisingSyncTransferParametersComplete, // 0x005D
+    NULL,                                                                    // 0x005E
+    HciEventOnLeModifySleepClockAccuracyComplete,                            // 0x005F
+    NULL,                                                                    // 0x0060
+    HciEventOnLeReadIsoTxSyncComplete,                                       // 0x0061
+    HciEventOnLeSetCigParametersComplete,                                    // 0x0062
+    HciEventOnLeSetCigParametersTestComplete,                                // 0x0063
+    HciEventOnLeCreateCisCommandComplete,                                    // 0x0064
+    HciEventOnLeRemoveCigComplete,                                           // 0x0065
+    HciEventOnLeAcceptCisRequestCommandComplete,                             // 0x0066
+    HciEventOnLeRejectCisRequestComplete,                                    // 0x0067
+    HciEventOnLeCreateBigCommandComplete,                                    // 0x0068
+    HciEventOnLeCreateBigCommandComplete,                                    // 0x0069
+    HciEventOnLeTerminateBigCommandComplete,                                 // 0x006A
+    HciEventOnLeBigCreateSyncCommandComplete,                                // 0x006B
+    HciEventOnLeBigTerminateSyncComplete,                                    // 0x006C
+    HciEventOnLeRequestPeerScaCommandComplete,                               // 0x006D
+    HciEventOnLeSetupIsoDataPathComplete,                                    // 0x006E
+    HciEventOnLeRemoveIsoDataPathComplete,                                   // 0x006F
+    HciEventOnLeIsoTransmitTestComplete,                                     // 0x0070
+    HciEventOnLeIsoReceiveTestComplete,                                      // 0x0071
+    HciEventOnLeIsoReadTestCountersComplete,                                 // 0x0072
+    HciEventOnLeIsoTestEndComplete,                                          // 0x0073
+    HciEventOnLeSetHostFeatureComplete,                                      // 0x0074
+    HciEventOnLeReadIsoLinkQualityComplete,                                  // 0x0075
+    HciEventOnLeEnhancedReadTransmitPowerLevelComplete,                      // 0x0076
+    HciEventOnLeReadRemoteTransmitPowerLevelCommandComplete,                 // 0x0077
+    HciEventOnLeSetPathLossReportingParametersComplete,                      // 0x0078
+    HciEventOnLeSetPathLossReportingEnableComplete,                          // 0x0079
+    HciEventOnLeSetTransmitPowerReportingEnableComplete,                     // 0x007A
 };
 
 // 0x005E is 7.8.93 LE Generate DHKey [v2]: asynchronous command, completion is
 // reported by the LE Generate DHKey Complete event (Subevent 0x09, handled in
 // hci_evt_le.c) - no Command Complete is generated, consistent with v1 (0x0026).
-#define LECONTROLLER_OCF_MAX 0x005F
+#define LECONTROLLER_OCF_MAX 0x007A
 
 void HciEventOnLeCommandComplete(uint16_t opCode, const void *param, uint8_t length)
 {

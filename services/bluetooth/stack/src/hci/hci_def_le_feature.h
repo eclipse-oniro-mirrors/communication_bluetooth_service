@@ -47,6 +47,10 @@ extern "C" {
 #define LE_FEATURE_BIT_SLEEP_CLOCK_ACCURACY_UPDATES 26
 #define LE_FEATURE_BIT_REMOTE_PUBLIC_KEY_VALIDATION 27
 
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 6, Part B
+// 4.6.34 Power Control Request feature bit.
+#define LE_FEATURE_BIT_POWER_CONTROL 52
+
 // Number of bits per feature byte (Bluetooth spec Vol 6, Part B, 4.6).
 #define LE_FEATURE_BITS_PER_BYTE 8
 
@@ -162,6 +166,14 @@ static inline int HciSupportSleepClockAccuracyUpdates(const uint8_t *features)
 static inline int HciSupportRemotePublicKeyValidation(const uint8_t *features)
 {
     return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_REMOTE_PUBLIC_KEY_VALIDATION);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 6, Part B
+// 4.6.34 Power Control Request. Without this feature the controller does not
+// support LE Set Path Loss Reporting Parameters / LE Transmit Power Reporting.
+static inline int HciSupportLePowerControl(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_POWER_CONTROL);
 }
 
 #ifdef __cplusplus

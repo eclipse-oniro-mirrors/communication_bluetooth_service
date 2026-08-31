@@ -97,6 +97,50 @@ void BTSTACK_API L2CIF_LeDisconnectionRsp(uint16_t lcid, uint8_t id, void (*cb)(
 int BTSTACK_API L2CIF_LeSendData(uint16_t lcid, const Packet *pkt, void (*cb)(uint16_t lcid, int result));
 
 /**
+ * @brief Send an Enhanced Credit Based Connection Request (0x17) for the EATT PSM 0x0027
+ *
+ * Runs on the L2CAP processing queue to stay serialized with the inbound-signal handling.
+ * The allocated source CIDs are returned through the callback: lcids points to an internal
+ * array of n entries valid only during the callback, so the caller must consume them (or
+ * copy them) synchronously. The callback reports only the local dispatch result; the real
+ * connection result is delivered asynchronously per 0x18 through the registered service's
+ * recvLeEattConnectionRsp. Refer to charter 4.25 of Core 5.2.
+ *
+ * @param addr remote bluetooth address
+ * @param cfg local config (MTU/MPS/credit), mtu and mps not less than 64
+ * @param n number of channels to create, in [1, L2CAP_LE_EATT_MAX_CHANNEL]
+ * @param cb dispatch callback (result, allocated source CIDs, count, user context)
+ * @param ctx user context passed to cb
+ * @return Returns <b>BT_SUCCESS</b> if the request is dispatched, otherwise the operation fails.
+ */
+int BTSTACK_API L2CIF_LeEattConnectionReq(const BtAddr *addr, const L2capLeConfigInfo *cfg, uint16_t n,
+    void (*cb)(int result, const uint16_t *lcids, uint16_t n, void *ctx), void *ctx);
+
+/**
+ * @brief Send an Enhanced Credit Based Reconfigure Request (0x19) for the EATT PSM 0x0027
+ *
+ * Runs on the L2CAP processing queue to stay serialized with the inbound-signal handling.
+ * The target local CIDs are copied into the L2CIF context, so the caller's array need not outlive
+ * this call. The callback reports only the local dispatch result (parameter checks in the L2CAP
+ * layer, charter 4.27); the real per-channel result is delivered asynchronously per 0x1A through
+ * the registered service's recvLeEattReconfigured. Refer to charter 4.27 of Core 5.2.
+ *
+ * @param params pointer to the reconfigure parameters (target CIDs, new MTU/MPS and
+ *               the dispatch callback); the target CIDs are copied into the L2CIF context
+ * @return Returns <b>BT_SUCCESS</b> if the request is dispatched, otherwise the operation fails.
+ */
+typedef struct {
+    const uint16_t *lcids;             // target local CIDs to reconfigure, n entries
+    uint16_t n;                        // number of CIDs, in [1, L2CAP_LE_EATT_MAX_CHANNEL]
+    uint16_t mtu;                      // new receive MTU, range validated in the L2CAP layer
+    uint16_t mps;                      // new receive MPS, range validated in the L2CAP layer
+    void (*cb)(int result, void *ctx); // dispatch callback (result, user context), may be NULL
+    void *ctx;                         // user context passed to cb
+} L2CIF_LeEattReconfigureParams;
+
+int BTSTACK_API L2CIF_LeEattReconfigureReq(const L2CIF_LeEattReconfigureParams *params);
+
+/**
  * @brief Register LE Fix Channel data callback
  *
  * @param cid fix channel id

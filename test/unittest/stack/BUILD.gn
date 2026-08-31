@@ -41,9 +41,11 @@ ohos_unittest("btfw_stack_unit_test") {
   module_out_path = module_output_path
 
   sources = [
+    "stack_att_52_test.cpp",
     "stack_gap_le_5_1_event_parse_test.cpp",
     "stack_gap_le_5_1_interact_test.cpp",
     "stack_gap_le_5_1_test.cpp",
+    "stack_gap_le_5_2_test.cpp",
     "stack_gap_le_interact_test.cpp",
     "stack_gap_le_test.cpp",
     "stack_smp_tool_test.cpp",
@@ -56,6 +58,7 @@ ohos_unittest("btfw_stack_unit_test") {
   external_deps = [
     "bounds_checking_function:libsec_shared",
     "googletest:gtest",
+    "hilog:libhilog",
   ]
 }
 

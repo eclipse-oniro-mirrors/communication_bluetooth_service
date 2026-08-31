@@ -57,7 +57,7 @@ static Mutex *g_modeLock = NULL;
 
 static HciFailureCallbacks g_hciFailureCallbacks;
 
-static const int G_COUNT_OF_ALL_MODULES = 8;
+static const int G_COUNT_OF_ALL_MODULES = 9;
 static const char *g_allModules[] = {
     MODULE_NAME_L2CAP,
     MODULE_NAME_GAP,
@@ -67,6 +67,7 @@ static const char *g_allModules[] = {
     MODULE_NAME_RFCOMM,
     MODULE_NAME_ATT,
     MODULE_NAME_SMP,
+    MODULE_NAME_ISO,
 };
 
 static const int G_COUNTOF_BREDR_AND_SHARED_MODULES = 8;
@@ -89,12 +90,13 @@ static const char *g_bredrModules[] = {
     MODULE_NAME_RFCOMM,
 };
 
-static const int G_COUNT_OF_LE_AND_SHARED_MODULES = 4;
+static const int G_COUNT_OF_LE_AND_SHARED_MODULES = 5;
 static const char *g_leAndSharedModules[] = {
     MODULE_NAME_L2CAP,
     MODULE_NAME_SMP,
     MODULE_NAME_GAP,
     MODULE_NAME_ATT,
+    MODULE_NAME_ISO,
 };
 
 static const int G_COUNT_OF_LE_MODULES = 0;

@@ -25,6 +25,13 @@
 extern "C" {
 #endif
 
+// Thread contract: every callback in this structure (command complete/status
+// and async event handlers alike) is invoked synchronously by the HCI event
+// reactor, which runs on the single Stack thread (the same thread that drains
+// the BTM/HCI/GAP/ATT/L2CAP/ISO processing queues). Parameter pointers are
+// only valid for the duration of the call and must not be retained. Modules
+// that need to act off this thread (e.g. alarm callbacks) must copy the
+// relevant fields and post the work to their own processing queue.
 typedef struct {
     // Cmds
 
@@ -692,6 +699,65 @@ typedef struct {
 
     // LE Cmds
 
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.96 LE Read ISO TX Sync Command
+    void (*leReadIsoTxSyncComplete)(const HciLeReadIsoTxSyncReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.97 LE Set CIG Parameters Command
+    void (*leSetCigParametersComplete)(const HciLeSetCigParametersReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.98 LE Set CIG Parameters Test Command
+    void (*leSetCigParametersTestComplete)(const HciLeSetCigParametersTestReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.99 LE Create CIS Command
+    void (*leCreateCisComplete)(const HciLeCreateCisReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.100 LE Remove CIG Command
+    void (*leRemoveCigComplete)(const HciLeRemoveCigReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.102 LE Reject CIS Request Command
+    void (*leRejectCisRequestComplete)(const HciLeRejectCisRequestReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.107 LE BIG Terminate Sync Command
+    void (*leBigTerminateSyncComplete)(const HciLeBigTerminateSyncReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.109 LE Setup ISO Data Path Command
+    void (*leSetupIsoDataPathComplete)(const HciLeSetupIsoDataPathReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.110 LE Remove ISO Data Path Command
+    void (*leRemoveIsoDataPathComplete)(const HciLeRemoveIsoDataPathReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.111 LE ISO Transmit Test Command
+    void (*leIsoTransmitTestComplete)(const HciLeIsoTransmitTestReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.112 LE ISO Receive Test Command
+    void (*leIsoReceiveTestComplete)(const HciLeIsoReceiveTestReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.113 LE ISO Read Test Counters Command
+    void (*leIsoReadTestCountersComplete)(const HciLeIsoReadTestCountersReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.114 LE ISO Test End Command
+    void (*leIsoTestEndComplete)(const HciLeIsoTestEndReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.115 LE Set Host Feature Command
+    void (*leSetHostFeatureComplete)(const HciLeSetHostFeatureReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.116 LE Read ISO Link Quality Command
+    void (*leReadIsoLinkQualityComplete)(const HciLeReadIsoLinkQualityReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.117 LE Enhanced Read Transmit Power Level Command
+    void (*leEnhancedReadTransmitPowerLevelComplete)(const HciLeEnhancedReadTransmitPowerLevelReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.119 LE Set Path Loss Reporting Parameters Command
+    void (*leSetPathLossReportingParametersComplete)(const HciLeSetPathLossReportingParametersReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.120 LE Set Path Loss Reporting Enable Command
+    void (*leSetPathLossReportingEnableComplete)(const HciLeSetPathLossReportingEnableReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.121 LE Set Transmit Power Reporting Enable Command
+    void (*leSetTransmitPowerReportingEnableComplete)(
+        const HciLeSetTransmitPowerReportingEnableReturnParam *returnParam);
+
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.8.1 LE Set Event Mask Command
     void (*leSetEventMaskComplete)(const HciLeSetEventMaskReturnParam *returParam);
@@ -1050,6 +1116,36 @@ typedef struct {
     // 7.7.65,24 LE Periodic Advertising Sync Transfer Received Event
     void (*lePeriodicAdvertisingSyncTransferReceived)(
         const HciLePeriodicAdvertisingSyncTransferReceivedEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.7.65,25 LE CIS Established Event
+    void (*leCisEstablished)(const HciLeCisEstablishedEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.7.65,26 LE CIS Request Event
+    void (*leCisRequest)(const HciLeCisRequestEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.7.65,27 LE Create BIG Complete Event
+    void (*leCreateBigComplete)(const HciLeCreateBigCompleteEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.7.65,28 LE Terminate BIG Complete Event
+    void (*leTerminateBigComplete)(const HciLeTerminateBigCompleteEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.7.65,29 LE BIG Sync Established Event
+    void (*leBigSyncEstablished)(const HciLeBigSyncEstablishedEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.7.65,30 LE BIG Sync Lost Event
+    void (*leBigSyncLost)(const HciLeBigSyncLostEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.7.65,31 LE Request Peer SCA Complete Event
+    void (*leRequestPeerScaComplete)(const HciLeRequestPeerScaCompleteEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.7.65,32 LE Path Loss Threshold Event
+    void (*lePathLossThreshold)(const HciLePathLossThresholdEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.7.65,33 LE Transmit Power Reporting Event
+    void (*leTransmitPowerReporting)(const HciLeTransmitPowerReportingEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.7.65,34 LE BIGInfo Advertising Report Event
+    void (*leBigInfoAdvertisingReport)(const HciLeBigInfoAdvertisingReportEventParam *eventParam);
 } HciEventCallbacks;
 
 int HCI_RegisterEventCallbacks(const HciEventCallbacks *callbacks);

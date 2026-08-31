@@ -240,6 +240,12 @@ void GapOnLeConnectionUpdateCompleteEvent(const HciLeConnectionUpdateCompleteEve
 void GapOnLeRemoteConnectionParameterRequestEvent(const HciLeRemoteConnectionParameterRequestEventParam *eventParam);
 void GapLeReadPhyComplete(const HciLeReadPhyReturnParam *param);
 void GapLeSetDefaultPhyComplete(const HciLeSetDefaultPhyReturnParam *param);
+void GapLeEnhancedReadTransmitPowerLevelComplete(const HciLeEnhancedReadTransmitPowerLevelReturnParam *param);
+void GapLeSetPathLossReportingParametersComplete(const HciLeSetPathLossReportingParametersReturnParam *param);
+void GapLeSetPathLossReportingEnableComplete(const HciLeSetPathLossReportingEnableReturnParam *param);
+void GapLeSetTransmitPowerReportingEnableComplete(const HciLeSetTransmitPowerReportingEnableReturnParam *param);
+void GapLePathLossThresholdEvent(const HciLePathLossThresholdEventParam *eventParam);
+void GapLeTransmitPowerReportingEvent(const HciLeTransmitPowerReportingEventParam *eventParam);
 void GapLeSetPhyComplete(const HciLeSetPhyReturnParam *param);
 void GapOnLePhyUpdateCompleteEvent(const HciLePhyUpdateCompleteEventParam *eventParam);
 void GapLeSetDataLengthComplete(const HciLeSetDataLengthReturnParam *param);
@@ -313,6 +319,11 @@ int GapLeCteCallbackInit(void);
 void GapLeCteCallbackDeinit(void);
 bool GapLeCteCallbackGet(GapLeCteCallback *callback, void **context);
 void GapLeCteCallbackRelease(void);
+
+// Power-control callback group lifecycle, owned by gap_le_power.c. The
+// registered callback is fetched through GapLePowerControlCallbackGet/Release.
+int GapLePowerControlCallbackInit(void);
+void GapLePowerControlCallbackDeinit(void);
 
 // Validates a 5.1 antenna switching pattern: length 0 with NULL antennaIds, or
 // length 0x02-0x4B with a non-NULL antennaIds array. Defined in gap_le_adv.c.

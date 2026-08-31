@@ -475,6 +475,18 @@ bool BTSTACK_API BTM_IsControllerSupportChannelSelectionAlgorithm2();
 bool BTSTACK_API BTM_IsControllerSupportLeReadTransmitPower();
 
 /**
+ * @brief Determine whether the local controller supports LE Power Control (LE Feature Bit 52).
+ *
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ *
+ * @note No locking: the result is populated by the BTM setup path (Read Local
+ *       Supported Features) and only read afterwards. Must be called after
+ *       BTM_Setup() has completed and before BTM_Close(), never concurrently
+ *       with setup or teardown.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLePowerControl();
+
+/**
  * @brief Determine whether the local controller supports LE Read RF Path Compensation.
  *
  * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.

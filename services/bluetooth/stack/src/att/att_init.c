@@ -22,8 +22,9 @@
 
 #include <string.h>
 
-#include "att_connect.h"
 #include "att_common.h"
+#include "att_connect.h"
+#include "att_eatt.h"
 #include "att_receive.h"
 
 #include "alarm.h"
@@ -108,6 +109,8 @@ static void AttAlarmListInit()
 
     for (; index < MAXCONNECT; ++index) {
         connectInfo[index].alarm = AlarmCreate((char *)&index, 0);
+        connectInfo[index].indicationAlarm = AlarmCreate((char *)&index, 0);
+        connectInfo[index].eattEstablishAlarm = AlarmCreate((char *)&index, 0);
     }
 
     for (increaseIndex = MAXCONNECT, index = 0; (increaseIndex < STEP_TWO * MAXCONNECT) && (index < MAXCONNECT);
@@ -143,6 +146,8 @@ static void ATT_StartUpAsync(const void *context)
     lel2capLeFixChannelObj.leDisconnected = AttLeDisconnected;
     lel2capLeFixChannelObj.recvLeData = AttRecvLeData;
     L2CIF_LeRegisterFixChannel(LE_CID, &lel2capLeFixChannelObj, L2cifLeRisterFixChannelCallback);
+
+    AttEattRegisterService();
 
     return;
 }
@@ -204,11 +209,21 @@ static void ATT_ShutDownAsync(const void *context)
     AttConnectingInfo *connectingInfo = AttGetConnectingStart();
 
     for (; index < MAXCONNECT; ++index) {
-        AttShutDownClearConnectInfo(&connectInfo[index]);
-        ListClear(connectInfo[index].instruct);
+        // Cancel every alarm before the snapshot slots are cleared: AlarmCancel is non-waiting,
+        // so the atomic field-by-field reset inside AttShutDownClearConnectInfo (paired with the
+        // alarm thread's relaxed atomic loads) is what keeps an expiry racing the clear defined;
+        // cancelling first simply shrinks the window.
         if (connectInfo[index].alarm) {
             AlarmCancel(connectInfo[index].alarm);
         }
+        if (connectInfo[index].indicationAlarm) {
+            AlarmCancel(connectInfo[index].indicationAlarm);
+        }
+        if (connectInfo[index].eattEstablishAlarm) {
+            AlarmCancel(connectInfo[index].eattEstablishAlarm);
+        }
+        AttShutDownClearConnectInfo(&connectInfo[index]);
+        ListClear(connectInfo[index].instruct);
         if (connectingInfo[index].bredrAlarm) {
             AlarmCancel(connectingInfo[index].bredrAlarm);
         }
@@ -216,6 +231,12 @@ static void ATT_ShutDownAsync(const void *context)
             AlarmCancel(connectingInfo[index].leAlarm);
         }
     }
+
+    // Unregister the EATT LE PSM (0x0027) on the shutdown path, mirroring the registration in
+    // AttEattRegisterService (review i9): leaving it registered would let a late L2CAP dispatch
+    // deliver EATT channel events into the torn-down ATT module. The deregistration is
+    // idempotent (L2CAP_LeDeregisterService), so it is safe on a module that was never started.
+    L2CIF_LeDeregisterService(L2CAP_LE_EATT_PSM, NULL);
 
     AttDelete(AttGetConnectStart(), AttGetConnectingStart());
 
@@ -308,6 +329,14 @@ static void AttDelete(AttConnectInfo *connectInfo, AttConnectingInfo *connecting
         if (connectInfo[index].alarm) {
             AlarmDelete(connectInfo[index].alarm);
             connectInfo[index].alarm = NULL;
+        }
+        if (connectInfo[index].indicationAlarm) {
+            AlarmDelete(connectInfo[index].indicationAlarm);
+            connectInfo[index].indicationAlarm = NULL;
+        }
+        if (connectInfo[index].eattEstablishAlarm) {
+            AlarmDelete(connectInfo[index].eattEstablishAlarm);
+            connectInfo[index].eattEstablishAlarm = NULL;
         }
         if (connectingInfo[index].bredrAlarm) {
             AlarmDelete(connectingInfo[index].bredrAlarm);

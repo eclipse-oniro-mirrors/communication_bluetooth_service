@@ -26,6 +26,10 @@
 extern "C" {
 #endif
 
+// Iterates the event callback list while holding the callback-list lock, i.e. the
+// registered module callbacks run while the lock is held. Contract: callbacks must
+// never call HCI_RegisterEventCallbacks / HCI_DeregisterEventCallbacks (they would
+// deadlock on the same lock); they may only post work to their own processing queue.
 #define HCI_FOREACH_EVT_CALLBACKS_START(x)                         \
     MutexLock(HciGetEventCallbackListLock());                      \
     ListNode *node_ = ListGetFirstNode(HciGetEventCallbackList()); \

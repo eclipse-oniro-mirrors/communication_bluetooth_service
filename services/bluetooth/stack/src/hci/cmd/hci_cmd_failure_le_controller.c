@@ -1519,108 +1519,565 @@ static void HciCmdOnLeModifySleepClockAccuracyFailed(uint8_t status, const void 
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+static void HciCmdOnLeReadIsoTxSyncFailed(uint8_t status, const void *param)
+{
+    // Failure events carry no return parameters, so the original command parameter
+    // is reused to recover the handle. This relies on the first field of the
+    // command parameter struct (Connection/BIG handle or CIG Identifier) being at
+    // offset 0 with no padding, which matches the first octet(s) of the serialized
+    // command. New failure handlers must keep this convention, or read the handle
+    // from the wire payload explicitly instead.
+    HciLeReadIsoTxSyncReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = (param != NULL) ? ((const HciLeReadIsoTxSyncParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReadIsoTxSyncComplete != NULL) {
+        callbacks->leReadIsoTxSyncComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetCigParametersFailed(uint8_t status, const void *param)
+{
+    HciLeSetCigParametersReturnParam returnParam = {
+        .status = status,
+    };
+
+    if (param != NULL) {
+        // The original command parameter carries the CIG Identifier as its first
+        // octet, which is also the first octet of the wire payload.
+        returnParam.cigId = ((const HciLeSetCigParametersParam *)param)->cigId;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, cigId left 0", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetCigParametersComplete != NULL) {
+        callbacks->leSetCigParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetCigParametersTestFailed(uint8_t status, const void *param)
+{
+    HciLeSetCigParametersTestReturnParam returnParam = {
+        .status = status,
+    };
+
+    if (param != NULL) {
+        // The original command parameter carries the CIG Identifier as its first
+        // octet, which is also the first octet of the wire payload.
+        returnParam.cigId = ((const HciLeSetCigParametersTestParam *)param)->cigId;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, cigId left 0", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetCigParametersTestComplete != NULL) {
+        callbacks->leSetCigParametersTestComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeCreateCisFailed(uint8_t status, const void *param)
+{
+    HciLeCreateCisReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCreateCisComplete != NULL) {
+        callbacks->leCreateCisComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeRemoveCigFailed(uint8_t status, const void *param)
+{
+    HciLeRemoveCigReturnParam returnParam = {
+        .status = status,
+        // echo the command's CIG_ID so the receiver can match it against the
+        // pending remove; a synthesized failure must behave like the real
+        // Command Complete of the same command
+        .cigId = (param != NULL) ? ((const HciLeRemoveCigParam *)param)->cigId : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leRemoveCigComplete != NULL) {
+        callbacks->leRemoveCigComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// LE Accept CIS Request has no Command_Complete; its result is delivered by the
+// LE CIS Established event. On failure, notify through the same event path.
+static void HciCmdOnLeAcceptCisRequestFailed(uint8_t status, const void *param)
+{
+    HciLeCisEstablishedEventParam eventParam = {
+        .status = status,
+        .connectionHandle = (param != NULL) ? ((const HciLeAcceptCisRequestParam *)param)->cisHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCisEstablished != NULL) {
+        callbacks->leCisEstablished(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeRejectCisRequestFailed(uint8_t status, const void *param)
+{
+    HciLeRejectCisRequestReturnParam returnParam = {
+        .status = status,
+        .cisHandle = (param != NULL) ? ((const HciLeRejectCisRequestParam *)param)->cisHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leRejectCisRequestComplete != NULL) {
+        callbacks->leRejectCisRequestComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetHostFeatureFailed(uint8_t status, const void *param)
+{
+    HciLeSetHostFeatureReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetHostFeatureComplete != NULL) {
+        callbacks->leSetHostFeatureComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeReadIsoLinkQualityFailed(uint8_t status, const void *param)
+{
+    HciLeReadIsoLinkQualityReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = (param != NULL) ? ((const HciLeReadIsoLinkQualityParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReadIsoLinkQualityComplete != NULL) {
+        callbacks->leReadIsoLinkQualityComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeEnhancedReadTransmitPowerLevelFailed(uint8_t status, const void *param)
+{
+    HciLeEnhancedReadTransmitPowerLevelReturnParam returnParam = {
+        .status = status,
+        .connectionHandle =
+            (param != NULL) ? ((const HciLeEnhancedReadTransmitPowerLevelParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leEnhancedReadTransmitPowerLevelComplete != NULL) {
+        callbacks->leEnhancedReadTransmitPowerLevelComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x0077 has no Command_Complete; its result is delivered by the LE Transmit Power
+// Reporting event (7.7.65,33) with Reason 0x02. On failure, notify through the same
+// event path so callers do not wait forever.
+static void HciCmdOnLeReadRemoteTransmitPowerLevelFailed(uint8_t status, const void *param)
+{
+    HciLeTransmitPowerReportingEventParam eventParam = {
+        .status = status,
+        .connectionHandle =
+            (param != NULL) ? ((const HciLeReadRemoteTransmitPowerLevelParam *)param)->connectionHandle : 0,
+        .reason = 0x02,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leTransmitPowerReporting != NULL) {
+        callbacks->leTransmitPowerReporting(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetPathLossReportingParametersFailed(uint8_t status, const void *param)
+{
+    HciLeSetPathLossReportingParametersReturnParam returnParam = {
+        .status = status,
+        .connectionHandle =
+            (param != NULL) ? ((const HciLeSetPathLossReportingParametersParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPathLossReportingParametersComplete != NULL) {
+        callbacks->leSetPathLossReportingParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetPathLossReportingEnableFailed(uint8_t status, const void *param)
+{
+    HciLeSetPathLossReportingEnableReturnParam returnParam = {
+        .status = status,
+        .connectionHandle =
+            (param != NULL) ? ((const HciLeSetPathLossReportingEnableParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPathLossReportingEnableComplete != NULL) {
+        callbacks->leSetPathLossReportingEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetTransmitPowerReportingEnableFailed(uint8_t status, const void *param)
+{
+    HciLeSetTransmitPowerReportingEnableReturnParam returnParam = {
+        .status = status,
+        .connectionHandle =
+            (param != NULL) ? ((const HciLeSetTransmitPowerReportingEnableParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetTransmitPowerReportingEnableComplete != NULL) {
+        callbacks->leSetTransmitPowerReportingEnableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// LE Create BIG / Create BIG Test have no Command_Complete; their result is delivered by the
+// LE Create BIG Complete event. On failure, notify through the same event path.
+static void HciCmdOnLeCreateBigFailed(uint8_t status, const void *param)
+{
+    HciLeCreateBigCompleteEventParam eventParam = {
+        .status = status,
+        .bigHandle = (param != NULL) ? ((const HciLeCreateBigParam *)param)->bigHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCreateBigComplete != NULL) {
+        callbacks->leCreateBigComplete(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeCreateBigTestFailed(uint8_t status, const void *param)
+{
+    HciLeCreateBigCompleteEventParam eventParam = {
+        .status = status,
+        .bigHandle = (param != NULL) ? ((const HciLeCreateBigTestParam *)param)->bigHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCreateBigComplete != NULL) {
+        callbacks->leCreateBigComplete(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// LE Terminate BIG has no Command_Complete; its result is delivered by the
+// LE Terminate BIG Complete event. On failure, notify through the same event path.
+static void HciCmdOnLeTerminateBigFailed(uint8_t status, const void *param)
+{
+    HciLeTerminateBigCompleteEventParam eventParam = {
+        .bigHandle = (param != NULL) ? ((const HciLeTerminateBigParam *)param)->bigHandle : 0,
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leTerminateBigComplete != NULL) {
+        callbacks->leTerminateBigComplete(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// LE Request Peer SCA has no Command_Complete; its result is delivered by the
+// LE Request Peer SCA Complete event. On failure, notify through the same event path.
+static void HciCmdOnLeRequestPeerScaFailed(uint8_t status, const void *param)
+{
+    HciLeRequestPeerScaCompleteEventParam eventParam = {
+        .status = status,
+        .connectionHandle = (param != NULL) ? ((const HciLeRequestPeerScaParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leRequestPeerScaComplete != NULL) {
+        callbacks->leRequestPeerScaComplete(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// LE BIG Create Sync has no Command_Complete; its result is delivered by the
+// LE BIG Sync Established event. On failure, notify through the same event path.
+static void HciCmdOnLeBigCreateSyncFailed(uint8_t status, const void *param)
+{
+    HciLeBigSyncEstablishedEventParam eventParam = {
+        .status = status,
+        .bigHandle = (param != NULL) ? ((const HciLeBigCreateSyncParam *)param)->bigHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leBigSyncEstablished != NULL) {
+        callbacks->leBigSyncEstablished(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeBigTerminateSyncFailed(uint8_t status, const void *param)
+{
+    HciLeBigTerminateSyncReturnParam returnParam = {
+        .status = status,
+        .bigHandle = (param != NULL) ? ((const HciLeBigTerminateSyncParam *)param)->bigHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leBigTerminateSyncComplete != NULL) {
+        callbacks->leBigTerminateSyncComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetupIsoDataPathFailed(uint8_t status, const void *param)
+{
+    HciLeSetupIsoDataPathReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = (param != NULL) ? ((const HciLeSetupIsoDataPathParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetupIsoDataPathComplete != NULL) {
+        callbacks->leSetupIsoDataPathComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeRemoveIsoDataPathFailed(uint8_t status, const void *param)
+{
+    HciLeRemoveIsoDataPathReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = (param != NULL) ? ((const HciLeRemoveIsoDataPathParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leRemoveIsoDataPathComplete != NULL) {
+        callbacks->leRemoveIsoDataPathComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeIsoTransmitTestFailed(uint8_t status, const void *param)
+{
+    HciLeIsoTransmitTestReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = (param != NULL) ? ((const HciLeIsoTransmitTestParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leIsoTransmitTestComplete != NULL) {
+        callbacks->leIsoTransmitTestComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeIsoReceiveTestFailed(uint8_t status, const void *param)
+{
+    HciLeIsoReceiveTestReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = (param != NULL) ? ((const HciLeIsoReceiveTestParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leIsoReceiveTestComplete != NULL) {
+        callbacks->leIsoReceiveTestComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeIsoReadTestCountersFailed(uint8_t status, const void *param)
+{
+    HciLeIsoReadTestCountersReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = (param != NULL) ? ((const HciLeIsoReadTestCountersParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leIsoReadTestCountersComplete != NULL) {
+        callbacks->leIsoReadTestCountersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeIsoTestEndFailed(uint8_t status, const void *param)
+{
+    HciLeIsoTestEndReturnParam returnParam = {
+        .status = status,
+        .connectionHandle = (param != NULL) ? ((const HciLeIsoTestEndParam *)param)->connectionHandle : 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leIsoTestEndComplete != NULL) {
+        callbacks->leIsoTestEndComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciCmdOnFailedFunc g_funcMap[] = {
-    NULL,                                                           // 0x0000
-    HciCmdOnLeSetEventMaskFailed,                                   // 0x0001
-    HciCmdOnLeReadBufferSizeFailed,                                 // 0x0002
-    HciCmdOnLeReadLocalSupportedFeaturesFailed,                     // 0x0003
-    NULL,                                                           // 0x0004
-    HciCmdOnLeSetRandomAddressFailed,                               // 0x0005
-    HciCmdOnLeSetAdvertisingParametersFailed,                       // 0x0006
-    HciCmdOnReadAdvertisingChannelTxPowerFailed,                    // 0x0007
-    HciCmdOnLeSetAdvertisingDataFailed,                             // 0x0008
-    HciCmdOnLeSetScanResponseDataFailed,                            // 0x0009
-    HciCmdOnLeSetAdvertisingEnableFailed,                           // 0x000A
-    HciCmdOnLeSetScanParametersFailed,                              // 0x000B
-    HciCmdOnLeSetScanEnableFailed,                                  // 0x000C
-    HciCmdOnLeCreateConnectionFailed,                               // 0x000D
-    HciCmdOnLeCreateConnectionCancelFailed,                         // 0x000E
-    HciCmdOnLeReadWhiteListSizeFailed,                              // 0x000F
-    HciCmdOnLeClearWhiteListFailed,                                 // 0x0010
-    HciCmdOnLeAddDeviceToWhiteListFailed,                           // 0x0011
-    HciCmdOnLeRemoveDeviceFromWhiteListFailed,                      // 0x0012
-    HciCmdOnLeConnectionUpdateFailed,                               // 0x0013
-    HciCmdOnLeSetHostChannelClassificationFailed,                   // 0x0014
-    HciCmdOnLeReadChannelMapFailed,                                 // 0x0015
-    HciCmdOnLeReadRemoteFeaturesFailed,                             // 0x0016
-    HciCmdOnLeEncryptFailed,                                        // 0x0017
-    HciCmdOnLeRandFailed,                                           // 0x0018
-    HciCmdOnLeStartEncryptionFailed,                                // 0x0019
-    HciCmdOnLeLongTermKeyRequestReplyFailed,                        // 0x001A
-    HciCmdOnLeLongTermKeyRequestNegativeReplyFailed,                // 0x001B
-    HciCmdOnLeReadSupportedStatesFailed,                            // 0x001C
-    HciCmdOnLeReceiverTestFailed,                                   // 0x001D
-    HciCmdOnLeTransmitterTestFailed,                                // 0x001E
-    HciCmdOnLeTestEndFailed,                                        // 0x001F
-    HciCmdOnLeRemoteConnectionParameterRequestFailed,               // 0x0020
-    HciCmdOnLeRemoteConnectionParameterRequestNegativeReplyFailed,  // 0x0021
-    HciCmdOnLeSetDataLengthFailed,                                  // 0x0022
-    HciCmdOnLeReadSuggestedDefaultDataLengthFailed,                 // 0x0023
-    HciCmdOnLeWriteSuggestedDefaultDataLengthFailed,                // 0x0024
-    HciCmdOnLeReadLocalP256PublicKeyFailed,                         // 0x0025
-    HciCmdOnLeGenerateDhKeyFailed,                                  // 0x0026
-    HciCmdOnLeAddDeviceToResolvingListFailed,                       // 0x0027
-    HciCmdOnLeRemoveDeviceFromResolvingListFailed,                  // 0x0028
-    HciCmdOnLeClearResolvingListFailed,                             // 0x0029
-    HciCmdOnLeReadResolvingListSizeFailed,                          // 0x002A
-    HciCmdOnLeReadPeerResolvableAddressFailed,                      // 0x002B
-    HciCmdOnLeReadLocalResolvableAddressFailed,                     // 0x002C
-    HciCmdOnLeSetAddressResolutionEnableFailed,                     // 0x002D
-    HciCmdOnLeSetResolvablePrivateAddressTimeoutFailed,             // 0x002E
-    HciCmdOnLeReadMaximumDataLengthFailed,                          // 0x002F
-    HciCmdOnLeReadPhyFailed,                                        // 0x0030
-    HciCmdOnLeSetDefaultPhyFailed,                                  // 0x0031
-    HciCmdOnLeSetPhyFailed,                                         // 0x0032
-    HciCmdOnLeEnhancedReceiverTestFailed,                           // 0x0033
-    HciCmdOnLeEnhancedTransmitterTestFailed,                        // 0x0034
-    HciCmdOnLeSetAdvertisingSetRandomAddressFailed,                 // 0x0035
-    HciCmdOnLeSetExtendedAdvertisingParametersFailed,               // 0x0036
-    HciCmdOnLeSetExtendedAdvertisingDataFailed,                     // 0x0037
-    HciCmdOnLeSetExtendedScanResponseDataFailed,                    // 0x0038
-    HciCmdOnLeSetExtendedAdvertisingEnableFailed,                   // 0x0039
-    HciCmdOnLeReadMaximumAdvertisingDataLengthFailed,               // 0x003A
-    HciCmdOnLeReadNumberofSupportedAdvertisingSetsFailed,           // 0x003B
-    HciCmdOnLeRemoveAdvertisingSetFailed,                           // 0x003C
-    HciCmdOnLeClearAdvertisingSetsFailed,                           // 0x003D
-    HciCmdOnLeSetPeriodicAdvertisingParametersFailed,               // 0x003E
-    HciCmdOnLeSetPeriodicAdvertisingDataFailed,                     // 0x003F
-    HciCmdOnLeSetPeriodicAdvertisingEnableFailed,                   // 0x0040
-    HciCmdOnLeSetExtendedScanParametersFailed,                      // 0x0041
-    HciCmdOnLeSetExtendedScanEnableFailed,                          // 0x0042
-    HciCmdOnLeExtendedCreateConnectionFailed,                       // 0x0043
-    HciCmdOnLePeriodicAdvertisingCreateSyncFailed,                  // 0x0044
-    HciCmdOnLePeriodicAdvertisingCreateSyncCancelFailed,            // 0x0045
-    HciCmdOnLePeriodicAdvertisingTerminateSyncFailed,               // 0x0046
-    HciCmdOnLeAddDeviceToPeriodicAdvertiserListFailed,              // 0x0047
-    HciCmdOnLeRemoveDeviceFromPeriodicAdvertiserListFailed,         // 0x0048
-    HciCmdOnLeClearPeriodicAdvertiserListFailed,                    // 0x0049
-    HciCmdOnLeReadPeriodicAdvertiserListSizeFailed,                 // 0x004A
-    HciCmdOnLeReadTransmitPowerFailed,                              // 0x004B
-    HciCmdOnLeReadRfPathCompensationFailed,                         // 0x004C
-    HciCmdOnLeWriteRfPathCompensationParamFailed,                   // 0x004D
-    HciCmdOnLeSetPrivacyModeFailed,                                 // 0x004E
-    HciCmdOnLeReceiverTestV3Failed,                                 // 0x004F
-    HciCmdOnLeTransmitterTestV3Failed,                              // 0x0050
-    HciCmdOnLeSetConnectionlessCteTransmitParametersFailed,         // 0x0051
-    HciCmdOnLeSetConnectionlessCteTransmitEnableFailed,             // 0x0052
-    HciCmdOnLeSetConnectionlessIqSamplingEnableFailed,              // 0x0053
-    HciCmdOnLeSetConnectionCteReceiveParametersFailed,              // 0x0054
-    HciCmdOnLeSetConnectionCteTransmitParametersFailed,             // 0x0055
-    HciCmdOnLeConnectionCteRequestEnableFailed,                     // 0x0056
-    HciCmdOnLeConnectionCteResponseEnableFailed,                    // 0x0057
-    HciCmdOnLeReadAntennaInformationFailed,                         // 0x0058
-    HciCmdOnLeSetPeriodicAdvertisingReceiveEnableFailed,            // 0x0059
-    HciCmdOnLePeriodicAdvertisingSyncTransferFailed,                // 0x005A
-    HciCmdOnLePeriodicAdvertisingSetInfoTransferFailed,             // 0x005B
-    HciCmdOnLeSetPeriodicAdvertisingSyncTransferParametersFailed,   // 0x005C
-    HciCmdOnLeSetDefaultPeriodicAdvertisingSyncTransferParametersFailed,  // 0x005D
-    HciCmdOnLeGenerateDhKeyFailed,                                  // 0x005E
-    HciCmdOnLeModifySleepClockAccuracyFailed,                       // 0x005F
+    NULL,                                                                // 0x0000
+    HciCmdOnLeSetEventMaskFailed,                                        // 0x0001
+    HciCmdOnLeReadBufferSizeFailed,                                      // 0x0002
+    HciCmdOnLeReadLocalSupportedFeaturesFailed,                          // 0x0003
+    NULL,                                                                // 0x0004
+    HciCmdOnLeSetRandomAddressFailed,                                    // 0x0005
+    HciCmdOnLeSetAdvertisingParametersFailed,                            // 0x0006
+    HciCmdOnReadAdvertisingChannelTxPowerFailed,                         // 0x0007
+    HciCmdOnLeSetAdvertisingDataFailed,                                  // 0x0008
+    HciCmdOnLeSetScanResponseDataFailed,                                 // 0x0009
+    HciCmdOnLeSetAdvertisingEnableFailed,                                // 0x000A
+    HciCmdOnLeSetScanParametersFailed,                                   // 0x000B
+    HciCmdOnLeSetScanEnableFailed,                                       // 0x000C
+    HciCmdOnLeCreateConnectionFailed,                                    // 0x000D
+    HciCmdOnLeCreateConnectionCancelFailed,                              // 0x000E
+    HciCmdOnLeReadWhiteListSizeFailed,                                   // 0x000F
+    HciCmdOnLeClearWhiteListFailed,                                      // 0x0010
+    HciCmdOnLeAddDeviceToWhiteListFailed,                                // 0x0011
+    HciCmdOnLeRemoveDeviceFromWhiteListFailed,                           // 0x0012
+    HciCmdOnLeConnectionUpdateFailed,                                    // 0x0013
+    HciCmdOnLeSetHostChannelClassificationFailed,                        // 0x0014
+    HciCmdOnLeReadChannelMapFailed,                                      // 0x0015
+    HciCmdOnLeReadRemoteFeaturesFailed,                                  // 0x0016
+    HciCmdOnLeEncryptFailed,                                             // 0x0017
+    HciCmdOnLeRandFailed,                                                // 0x0018
+    HciCmdOnLeStartEncryptionFailed,                                     // 0x0019
+    HciCmdOnLeLongTermKeyRequestReplyFailed,                             // 0x001A
+    HciCmdOnLeLongTermKeyRequestNegativeReplyFailed,                     // 0x001B
+    HciCmdOnLeReadSupportedStatesFailed,                                 // 0x001C
+    HciCmdOnLeReceiverTestFailed,                                        // 0x001D
+    HciCmdOnLeTransmitterTestFailed,                                     // 0x001E
+    HciCmdOnLeTestEndFailed,                                             // 0x001F
+    HciCmdOnLeRemoteConnectionParameterRequestFailed,                    // 0x0020
+    HciCmdOnLeRemoteConnectionParameterRequestNegativeReplyFailed,       // 0x0021
+    HciCmdOnLeSetDataLengthFailed,                                       // 0x0022
+    HciCmdOnLeReadSuggestedDefaultDataLengthFailed,                      // 0x0023
+    HciCmdOnLeWriteSuggestedDefaultDataLengthFailed,                     // 0x0024
+    HciCmdOnLeReadLocalP256PublicKeyFailed,                              // 0x0025
+    HciCmdOnLeGenerateDhKeyFailed,                                       // 0x0026
+    HciCmdOnLeAddDeviceToResolvingListFailed,                            // 0x0027
+    HciCmdOnLeRemoveDeviceFromResolvingListFailed,                       // 0x0028
+    HciCmdOnLeClearResolvingListFailed,                                  // 0x0029
+    HciCmdOnLeReadResolvingListSizeFailed,                               // 0x002A
+    HciCmdOnLeReadPeerResolvableAddressFailed,                           // 0x002B
+    HciCmdOnLeReadLocalResolvableAddressFailed,                          // 0x002C
+    HciCmdOnLeSetAddressResolutionEnableFailed,                          // 0x002D
+    HciCmdOnLeSetResolvablePrivateAddressTimeoutFailed,                  // 0x002E
+    HciCmdOnLeReadMaximumDataLengthFailed,                               // 0x002F
+    HciCmdOnLeReadPhyFailed,                                             // 0x0030
+    HciCmdOnLeSetDefaultPhyFailed,                                       // 0x0031
+    HciCmdOnLeSetPhyFailed,                                              // 0x0032
+    HciCmdOnLeEnhancedReceiverTestFailed,                                // 0x0033
+    HciCmdOnLeEnhancedTransmitterTestFailed,                             // 0x0034
+    HciCmdOnLeSetAdvertisingSetRandomAddressFailed,                      // 0x0035
+    HciCmdOnLeSetExtendedAdvertisingParametersFailed,                    // 0x0036
+    HciCmdOnLeSetExtendedAdvertisingDataFailed,                          // 0x0037
+    HciCmdOnLeSetExtendedScanResponseDataFailed,                         // 0x0038
+    HciCmdOnLeSetExtendedAdvertisingEnableFailed,                        // 0x0039
+    HciCmdOnLeReadMaximumAdvertisingDataLengthFailed,                    // 0x003A
+    HciCmdOnLeReadNumberofSupportedAdvertisingSetsFailed,                // 0x003B
+    HciCmdOnLeRemoveAdvertisingSetFailed,                                // 0x003C
+    HciCmdOnLeClearAdvertisingSetsFailed,                                // 0x003D
+    HciCmdOnLeSetPeriodicAdvertisingParametersFailed,                    // 0x003E
+    HciCmdOnLeSetPeriodicAdvertisingDataFailed,                          // 0x003F
+    HciCmdOnLeSetPeriodicAdvertisingEnableFailed,                        // 0x0040
+    HciCmdOnLeSetExtendedScanParametersFailed,                           // 0x0041
+    HciCmdOnLeSetExtendedScanEnableFailed,                               // 0x0042
+    HciCmdOnLeExtendedCreateConnectionFailed,                            // 0x0043
+    HciCmdOnLePeriodicAdvertisingCreateSyncFailed,                       // 0x0044
+    HciCmdOnLePeriodicAdvertisingCreateSyncCancelFailed,                 // 0x0045
+    HciCmdOnLePeriodicAdvertisingTerminateSyncFailed,                    // 0x0046
+    HciCmdOnLeAddDeviceToPeriodicAdvertiserListFailed,                   // 0x0047
+    HciCmdOnLeRemoveDeviceFromPeriodicAdvertiserListFailed,              // 0x0048
+    HciCmdOnLeClearPeriodicAdvertiserListFailed,                         // 0x0049
+    HciCmdOnLeReadPeriodicAdvertiserListSizeFailed,                      // 0x004A
+    HciCmdOnLeReadTransmitPowerFailed,                                   // 0x004B
+    HciCmdOnLeReadRfPathCompensationFailed,                              // 0x004C
+    HciCmdOnLeWriteRfPathCompensationParamFailed,                        // 0x004D
+    HciCmdOnLeSetPrivacyModeFailed,                                      // 0x004E
+    HciCmdOnLeReceiverTestV3Failed,                                      // 0x004F
+    HciCmdOnLeTransmitterTestV3Failed,                                   // 0x0050
+    HciCmdOnLeSetConnectionlessCteTransmitParametersFailed,              // 0x0051
+    HciCmdOnLeSetConnectionlessCteTransmitEnableFailed,                  // 0x0052
+    HciCmdOnLeSetConnectionlessIqSamplingEnableFailed,                   // 0x0053
+    HciCmdOnLeSetConnectionCteReceiveParametersFailed,                   // 0x0054
+    HciCmdOnLeSetConnectionCteTransmitParametersFailed,                  // 0x0055
+    HciCmdOnLeConnectionCteRequestEnableFailed,                          // 0x0056
+    HciCmdOnLeConnectionCteResponseEnableFailed,                         // 0x0057
+    HciCmdOnLeReadAntennaInformationFailed,                              // 0x0058
+    HciCmdOnLeSetPeriodicAdvertisingReceiveEnableFailed,                 // 0x0059
+    HciCmdOnLePeriodicAdvertisingSyncTransferFailed,                     // 0x005A
+    HciCmdOnLePeriodicAdvertisingSetInfoTransferFailed,                  // 0x005B
+    HciCmdOnLeSetPeriodicAdvertisingSyncTransferParametersFailed,        // 0x005C
+    HciCmdOnLeSetDefaultPeriodicAdvertisingSyncTransferParametersFailed, // 0x005D
+    HciCmdOnLeGenerateDhKeyFailed,                                       // 0x005E
+    HciCmdOnLeModifySleepClockAccuracyFailed,                            // 0x005F
+    NULL,                                                                // 0x0060
+    HciCmdOnLeReadIsoTxSyncFailed,                                       // 0x0061
+    HciCmdOnLeSetCigParametersFailed,                                    // 0x0062
+    HciCmdOnLeSetCigParametersTestFailed,                                // 0x0063
+    HciCmdOnLeCreateCisFailed,                                           // 0x0064
+    HciCmdOnLeRemoveCigFailed,                                           // 0x0065
+    HciCmdOnLeAcceptCisRequestFailed,                                    // 0x0066
+    HciCmdOnLeRejectCisRequestFailed,                                    // 0x0067
+    HciCmdOnLeCreateBigFailed,                                           // 0x0068
+    HciCmdOnLeCreateBigTestFailed,                                       // 0x0069
+    HciCmdOnLeTerminateBigFailed,                                        // 0x006A
+    HciCmdOnLeBigCreateSyncFailed,                                       // 0x006B
+    HciCmdOnLeBigTerminateSyncFailed,                                    // 0x006C
+    HciCmdOnLeRequestPeerScaFailed,                                      // 0x006D
+    HciCmdOnLeSetupIsoDataPathFailed,                                    // 0x006E
+    HciCmdOnLeRemoveIsoDataPathFailed,                                   // 0x006F
+    HciCmdOnLeIsoTransmitTestFailed,                                     // 0x0070
+    HciCmdOnLeIsoReceiveTestFailed,                                      // 0x0071
+    HciCmdOnLeIsoReadTestCountersFailed,                                 // 0x0072
+    HciCmdOnLeIsoTestEndFailed,                                          // 0x0073
+    HciCmdOnLeSetHostFeatureFailed,                                      // 0x0074
+    HciCmdOnLeReadIsoLinkQualityFailed,                                  // 0x0075
+    HciCmdOnLeEnhancedReadTransmitPowerLevelFailed,                      // 0x0076
+    HciCmdOnLeReadRemoteTransmitPowerLevelFailed,                        // 0x0077
+    HciCmdOnLeSetPathLossReportingParametersFailed,                      // 0x0078
+    HciCmdOnLeSetPathLossReportingEnableFailed,                          // 0x0079
+    HciCmdOnLeSetTransmitPowerReportingEnableFailed,                     // 0x007A
 };
 
 // 0x005E is 7.8.93 LE Generate DHKey [v2] (Key_Type variant): the failure path
 // dispatches the same leGenerateDHKeyComplete callback as v1 (0x0026).
-#define LECONTROLLER_OCF_MAX 0x005F
+#define LECONTROLLER_OCF_MAX 0x007A
 
 void HciOnLeControllerCmdFailed(uint16_t opCode, uint8_t status, const void *param)
 {

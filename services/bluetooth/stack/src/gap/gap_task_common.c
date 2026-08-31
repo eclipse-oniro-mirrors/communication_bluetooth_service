@@ -60,12 +60,51 @@ NO_SANITIZE("cfi") void GapUnBlockInTaskProcess(void *ctx)
 
 int GapRunTaskBlockProcess(void (*func)(void *), void *ctx)
 {
+    // All BTM processing queues (GAP included) are drained by the single Stack thread
+    // (BTM_GetProcessingThread). A caller already running on that thread (e.g. a GAP
+    // result callback invoking a GAPIF_* API) must not enqueue the task and wait on the
+    // event: the thread would block forever waiting for itself to drain the queue.
+    // Execute the task directly instead (same reentrant guard as RunAllTaskInQueue in
+    // btm_thread.c). The task functions only send fire-and-forget HCI commands and read
+    // the result asynchronously via registered callbacks, so no blocking wait is
+    // re-entered.
+    // NOTE: ThreadIsSelf returns 0 when the calling thread IS the processing thread (see
+    // thread_linux.c), so the fast path below runs the task inline on the Stack thread.
+    //
+    // Ordering contract of this fast path: the inline execution bypasses the GAP
+    // processing queue, so it can reorder tasks of the same module - a task enqueued
+    // earlier by an external thread T1 may still sit in the queue while this task runs
+    // ahead of it. Callers MUST therefore ensure the task has no ordering dependency on
+    // other queued GAP tasks and never blocks (the fast path runs synchronously on the
+    // caller's stack, and no queue-level gate protects a teardown window). This holds
+    // for all current call sites (see gap_le_if.c, gap.c, gap_le_power.c): each task is
+    // self-contained - it only sends fire-and-forget HCI commands, copies parameters
+    // into the task context, or reads a result written by the task itself.
+    //
+    // Defensive notes (contract of the fast path, not enforced by code):
+    // - func must not be NULL: unlike the slow path, whose queued wrapper
+    //   (GapBlockInTaskProcess) tolerates a NULL func, the fast path invokes
+    //   func(ctx) directly and would crash on a NULL function pointer.
+    // - Queue availability is NOT checked: the slow path returns the queue's error
+    //   (BTM_RunTaskInProcessingQueue) when the GAP queue is unavailable or being torn
+    //   down, while the fast path always reports success. Callers must not assume a
+    //   BT_SUCCESS here implies the task was queued when running on the Stack thread.
+    Thread *processingThread = BTM_GetProcessingThread();
+    if (processingThread != NULL && ThreadIsSelf(processingThread) == 0) {
+        func(ctx);
+        return BT_SUCCESS;
+    }
+
     GapRunTaskBlockInfo *info = MEM_MALLOC.alloc(sizeof(GapRunTaskBlockInfo));
     if (info == NULL) {
         return BT_NO_MEMORY;
     }
 
-    info->event = EventCreate(true);
+    // Non-autoClear on purpose: if an EVENT_WAIT_OTHER_ERR return raced with the task's
+    // EventSet, the autoClear variant would consume the signal inside the failed wait and
+    // the retry below would then block forever (the task never sets it again). With
+    // autoClear off the signal survives the failed wait, so the retry converges.
+    info->event = EventCreate(false);
     if (info->event == NULL) {
         MEM_MALLOC.free(info);
         return BT_NO_MEMORY;
@@ -87,6 +126,11 @@ int GapRunTaskBlockProcess(void (*func)(void *), void *ctx)
         while (ret == EVENT_WAIT_OTHER_ERR) {
             HILOGW("EventWait result is wait err, retrying");
             ret = EventWait(info->event, WAIT_TIME);
+        }
+        if (ret == 0) {
+            // Success: clear the signal explicitly (EventCreate(false)). The queued
+            // task's EventSet happens-before this wait returned, so no race.
+            EventClear(info->event);
         }
         if (ret == EVENT_WAIT_TIMEOUT_ERR) {
             // Unreachable while WAIT_TIME is -1 (infinite wait); kept as a

@@ -150,6 +150,18 @@ static void GapInitializeTask(void *ctx)
         GapInitCleanupBlocks();
         return;
     }
+
+    ret = GapLePowerControlCallbackInit();
+    if (ret != GAP_SUCCESS) {
+        LOG_ERROR("%{public}s: GapLePowerControlCallbackInit failed: %{public}d.", __FUNCTION__, ret);
+        GapLePowerControlCallbackDeinit();
+        GapLeCteCallbackDeinit();
+        GapLeCallbackDeinit();
+        GapLePeriodicAdvSyncDeinit();
+        MutexDelete(g_gapMng.le.exAdvBlock.lock);
+        GapInitCleanupBlocks();
+        return;
+    }
 #endif
 
     g_gapInitOk = true;
@@ -327,6 +339,7 @@ static void GapFinalizeTask(void *ctx)
     }
     GapLePeriodicAdvSyncDeinit();
     GapLeCteCallbackDeinit();
+    GapLePowerControlCallbackDeinit();
 
     ListDelete(g_gapMng.le.connectionInfoBlock.deviceList);
     ListDelete(g_gapMng.le.signatureBlock.RequestList);

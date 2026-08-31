@@ -531,6 +531,118 @@ void HCI_SetLeBufferSize(uint16_t packetLength, uint8_t totalPackets);
 }
 #endif
 
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.96-7.8.121 LE Controller command senders (ISO / LE Power Control).
+#ifdef __cplusplus
+extern "C" {
+#endif
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.96 LE Read ISO TX Sync Command
+int HCI_LeReadIsoTxSync(const HciLeReadIsoTxSyncParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.97 LE Set CIG Parameters Command
+int HCI_LeSetCigParameters(const HciLeSetCigParametersParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.98 LE Set CIG Parameters Test Command
+int HCI_LeSetCigParametersTest(const HciLeSetCigParametersTestParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.99 LE Create CIS Command
+int HCI_LeCreateCis(const HciLeCreateCisParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.100 LE Remove CIG Command
+int HCI_LeRemoveCig(const HciLeRemoveCigParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.101 LE Accept CIS Request Command
+int HCI_LeAcceptCisRequest(const HciLeAcceptCisRequestParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.102 LE Reject CIS Request Command
+int HCI_LeRejectCisRequest(const HciLeRejectCisRequestParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.103 LE Create BIG Command
+int HCI_LeCreateBig(const HciLeCreateBigParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.104 LE Create BIG Test Command
+int HCI_LeCreateBigTest(const HciLeCreateBigTestParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.105 LE Terminate BIG Command
+int HCI_LeTerminateBig(const HciLeTerminateBigParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.106 LE BIG Create Sync Command
+int HCI_LeBigCreateSync(const HciLeBigCreateSyncParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.107 LE BIG Terminate Sync Command
+int HCI_LeBigTerminateSync(const HciLeBigTerminateSyncParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.108 LE Request Peer SCA Command
+int HCI_LeRequestPeerSca(const HciLeRequestPeerScaParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.109 LE Setup ISO Data Path Command
+int HCI_LeSetupIsoDataPath(const HciLeSetupIsoDataPathParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.110 LE Remove ISO Data Path Command
+int HCI_LeRemoveIsoDataPath(const HciLeRemoveIsoDataPathParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.111 LE ISO Transmit Test Command
+int HCI_LeIsoTransmitTest(const HciLeIsoTransmitTestParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.112 LE ISO Receive Test Command
+int HCI_LeIsoReceiveTest(const HciLeIsoReceiveTestParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.113 LE ISO Read Test Counters Command
+int HCI_LeIsoReadTestCounters(const HciLeIsoReadTestCountersParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.114 LE ISO Test End Command
+int HCI_LeIsoTestEnd(const HciLeIsoTestEndParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.115 LE Set Host Feature Command
+int HCI_LeSetHostFeature(const HciLeSetHostFeatureParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.116 LE Read ISO Link Quality Command
+int HCI_LeReadIsoLinkQuality(const HciLeReadIsoLinkQualityParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.117 LE Enhanced Read Transmit Power Level Command
+int HCI_LeEnhancedReadTransmitPowerLevel(const HciLeEnhancedReadTransmitPowerLevelParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.118 LE Read Remote Transmit Power Level Command
+int HCI_LeReadRemoteTransmitPowerLevel(const HciLeReadRemoteTransmitPowerLevelParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.119 LE Set Path Loss Reporting Parameters Command
+int HCI_LeSetPathLossReportingParameters(const HciLeSetPathLossReportingParametersParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.120 LE Set Path Loss Reporting Enable Command
+int HCI_LeSetPathLossReportingEnable(const HciLeSetPathLossReportingEnableParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.121 LE Set Transmit Power Reporting Enable Command
+int HCI_LeSetTransmitPowerReportingEnable(const HciLeSetTransmitPowerReportingEnableParam *param);
+#ifdef __cplusplus
+}
+#endif
+
 // BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
 // 7.8.78-7.8.92 LE Controller command senders (Direction Finding / PAST / test v3).
 // The header has its own extern "C" guard.

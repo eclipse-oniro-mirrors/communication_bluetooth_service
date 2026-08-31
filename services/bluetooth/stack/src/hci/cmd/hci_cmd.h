@@ -30,6 +30,10 @@ typedef struct {
     void *param;
     Packet *packet;
     Alarm *alarm;
+    // Monotonic generation assigned at allocation: the timeout alarm carries this number
+    // (never the HciCmd pointer), so a stale timeout task cannot collide with a newer
+    // command reallocated at the same address (malloc reuse, ABA).
+    uint32_t generation;
 } HciCmd;
 
 void HciInitCmd();
@@ -37,8 +41,11 @@ void HciCloseCmd();
 
 void HciSetNumberOfHciCmd(uint8_t numberOfHciCmd);
 
-void HciCmdOnCommandComplete(uint16_t opCode);
-void HciCmdOnCommandStatus(uint16_t opCode, uint8_t status);
+// Returns false when the Complete was absorbed as the late answer of a timed-out command of the
+// same opcode, or when no pending command of this opcode is tracked (in both cases the caller
+// must not dispatch it to the upper layers); returns true when a pending command matched.
+bool HciCmdOnCommandComplete(uint16_t opCode);
+bool HciCmdOnCommandStatus(uint16_t opCode, uint8_t status);
 
 HciCmd *HciAllocCmd(uint16_t opCode, const void *param, size_t paramLength);
 int HciSendCmd(HciCmd *cmd);

@@ -96,8 +96,16 @@ void QueueEnqueue(Queue *queue, void *data)
     SemaphoreWait(queue->enqueueSem);
 
     MutexLock(queue->mutex);
-    ListAddLast(queue->list, data);
+    bool appended = ListAddLast(queue->list, data);
     MutexUnlock(queue->mutex);
+    if (!appended) {
+        // ListAddLast failed (OOM): the data was NOT appended. Posting the dequeue
+        // semaphore would wake a consumer into a NULL dequeue (ASSERT in list.c) and
+        // desynchronize the semaphore counts from the list length, so the post is
+        // skipped. This void API cannot report the loss; callers that must react to it
+        // should use QueueTryEnqueue instead.
+        return;
+    }
 
     SemaphorePost(queue->dequeueSem);
 }
@@ -112,8 +120,14 @@ bool QueueTryEnqueue(Queue *queue, void *data)
     }
 
     MutexLock(queue->mutex);
-    ListAddLast(queue->list, data);
+    bool appended = ListAddLast(queue->list, data);
     MutexUnlock(queue->mutex);
+    if (!appended) {
+        // ListAddLast failed (OOM): the data was NOT appended and the dequeue side is
+        // not woken. Report the failure so the caller can release the data it owns
+        // (e.g. BTM_RunTaskInProcessingQueueNoBlock frees the task block on false).
+        return false;
+    }
 
     SemaphorePost(queue->dequeueSem);
 
