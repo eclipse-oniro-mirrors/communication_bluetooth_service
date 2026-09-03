@@ -99,8 +99,11 @@ static const char *g_leAndSharedModules[] = {
     MODULE_NAME_ISO,
 };
 
-static const int G_COUNT_OF_LE_MODULES = 0;
-static const char *g_leModules[] = {};
+static const int G_COUNT_OF_LE_MODULES = 1;
+static const char *g_leModules[] = {
+    // ISO also listed in g_leAndSharedModules; this table covers the BR/EDR-first enable order
+    MODULE_NAME_ISO,
+};
 
 static List *g_btmCallbackList = NULL;
 static Mutex *g_btmCallbackListLock = NULL;

@@ -189,6 +189,10 @@ int HCI_SniffSubrating(const HciSniffSubratingParam *param);
 int HCI_SetEventMask(const HciSetEventMaskParam *param);
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
+// 7.3.69 Set Event Mask Page 2 Command
+int HCI_SetEventMaskPage2(const HciSetEventMaskPage2Param *param);
+
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.3.2 Reset Command
 int HCI_Reset(void);
 
@@ -268,6 +272,10 @@ int HCI_WriteAuthenticatedPayloadTimeout(const HciWriteAuthenticatedPayloadTimeo
 // 7.3.95 Read Local OOB Extended Data Command
 int HCI_ReadLocalOOBExtendedData(void);
 
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.3.102 Set Min Encryption Key Size Command
+int HCI_SetMinEncryptionKeySize(const HciSetMinEncryptionKeySizeParam *param);
+
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.4.1 Read Local Version Information Command
 int HCI_ReadLocalVersionInformation(void);
@@ -307,6 +315,10 @@ int HCI_LeSetEventMask(const HciLeSetEventMaskParam *param);
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.8.2 LE Read Buffer Size Command
 int HCI_LeReadBufferSize(void);
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.72 LE Read Buffer Size V2 Command
+int HCI_LeReadBufferSizeV2(void);
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.8.3 LE Read Local Supported Features Command
@@ -503,6 +515,11 @@ int HCI_LeSetPrivacyMode(const HciLeSetPrivacyModeParam *param);
 #define FLUSHABLE_PACKET 1
 int HCI_SendAclData(uint16_t handle, uint8_t flushable, Packet *packet);
 
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 4, Part E
+// 5.4.5 HCI ISO Data packets; ISO_Data_Load_Length is a 14-bit field (max 0x3FFF).
+#define ISO_DATA_LOAD_LENGTH_MAX 0x3FFF
+int HCI_SendIsoData(uint16_t handle, uint8_t pbFlag, uint8_t tsFlag, Packet *packet);
+
 #define TRANSMISSON_TYPE_H2C_CMD 1
 #define TRANSMISSON_TYPE_C2H_EVENT 2
 #define TRANSMISSON_TYPE_H2C_DATA 3
@@ -639,6 +656,18 @@ int HCI_LeSetPathLossReportingEnable(const HciLeSetPathLossReportingEnableParam 
 // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
 // 7.8.121 LE Set Transmit Power Reporting Enable Command
 int HCI_LeSetTransmitPowerReportingEnable(const HciLeSetTransmitPowerReportingEnableParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.8.122 LE Set Data Related Address Changes Command
+// RESERVED: HCI plumbing only - no in-repo caller and no completion-callback
+// registration exists yet, so a Command Complete for this opcode would be
+// silently dropped and the caller would only learn via command timeout. Do not
+// call from upper layers until the event path is wired.
+int HCI_LeSetDataRelatedAddressChanges(const HciLeSetDataRelatedAddressChangesParam *param);
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.8.123-7.8.124 Connection Subrating Commands
+int HCI_LeSetDefaultSubrate(const HciLeSetDefaultSubrateParam *param);
+int HCI_LeSubrateRequest(const HciLeSubrateRequestParam *param);
 #ifdef __cplusplus
 }
 #endif

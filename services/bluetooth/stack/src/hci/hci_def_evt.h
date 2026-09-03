@@ -119,6 +119,21 @@ typedef struct {
     uint8_t encryptionEnabled;
 } HciEncryptionChangeEventParam;
 
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.7.8 Encryption Change [v2] Event (payload layout verified against the
+// amended 2024 spec table: Status + Connection_Handle + Encryption_Enabled +
+// Encryption_Key_Size, 5 octets including Status).
+#define HCI_ENCRYPTION_CHANGE_V2_EVENT 0x59
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint8_t encryptionEnabled;
+    // Key size in octets (0x01-0x10). Shall be ignored for LE connections and
+    // when Link Level Encryption is OFF.
+    uint8_t encryptionKeySize;
+} HciEncryptionChangeV2EventParam;
+
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.7.9 Change Connection Link Key Complete Event
 #define HCI_CHANGE_CONNECTION_LINK_KEY_COMPLETE_EVENT 0x09

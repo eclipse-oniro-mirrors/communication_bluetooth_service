@@ -215,6 +215,22 @@ int GAP_LePeriodicAdvSetData(uint8_t advHandle, uint8_t operation, uint8_t advDa
 int GAP_LePeriodicAdvSetEnable(uint8_t enable, uint8_t advHandle);
 
 /**
+ * @brief       Enable periodic advertising of an advertising set with the
+ *              5.3 Include ADI option.
+ * @param[in]   enable              bit 0: 0x00 disable, 0x01 enable; bit 1:
+ *                                  0x02 also include the ADI field in the
+ *                                  AUX_SYNC_IND PDUs (Vol 4, Part E, 7.8.63
+ *                                  Enable parameter, 5.3; ignored by the
+ *                                  controller when bit 0 is 0)
+ * @param[in]   advHandle           advertising set handle (0x00-0xEF)
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_NOT_SUPPORT: controller lacks bit 36 (Periodic
+ *                                  Advertising ADI Support) while bit 1 is set
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LePeriodicAdvSetEnableWithAdi(uint8_t enable, uint8_t advHandle);
+
+/**
  * @brief       Register periodic advertising sync callback.
  * @param[in]   callback            periodic advertising sync callback structure
  * @param[in]   context             callback context parameter

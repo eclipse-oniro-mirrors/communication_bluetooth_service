@@ -23,6 +23,7 @@
 
 #include "btm/btm_thread.h"
 #include "hci/hci.h"
+#include "hci/hci_error.h"
 
 #include "iso_task_internal.h"
 
@@ -58,6 +59,7 @@ ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeIsoTestEndComplete, HciLeIsoTestEndReturnParam
 ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeReadIsoLinkQualityComplete, HciLeReadIsoLinkQualityReturnParam)
 ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeReadIsoTxSyncComplete, HciLeReadIsoTxSyncReturnParam)
 ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeRequestPeerScaComplete, HciLeRequestPeerScaCompleteEventParam)
+ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeReadBufferSizeV2Complete, HciLeReadBufferSizeV2ReturnParam)
 
 static int IsoProcessHciEventInTask(TaskFunc run, const void *ctx, uint32_t ctxLen, TaskFunc freeCtx)
 {
@@ -290,7 +292,18 @@ void IsoRecvLeRequestPeerScaComplete(const HciLeRequestPeerScaCompleteEventParam
     }
 }
 
+void IsoRecvLeReadBufferSizeV2Complete(const HciLeReadBufferSizeV2ReturnParam *param)
+{
+    HILOGI(
+        "status: 0x%{public}02x, isoDataPacketLength: 0x%{public}04x", param->status, param->hcLeIsoDataPacketLength);
+    int ret = IsoProcessHciEventInTask(IsoHciEventAdapter_IsoLeReadBufferSizeV2Complete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
 static HciEventCallbacks g_hciEventCallbacks = {
+    .leReadBufferSizeV2Complete = IsoRecvLeReadBufferSizeV2Complete,
     .leSetCigParametersComplete = IsoRecvLeSetCigParametersComplete,
     .leCreateCisComplete = IsoRecvLeCreateCisComplete,
     .leRemoveCigComplete = IsoRecvLeRemoveCigComplete,

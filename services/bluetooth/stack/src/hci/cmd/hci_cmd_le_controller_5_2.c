@@ -159,6 +159,17 @@ int HCI_LeSetDefaultPeriodicAdvertisingSyncTransferParameters(
 }
 
 // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.72 LE Read Buffer Size V2 Command
+int HCI_LeReadBufferSizeV2(void)
+{
+    HciCmd *cmd = HciAllocCmd(HCI_LE_READ_BUFFER_SIZE_V2, NULL, 0);
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
 // 7.8.96 LE Read ISO TX Sync Command
 int HCI_LeReadIsoTxSync(const HciLeReadIsoTxSyncParam *param)
 {

@@ -1194,6 +1194,17 @@ typedef struct {
 
 typedef HciStatusParam HciWriteExtendedInquiryLengthReturnParam;
 
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.3.102 Set Min Encryption Key Size Command (BR/EDR transport wide
+// setting; does not affect existing connections).
+#define HCI_SET_MIN_ENCRYPTION_KEY_SIZE MAKE_OPCODE(0x0084, HCI_COMMAND_OGF_CONTTOLLER_AND_BASEBAND)
+
+typedef struct {
+    uint8_t minEncryptionKeySize;
+} HciSetMinEncryptionKeySizeParam;
+
+typedef HciStatusParam HciSetMinEncryptionKeySizeReturnParam;
+
 #pragma pack(0)
 
 #ifdef __cplusplus

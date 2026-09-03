@@ -20,6 +20,7 @@
 #define ISO_UINT8_BITS 8     // bits per octet, shift amount between consecutive bytes
 #define ISO_UINT24_BYTES 3   // octets of a 24-bit little-endian value
 #define ISO_UINT16_BYTES 2   // octets of a 16-bit little-endian value
+#define ISO_UINT32_BYTES 4   // octets of a 32-bit little-endian value
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -30,6 +31,7 @@
 
 #include "alarm.h"
 #include "list.h"
+#include "packet.h"
 
 #include "hci/hci_def_evt.h"
 #include "hci/hci_def_le_cmd.h"
@@ -80,7 +82,8 @@ typedef struct {
 } IsoBigInfo;
 
 typedef struct {
-    List *bigList;
+    List *bigList;   // BIGs created by this host (broadcaster)
+    List *syncList;  // BIGs synchronized by this host (receiver)
 } IsoBigBlock;
 
 typedef struct {
@@ -147,7 +150,74 @@ typedef struct {
     void *testCallbackContext;
     const IsoLeStatusQueryCallback *statusQueryCallback;
     void *statusQueryCallbackContext;
+    const IsoLeSduCallback *sduCallback;
+    void *sduCallbackContext;
+    uint16_t isoDataPacketLength;
 } IsoLeMng;
+
+// ISO_SDU_Length is a 12-bit field in the ISO_Data_Load header (Vol 4, Part E, 5.4.5,
+// Figure 5.6); bits 12-13 are RFU and bits 14-15 are the Packet_Status_Flag.
+#define ISO_SDU_LENGTH_MAX 0x0FFF
+#define ISO_SDU_PACKET_STATUS_SHIFT 14  // bit position of the 2-bit Packet_Status_Flag
+#define ISO_SDU_PACKET_STATUS_MASK 0x3  // mask of the Packet_Status_Flag in the value above
+
+// Self-contained reassembly state for one connection, drivable without a live CIS.
+typedef struct {
+    bool inProgress;         // a fragmented SDU is being reassembled
+    uint16_t sduLength;      // ISO_SDU_Length of the SDU being reassembled
+    uint16_t receivedLength; // bytes accumulated so far
+    uint16_t seqNum;         // Packet_Sequence_Number of the SDU
+    uint32_t timestamp;      // Time_Stamp of the SDU (unit: us), 0 when TS_Flag was clear
+    uint8_t packetStatus;    // Packet_Status_Flag read from the first fragment
+    uint8_t *buffer;         // reassembly buffer, allocated on the first fragment
+} IsoSduRxState;
+
+// Parsed ISO_Data_Load header of a 0b00/0b10 fragment (Vol 4, Part E, 5.4.5, Figure 5.6).
+typedef struct {
+    uint32_t timestamp;   // Time_Stamp (us); 0 when TS_Flag was clear
+    uint16_t seqNum;      // Packet_Sequence_Number of the SDU
+    uint16_t sduLength;   // ISO_SDU_Length (12-bit payload length field)
+    uint8_t packetStatus; // Packet_Status_Flag of the SDU
+} IsoSduRxHeader;
+
+// Result of one HCI ISO data packet; sduComplete means an SDU is delivered in data/length.
+typedef struct {
+    bool sduComplete;
+    uint16_t seqNum;
+    uint32_t timestamp;
+    uint8_t packetStatus;
+    const uint8_t *data;
+    uint16_t length;
+} IsoSduRxResult;
+
+// Input of IsoSduRxOnPacket: one HCI ISO data fragment (the connection is implicit,
+// the caller resolved it to its IsoSduRxState).
+typedef struct {
+    uint8_t pbFlag;      // PB_Flag of this fragment (0b00/0b01/0b10/0b11)
+    uint8_t tsFlag;      // whether the ISO_Data_Load carries a Time_Stamp field
+    const uint8_t *load; // ISO_Data_Load (header first for 0b00/0b10 fragments)
+    uint16_t loadLength; // size of load
+} IsoSduFragmentParam;
+
+// One HCI ISO data packet fragment of an SDU, produced by IsoBuildIsoDataFragments.
+typedef struct {
+    uint8_t pbFlag;           // PB_Flag of this fragment (0b00/0b01/0b10/0b11)
+    uint8_t loadHeaderLength; // header size with (TS) / without TS for first/complete fragments, 0 otherwise
+    uint8_t loadHeader[ISO_UINT32_BYTES + ISO_UINT16_BYTES + ISO_UINT16_BYTES];
+                              // pre-serialized ISO_Data_Load header (TS + PSN + ISO_SDU_Length)
+    uint16_t dataOffset;      // offset of this fragment's data within the SDU
+    uint16_t dataLength;      // length of this fragment's data
+} IsoIsoDataSegment;
+
+// Feeds one HCI ISO data fragment into the reassembly state machine. On a completed
+// SDU, result->sduComplete is set and result->data points into the internal reassembly
+// buffer: the caller must copy it or otherwise consume it, then call IsoSduRxResetState.
+// Error paths reset the state internally and never set sduComplete.
+int IsoSduRxOnPacket(IsoSduRxState *state, const IsoSduFragmentParam *fragment, IsoSduRxResult *result);
+void IsoSduRxResetState(IsoSduRxState *state);
+uint16_t IsoIsoDataSegmentCount(uint16_t sduLength, uint16_t maxPacketLength, uint8_t tsFlag);
+int IsoBuildIsoDataFragments(const IsoLeSendIsoDataParam *param, uint16_t maxPacketLength,
+    IsoIsoDataSegment *segmentList);
 
 bool IsoIsEnable(void);
 IsoLeMng *IsoGetMng(void);
@@ -229,6 +299,17 @@ int IsoLeReadIsoLinkQuality(uint16_t connectionHandle);
 int IsoLeReadIsoTxSync(uint16_t connectionHandle);
 int IsoLeRequestPeerSca(uint16_t connectionHandle);
 
+int IsoRegisterSduCallback(const IsoLeSduCallback *callback, void *context);
+int IsoDeregisterSduCallback(void);
+int IsoLeSendIsoData(const IsoLeSendIsoDataParam *param);
+
+void IsoRegisterHciDataCallbacks(void);
+void IsoDeregisterHciDataCallbacks(void);
+
+void IsoOnIsoData(uint16_t handle, uint8_t pbFlag, uint8_t tsFlag, Packet *packet);
+void IsoLeReadBufferSizeV2Complete(const HciLeReadBufferSizeV2ReturnParam *param);
+void IsoDataRemoveRxContext(uint16_t connectionHandle);
+
 void IsoLeSetCigParametersComplete(const HciLeSetCigParametersReturnParam *param);
 void IsoLeCreateCisComplete(const HciLeCreateCisReturnParam *param);
 void IsoLeRemoveCigComplete(const HciLeRemoveCigReturnParam *param);
@@ -276,6 +357,7 @@ void IsoRecvLeIsoTestEndComplete(const HciLeIsoTestEndReturnParam *param);
 void IsoRecvLeReadIsoLinkQualityComplete(const HciLeReadIsoLinkQualityReturnParam *param);
 void IsoRecvLeReadIsoTxSyncComplete(const HciLeReadIsoTxSyncReturnParam *param);
 void IsoRecvLeRequestPeerScaComplete(const HciLeRequestPeerScaCompleteEventParam *param);
+void IsoRecvLeReadBufferSizeV2Complete(const HciLeReadBufferSizeV2ReturnParam *param);
 
 void IsoRegisterHciEventCallbacks(void);
 void IsoDeregisterHciEventCallbacks(void);

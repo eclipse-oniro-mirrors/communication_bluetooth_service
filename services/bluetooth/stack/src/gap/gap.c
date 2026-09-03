@@ -108,6 +108,85 @@ static void GapInitCleanupBlocks(void)
     (void)memset_s(&g_gapMng, sizeof(GapMng), 0x00, sizeof(GapMng));
 }
 
+// LE init steps of GapInitializeTask (5.2 groups, then the 5.3 subrate group),
+// each unwinding what it or its predecessors brought up when its own init
+// fails. Split out of GapInitializeTask so every step stays under the
+// per-function size limit; the chained caller keeps the all-or-nothing
+// semantics the inline blocks had.
+static bool GapInitLeAdvSyncGroup(void)
+{
+    int ret = GapLePeriodicAdvSyncInit();
+    if (ret != GAP_SUCCESS) {
+        LOG_ERROR("%{public}s: GapLePeriodicAdvSyncInit failed: %{public}d.", __FUNCTION__, ret);
+        MutexDelete(g_gapMng.le.exAdvBlock.lock);
+        GapInitCleanupBlocks();
+        return false;
+    }
+    return true;
+}
+
+static bool GapInitLeCallbackGroup(void)
+{
+    int ret = GapLeCallbackInit();
+    if (ret != GAP_SUCCESS) {
+        LOG_ERROR("%{public}s: GapLeCallbackInit failed: %{public}d.", __FUNCTION__, ret);
+        GapLeCallbackDeinit();
+        GapLePeriodicAdvSyncDeinit();
+        MutexDelete(g_gapMng.le.exAdvBlock.lock);
+        GapInitCleanupBlocks();
+        return false;
+    }
+    return true;
+}
+
+static bool GapInitLeCteGroup(void)
+{
+    int ret = GapLeCteCallbackInit();
+    if (ret != GAP_SUCCESS) {
+        LOG_ERROR("%{public}s: GapLeCteCallbackInit failed: %{public}d.", __FUNCTION__, ret);
+        GapLeCteCallbackDeinit();
+        GapLeCallbackDeinit();
+        GapLePeriodicAdvSyncDeinit();
+        MutexDelete(g_gapMng.le.exAdvBlock.lock);
+        GapInitCleanupBlocks();
+        return false;
+    }
+    return true;
+}
+
+static bool GapInitLePowerControlGroup(void)
+{
+    int ret = GapLePowerControlCallbackInit();
+    if (ret != GAP_SUCCESS) {
+        LOG_ERROR("%{public}s: GapLePowerControlCallbackInit failed: %{public}d.", __FUNCTION__, ret);
+        GapLePowerControlCallbackDeinit();
+        GapLeCteCallbackDeinit();
+        GapLeCallbackDeinit();
+        GapLePeriodicAdvSyncDeinit();
+        MutexDelete(g_gapMng.le.exAdvBlock.lock);
+        GapInitCleanupBlocks();
+        return false;
+    }
+    return true;
+}
+
+static bool GapInitLeSubrateGroup(void)
+{
+    int ret = GapLeSubrateCallbackInit();
+    if (ret != GAP_SUCCESS) {
+        LOG_ERROR("%{public}s: GapLeSubrateCallbackInit failed: %{public}d.", __FUNCTION__, ret);
+        GapLeSubrateCallbackDeinit();
+        GapLePowerControlCallbackDeinit();
+        GapLeCteCallbackDeinit();
+        GapLeCallbackDeinit();
+        GapLePeriodicAdvSyncDeinit();
+        MutexDelete(g_gapMng.le.exAdvBlock.lock);
+        GapInitCleanupBlocks();
+        return false;
+    }
+    return true;
+}
+
 static void GapInitializeTask(void *ctx)
 {
     LOG_DEBUG("%{public}s:", __FUNCTION__);
@@ -122,44 +201,8 @@ static void GapInitializeTask(void *ctx)
     }
 
 #ifdef GAP_LE_SUPPORT
-    ret = GapLePeriodicAdvSyncInit();
-    if (ret != GAP_SUCCESS) {
-        LOG_ERROR("%{public}s: GapLePeriodicAdvSyncInit failed: %{public}d.", __FUNCTION__, ret);
-        MutexDelete(g_gapMng.le.exAdvBlock.lock);
-        GapInitCleanupBlocks();
-        return;
-    }
-
-    ret = GapLeCallbackInit();
-    if (ret != GAP_SUCCESS) {
-        LOG_ERROR("%{public}s: GapLeCallbackInit failed: %{public}d.", __FUNCTION__, ret);
-        GapLeCallbackDeinit();
-        GapLePeriodicAdvSyncDeinit();
-        MutexDelete(g_gapMng.le.exAdvBlock.lock);
-        GapInitCleanupBlocks();
-        return;
-    }
-
-    ret = GapLeCteCallbackInit();
-    if (ret != GAP_SUCCESS) {
-        LOG_ERROR("%{public}s: GapLeCteCallbackInit failed: %{public}d.", __FUNCTION__, ret);
-        GapLeCteCallbackDeinit();
-        GapLeCallbackDeinit();
-        GapLePeriodicAdvSyncDeinit();
-        MutexDelete(g_gapMng.le.exAdvBlock.lock);
-        GapInitCleanupBlocks();
-        return;
-    }
-
-    ret = GapLePowerControlCallbackInit();
-    if (ret != GAP_SUCCESS) {
-        LOG_ERROR("%{public}s: GapLePowerControlCallbackInit failed: %{public}d.", __FUNCTION__, ret);
-        GapLePowerControlCallbackDeinit();
-        GapLeCteCallbackDeinit();
-        GapLeCallbackDeinit();
-        GapLePeriodicAdvSyncDeinit();
-        MutexDelete(g_gapMng.le.exAdvBlock.lock);
-        GapInitCleanupBlocks();
+    if (!GapInitLeAdvSyncGroup() || !GapInitLeCallbackGroup() || !GapInitLeCteGroup() ||
+        !GapInitLePowerControlGroup() || !GapInitLeSubrateGroup()) {
         return;
     }
 #endif
@@ -340,6 +383,7 @@ static void GapFinalizeTask(void *ctx)
     GapLePeriodicAdvSyncDeinit();
     GapLeCteCallbackDeinit();
     GapLePowerControlCallbackDeinit();
+    GapLeSubrateCallbackDeinit();
 
     ListDelete(g_gapMng.le.connectionInfoBlock.deviceList);
     ListDelete(g_gapMng.le.signatureBlock.RequestList);
@@ -1466,7 +1510,8 @@ int GAP_LeSetStaticIdentityAddr(uint8_t addr[BT_ADDRESS_SIZE])
 
     localInfo = GapGetLeLocalInfo();
     if (localInfo->addr.type == BT_PUBLIC_DEVICE_ADDRESS) {
-        LOG_WARN("%{public}s: have public address " BT_ADDR_FMT, __FUNCTION__, BT_ADDR_FMT_OUTPUT(localInfo->addr.addr));
+        LOG_WARN("%{public}s: have public address " BT_ADDR_FMT, __FUNCTION__,
+            BT_ADDR_FMT_OUTPUT(localInfo->addr.addr));
         localInfo->addr.type = BT_RANDOM_DEVICE_ADDRESS;
     }
     (void)memcpy_s(localInfo->addr.addr, BT_ADDRESS_SIZE, addr, BT_ADDRESS_SIZE);

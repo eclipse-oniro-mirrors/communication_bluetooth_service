@@ -429,6 +429,44 @@ int GAPIF_LePeriodicAdvSetEnable(uint8_t enable, uint8_t advHandle)
     return ret;
 }
 
+static void GapLePeriodicAdvSetEnableWithAdiTask(void *ctx)
+{
+    GapLePeriodicAdvSetEnableInfo *info = ctx;
+    info->result = GAP_LePeriodicAdvSetEnableWithAdi(info->enable, info->advHandle);
+}
+
+int GAPIF_LePeriodicAdvSetEnableWithAdi(uint8_t enable, uint8_t advHandle)
+{
+    // 5.3 Enable parameter: bit 0 advertising enable, bit 1 include ADI.
+    if (enable > GAP_PERIODIC_ADV_ENABLE_TRUE_ADI || advHandle > GAP_LE_ADV_HANDLE_MAX) {
+        return BT_BAD_PARAM;
+    }
+
+    LOG_INFO("%{public}s: advHandle:%hhu enable:%hhu", __FUNCTION__, advHandle, enable);
+    GapLePeriodicAdvSetEnableInfo *ctx = MEM_MALLOC.alloc(sizeof(GapLePeriodicAdvSetEnableInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    if (memset_s(ctx, sizeof(GapLePeriodicAdvSetEnableInfo), 0x00, sizeof(GapLePeriodicAdvSetEnableInfo)) != EOK) {
+        MEM_MALLOC.free(ctx);
+        ctx = NULL;
+        return BT_OPERATION_FAILED;
+    }
+
+    ctx->enable = enable;
+    ctx->advHandle = advHandle;
+
+    int ret = GapRunTaskBlockProcess(GapLePeriodicAdvSetEnableWithAdiTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    ctx = NULL;
+    return ret;
+}
+
 typedef struct {
     int result;
     const GapPeriodicAdvSyncCallback *callback;

@@ -42,6 +42,9 @@ NO_SANITIZE("cfi") int32_t BluetoothHciCallbacks::OnReceivedHciPacket(BtType typ
             case BtType::SCO_DATA:
                 packetType = BtPacketType::PACKET_TYPE_SCO;
                 break;
+            case BtType::ISO_DATA:
+                packetType = BtPacketType::PACKET_TYPE_ISO;
+                break;
             default:
                 break;
         }

@@ -46,10 +46,23 @@ extern "C" {
 #define LE_FEATURE_BIT_PERIODIC_ADVERTISING_SYNC_TRANSFER_RECIPIENT 25
 #define LE_FEATURE_BIT_SLEEP_CLOCK_ACCURACY_UPDATES 26
 #define LE_FEATURE_BIT_REMOTE_PUBLIC_KEY_VALIDATION 27
-
 // BLUETOOTH SPECIFICATION Version 5.2 | Vol 6, Part B
-// 4.6.34 Power Control Request feature bit.
-#define LE_FEATURE_BIT_POWER_CONTROL 52
+// 4.6.28-4.6.35 FEATURE SUPPORT (Connected Isochronous Stream / Isochronous Broadcast)
+#define LE_FEATURE_BIT_CONNECTED_ISOCHRONOUS_STREAM_MASTER 28
+#define LE_FEATURE_BIT_CONNECTED_ISOCHRONOUS_STREAM_SLAVE 29
+#define LE_FEATURE_BIT_ISOCHRONOUS_BROADCASTER 30
+#define LE_FEATURE_BIT_SYNCHRONIZED_RECEIVER 31
+#define LE_FEATURE_BIT_ISOCHRONOUS_CHANNELS_HOST 32
+#define LE_FEATURE_BIT_POWER_CONTROL_REQUEST 33
+#define LE_FEATURE_BIT_POWER_CHANGE_INDICATION 34
+#define LE_FEATURE_BIT_PATH_LOSS_MONITORING 35
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 6, Part B
+// 4.6.36-4.6.39 FEATURE SUPPORT (ADI / Connection Subrating / Channel Classification)
+#define LE_FEATURE_BIT_PERIODIC_ADV_ADI_SUPPORT 36
+#define LE_FEATURE_BIT_CONNECTION_SUBRATING 37
+#define LE_FEATURE_BIT_CONNECTION_SUBRATING_HOST_SUPPORT 38
+#define LE_FEATURE_BIT_CHANNEL_CLASSIFICATION 39
 
 // Number of bits per feature byte (Bluetooth spec Vol 6, Part B, 4.6).
 #define LE_FEATURE_BITS_PER_BYTE 8
@@ -169,11 +182,65 @@ static inline int HciSupportRemotePublicKeyValidation(const uint8_t *features)
 }
 
 // BLUETOOTH SPECIFICATION Version 5.2 | Vol 6, Part B
-// 4.6.34 Power Control Request. Without this feature the controller does not
-// support LE Set Path Loss Reporting Parameters / LE Transmit Power Reporting.
-static inline int HciSupportLePowerControl(const uint8_t *features)
+// 4.6.28-4.6.35 FEATURE SUPPORT (Connected Isochronous Stream / Isochronous Broadcast)
+static inline int HciSupportConnectedIsochronousStreamMaster(const uint8_t *features)
 {
-    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_POWER_CONTROL);
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_CONNECTED_ISOCHRONOUS_STREAM_MASTER);
+}
+
+static inline int HciSupportConnectedIsochronousStreamSlave(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_CONNECTED_ISOCHRONOUS_STREAM_SLAVE);
+}
+
+static inline int HciSupportIsochronousBroadcaster(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_ISOCHRONOUS_BROADCASTER);
+}
+
+static inline int HciSupportSynchronizedReceiver(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_SYNCHRONIZED_RECEIVER);
+}
+
+static inline int HciSupportIsochronousChannelsHost(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_ISOCHRONOUS_CHANNELS_HOST);
+}
+
+static inline int HciSupportLePowerControlRequest(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_POWER_CONTROL_REQUEST);
+}
+
+static inline int HciSupportLePowerChangeIndication(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_POWER_CHANGE_INDICATION);
+}
+
+static inline int HciSupportLePathLossMonitoring(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_PATH_LOSS_MONITORING);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 6, Part B
+// 4.6.36-4.6.39 FEATURE SUPPORT (ADI / Connection Subrating / Channel Classification)
+static inline int HciSupportLePeriodicAdvAdiSupport(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_PERIODIC_ADV_ADI_SUPPORT);
+}
+
+static inline int HciSupportLeConnectionSubrating(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_CONNECTION_SUBRATING);
+}
+
+// Bit38 (Connection Subrating Host Support) is a Host Support bit written to the
+// controller via LE Set Host Feature (bitNumber=0x26, see BtmLeSetHostFeature);
+// it needs no local feature query wrapper.
+static inline int HciSupportLeChannelClassification(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_CHANNEL_CLASSIFICATION);
 }
 
 #ifdef __cplusplus

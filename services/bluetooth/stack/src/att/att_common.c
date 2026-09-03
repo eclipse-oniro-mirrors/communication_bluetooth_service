@@ -2104,6 +2104,14 @@ static void AttRecvDataAsync(const void *context)
     AttRecvDataAsyncContext *attRecvDataAsyncPtr = (AttRecvDataAsyncContext *)context;
     AttGetConnectInfoIndexByCid(attRecvDataAsyncPtr->lcid, &connect);
     if (connect != NULL) {
+        // An ATT PDU is at least the 1-octet Attribute Opcode (Vol 3 Part F 3.3.1 Table 3.2);
+        // drop an empty SDU that cannot form a valid PDU.
+        if (PacketPayloadSize(attRecvDataAsyncPtr->packet) < sizeof(uint8_t)) {
+            LOG_WARN("%{public}s: empty ATT PDU, lcid = %hu, drop", __FUNCTION__, attRecvDataAsyncPtr->lcid);
+            PacketFree(attRecvDataAsyncPtr->packet);
+            MEM_MALLOC.free(attRecvDataAsyncPtr);
+            return;
+        }
         PacketExtractHead(attRecvDataAsyncPtr->packet, &opcode, sizeof(uint8_t));
         Buffer *buffer = PacketContinuousPayload(attRecvDataAsyncPtr->packet);
         recvDataFunction functionPtr = GetFunction(opcode);
@@ -2112,7 +2120,7 @@ static void AttRecvDataAsync(const void *context)
         } else {
             LOG_WARN("%{public}s UnKnow OpCode : %hhu", __FUNCTION__, opcode);
             if ((opcode & 0b01000000) == 0) {
-                AttErrorCode(connect, opcode);
+                AttReplyNotSupported(connect, opcode);
             }
         }
     }
@@ -2182,6 +2190,15 @@ static void AttRecvLeDataAsync(const void *context)
     // to resolve the UATT bearer exactly (Vol 3 Part G 5.3; fixed channel 0x0004).
     connect = AttGetConnectInfoByAclHandleAndLeCid(attRecvLeDataAsyncPtr->aclHandle, LE_CID);
     if (connect != NULL) {
+        // An ATT PDU is at least the 1-octet Attribute Opcode (Vol 3 Part F 3.3.1 Table 3.2);
+        // drop an empty SDU that cannot form a valid PDU.
+        if (PacketPayloadSize(attRecvLeDataAsyncPtr->packet) < sizeof(uint8_t)) {
+            LOG_WARN("%{public}s: empty ATT PDU, aclHandle = %hu, drop", __FUNCTION__,
+                attRecvLeDataAsyncPtr->aclHandle);
+            PacketFree(attRecvLeDataAsyncPtr->packet);
+            MEM_MALLOC.free(attRecvLeDataAsyncPtr);
+            return;
+        }
         PacketExtractHead(attRecvLeDataAsyncPtr->packet, &opcode, sizeof(uint8_t));
         Buffer *buffer = PacketContinuousPayload(attRecvLeDataAsyncPtr->packet);
         recvDataFunction functionPtr = GetFunction(opcode);
@@ -2190,7 +2207,7 @@ static void AttRecvLeDataAsync(const void *context)
         } else {
             LOG_WARN("UnKnow OpCode : %hhu", opcode);
             if ((opcode & 0b01000000) == 0) {
-                AttErrorCode(connect, opcode);
+                AttReplyNotSupported(connect, opcode);
             }
         }
     }
@@ -2715,6 +2732,24 @@ int AttResponseSendData(const AttConnectInfo *connect, const Packet *packet)
  * @param1 connect Indicates the pointer to const AttConnectInfo.
  * @param2 opcode Indicates the opcode.
  */
+void AttReplyNotSupported(AttConnectInfo *connect, uint8_t opcode)
+{
+    if (connect == NULL) {
+        LOG_WARN("%{public}s:connect == NULL, return.", __FUNCTION__);
+        return;
+    }
+    AttError attError = {0};
+    attError.reqOpcode = opcode;
+    attError.attHandleInError = 0x0000;
+    attError.errorCode = ATT_REQUEST_NOT_SUPPORTED;
+    if (connect->transportType == BT_TRANSPORT_BR_EDR) {
+        ATT_ErrorResponse(connect->retGattConnectHandle, &attError);
+    } else {
+        ATT_ErrorResponseCid(connect->retGattConnectHandle, connect->AttConnectID.lecid, &attError);
+    }
+}
+
+/* @deprecated Replaced by AttReplyNotSupported (cid-aware); kept for API compatibility. */
 void AttErrorCode(const AttConnectInfo *connect, uint8_t opcode)
 {
     LOG_INFO("%{public}s enter", __FUNCTION__);

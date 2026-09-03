@@ -1251,6 +1251,23 @@ static void HciEventOnLeReadIsoTxSyncComplete(const void *param, uint8_t length)
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+static void HciEventOnLeReadBufferSizeV2Complete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeReadBufferSizeV2ReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReadBufferSizeV2Complete != NULL) {
+        callbacks->leReadBufferSizeV2Complete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static void HciEventOnLeSetCigParametersComplete(const void *param, uint8_t length)
 {
     if (param == NULL) {
@@ -1604,6 +1621,64 @@ static void HciEventOnLeSetTransmitPowerReportingEnableComplete(const void *para
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.8.123 LE Set Default Subrate Command Complete (status-only payload)
+static void HciEventOnLeSetDefaultSubrateComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeSetDefaultSubrateReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetDefaultSubrateComplete != NULL) {
+        callbacks->leSetDefaultSubrateComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.8.124 LE Subrate Request Command Complete (status-only payload)
+static void HciEventOnLeSubrateRequestComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeSubrateRequestReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSubrateRequestComplete != NULL) {
+        callbacks->leSubrateRequestComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.8.122 LE Set Data Related Address Changes Command Complete (status-only
+// payload)
+static void HciEventOnLeSetDataRelatedAddressChangesComplete(const void *param, uint8_t length)
+{
+    if (param == NULL) {
+        return;
+    }
+    HciLeSetDataRelatedAddressChangesReturnParam returnParam = { 0 };
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetDataRelatedAddressChangesComplete != NULL) {
+        callbacks->leSetDataRelatedAddressChangesComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 // 0x0064 LE Create CIS normally completes via Command_Status + the LE CIS Established
 // event (7.7.65,25), not Command_Complete. A Controller that does not implement the
 // command replies Command_Complete + error (Vol 1 Part F, Section 2.1); deliver that
@@ -1812,7 +1887,7 @@ static HciLeCmdCompleteFunc g_leControllerCommandCompleteMap[] = {
     HciEventOnLeSetDefaultPeriodicAdvertisingSyncTransferParametersComplete, // 0x005D
     NULL,                                                                    // 0x005E
     HciEventOnLeModifySleepClockAccuracyComplete,                            // 0x005F
-    NULL,                                                                    // 0x0060
+    HciEventOnLeReadBufferSizeV2Complete,                                    // 0x0060
     HciEventOnLeReadIsoTxSyncComplete,                                       // 0x0061
     HciEventOnLeSetCigParametersComplete,                                    // 0x0062
     HciEventOnLeSetCigParametersTestComplete,                                // 0x0063
@@ -1839,12 +1914,16 @@ static HciLeCmdCompleteFunc g_leControllerCommandCompleteMap[] = {
     HciEventOnLeSetPathLossReportingParametersComplete,                      // 0x0078
     HciEventOnLeSetPathLossReportingEnableComplete,                          // 0x0079
     HciEventOnLeSetTransmitPowerReportingEnableComplete,                     // 0x007A
+    NULL,                                                                    // 0x007B
+    HciEventOnLeSetDataRelatedAddressChangesComplete,                        // 0x007C
+    HciEventOnLeSetDefaultSubrateComplete,                                   // 0x007D
+    HciEventOnLeSubrateRequestComplete,                                      // 0x007E
 };
 
 // 0x005E is 7.8.93 LE Generate DHKey [v2]: asynchronous command, completion is
 // reported by the LE Generate DHKey Complete event (Subevent 0x09, handled in
 // hci_evt_le.c) - no Command Complete is generated, consistent with v1 (0x0026).
-#define LECONTROLLER_OCF_MAX 0x007A
+#define LECONTROLLER_OCF_MAX 0x007E
 
 void HciEventOnLeCommandComplete(uint16_t opCode, const void *param, uint8_t length)
 {

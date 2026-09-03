@@ -75,6 +75,10 @@ extern "C" {
 #define LE_EVENT_MASK_LE_TRANSMIT_POWER_REPORTING_EVENT   0x0000000100000000
 #define LE_EVENT_MASK_LE_BIGINFO_ADVERTISING_REPORT_EVENT 0x0000000200000000
 
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.8.1 LE Set Event Mask Command (bit 34, subevent code 0x23)
+#define LE_EVENT_MASK_LE_SUBRATE_CHANGE_EVENT            0x0000000400000000
+
 #define LE_EVENT_MASK_DEFAULT 0x000000000000001F
 
 #define LE_EVENT_MASK_CORE_4_0 LE_EVENT_MASK_DEFAULT
@@ -123,6 +127,18 @@ typedef struct {
     uint16_t hcLeAclDataPacketLength;
     uint8_t hcTotalNumLeDataPackets;
 } HciLeReadBufferSizeReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// 7.8.72 LE Read Buffer Size V2 Command
+#define HCI_LE_READ_BUFFER_SIZE_V2 MAKE_OPCODE(0x0060, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint8_t status;
+    uint16_t hcLeAclDataPacketLength;
+    uint8_t hcTotalNumLeAclDataPackets;
+    uint16_t hcLeIsoDataPacketLength;
+    uint8_t hcTotalNumLeIsoDataPackets;
+} HciLeReadBufferSizeV2ReturnParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.8.3 LE Read Local Supported Features Command
@@ -875,7 +891,7 @@ typedef struct {
     uint8_t broadcastCode[16];
 } HciLeCreateBigParam;
 
-// BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 4 Part E
 // 7.8.104 LE Create BIG Test Command
 #define HCI_LE_CREATE_BIG_TEST MAKE_OPCODE(0x0069, HCI_COMMAND_OGF_LE_CONTROLLER)
 
@@ -885,13 +901,15 @@ typedef struct {
     uint8_t numBis;
     uint8_t sduInterval[3];
     uint16_t isoInterval;
-    uint8_t numberOfSdu;
+    uint8_t nse;
     uint16_t maxSdu;
-    uint16_t maxTransportLatency;
-    uint8_t rtn;
+    uint16_t maxPdu;
     uint8_t phy;
     uint8_t packing;
     uint8_t framing;
+    uint8_t bn;
+    uint8_t irc;
+    uint8_t pto;
     uint8_t encryption;
     uint8_t broadcastCode[16];
 } HciLeCreateBigTestParam;
@@ -1134,6 +1152,67 @@ typedef struct {
     uint8_t status;
     uint16_t connectionHandle;
 } HciLeSetTransmitPowerReportingEnableReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.8.122 LE Set Data Related Address Changes command (RPA refresh trigger
+// tied to advertising/scan-response data changes; see the amended 2024 spec).
+#define HCI_LE_SET_DATA_RELATED_ADDRESS_CHANGES MAKE_OPCODE(0x007C, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint8_t advertisingHandle; // Advertising_Handle 0x00~0xEF
+    uint8_t changeReasons;     // bit 0: adv data changed; bit 1: scan resp data changed
+} HciLeSetDataRelatedAddressChangesParam;
+
+typedef struct {
+    uint8_t status;
+} HciLeSetDataRelatedAddressChangesReturnParam;
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.8.123-7.8.124 Connection Subrating commands. Parameter layout verified
+// against the amended 2024 spec tables: Continuation_Number is 2 octets with
+// range 0x0000-0x01F3 (not 1 octet).
+#define HCI_LE_SET_DEFAULT_SUBRATE MAKE_OPCODE(0x007D, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+// Shared Connection Subrating parameter limits (7.8.123/7.8.124, verified
+// against the amended 2024 spec tables). Single maintenance point: the GAP
+// and HCI validation gates (gap_le_subrate.c / hci_cmd_le_controller_5_3.c)
+// reference these, so a limit change needs no cross-layer sync.
+#define LE_SUBRATE_FACTOR_MIN              0x0001
+#define LE_SUBRATE_FACTOR_MAX              0x01F4
+#define LE_SUBRATE_MAX_LATENCY_MAX         0x01F3
+#define LE_SUBRATE_CONTINUATION_MAX        0x01F3
+#define LE_SUBRATE_SUPERVISION_TIMEOUT_MIN 0x000A
+#define LE_SUBRATE_SUPERVISION_TIMEOUT_MAX 0x0C80
+// Subrate_Max x (Max_Latency + 1) must not exceed 500 (7.8.124); beyond that
+// the Controller returns Invalid HCI Command Parameters (0x12).
+#define LE_SUBRATE_MAX_LATENCY_PRODUCT_MAX 500
+
+typedef struct {
+    uint16_t defaultSubrateMin;         // Subrate_Min 1~500 (0x0001~0x01F4)
+    uint16_t defaultSubrateMax;         // Subrate_Max >= Subrate_Min
+    uint16_t defaultMaxLatency;         // Max_Latency 0~499 (0x0000~0x01F3)
+    uint16_t defaultContinuationNumber; // Continuation_Number 0~499 (0x0000~0x01F3)
+    uint16_t defaultSupervisionTimeout; // Supervision_Timeout 100ms~32s, unit 10ms (0x000A~0x0C80)
+} HciLeSetDefaultSubrateParam;
+
+typedef struct {
+    uint8_t status;
+} HciLeSetDefaultSubrateReturnParam;
+
+#define HCI_LE_SUBRATE_REQUEST MAKE_OPCODE(0x007E, HCI_COMMAND_OGF_LE_CONTROLLER)
+
+typedef struct {
+    uint16_t connectionHandle;
+    uint16_t subrateMin;
+    uint16_t subrateMax;
+    uint16_t maxLatency;
+    uint16_t continuationNumber;        // Continuation_Number 2 octets, < Subrate_Max
+    uint16_t supervisionTimeout;        // Supervision_Timeout 100ms~32s, unit 10ms
+} HciLeSubrateRequestParam;
+
+typedef struct {
+    uint8_t status;
+} HciLeSubrateRequestReturnParam;
 
 #pragma pack(0)
 

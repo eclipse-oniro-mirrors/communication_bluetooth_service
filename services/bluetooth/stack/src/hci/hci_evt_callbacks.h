@@ -419,6 +419,9 @@ typedef struct {
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.3.99 Write Extended Inquiry Length Command
     void (*writeExtendedInquiryLengthComplete)(const HciWriteExtendedInquiryLengthReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+    // 7.3.102 Set Min Encryption Key Size Command
+    void (*setMinEncryptionKeySizeComplete)(const HciSetMinEncryptionKeySizeReturnParam *returnParam);
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.4.1 Read Local Version Information Command
     void (*readLocalVersionInformationComplete)(const HciReadLocalVersionInformationReturnParam *returnParam);
@@ -505,6 +508,10 @@ typedef struct {
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.7.8 Encryption Change Event
     void (*encryptionChange)(const HciEncryptionChangeEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+    // 7.7.8 Encryption Change [v2] Event (0x59; carries Encryption_Key_Size
+    // in addition to the v1 fields)
+    void (*encryptionChangeV2)(const HciEncryptionChangeV2EventParam *eventParam);
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.7.9 Change Connection Link Key Complete Event
     void (*changeConnectionLinkKeyComplete)(const HciChangeConnectionLinkKeyCompleteEventParam *eventParam);
@@ -744,6 +751,9 @@ typedef struct {
     // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
     // 7.8.116 LE Read ISO Link Quality Command
     void (*leReadIsoLinkQualityComplete)(const HciLeReadIsoLinkQualityReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
+    // 7.8.72 LE Read Buffer Size V2 Command
+    void (*leReadBufferSizeV2Complete)(const HciLeReadBufferSizeV2ReturnParam *returnParam);
     // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
     // 7.8.117 LE Enhanced Read Transmit Power Level Command
     void (*leEnhancedReadTransmitPowerLevelComplete)(const HciLeEnhancedReadTransmitPowerLevelReturnParam *returnParam);
@@ -1038,6 +1048,16 @@ typedef struct {
     // BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
     // 7.8.94 LE Modify Sleep Clock Accuracy Command Complete
     void (*leModifySleepClockAccuracyComplete)(const HciLeModifySleepClockAccuracyReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+    // 7.8.123 LE Set Default Subrate Command Complete
+    void (*leSetDefaultSubrateComplete)(const HciLeSetDefaultSubrateReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+    // 7.8.124 LE Subrate Request Command Complete
+    void (*leSubrateRequestComplete)(const HciLeSubrateRequestReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+    // 7.8.122 LE Set Data Related Address Changes Command Complete
+    void (*leSetDataRelatedAddressChangesComplete)(
+        const HciLeSetDataRelatedAddressChangesReturnParam *returnParam);
 
     // LE Events
 
@@ -1146,6 +1166,9 @@ typedef struct {
     // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
     // 7.7.65,34 LE BIGInfo Advertising Report Event
     void (*leBigInfoAdvertisingReport)(const HciLeBigInfoAdvertisingReportEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+    // 7.7.65,35 LE Subrate Change Event
+    void (*leSubrateChange)(const HciLeSubrateChangeEventParam *eventParam);
 } HciEventCallbacks;
 
 int HCI_RegisterEventCallbacks(const HciEventCallbacks *callbacks);
@@ -1157,6 +1180,13 @@ typedef struct {
 
 int HCI_RegisterAclCallbacks(const HciAclCallbacks *callbacks);
 int HCI_DeregisterAclCallbacks(const HciAclCallbacks *callbacks);
+
+typedef struct {
+    void (*onIsoData)(uint16_t handle, uint8_t pbFlag, uint8_t tsFlag, Packet *packet);
+} HciIsoCallbacks;
+
+int HCI_RegisterIsoCallbacks(const HciIsoCallbacks *callbacks);
+int HCI_DeregisterIsoCallbacks(const HciIsoCallbacks *callbacks);
 
 typedef struct {
     void (*onCmdTimeout)();

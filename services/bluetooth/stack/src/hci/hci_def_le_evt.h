@@ -525,6 +525,21 @@ typedef struct {
     uint8_t encryption;
 } HciLeBigInfoAdvertisingReportEventParam;
 
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.7.65,35 LE Subrate Change Event. Wire layout verified against the amended
+// 2024 spec: Continuation_Number is 2 octets (0x0000-0x01F3), total payload
+// after the subevent code is 11 octets.
+#define HCI_LE_SUBRATE_CHANGE_EVENT 0x23
+
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint16_t subrateFactor;          // 1~500 (0x0001~0x01F4)
+    uint16_t peripheralLatency;      // 0~499 (0x0000~0x01F3)
+    uint16_t continuationNumber;     // 0~499 (0x0000~0x01F3)
+    uint16_t supervisionTimeout;     // 100ms~32s, unit 10ms (0x000A~0x0C80)
+} HciLeSubrateChangeEventParam;
+
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.7.75 Authenticated Payload Timeout Expired Event
 #define HCI_AUTHENTICATED_PAYLOAD_TIMEOUT_EXPIRED_EVENT 0x57

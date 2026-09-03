@@ -29,6 +29,7 @@
 
 #include "alarm.h"
 #include "acl/hci_acl.h"
+#include "iso/hci_iso.h"
 #include "cmd/hci_cmd.h"
 #include "evt/hci_evt.h"
 #include "hdi_wrapper.h"
@@ -184,6 +185,7 @@ int HCI_Initialize()
         HciInitCmd();
         HciInitEvent();
         HciInitAcl();
+        HciInitIso();
         HciVendorInit();
 
         g_hciTxThread = ThreadCreate("HciTx");
@@ -310,6 +312,7 @@ NO_SANITIZE("cfi") void HCI_Close()
     HciCloseCmd();
     HciCloseEvent();
     HciCloseAcl();
+    HciCloseIso();
     HciCloseFailure();
     HciVendorClose();
 
@@ -348,8 +351,14 @@ static void HciOnReceivedHciPacket(BtPacketType type, const BtPacket *btPacket)
             case PACKET_TYPE_EVENT:
                 hciPacket->type = C2H_EVENT;
                 break;
-            default:
+            case PACKET_TYPE_ISO:
+                hciPacket->type = C2H_ISODATA;
                 break;
+            default:
+                // Unsupported HCI RX packet type: drop it rather than enqueueing an
+                // unclassified packet with an uninitialized type.
+                MEM_MALLOC.free(hciPacket);
+                return;
         }
 
         hciPacket->packet = PacketMalloc(0, 0, btPacket->size);
@@ -385,6 +394,9 @@ NO_SANITIZE("cfi") static void HciSendPacketCallback(void *param)
             case H2C_SCODATA:
                 result = g_hdiLib->hdiSendHciPacket(PACKET_TYPE_SCO, &btPacket);
                 break;
+            case H2C_ISODATA:
+                result = g_hdiLib->hdiSendHciPacket(PACKET_TYPE_ISO, &btPacket);
+                break;
             default:
                 result = UNKNOWN;
                 break;
@@ -414,6 +426,9 @@ static void HciRecvPacketCallback(void *param)
                 break;
             case C2H_EVENT:
                 HciOnEvent(packet->packet);
+                break;
+            case C2H_ISODATA:
+                HciOnIsoData(packet->packet);
                 break;
             case C2H_SCODATA:
                 // NOT IMPLETEMENTED

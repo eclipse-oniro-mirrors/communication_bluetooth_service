@@ -35,6 +35,12 @@ enum {
     SUPPORTED_CMDS_OCTET_35 = 35,
     SUPPORTED_CMDS_OCTET_38 = 38,
     SUPPORTED_CMDS_OCTET_39 = 39,
+    SUPPORTED_CMDS_OCTET_41 = 41,
+    SUPPORTED_CMDS_OCTET_42 = 42,
+    SUPPORTED_CMDS_OCTET_43 = 43,
+    SUPPORTED_CMDS_OCTET_44 = 44,
+    SUPPORTED_CMDS_OCTET_45 = 45,
+    SUPPORTED_CMDS_OCTET_46 = 46,
 };
 
 // Bit indexes within a Supported Commands octet (Vol 2, Part E 6.27).
@@ -97,6 +103,169 @@ static inline int HciSupportLeWriteRfPathCompensation(const uint8_t *cmds)
 static inline int HciSupportLeReadPhy(const uint8_t *cmds)
 {
     return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_35, SUPPORTED_CMDS_BIT_4);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.2 | Vol 4, Part E
+// 6.27 SUPPORTED COMMANDS (LE 5.2 commands, octet 41-44)
+static inline int HciSupportLeReadBufferSizeV2(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_41, SUPPORTED_CMDS_BIT_5);
+}
+
+static inline int HciSupportLeReadIsoTxSync(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_41, SUPPORTED_CMDS_BIT_6);
+}
+
+static inline int HciSupportLeSetCigParameters(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_41, SUPPORTED_CMDS_BIT_7);
+}
+
+static inline int HciSupportLeSetCigParametersTest(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_42, SUPPORTED_CMDS_BIT_0);
+}
+
+static inline int HciSupportLeCreateCis(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_42, SUPPORTED_CMDS_BIT_1);
+}
+
+static inline int HciSupportLeRemoveCig(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_42, SUPPORTED_CMDS_BIT_2);
+}
+
+static inline int HciSupportLeAcceptCisRequest(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_42, SUPPORTED_CMDS_BIT_3);
+}
+
+static inline int HciSupportLeRejectCisRequest(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_42, SUPPORTED_CMDS_BIT_4);
+}
+
+static inline int HciSupportLeCreateBig(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_42, SUPPORTED_CMDS_BIT_5);
+}
+
+static inline int HciSupportLeCreateBigTest(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_42, SUPPORTED_CMDS_BIT_6);
+}
+
+static inline int HciSupportLeTerminateBig(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_42, SUPPORTED_CMDS_BIT_7);
+}
+
+static inline int HciSupportLeBigCreateSync(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_43, SUPPORTED_CMDS_BIT_0);
+}
+
+static inline int HciSupportLeBigTerminateSync(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_43, SUPPORTED_CMDS_BIT_1);
+}
+
+static inline int HciSupportLeRequestPeerSca(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_43, SUPPORTED_CMDS_BIT_2);
+}
+
+static inline int HciSupportLeSetupIsoDataPath(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_43, SUPPORTED_CMDS_BIT_3);
+}
+
+static inline int HciSupportLeRemoveIsoDataPath(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_43, SUPPORTED_CMDS_BIT_4);
+}
+
+static inline int HciSupportLeIsoTransmitTest(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_43, SUPPORTED_CMDS_BIT_5);
+}
+
+static inline int HciSupportLeIsoReceiveTest(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_43, SUPPORTED_CMDS_BIT_6);
+}
+
+static inline int HciSupportLeIsoReadTestCounters(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_43, SUPPORTED_CMDS_BIT_7);
+}
+
+static inline int HciSupportLeIsoTestEnd(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_44, SUPPORTED_CMDS_BIT_0);
+}
+
+static inline int HciSupportLeSetHostFeature(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_44, SUPPORTED_CMDS_BIT_1);
+}
+
+static inline int HciSupportLeReadIsoLinkQuality(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_44, SUPPORTED_CMDS_BIT_2);
+}
+
+static inline int HciSupportLeEnhancedReadTransmitPowerLevel(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_44, SUPPORTED_CMDS_BIT_3);
+}
+
+static inline int HciSupportLeReadRemoteTransmitPowerLevel(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_44, SUPPORTED_CMDS_BIT_4);
+}
+
+static inline int HciSupportLeSetPathLossReportingParameters(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_44, SUPPORTED_CMDS_BIT_5);
+}
+
+static inline int HciSupportLeSetPathLossReportingEnable(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_44, SUPPORTED_CMDS_BIT_6);
+}
+
+static inline int HciSupportLeSetTransmitPowerReportingEnable(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_44, SUPPORTED_CMDS_BIT_7);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E, 6.27 (amended 2024)
+// Bit positions verified against the spec table. Note: octets 45/46 are NOT in
+// OCF order - octet 45 hosts mixed 5.3 additions (bit 6 = HCI_LE_Set_Data_
+// Related_Address_Changes 0x7C, bit 7 = HCI_Set_Min_Encryption_Key_Size
+// 0x0084) and the two subrate commands sit in octet 46 (bit 0 = 0x7D,
+// bit 1 = 0x7E).
+static inline int HciSupportLeSetDataRelatedAddressChanges(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_45, SUPPORTED_CMDS_BIT_6);
+}
+
+static inline int HciSupportLeSetDefaultSubrate(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_46, SUPPORTED_CMDS_BIT_0);
+}
+
+static inline int HciSupportLeSubrateRequest(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_46, SUPPORTED_CMDS_BIT_1);
+}
+
+static inline int HciSupportSetMinEncryptionKeySize(const uint8_t *cmds)
+{
+    return !!HciGetCommandFlag(cmds, SUPPORTED_CMDS_OCTET_45, SUPPORTED_CMDS_BIT_7);
 }
 
 #ifdef __cplusplus

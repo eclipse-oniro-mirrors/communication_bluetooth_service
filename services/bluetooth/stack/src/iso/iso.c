@@ -24,6 +24,8 @@
 #include "btm.h"
 #include "btm/btm_thread.h"
 
+#include "hci/hci.h"
+
 #include "iso_task_internal.h"
 
 static IsoLeMng g_isoMng;
@@ -42,6 +44,7 @@ static void IsoInitializeTask(void *ctx)
     g_isoMng.cigBlock.cigList = ListCreate(IsoFreeNode);
     g_isoMng.cisList = ListCreate(IsoFreeNode);
     g_isoMng.bigBlock.bigList = ListCreate(IsoFreeNode);
+    g_isoMng.bigBlock.syncList = ListCreate(IsoFreeNode);
     // watchdog of the LE Remove CIG pending slot (see IsoLeRemoveCig); an alarm failure only
     // degrades to the old forever-BT_ALREADY behavior, unlike the lists it is not fatal
     g_isoMng.removePending.timer = AlarmCreate("isoRemoveCig", false);
@@ -50,7 +53,7 @@ static void IsoInitializeTask(void *ctx)
     // the module stays disabled (all public APIs check IsoIsEnable) and the disabled
     // path null-guards the lists below.
     if ((g_isoMng.cigBlock.cigList == NULL) || (g_isoMng.cisList == NULL) ||
-        (g_isoMng.bigBlock.bigList == NULL)) {
+        (g_isoMng.bigBlock.bigList == NULL) || (g_isoMng.bigBlock.syncList == NULL)) {
         LOG_ERROR("%{public}s: ListCreate failed", __FUNCTION__);
         if (g_isoMng.cigBlock.cigList != NULL) {
             ListClear(g_isoMng.cigBlock.cigList);
@@ -63,6 +66,10 @@ static void IsoInitializeTask(void *ctx)
         if (g_isoMng.bigBlock.bigList != NULL) {
             ListClear(g_isoMng.bigBlock.bigList);
             g_isoMng.bigBlock.bigList = NULL;
+        }
+        if (g_isoMng.bigBlock.syncList != NULL) {
+            ListClear(g_isoMng.bigBlock.syncList);
+            g_isoMng.bigBlock.syncList = NULL;
         }
         g_isoMng.isEnable = false;
     }
@@ -100,9 +107,12 @@ static void IsoEnableTask(void *ctx)
     }
     // The lists must exist: their consumers run whenever the module is enabled.
     if (BTM_IsControllerSupportLe() && (g_isoMng.cigBlock.cigList != NULL) && (g_isoMng.cisList != NULL) &&
-        (g_isoMng.bigBlock.bigList != NULL)) {
+        (g_isoMng.bigBlock.bigList != NULL) && (g_isoMng.bigBlock.syncList != NULL)) {
         g_isoMng.isEnable = true;
         IsoRegisterHciEventCallbacks();
+        IsoRegisterHciDataCallbacks();
+        // 0x0060: read the ISO buffer size; drives the HCI ISO data fragmentation granularity
+        HCI_LeReadBufferSizeV2();
     }
 }
 
@@ -122,6 +132,7 @@ static void IsoDisableTask(void *ctx)
 
     (void)ctx;
     IsoDeregisterHciEventCallbacks();
+    IsoDeregisterHciDataCallbacks();
     if (g_isoMng.cigBlock.cigList != NULL) {
         ListClear(g_isoMng.cigBlock.cigList);
     }
@@ -130,6 +141,9 @@ static void IsoDisableTask(void *ctx)
     }
     if (g_isoMng.bigBlock.bigList != NULL) {
         ListClear(g_isoMng.bigBlock.bigList);
+    }
+    if (g_isoMng.bigBlock.syncList != NULL) {
+        ListClear(g_isoMng.bigBlock.syncList);
     }
     // A RemoveCIG whose Complete event never arrived (callbacks are deregistered
     // above) would otherwise block every later ISOIF_LeRemoveCig with BT_ALREADY.
@@ -155,6 +169,8 @@ static void IsoDisableTask(void *ctx)
     g_isoMng.testCallbackContext = NULL;
     g_isoMng.statusQueryCallback = NULL;
     g_isoMng.statusQueryCallbackContext = NULL;
+    g_isoMng.sduCallback = NULL;
+    g_isoMng.sduCallbackContext = NULL;
     g_isoMng.isEnable = false;
 }
 
@@ -217,6 +233,7 @@ static void IsoFinalizeTask(void *ctx)
     ListDelete(g_isoMng.cigBlock.cigList);
     ListDelete(g_isoMng.cisList);
     ListDelete(g_isoMng.bigBlock.bigList);
+    ListDelete(g_isoMng.bigBlock.syncList);
 
     (void)memset_s(&g_isoMng, sizeof(IsoLeMng), 0x00, sizeof(IsoLeMng));
 }

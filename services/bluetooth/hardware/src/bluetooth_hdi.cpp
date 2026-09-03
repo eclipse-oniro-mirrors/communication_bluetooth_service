@@ -67,6 +67,9 @@ int HdiSendHciPacket(BtPacketType type, const BtPacket *packet)
         case PACKET_TYPE_SCO:
             btType = BtType::SCO_DATA;
             break;
+        case PACKET_TYPE_ISO:
+            btType = BtType::ISO_DATA;
+            break;
         default:
             break;
     }

@@ -16,7 +16,11 @@
 #ifndef ISO_TASK_INTERNAL_H
 #define ISO_TASK_INTERNAL_H
 
+#include <stdint.h>
+
 #include "event.h"
+
+#include "iso_le_if.h"
 
 #define ISO_WAIT_TIME (-1)
 
@@ -47,6 +51,15 @@ typedef struct {
     void *callback;
     void *context;
 } IsoGeneralCallbackInfo;
+
+typedef struct {
+    // Send parameters (data still points at the caller buffer when queued).
+    IsoLeSendIsoDataParam param;
+    // Owned copy of the SDU data; transmission is async, the caller's buffer may be gone
+    // once ISOIF_LeSendIsoData returns. Freed by the destroy callback; IsoLeSendIsoDataTask
+    // points param.data at this copy before sending.
+    uint8_t *data;
+} IsoLeSendIsoDataInfo;
 
 int IsoRunTaskBlockProcess(void (*func)(void *), void *ctx);
 // |freeCtx| (when non-NULL) is invoked on the ISO queue with |ctx| to release it, so it must be

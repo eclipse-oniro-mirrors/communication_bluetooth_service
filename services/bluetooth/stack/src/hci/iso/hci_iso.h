@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Huawei Device Co., Ltd.
+ * Copyright (C) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,39 +13,28 @@
  * limitations under the License.
  */
 
-#ifndef HCI_DEF_H
-#define HCI_DEF_H
+#ifndef HCI_ISO_H
+#define HCI_ISO_H
 
+#include <stdint.h>
+
+#include "hci/acl/hci_acl.h"
 #include "packet.h"
-
-#include "hci_def_cmd.h"
-#include "hci_def_common.h"
-#include "hci_def_evt.h"
-#include "hci_def_feature.h"
-#include "hci_def_le_cmd.h"
-#include "hci_def_le_evt.h"
-#include "hci_def_le_feature.h"
-#include "hci_def_supported_cmds.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef enum {
-    H2C_CMD,
-    H2C_ACLDATA,
-    H2C_SCODATA,
-    H2C_ISODATA,
-    C2H_ACLDATA,
-    C2H_SCODATA,
-    C2H_EVENT,
-    C2H_ISODATA,
-} HciPacketType;
+void HciInitIso(void);
+void HciCloseIso(void);
 
-typedef struct {
-    HciPacketType type;
-    Packet *packet;
-} HciPacket;
+void HciOnIsoData(Packet *packet);
+
+void HciIsoSetIsoDataPackets(uint16_t totalPackets);
+uint16_t HciIsoGetAvailableIsoDataPackets(void);
+void HciIsoRegisterHandle(uint16_t connectionHandle);
+void HciIsoDeregisterHandle(uint16_t connectionHandle);
+void HciIsoOnNumberOfCompletedPackets(uint8_t numberOfHandles, const HciNumberOfCompletedPackets *list);
 
 #ifdef __cplusplus
 }

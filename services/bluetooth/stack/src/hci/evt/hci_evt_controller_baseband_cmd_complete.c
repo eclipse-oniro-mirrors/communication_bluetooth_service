@@ -1316,6 +1316,20 @@ static void HciEventOnWriteExtendedInquiryLengthComplete(const void *param, uint
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+static void HciEventOnSetMinEncryptionKeySizeComplete(const void *param, uint8_t length)
+{
+    HciSetMinEncryptionKeySizeReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->setMinEncryptionKeySizeComplete != NULL) {
+        callbacks->setMinEncryptionKeySizeComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciEventCommandCompleteFunc g_controllerBasebandCommandCompleteMap[] = {
     NULL,                                                       // 0x0000
     HciEventOnSetEventMaskCompete,                              // 0x0001
@@ -1447,9 +1461,12 @@ static HciEventCommandCompleteFunc g_controllerBasebandCommandCompleteMap[] = {
     HciEventOnWriteExtendedPageTimeoutComplete,                 // 0x007F
     HciEventOnReadExtendedInquiryLengthComplete,                // 0x0080
     HciEventOnWriteExtendedInquiryLengthComplete,               // 0x0081
+    NULL,                                                       // 0x0082
+    NULL,                                                       // 0x0083
+    HciEventOnSetMinEncryptionKeySizeComplete,                  // 0x0084
 };
 
-#define CONTROLLERBASEBAND_OCF_MAX 0x0081
+#define CONTROLLERBASEBAND_OCF_MAX 0x0084
 
 void HciEventOnControllerBasebandCommandComplete(uint16_t opCode, const void *param, uint8_t length)
 {
