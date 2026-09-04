@@ -31,6 +31,21 @@ int HCI_SetEventMask(const HciSetEventMaskParam *param)
 }
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
+// 7.3.69 Set Event Mask Page 2 Command
+int HCI_SetEventMaskPage2(const HciSetEventMaskPage2Param *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd = HciAllocCmd(HCI_SET_EVENT_MASK_PAGE_2, (void *)param, sizeof(HciSetEventMaskPage2Param));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.3.2 Reset Command
 int HCI_Reset()
 {
@@ -253,5 +268,28 @@ int HCI_WriteAuthenticatedPayloadTimeout(const HciWriteAuthenticatedPayloadTimeo
 int HCI_ReadLocalOOBExtendedData()
 {
     HciCmd *cmd = HciAllocCmd(HCI_READ_LOCAL_OOB_EXTENDED_DATA, NULL, 0);
+    return HciSendCmd(cmd);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.3.102 Set Min Encryption Key Size Command (BR/EDR minimum key size for
+// subsequent connections; does not affect existing connections)
+int HCI_SetMinEncryptionKeySize(const HciSetMinEncryptionKeySizeParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    // Min_Encryption_Key_Size: 0x01-0x10 octets; the Controller rejects values
+    // outside this range with 0x11/0x12, gate them here.
+    if (param->minEncryptionKeySize < 0x01 || param->minEncryptionKeySize > 0x10) {
+        return BT_BAD_PARAM;
+    }
+
+    HciCmd *cmd = HciAllocCmd(
+        HCI_SET_MIN_ENCRYPTION_KEY_SIZE, (void *)param, sizeof(HciSetMinEncryptionKeySizeParam));
+    if (cmd == NULL) {
+        return BT_NO_MEMORY;
+    }
     return HciSendCmd(cmd);
 }

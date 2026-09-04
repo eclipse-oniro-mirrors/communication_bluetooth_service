@@ -1210,6 +1210,38 @@ static void HciEventOnLeBigInfoAdvertisingReportEvent(const uint8_t *param, size
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.7.65,35 LE Subrate Change Event (Status + Connection_Handle +
+// Subrate_Factor + Peripheral_Latency + Continuation_Number(2 octets) +
+// Supervision_Timeout)
+static void HciEventOnLeSubrateChangeEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || length < sizeof(HciLeSubrateChangeEventParam)) {
+        return;
+    }
+
+    HciLeSubrateChangeEventParam eventParam = { 0 };
+    size_t offset = 0;
+    eventParam.status = param[offset];
+    offset += sizeof(uint8_t);
+    (void)memcpy_s(&eventParam.connectionHandle, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(&eventParam.subrateFactor, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(&eventParam.peripheralLatency, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(&eventParam.continuationNumber, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(&eventParam.supervisionTimeout, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSubrateChange != NULL) {
+        callbacks->leSubrateChange(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciLeEventFunc g_leEventMap[] = {
     NULL,                                                     // 0x00
     HciEventOnLeConnectionCompleteEvent,                      // 0x01
@@ -1246,9 +1278,10 @@ static HciLeEventFunc g_leEventMap[] = {
     HciEventOnLePathLossThresholdEvent,                       // 0x20
     HciEventOnLeTransmitPowerReportingEvent,                  // 0x21
     HciEventOnLeBigInfoAdvertisingReportEvent,                // 0x22
+    HciEventOnLeSubrateChangeEvent,                           // 0x23
 };
 
-#define LESUBEVENTCODE_MAX 0x22
+#define LESUBEVENTCODE_MAX 0x23
 
 void HciEventOnLeMetaEvent(Packet *packet)
 {

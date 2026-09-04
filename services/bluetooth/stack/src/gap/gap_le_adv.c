@@ -978,6 +978,42 @@ int GAP_LePeriodicAdvSetEnable(uint8_t enable, uint8_t advHandle)
     return ret;
 }
 
+int GAP_LePeriodicAdvSetEnableWithAdi(uint8_t enable, uint8_t advHandle)
+{
+    LOG_INFO("%{public}s: enable: 0x%{public}02x", __FUNCTION__, enable);
+    int ret = GAP_SUCCESS;
+
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    // 5.3 Enable parameter (Vol 4, Part E, 7.8.63): bit 0 advertising enable,
+    // bit 1 include ADI in AUX_SYNC_IND. 0x00-0x03 are the only valid values.
+    if (enable > GAP_PERIODIC_ADV_ENABLE_TRUE_ADI || advHandle > GAP_PERIODIC_ADV_HANDLE_MAX) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    // Pre-check bit 36 (Periodic Advertising ADI Support, 5.3) only when the
+    // call actually enables advertising (bit 0 set): per 7.8.63 the Include_
+    // ADI bit is ignored when Advertising_Enable is 0, so disabling must never
+    // depend on the ADI capability. A controller without the feature returns
+    // 0x11 on the command, but failing here gives a synchronous, clearer error
+    // (same pre-check pattern as GapLeSetConnectionlessCteTransmitParams).
+    if ((enable & GAP_PERIODIC_ADV_ENABLE_INCLUDE_ADI) &&
+        (enable & GAP_PERIODIC_ADV_ENABLE_TRUE) &&
+        !BTM_IsControllerSupportLePeriodicAdvAdiSupport()) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+
+    if (GapLeRolesCheck(GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_PERIPHERAL) == false) {
+        ret = GAP_ERR_INVAL_STATE;
+    } else {
+        ret = GapLeSetPeriodicAdvertisingEnable(enable, advHandle);
+    }
+
+    return ret;
+}
+
 NO_SANITIZE("cfi")
 void GapLeSetPeriodicAdvertisingEnableComplete(const HciLeSetPeriodicAdvertisingEnableReturnParam *param)
 {

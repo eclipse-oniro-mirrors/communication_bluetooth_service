@@ -24,8 +24,9 @@
 //   0x16 LE Connection IQ Report（7.7.65,22，13 固定字节 + 2*Sample_Count 交错 I/Q）
 //   0x17 LE CTE Request Failed（7.7.65,23，3 字节）
 //   0x18 LE Periodic Advertising Sync Transfer Received（7.7.65,24，19 字节）
-// 0x19+（Set Info Transfer Received / Sync Established (v2) 等）不在本 5.1 升级范围，
-// 注入 0x19 子事件应被静默丢弃（见 UnknownSubevent 用例）。
+// 0x19+（Set Info Transfer Received / Sync Established (v2) 等）不在本 5.1 升级范围。
+// 注意：0x19 LE CIS Established 自 5.2 起已有处理器（hci_evt_le.c），LESUBEVENTCODE_MAX
+// 已在 5.3 提升到 0x23，故"未知子事件"负向探针改用 0x24（见 UnknownSubevent 用例）。
 
 #include <gtest/gtest.h>
 
@@ -142,15 +143,17 @@ constexpr uint8_t TRUNCATED_PAST_WIRE[] = {
     0xFF, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x01, 0xA0, 0x00,
 };
 
-// 子事件 0x19 不在本 5.1 升级范围（LESUBEVENTCODE_MAX = 0x18）。
+// 子事件 0x24 超过 LESUBEVENTCODE_MAX（0x23，5.3 起 0x23 已被 LE Subrate Change 占用；
+// 0x19 LE CIS Established 自 5.2 起已有处理器，见 stack_gap_le_5_3_test.cpp）→ LE Meta 分发丢弃。
 constexpr uint8_t UNKNOWN_SUBEVENT_WIRE[] = {
-    0x3E, 0x14, 0x19,
+    0x3E, 0x14, 0x24,
     0x00, 0x08, 0x00, 0x34, 0x12, 0x67, 0x05, 0x03, 0x00,
     0xFF, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x01, 0xA0, 0x00, 0x01,
 };
 
-// 事件码 0x59 超过 EVENTCODE_MAX（0x58）→ HciOnEvent 丢弃。
-constexpr uint8_t UNKNOWN_EVENT_CODE_WIRE[] = {0x59, 0x01, 0x00};
+// 事件码 0x5A 超过 EVENTCODE_MAX（0x59，5.3 起 Encryption Change [v2] 占用了 0x59，
+// 见 stack_gap_le_5_3_test.cpp）→ HciOnEvent 丢弃。
+constexpr uint8_t UNKNOWN_EVENT_CODE_WIRE[] = {0x5A, 0x01, 0x00};
 
 // ---------------- 回调捕获 ----------------
 // HCI 回调表是函数指针结构、不带 context 参数，故用文件级全局捕获对象
@@ -346,7 +349,7 @@ HWTEST_F(StackGapLe51EventParseTest, StackGapLe5_1EventParse_PastSyncTransferRec
 // @tc.number: StackGapLe5_1EventParse_TruncatedDropped_00500
 // @tc.name:  畸形事件被静默丢弃（回调不触发）
 // @tc.desc:  覆盖固定部分截断、声明长度与实际负载不符、Sample_Count 溢出、PAST 截断、
-//            未知子事件 0x19、未知事件码 0x59 六类畸形 wire 字节
+//            未知子事件 0x24（超过 LESUBEVENTCODE_MAX 0x23）、未知事件码 0x5A 六类畸形 wire 字节
 HWTEST_F(StackGapLe51EventParseTest, StackGapLe5_1EventParse_TruncatedDropped_00500, TestSize.Level1)
 {
     InjectWire(TRUNCATED_CONNLESS_IQ_WIRE, sizeof(TRUNCATED_CONNLESS_IQ_WIRE));

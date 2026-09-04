@@ -233,6 +233,52 @@ static void IsoDeregisterDataPathCallbackTask(void *ctx)
     info->result = IsoDeregisterDataPathCallback();
 }
 
+static void IsoLeSendIsoDataTask(void *ctx)
+{
+    IsoLeSendIsoDataInfo *info = ctx;
+    // Point the param at the owned SDU copy: the caller buffer may already be gone.
+    info->param.data = info->data;
+    int result = IsoLeSendIsoData(&info->param);
+    if (result != BT_SUCCESS) {
+        if (result == BT_OPERATION_FAILED) {
+            // Data plane unavailable (0x0060 not completed) or credit exhausted:
+            // every SDU fails identically while the condition lasts, so log at
+            // DEBUG to avoid ~100 ERROR lines per second on a live audio stream.
+            LOG_DEBUG("%{public}s: send unavailable, handle:0x%04x, seqNum:%u, ret:%d", __FUNCTION__,
+                info->param.connectionHandle, info->param.seqNum, result);
+        } else {
+            LOG_ERROR("%{public}s: send failed, handle:0x%04x, seqNum:%u, ret:%d", __FUNCTION__,
+                info->param.connectionHandle, info->param.seqNum, result);
+        }
+    }
+}
+
+static void IsoLeSendIsoDataInfoDestroy(void *ctx)
+{
+    // The queued task (IsoUnBlockInTaskProcess) calls this as freeCtx and then
+    // frees only its own wrapper: the context itself must be released here, or
+    // every successfully enqueued SDU leaks one IsoLeSendIsoDataInfo.
+    IsoLeSendIsoDataInfo *info = ctx;
+    if (info != NULL) {
+        if (info->data != NULL) {
+            MEM_MALLOC.free(info->data);
+        }
+        MEM_MALLOC.free(info);
+    }
+}
+
+static void IsoRegisterSduCallbackTask(void *ctx)
+{
+    IsoGeneralCallbackInfo *info = ctx;
+    info->result = IsoRegisterSduCallback(info->callback, info->context);
+}
+
+static void IsoDeregisterSduCallbackTask(void *ctx)
+{
+    IsoGeneralVoidInfo *info = ctx;
+    info->result = IsoDeregisterSduCallback();
+}
+
 static void IsoLeIsoTransmitTestTask(void *ctx)
 {
     IsoLeIsoTransmitTestInfo *info = ctx;
@@ -759,6 +805,91 @@ int ISOIF_LeRemoveIsoDataPath(uint16_t connectionHandle, uint8_t dataPathDirecti
     }
 
     MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+int ISOIF_LeRegisterSduCallback(const IsoLeSduCallback *callback, void *context)
+{
+    if (callback == NULL) {
+        return BT_BAD_PARAM;
+    }
+    LOG_INFO("%{public}s: ", __FUNCTION__);
+    IsoGeneralCallbackInfo *ctx = MEM_MALLOC.alloc(sizeof(IsoGeneralCallbackInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(IsoGeneralCallbackInfo), 0x00, sizeof(IsoGeneralCallbackInfo));
+
+    ctx->callback = (void *)callback;
+    ctx->context = context;
+
+    int ret = IsoRunTaskBlockProcess(IsoRegisterSduCallbackTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+int ISOIF_LeDeregisterSduCallback(void)
+{
+    LOG_INFO("%{public}s: ", __FUNCTION__);
+    IsoGeneralVoidInfo *ctx = MEM_MALLOC.alloc(sizeof(IsoGeneralVoidInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(IsoGeneralVoidInfo), 0x00, sizeof(IsoGeneralVoidInfo));
+
+    int ret = IsoRunTaskBlockProcess(IsoDeregisterSduCallbackTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+int ISOIF_LeSendIsoData(const IsoLeSendIsoDataParam *param)
+{
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    // Per-SDU tracing: keep it out of INFO to avoid flooding on the isochronous data path.
+    LOG_DEBUG("%{public}s: connectionHandle:0x%04x, seqNum:%u, timestampFlag:0x%02x, length:%u", __FUNCTION__,
+        param->connectionHandle, param->seqNum, param->timestampFlag, param->length);
+    if (param->timestampFlag > 1 || param->length > ISO_SDU_LENGTH_MAX) {
+        return BT_BAD_PARAM;
+    }
+    if (param->length > 0 && param->data == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    IsoLeSendIsoDataInfo *ctx = MEM_MALLOC.alloc(sizeof(IsoLeSendIsoDataInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(IsoLeSendIsoDataInfo), 0x00, sizeof(IsoLeSendIsoDataInfo));
+    ctx->param = *param;
+    if (param->length > 0) {
+        ctx->data = MEM_MALLOC.alloc(param->length);
+        if (ctx->data == NULL) {
+            MEM_MALLOC.free(ctx);
+            return BT_NO_MEMORY;
+        }
+        (void)memcpy_s(ctx->data, param->length, param->data, param->length);
+    }
+
+    // Transmission runs on the stack thread after enqueue; the caller thread never blocks.
+    // On enqueue failure IsoUnBlockInTaskProcess never runs, so destroy ctx and its data
+    // copy here (IsoLeSendIsoDataInfoDestroy releases both; do not free ctx again).
+    int ret = IsoRunTaskUnBlockProcess(IsoLeSendIsoDataTask, ctx, IsoLeSendIsoDataInfoDestroy);
+    if (ret != BT_SUCCESS) {
+        IsoLeSendIsoDataInfoDestroy(ctx);
+    }
     return ret;
 }
 

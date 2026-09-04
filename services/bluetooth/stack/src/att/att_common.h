@@ -726,10 +726,21 @@ int AttResponseSendData(const AttConnectInfo *connect, const Packet *packet);
 /**
  * @brief received error opcode.
  *
+ * @deprecated Replaced by AttReplyNotSupported (cid-aware); kept for API compatibility.
+ *
  * @param1 connect Indicates the AttConnectInfo.
  * @param2 error opcode.
  */
 void AttErrorCode(const AttConnectInfo *connect, uint8_t opcode);
+
+/**
+ * @brief reply ATT_ERROR_RSP with Request Not Supported for an unknown request
+ *        opcode (Vol 3 Part F 3.3).
+ *
+ * @param1 connect Indicates the AttConnectInfo.
+ * @param2 opcode Indicates the opcode of the received request.
+ */
+void AttReplyNotSupported(AttConnectInfo *connect, uint8_t opcode);
 
 /**
  * @brief get function array dress.

@@ -46,6 +46,10 @@
 
 #define PERIODIC_ADV_HANDLE_MAX 0xEF
 
+// 5.3 (Vol 4, Part E, 7.8.63): Enable is a bit field - bit 0 advertising
+// enable, bit 1 include ADI in AUX_SYNC_IND - so 0x00-0x03 are valid.
+#define LE_PERIODIC_ADV_ENABLE_MAX 0x03
+
 // LE Set Extended Scan Parameters (7.8.64) and LE Extended Create Connection
 // (7.8.66) accept LE 1M (bit0), LE 2M (bit1) and LE Coded (bit2) PHYs.
 #define LE_SCANNING_PHYS_MASK (LE_1M_PHY | LE_2M_PHY | LE_CODED_PHY)
@@ -1415,12 +1419,14 @@ int HCI_LeSetPeriodicAdvertisingData(const HciLeSetPeriodicAdvertisingDataHostPa
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.8.63 LE Set Periodic Advertising Enable Command
+// 5.3 adds bit 1 (include ADI) to Enable; accept the full 0x00-0x03 range so
+// the WithAdi variant can reach controllers that support the ADI field.
 int HCI_LeSetPeriodicAdvertisingEnable(const HciLeSetPeriodicAdvertisingEnableParam *param)
 {
     if (param == NULL) {
         return BT_BAD_PARAM;
     }
-    if (param->enable > LE_ENABLE_MAX || param->advertisingHandle > PERIODIC_ADV_HANDLE_MAX) {
+    if (param->enable > LE_PERIODIC_ADV_ENABLE_MAX || param->advertisingHandle > PERIODIC_ADV_HANDLE_MAX) {
         return BT_BAD_PARAM;
     }
 

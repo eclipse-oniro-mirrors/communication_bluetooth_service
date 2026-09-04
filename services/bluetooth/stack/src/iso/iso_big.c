@@ -22,6 +22,7 @@
 
 #include "hci/hci.h"
 #include "hci/hci_error.h"
+#include "hci/iso/hci_iso.h"
 
 static bool IsoFindBigByBigHandle(void *data, void *parameter)
 {
@@ -30,9 +31,35 @@ static bool IsoFindBigByBigHandle(void *data, void *parameter)
     return bigInfo->bigHandle == bigHandle;
 }
 
+static IsoBigInfo *IsoFindBigInList(List *bigList, uint8_t bigHandle)
+{
+    return ListForEachData(bigList, IsoFindBigByBigHandle, &bigHandle);
+}
+
 static IsoBigInfo *IsoFindBig(IsoLeMng *mng, uint8_t bigHandle)
 {
-    return ListForEachData(mng->bigBlock.bigList, IsoFindBigByBigHandle, &bigHandle);
+    return IsoFindBigInList(mng->bigBlock.bigList, bigHandle);
+}
+
+static IsoBigInfo *IsoFindBigSync(IsoLeMng *mng, uint8_t bigHandle)
+{
+    return IsoFindBigInList(mng->bigBlock.syncList, bigHandle);
+}
+
+// Sync termination (BIG Sync Lost / Terminate Sync success): the controller destroyed
+// the BIS handles, so release their RX reassembly contexts and HCI ISO flow-control
+// tracking with them (symmetric with the broadcaster path in IsoLeTerminateBigComplete).
+static void IsoRemoveBigSyncEntry(IsoLeMng *mng, uint8_t bigHandle)
+{
+    IsoBigInfo *bigInfo = IsoFindBigSync(mng, bigHandle);
+    if (bigInfo == NULL) {
+        return;
+    }
+    for (uint8_t i = 0; i < bigInfo->bisCount; i++) {
+        IsoDataRemoveRxContext(bigInfo->bisHandles[i]);
+        HciIsoDeregisterHandle(bigInfo->bisHandles[i]);
+    }
+    ListRemoveNode(mng->bigBlock.syncList, bigInfo);
 }
 
 int IsoRegisterBigCallback(const IsoLeBigCallback *callback, void *context)
@@ -75,6 +102,10 @@ int IsoLeCreateBig(uint8_t bigHandle, uint8_t advertisingHandle, uint8_t numBis,
         bigParam->framing > 0x01 || bigParam->encryption > 0x01) {
         return BT_BAD_PARAM;
     }
+    /* Vol 3 Part C 3.2.6,1: Broadcast_Code is mandatory once BIG encryption is set */
+    if (bigParam->encryption && (broadcastCode == NULL)) {
+        return BT_BAD_PARAM;
+    }
 
     HciLeCreateBigParam hciParam = { 0 };
     hciParam.bigHandle = bigHandle;
@@ -110,11 +141,21 @@ int IsoLeCreateBigTest(uint8_t bigHandle, uint8_t advertisingHandle, uint8_t num
         return BT_BAD_PARAM;
     }
     // BLUETOOTH SPECIFICATION Version 5.2 | Vol 4, Part E
-    // 7.8.104 LE Create BIG Test: BIG_Handle 0x00-0xEF, RTN 0x00-0x1F, PHY 0x00-0x02,
-    // Packing/Framing 0x00-0x01, Encryption 0x00-0x01; Advertising_Handle is validated
+    // 7.8.104 LE Create BIG Test: BIG_Handle 0x00-0xEF, PHY 0x00-0x02,
+    // Packing/Framing 0x00-0x01, Encryption 0x00-0x01, BN 0x01-0x07,
+    // IRC 1 to (NSE/BN), PTO 0x00-0x0F; Advertising_Handle is validated
     // by the controller.
-    if (bigHandle > 0xEF || bigParam->rtn > 0x1F || bigParam->phy > 0x02 || bigParam->packing > 0x01 ||
+    if (bigHandle > 0xEF || bigParam->phy > 0x02 || bigParam->packing > 0x01 ||
         bigParam->framing > 0x01 || bigParam->encryption > 0x01) {
+        return BT_BAD_PARAM;
+    }
+    /* Vol 4 Part E 7.8.104: BN 0x01-0x07, IRC 1 to (NSE/BN), PTO 0x00-0x0F */
+    if (bigParam->bn < 0x01 || bigParam->bn > 0x07 || bigParam->irc < 0x01 || bigParam->irc > 0x0F ||
+        bigParam->pto > 0x0F || bigParam->irc * bigParam->bn > bigParam->nse) {
+        return BT_BAD_PARAM;
+    }
+    /* Vol 3 Part C 3.2.6,1: Broadcast_Code is mandatory once BIG encryption is set */
+    if (bigParam->encryption && (broadcastCode == NULL)) {
         return BT_BAD_PARAM;
     }
 
@@ -124,13 +165,15 @@ int IsoLeCreateBigTest(uint8_t bigHandle, uint8_t advertisingHandle, uint8_t num
     hciParam.numBis = numBis;
     IsoWriteUint24(hciParam.sduInterval, bigParam->sduInterval);
     hciParam.isoInterval = bigParam->isoInterval;
-    hciParam.numberOfSdu = bigParam->numberOfSdu;
+    hciParam.nse = bigParam->nse;
     hciParam.maxSdu = bigParam->maxSdu;
-    hciParam.maxTransportLatency = bigParam->maxTransportLatency;
-    hciParam.rtn = bigParam->rtn;
+    hciParam.maxPdu = bigParam->maxPdu;
     hciParam.phy = bigParam->phy;
     hciParam.packing = bigParam->packing;
     hciParam.framing = bigParam->framing;
+    hciParam.bn = bigParam->bn;
+    hciParam.irc = bigParam->irc;
+    hciParam.pto = bigParam->pto;
     hciParam.encryption = bigParam->encryption;
     if (broadcastCode != NULL) {
         (void)memcpy_s(
@@ -236,21 +279,36 @@ static bool IsoCreateBigTrack(IsoLeMng *mng, const HciLeCreateBigCompleteEventPa
     return true;
 }
 
+// Shared defense-in-depth clamp for the BIG events that feed numBis into a memcpy
+// length: a malformed event must not overflow bisHandles (the HCI parser already
+// clamps numBis; this local clamp is the last gate before the copy).
+static uint8_t IsoClampBisCount(const char *eventName, uint8_t numBis)
+{
+    if (numBis > ISO_LE_BIS_COUNT_MAX) {
+        HILOGE("%{public}s: invalid numBis:%hhu from %{public}s, clamp to %hhu", __FUNCTION__, numBis, eventName,
+            (uint8_t)ISO_LE_BIS_COUNT_MAX);
+        return ISO_LE_BIS_COUNT_MAX;
+    }
+    return numBis;
+}
+
 void IsoLeCreateBigComplete(const HciLeCreateBigCompleteEventParam *param)
 {
     LOG_INFO("%{public}s: status:0x%02x, bigHandle:0x%02x, numBis:%hhu", __FUNCTION__, param->status, param->bigHandle,
         param->numBis);
 
-    // Defense-in-depth: the HCI parser already clamps numBis, but clamp locally as well
-    // before using it as a memcpy length, so a malformed event cannot overflow bisHandles.
-    uint8_t numBis = (param->numBis > ISO_LE_BIS_COUNT_MAX) ? ISO_LE_BIS_COUNT_MAX : param->numBis;
-    if (param->numBis > ISO_LE_BIS_COUNT_MAX) {
-        HILOGE("%{public}s: invalid numBis:%hhu, clamp to %hhu", __FUNCTION__, param->numBis, numBis);
-    }
+    uint8_t numBis = IsoClampBisCount("create BIG complete", param->numBis);
 
     IsoLeMng *mng = IsoGetMng();
     if (param->status == HCI_SUCCESS && !IsoCreateBigTrack(mng, param, numBis)) {
         return;
+    }
+    if (param->status == HCI_SUCCESS) {
+        // The BIS handles are established ISO data handles; register them for the HCI ISO
+        // data path (Number of Completed Packets filtering / credit recovery).
+        for (uint8_t i = 0; i < numBis; i++) {
+            HciIsoRegisterHandle(param->bisHandles[i]);
+        }
     }
 
     IsoLeBigCreatedInfo info = {
@@ -280,6 +338,12 @@ void IsoLeTerminateBigComplete(const HciLeTerminateBigCompleteEventParam *param)
     if (param->status == HCI_SUCCESS) {
         IsoBigInfo *bigInfo = IsoFindBig(mng, param->bigHandle);
         if (bigInfo != NULL) {
+            // Broadcast BIG termination: BIS handles are destroyed by the controller,
+            // release their RX reassembly contexts (symmetric with IsoRemoveBigSyncEntry).
+            for (uint8_t i = 0; i < bigInfo->bisCount; i++) {
+                IsoDataRemoveRxContext(bigInfo->bisHandles[i]);
+                HciIsoDeregisterHandle(bigInfo->bisHandles[i]);
+            }
             ListRemoveNode(mng->bigBlock.bigList, bigInfo);
         }
     }
@@ -289,20 +353,51 @@ void IsoLeTerminateBigComplete(const HciLeTerminateBigCompleteEventParam *param)
     }
 }
 
-void IsoLeBigSyncEstablishedEvent(const HciLeBigSyncEstablishedEventParam *param)
+// Track a synchronized BIG's BIS handles under the sync handle. Reuses an
+// existing sync entry - dropping the previous session's BIS handle registrations
+// and RX contexts first, since a repeated Established event before the Terminate
+// Sync completed would otherwise leak them and misroute ISO flow control on a
+// reused handle (symmetric with IsoRemoveBigSyncEntry). Registers each BIS
+// handle for HCI ISO flow control and stores the current set in the entry.
+static void IsoTrackBigSyncEstablished(IsoLeMng *mng, const HciLeBigSyncEstablishedEventParam *param, uint8_t numBis)
 {
-    LOG_INFO("%{public}s: status:0x%02x, bigHandle:0x%02x, numBis:%hhu", __FUNCTION__, param->status, param->bigHandle,
-        param->numBis);
-
-    // Defense-in-depth: clamp numBis before using it as a memcpy length (see
-    // IsoLeCreateBigComplete), a malformed event must not overflow bisHandles.
-    uint8_t numBis = (param->numBis > ISO_LE_BIS_COUNT_MAX) ? ISO_LE_BIS_COUNT_MAX : param->numBis;
-    if (param->numBis > ISO_LE_BIS_COUNT_MAX) {
-        HILOGE("%{public}s: invalid numBis:%hhu, clamp to %hhu", __FUNCTION__, param->numBis, numBis);
+    IsoBigInfo *bigInfo = IsoFindBigSync(mng, param->bigHandle);
+    if (bigInfo == NULL) {
+        bigInfo = MEM_MALLOC.alloc(sizeof(IsoBigInfo));
+        if (bigInfo == NULL) {
+            HILOGE("%{public}s: sync tracking alloc failed, bigHandle:0x%02x not tracked", __FUNCTION__,
+                param->bigHandle);
+            return;
+        }
+        (void)memset_s(bigInfo, sizeof(IsoBigInfo), 0x00, sizeof(IsoBigInfo));
+        bigInfo->bigHandle = param->bigHandle;
+        if (!ListAddLast(mng->bigBlock.syncList, bigInfo)) {
+            HILOGE("%{public}s: sync tracking insert failed, bigHandle:0x%02x not tracked", __FUNCTION__,
+                param->bigHandle);
+            MEM_MALLOC.free(bigInfo);
+            return;
+        }
+    } else {
+        for (uint8_t i = 0; i < bigInfo->bisCount; i++) {
+            IsoDataRemoveRxContext(bigInfo->bisHandles[i]);
+            HciIsoDeregisterHandle(bigInfo->bisHandles[i]);
+        }
     }
+    bigInfo->bisCount = numBis;
+    (void)memcpy_s(bigInfo->bisHandles, sizeof(bigInfo->bisHandles), param->bisHandles, numBis * sizeof(uint16_t));
+    for (uint8_t i = 0; i < numBis; i++) {
+        HciIsoRegisterHandle(param->bisHandles[i]);
+    }
+}
 
+// Report a BIG Sync Established event to the registered upper-layer callback,
+// always carrying the event status (also when tracking above could not run).
+static void IsoNotifyBigSyncEstablished(const HciLeBigSyncEstablishedEventParam *param, uint8_t numBis)
+{
     IsoLeMng *mng = IsoGetMng();
-
+    if (mng->bigCallback == NULL || mng->bigCallback->bigSyncEstablished == NULL) {
+        return;
+    }
     IsoLeBigSyncEstablishedInfo info = {
         .bigHandle = param->bigHandle,
         .transportLatencyBig = IsoReadUint24(param->transportLatencyBig),
@@ -315,16 +410,27 @@ void IsoLeBigSyncEstablishedEvent(const HciLeBigSyncEstablishedEventParam *param
         .numBis = numBis,
     };
     (void)memcpy_s(info.bisHandles, sizeof(info.bisHandles), param->bisHandles, numBis * sizeof(uint16_t));
+    mng->bigCallback->bigSyncEstablished(param->status, &info, mng->bigCallbackContext);
+}
 
-    if (mng->bigCallback != NULL && mng->bigCallback->bigSyncEstablished != NULL) {
-        mng->bigCallback->bigSyncEstablished(param->status, &info, mng->bigCallbackContext);
+void IsoLeBigSyncEstablishedEvent(const HciLeBigSyncEstablishedEventParam *param)
+{
+    LOG_INFO("%{public}s: status:0x%02x, bigHandle:0x%02x, numBis:%hhu", __FUNCTION__, param->status, param->bigHandle,
+        param->numBis);
+
+    // numBis feeds a memcpy length below (see IsoClampBisCount).
+    uint8_t numBis = IsoClampBisCount("BIG sync established", param->numBis);
+    if (param->status == HCI_SUCCESS) {
+        IsoTrackBigSyncEstablished(IsoGetMng(), param, numBis);
     }
+    IsoNotifyBigSyncEstablished(param, numBis);
 }
 
 void IsoLeBigSyncLostEvent(const HciLeBigSyncLostEventParam *param)
 {
     LOG_INFO("%{public}s: bigHandle:0x%02x, reason:0x%02x", __FUNCTION__, param->bigHandle, param->reason);
     IsoLeMng *mng = IsoGetMng();
+    IsoRemoveBigSyncEntry(mng, param->bigHandle);
     if (mng->bigCallback != NULL && mng->bigCallback->bigSyncLost != NULL) {
         mng->bigCallback->bigSyncLost(param->bigHandle, param->reason, mng->bigCallbackContext);
     }
@@ -360,6 +466,9 @@ void IsoLeBigTerminateSyncComplete(const HciLeBigTerminateSyncReturnParam *param
 {
     LOG_INFO("%{public}s: status:0x%02x", __FUNCTION__, param->status);
     IsoLeMng *mng = IsoGetMng();
+    if (param->status == HCI_SUCCESS) {
+        IsoRemoveBigSyncEntry(mng, param->bigHandle);
+    }
     if (mng->bigCallback != NULL && mng->bigCallback->bigTerminateSyncResult != NULL) {
         mng->bigCallback->bigTerminateSyncResult(param->status, mng->bigCallbackContext);
     }

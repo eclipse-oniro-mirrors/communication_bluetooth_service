@@ -541,7 +541,7 @@ HWTEST_F(HostTest, Host_ModuleTest_GetDeviceType_00100, TestSize.Level1)
 
     host_ = &BluetoothHost::GetDefaultHost();
     BluetoothRemoteDevice device_("00:00:00:00:00:00", BT_TRANSPORT_BREDR);
-    EXPECT_EQ(device_.GetDeviceType(), INVALID_VALUE);
+    EXPECT_EQ(device_.GetDeviceType(), DEVICE_TYPE_UNKNOWN);
 
     GTEST_LOG_(INFO) << "Host_ModuleTest_GetDeviceType_00100 end";
 }

@@ -63,6 +63,8 @@ static HciReadBdAddrReturnParam g_readBdAddrResult;
 static HciReadLocalSupportedCommandsReturnParam g_readLocalSupportedCommandsResult;
 static HciReadLocalSupportedFeaturesReturnParam g_readLocalSupportedFeaturesResult;
 static HciSetEventMaskReturnParam g_setEventMaskResult;
+static HciSetMinEncryptionKeySizeReturnParam g_setMinEncryptionKeySizeResult;
+static HciSetEventMaskPage2ReturnParam g_setEventMaskPage2Result;
 static uint8_t g_readLocalSupportedCodecsResult;
 static BtmLocalSupportedCodecs g_localSupportedCodecs;
 // Deep-copy buffers for BTM_GetLocalSupportedCodecs. The getter copies the codec
@@ -178,6 +180,18 @@ static void BtmControllerOnReadLocalExtendedFeaturesComplete(const HciReadLocalE
 static void BtmControllerOnSetEventMaskComplete(const HciSetEventMaskReturnParam *returnParam)
 {
     g_setEventMaskResult = *returnParam;
+    EventSet(g_waitSetupController);
+}
+
+static void BtmControllerOnSetMinEncryptionKeySizeComplete(const HciSetMinEncryptionKeySizeReturnParam *returnParam)
+{
+    g_setMinEncryptionKeySizeResult = *returnParam;
+    EventSet(g_waitSetupController);
+}
+
+static void BtmControllerOnSetEventMaskPage2Complete(const HciSetEventMaskPage2ReturnParam *returnParam)
+{
+    g_setEventMaskPage2Result = *returnParam;
     EventSet(g_waitSetupController);
 }
 
@@ -407,6 +421,14 @@ bool BtmIsControllerSupportedLeSetPrivacyMode()
     return HciSupportLeSetPrivacyMode(g_readLocalSupportedCommandsResult.supportedCommands);
 }
 
+// Capability gate for HCI_LE_Request_Peer_SCA (0x006D, octet 43 bit 2 of Local
+// Supported Commands). Consumed by the 5.2 end-to-end tests
+// (stack_gap_le_5_2_test.cpp) to skip when the controller lacks the command.
+bool BtmIsControllerSupportedLeRequestPeerSca()
+{
+    return HciSupportLeRequestPeerSca(g_readLocalSupportedCommandsResult.supportedCommands);
+}
+
 static HciEventCallbacks g_hciEventCallbacks = {
     .resetComplete = BtmControllerOnResetComplete,
     .readBufferSizeComplete = BtmControllerOnReadBufferSizeComplete,
@@ -417,6 +439,8 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .readLocalSupportedFeaturesComplete = BtmControllerOnReadLocalSupportedFeaturesComplete,
     .readLocalExtendedFeaturesComplete = BtmControllerOnReadLocalExtendedFeaturesComplete,
     .setEventMaskComplete = BtmControllerOnSetEventMaskComplete,
+    .setMinEncryptionKeySizeComplete = BtmControllerOnSetMinEncryptionKeySizeComplete,
+    .setEventMaskPage2Complete = BtmControllerOnSetEventMaskPage2Complete,
     .readLocalSupportedCodecsComplete = BtmControllerOnReadLocalSupportedCodecs,
     .writeLeHostSupportComplete = BtmControllerOnWriteLeHostSupportedComplete,
 
@@ -530,6 +554,14 @@ static uint64_t BtmGetLe51EventMask(uint64_t leEventMask)
     // / 0x21 subevents the LE Power Control feature relies on (Vol 6, Part B, 4.5.6/4.5.7).
     if (BTM_IsControllerSupportLePowerControl()) {
         leEventMask |= (LE_EVENT_MASK_LE_PATH_LOSS_THRESHOLD_EVENT | LE_EVENT_MASK_LE_TRANSMIT_POWER_REPORTING_EVENT);
+    }
+
+    // BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E, 7.8.1 Table 3.3
+    // LE Subrate Change event (bit 34, subevent 0x23). Without Connection
+    // Subrating (bit 37) the controller never generates this subevent; gate on
+    // the feature bit the same way the 5.1/5.2 blocks above do.
+    if (BTM_IsControllerSupportLeConnectionSubrating()) {
+        leEventMask |= LE_EVENT_MASK_LE_SUBRATE_CHANGE_EVENT; // Bit 34
     }
 
     return leEventMask;
@@ -752,6 +784,101 @@ static int BtmSetEventMask()
         result = BT_OPERATION_FAILED;
     }
     return result;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.3.102 Set Min Encryption Key Size: init-time policy step that declares a
+// default minimum BR/EDR encryption key size (16 octets) for subsequent
+// connections. The command only constrains future BR/EDR negotiation - existing
+// connections and LE keys are unaffected. Best-effort by design: the command is
+// skipped when the controller does not advertise it (Supported Commands octet
+// 45 bit 7), and any completion status (e.g. 0x11 Unsupported Feature on a
+// pre-5.3 controller) is logged and tolerated - a security policy setting must
+// not block controller bring-up. Returns BT_SUCCESS when the step is done or
+// skipped; a non-success only means the synchronous wait itself failed.
+static int BtmSetMinEncryptionKeySize()
+{
+    if (!HciSupportSetMinEncryptionKeySize(g_readLocalSupportedCommandsResult.supportedCommands)) {
+        LOG_WARN("HCI_SetMinEncryptionKeySize unsupported, skipped");
+        return BT_SUCCESS;
+    }
+
+    // Clear the event before sending and mark the result as unanswered: the
+    // completion of a timed-out predecessor command can arrive late and set the
+    // shared event (the HCI layer dispatches completions by opcode without
+    // matching a pending command), which would wake the wait below immediately
+    // on a zero-initialized status and record the 5.3 security policy as applied
+    // although its own command never completed. The 0xFF sentinel turns such a
+    // stale wake-up into a logged skip instead of a silent success.
+    EventClear(g_waitSetupController);
+    (void)memset_s(&g_setMinEncryptionKeySizeResult, sizeof(g_setMinEncryptionKeySizeResult), 0xFF,
+        sizeof(g_setMinEncryptionKeySizeResult));
+
+    HciSetMinEncryptionKeySizeParam setMinEncryptionKeySizeParam = {
+        .minEncryptionKeySize = 0x10,
+    };
+    int result = HCI_SetMinEncryptionKeySize(&setMinEncryptionKeySizeParam);
+    if (result != BT_SUCCESS) {
+        LOG_ERROR("HCI_SetMinEncryptionKeySize failed: %{public}d", result);
+        return result;
+    }
+    if (EventWait(g_waitSetupController, WAIT_CMD_TIMEOUT) == 0) {
+        if (g_setMinEncryptionKeySizeResult.status != HCI_SUCCESS) {
+            LOG_WARN("HCI_SetMinEncryptionKeySize status: 0x%{public}02x, skipped",
+                g_setMinEncryptionKeySizeResult.status);
+        }
+    } else {
+        LOG_WARN("HCI_SetMinEncryptionKeySize Timeout, skipped");
+    }
+    return BT_SUCCESS;
+}
+
+// 5.3 7.3.69 Set Event Mask Page 2 + 7.7.8 Encryption Change [v2] event
+// (0x59): partner step of BtmSetMinEncryptionKeySize. The v2 event (v1 payload
+// plus Encryption_Key_Size) is reported only when page-2 bit 25 is set - event
+// codes above 0x3F cannot be expressed in the 64-bit page-1 mask. Without this
+// step, a 5.3 controller that switches from v1 to v2 after the 0x0084 command
+// above would have its encryption-change events dropped by the host-side mask.
+// Best-effort like its partner: gated on 0x0084 support (same 5.3 feature), any
+// completion status and timeouts are tolerated. Returns BT_SUCCESS when the
+// step is done or skipped; a non-success only means the synchronous wait itself
+// failed.
+static int BtmSetEventMaskPage2()
+{
+    if (!HciSupportSetMinEncryptionKeySize(g_readLocalSupportedCommandsResult.supportedCommands)) {
+        LOG_WARN("HCI_SetEventMaskPage2 unsupported, skipped");
+        return BT_SUCCESS;
+    }
+
+    // Clear the event before sending and mark the result as unanswered (mirror
+    // BtmSetMinEncryptionKeySize): the completion of the preceding 0x0084
+    // command may arrive late and set the shared event, which would wake the
+    // wait below on a zero-initialized status and record the page-2 mask (the
+    // 0x59 Encryption Change v2 event switch) as applied although its own
+    // command never completed. The 0xFF sentinel turns such a stale wake-up
+    // into a logged skip instead of a silent success. No HCI status is 0xFF.
+    EventClear(g_waitSetupController);
+    (void)memset_s(&g_setEventMaskPage2Result, sizeof(g_setEventMaskPage2Result), 0xFF,
+        sizeof(g_setEventMaskPage2Result));
+
+    HciSetEventMaskPage2Param setEventMaskPage2Param = {
+        // 7.3.69 bit 25 -> event code 0x59 (0x40 + 25) Encryption Change [v2].
+        .eventMaskPage2 = (1ULL << 25),
+    };
+    int result = HCI_SetEventMaskPage2(&setEventMaskPage2Param);
+    if (result != BT_SUCCESS) {
+        LOG_ERROR("HCI_SetEventMaskPage2 failed: %{public}d", result);
+        return result;
+    }
+    if (EventWait(g_waitSetupController, WAIT_CMD_TIMEOUT) == 0) {
+        if (g_setEventMaskPage2Result.status != HCI_SUCCESS) {
+            LOG_WARN("HCI_SetEventMaskPage2 status: 0x%{public}02x, skipped",
+                g_setEventMaskPage2Result.status);
+        }
+    } else {
+        LOG_WARN("HCI_SetEventMaskPage2 Timeout, skipped");
+    }
+    return BT_SUCCESS;
 }
 
 static int BtmReadLocalSupportedCodecs()
@@ -1050,8 +1177,19 @@ static void BtmLogSetHostFeatureStatus(uint8_t status, uint8_t bit)
 
 static int BtmLeSetHostFeature()
 {
-    static const uint8_t bitsToEnable[] = { 0x20 };
+    // Host-controlled FeatureSet bits (Vol 6, Part B, 4.6.33): bit 32 Connected
+    // Isochronous Stream (Host Support, 5.2) and bit 38 Connection Subrating
+    // (Host Support, 5.3). Each bit is sent and status-tolerated independently
+    // below, so a 5.2-only controller declining 0x26 with 0x11 does not affect
+    // the ISO bit or the rest of BTM_Enable.
+    static const uint8_t bitsToEnable[] = { 0x20, 0x26 };
     for (size_t i = 0; i < sizeof(bitsToEnable) / sizeof(bitsToEnable[0]); i++) {
+        // Skip when the controller does not advertise the command (Supported
+        // Commands table, Vol 4, Part E, 6.27).
+        if (!HciSupportLeSetHostFeature(g_readLocalSupportedCommandsResult.supportedCommands)) {
+            LOG_WARN("HCI_LeSetHostFeature(bit=%{public}d) unsupported, skipped", bitsToEnable[i]);
+            continue;
+        }
         // Clear the event first: a stale signal from a timed-out predecessor
         // command (or the previous loop iteration) would otherwise make
         // EventWait return immediately and this command would consume a
@@ -1236,6 +1374,14 @@ static int BtmInitControllerCommandSequence(void)
         if (BTM_IsControllerSupportLe()) {
             result = BtmInitLeFeature();
         }
+        if (result == BT_SUCCESS) {
+            // 5.3 policy step (best-effort, never fails the sequence): declare
+            // the default minimum BR/EDR encryption key size to the controller.
+            (void)BtmSetMinEncryptionKeySize();
+            // 5.3 partner step: enable the Encryption Change [v2] event (0x59)
+            // that reports the negotiated key size for those connections.
+            (void)BtmSetEventMaskPage2();
+        }
     } while (0);
 
     return result;
@@ -1408,7 +1554,31 @@ bool BTM_IsControllerSupportLeReadTransmitPower()
 // All in-repo call sites satisfy this; a future caller must too.
 bool BTM_IsControllerSupportLePowerControl()
 {
-    return HciSupportLePowerControl(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+    // Bit 33 (LE Power Control Request, Vol 6 Part B 4.6.33) is the spec-correct
+    // feature bit for host-side power control (LE Transmit Power Reporting / LE
+    // Path Loss Monitoring). The old definition read bit 52, which in the spec is
+    // the unrelated bit 52 range of Features (4.6.52+ reserved area); corrected as
+    // part of the 5.3 feature-bit audit (M4).
+    return HciSupportLePowerControlRequest(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 6, Part B, 4.6.34-4.6.36
+// Bit 36 Periodic Advertising ADI support / bit 37 Connection Subrating /
+// bit 39 Channel Classification. Same read-only contract as the queries above:
+// call after BTM_Setup() completed, never concurrently with setup.
+bool BTM_IsControllerSupportLeConnectionSubrating()
+{
+    return HciSupportLeConnectionSubrating(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportLePeriodicAdvAdiSupport()
+{
+    return HciSupportLePeriodicAdvAdiSupport(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportLeChannelClassification()
+{
+    return HciSupportLeChannelClassification(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportLeReadRfPathCompensation()

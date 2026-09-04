@@ -608,7 +608,7 @@ static void AttEattRecvLeDataAsync(const void *context)
         } else {
             LOG_WARN("UnKnow OpCode : %hhu", opcode);
             if ((opcode & 0b01000000) == 0) {
-                AttErrorCode(connect, opcode);
+                AttReplyNotSupported(connect, opcode);
             }
         }
     }

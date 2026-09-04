@@ -67,6 +67,7 @@ static void FindInformationResponseErrorAssign(AttError *attErrorObjPtr, const A
 static void FindByTypeValueResponseErrorAssign(AttError *attErrorObjPtr, const AttConnectInfo *connect);
 static void ReadByGroupTypeResponseErrorAssign(AttError *attErrorObjPtr, const AttConnectInfo *connect);
 static void AttSignedWriteCommandGapRetErrorAssign(AttWrite *attWriteObjPtr, const uint8_t *data);
+static void AttReplyInvalidPdu(AttConnectInfo *connect, uint8_t opcode);
 
 /**
  * @brief gap security confirmation result async.
@@ -334,6 +335,29 @@ static void AttReadAttrAssign(const AttRead *attReadPtr, uint8_t len, const uint
 }
 
 /**
+ * @brief reply ATT_ERROR_RSP with Invalid PDU for a malformed request (Vol 3 Part F 3.3).
+ *
+ * @param1 connect Indicates the pointer to AttConnectInfo.
+ * @param2 opcode Indicates the opcode of the received request.
+ */
+static void AttReplyInvalidPdu(AttConnectInfo *connect, uint8_t opcode)
+{
+    if (connect == NULL) {
+        LOG_WARN("%{public}s:connect == NULL, return.", __FUNCTION__);
+        return;
+    }
+    AttError attError = {0};
+    attError.reqOpcode = opcode;
+    attError.attHandleInError = 0x0000;
+    attError.errorCode = ATT_INVALID_PDU;
+    if (connect->transportType == BT_TRANSPORT_BR_EDR) {
+        ATT_ErrorResponse(connect->retGattConnectHandle, &attError);
+    } else {
+        ATT_ErrorResponseCid(connect->retGattConnectHandle, connect->AttConnectID.lecid, &attError);
+    }
+}
+
+/**
  * @brief received error response.
  *
  * @param1 connect Indicates the pointer to const AttConnectInfo.
@@ -354,6 +378,11 @@ void AttErrorResponse(AttConnectInfo *connect, const Buffer *buffer)
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
+        goto ATTERRORRESPONSE_END;
+    }
+
+    if (BufferGetSize(buffer) < STEP_FOUR) {
+        LOG_WARN("%{public}s: invalid PDU, size=%{public}u", __FUNCTION__, BufferGetSize(buffer));
         goto ATTERRORRESPONSE_END;
     }
 
@@ -400,6 +429,11 @@ void AttExchangeMTURequest(AttConnectInfo *connect, const Buffer *buffer)
         return;
     }
 
+    if (BufferGetSize(buffer) < STEP_TWO) {
+        AttReplyInvalidPdu(connect, EXCHANGE_MTU_REQUEST);
+        return;
+    }
+
     data = (uint8_t *)BufferPtr(buffer);
     attExchangeMTUObj.mtuSize = ((uint16_t *)data)[0];
     connect->receiveMtu = attExchangeMTUObj.mtuSize;
@@ -434,6 +468,11 @@ void AttExchangeMTUResponse(AttConnectInfo *connect, const Buffer *buffer)
 
     if (buffer == NULL) {
         LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
+        goto ATTEXCHANGEMTURESPONSE_END;
+    }
+
+    if (BufferGetSize(buffer) < STEP_TWO) {
+        LOG_WARN("%{public}s: invalid PDU, size=%{public}u", __FUNCTION__, BufferGetSize(buffer));
         goto ATTEXCHANGEMTURESPONSE_END;
     }
 
@@ -479,6 +518,11 @@ void AttFindInformationRequest(AttConnectInfo *connect, const Buffer *buffer)
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         ((AttConnectInfo *)connect)->mtuFlag = true;
+    }
+
+    if (BufferGetSize(buffer) < STEP_FOUR) {
+        AttReplyInvalidPdu(connect, FIND_INFORMATION_REQUEST);
+        return;
     }
 
     data = (uint8_t *)BufferPtr(buffer);
@@ -543,6 +587,10 @@ void AttFindInformationResponse(AttConnectInfo *connect, const Buffer *buffer)
         goto ATTFINDINFORMATIONRESPONSE_END;
     }
     dataLen = BufferGetSize(buffer);
+    if (dataLen < 1) {
+        LOG_WARN("%{public}s: invalid PDU, size=%{public}zu", __FUNCTION__, dataLen);
+        goto ATTFINDINFORMATIONRESPONSE_END;
+    }
     data = (uint8_t *)BufferPtr(buffer);
     attFindObj.findInforRsponse.format = data[0];
     AttCount(attFindObj.findInforRsponse.format, &inforLen, &uuidLen);
@@ -599,7 +647,7 @@ void AttFindByTypeValueRequest(AttConnectInfo *connect, const Buffer *buffer)
     buffSize = BufferGetSize(buffer);
     data = (uint8_t *)BufferPtr(buffer);
     if (data == NULL || buffSize < STEP_SIX) {
-        LOG_ERROR("%{public}s error request", __FUNCTION__);
+        AttReplyInvalidPdu(connect, FIND_BY_TYPE_VALUE_REQUEST);
         return;
     }
     attFindObj.findByTypeValueRequest.handleRange.startHandle = ((uint16_t *)data)[0];
@@ -721,6 +769,10 @@ void AttReadByTypeRequest(AttConnectInfo *connect, const Buffer *buffer)
     }
 
     buffSize = BufferGetSize(buffer);
+    if (buffSize != (STEP_FOUR + UUID16BITTYPELEN) && buffSize != (STEP_FOUR + UUID128BITTYPELEN)) {
+        AttReplyInvalidPdu(connect, READ_BY_TYPE_REQUEST);
+        return;
+    }
     data = (uint8_t *)BufferPtr(buffer);
     attReadObj.readHandleRangeUuid.handleRange.startHandle = ((uint16_t *)data)[0];
     attReadObj.readHandleRangeUuid.handleRange.endHandle = ((uint16_t *)(data + STEP_TWO))[0];
@@ -773,6 +825,10 @@ void AttReadByTypeResponse(AttConnectInfo *connect, const Buffer *buffer)
     }
 
     dataLen = BufferGetSize(buffer);
+    if (dataLen < 1) {
+        LOG_WARN("%{public}s: invalid PDU, size=%{public}zu", __FUNCTION__, dataLen);
+        goto ATTREADBYTYPERESPONSE_END;
+    }
     attReadObj.readHandleListNum.len = *(uint8_t *)BufferPtr(buffer);
     len = attReadObj.readHandleListNum.len;
     LOG_INFO("%{public}s callback para : len = %hhu", __FUNCTION__, len);
@@ -834,6 +890,11 @@ void AttReadRequest(AttConnectInfo *connect, const Buffer *buffer)
     if ((connect->transportType == BT_TRANSPORT_LE && connect->mtu == DEFAULTLEATTMTU) ||
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
+    }
+
+    if (BufferGetSize(buffer) < STEP_TWO) {
+        AttReplyInvalidPdu(connect, READ_REQUEST);
+        return;
     }
 
     data = (uint8_t *)BufferPtr(buffer);
@@ -903,6 +964,10 @@ void AttReadBlobRequest(AttConnectInfo *connect, const Buffer *buffer)
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
     }
+    if (BufferGetSize(buffer) < STEP_FOUR) {
+        AttReplyInvalidPdu(connect, READ_BLOB_REQUEST);
+        return;
+    }
     data = (uint8_t *)BufferPtr(buffer);
     attReadObj.readBlob.attHandle = ((uint16_t *)data)[0];
     attReadObj.readBlob.offset = ((uint16_t *)(data + STEP_TWO))[0];
@@ -969,7 +1034,20 @@ void AttReadMultipleRequest(AttConnectInfo *connect, const Buffer *buffer)
         (connect->transportType == BT_TRANSPORT_BR_EDR && connect->mtu == DEFAULTBREDRMTU)) {
         connect->mtuFlag = true;
     }
+    if (BufferGetSize(buffer) < STEP_FOUR) {
+        AttReplyInvalidPdu(connect, READ_MULTIPLE_REQUEST);
+        return;
+    }
     LOG_INFO("%{public}s connectHandle = %hu", __FUNCTION__, connect->retGattConnectHandle);
+    size_t buffSize = BufferGetSize(buffer);
+    if (buffSize % STEP_TWO) {
+        // The handle list is 2-octet aligned (Vol 3, Part F, 3.4.2,1): an odd
+        // remaining length is a malformed PDU and must be rejected, not silently
+        // truncated (the client would misalign its own handle count against the
+        // response values).
+        AttReplyInvalidPdu(connect, READ_MULTIPLE_REQUEST);
+        return;
+    }
     AttServerCallbackDispatch(connect, ATT_READ_MULTIPLE_REQUEST_ID, NULL, (Buffer *)buffer);
 
     return;
@@ -1031,10 +1109,14 @@ void AttReadByGroupTypeRequest(AttConnectInfo *connect, const Buffer *buffer)
         return;
     }
 
+    buffSize = BufferGetSize(buffer);
+    if (buffSize != (STEP_FOUR + UUID16BITTYPELEN) && buffSize != (STEP_FOUR + UUID128BITTYPELEN)) {
+        AttReplyInvalidPdu(connect, READ_BY_GROUP_TYPE_REQUEST);
+        return;
+    }
     data = (uint8_t *)BufferPtr(buffer);
     attReadObj.readGroupRequest.handleRange.startHandle = ((uint16_t *)data)[0];
     attReadObj.readGroupRequest.handleRange.endHandle = ((uint16_t *)(data + STEP_TWO))[0];
-    buffSize = BufferGetSize(buffer);
     attReadObj.readGroupRequest.uuid = MEM_MALLOC.alloc(sizeof(BtUuid));
 
     if ((buffSize - STEP_FOUR) == UUID16BITTYPELEN) {
@@ -1104,6 +1186,10 @@ void AttReadByGroupTypeResponse(AttConnectInfo *connect, const Buffer *buffer)
     }
 
     dataLen = BufferGetSize(buffer);
+    if (dataLen < 1) {
+        LOG_WARN("%{public}s: invalid PDU, size=%{public}zu", __FUNCTION__, dataLen);
+        goto ATTREADBYGROUPTYPERESPONSE_END;
+    }
     data = ((uint8_t *)BufferPtr(buffer) + 1);
     attReadObj.readGroupResponse.length = *(uint8_t *)BufferPtr(buffer);
     len = attReadObj.readGroupResponse.length;
@@ -1153,7 +1239,16 @@ void AttWriteRequest(AttConnectInfo *connect, const Buffer *buffer)
         connect->mtuFlag = true;
     }
 
+    if (buffer == NULL) {
+        LOG_WARN("%{public}s:buffer == NULL", __FUNCTION__);
+        return;
+    }
+
     buffSize = BufferGetSize(buffer);
+    if (buffSize < STEP_TWO) {
+        AttReplyInvalidPdu(connect, WRITE_REQUEST);
+        return;
+    }
     data = (uint8_t *)BufferPtr(buffer);
     attWriteObj.writeRequest.attHandle = ((uint16_t *)data)[0];
     bufferNew = BufferSliceMalloc(buffer, STEP_TWO, buffSize - STEP_TWO);
@@ -1217,6 +1312,10 @@ void AttWriteCommand(AttConnectInfo *connect, const Buffer *buffer)
     }
 
     buffSize = BufferGetSize(buffer);
+    if (buffSize < STEP_TWO) {
+        LOG_WARN("%{public}s: invalid PDU, size=%{public}zu", __FUNCTION__, buffSize);
+        return;
+    }
     data = (uint8_t *)BufferPtr(buffer);
     attWriteObj.writeCommand.attHandle = ((uint16_t *)data)[0];
     Buffer *bufferNew = BufferSliceMalloc(buffer, STEP_TWO, buffSize - STEP_TWO);
@@ -1273,7 +1372,7 @@ void AttSignedWriteCommand(AttConnectInfo *connect, const Buffer *buffer)
     Buffer *sigedWriteBuffPtr = NULL;
     int ret;
     GapSignatureData gapSignatureDataObj;
-    uint8_t signature[12] = {0};
+    uint8_t signature[GAPSIGNATURESIZE] = {0};
     SigedWriteCommandConfirmationContext *sigedWriteCommandConfirmContextPtr = NULL;
 
     if (buffer == NULL) {
@@ -1282,15 +1381,20 @@ void AttSignedWriteCommand(AttConnectInfo *connect, const Buffer *buffer)
 
     dataBuffer = (uint8_t *)BufferPtr(buffer);
     buffSize = BufferGetSize(buffer);
+    // Validate before copying or allocating: the minimal Signed Write Command PDU
+    // (buffer excludes the opcode, Vol 3 Part F 3.2.5) is handle(2) + value(0) +
+    // auth signature(GAPSIGNATURESIZE); anything shorter is malformed.
+    if (buffSize < (STEP_TWO + GAPSIGNATURESIZE)) {
+        LOG_WARN("%{public}s: invalid PDU, size=%{public}zu", __FUNCTION__, buffSize);
+        return;
+    }
     bufferallPtr = BufferMalloc(buffSize + 1);
     data = (uint8_t *)BufferPtr(bufferallPtr);
     AttSignWriteCommConfDataAssign(data, dataBuffer, buffSize, signature);
     gapSignatureDataObj.data = data;
-    if (buffSize < (sizeof(signature) - 1)) {
-        LOG_ERROR("%{public}s buffSize is invalid", __FUNCTION__);
-        return;
-    }
-    gapSignatureDataObj.dataLen = buffSize - (sizeof(signature) - 1);
+    // data prepends the opcode (1 byte) to the received PDU; the auth signature
+    // trails it, so the signed content length is buffSize + 1 - GAPSIGNATURESIZE.
+    gapSignatureDataObj.dataLen = buffSize + 1 - GAPSIGNATURESIZE;
     sigedWriteBuffPtr = BufferMalloc(sizeof(SigedWriteCommandConfirmationContext));
     sigedWriteCommandConfirmContextPtr = (SigedWriteCommandConfirmationContext *)BufferPtr(sigedWriteBuffPtr);
     AttSignWriteCommConfContextAssign(sigedWriteCommandConfirmContextPtr, connect, data, bufferallPtr, buffSize);
@@ -1343,6 +1447,10 @@ void AttPrepareWriteRequest(AttConnectInfo *connect, const Buffer *buffer)
     }
 
     buffSize = BufferGetSize(buffer);
+    if (buffSize < STEP_FOUR) {
+        AttReplyInvalidPdu(connect, PREPARE_WRITE_REQUEST);
+        return;
+    }
     data = (uint8_t *)BufferPtr(buffer);
     attWriteObj.prepareWrite.handleValue.attHandle = ((uint16_t *)data)[0];
     attWriteObj.prepareWrite.offset = ((uint16_t *)(data + STEP_TWO))[0];
@@ -1385,6 +1493,10 @@ void AttPrepareWriteResponse(AttConnectInfo *connect, const Buffer *buffer)
     }
 
     buffSize = BufferGetSize(buffer);
+    if (buffSize < STEP_FOUR) {
+        LOG_WARN("%{public}s: invalid PDU, size=%{public}zu", __FUNCTION__, buffSize);
+        goto ATTPREPAREWRITERESPONSE_END;
+    }
     data = (uint8_t *)BufferPtr(buffer);
     attWriteObj.prepareWrite.handleValue.attHandle = ((uint16_t *)data)[0];
     attWriteObj.prepareWrite.offset = ((uint16_t *)(data + STEP_TWO))[0];
@@ -1431,6 +1543,10 @@ void AttExecuteWriteRequest(AttConnectInfo *connect, const Buffer *buffer)
         connect->mtuFlag = true;
     }
 
+    if (BufferGetSize(buffer) < 1) {
+        AttReplyInvalidPdu(connect, EXECUTE_WRITE_REQUEST);
+        return;
+    }
     data = (uint8_t *)BufferPtr(buffer);
     attWriteObj.excuteWrite.flag = data[0];
 
@@ -1499,6 +1615,10 @@ void AttHandleValueNotification(AttConnectInfo *connect, const Buffer *buffer)
     }
 
     buffNotiSize = BufferGetSize(buffer);
+    if (buffNotiSize < STEP_TWO) {
+        LOG_WARN("%{public}s: invalid PDU, size=%{public}zu", __FUNCTION__, buffNotiSize);
+        return;
+    }
     data = (uint8_t *)BufferPtr(buffer);
     AttHandleValueObj.attHandle = ((uint16_t *)data)[0];
     bufferNew = BufferSliceMalloc(buffer, STEP_TWO, buffNotiSize - STEP_TWO);
@@ -1540,6 +1660,10 @@ void AttHandleValueIndication(AttConnectInfo *connect, const Buffer *buffer)
     }
 
     buffIndiSize = BufferGetSize(buffer);
+    if (buffIndiSize < STEP_TWO) {
+        LOG_WARN("%{public}s: invalid PDU, size=%{public}zu", __FUNCTION__, buffIndiSize);
+        return;
+    }
     data = (uint8_t *)BufferPtr(buffer);
     AttHandleValueObj.attHandle = ((uint16_t *)data)[0];
     bufferNew = BufferSliceMalloc(buffer, STEP_TWO, buffIndiSize - STEP_TWO);

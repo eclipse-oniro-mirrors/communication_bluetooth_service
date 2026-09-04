@@ -1540,6 +1540,27 @@ static void HciCmdOnLeReadIsoTxSyncFailed(uint8_t status, const void *param)
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// 0x0060 LE Read Buffer Size V2 has no command parameters; on failure all buffer
+// sizes are zeroed (IsoLeReadBufferSizeV2Complete keeps the data plane unavailable).
+static void HciCmdOnLeReadBufferSizeV2Failed(uint8_t status, const void *param)
+{
+    (void)param;
+    HciLeReadBufferSizeV2ReturnParam returnParam = {
+        .status = status,
+        .hcLeAclDataPacketLength = 0,
+        .hcTotalNumLeAclDataPackets = 0,
+        .hcLeIsoDataPacketLength = 0,
+        .hcTotalNumLeIsoDataPackets = 0,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReadBufferSizeV2Complete != NULL) {
+        callbacks->leReadBufferSizeV2Complete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static void HciCmdOnLeSetCigParametersFailed(uint8_t status, const void *param)
 {
     HciLeSetCigParametersReturnParam returnParam = {
@@ -1658,6 +1679,51 @@ static void HciCmdOnLeSetHostFeatureFailed(uint8_t status, const void *param)
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
     if (callbacks->leSetHostFeatureComplete != NULL) {
         callbacks->leSetHostFeatureComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.8.123-7.8.124 Connection Subrating commands: status-only completions are
+// synthesized from the failure status and re-use the complete callbacks.
+static void HciCmdOnLeSetDefaultSubrateFailed(uint8_t status, const void *param)
+{
+    HciLeSetDefaultSubrateReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetDefaultSubrateComplete != NULL) {
+        callbacks->leSetDefaultSubrateComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSubrateRequestFailed(uint8_t status, const void *param)
+{
+    HciLeSubrateRequestReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSubrateRequestComplete != NULL) {
+        callbacks->leSubrateRequestComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciCmdOnLeSetDataRelatedAddressChangesFailed(uint8_t status, const void *param)
+{
+    HciLeSetDataRelatedAddressChangesReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetDataRelatedAddressChangesComplete != NULL) {
+        callbacks->leSetDataRelatedAddressChangesComplete(&returnParam);
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
@@ -2046,7 +2112,7 @@ static HciCmdOnFailedFunc g_funcMap[] = {
     HciCmdOnLeSetDefaultPeriodicAdvertisingSyncTransferParametersFailed, // 0x005D
     HciCmdOnLeGenerateDhKeyFailed,                                       // 0x005E
     HciCmdOnLeModifySleepClockAccuracyFailed,                            // 0x005F
-    NULL,                                                                // 0x0060
+    HciCmdOnLeReadBufferSizeV2Failed,                                    // 0x0060
     HciCmdOnLeReadIsoTxSyncFailed,                                       // 0x0061
     HciCmdOnLeSetCigParametersFailed,                                    // 0x0062
     HciCmdOnLeSetCigParametersTestFailed,                                // 0x0063
@@ -2073,11 +2139,15 @@ static HciCmdOnFailedFunc g_funcMap[] = {
     HciCmdOnLeSetPathLossReportingParametersFailed,                      // 0x0078
     HciCmdOnLeSetPathLossReportingEnableFailed,                          // 0x0079
     HciCmdOnLeSetTransmitPowerReportingEnableFailed,                     // 0x007A
+    NULL,                                                                // 0x007B
+    HciCmdOnLeSetDataRelatedAddressChangesFailed,                        // 0x007C
+    HciCmdOnLeSetDefaultSubrateFailed,                                   // 0x007D
+    HciCmdOnLeSubrateRequestFailed,                                      // 0x007E
 };
 
 // 0x005E is 7.8.93 LE Generate DHKey [v2] (Key_Type variant): the failure path
 // dispatches the same leGenerateDHKeyComplete callback as v1 (0x0026).
-#define LECONTROLLER_OCF_MAX 0x007A
+#define LECONTROLLER_OCF_MAX 0x007E
 
 void HciOnLeControllerCmdFailed(uint16_t opCode, uint8_t status, const void *param)
 {

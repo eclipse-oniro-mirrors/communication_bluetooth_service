@@ -42,6 +42,10 @@
 #define GAP_PERIODIC_ADV_SYNC_TIMEOUT_MIN 0x000A
 #define GAP_PERIODIC_ADV_SYNC_TIMEOUT_MAX 0x4000
 #define GAP_PERIODIC_ADV_ENABLE_TRUE 0x01
+// 5.3 Enable parameter bits of HCI_LE_Set_Periodic_Advertising_Enable
+// (Vol 4, Part E, 7.8.63): bit 1 includes the ADI field in AUX_SYNC_IND PDUs.
+#define GAP_PERIODIC_ADV_ENABLE_INCLUDE_ADI 0x02
+#define GAP_PERIODIC_ADV_ENABLE_TRUE_ADI (GAP_PERIODIC_ADV_ENABLE_TRUE | GAP_PERIODIC_ADV_ENABLE_INCLUDE_ADI)
 #define GAP_LE_RF_PATH_COMPENSATION_MIN (-1280)
 #define GAP_LE_RF_PATH_COMPENSATION_MAX (1280)
 #define GAP_LE_TEST_DATA_LENGTH_MAX 0xFF
@@ -151,6 +155,7 @@ void GapOnSimplePairingComplete(const HciSimplePairingCompleteEventParam *eventP
 void GapReadLocalOobExtendedDataComplete(const HciReadLocalOobExtendedDataReturnParam *param);
 void GapOnAuthenticationComplete(const HciAuthenticationCompleteEventParam *eventParam);
 void GapOnEncryptionChangeEvent(const HciEncryptionChangeEventParam *eventParam);
+void GapOnEncryptionChangeV2Event(const HciEncryptionChangeV2EventParam *eventParam);
 void GapOnPINCodeRequestEvent(const HciPinCodeRequestEventParam *eventParam);
 void GapOnLinkKeyRequestEvent(const HciLinkKeyRequestEventParam *eventParam);
 void GapOnLinkKeyNotificationEvent(const HciLinkKeyNotificationEventParam *eventParam);
@@ -246,6 +251,12 @@ void GapLeSetPathLossReportingEnableComplete(const HciLeSetPathLossReportingEnab
 void GapLeSetTransmitPowerReportingEnableComplete(const HciLeSetTransmitPowerReportingEnableReturnParam *param);
 void GapLePathLossThresholdEvent(const HciLePathLossThresholdEventParam *eventParam);
 void GapLeTransmitPowerReportingEvent(const HciLeTransmitPowerReportingEventParam *eventParam);
+// Connection Subrating (5.3, 7.8.123/7.8.124/7.7.65,35) handlers, owned by
+// gap_le_subrate.c. Task targets of the gap_hci_receive.c wrappers; they run
+// on the Stack thread and dispatch the registered GapLeSubrateCallback.
+void GapLeSetDefaultSubrateComplete(const HciLeSetDefaultSubrateReturnParam *param);
+void GapLeSubrateRequestComplete(const HciLeSubrateRequestReturnParam *param);
+void GapLeSubrateChangeEvent(const HciLeSubrateChangeEventParam *eventParam);
 void GapLeSetPhyComplete(const HciLeSetPhyReturnParam *param);
 void GapOnLePhyUpdateCompleteEvent(const HciLePhyUpdateCompleteEventParam *eventParam);
 void GapLeSetDataLengthComplete(const HciLeSetDataLengthReturnParam *param);
@@ -324,6 +335,12 @@ void GapLeCteCallbackRelease(void);
 // registered callback is fetched through GapLePowerControlCallbackGet/Release.
 int GapLePowerControlCallbackInit(void);
 void GapLePowerControlCallbackDeinit(void);
+
+// Connection Subrating callback group lifecycle, owned by gap_le_subrate.c.
+// Same single-slot by-value registration and ref-counted dispatch model as the
+// power-control group above.
+int GapLeSubrateCallbackInit(void);
+void GapLeSubrateCallbackDeinit(void);
 
 // Validates a 5.1 antenna switching pattern: length 0 with NULL antennaIds, or
 // length 0x02-0x4B with a non-NULL antennaIds array. Defined in gap_le_adv.c.

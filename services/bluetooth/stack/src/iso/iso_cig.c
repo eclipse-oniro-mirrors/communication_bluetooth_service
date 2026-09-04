@@ -23,6 +23,7 @@
 #include "hci/hci.h"
 #include "hci/hci_def_link_ctrl_cmd.h"
 #include "hci/hci_error.h"
+#include "hci/iso/hci_iso.h"
 
 #include "btm/btm_thread.h"
 
@@ -522,6 +523,10 @@ static void IsoRemoveCigCisEntries(IsoLeMng *mng, IsoCigInfo *cigInfo)
         IsoCisInfo *cisInfo = IsoFindCis(mng, cigInfo->cisHandles[i]);
         if (cisInfo != NULL) {
             ListRemoveNode(mng->cisList, cisInfo);
+            // The CIG removal has torn the CIS down: drop the HCI handle
+            // registration and the RX reassembly context alongside the entry.
+            HciIsoDeregisterHandle(cigInfo->cisHandles[i]);
+            IsoDataRemoveRxContext(cigInfo->cisHandles[i]);
         }
     }
 }
@@ -658,6 +663,11 @@ void IsoLeCisEstablishedEvent(const HciLeCisEstablishedEventParam *param)
     if (param->status == HCI_SUCCESS && !IsoCisEstablishedTrack(mng, param)) {
         return;
     }
+    if (param->status == HCI_SUCCESS) {
+        // Established CIS: register the handle for the HCI ISO data path
+        // (Number of Completed Packets filtering / credit recovery).
+        HciIsoRegisterHandle(param->connectionHandle);
+    }
 
     IsoLeCisEstablishedInfo info = {
         .cisHandle = param->connectionHandle,
@@ -727,6 +737,9 @@ void IsoLeDisconnectComplete(const HciDisconnectCompleteEventParam *param)
     if (param->status == HCI_SUCCESS) {
         ListRemoveNode(mng->cisList, cisInfo);
         IsoClearCisHandleInCig(mng, param->connectionHandle);
+        HciIsoDeregisterHandle(param->connectionHandle);
+        // Drop the RX reassembly context for this CIS; its handle is gone for good.
+        IsoDataRemoveRxContext(param->connectionHandle);
     }
 
     // BLUETOOTH SPECIFICATION Version 5.2 | Vol 6, Part B

@@ -26,6 +26,7 @@
 #include "hci/cmd/hci_cmd.h"
 #include "hci/hci.h"
 #include "hci/hci_error.h"
+#include "hci/iso/hci_iso.h"
 
 #include "hci_evt_cmd_complete.h"
 #include "hci_evt_le.h"
@@ -272,6 +273,33 @@ static void HciEventOnEncryptionChangeEvent(Packet *packet)
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// 5.3 7.7.8 Encryption Change [v2] event (0x59). The v1 (0x08) handler above
+// stays untouched: a pre-5.3 controller keeps emitting v1 and both paths are
+// kept live (same policy as BlueZ). Payload is 5 octets including the
+// status octet (verified against the amended 2024 spec).
+static void HciEventOnEncryptionChangeV2Event(Packet *packet)
+{
+    Buffer *payloadBuffer = PacketContinuousPayload(packet);
+    if (payloadBuffer == NULL) {
+        return;
+    }
+    HciEncryptionChangeV2EventParam *param = (HciEncryptionChangeV2EventParam *)BufferPtr(payloadBuffer);
+    if (param == NULL) {
+        return;
+    }
+    size_t length = BufferGetSize(payloadBuffer);
+    if (length != sizeof(HciEncryptionChangeV2EventParam)) {
+        return;
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->encryptionChangeV2 != NULL) {
+        callbacks->encryptionChangeV2(param);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static void HciEventOnReadRemoteSupportedFeaturesCompleteEvent(Packet *packet)
 {
     Buffer *payloadBuffer = PacketContinuousPayload(packet);
@@ -380,6 +408,7 @@ static void HciEventOnNumberOfCompletedPacketsEvent(Packet *packet)
         }
 
         HciAclOnNumberOfCompletedPacket(numberOfHandles, list);
+        HciIsoOnNumberOfCompletedPackets(numberOfHandles, list);
         MEM_MALLOC.free(list);
     }
 }
@@ -1990,9 +2019,10 @@ static HciEventFunc g_eventFuncMap[] = {
     HciEventOnInquiryResponseNotificationEvent,                   // 0x56
     HciEventOnAuthenticatedPayloadTimeoutExpiredEvent,            // 0x57
     HciEventOnSAMStatusChangeEvent,                               // 0x58
+    HciEventOnEncryptionChangeV2Event,                            // 0x59
 };
 
-#define EVENTCODE_MAX 0x58
+#define EVENTCODE_MAX 0x59
 
 void HciOnEvent(Packet *packet)
 {

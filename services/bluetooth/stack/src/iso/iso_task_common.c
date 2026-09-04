@@ -142,6 +142,27 @@ int IsoRunTaskBlockProcess(void (*func)(void *), void *ctx)
 
 int IsoRunTaskUnBlockProcess(void (* const func)(void *), void *ctx, void (* const freeCtx)(void *))
 {
+    // Same-thread short-circuit (mirror IsoRunTaskBlockProcess): the ISO queue is
+    // drained by the single Stack thread, and callers already running on that thread
+    // (documented usage: ISOIF_LeSendIsoData from the sduReceivedInd callback) must
+    // not block on the enqueue semaphore when the queue is full - the thread would
+    // wait forever for itself to drain it. Execute inline instead, matching
+    // IsoUnBlockInTaskProcess's ownership: func runs first, then freeCtx (or a plain
+    // free when freeCtx is NULL) releases ctx. The task bodies only build packets
+    // and enqueue HCI data, so no blocking wait is re-entered.
+    Thread *processingThread = BTM_GetProcessingThread();
+    if (processingThread != NULL && ThreadIsSelf(processingThread) == 0) {
+        if (func != NULL) {
+            func(ctx);
+        }
+        if (freeCtx != NULL) {
+            freeCtx(ctx);
+        } else if (ctx != NULL) {
+            MEM_MALLOC.free(ctx);
+        }
+        return BT_SUCCESS;
+    }
+
     IsoRunTaskUnBlockInfo *info = MEM_MALLOC.alloc(sizeof(IsoRunTaskUnBlockInfo));
     if (info == NULL) {
         return BT_NO_MEMORY;

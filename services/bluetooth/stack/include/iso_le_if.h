@@ -158,18 +158,25 @@ typedef struct {
 } IsoLeBigParam;
 
 /**
- * @brief       BIG-level parameters for LE Create BIG Test, adds ISO_Interval / Number_Of_SDU
+ * @brief       BIG-level parameters for LE Create BIG Test, adds ISO_Interval / NSE
+ * @note        Breaking layout change (5.3 migration, HCI 7.8.104 field set):
+ *              the former maxTransportLatency/rtn fields were replaced by
+ *              nse/maxPdu/bn/irc/pto. No in-repo consumer existed at the
+ *              change, but downstream code compiled against the old layout
+ *              will silently misparse this structure - recompile every user.
  */
 typedef struct {
     uint32_t sduInterval;         ///< SDU_Interval (24-bit, unit: us, max 0xFFFFFF)
     uint16_t isoInterval;         ///< ISO_Interval (unit: 1.25ms)
-    uint8_t numberOfSdu;          ///< Number_Of_SDU
+    uint8_t nse;                  ///< NSE: number of subevents (Vol 4 Part E 7.8.104)
     uint16_t maxSdu;              ///< Max_SDU
-    uint16_t maxTransportLatency; ///< Max_Transport_Latency (0xFFFF: no constraint)
-    uint8_t rtn;                  ///< RTN: number of retransmission attempts
+    uint16_t maxPdu;              ///< Max_PDU: maximum size of every BIS Data PDU
     uint8_t phy;                  ///< PHY used for transmission
     uint8_t packing;              ///< Packing: 0x00 sequential, 0x01 interleaved
     uint8_t framing;              ///< Framing: 0x00 unframed, 0x01 framed
+    uint8_t bn;                   ///< BN: number of new payloads per BIS event (0x01-0x07)
+    uint8_t irc;                  ///< IRC: 1 to (NSE / BN)
+    uint8_t pto;                  ///< PTO: pre-transmission offset (0x00-0x0F)
     uint8_t encryption;           ///< Encryption: 0x00 unencrypted, 0x01 encrypted
 } IsoLeBigTestParam;
 
@@ -379,6 +386,47 @@ typedef struct {
     void (*readIsoTxSyncResult)(uint8_t status, const IsoLeTxSyncInfo *info, void *context);
     void (*requestPeerScaResult)(uint8_t status, const IsoLePeerScaInfo *info, void *context);
 } IsoLeStatusQueryCallback;
+
+/**
+ * @brief       Description of one received ISO SDU, delivered by sduReceivedInd
+ *
+ * data is valid only during the callback. timestamp is the Time_Stamp (us) when
+ * TS_Flag was set, 0 otherwise. packetStatus (Table 5.2): 0 valid, 1 possibly
+ * invalid, 2 lost; non-zero is delivered for the upper layer to discard at its
+ * discretion.
+ */
+typedef struct {
+    uint16_t connectionHandle; ///< CIS/BIS Connection Handle
+    uint16_t seqNum;           ///< Packet_Sequence_Number of the received SDU
+    uint32_t timestamp;        ///< Time_Stamp (us); 0 when TS_Flag was not set
+    uint8_t packetStatus;      ///< 0 valid, 1 possibly invalid, 2 lost (Table 5.2)
+    const uint8_t *data;       ///< ISO_SDU data; valid only during the callback
+    uint16_t length;           ///< ISO_SDU length (0 for a lost complete packet)
+} IsoLeSduReceivedInfo;
+
+/**
+ * @brief       ISO SDU receive callback structure (HCI ISO Data packets, 0x14/0x15)
+ *
+ * Invoked once per complete reassembled ISO SDU.
+ *
+ * Lost-SDU delivery contract (matches IsoSduRxOnPacket; Vol 4, Part E, 5.4.5): a lost
+ * SDU carried in one complete packet (PB 0b10) is reported with packetStatus 2. The
+ * spec has the sender set ISO_SDU_Length to zero and send no data, so the report
+ * carries data == NULL and length == 0; a non-conforming sender that marks such a
+ * packet lost but still fills the payload gets it delivered as-is with packetStatus 2
+ * (length > 0, data valid). A malformed lost packet (length mismatch) is rejected
+ * without any report. A fragmented SDU (PB 0b00...) whose first fragment is marked
+ * lost carries ISO_SDU_Length zero, which the reassembler rejects: no synthetic lost
+ * report is generated for it, and the loss surfaces as a gap in the seqNum sequence.
+ *
+ * Runs on the stack thread. ISOIF_* entry points detect a same-thread caller and
+ * execute inline instead of queueing (see IsoRunTaskBlockProcess), so calling them
+ * from this callback neither deadlocks nor must be avoided: blocking ones simply run
+ * synchronously. ISOIF_LeSendIsoData is the common case.
+ */
+typedef struct {
+    void (*sduReceivedInd)(const IsoLeSduReceivedInfo *info, void *context);
+} IsoLeSduCallback;
 
 /**
  * @brief       Register CIG management result callback function
@@ -705,6 +753,48 @@ BTSTACK_API int ISOIF_LeReadIsoTxSync(uint16_t connectionHandle);
  * Sleep Clock Accuracy Update feature.
  */
 BTSTACK_API int ISOIF_LeRequestPeerSca(uint16_t connectionHandle);
+
+/**
+ * @brief       Register ISO SDU receive callback function (HCI ISO Data packets, 0x14/0x15)
+ * @param[in]   callback            ISO SDU receive callback structure
+ * @param[in]   context             ISO SDU receive callback context parameter
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int ISOIF_LeRegisterSduCallback(const IsoLeSduCallback *callback, void *context);
+
+/**
+ * @brief       Deregister ISO SDU receive callback function
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int ISOIF_LeDeregisterSduCallback(void);
+
+/**
+ * @brief       Parameters of one ISO SDU to transmit (ISOIF_LeSendIsoData)
+ *
+ * The SDU bytes are copied by the call and need not outlive it. timestamp is
+ * carried in the ISO_Data_Load header only when timestampFlag is set.
+ */
+typedef struct {
+    uint16_t connectionHandle; ///< CIS/BIS Connection Handle
+    uint16_t seqNum;           ///< Packet_Sequence_Number of the SDU
+    uint32_t timestamp;        ///< Time_Stamp of the SDU (unit: us)
+    uint8_t timestampFlag;     ///< Whether to include the Time_Stamp in the ISO_Data_Load header
+    const uint8_t *data;       ///< ISO_SDU data, length bytes
+    uint16_t length;           ///< ISO_SDU length
+} IsoLeSendIsoDataParam;
+
+/**
+ * @brief       Send an ISO SDU, fragmenting it into HCI ISO data packets (0x14/0x15)
+ * @param[in]   param               ISO SDU to transmit (see IsoLeSendIsoDataParam)
+ * @return      @c BT_SUCCESS      : The SDU was queued for transmission.
+ *              @c otherwise        : The SDU was rejected (invalid parameter or queue failure).
+ * @note        The SDU is copied and the call returns immediately; the return value is only the
+ *              enqueue result, not the send result. A later send failure (no ISO data buffer, or
+ *              before LE Read Buffer Size V2 completes) is dropped and logged; data stays valid.
+ */
+BTSTACK_API int ISOIF_LeSendIsoData(const IsoLeSendIsoDataParam *param);
 
 #ifdef __cplusplus
 }

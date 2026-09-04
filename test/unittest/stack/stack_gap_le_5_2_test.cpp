@@ -59,9 +59,11 @@
 #include "l2cap_def.h"
 #include "l2cap_le_if.h"
 #include "securec.h"
+#include "src/btm/btm_controller.h"
 #include "src/hci/evt/hci_evt.h"
 #include "src/hci/hci.h"
 #include "src/hci/hci_def_le_cmd.h"
+#include "src/hci/iso/hci_iso.h"
 #include "src/iso/iso.h"
 #include "src/l2cap/l2cap_cmn.h"
 #include "src/l2cap/l2cap_le.h"
@@ -1381,13 +1383,15 @@ HWTEST_F(StackGapLe52Test, StackGapLe52_HciCreateBigTest_00200, TestSize.Level1)
     param.numBis = 1;
     param.sduInterval[0] = 0x64;
     param.isoInterval = 0x10;
-    param.numberOfSdu = 0x01;
+    param.nse = 0x01;
     param.maxSdu = 0x0100;
-    param.maxTransportLatency = 0x0FFF;
-    param.rtn = 0x02;
+    param.maxPdu = 0x0100;
     param.phy = 0x01;
     param.packing = 0x00;
     param.framing = 0x00;
+    param.bn = 0x01;
+    param.irc = 0x01;
+    param.pto = 0x00;
     param.encryption = 0x00;
 
     int ret = HCI_LeCreateBigTest(&param);
@@ -1524,13 +1528,15 @@ HWTEST_F(StackGapLe52Test, StackGapLe52_IsoifCreateBigTest_00200, TestSize.Level
     IsoLeBigTestParam bigParam = { };
     bigParam.sduInterval = 0x64;
     bigParam.isoInterval = 0x10;
-    bigParam.numberOfSdu = 0x01;
+    bigParam.nse = 0x01;
     bigParam.maxSdu = 0x0100;
-    bigParam.maxTransportLatency = 0x0FFF;
-    bigParam.rtn = 0x02;
+    bigParam.maxPdu = 0x0100;
     bigParam.phy = 0x01;
     bigParam.packing = 0x00;
     bigParam.framing = 0x00;
+    bigParam.bn = 0x01;
+    bigParam.irc = 0x01;
+    bigParam.pto = 0x00;
     bigParam.encryption = 0x00;
 
     int ret = ISOIF_LeCreateBigTest(0x00, 0x00, 1, &bigParam, nullptr);
@@ -2217,11 +2223,15 @@ HWTEST_F(StackGapLe52Test, StackGapLe52_E2eReadIsoTxSync_00100, TestSize.Level1)
  * @tc.number: StackGapLe52_E2eRequestPeerSca_00100
  * @tc.name: end-to-end 0x006D with controller reply
  * @tc.desc: dispatch ISOIF_LeRequestPeerSca, wait for requestPeerScaResult.
- *           handle 0x0000 is not a connected ACL, so the controller replies an error,
- *           but the Command_Status/event path still round-trips through the stack
+ *           Skipped when the controller's Local Supported Commands reports 0x006D
+ *           as unsupported
  */
 HWTEST_F(StackGapLe52Test, StackGapLe52_E2eRequestPeerSca_00100, TestSize.Level1)
 {
+    if (!BtmIsControllerSupportedLeRequestPeerSca()) {
+        GTEST_SKIP() << "controller does not support HCI_LE_Request_Peer_SCA (0x006D)";
+    }
+
     IsoStatusQueryResult result;
     IsoLeStatusQueryCallback cb = { };
     cb.requestPeerScaResult = OnRequestPeerScaResult;
@@ -2242,6 +2252,10 @@ HWTEST_F(StackGapLe52Test, StackGapLe52_E2eRequestPeerSca_00100, TestSize.Level1
  */
 HWTEST_F(StackGapLe52Test, StackGapLe52_TwoDeviceRequestPeerSca_00100, TestSize.Level1)
 {
+    if (!BtmIsControllerSupportedLeRequestPeerSca()) {
+        GTEST_SKIP() << "controller does not support HCI_LE_Request_Peer_SCA (0x006D)";
+    }
+
     if (g_peerAddrArg[0] == '\0') {
         GTEST_SKIP() << "peer address not set (BT52_PEER_ADDR=XX:XX:XX:XX:XX:XX)";
     }
@@ -2982,6 +2996,235 @@ HWTEST_F(StackGapLe52Test, StackGapLe52_EattRequestTimeout_00100, TestSize.Level
     ASSERT_EQ(CallL2cap(EattReqTimeoutFn, &arg), BT_SUCCESS);
     ASSERT_TRUE(g_mockCtx.disconnected.WaitFor(3)) << "0x17 timeout cleanup incomplete";
     EXPECT_EQ(g_mockCtx.disconnected.Count(), 3);
+}
+
+namespace {
+// PB_Flag of one HCI ISO data packet (Vol 4, Part E, 5.4.5, Table 5.1); the flow-control
+// and gate cases only ever send complete SDUs.
+constexpr uint8_t PB_COMPLETE_SDU = 0x02;
+} // namespace
+
+// --- Gate: IsoOnIsoData drops ISO data for an inactive handle (report §9 gap 2) ---
+// The HCI RX path (HciOnIsoData) serializes on the stack thread, so driving IsoOnIsoData
+// directly here mirrors production; 0x1D success registers the BIS handle, 0x1E and
+// 0x006C success remove it, and only a registered handle may deliver an SDU.
+
+struct IsoGateSduContext : CallbackWaiter {
+    uint16_t handle = 0xFFFF;
+    uint16_t seqNum = 0xFFFF;
+    uint8_t packetStatus = 0xFF;
+    uint16_t length = 0xFFFF;
+};
+
+void OnGateSduReceived(const IsoLeSduReceivedInfo *info, void *context)
+{
+    auto *ctx = static_cast<IsoGateSduContext *>(context);
+    ctx->handle = info->connectionHandle;
+    ctx->seqNum = info->seqNum;
+    ctx->packetStatus = info->packetStatus;
+    ctx->length = info->length;
+    ctx->Notify();
+}
+
+/**
+ * @tc.number: StackGapLe52_IsoOnIsoDataGate_00100
+ * @tc.name: IsoOnIsoData handle gate follows the sync BIG lifecycle
+ * @tc.desc: a BIS handle becomes active on LE BIG Sync Established (0x1D, success) and
+ *           drops on LE BIG Sync Lost (0x1E) and LE BIG Terminate Sync complete (0x006C,
+ *           success); a re-sync restores the gate. ISO data for an inactive handle is
+ *           discarded before the reassembly state machine is touched.
+ */
+HWTEST_F(StackGapLe52Test, StackGapLe52_IsoOnIsoDataGate_00100, TestSize.Level1)
+{
+    const uint16_t bisHandle = 0x0011;
+
+    IsoLeSduCallback sduCb = { };
+    IsoGateSduContext ctx;
+    sduCb.sduReceivedInd = OnGateSduReceived;
+    ASSERT_EQ(ISOIF_LeRegisterSduCallback(&sduCb, &ctx), BT_SUCCESS);
+
+    // Complete-SDU ISO data load: [PSN 2B][ISO_SDU_Length 2B][payload] (no TS).
+    uint8_t load[64];
+    const uint8_t payload[] = { 0x01, 0x02, 0x03, 0x04, 0x05 };
+    load[0] = 0x34; // PSN 0x1234, little-endian
+    load[1] = 0x12;
+    load[2] = static_cast<uint8_t>(sizeof(payload)); // ISO_SDU_Length low octet
+    load[3] = 0x00; // ISO_SDU_Length high octet, PSF 0b00
+    (void)memcpy_s(load + (ISO_UINT16_BYTES + ISO_UINT16_BYTES),
+        sizeof(load) - (ISO_UINT16_BYTES + ISO_UINT16_BYTES), payload, sizeof(payload));
+    uint16_t loadLen = static_cast<uint16_t>(sizeof(payload) + ISO_UINT16_BYTES + ISO_UINT16_BYTES);
+    Packet *pkt = PacketMalloc(0, 0, loadLen);
+    ASSERT_NE(pkt, nullptr);
+    (void)PacketPayloadWrite(pkt, load, 0, loadLen);
+    auto deliver = [&ctx, pkt, bisHandle]() { ctx.Reset(); IsoOnIsoData(bisHandle, PB_COMPLETE_SDU, 0, pkt); };
+
+    // 0x1D success registers the BIS handle; the SDU must pass the gate.
+    HciLeBigSyncEstablishedEventParam sync = { .status = HCI_STATUS_SUCCESS, .bigHandle = 0x00, .numBis = 1,
+        .bisHandles = { bisHandle } };
+    // The task-context handler registers the BIS handles and notifies the upper layer.
+    IsoLeBigSyncEstablishedEvent(&sync);
+
+    deliver();
+    ASSERT_TRUE(ctx.Wait()) << "SDU not delivered for the synced BIS handle";
+    EXPECT_EQ(ctx.handle, bisHandle);
+    EXPECT_EQ(ctx.seqNum, 0x1234);
+    EXPECT_EQ(ctx.packetStatus, 0);
+    EXPECT_EQ(ctx.length, sizeof(payload));
+
+    // 0x1E removes the entry; the same SDU must now be dropped.
+    HciLeBigSyncLostEventParam lost = { };
+    lost.bigHandle = 0x00;
+    IsoLeBigSyncLostEvent(&lost);
+
+    deliver();
+    EXPECT_FALSE(ctx.Wait(200)) << "SDU delivered after 0x1E sync lost";
+
+    // Re-sync (0x1D) restores the gate.
+    IsoLeBigSyncEstablishedEvent(&sync);
+    deliver();
+    ASSERT_TRUE(ctx.Wait()) << "SDU not delivered after re-sync";
+    EXPECT_EQ(ctx.length, sizeof(payload));
+
+    // 0x006C success removes the entry; the SDU must be dropped again.
+    HciLeBigTerminateSyncReturnParam term = { };
+    term.status = HCI_STATUS_SUCCESS;
+    term.bigHandle = 0x00;
+    IsoLeBigTerminateSyncComplete(&term);
+
+    deliver();
+    EXPECT_FALSE(ctx.Wait(200)) << "SDU delivered after 0x006C terminate sync";
+
+    PacketFree(pkt);
+    (void)ISOIF_LeDeregisterSduCallback();
+}
+
+// --- M1: HCI ISO TX flow control (Vol 4, Part E, 4.1.1) ---
+// HCI_SendIsoData consumes one Controller buffer credit per packet sent and returns
+// BT_OPERATION_FAILED once the credit is exhausted (isochronous data expires, so
+// queueing would only delay stale data). Number of Completed Packets (0x13) restores
+// credit for registered ISO handles only, and disconnecting a link recovers the
+// credit of packets the Controller never completed.
+
+/**
+ * @tc.number: StackGapLe52_IsoFlowControlCreditSeed_00100
+ * @tc.name: seeded credit is consumed per send and exhausted sends are rejected
+ * @tc.desc: seed 2 Controller buffers as 0x0060 success does; two HCI ISO Data
+ *           packets are accepted, the third returns BT_OPERATION_FAILED
+ */
+HWTEST_F(StackGapLe52Test, StackGapLe52_IsoFlowControlCreditSeed_00100, TestSize.Level1)
+{
+    const uint16_t isoHandle = 0x0050;
+    HciIsoRegisterHandle(isoHandle);
+    HciIsoSetIsoDataPackets(2);
+
+    Packet *pkt = PacketMalloc(0, 0, 8);
+    ASSERT_NE(pkt, nullptr);
+    uint8_t load[8] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
+    (void)PacketPayloadWrite(pkt, load, 0, sizeof(load));
+
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_SUCCESS);
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_SUCCESS);
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_OPERATION_FAILED);
+
+    PacketFree(pkt);
+    HciIsoDeregisterHandle(isoHandle);
+}
+
+/**
+ * @tc.number: StackGapLe52_IsoFlowControlCompletedPackets_00200
+ * @tc.name: Number of Completed Packets restores the drained credit
+ * @tc.desc: after the single credit is drained, a 0x13 completion for the ISO
+ *           handle adds the count back and a further send succeeds
+ */
+HWTEST_F(StackGapLe52Test, StackGapLe52_IsoFlowControlCompletedPackets_00200, TestSize.Level1)
+{
+    const uint16_t isoHandle = 0x0051;
+    HciIsoRegisterHandle(isoHandle);
+    HciIsoSetIsoDataPackets(1);
+
+    Packet *pkt = PacketMalloc(0, 0, 8);
+    ASSERT_NE(pkt, nullptr);
+    uint8_t load[8] = { 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80 };
+    (void)PacketPayloadWrite(pkt, load, 0, sizeof(load));
+
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_SUCCESS);
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_OPERATION_FAILED);
+
+    HciNumberOfCompletedPackets completed[1] = {
+        { isoHandle, 1 }
+    };
+    HciIsoOnNumberOfCompletedPackets(1, completed);
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_SUCCESS);
+
+    PacketFree(pkt);
+    HciIsoDeregisterHandle(isoHandle);
+}
+
+/**
+ * @tc.number: StackGapLe52_IsoFlowControlHandleFilter_00300
+ * @tc.name: 0x13 completions are credited for ISO handles only
+ * @tc.desc: a completion for an unregistered (ACL) handle must not restore the
+ *           ISO credit; only a registered ISO handle's completion does
+ */
+HWTEST_F(StackGapLe52Test, StackGapLe52_IsoFlowControlHandleFilter_00300, TestSize.Level1)
+{
+    const uint16_t isoHandle = 0x0052;
+    const uint16_t aclHandle = 0x0053; // not in the ISO handle list
+    HciIsoRegisterHandle(isoHandle);
+    HciIsoSetIsoDataPackets(1);
+
+    Packet *pkt = PacketMalloc(0, 0, 8);
+    ASSERT_NE(pkt, nullptr);
+    uint8_t load[8] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x11, 0x22, 0x33 };
+    (void)PacketPayloadWrite(pkt, load, 0, sizeof(load));
+
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_SUCCESS);
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_OPERATION_FAILED);
+
+    HciNumberOfCompletedPackets aclCompleted[1] = {
+        { aclHandle, 1 }
+    };
+    HciIsoOnNumberOfCompletedPackets(1, aclCompleted);
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_OPERATION_FAILED);
+
+    HciNumberOfCompletedPackets isoCompleted[1] = {
+        { isoHandle, 1 }
+    };
+    HciIsoOnNumberOfCompletedPackets(1, isoCompleted);
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_SUCCESS);
+
+    PacketFree(pkt);
+    HciIsoDeregisterHandle(isoHandle);
+}
+
+/**
+ * @tc.number: StackGapLe52_IsoFlowControlDisconnectRecovery_00400
+ * @tc.name: deregistering a handle recovers the in-flight credit
+ * @tc.desc: two packets in flight are never completed by the Controller; on
+ *           disconnect (0x05 / 0x006C) their credit must be returned or it is
+ *           lost permanently, so two further sends succeed and the third fails
+ */
+HWTEST_F(StackGapLe52Test, StackGapLe52_IsoFlowControlDisconnectRecovery_00400, TestSize.Level1)
+{
+    const uint16_t isoHandle = 0x0054;
+    HciIsoRegisterHandle(isoHandle);
+    HciIsoSetIsoDataPackets(2);
+
+    Packet *pkt = PacketMalloc(0, 0, 8);
+    ASSERT_NE(pkt, nullptr);
+    uint8_t load[8] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
+    (void)PacketPayloadWrite(pkt, load, 0, sizeof(load));
+
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_SUCCESS);
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_SUCCESS);
+    HciIsoDeregisterHandle(isoHandle);
+
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_SUCCESS);
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_SUCCESS);
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_OPERATION_FAILED);
+    EXPECT_EQ(HCI_SendIsoData(isoHandle, PB_COMPLETE_SDU, 0, pkt), BT_OPERATION_FAILED);
+
+    PacketFree(pkt);
 }
 
 } // namespace Bluetooth

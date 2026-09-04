@@ -105,6 +105,7 @@ StackGapSrc = [
   "src/gap/gap_le_if_5_0.c",
   "src/gap/gap_le_if_5_1.c",
   "src/gap/gap_le_power.c",
+  "src/gap/gap_le_subrate.c",
   "src/gap/gap_sm_receive.c",
   "src/gap/gap_task_common.c",
 ]
@@ -113,6 +114,7 @@ StackIsoSrc = [
   "src/iso/iso.c",
   "src/iso/iso_big.c",
   "src/iso/iso_cig.c",
+  "src/iso/iso_data.c",
   "src/iso/iso_data_path.c",
   "src/iso/iso_hci_receive.c",
   "src/iso/iso_if.c",
@@ -128,6 +130,7 @@ StackIsoSrc = [
 StackHciSrc = [
   "src/hci/hdi_wrapper.c",
   "src/hci/acl/hci_acl.c",
+  "src/hci/iso/hci_iso.c",
   "src/hci/hci.c",
   "src/hci/cmd/hci_cmd.c",
   "src/hci/cmd/hci_cmd_controller_baseband.c",
@@ -141,6 +144,7 @@ StackHciSrc = [
   "src/hci/cmd/hci_cmd_info_params.c",
   "src/hci/cmd/hci_cmd_le_controller.c",
   "src/hci/cmd/hci_cmd_le_controller_5_2.c",
+  "src/hci/cmd/hci_cmd_le_controller_5_3.c",
   "src/hci/cmd/hci_cmd_link_ctrl.c",
   "src/hci/cmd/hci_cmd_link_policy.c",
   "src/hci/cmd/hci_cmd_status_params.c",

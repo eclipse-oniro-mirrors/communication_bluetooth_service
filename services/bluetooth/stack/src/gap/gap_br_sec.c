@@ -1762,6 +1762,25 @@ NO_SANITIZE("cfi") void GapOnEncryptionChangeEvent(const HciEncryptionChangeEven
     GapLeEncryptionComplete(eventParam->connectionHandle, eventParam->status);
 }
 
+// BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
+// 7.7.8 Encryption Change [v2] event (0x59). A 5.3 controller emits v2
+// instead of v1 for the same BR/EDR and LE encryption changes, so the v1
+// handling above (BR security state machine plus the LE encryption
+// completion) applies unchanged: the first four v2 octets are exactly the
+// v1 parameters. The extra Encryption_Key_Size octet is carried in the HCI
+// event but has no storage consumer in this stack yet (the BR link key size
+// was never cached; the host reads it on demand when pairing), so it is not
+// forwarded further.
+NO_SANITIZE("cfi") void GapOnEncryptionChangeV2Event(const HciEncryptionChangeV2EventParam *eventParam)
+{
+    HciEncryptionChangeEventParam v1Param = {
+        .status = eventParam->status,
+        .connectionHandle = eventParam->connectionHandle,
+        .encryptionEnabled = eventParam->encryptionEnabled,
+    };
+    GapOnEncryptionChangeEvent(&v1Param);
+}
+
 void GapOnEncryptionKeyRefreshComplete(const HciEncryptionKeyRefreshCompleteEventParam *eventParam)
 {
     BtAddr addr = {0};

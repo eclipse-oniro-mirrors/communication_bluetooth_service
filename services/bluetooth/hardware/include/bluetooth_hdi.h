@@ -37,7 +37,8 @@ typedef enum {
     PACKET_TYPE_CMD = 1,
     PACKET_TYPE_ACL = 2,
     PACKET_TYPE_SCO = 3,
-    PACKET_TYPE_EVENT = 4
+    PACKET_TYPE_EVENT = 4,
+    PACKET_TYPE_ISO = 5
 } BtPacketType;
 
 // Hci packet received from backend

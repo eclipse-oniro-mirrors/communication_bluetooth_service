@@ -1599,6 +1599,24 @@ static void BtmOnEncryptionChange(const HciEncryptionChangeEventParam *eventPara
     MutexUnlock(g_aclListLock);
 }
 
+// 5.3 7.7.8 Encryption Change [v2] event (0x59): a 5.3 controller emits v2 for
+// the same BR/EDR and LE ACL encryption changes as v1, with the added
+// Encryption_Key_Size octet. The ACL encryption state update is identical to
+// the v1 handler; the key size is not cached on the ACL record (no consumer).
+static void BtmOnEncryptionChangeV2(const HciEncryptionChangeV2EventParam *eventParam)
+{
+    if (eventParam->status != HCI_SUCCESS) {
+        return;
+    }
+
+    MutexLock(g_aclListLock);
+    BtmAclConnection *connection = BtmAclFindConnectionByHandle(eventParam->connectionHandle);
+    if (connection != NULL) {
+        connection->encryption = eventParam->encryptionEnabled;
+    }
+    MutexUnlock(g_aclListLock);
+}
+
 bool BTM_IsSecureConnection(const BtAddr *addr)
 {
     if (!IS_INITIALIZED()) {
@@ -2125,6 +2143,7 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .connectionIndication = BtmOnConnectionIndication,
     .disconnectComplete = BtmOnDisconnectComplete,
     .encryptionChange = BtmOnEncryptionChange,
+    .encryptionChangeV2 = BtmOnEncryptionChangeV2,
     .readRemoteSupportedFeaturesComplete = BtmOnReadRemoteSupportedFeaturesComplete,
     .readRemoteVersionInformationComplete = BtmOnReadRemoteVersionInformationComplete,
     .commandStatus = BtmAclOnCommandStatus,

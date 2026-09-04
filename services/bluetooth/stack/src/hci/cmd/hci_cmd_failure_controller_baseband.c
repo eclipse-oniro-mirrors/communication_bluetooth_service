@@ -1292,6 +1292,20 @@ static void HciCmdOnWriteExtendedInquiryLengthFailed(uint8_t status, const void 
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+static void HciCmdOnSetMinEncryptionKeySizeFailed(uint8_t status, const void *param)
+{
+    HciSetMinEncryptionKeySizeReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->setMinEncryptionKeySizeComplete != NULL) {
+        callbacks->setMinEncryptionKeySizeComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciCmdOnFailedFunc g_funcMap[] = {
     NULL,                                                 // 0x0000
     HciCmdOnSetEventMaskFailed,                           // 0x0001
@@ -1423,9 +1437,12 @@ static HciCmdOnFailedFunc g_funcMap[] = {
     HciCmdOnWriteExtendedPageTimeoutFailed,               // 0x007F
     HciCmdOnReadExtendedInquiryLengthFailed,              // 0x0080
     HciCmdOnWriteExtendedInquiryLengthFailed,             // 0x0081
+    NULL,                                                 // 0x0082
+    NULL,                                                 // 0x0083
+    HciCmdOnSetMinEncryptionKeySizeFailed,                // 0x0084
 };
 
-#define CONTROLLERBASEBAND_OCF_MAX 0x0081
+#define CONTROLLERBASEBAND_OCF_MAX 0x0084
 
 void HciOnControllerBasebandCmdFailed(uint16_t opCode, uint8_t status, const void *param)
 {

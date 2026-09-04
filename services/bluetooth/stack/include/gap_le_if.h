@@ -33,6 +33,7 @@
 
 #include "gap_comm.h"
 #include "gap_le_if_5_1.h"
+#include "gap_le_if_5_3.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -830,6 +831,23 @@ BTSTACK_API int GAPIF_LePeriodicAdvSetData(
  *              @c otherwise        : The function is not executed successfully.
  */
 BTSTACK_API int GAPIF_LePeriodicAdvSetEnable(uint8_t enable, uint8_t advHandle);
+
+/**
+ * @brief       Enable or disable periodic advertising of an advertising set,
+ *              optionally including the ADI field (5.3).
+ * @param[in]   enable              bit 0: 0x00 disable, 0x01 enable; bit 1:
+ *                                  0x02 include the ADI field in the
+ *                                  AUX_SYNC_IND PDUs (ignored when bit 0 is 0)
+ * @param[in]   advHandle           used to identify an advertising set (0x00-0xEF)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ * @note        Requires controller bit 36 (Periodic Advertising ADI Support);
+ *              setting bit 1 without that capability returns an error
+ *              synchronously instead of relying on the controller's 0x11.
+ *              The 5.2 API GAPIF_LePeriodicAdvSetEnable is unchanged and
+ *              keeps its 0x00/0x01-only semantics.
+ */
+BTSTACK_API int GAPIF_LePeriodicAdvSetEnableWithAdi(uint8_t enable, uint8_t advHandle);
 
 /**
  * @brief       Register periodic advertising sync callback function

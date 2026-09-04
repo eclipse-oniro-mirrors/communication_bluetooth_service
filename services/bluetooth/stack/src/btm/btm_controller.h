@@ -31,6 +31,7 @@ bool BtmIsControllerSupportedReadLocalSupportedCodecsCommand();
 bool BtmIsControllerSupportedEnhancedSetupSynchronousConnection();
 bool BtmIsControllerSupportedEnhancedAcceptSynchronousConnection();
 bool BtmIsControllerSupportedLeSetPrivacyMode();
+bool BtmIsControllerSupportedLeRequestPeerSca();
 
 bool BtmGetLocalSupportedFeature(HciLmpFeatures *lmpFeature);
 

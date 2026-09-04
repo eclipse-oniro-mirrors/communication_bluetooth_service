@@ -599,6 +599,36 @@ bool BTSTACK_API BTM_IsControllerSupportSleepClockAccuracyUpdates();
 bool BTSTACK_API BTM_IsControllerSupportRemotePublicKeyValidation();
 
 /**
+ * @brief Determine whether the local controller supports Connection Subrating (LE Feature Bit 37).
+ *
+ * Bluetooth 5.3, Vol 6, Part B, 4.6.35. Without this bit the controller only
+ * supports a connSubrateFactor of 1. Used to gate the LE Subrate Change event
+ * mask (bit 34) and by upper layers before issuing subrate requests.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeConnectionSubrating();
+
+/**
+ * @brief Determine whether the local controller supports Periodic Advertising ADI support (LE Feature Bit 36).
+ *
+ * Bluetooth 5.3, Vol 6, Part B, 4.6.34. The host can enable "Include the ADI
+ * field in AUX_SYNC_IND PDUs" (bit 1 of HCI_LE_Set_Periodic_Advertising_Enable
+ * Enable) only when this feature is supported; otherwise the controller returns 0x11.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLePeriodicAdvAdiSupport();
+
+/**
+ * @brief Determine whether the local controller supports LE Channel Classification (LE Feature Bit 39).
+ *
+ * Bluetooth 5.3, Vol 6, Part B, 4.6.36. Exposed for upper-layer queries; the
+ * LL-side reporting (LL_CHANNEL_REPORTING_IND / LL_CHANNEL_STATUS_IND) is a
+ * controller mechanism with no host code in this repo.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeChannelClassification();
+
+/**
  * @brief Get the cached LE Read Antenna Information result (7.8.87).
  *
  * The result is read during controller bring-up when the controller supports
