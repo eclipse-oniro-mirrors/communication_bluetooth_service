@@ -295,6 +295,106 @@ static int GapLeSetExtendedAdvertisingParameters(
     return HCI_LeSetExtendedAdvertisingParameters(&hciCmdParam);
 }
 
+// Validation of the [v2] parameters (7.8.53): the [v1] range checks of
+// GapLeSetExtendedAdvertisingParameters plus the two option octets (option
+// values 0x05-0xFF are reserved).
+static int GapLeCheckExtendedAdvertisingParamsV2(const GapExAdvParamV2 *param)
+{
+    if (param->advHandle > GAP_LE_ADV_HANDLE_MAX) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if ((param->properties & (GAP_LE_EXT_ADV_PROP_DIRECTED | GAP_LE_EXT_ADV_PROP_HIGH_DUTY_DIR)) &&
+        param->advExParam.peerAddr == NULL) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if (param->advExParam.advIntervalMin > param->advExParam.advIntervalMax ||
+        param->advExParam.advChannelMap < GAP_LE_EXT_ADV_CHANNEL_MAP_MIN ||
+        param->advExParam.advChannelMap > GAP_LE_EXT_ADV_CHANNEL_MAP_MAX ||
+        (param->advExParam.primaryAdvPhy != GAP_LE_PHY_1M &&
+            param->advExParam.primaryAdvPhy != GAP_LE_PHY_CODED) ||
+        (param->advExParam.secondaryAdvPhy != GAP_LE_PHY_1M &&
+            param->advExParam.secondaryAdvPhy != GAP_LE_PHY_2M &&
+            param->advExParam.secondaryAdvPhy != GAP_LE_PHY_CODED) ||
+        param->advExParam.advSid > GAP_LE_ADV_SID_MAX ||
+        param->advExParam.advFilterPolicy > GAP_LE_EXT_ADV_FILTER_POLICY_MAX ||
+        param->advExParam.secondaryAdvMaxSkip > GAP_LE_EXT_ADV_MAX_SKIP_MAX ||
+        param->advExParam.scanRequestNotifyEnable > GAP_LE_EXT_ADV_SCAN_REQ_NOTIFY_MAX ||
+        param->primaryPhyOptions > LE_EXT_ADV_PHY_OPTIONS_MAX ||
+        param->secondaryPhyOptions > LE_EXT_ADV_PHY_OPTIONS_MAX) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+    return GAP_SUCCESS;
+}
+
+// Fill the [v2] command parameter block (7.8.53): the [v1] parameter fields
+// plus the two advertising coding option octets appended by [v2].
+static void GapLeFillExtendedAdvertisingParametersV2Frame(
+    const GapExAdvParamV2 *param, HciLeSetExtendedAdvertisingParametersV2Param *frame)
+{
+    frame->advertisingHandle = param->advHandle;
+    frame->advertisingEventProperties = param->properties;
+    (void)memcpy_s(frame->priAdvertisingIntervalMin, sizeof(frame->priAdvertisingIntervalMin),
+        &param->advExParam.advIntervalMin, sizeof(frame->priAdvertisingIntervalMin));
+    (void)memcpy_s(frame->priAdvertisingIntervalMax, sizeof(frame->priAdvertisingIntervalMax),
+        &param->advExParam.advIntervalMax, sizeof(frame->priAdvertisingIntervalMax));
+    frame->priAdvertisingChannelMap = param->advExParam.advChannelMap;
+    frame->ownAddressType = BTM_GetOwnAddressType();
+    if (param->advExParam.peerAddr != NULL) {
+        frame->peerAddressType = param->advExParam.peerAddr->type;
+        (void)memcpy_s(frame->peerAddress, BT_ADDRESS_SIZE, param->advExParam.peerAddr->addr, BT_ADDRESS_SIZE);
+    } else {
+        frame->peerAddressType = BT_PUBLIC_DEVICE_ADDRESS;
+        (void)memset_s(frame->peerAddress, BT_ADDRESS_SIZE, 0x00, BT_ADDRESS_SIZE);
+    }
+    frame->advertisingFilterPolicy = param->advExParam.advFilterPolicy;
+    frame->advertisingTxPower = param->txPower;
+    frame->priAdvertisingPHY = param->advExParam.primaryAdvPhy;
+    frame->secondaryAdvertisingMaxSkip = param->advExParam.secondaryAdvMaxSkip;
+    frame->secondaryAdvertisingPHY = param->advExParam.secondaryAdvPhy;
+    frame->advertisingSID = param->advExParam.advSid;
+    frame->scanRequestNotificationEnable = param->advExParam.scanRequestNotifyEnable;
+    frame->primaryAdvertisingPhyOptions = param->primaryPhyOptions;
+    frame->secondaryAdvertisingPhyOptions = param->secondaryPhyOptions;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.53 LE Set Extended Advertising Parameters [v2] (Advertising Coding
+// Selection). Validation mirrors the [v1] builder above plus the two option
+// octets. The command selection keys ONLY on the Advertising Coding Selection
+// Controller support (LL feature bit 40, BTM_IsControllerSupportLeAdvCodingSel):
+//  - bit 40 set:   the [v2] command (OCF 0x007F) is used, even when both
+//                  options are 0x00;
+//  - bit 40 clear: the [v1] command is used and the options are ignored -
+//                  identical to pre-5.4 behavior, no error.
+// Bit 41 (ACS Host Support) is not a command-selection condition (4.6.37).
+// An option naming a non-LE-Coded PHY is ignored by the Controller per 7.8.53,
+// so it is passed through, not rejected.
+static int GapLeSetExtendedAdvertisingParametersV2(const GapExAdvParamV2 *param)
+{
+    if (param == NULL) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    int ret = GapLeCheckExtendedAdvertisingParamsV2(param);
+    if (ret != GAP_SUCCESS) {
+        return ret;
+    }
+
+    if (!BTM_IsControllerSupportLeAdvCodingSel()) {
+        // Pre-5.4 (or ACS-less) Controller: the [v1] command has the same wire
+        // effect as [v2] with both options zero; the requested options are
+        // ignored, matching the pre-5.4 behavior this entry extends.
+        return GapLeSetExtendedAdvertisingParameters(
+            param->advHandle, param->properties, param->txPower, param->advExParam);
+    }
+
+    HciLeSetExtendedAdvertisingParametersV2Param hciCmdParam;
+    GapLeFillExtendedAdvertisingParametersV2Frame(param, &hciCmdParam);
+    return HCI_LeSetExtendedAdvertisingParametersV2(&hciCmdParam);
+}
+
 NO_SANITIZE("cfi")
 void GapLeSetExtendedAdvertisingParametersComplete(const HciLeSetExtendedAdvertisingParametersReturnParam *param)
 {
@@ -320,6 +420,27 @@ int GAP_LeExAdvSetParam(uint8_t advHandle, uint8_t properties, int8_t txPower, G
         ret = GAP_ERR_INVAL_STATE;
     } else {
         ret = GapLeSetExtendedAdvertisingParameters(advHandle, properties, txPower, advExParam);
+    }
+    return ret;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.53 LE Set Extended Advertising Parameters [v2] entry: same role/enable
+// gating as the [v1] entry; the command selection (and with it the
+// Advertising Coding Selection capability gate) happens in
+// GapLeSetExtendedAdvertisingParametersV2.
+int GAP_LeExAdvSetParamV2(const GapExAdvParamV2 *param)
+{
+    int ret;
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    if (GapLeRolesCheck(GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_PERIPHERAL) == false) {
+        ret = GAP_ERR_INVAL_STATE;
+    } else {
+        ret = GapLeSetExtendedAdvertisingParametersV2(param);
     }
     return ret;
 }

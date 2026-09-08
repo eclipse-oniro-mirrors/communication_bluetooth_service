@@ -1058,6 +1058,35 @@ typedef struct {
     // 7.8.122 LE Set Data Related Address Changes Command Complete
     void (*leSetDataRelatedAddressChangesComplete)(
         const HciLeSetDataRelatedAddressChangesReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+    // 7.8.53 LE Set Extended Advertising Parameters Command [v2] Complete (OCF 0x007F);
+    // return parameters are identical to [v1] (Status + Selected_TX_Power).
+    void (*leSetExtendedAdvertisingParametersV2Complete)(
+        const HciLeSetExtendedAdvertisingParametersReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+    // 7.8.125 LE Set Periodic Advertising Subevent Data Command Complete (OCF 0x0082);
+    // Status + Advertising_Handle echo. Error statuses: 0x42 (unknown
+    // advertising set), 0x0C (subevent outside the 0x27 request), 0x45 (data
+    // too long, discarded), 0x46/0x47 (too late / too early, discarded).
+    void (*leSetPeriodicAdvertisingSubeventDataComplete)(
+        const HciLeSetPeriodicAdvertisingSubeventDataReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+    // 7.8.126 LE Set Periodic Advertising Response Data Command Complete (OCF 0x0083);
+    // Status + Sync_Handle echo. Error statuses: 0x45 (data too long for the
+    // response slot, discarded), 0x46 (response slot already passed, discarded).
+    void (*leSetPeriodicAdvertisingResponseDataComplete)(
+        const HciLeSetPeriodicAdvertisingResponseDataReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+    // 7.8.127 LE Set Periodic Sync Subevent Command Complete (OCF 0x0084);
+    // Status + Sync_Handle echo.
+    void (*leSetPeriodicSyncSubeventComplete)(
+        const HciLeSetPeriodicSyncSubeventReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+    // 7.8.61 LE Set Periodic Advertising Parameters Command [v2] Complete (OCF 0x0086);
+    // the [v2] return parameters add the Advertising_Handle echo to the [v1]
+    // Status-only pair.
+    void (*leSetPeriodicAdvertisingParametersV2Complete)(
+        const HciLeSetPeriodicAdvertisingParametersV2ReturnParam *returnParam);
 
     // LE Events
 
@@ -1169,6 +1198,47 @@ typedef struct {
     // BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E
     // 7.7.65,35 LE Subrate Change Event
     void (*leSubrateChange)(const HciLeSubrateChangeEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+    // 7.7.65,14 LE Periodic Advertising Sync Established Event [v2] (subevent
+    // code 0x24): [v1] parameters plus Num_Subevents, Subevent_Interval,
+    // Response_Slot_Delay and Response_Slot_Spacing.
+    void (*lePeriodicAdvertisingSyncEstablishedV2)(
+        const HciLePeriodicAdvertisingSyncEstablishedV2EventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+    // 7.7.65,15 LE Periodic Advertising Report Event [v2] (subevent code
+    // 0x25): [v1] parameters plus Periodic_Event_Counter and Subevent inserted
+    // between CTE_Type and Data_Status. The Data payload pointer is a
+    // zero-copy view into the HCI event packet and is valid only for the
+    // duration of the callback; consumers must copy it.
+    void (*lePeriodicAdvertisingReportV2)(const HciLePeriodicAdvertisingReportV2EventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+    // 7.7.65,24 LE Periodic Advertising Sync Transfer Received Event [v2]
+    // (subevent code 0x26): [v1] parameters plus the same four
+    // subevent/response-slot parameters as the 0x24 event. When there are no
+    // subevents or response slots Num_Subevents is zero and the remaining
+    // three are ignored by the Host (values unspecified).
+    void (*lePeriodicAdvertisingSyncTransferReceivedV2)(
+        const HciLePeriodicAdvertisingSyncTransferReceivedV2EventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+    // 7.7.65,36 LE Periodic Advertising Subevent Data Request Event (subevent
+    // code 0x27): the Controller is ready to transmit one or more subevents
+    // and requests the advertising data for them.
+    void (*lePeriodicAdvertisingSubeventDataRequest)(
+        const HciLePeriodicAdvertisingSubeventDataRequestEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+    // 7.7.65,37 LE Periodic Advertising Response Report Event (subevent code
+    // 0x28): one or more devices responded on the response slots of a PAwR
+    // train. Per-response Data pointers are zero-copy views into the HCI event
+    // packet and are valid only for the duration of the callback; consumers
+    // must copy them.
+    void (*lePeriodicAdvertisingResponseReport)(
+        const HciLePeriodicAdvertisingResponseReportEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+    // 7.7.65,10 LE Enhanced Connection Complete Event [v2] (subevent code
+    // 0x29): [v1] parameters plus Advertising_Handle and Sync_Handle that
+    // associate the connection with the PAwR train it was established from
+    // (0xFF/0xFFFF and ignored otherwise).
+    void (*leEnhancedConnectionCompleteV2)(const HciLeEnhancedConnectionCompleteV2EventParam *eventParam);
 } HciEventCallbacks;
 
 int HCI_RegisterEventCallbacks(const HciEventCallbacks *callbacks);

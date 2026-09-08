@@ -307,7 +307,24 @@ static void BtmControllerOnLeReadBufferSizeComplete(const HciLeReadBufferSizeRet
 static void BtmControllerOnLeReadLocalSupportedFeaturesComplete(
     const HciLeReadLocalSupportedFeaturesReturnParam *returnParam)
 {
+    if (returnParam == NULL) {
+        // Wake the bring-up wait loop anyway so a lost completion cannot hang
+        // the controller setup.
+        EventSet(g_waitSetupController);
+        return;
+    }
     g_leReadLocalSupportedFeaturesResult = *returnParam;
+    if (returnParam->status == HCI_SUCCESS) {
+        // BLUETOOTH SPECIFICATION Version 5.4 | Vol 6, Part B, Table 4.7 Sheet 2
+        // Log the 5.4 capability state read from the controller once at bring-up.
+        // The ACS Host Support bit (LL feature bit 41) is only mirrored into
+        // g_leReadLocalSupportedFeaturesResult later, by BtmLeSetHostFeature()
+        // after LE Set Host Feature has been issued, so it is not read here.
+        LOG_INFO("LE features (5.4): Advertising Coding Selection=%{public}d, "
+                 "PAwR Advertiser=%{public}d, PAwR Scanner=%{public}d",
+            BTM_IsControllerSupportLeAdvCodingSel(),
+            BTM_IsControllerSupportPawrAdvertiser(), BTM_IsControllerSupportPawrScanner());
+    }
     EventSet(g_waitSetupController);
 }
 
@@ -455,8 +472,50 @@ static HciEventCallbacks g_hciEventCallbacks = {
 };
 
 static uint64_t BtmGetLe51EventMask(uint64_t leEventMask);
+static uint64_t BtmGetLe54EventMask(uint64_t leEventMask, uint8_t groups);
 
-static uint64_t BtmGetLeEventMask()
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.8.1 (Table 3.3, bits 35-40)
+// LE_Event_Mask groups of the 5.4 [v2]/new subevents. Each [v2] group replaces
+// the [v1] bit of the same event type once enabled (pairs 9<->40, 13<->35,
+// 14<->36, 23<->37). Per Vol 4E 4.8 (Versioned Events) the Controller shall use
+// the latest version that is enabled when both bits of a [v1]/[v2] pair are
+// unmasked; BtmGetLe54EventMask additionally clears the [v1] bit so exactly one
+// version is unmasked. Group enablement is bound to the implementation stage:
+// the [v2] periodic events need the P1 subevent parsing in place (enabling them
+// switches every periodic advertising event - PAwR or not - to the [v2] layout),
+// the [v2] connection event needs the P5 connection path, and the PAwR data
+// events (0x27/0x28) are only produced while a PAwR train with response slots
+// actually runs.
+typedef enum {
+    // 0x24/0x25/0x26 [v2] (bits 35-37): Periodic Advertising Sync Established
+    // [v2] / Periodic Advertising Report [v2] / Periodic Advertising Sync
+    // Transfer Received [v2].
+    BTM_LE54_EVENT_GROUP_PERIODIC_V2 = 0x01,
+    // 0x29 [v2] (bit 40): Enhanced Connection Complete [v2], emitted for every
+    // LE connection once enabled (Advertising_Handle / Sync_Handle carry 0xFFFF
+    // for connections not created from a PAwR train).
+    BTM_LE54_EVENT_GROUP_CONNECTION_V2 = 0x02,
+    // 0x27/0x28 (bits 38/39): Periodic Advertising Subevent Data Request /
+    // Periodic Advertising Response Report. New events, no [v1] counterpart;
+    // generated only while the local controller advertises a PAwR train.
+    BTM_LE54_EVENT_GROUP_PAWR_DATA = 0x04,
+} BtmLe54EventGroup;
+
+// Groups enabled in this build. This is the single knob the milestone stages
+// turn: P1 opened PERIODIC_V2 together with the 0x24/0x25/0x26 [v2] event
+// parsers and their legacy-flow bridges (on a PAwR-capable controller every
+// periodic advertising event is switched to the [v2] layout, PAwR train or
+// not), P3 opened PAWR_DATA together with the advertiser-side 0x27/0x28
+// handling (gap_le_pawr_adv.c), P5 opens CONNECTION_V2 with the 0x29
+// connect-from-PAwR path (btm_acl.c bridges the [v1] prefix to the legacy
+// enhanced-connection-complete flow and records the Advertising_Handle /
+// Sync_Handle association; the bit engages only on PAwR-capable controllers
+// (LL feature bits 43/44, see C.69) at HCI version 5.4 or later and clears
+// the [v1] bit 9, see BtmGetLe54EventMask).
+#define BTM_LE54_EVENT_GROUPS_ENABLED \
+    (BTM_LE54_EVENT_GROUP_PERIODIC_V2 | BTM_LE54_EVENT_GROUP_PAWR_DATA | BTM_LE54_EVENT_GROUP_CONNECTION_V2)
+
+static uint64_t BtmGetLeEventMask(uint8_t le54Groups)
 {
     uint64_t leEventMask = LE_EVENT_MASK_DEFAULT;
 
@@ -511,7 +570,8 @@ static uint64_t BtmGetLeEventMask()
         leEventMask |= LE_EVENT_MASK_LE_GENERATE_DHKEY_COMPLETE_EVENT;
     }
 
-    return BtmGetLe51EventMask(leEventMask);
+    // 5.1-5.3 tail, then the 5.4 tail (the [v2] bits clear their [v1] counterparts).
+    return BtmGetLe54EventMask(BtmGetLe51EventMask(leEventMask), le54Groups);
 }
 
 // BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
@@ -562,6 +622,62 @@ static uint64_t BtmGetLe51EventMask(uint64_t leEventMask)
     // the feature bit the same way the 5.1/5.2 blocks above do.
     if (BTM_IsControllerSupportLeConnectionSubrating()) {
         leEventMask |= LE_EVENT_MASK_LE_SUBRATE_CHANGE_EVENT; // Bit 34
+    }
+
+    return leEventMask;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.8.1 (Table 3.3, bits 35-40)
+// Compose the 5.4 tail of the LE event mask from the enabled groups (see
+// BtmLe54EventGroup). Runs after the 5.0-5.3 composition so its [v2] bits can
+// clear the [v1] counterparts the earlier steps set.
+static uint64_t BtmGetLe54EventMask(uint64_t leEventMask, uint8_t groups)
+{
+    // The [v2] periodic subevent switch (bits 35-37) engages only when the
+    // controller supports the PAwR Scanner role (LL feature bit 44): Table 3.1
+    // marks 0x24/0x25/0x26 [v2] "mandatory if LE Feature (Periodic Advertising
+    // with Responses - Scanner) is supported, otherwise excluded" (C.68), and
+    // 7.8.1 has the controller ignore bits for events it does not support. On a
+    // controller without bit 44 (plain periodic advertising, or PAwR Advertiser
+    // only) the [v2] forms are excluded, so its [v1] bits 13/14/23 must stay
+    // set - clearing them here would silence the events entirely.
+    if ((groups & BTM_LE54_EVENT_GROUP_PERIODIC_V2) &&
+        BTM_IsControllerSupportPawrScanner()) {
+        leEventMask |= (LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_ESTABLISHED_V2_EVENT | // Bit 35, 0x24
+                        LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_REPORT_V2_EVENT |           // Bit 36, 0x25
+                        LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_TRANSFER_RECEIVED_V2_EVENT); // Bit 37, 0x26
+        // Never enable both members of a [v1]/[v2] pair: clear the [v1] bits of
+        // the events the [v2] bits above now select (13/14/23).
+        leEventMask &= ~(LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_ESTABLISHED_EVENT |
+                         LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_REPORT_EVENT |
+                         LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_TRANSFER_RECEIVED_EVENT);
+    }
+
+    // 0x27/0x28 (bits 38/39) have no [v1] counterpart: Table 3.1 marks them
+    // "mandatory if LE Feature (Periodic Advertising with Responses -
+    // Advertiser) is supported, otherwise excluded" (C.67); they are produced
+    // only while the local controller advertises a PAwR train with response
+    // slots, so they can stay enabled whenever the advertiser PAwR capability
+    // is present - no events appear while no PAwR train runs.
+    if ((groups & BTM_LE54_EVENT_GROUP_PAWR_DATA) &&
+        BTM_IsControllerSupportPawrAdvertiser()) {
+        leEventMask |= (LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SUBEVENT_DATA_REQUEST_EVENT | // Bit 38, 0x27
+                        LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_RESPONSE_REPORT_EVENT);        // Bit 39, 0x28
+    }
+
+    // 0x29 (bit 40) is available only on PAwR-capable controllers: Table 3.1
+    // marks the Enhanced Connection Complete [v2] "mandatory if LE Feature
+    // (Periodic Advertising with Responses - Advertiser) or (Periodic
+    // Advertising with Responses - Scanner) is supported, otherwise excluded"
+    // (C.69). On a controller without the PAwR feature bits the [v2] form is
+    // excluded and bit 40 is ignored (7.8.1), so clearing its [v1] bit 9 would
+    // silence the event entirely. The HCI version check is kept as a floor for
+    // controllers older than 5.4 that treat bit 40 as reserved.
+    if ((groups & BTM_LE54_EVENT_GROUP_CONNECTION_V2) &&
+        g_readLocalVersionResult.hciVersion >= BLUETOOTH_CORE_SPECIFICATION_5_4 &&
+        (BTM_IsControllerSupportPawrAdvertiser() || BTM_IsControllerSupportPawrScanner())) {
+        leEventMask |= LE_EVENT_MASK_LE_ENHANCED_CONNECTION_COMPLETE_V2_EVENT; // Bit 40, 0x29
+        leEventMask &= ~LE_EVENT_MASK_LE_ENHANCED_CONNECTION_COMPLETE_EVENT;   // Clear [v1] bit 9
     }
 
     return leEventMask;
@@ -1105,7 +1221,7 @@ static int BtmLeReadResolvingListSize()
 static int BtmLeSetEventMask()
 {
     HciLeSetEventMaskParam lsSetEventMaskParam = {
-        .leEventMask = BtmGetLeEventMask(),
+        .leEventMask = BtmGetLeEventMask(BTM_LE54_EVENT_GROUPS_ENABLED),
     };
     // Clear the shared event, then mark the result as unanswered before sending and capture
     // the seq of this send. A Command_Complete of a predecessor command that timed out at the
@@ -1139,6 +1255,14 @@ static int BtmLeSetEventMask()
     if (g_leSetEventMaskResult.status != HCI_SUCCESS) {
         LOG_ERROR("HCI_LeSetEventMask status: 0x%02x", g_leSetEventMaskResult.status);
         result = BT_OPERATION_FAILED;
+    } else {
+        // 5.4 mask state in the sent value, one readable line per group instead of
+        // the raw 64-bit mask (BTM_LE54_EVENT_GROUP_* enable flags above are the
+        // requested set; these are what the controller actually received).
+        LOG_INFO("LE event mask: [v2] periodic=%{public}d, [v2] connection=%{public}d, PAwR data=%{public}d",
+            (lsSetEventMaskParam.leEventMask & LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_ESTABLISHED_V2_EVENT) != 0,
+            (lsSetEventMaskParam.leEventMask & LE_EVENT_MASK_LE_ENHANCED_CONNECTION_COMPLETE_V2_EVENT) != 0,
+            (lsSetEventMaskParam.leEventMask & LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SUBEVENT_DATA_REQUEST_EVENT) != 0);
     }
     return result;
 }
@@ -1178,12 +1302,19 @@ static void BtmLogSetHostFeatureStatus(uint8_t status, uint8_t bit)
 static int BtmLeSetHostFeature()
 {
     // Host-controlled FeatureSet bits (Vol 6, Part B, 4.6.33): bit 32 Connected
-    // Isochronous Stream (Host Support, 5.2) and bit 38 Connection Subrating
-    // (Host Support, 5.3). Each bit is sent and status-tolerated independently
-    // below, so a 5.2-only controller declining 0x26 with 0x11 does not affect
-    // the ISO bit or the rest of BTM_Enable.
-    static const uint8_t bitsToEnable[] = { 0x20, 0x26 };
+    // Isochronous Stream (Host Support, 5.2), bit 38 Connection Subrating (Host
+    // Support, 5.3) and bit 41 Advertising Coding Selection (Host Support, 5.4).
+    // Each bit is sent and status-tolerated independently below, so a 5.2-only
+    // controller declining 0x26 with 0x11 does not affect the ISO bit or the
+    // rest of BTM_Enable.
+    static const uint8_t bitsToEnable[] = { 0x20, 0x26, 0x29 };
     for (size_t i = 0; i < sizeof(bitsToEnable) / sizeof(bitsToEnable[0]); i++) {
+        // BLUETOOTH SPECIFICATION Version 5.4 | Vol 6, Part B, 4.6.33.3
+        // Bit 41 (0x29) is only set by the controller when it supports Advertising
+        // Coding Selection (bit 40); skip the request entirely otherwise.
+        if (bitsToEnable[i] == 0x29 && !BTM_IsControllerSupportLeAdvCodingSel()) {
+            continue;
+        }
         // Skip when the controller does not advertise the command (Supported
         // Commands table, Vol 4, Part E, 6.27).
         if (!HciSupportLeSetHostFeature(g_readLocalSupportedCommandsResult.supportedCommands)) {
@@ -1237,6 +1368,18 @@ static int BtmLeSetHostFeature()
         if (g_leSetHostFeatureResult.status != HCI_SUCCESS) {
             BtmLogSetHostFeatureStatus(g_leSetHostFeatureResult.status, bitsToEnable[i]);
             continue;
+        }
+        if (bitsToEnable[i] == 0x29) {
+            // The Controller turns on bit 41 (Advertising Coding Selection Host
+            // Support) of its supported features only once the Host has requested
+            // it (LL 4.6.33,3) - i.e. after the features read of BtmInitLeFeature
+            // - so mirror the state into the cached read: the event-report path
+            // (7.7.65,13, PHY field 0x03/0x04 coding indication) keys on this bit
+            // through BTM_IsControllerSupportLeAdvCodingSelHost().
+            uint8_t *raw = g_leReadLocalSupportedFeaturesResult.leFeatures.raw;
+            raw[LE_FEATURE_BIT_ADVERTISING_CODING_SELECTION_HOST_SUPPORT / LE_FEATURE_BITS_PER_BYTE] |=
+                (uint8_t)(0x01 <<
+                    (LE_FEATURE_BIT_ADVERTISING_CODING_SELECTION_HOST_SUPPORT % LE_FEATURE_BITS_PER_BYTE));
         }
     }
     return BT_SUCCESS;
@@ -1579,6 +1722,34 @@ bool BTM_IsControllerSupportLePeriodicAdvAdiSupport()
 bool BTM_IsControllerSupportLeChannelClassification()
 {
     return HciSupportLeChannelClassification(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 6, Part B, 4.6.33.3 / 4.6.37-4.6.39
+// Bit 40 Advertising Coding Selection / bit 41 Advertising Coding Selection (Host
+// Support) / bit 43 PAwR - Advertiser / bit 44 PAwR - Scanner. Same read-only
+// contract as the queries above: call after BTM_Setup() completed, never
+// concurrently with setup.
+bool BTM_IsControllerSupportLeAdvCodingSel()
+{
+    return HciSupportLeAdvCodingSel(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+// Bit 41 is a Host Support bit the controller only sets on request via LE Set
+// Host Feature (see HciSupportLeAdvCodingSelHost note). Exposed for informational
+// logging only; capability decisions gate on bit 40.
+bool BTM_IsControllerSupportLeAdvCodingSelHost()
+{
+    return HciSupportLeAdvCodingSelHost(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportPawrAdvertiser()
+{
+    return HciSupportPawrAdvertiser(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+bool BTM_IsControllerSupportPawrScanner()
+{
+    return HciSupportPawrScanner(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportLeReadRfPathCompensation()

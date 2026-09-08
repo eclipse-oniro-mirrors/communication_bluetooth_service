@@ -64,6 +64,15 @@ extern "C" {
 #define LE_FEATURE_BIT_CONNECTION_SUBRATING_HOST_SUPPORT 38
 #define LE_FEATURE_BIT_CHANNEL_CLASSIFICATION 39
 
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 6, Part B
+// 4.6.37-4.6.39 / 4.6.33,3 FEATURE SUPPORT (Advertising Coding Selection / PAwR,
+// Table 4.7 Sheet 2). Bit 42 is unassigned in the 5.4 table; bits 40/41/43/44
+// all live in byte 5 of the 8-byte FeatureSet.
+#define LE_FEATURE_BIT_ADVERTISING_CODING_SELECTION 40
+#define LE_FEATURE_BIT_ADVERTISING_CODING_SELECTION_HOST_SUPPORT 41
+#define LE_FEATURE_BIT_PERIODIC_ADVERTISING_WITH_RESPONSES_ADVERTISER 43
+#define LE_FEATURE_BIT_PERIODIC_ADVERTISING_WITH_RESPONSES_SCANNER 44
+
 // Number of bits per feature byte (Bluetooth spec Vol 6, Part B, 4.6).
 #define LE_FEATURE_BITS_PER_BYTE 8
 
@@ -241,6 +250,38 @@ static inline int HciSupportLeConnectionSubrating(const uint8_t *features)
 static inline int HciSupportLeChannelClassification(const uint8_t *features)
 {
     return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_CHANNEL_CLASSIFICATION);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 6, Part B
+// 4.6.37-4.6.39 / 4.6.33,3 FEATURE SUPPORT (Advertising Coding Selection / PAwR)
+static inline int HciSupportLeAdvCodingSel(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_ADVERTISING_CODING_SELECTION);
+}
+
+// Bit41 (Advertising Coding Selection Host Support) is a Host Support bit written
+// to the controller via LE Set Host Feature (bitNumber=0x29, see
+// BtmLeSetHostFeature); the controller only sets it once the Host requests it
+// (LL 4.6.33,3). The features are read at setup before the Set Host Feature round
+// trip, so this getter on the cached read is informational only - capability
+// decisions must key off bit 40 (HciSupportLeAdvCodingSel).
+static inline int HciSupportLeAdvCodingSelHost(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_ADVERTISING_CODING_SELECTION_HOST_SUPPORT);
+}
+
+// A PAwR Advertiser controller (bit 43) must also support Periodic Advertising
+// Sync Transfer - Sender (bit 24); a PAwR Scanner controller (bit 44) must also
+// support Periodic Advertising Sync Transfer - Recipient (bit 25) - recorded as a
+// capability note (LL 4.6.38/4.6.39), no extra gating added.
+static inline int HciSupportPawrAdvertiser(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_PERIODIC_ADVERTISING_WITH_RESPONSES_ADVERTISER);
+}
+
+static inline int HciSupportPawrScanner(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_PERIODIC_ADVERTISING_WITH_RESPONSES_SCANNER);
 }
 
 #ifdef __cplusplus

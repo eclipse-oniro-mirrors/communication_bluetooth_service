@@ -69,6 +69,7 @@ private:
     void SetOtherWindowAndInterval(const int mode, uint16_t &window, uint16_t &interval);
     bool IsNewScanParams();
     bool IsAllStop();
+    void NotifyStopScanSuccessToClient(int32_t pid);
     int ConfigScanFilterInner(int32_t scannerId, const std::vector<BluetoothBleScanFilter> &filters);
 };
 }  // namespace Bluetooth

@@ -441,6 +441,12 @@ int BluetoothBleCentralManagerServer::StopScan(int32_t scannerId)
     pimpl->eventHandler_->PostSyncTask([&]() {
         if (!pimpl->isScanning) {
             HILOGE("scan is not started.");
+            // No stack stop-scan will be issued, so no OnStartOrStopScanEvent will be reported
+            // for this request. Notify the caller that its stopScan succeeded (no-op stop);
+            // otherwise the caller's pending async work can only be resolved by a stale stop
+            // event of another session or by the napi watchdog timer, either of which would
+            // make the idle stopScan fail spuriously.
+            NotifyStopScanSuccessToClient(pid);
             return;
         }
 
@@ -463,9 +469,25 @@ int BluetoothBleCentralManagerServer::StopScan(int32_t scannerId)
             pimpl->isScanning = false;
             HiSysEventWrite(OHOS::HiviewDFX::HiSysEvent::Domain::BT_SERVICE, "BLE_SCAN_STOP",
                 OHOS::HiviewDFX::HiSysEvent::EventType::STATISTIC, "PID", pid, "UID", uid);
+        } else {
+            // Other clients keep the scan running with the same params, so no stack stop-scan
+            // is issued for this request either. The caller's own session is already marked as
+            // stopped above, settle its pending stopScan with success directly.
+            NotifyStopScanSuccessToClient(pid);
         }
     });
     return NO_ERROR;
+}
+
+void BluetoothBleCentralManagerServer::NotifyStopScanSuccessToClient(int32_t pid)
+{
+    pimpl->observers_.ForEach([this, pid](IBluetoothBleCentralManagerCallback *observer) {
+        auto pidIter = pimpl->observersPid_.find(observer->AsObject());
+        if (pidIter != pimpl->observersPid_.end() && pidIter->second == pid) {
+            // BT_NO_ERROR(0) makes the client settle the pending stopScan as success.
+            observer->OnStartOrStopScanEvent(BT_NO_ERROR, false);
+        }
+    });
 }
 
 int BluetoothBleCentralManagerServer::ConfigScanFilterInner(

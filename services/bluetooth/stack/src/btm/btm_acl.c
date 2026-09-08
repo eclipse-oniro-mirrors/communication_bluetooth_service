@@ -93,6 +93,11 @@ static BtmAclConnection *AllocAclConnection()
         connection->remoteFeatures.bredr.featureStatus = REQUEST_NOT_COMPLETED;
         connection->remoteFeatures.bredr.extendedFeatureStatus = REQUEST_NOT_COMPLETED;
         connection->remoteFeatures.le.featureStatus = REQUEST_NOT_COMPLETED;
+
+        // No PAwR association until the Enhanced Connection Complete [v2]
+        // event (0x29) reports one (7.7.65,10 No values).
+        connection->pawrAdvertisingHandle = 0xFF;
+        connection->pawrSyncHandle = 0xFFFF;
     }
     return connection;
 }
@@ -781,6 +786,190 @@ int BTM_LeConnect(const BtAddr *addr)
     return result;
 }
 
+// Ranges of the PAwR pair of LE Extended Create Connection [v2] (7.8.66);
+// kept in sync with the [v1]/[v2] senders in hci_cmd_le_controller.c and
+// hci_cmd_le_controller_5_4.c.
+#define PAWR_CONNECT_ADVERTISING_HANDLE_MAX 0xEF
+#define PAWR_CONNECT_SUBEVENT_MAX 0x7F
+
+// Same command as BtmLeExtendedCreateConnection above, but directed at a
+// specific synchronized device from a subevent of a local PAwR train
+// (7.8.66 [v2]). The parameter sets and their defaults mirror the [v1]
+// builder; with the Advertising_Handle/Subevent pair used, the Controller
+// ignores Initiator_Filter_Policy, Initiating_PHYs, Scan_Interval and
+// Scan_Window and selects the connection parameter set of the PHY the train
+// operates on (see the sender comment in hci_cmd_le_controller_5_4.c).
+static int BtmLeExtendedCreateConnectionV2(const BtAddr *addr, uint8_t advertisingHandle, uint8_t subevent)
+{
+    uint8_t ownAddressType = LOCAL_ADDR_TYPE_PUBLIC;
+    if (BTM_GetOwnAddressType() == OWN_ADDRESS_TYPE_RANDOM) {
+        ownAddressType = BTM_IsControllerSupportLlPrivacy() ? LOCAL_ADDR_TYPE_RPA_OR_RANDOM : LOCAL_ADDR_TYPE_RANDOM;
+    }
+
+    uint8_t countOfSets = 1;
+    uint8_t initiatingPhys = LE_1M_PHY;
+    if (BTM_IsControllerSupportLe2MPhy()) {
+        initiatingPhys |= LE_2M_PHY;
+        countOfSets++;
+    }
+    if (BTM_IsControllerSupportLeCodedPhy()) {
+        initiatingPhys |= LE_CODED_PHY;
+        countOfSets++;
+    }
+
+    uint16_t leScanInterval = g_leScanInterval;
+    uint16_t leScanWindow = g_leScanWindow;
+
+    HciLeConnectionParamSet *sets = MEM_MALLOC.alloc(sizeof(HciLeConnectionParamSet) * countOfSets);
+    if (sets == NULL) {
+        LOG_ERROR("sets is NULL");
+        return BT_NO_MEMORY;
+    }
+    for (uint8_t i = 0; i < countOfSets; i++) {
+        sets[i].scanInterval = leScanInterval;
+        sets[i].scanWindow = leScanWindow;
+        sets[i].connIntervalMin = LE_CONN_INTERVAL_MIN_DEFAULT;
+        sets[i].connIntervalMax = LE_CONN_INTERVAL_MAX_DEFAULT;
+        sets[i].connLatency = LE_CONN_LATENCY_DEFAULT;
+        sets[i].supervisionTimeout = LE_SUPERVISION_TIMEOUT_DEFAULT;
+        sets[i].minimumCELength = LE_MINIMUM_CE_LENGTH_DEFAULT;
+        sets[i].maximumCELength = LE_MAXIMUM_CE_LENGTH_DEFAULT;
+    }
+
+    HciLeExtendedCreateConnectionV2Param param = {
+        .advertisingHandle = advertisingHandle,
+        .subevent = subevent,
+        // Ignored by the Controller when the PAwR pair above is used
+        // (7.8.66); peer-address-direct encoding for the fallback safety of
+        // the sender validation.
+        .initiatingFilterPolicy = INITIATOR_FILTER_NO_WHITE_LIST,
+        .peerAddressType =
+            (addr->type == BT_PUBLIC_DEVICE_ADDRESS) ? PEER_ADDR_TYPE_PUBLIC : PEER_ADDR_TYPE_RANDOM,
+        .peerAddress = {.raw = {0}},
+        .ownAddressType = ownAddressType,
+        .initiatingPhys = initiatingPhys,
+        .sets = sets,
+    };
+    (void)memcpy_s(param.peerAddress.raw, sizeof(HciBdAddr), addr->addr, BT_ADDRESS_SIZE);
+
+    int result = HCI_LeExtendedCreateConnectionV2(&param);
+
+    MEM_MALLOC.free(sets);
+
+    return result;
+}
+
+// Whether any recorded LE connect attempt (address-based or from a PAwR
+// train) is currently in progress. The Link Layer allows a single
+// outstanding connection request; the address-based path serializes
+// attempts through the Filter Accept List machinery while a train-based
+// attempt is one-shot, so the train-based entry refuses to overlap instead
+// of queueing. Note: a background auto-connect attempt (Filter Accept List
+// auto-connection) is not recorded in g_aclList and is therefore not covered
+// by this check; such an overlap is not rejected here and is left to the
+// Controller to arbitrate (a disallowed command is surfaced through the
+// ordinary failure callbacks).
+// Caller must hold g_aclListLock.
+static bool BtmIsLeConnectAttemptInProgress(void)
+{
+    ListNode *node = ListGetFirstNode(g_aclList);
+    while (node != NULL) {
+        BtmAclConnection *connection = ListGetNodeData(node);
+        if (connection->transport == TRANSPORT_LE_STACK && connection->state == CONNECTING) {
+            return true;
+        }
+        node = ListGetNextNode(node);
+    }
+    return false;
+}
+
+// Start the train-based connect attempt behind BTM_LeConnectFromPawr: create
+// the CONNECTING record and send the [v2] connect command. Caller must hold
+// g_aclListLock. A record for the address that already exists (connected or
+// still connecting), or any other in-flight LE connect attempt, fails the
+// call - one connection request at a time; the train-based path does not
+// queue, the address-based path serializes attempts through the Filter
+// Accept List machinery instead. On a send failure the record is dropped
+// again so no CONNECTING entry lingers for an attempt that never left.
+static int BtmStartLePawrConnectAttemptLocked(
+    const BtAddr *addr, const BtAddr *leAddr, uint8_t advertisingHandle, uint8_t subevent)
+{
+    BtmAclConnection *connection = BtmAclFindLeConnectionByAddr(addr);
+    if (connection != NULL || BtmIsLeConnectAttemptInProgress()) {
+        return BT_BAD_STATUS;
+    }
+
+    connection = AllocAclConnection();
+    if (connection == NULL) {
+        return BT_NO_MEMORY;
+    }
+    connection->addr = *addr;
+    connection->transport = TRANSPORT_LE_STACK;
+    connection->isInitiator = true;
+    connection->state = CONNECTING;
+
+    if (BTM_GetOwnAddressType() == OWN_ADDRESS_TYPE_RANDOM) {
+        // Random Address
+        BTM_GetLeRandomAddress(&connection->leLocalAddr);
+    } else {
+        // Public Address
+        BTM_GetLocalAddr(&connection->leLocalAddr);
+    }
+    connection->lePeerAddr = *leAddr;
+
+    ListAddLast(g_aclList, connection);
+
+    int result = BtmLeExtendedCreateConnectionV2(leAddr, advertisingHandle, subevent);
+    if (result != BT_SUCCESS) {
+        ListRemoveNode(g_aclList, connection);
+    }
+    return result;
+}
+
+int BTM_LeConnectFromPawr(const BtAddr *addr, uint8_t advertisingHandle, uint8_t subevent)
+{
+    // Both parameters 0xFF: the PAwR pair is not used and the call falls
+    // back to the address-based connect (7.8.66 [v2]), i.e. exactly
+    // BTM_LeConnect including its Filter Accept List behavior.
+    if (advertisingHandle == 0xFF && subevent == 0xFF) {
+        return BTM_LeConnect(addr);
+    }
+
+    // Advertising_Handle and Subevent shall both be 0xFF (not used) or both
+    // be valid (7.8.66); a 0xFF on exactly one of the pair is not allowed.
+    if (advertisingHandle == 0xFF || subevent == 0xFF ||
+        advertisingHandle > PAWR_CONNECT_ADVERTISING_HANDLE_MAX || subevent > PAWR_CONNECT_SUBEVENT_MAX) {
+        return BT_BAD_PARAM;
+    }
+
+    if (addr == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    if (!IS_INITIALIZED()) {
+        return BT_BAD_STATUS;
+    }
+
+    if (!BTM_IsControllerSupportPawrAdvertiser()) {
+        return BT_NOT_SUPPORT;
+    }
+
+    BtAddr leAddr = *addr;
+    BtmConvertAddressForConnection(&leAddr);
+
+    MutexLock(g_aclListLock);
+
+    if (ListGetSize(g_aclList) >= BTM_MAX_ACL) {
+        MutexUnlock(g_aclListLock);
+        return BT_CONNECT_NUM_MAX;
+    }
+    int result = BtmStartLePawrConnectAttemptLocked(addr, &leAddr, advertisingHandle, subevent);
+
+    MutexUnlock(g_aclListLock);
+
+    return result;
+}
+
 static void BtmConvertAddressForConnectionComplete(BtAddr *addr)
 {
     BtAddr pairedAddress;
@@ -1266,6 +1455,66 @@ static void BtmOnLeEnhancedConnectionComplete(const HciLeEnhancedConnectionCompl
     if (addrList != NULL) {
         MEM_CALLOC.free(addrList);
     }
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65.10: the [v2]
+// Enhanced Connection Complete event (0x29) carries the [v1] parameters (0x0A)
+// followed by Advertising_Handle and Sync_Handle, which associate the
+// connection with the PAwR train it was established from. For connections not
+// established from periodic advertising with responses the Controller sets
+// them to No Advertising_Handle (0xFF) / No Sync_Handle (0xFFFF) and the Host
+// shall ignore them, so the leading [v1] prefix feeds the shared handler
+// unchanged; the PAwR association is consumed by the connect-from-PAwR work.
+static void BtmOnLeEnhancedConnectionCompleteV2(const HciLeEnhancedConnectionCompleteV2EventParam *eventParam)
+{
+    if (eventParam == NULL) {
+        return;
+    }
+    BtmOnLeEnhancedConnectionComplete((const HciLeEnhancedConnectionCompleteEventParam *)eventParam);
+
+    // The [v1] handler above created/updated the connection record (it runs
+    // after BtmUpdateConnectionInfoOnLeEnhancedConnectionComplete); hang the
+    // PAwR association of the 0x29 tail on it. On success the Controller
+    // sets Advertising_Handle according to the train for a Central and
+    // Sync_Handle according to the train for a Peripheral; all other
+    // connections carry the No values (0xFF / 0xFFFF) which are recorded
+    // verbatim. On failure the tail is not valid and nothing is recorded.
+    if (eventParam->status != HCI_SUCCESS) {
+        return;
+    }
+
+    MutexLock(g_aclListLock);
+    BtmAclConnection *connection = BtmAclFindConnectionByHandle(eventParam->connectionHandle);
+    if (connection != NULL) {
+        connection->pawrAdvertisingHandle = eventParam->advertisingHandle;
+        connection->pawrSyncHandle = eventParam->syncHandle;
+    }
+    MutexUnlock(g_aclListLock);
+}
+
+int BTM_GetLeConnectionPawrAssociation(
+    uint16_t connectionHandle, uint8_t *advertisingHandle, uint16_t *syncHandle)
+{
+    if (advertisingHandle == NULL || syncHandle == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    if (!IS_INITIALIZED()) {
+        return BT_BAD_STATUS;
+    }
+
+    MutexLock(g_aclListLock);
+    BtmAclConnection *connection = BtmAclFindConnectionByHandle(connectionHandle);
+    if (connection == NULL) {
+        MutexUnlock(g_aclListLock);
+        return BT_BAD_STATUS;
+    }
+
+    *advertisingHandle = connection->pawrAdvertisingHandle;
+    *syncHandle = connection->pawrSyncHandle;
+    MutexUnlock(g_aclListLock);
+
+    return BT_SUCCESS;
 }
 
 uint8_t BTM_GetAclTranspot(uint16_t connectionHandle)
@@ -2155,4 +2404,5 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .leConnectionComplete = BtmOnLeConnectionComplete,
     .leReadRemoteFeaturesComplete = BtmOnLeReadRemoteFeaturesComplete,
     .leEnhancedConnectionComplete = BtmOnLeEnhancedConnectionComplete,
+    .leEnhancedConnectionCompleteV2 = BtmOnLeEnhancedConnectionCompleteV2,
 };

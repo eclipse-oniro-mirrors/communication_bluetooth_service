@@ -517,6 +517,23 @@ static void HciEventOnLeSetExtendedAdvertisingParametersComplete(const void *par
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.53 LE Set Extended Advertising Parameters Command [v2] Complete
+// Return parameters are unchanged from [v1], so the v1 return struct is reused.
+static void HciEventOnLeSetExtendedAdvertisingParametersV2Complete(const void *param, uint8_t length)
+{
+    HciLeSetExtendedAdvertisingParametersReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetExtendedAdvertisingParametersV2Complete != NULL) {
+        callbacks->leSetExtendedAdvertisingParametersV2Complete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static void HciEventOnLeSetExtendedAdvertisingDataComplete(const void *param, uint8_t length)
 {
     HciLeSetExtendedAdvertisingDataReturnParam returnParam = {0};
@@ -1790,6 +1807,75 @@ static void HciEventOnLeBigCreateSyncCommandComplete(const void *param, uint8_t 
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.125 LE Set Periodic Advertising Subevent Data Command Complete
+// Return parameters: Status + Advertising_Handle (echo).
+static void HciEventOnLeSetPeriodicAdvertisingSubeventDataComplete(const void *param, uint8_t length)
+{
+    HciLeSetPeriodicAdvertisingSubeventDataReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicAdvertisingSubeventDataComplete != NULL) {
+        callbacks->leSetPeriodicAdvertisingSubeventDataComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.126 LE Set Periodic Advertising Response Data Command Complete
+// Return parameters: Status + Sync_Handle (echo).
+static void HciEventOnLeSetPeriodicAdvertisingResponseDataComplete(const void *param, uint8_t length)
+{
+    HciLeSetPeriodicAdvertisingResponseDataReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicAdvertisingResponseDataComplete != NULL) {
+        callbacks->leSetPeriodicAdvertisingResponseDataComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.127 LE Set Periodic Sync Subevent Command Complete
+// Return parameters: Status + Sync_Handle (echo).
+static void HciEventOnLeSetPeriodicSyncSubeventComplete(const void *param, uint8_t length)
+{
+    HciLeSetPeriodicSyncSubeventReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicSyncSubeventComplete != NULL) {
+        callbacks->leSetPeriodicSyncSubeventComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.61 LE Set Periodic Advertising Parameters Command [v2] Complete
+// The [v2] return parameters add Advertising_Handle (echo) to the [v1]
+// Status-only pair, hence the dedicated struct and callback.
+static void HciEventOnLeSetPeriodicAdvertisingParametersV2Complete(const void *param, uint8_t length)
+{
+    HciLeSetPeriodicAdvertisingParametersV2ReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicAdvertisingParametersV2Complete != NULL) {
+        callbacks->leSetPeriodicAdvertisingParametersV2Complete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciLeCmdCompleteFunc g_leControllerCommandCompleteMap[] = {
     NULL,                                                                    // 0x0000
     HciEventOnLeSetEventMaskComplete,                                        // 0x0001
@@ -1918,12 +2004,25 @@ static HciLeCmdCompleteFunc g_leControllerCommandCompleteMap[] = {
     HciEventOnLeSetDataRelatedAddressChangesComplete,                        // 0x007C
     HciEventOnLeSetDefaultSubrateComplete,                                   // 0x007D
     HciEventOnLeSubrateRequestComplete,                                      // 0x007E
+    HciEventOnLeSetExtendedAdvertisingParametersV2Complete,                  // 0x007F
+    NULL,                                                                    // 0x0080
+    NULL,                                                                    // 0x0081
+    HciEventOnLeSetPeriodicAdvertisingSubeventDataComplete,                  // 0x0082
+    HciEventOnLeSetPeriodicAdvertisingResponseDataComplete,                  // 0x0083
+    HciEventOnLeSetPeriodicSyncSubeventComplete,                             // 0x0084
+    NULL,                                                                    // 0x0085
+    HciEventOnLeSetPeriodicAdvertisingParametersV2Complete,                  // 0x0086
 };
 
 // 0x005E is 7.8.93 LE Generate DHKey [v2]: asynchronous command, completion is
 // reported by the LE Generate DHKey Complete event (Subevent 0x09, handled in
 // hci_evt_le.c) - no Command Complete is generated, consistent with v1 (0x0026).
-#define LECONTROLLER_OCF_MAX 0x007E
+// 0x0085 (7.8.66 [v2]) is asynchronous like its [v1] counterpart (0x0043): no
+// Command Complete, the outcome arrives as the LE Enhanced Connection Complete
+// [v2] event (0x29) or as a Command_Status error handled in
+// hci_cmd_failure_le_controller.c. OCFs 0x0080/0x0081 are unassigned in the
+// 5.4 LE Controller command space (verified against the 5.4 command tables).
+#define LECONTROLLER_OCF_MAX 0x0086
 
 void HciEventOnLeCommandComplete(uint16_t opCode, const void *param, uint8_t length)
 {

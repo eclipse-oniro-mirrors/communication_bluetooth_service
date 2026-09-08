@@ -540,6 +540,166 @@ typedef struct {
     uint16_t supervisionTimeout;     // 100ms~32s, unit 10ms (0x000A~0x0C80)
 } HciLeSubrateChangeEventParam;
 
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,14 LE Periodic Advertising Sync Established Event [v2]. Subevent
+// codes 0x24-0x29 are the 5.4 [v2]/new events (event-mask bits 35-40, 7.8.1):
+// 0x24/0x25/0x26 replace their [v1] codes 0x0E/0x0F/0x18 once bits 35-37 are
+// enabled, 0x27/0x28 are new PAwR events without a [v1] counterpart, and 0x29
+// replaces the [v1] Enhanced Connection Complete code 0x0A once bit 40 is
+// enabled.
+#define HCI_LE_PERIODIC_ADVERTISING_SYNC_ESTABLISHED_V2_EVENT 0x24
+#define HCI_LE_PERIODIC_ADVERTISING_REPORT_V2_EVENT 0x25
+#define HCI_LE_PERIODIC_ADVERTISING_SYNC_TRANSFER_RECEIVED_V2_EVENT 0x26
+#define HCI_LE_PERIODIC_ADVERTISING_SUBEVENT_DATA_REQUEST_EVENT 0x27
+#define HCI_LE_PERIODIC_ADVERTISING_RESPONSE_REPORT_EVENT 0x28
+#define HCI_LE_ENHANCED_CONNECTION_COMPLETE_V2_EVENT 0x29
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,14 LE Periodic Advertising Sync Established Event [v2]: the [v1]
+// parameters (0x0E) followed by the four subevent/response-slot parameters.
+// When the periodic advertising train has no subevents or response slots the
+// Controller sets all four to 0x00.
+// Num_Subevents: 0x00 none, 0x01-0x80 subevents.
+// Subevent_Interval: unit 1.25 ms.
+// Response_Slot_Delay: 0x01-0xFE, unit 1.25 ms (0x00 when no response slots).
+// Response_Slot_Spacing: 0x02-0xFF, unit 0.125 ms (0x00 when no response slots).
+typedef struct {
+    uint8_t status;
+    uint16_t syncHandle;
+    uint8_t advertisingSid;
+    uint8_t advertiserAddressType;
+    HciBdAddr advertiserAddress;
+    uint8_t advertiserPhy;
+    uint16_t periodicAdvertisingInterval;
+    uint8_t advertiserClockAccuracy;
+    uint8_t numSubevents;
+    uint8_t subeventInterval;
+    uint8_t responseSlotDelay;
+    uint8_t responseSlotSpacing;
+} HciLePeriodicAdvertisingSyncEstablishedV2EventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,15 LE Periodic Advertising Report Event [v2]: the [v1] parameters
+// (0x0F) with Periodic_Event_Counter and Subevent inserted between CTE_Type
+// and Data_Status. Unlike [v1], CTE_Type is always present in the [v2] layout
+// (the code can only be emitted by a 5.4 Controller). The trailing Data payload
+// is referenced through the separate |data| pointer and is valid only for the
+// duration of the callback.
+// Periodic_Event_Counter: paEventCounter value of the event.
+// Subevent: 0x00-0x7F subevent number, 0xFF = no subevents.
+typedef struct {
+    uint16_t syncHandle;
+    int8_t txPower;
+    int8_t rssi;
+    uint8_t cteType;
+    uint16_t periodicEventCounter;
+    uint8_t subevent;
+    uint8_t dataStatus;
+    uint8_t dataLength;
+    const uint8_t *data;
+} HciLePeriodicAdvertisingReportV2EventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,24 LE Periodic Advertising Sync Transfer Received Event [v2]: the
+// [v1] parameters (0x18) followed by the same four subevent/response-slot
+// parameters as the 0x24 event. When the periodic advertising train has no
+// subevents or response slots the Controller sets Num_Subevents to zero and
+// the Host shall ignore Subevent_Interval, Response_Slot_Delay and
+// Response_Slot_Spacing - the spec does not constrain their values in that
+// case, so parsers must not assume 0x00.
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint16_t serviceData;
+    uint16_t syncHandle;  // ignored when Status != 0
+    uint8_t advertisingSid;
+    uint8_t advertiserAddressType;
+    HciBdAddr advertiserAddress;
+    uint8_t advertiserPhy;  // 0x01 LE 1M / 0x02 LE 2M / 0x03 LE Coded
+    uint16_t periodicAdvertisingInterval;
+    uint8_t advertiserClockAccuracy;
+    uint8_t numSubevents;
+    uint8_t subeventInterval;
+    uint8_t responseSlotDelay;
+    uint8_t responseSlotSpacing;
+} HciLePeriodicAdvertisingSyncTransferReceivedV2EventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,36 LE Periodic Advertising Subevent Data Request Event: sent by the
+// Controller when it has no data for upcoming subevents and is ready to
+// transmit them.
+// Advertising_Handle: 0x00-0xEF, identifies the periodic advertising train.
+// Subevent_Start: 0x00-0x7F, the first subevent data is requested for.
+// Subevent_Data_Count: 0x01-0x80, the number of subevents requested; subevent
+// numbers wrap from (numSubevents - 1) to zero.
+typedef struct {
+    uint8_t advertisingHandle;
+    uint8_t subeventStart;
+    uint8_t subeventDataCount;
+} HciLePeriodicAdvertisingSubeventDataRequestEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,37 LE Periodic Advertising Response Report Event: reports responses
+// received on the response slots of a PAwR train. The wire carries
+// Num_Responses interleaved records (Tx_Power/RSSI/CTE_Type/Response_Slot/
+// Data_Status/Data_Length/Data), so the parser de-interleaves them into
+// response[i] with the per-response Data referenced through |data| (valid only
+// for the duration of the callback).
+// Tx_Status: 0x00 AUX_SYNC_SUBEVENT_IND transmitted / 0x01 not transmitted.
+// Num_Responses: 0x00-0x19.
+// Tx_Power[i]/RSSI[i]: -127 to +20 dBm; 0x7F = not available.
+// CTE_Type[i]: 0x00 AoA, 0x01 AoD 1 us, 0x02 AoD 2 us, 0xFF no CTE.
+// Response_Slot[i]: 0x00-0xFF, the response slot the data was received in.
+// Data_Status[i]: 0x00 complete, 0x01 incomplete (more to come),
+//                 0xFF failed to receive the AUX_SYNC_SUBEVENT_RSP PDU.
+#define HCI_LE_PERIODIC_ADVERTISING_RESPONSE_REPORT_NUM_RESPONSES_MAX 0x19
+
+typedef struct {
+    int8_t txPower;
+    int8_t rssi;
+    uint8_t cteType;
+    uint8_t responseSlot;
+    uint8_t dataStatus;
+    uint8_t dataLength;
+    const uint8_t *data;
+} HciLePeriodicAdvertisingResponseReportRecord;
+
+typedef struct {
+    uint8_t advertisingHandle;
+    uint8_t subevent;
+    uint8_t txStatus;
+    uint8_t numResponses;
+    HciLePeriodicAdvertisingResponseReportRecord
+        response[HCI_LE_PERIODIC_ADVERTISING_RESPONSE_REPORT_NUM_RESPONSES_MAX];
+} HciLePeriodicAdvertisingResponseReportEventParam;
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,10 LE Enhanced Connection Complete Event [v2]: the [v1] parameters
+// (0x0A) followed by Advertising_Handle and Sync_Handle, which associate the
+// connection with the PAwR train it was established from. For connections not
+// established from periodic advertising with responses the Controller sets
+// Advertising_Handle to 0xFF (No Advertising_Handle) and Sync_Handle to 0xFFFF
+// (No Sync_Handle), which the Host shall ignore.
+// Advertising_Handle: 0x00-0xEF, valid when Role is Central (0x00) and the
+// connection was established from periodic advertising with responses.
+// Sync_Handle: valid when Role is Peripheral (0x01) and the connection was
+// established from periodic advertising with responses.
+typedef struct {
+    uint8_t status;
+    uint16_t connectionHandle;
+    uint8_t role;
+    uint8_t peerAddressType;
+    HciBdAddr peerAddress;
+    HciBdAddr localResolvablePrivateAddress;
+    HciBdAddr peerResolvablePrivateAddress;
+    uint16_t connInterval;
+    uint16_t connLatency;
+    uint16_t supervisionTimeout;
+    uint8_t masterClockAccuracy;
+    uint8_t advertisingHandle;  // 0xFF = No Advertising_Handle
+    uint16_t syncHandle;        // 0xFFFF = No Sync_Handle
+} HciLeEnhancedConnectionCompleteV2EventParam;
+
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
 // 7.7.75 Authenticated Payload Timeout Expired Event
 #define HCI_AUTHENTICATED_PAYLOAD_TIMEOUT_EXPIRED_EVENT 0x57

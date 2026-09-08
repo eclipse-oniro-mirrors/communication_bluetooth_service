@@ -149,6 +149,14 @@ static void GapLeSetExAdvReportParam(GapExAdvReportParam *advParam, const HciLeE
         advParam->rssi = report->rssi;
         advParam->secondaryPhy = report->secondaryPHY;
         advParam->txPower = report->txPower;
+        // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.7.65.13: with
+        // the local Advertising Coding Selection Host Support (bit 41) declared
+        // (it is mirrored into the cached features by BTM after the LE Set Host
+        // Feature round trip, see BtmLeSetHostFeature), the Controller reports
+        // the exact coding used on Coded-PHY advertisements by value-extension
+        // of the PHY fields (0x04 = LE Coded S=2, 0x03 = LE Coded S=8); the
+        // upper layer decodes primaryPhy/secondaryPhy through this flag.
+        advParam->codingSelectionKnown = BTM_IsControllerSupportLeAdvCodingSelHost() ? 0x01 : 0x00;
     }
 }
 
@@ -187,7 +195,7 @@ static void GapCallbackRPAExtendedAdvertisingReport(const AdvReportRPAResolveInf
     }
 
     HciLeExtendedAdvertisingReport *report = info->report;
-    GapExAdvReportParam advParam;
+    GapExAdvReportParam advParam = {0};
     BtAddr directAddr;
 
     if (report == NULL || ((report->dataLength != 0) && (report->data == NULL))) {
@@ -545,7 +553,7 @@ static void GapOnLeExtendedAdvertisingReportEventProcessOnce(const HciLeExtended
     GapChangeHCIAddr(&addr, &report->address, report->addressType);
     BtAddr currentAddr = addr;
     uint8_t advType = report->eventType;
-    GapExAdvReportParam advParam;
+    GapExAdvReportParam advParam = {0};
     BtAddr directAddr;
     GapLeSetExAdvReportParam(&advParam, report);
     GapChangeHCIAddr(&directAddr, &report->directAddress, report->directAddressType);

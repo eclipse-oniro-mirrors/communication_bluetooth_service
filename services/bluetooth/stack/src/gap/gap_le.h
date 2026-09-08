@@ -132,6 +132,15 @@ int GAP_LeExAdvSetRandAddr(uint8_t advHandle, const uint8_t addr[BT_ADDRESS_SIZE
  */
 int GAP_LeExAdvSetParam(uint8_t advHandle, uint8_t properties, int8_t txPower, GapLeExAdvParam advExParam);
 
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.53 LE Set Extended Advertising Parameters [v2]: like GAP_LeExAdvSetParam
+// plus the Advertising Coding Selection options in GapExAdvParamV2
+// (gap_le_if.h). Command selection keys only on the Advertising Coding
+// Selection Controller support (bit 40): set -> [v2] OCF 0x007F (even with
+// options all 0x00), clear -> [v1] with the options ignored. Completion is
+// reported through the same exAdvSetParamResult callback as [v1].
+int GAP_LeExAdvSetParamV2(const GapExAdvParamV2 *param);
+
 /**
  * @brief       Set the advertising data used by advertising.
  * @param[in]   advHandle           used to identify an advertising set (0x00-0xEF)

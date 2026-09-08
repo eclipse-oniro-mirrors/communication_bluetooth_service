@@ -41,8 +41,10 @@ static void GapRunFreeFuncWithHeapCopy(const void *ctx, uint32_t ctxLen, TaskFun
     }
 }
 
-static int GapProcessHciEventInTask(TaskFunc run, const void *ctx, uint32_t ctxLen, TaskFunc freeFunc)
+int GapProcessHciEventInTask(TaskFunc run, const void *ctx, uint32_t ctxLen, TaskFunc freeFunc)
 {
+    // Exported for gap_hci_receive_5_4.c: the Bluetooth 5.4 PAwR receivers
+    // split into that file call this task-post helper.
     // Contract: |freeFunc| (if provided) fully owns the context it receives,
     // i.e. it releases both the nested resources and the struct itself.
     // Therefore |freeFunc| must always be invoked with a heap object, never
@@ -1285,7 +1287,9 @@ static void GapRecvLePeriodicAdvertisingSyncEstablishedEvent(
     }
 }
 
-static void GapFreeLePeriodicAdvertisingReportEvent(void *ctx)
+// Exported for gap_hci_receive_5_4.c: frees the struct of a posted [v1]
+// periodic-advertising-report task copy (see the contract note above).
+void GapFreeLePeriodicAdvertisingReportEvent(void *ctx)
 {
     // ctx is always a heap copy of HciLePeriodicAdvertisingReportEventParam
     // produced by GapProcessHciEventInTask, so it is safe to free the struct
@@ -1345,6 +1349,7 @@ static void GapRecvLePeriodicAdvertisingReportEvent(const HciLePeriodicAdvertisi
         HILOGE("Task error: %{public}d.", ret);
     }
 }
+
 
 static void GapRecvLePeriodicAdvertisingSyncLostEvent(const HciLePeriodicAdvertisingSyncLostEventParam *eventParam)
 {
@@ -1562,6 +1567,26 @@ static void GapRecvLeConnectionIqReportEvent(const HciLeConnectionIqReportEventP
 static void GapRecvLeCteRequestFailedEvent(const HciLeCteRequestFailedEventParam *eventParam);
 static void GapRecvLePeriodicAdvertisingSyncTransferReceivedEvent(
     const HciLePeriodicAdvertisingSyncTransferReceivedEventParam *eventParam);
+
+// Bluetooth 5.4 PAwR receivers below are defined in gap_hci_receive_5_4.c,
+// split out of this file to keep it under the source size limit; the
+// callback table references them like the pre-split statics.
+void GapRecvLePeriodicAdvertisingSyncEstablishedV2Event(
+    const HciLePeriodicAdvertisingSyncEstablishedV2EventParam *eventParam);
+void GapRecvLePeriodicAdvertisingReportV2Event(const HciLePeriodicAdvertisingReportV2EventParam *eventParam);
+void GapRecvLeSetPeriodicAdvertisingParametersV2Complete(
+    const HciLeSetPeriodicAdvertisingParametersV2ReturnParam *param);
+void GapRecvLeSetPeriodicAdvertisingSubeventDataComplete(
+    const HciLeSetPeriodicAdvertisingSubeventDataReturnParam *param);
+void GapRecvLeSetPeriodicAdvertisingResponseDataComplete(
+    const HciLeSetPeriodicAdvertisingResponseDataReturnParam *param);
+void GapRecvLeSetPeriodicSyncSubeventComplete(const HciLeSetPeriodicSyncSubeventReturnParam *param);
+void GapRecvLePeriodicAdvertisingSubeventDataRequestEvent(
+    const HciLePeriodicAdvertisingSubeventDataRequestEventParam *eventParam);
+void GapRecvLePeriodicAdvertisingResponseReportEvent(
+    const HciLePeriodicAdvertisingResponseReportEventParam *eventParam);
+void GapRecvLePeriodicAdvertisingSyncTransferReceivedV2Event(
+    const HciLePeriodicAdvertisingSyncTransferReceivedV2EventParam *eventParam);
 #endif
 
 static HciEventCallbacks g_hciEventCallbacks = {
@@ -1631,6 +1656,7 @@ static HciEventCallbacks g_hciEventCallbacks = {
         GapRecvLeRemoteConnectionParameterRequestNegativeReplyComplete,
     .leSetAdvertisingSetRandomAddressComplete = GapRecvLeSetAdvertisingSetRandomAddressComplete,
     .leSetExtendedAdvertisingParametersComplete = GapRecvLeSetExtendedAdvertisingParametersComplete,
+    .leSetExtendedAdvertisingParametersV2Complete = GapRecvLeSetExtendedAdvertisingParametersComplete,
     .leSetExtendedAdvertisingDataComplete = GapRecvLeSetExtendedAdvertisingDataComplete,
     .leSetExtendedScanResponseDataComplete = GapRecvLeSetExtendedScanResponseDataComplete,
     .leSetExtendedAdvertisingEnableComplete = GapRecvLeSetExtendedAdvertisingEnableComplete,
@@ -1651,6 +1677,10 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .leSetPhyComplete = GapRecvLeSetPhyComplete,
     .leSetDataLengthComplete = GapRecvLeSetDataLengthComplete,
     .leSetPeriodicAdvertisingParametersComplete = GapRecvLeSetPeriodicAdvertisingParametersComplete,
+    .leSetPeriodicAdvertisingParametersV2Complete = GapRecvLeSetPeriodicAdvertisingParametersV2Complete,
+    .leSetPeriodicAdvertisingSubeventDataComplete = GapRecvLeSetPeriodicAdvertisingSubeventDataComplete,
+    .leSetPeriodicAdvertisingResponseDataComplete = GapRecvLeSetPeriodicAdvertisingResponseDataComplete,
+    .leSetPeriodicSyncSubeventComplete = GapRecvLeSetPeriodicSyncSubeventComplete,
     .leSetPeriodicAdvertisingDataComplete = GapRecvLeSetPeriodicAdvertisingDataComplete,
     .leSetPeriodicAdvertisingEnableComplete = GapRecvLeSetPeriodicAdvertisingEnableComplete,
     .lePeriodicAdvertisingCreateSyncCancelComplete = GapRecvLePeriodicAdvertisingCreateSyncCancelComplete,
@@ -1700,12 +1730,17 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .leDataLengthChange = GapRecvLeDataLengthChangeEvent,
 
     .lePeriodicAdvertisingSyncEstablished = GapRecvLePeriodicAdvertisingSyncEstablishedEvent,
+    .lePeriodicAdvertisingSyncEstablishedV2 = GapRecvLePeriodicAdvertisingSyncEstablishedV2Event,
     .lePeriodicAdvertisingReport = GapRecvLePeriodicAdvertisingReportEvent,
+    .lePeriodicAdvertisingReportV2 = GapRecvLePeriodicAdvertisingReportV2Event,
     .lePeriodicAdvertisingSyncLost = GapRecvLePeriodicAdvertisingSyncLostEvent,
+    .lePeriodicAdvertisingSubeventDataRequest = GapRecvLePeriodicAdvertisingSubeventDataRequestEvent,
+    .lePeriodicAdvertisingResponseReport = GapRecvLePeriodicAdvertisingResponseReportEvent,
     .leConnectionlessIqReport = GapRecvLeConnectionlessIqReportEvent,
     .leConnectionIqReport = GapRecvLeConnectionIqReportEvent,
     .leCteRequestFailed = GapRecvLeCteRequestFailedEvent,
     .lePeriodicAdvertisingSyncTransferReceived = GapRecvLePeriodicAdvertisingSyncTransferReceivedEvent,
+    .lePeriodicAdvertisingSyncTransferReceivedV2 = GapRecvLePeriodicAdvertisingSyncTransferReceivedV2Event,
 #endif
 };
 

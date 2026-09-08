@@ -124,6 +124,81 @@ int BTSTACK_API BTM_AclCancelConnect(const BtAddr *addr);
 int BTSTACK_API BTM_LeConnect(const BtAddr *addr);
 
 /**
+ * @brief Create an ACL connection to a synchronized device from a local PAwR
+ *        train (BLUETOOTH SPECIFICATION Version 5.4, Vol 4, Part E 7.8.66,
+ *        LE Extended Create Connection [v2]).
+ *
+ * The local device runs the periodic advertising train identified by
+ * @p advertisingHandle. The Controller transmits an AUX_CONNECT_REQ PDU
+ * instead of the AUX_SYNC_SUBEVENT_IND PDU of subevent @p subevent of that
+ * train, with the InitA field set to the address of the local device and the
+ * AdvA field set to @p addr (Vol 6, Part B, 4.4.2.12.2); the synchronized
+ * device replies with an AUX_CONNECT_RSP and the connection is created with
+ * the local device in the Central role. Connection parameters default to the
+ * values of the legacy connect path (see BTM_LeConnect).
+ *
+ * When both @p advertisingHandle and @p subevent are 0xFF the pair is not
+ * used and the call behaves exactly like @c BTM_LeConnect (address-based
+ * connect via the Filter Accept List machinery); a 0xFF on exactly one of
+ * the two parameters is invalid.
+ *
+ * The outcome of the attempt - success, or failure with an HCI status such
+ * as 0x3E (Connection Failed to be Established) when the synchronized device
+ * misses the AUX_CONNECT_REQ or the periodic advertiser misses the
+ * AUX_CONNECT_RSP - is reported through the same connection-complete
+ * notification path as @c BTM_LeConnect (no new callback). A peer that has
+ * already established the connection while the advertiser missed the reply
+ * is disconnected by the Controller after six connection events
+ * (Disconnection Complete, Reason 0x3E), also through the existing path.
+ * The connection record carries the PAwR handles of the train afterwards -
+ * once the connection-complete notification of the attempt has been
+ * delivered, the association is written while the completion event is
+ * processed, i.e. after the callback chain - queryable through
+ * BTM_GetLeConnectionPawrAssociation.
+ *
+ * The controller must support the Periodic Advertising Advertiser role
+ * (LL feature bit 43) for a PAwR connect; the attempt is refused with
+ * @c BT_NOT_SUPPORT otherwise. Only one recorded LE connect attempt can be
+ * pending at a time; the call returns @c BT_BAD_STATUS while another
+ * recorded attempt (including an address-based one) is in progress.
+ * A background auto-connect attempt (Filter Accept List auto-connection,
+ * which keeps no connection record) is not part of that check: overlapping
+ * such an attempt is arbitrated by the Controller and any command rejection
+ * is surfaced through the ordinary failure callbacks.
+ *
+ * @param addr               The address of the synchronized LE device to
+ *                           connect to (the AdvA of the AUX_CONNECT_REQ).
+ * @param advertisingHandle  Handle of the local PAwR train: 0x00-0xEF,
+ *                           0xFF when not used.
+ * @param subevent           Subevent the connection request is initiated
+ *                           from: 0x00-0x7F, 0xFF when not used.
+ * @return Returns <b>BT_SUCCESS</b> if the operation is successful; returns
+ *         others if the operation fails.
+ */
+int BTSTACK_API BTM_LeConnectFromPawr(const BtAddr *addr, uint8_t advertisingHandle, uint8_t subevent);
+
+/**
+ * @brief Query the PAwR association of an established LE connection.
+ *
+ * Filled in by the LE Enhanced Connection Complete [v2] event (0x29) on a
+ * 5.4 controller: Advertising_Handle (valid when the local device is the
+ * Central of a connection established from periodic advertising with
+ * responses) and Sync_Handle (valid when the local device is the Peripheral
+ * and the connection was established from a train it synchronized to,
+ * Vol 4, Part E 7.7.65.10). Connections not established from periodic
+ * advertising with responses report No Advertising_Handle (0xFF) and No
+ * Sync_Handle (0xFFFF).
+ *
+ * @param connectionHandle   Handle of the established LE connection.
+ * @param advertisingHandle  Out: the PAwR advertising handle (0xFF = none).
+ * @param syncHandle         Out: the PAwR sync handle (0xFFFF = none).
+ * @return Returns <b>BT_SUCCESS</b> if the connection exists and the handles
+ *         were filled in; returns others if the operation fails.
+ */
+int BTSTACK_API BTM_GetLeConnectionPawrAssociation(
+    uint16_t connectionHandle, uint8_t *advertisingHandle, uint16_t *syncHandle);
+
+/**
  * @brief Cancel the connect operation to LE device.
  *
  * @param addr The address of LE device.
@@ -627,6 +702,65 @@ bool BTSTACK_API BTM_IsControllerSupportLePeriodicAdvAdiSupport();
  * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
  */
 bool BTSTACK_API BTM_IsControllerSupportLeChannelClassification();
+
+/**
+ * @brief Determine whether the local controller supports Advertising Coding Selection (LE Feature Bit 40).
+ *
+ * Bluetooth 5.4, Vol 6, Part B, 4.6.37. A controller with this bit supports
+ * host selection of the S=2/S=8 coding scheme used in advertising and reports
+ * the coding scheme in LE Extended Advertising Report events. Gates the HCI_LE
+ * Set Extended Advertising Parameters [v2] (OCF 0x007F) command selection (a
+ * controller without the feature that receives a non-zero option returns
+ * Unsupported Feature or Parameter Value, 0x11) and the request of LE Feature
+ * Bit 41 (Advertising Coding Selection Host Support) via HCI_LE_Set_Host_
+ * Feature. This bit does not gate the PAwR events 0x24-0x29: those are
+ * enabled through the LE event-mask bits 35-40, which BtmGetLe54EventMask
+ * (btm_controller.c) sets per the PAwR controller features (LL bits 43/44)
+ * and a controller version of 5.4 or later.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeAdvCodingSel();
+
+/**
+ * @brief Determine whether the local controller reports Advertising Coding Selection Host Support
+ * (LE Feature Bit 41).
+ *
+ * Bluetooth 5.4, Vol 6, Part B, 4.6.33.3. The controller only sets this bit on
+ * request from the Host via HCI_LE_Set_Host_Feature (bitNumber 0x29), and only
+ * if it supports Advertising Coding Selection (bit 40). Informational only - the
+ * features are read during setup before the Set Host Feature round trip, so
+ * capability decisions must gate on bit 40
+ * (BTM_IsControllerSupportLeAdvCodingSel).
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeAdvCodingSelHost();
+
+/**
+ * @brief Determine whether the local controller supports Periodic Advertising with Responses - Advertiser
+ * (LE Feature Bit 43).
+ *
+ * Bluetooth 5.4, Vol 6, Part B, 4.6.38. A controller with this bit can
+ * advertise a PAwR train (subevents with response slots). Per 4.6.38 such a
+ * controller must also support Periodic Advertising Sync Transfer - Sender
+ * (bit 24). Gates the PAwR advertiser subevent/response-slot commands and the
+ * Subevent Data Request (0x27) / Response Report (0x28) event handling.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportPawrAdvertiser();
+
+/**
+ * @brief Determine whether the local controller supports Periodic Advertising with Responses - Scanner
+ * (LE Feature Bit 44).
+ *
+ * Bluetooth 5.4, Vol 6, Part B, 4.6.39. A controller with this bit can
+ * synchronize to the subevents of a PAwR train and send responses. Per 4.6.39
+ * such a controller must also support Periodic Advertising Sync Transfer -
+ * Recipient (bit 25). Gates the PAwR sync-side commands (Set Periodic Sync
+ * Subevent / Set Periodic Advertising Response Data) and the [v2] periodic
+ * subevent events on the scanner side.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportPawrScanner();
 
 /**
  * @brief Get the cached LE Read Antenna Information result (7.8.87).

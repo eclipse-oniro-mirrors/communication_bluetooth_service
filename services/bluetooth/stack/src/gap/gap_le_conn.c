@@ -462,6 +462,59 @@ int GAP_LeConnectionParameterRsp(const BtAddr *addr, uint8_t accept, const GapLe
     return GAP_ERR_INVAL_PARAM;
 }
 
+// Range of the Subevent parameter of LE Extended Create Connection [v2]
+// (7.8.66); kept in sync with the sender in hci_cmd_le_controller_5_4.c.
+#define GAP_PAWR_CONNECT_SUBEVENT_MAX 0x7F
+
+// GAP entry of the Bluetooth 5.4 connect-from-PAwR path: the local device
+// runs a PAwR train (P3, gap_le_pawr_adv.c) and creates a connection to a
+// synchronized device from one of its subevents. The HCI command is sent by
+// BTM, which also owns the connection record and the completion flow, so
+// this entry only validates and forwards; the outcome - including failures
+// with Status 0x3E and the Enhanced Connection Complete [v2] association -
+// reaches the same callbacks as an address-based connect.
+int GAPIF_LeExtCreateConnFromPawr(uint8_t advHandle, uint8_t subevent, const BtAddr *addr)
+{
+    LOG_INFO("%{public}s: advHandle:0x%{public}02x subevent:0x%{public}02x", __FUNCTION__, advHandle, subevent);
+
+    if (addr == NULL) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    // The LE enable gate covers every path below, including the fallback:
+    // the address-based connect must not run while GAP_LE is disabled either.
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    // Both parameters 0xFF: the PAwR pair is not used, the call falls back
+    // to the legacy address-based connect (v1 semantics, 7.8.66 [v2]).
+    if (advHandle == 0xFF && subevent == 0xFF) {
+        return BTM_LeConnect(addr);
+    }
+
+    // Advertising_Handle and Subevent shall both be 0xFF (not used) or both
+    // be valid (7.8.66); a 0xFF on exactly one of the pair is not allowed.
+    if (advHandle == 0xFF || subevent == 0xFF || advHandle > GAP_PERIODIC_ADV_HANDLE_MAX ||
+        subevent > GAP_PAWR_CONNECT_SUBEVENT_MAX) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    // A train-based connect requires the advertising roles of the PAwR
+    // train plus the Central role of the new connection. The fallback above
+    // deliberately skips this check: the legacy path never applied a role
+    // gate at this entry and direct callers of BTM_LeConnect have none.
+    if (GapLeRolesCheck(GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_CENTRAL) == false) {
+        return GAP_ERR_INVAL_STATE;
+    }
+
+    if (!BTM_IsControllerSupportPawrAdvertiser()) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+
+    return BTM_LeConnectFromPawr(addr, advHandle, subevent);
+}
+
 static int GapLeSetHostChannelClassification(uint64_t channelMap)
 {
     HciLeSetHostChannelClassificationParam hciCmdParam;
