@@ -1962,5 +1962,10 @@ int32_t BluetoothHostServer::VerifyMultiPermissions(bool systemHapNeeded,
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
+
+int32_t BluetoothHostServer::GetBrAddressByBleAddress(const std::string &bleAddr, std::string &brAddr)
+{
+    return BT_ERR_API_NOT_SUPPORT;
+}
 }  // namespace Bluetooth
 }  // namespace OHOS
