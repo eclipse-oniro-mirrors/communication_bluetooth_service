@@ -79,6 +79,19 @@ extern "C" {
 // 7.8.1 LE Set Event Mask Command (bit 34, subevent code 0x23)
 #define LE_EVENT_MASK_LE_SUBRATE_CHANGE_EVENT            0x0000000400000000
 
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.1 LE Set Event Mask Command (bits 35-40, subevent code 0x24-0x29).
+// The [v2] event bits pair with the [v1] bits of the same event type (9<->40,
+// 13<->35, 14<->36, 23<->37); behavior is undefined when both bits of a pair are
+// set, so a host that enables a [v2] bit keeps the [v1] bit clear. Bits 38/39
+// (0x27/0x28) are new events with no [v1] counterpart.
+#define LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_ESTABLISHED_V2_EVENT 0x0000000800000000  // bit 35, 0x24
+#define LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_REPORT_V2_EVENT           0x0000001000000000  // bit 36, 0x25
+#define LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SYNC_TRANSFER_RECEIVED_V2_EVENT 0x0000002000000000  // bit 37, 0x26
+#define LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_SUBEVENT_DATA_REQUEST_EVENT 0x0000004000000000  // bit 38, 0x27
+#define LE_EVENT_MASK_LE_PERIODIC_ADVERTISING_RESPONSE_REPORT_EVENT     0x0000008000000000  // bit 39, 0x28
+#define LE_EVENT_MASK_LE_ENHANCED_CONNECTION_COMPLETE_V2_EVENT          0x0000010000000000  // bit 40, 0x29
+
 #define LE_EVENT_MASK_DEFAULT 0x000000000000001F
 
 #define LE_EVENT_MASK_CORE_4_0 LE_EVENT_MASK_DEFAULT
@@ -1220,9 +1233,10 @@ typedef struct {
 }
 #endif
 
-// Included outside extern "C": the 5.0/5.1 definitions own their extern "C"
-// wrapper and must not be nested inside another one.
+// Included outside extern "C": the 5.0/5.1/5.4 definitions own their extern
+// "C" wrapper and must not be nested inside another one.
 #include "hci_def_le_cmd_5_0.h"
 #include "hci_def_le_cmd_5_1.h"
+#include "hci_def_le_cmd_5_4.h"
 
 #endif

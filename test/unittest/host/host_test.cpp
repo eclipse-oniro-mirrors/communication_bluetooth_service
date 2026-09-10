@@ -14,6 +14,7 @@
  */
 
 #include <gtest/gtest.h>
+#include <chrono>
 #include <mutex>
 #include <thread>
 
@@ -540,9 +541,28 @@ HWTEST_F(HostTest, Host_ModuleTest_GetDeviceType_00100, TestSize.Level1)
     GTEST_LOG_(INFO) << "Host_ModuleTest_GetDeviceType_00100 start";
 
     host_ = &BluetoothHost::GetDefaultHost();
+    // DEVICE_TYPE_UNKNOWN(-1) is answered only while bluetooth is on and the
+    // adapter can be queried; with the radio off the server returns
+    // INVALID_VALUE(0) instead. Make the case self-sufficient: turn bluetooth
+    // on first, and skip when this environment cannot enable it at all.
+    if (host_->GetBtState() != BTStateID::STATE_TURN_ON) {
+        host_->EnableBt();
+    }
+    int tryCount = 0;
+    while (host_->GetBtState() != BTStateID::STATE_TURN_ON && tryCount++ < 30) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+    if (host_->GetBtState() != BTStateID::STATE_TURN_ON) {
+        GTEST_SKIP() << "bluetooth cannot be enabled in this environment";
+    }
     BluetoothRemoteDevice device_("00:00:00:00:00:00", BT_TRANSPORT_BREDR);
     EXPECT_EQ(device_.GetDeviceType(), DEVICE_TYPE_UNKNOWN);
 
+    // Bluetooth is intentionally left on at the end of this case: the
+    // framework keeps a per-process reference count of enable requests and
+    // other cases in this binary rely on the radio state, so tearing the
+    // state down here could leak into them. Cases that require the radio off
+    // disable it explicitly themselves.
     GTEST_LOG_(INFO) << "Host_ModuleTest_GetDeviceType_00100 end";
 }
 

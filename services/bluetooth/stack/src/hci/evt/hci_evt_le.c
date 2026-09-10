@@ -417,6 +417,14 @@ static bool HciParseLeExtendedAdvertisingReport(
     }
     *offset += BT_ADDRESS_SIZE;
 
+    // PHY fields pass through raw (7.7.65,13): on a host that declared the
+    // Advertising Coding Selection Host Support feature (local LL bit 41) the
+    // Controller reports the exact coding used on Coded-PHY advertisements by
+    // value extension of these fields - 0x04 = LE Coded S=2, 0x03 = LE Coded
+    // S=8 (BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, p.2262-2263).
+    // Otherwise 0x03 = LE Coded with the coding not distinguishable and 0x04
+    // never occurs. Decoding for the upper layer happens in
+    // GapLeSetExAdvReportParam (gap_le_scan.c) through codingSelectionKnown.
     report->primaryPHY = param[*offset];
     *offset += sizeof(uint8_t);
 
@@ -1242,6 +1250,239 @@ static void HciEventOnLeSubrateChangeEvent(const uint8_t *param, size_t length)
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,14 LE Periodic Advertising Sync Established Event [v2] (0x24): the
+// [v1] parameters (0x0E) followed by Num_Subevents, Subevent_Interval,
+// Response_Slot_Delay and Response_Slot_Spacing (all 1 octet, all 0x00 when
+// the train has no subevents or response slots).
+static void HciEventOnLEPeriodicAdvertisingSyncEstablishedV2Event(const uint8_t *param, size_t length)
+{
+    if (param == NULL || length < sizeof(HciLePeriodicAdvertisingSyncEstablishedV2EventParam)) {
+        return;
+    }
+
+    HciLePeriodicAdvertisingSyncEstablishedV2EventParam *eventParam =
+        (HciLePeriodicAdvertisingSyncEstablishedV2EventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->lePeriodicAdvertisingSyncEstablishedV2 != NULL) {
+        callbacks->lePeriodicAdvertisingSyncEstablishedV2(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,15 LE Periodic Advertising Report Event [v2] (0x25): the fixed wire
+// header is Sync_Handle(2) + TX_Power(1) + RSSI(1) + CTE_Type(1) +
+// Periodic_Event_Counter(2) + Subevent(1) + Data_Status(1) + Data_Length(1),
+// i.e. 10 bytes - the [v1] layout (0x0F) with Periodic_Event_Counter and
+// Subevent inserted between CTE_Type and Data_Status. Unlike the [v1] report,
+// CTE_Type is always present in the [v2] layout: subevent code 0x25 is only
+// emitted by a 5.4 Controller, for which the [v2] report parameters are
+// unconditional. Only the fixed-size header is parsed byte-by-byte; the
+// trailing Data payload is referenced through the separate |data| pointer and
+// is valid only for the duration of this callback.
+static void HciEventOnLEPeriodicAdvertisingReportV2Event(const uint8_t *param, size_t length)
+{
+    const size_t fixedLength =
+        sizeof(uint16_t) + (sizeof(uint8_t) * 3) + sizeof(uint16_t) + (sizeof(uint8_t) * 3);
+    if (param == NULL || length < fixedLength) {
+        return;
+    }
+
+    HciLePeriodicAdvertisingReportV2EventParam eventParam = { 0 };
+    size_t offset = 0;
+
+    if (HciEvtLeReadUint16Le(param, length, &offset, &eventParam.syncHandle) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, (uint8_t *)&eventParam.txPower) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, (uint8_t *)&eventParam.rssi) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, &eventParam.cteType) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint16Le(param, length, &offset, &eventParam.periodicEventCounter) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, &eventParam.subevent) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, &eventParam.dataStatus) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, &eventParam.dataLength) != 0) {
+        return;
+    }
+
+    if (eventParam.dataLength > length - offset) {
+        LOG_ERROR("%{public}s: malformed length, got %{public}zu, expected at least %{public}zu",
+            __FUNCTION__, length, offset + eventParam.dataLength);
+        return;
+    }
+    eventParam.data = (eventParam.dataLength > 0) ? (param + offset) : NULL;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->lePeriodicAdvertisingReportV2 != NULL) {
+        callbacks->lePeriodicAdvertisingReportV2(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,24 LE Periodic Advertising Sync Transfer Received Event [v2] (0x26):
+// the [v1] parameters (0x18) followed by the same four subevent/response-slot
+// parameters as the 0x24 event. When the train has no subevents or response
+// slots the Controller sets Num_Subevents to zero and the Host shall ignore
+// the remaining three - their values are unspecified, so they are passed
+// through untouched.
+static void HciEventOnLePeriodicAdvertisingSyncTransferReceivedV2Event(const uint8_t *param, size_t length)
+{
+    if (param == NULL || length < sizeof(HciLePeriodicAdvertisingSyncTransferReceivedV2EventParam)) {
+        return;
+    }
+
+    HciLePeriodicAdvertisingSyncTransferReceivedV2EventParam *eventParam =
+        (HciLePeriodicAdvertisingSyncTransferReceivedV2EventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->lePeriodicAdvertisingSyncTransferReceivedV2 != NULL) {
+        callbacks->lePeriodicAdvertisingSyncTransferReceivedV2(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,36 LE Periodic Advertising Subevent Data Request Event (0x27):
+// Advertising_Handle + Subevent_Start + Subevent_Data_Count.
+static void HciEventOnLePeriodicAdvertisingSubeventDataRequestEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || length < sizeof(HciLePeriodicAdvertisingSubeventDataRequestEventParam)) {
+        return;
+    }
+
+    HciLePeriodicAdvertisingSubeventDataRequestEventParam *eventParam =
+        (HciLePeriodicAdvertisingSubeventDataRequestEventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->lePeriodicAdvertisingSubeventDataRequest != NULL) {
+        callbacks->lePeriodicAdvertisingSubeventDataRequest(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// Fixed octets preceding the response records of the 0x28 event (7.7.65,37):
+// Advertising_Handle + Subevent + Tx_Status + Num_Responses.
+#define HCI_LE_PAWR_RESPONSE_REPORT_FIXED_OCTETS 0x04
+
+// Read the fixed octets of one response record of the 0x28 event (7.7.65,37):
+// Tx_Power, RSSI, CTE_Type, Response_Slot, Data_Status and Data_Length.
+// Returns non-zero when the buffer ends before the record is complete; the
+// already-read octets stay consumed in that case, like the reading helpers.
+static int HciEvtLeReadPawrResponseReportRecord(const uint8_t *param, size_t length, size_t *offset,
+    HciLePeriodicAdvertisingResponseReportRecord *record)
+{
+    if (HciEvtLeReadUint8(param, length, offset, (uint8_t *)&record->txPower) != 0 ||
+        HciEvtLeReadUint8(param, length, offset, (uint8_t *)&record->rssi) != 0 ||
+        HciEvtLeReadUint8(param, length, offset, &record->cteType) != 0 ||
+        HciEvtLeReadUint8(param, length, offset, &record->responseSlot) != 0 ||
+        HciEvtLeReadUint8(param, length, offset, &record->dataStatus) != 0 ||
+        HciEvtLeReadUint8(param, length, offset, &record->dataLength) != 0) {
+        return -1;
+    }
+    return 0;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,37 LE Periodic Advertising Response Report Event (0x28): the fixed
+// prefix is Advertising_Handle + Subevent + Tx_Status + Num_Responses, then
+// Num_Responses interleaved records of Tx_Power + RSSI + CTE_Type +
+// Response_Slot + Data_Status + Data_Length + Data (variable). The records
+// are de-interleaved into the fixed response[] array with each Data payload
+// referenced through its record |data| pointer, valid only for the duration
+// of this callback.
+static void HciEventOnLePeriodicAdvertisingResponseReportEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || length < HCI_LE_PAWR_RESPONSE_REPORT_FIXED_OCTETS) {
+        return;
+    }
+
+    HciLePeriodicAdvertisingResponseReportEventParam eventParam = { 0 };
+    size_t offset = 0;
+
+    if (HciEvtLeReadUint8(param, length, &offset, &eventParam.advertisingHandle) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, &eventParam.subevent) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, &eventParam.txStatus) != 0) {
+        return;
+    }
+    if (HciEvtLeReadUint8(param, length, &offset, &eventParam.numResponses) != 0) {
+        return;
+    }
+    if (eventParam.numResponses > HCI_LE_PERIODIC_ADVERTISING_RESPONSE_REPORT_NUM_RESPONSES_MAX) {
+        LOG_ERROR("%{public}s: numResponses out of range: %{public}hhu", __FUNCTION__, eventParam.numResponses);
+        return;
+    }
+
+    for (uint8_t i = 0; i < eventParam.numResponses; i++) {
+        HciLePeriodicAdvertisingResponseReportRecord *record = &eventParam.response[i];
+        if (HciEvtLeReadPawrResponseReportRecord(param, length, &offset, record) != 0) {
+            return;
+        }
+        if (record->dataLength > length - offset) {
+            LOG_ERROR("%{public}s: malformed length, got %{public}zu, expected at least %{public}zu",
+                __FUNCTION__, length, offset + record->dataLength);
+            return;
+        }
+        record->data = (record->dataLength > 0) ? (param + offset) : NULL;
+        offset += record->dataLength;
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->lePeriodicAdvertisingResponseReport != NULL) {
+        callbacks->lePeriodicAdvertisingResponseReport(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.7.65,10 LE Enhanced Connection Complete Event [v2] (0x29): the [v1]
+// parameters (0x0A) followed by Advertising_Handle and Sync_Handle. For
+// connections not established from periodic advertising with responses both
+// are set to No Advertising_Handle (0xFF) / No Sync_Handle (0xFFFF) and shall
+// be ignored by the Host - the legacy connection handling below only reads
+// the leading [v1] parameters.
+static void HciEventOnLeEnhancedConnectionCompleteV2Event(const uint8_t *param, size_t length)
+{
+    if (param == NULL || length < sizeof(HciLeEnhancedConnectionCompleteV2EventParam)) {
+        return;
+    }
+
+    HciLeEnhancedConnectionCompleteV2EventParam *eventParam = (HciLeEnhancedConnectionCompleteV2EventParam *)param;
+
+    if (eventParam->status == HCI_SUCCESS) {
+        HciAclOnConnectionComplete(eventParam->connectionHandle, TRANSPORT_LE_STACK);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leEnhancedConnectionCompleteV2 != NULL) {
+        callbacks->leEnhancedConnectionCompleteV2(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciLeEventFunc g_leEventMap[] = {
     NULL,                                                     // 0x00
     HciEventOnLeConnectionCompleteEvent,                      // 0x01
@@ -1279,9 +1520,15 @@ static HciLeEventFunc g_leEventMap[] = {
     HciEventOnLeTransmitPowerReportingEvent,                  // 0x21
     HciEventOnLeBigInfoAdvertisingReportEvent,                // 0x22
     HciEventOnLeSubrateChangeEvent,                           // 0x23
+    HciEventOnLEPeriodicAdvertisingSyncEstablishedV2Event,    // 0x24
+    HciEventOnLEPeriodicAdvertisingReportV2Event,             // 0x25
+    HciEventOnLePeriodicAdvertisingSyncTransferReceivedV2Event, // 0x26
+    HciEventOnLePeriodicAdvertisingSubeventDataRequestEvent,  // 0x27
+    HciEventOnLePeriodicAdvertisingResponseReportEvent,       // 0x28
+    HciEventOnLeEnhancedConnectionCompleteV2Event,            // 0x29
 };
 
-#define LESUBEVENTCODE_MAX 0x23
+#define LESUBEVENTCODE_MAX 0x29
 
 void HciEventOnLeMetaEvent(Packet *packet)
 {

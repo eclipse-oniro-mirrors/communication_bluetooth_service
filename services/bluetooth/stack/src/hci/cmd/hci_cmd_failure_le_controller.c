@@ -1714,6 +1714,24 @@ static void HciCmdOnLeSubrateRequestFailed(uint8_t status, const void *param)
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.53 LE Set Extended Advertising Parameters Command [v2] failure path:
+// synthesizes the [v1]-shaped return params (Status + Selected_TX_Power is
+// unchanged in [v2]) and re-dispatches to the [v2] completion callback.
+static void HciCmdOnLeSetExtendedAdvertisingParametersV2Failed(uint8_t status, const void *param)
+{
+    HciLeSetExtendedAdvertisingParametersReturnParam returnParam = {
+        .status = status,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetExtendedAdvertisingParametersV2Complete != NULL) {
+        callbacks->leSetExtendedAdvertisingParametersV2Complete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static void HciCmdOnLeSetDataRelatedAddressChangesFailed(uint8_t status, const void *param)
 {
     HciLeSetDataRelatedAddressChangesReturnParam returnParam = {
@@ -2015,6 +2033,129 @@ static void HciCmdOnLeIsoTestEndFailed(uint8_t status, const void *param)
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.125 failure path. These commands normally answer through Command
+// Complete (whose error Status reaches the same complete callbacks through the
+// hci_evt_le_cmd_complete.c map); the synthesized return parameters below
+// cover the Command_Status-with-error and command-timeout cases so callers do
+// not wait forever. The advertisingHandle echo is read from the serialized
+// command prefix, which is byte-identical to the head of the host struct.
+// Only that header prefix is ever read through the casts below - the pointer
+// members of the host structs (the subevent-data pointer of 7.8.125/7.8.126,
+// the subevent array of 7.8.127, the sets array of 7.8.61 [v2]) are never
+// dereferenced here: the serialized region does not contain them.
+static void HciCmdOnLeSetPeriodicAdvertisingSubeventDataFailed(uint8_t status, const void *param)
+{
+    HciLeSetPeriodicAdvertisingSubeventDataReturnParam returnParam = {
+        .status = status,
+        .advertisingHandle =
+            (param != NULL) ? ((const HciLeSetPeriodicAdvertisingSubeventDataParam *)param)->advertisingHandle : 0xFF,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicAdvertisingSubeventDataComplete != NULL) {
+        callbacks->leSetPeriodicAdvertisingSubeventDataComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.126 failure path; see HciCmdOnLeSetPeriodicAdvertisingSubeventDataFailed.
+static void HciCmdOnLeSetPeriodicAdvertisingResponseDataFailed(uint8_t status, const void *param)
+{
+    HciLeSetPeriodicAdvertisingResponseDataReturnParam returnParam = {
+        .status = status,
+        .syncHandle =
+            (param != NULL) ? ((const HciLeSetPeriodicAdvertisingResponseDataParam *)param)->syncHandle : 0xFFFF,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicAdvertisingResponseDataComplete != NULL) {
+        callbacks->leSetPeriodicAdvertisingResponseDataComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.127 failure path; see HciCmdOnLeSetPeriodicAdvertisingSubeventDataFailed.
+static void HciCmdOnLeSetPeriodicSyncSubeventFailed(uint8_t status, const void *param)
+{
+    HciLeSetPeriodicSyncSubeventReturnParam returnParam = {
+        .status = status,
+        .syncHandle =
+            (param != NULL) ? ((const HciLeSetPeriodicSyncSubeventParam *)param)->syncHandle : 0xFFFF,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicSyncSubeventComplete != NULL) {
+        callbacks->leSetPeriodicSyncSubeventComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.61 LE Set Periodic Advertising Parameters Command [v2] failure path.
+// The [v2] return parameters add the Advertising_Handle echo to the [v1]
+// Status-only pair; see HciCmdOnLeSetPeriodicAdvertisingSubeventDataFailed.
+static void HciCmdOnLeSetPeriodicAdvertisingParametersV2Failed(uint8_t status, const void *param)
+{
+    HciLeSetPeriodicAdvertisingParametersV2ReturnParam returnParam = {
+        .status = status,
+        .advertisingHandle =
+            (param != NULL) ? ((const HciLeSetPeriodicAdvertisingParametersV2Param *)param)->advertisingHandle : 0xFF,
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetPeriodicAdvertisingParametersV2Complete != NULL) {
+        callbacks->leSetPeriodicAdvertisingParametersV2Complete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.66 LE Extended Create Connection Command [v2] failure path. Like the
+// [v1] command (0x0043) this one has no Command Complete: its outcome is the
+// LE Enhanced Connection Complete [v2] event (0x29), so on Command_Status
+// errors and timeouts a [v2] completion event is synthesized carrying the
+// error Status, the peer identity and the Advertising_Handle echo (0xFF when
+// the PAwR form was not used).
+// The synthesized event is not a real connection: only status,
+// peerAddressType, peerAddress and advertisingHandle are meaningful; every
+// remaining field keeps its placeholder value (connectionHandle 0x0000,
+// role 0x00, resolvable addresses zeroed, connection parameters 0, syncHandle
+// 0xFFFF), so consumers must key on status != 0x00 and must not treat the
+// event as an establishment.
+static void HciCmdOnLeExtendedCreateConnectionV2Failed(uint8_t status, const void *param)
+{
+    HciLeEnhancedConnectionCompleteV2EventParam eventParam = {
+        .status = status,
+        .peerAddressType = 0xFF,
+        .peerAddress = {0},
+        .advertisingHandle = 0xFF,
+        .syncHandle = 0xFFFF,
+    };
+
+    if (param != NULL) {
+        const HciLeExtendedCreateConnectionV2Param *cmdParam = (const HciLeExtendedCreateConnectionV2Param *)param;
+        eventParam.peerAddressType = cmdParam->peerAddressType;
+        eventParam.peerAddress = cmdParam->peerAddress;
+        eventParam.advertisingHandle = cmdParam->advertisingHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid target info", __FUNCTION__);
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leEnhancedConnectionCompleteV2 != NULL) {
+        callbacks->leEnhancedConnectionCompleteV2(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciCmdOnFailedFunc g_funcMap[] = {
     NULL,                                                                // 0x0000
     HciCmdOnLeSetEventMaskFailed,                                        // 0x0001
@@ -2143,11 +2284,20 @@ static HciCmdOnFailedFunc g_funcMap[] = {
     HciCmdOnLeSetDataRelatedAddressChangesFailed,                        // 0x007C
     HciCmdOnLeSetDefaultSubrateFailed,                                   // 0x007D
     HciCmdOnLeSubrateRequestFailed,                                      // 0x007E
+    HciCmdOnLeSetExtendedAdvertisingParametersV2Failed,                  // 0x007F
+    NULL,                                                                // 0x0080
+    NULL,                                                                // 0x0081
+    HciCmdOnLeSetPeriodicAdvertisingSubeventDataFailed,                  // 0x0082
+    HciCmdOnLeSetPeriodicAdvertisingResponseDataFailed,                  // 0x0083
+    HciCmdOnLeSetPeriodicSyncSubeventFailed,                             // 0x0084
+    HciCmdOnLeExtendedCreateConnectionV2Failed,                          // 0x0085
+    HciCmdOnLeSetPeriodicAdvertisingParametersV2Failed,                  // 0x0086
 };
 
 // 0x005E is 7.8.93 LE Generate DHKey [v2] (Key_Type variant): the failure path
 // dispatches the same leGenerateDHKeyComplete callback as v1 (0x0026).
-#define LECONTROLLER_OCF_MAX 0x007E
+// OCFs 0x0080/0x0081 are unassigned in the 5.4 LE Controller command space.
+#define LECONTROLLER_OCF_MAX 0x0086
 
 void HciOnLeControllerCmdFailed(uint16_t opCode, uint8_t status, const void *param)
 {

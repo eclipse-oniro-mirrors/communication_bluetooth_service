@@ -90,6 +90,12 @@ extern "C" {
 #define HCI_LIMIT_REACHED 0x43
 #define HCI_OPERATION_CANCELLED_BY_HOST 0x44
 
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 2, Part D
+// 1.3 LIST OF ERROR CODES
+#define HCI_PACKET_TOO_LONG 0x45
+#define HCI_TOO_LATE 0x46
+#define HCI_TOO_EARLY 0x47
+
 // Stack definition
 #define HCI_TIMEOUT 0xE1
 

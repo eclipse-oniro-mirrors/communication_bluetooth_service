@@ -299,6 +299,16 @@ typedef struct {
     const BtAddr *directAddr;      /// Directed advertising event address
     uint8_t dataLen;               /// Advertising data len
     uint8_t *data;                 /// Advertising data
+    /// LE Coded PHY coding knowledge of primaryPhy/secondaryPhy (BLUETOOTH
+    /// SPECIFICATION Version 5.4 | Vol 4, Part E, 7.7.65.13): 0x01 when the
+    /// local Host has declared the Advertising Coding Selection Host Support
+    /// LL feature (bit 41) - the Controller then reports the coding actually
+    /// used by value-extension of the PHY fields: primaryPhy/secondaryPhy
+    /// 0x04 = LE Coded with S=2, 0x03 = LE Coded with S=8. 0x00 (pre-5.4
+    /// declaration): 0x03 = LE Coded with the coding not distinguishable and
+    /// 0x04 is reserved and never reported. The semantics depend only on the
+    /// reporting (local) side, never on the advertiser's features.
+    uint8_t codingSelectionKnown;  /// PHY fields carry the exact S=2/S=8 coding
 } GapExAdvReportParam;
 
 /**
@@ -1513,5 +1523,11 @@ BTSTACK_API int GAPIF_LeDataSignatureConfirmationAsync(const BtAddr *addr, GapSi
 #ifdef __cplusplus
 }
 #endif
+
+/*
+ * gap_le_if_5_4.h embeds the [v1] GapLeExAdvParam above (typedef'd earlier in
+ * this file), so it is included last - after every type it depends on.
+ */
+#include "gap_le_if_5_4.h"
 
 #endif /* GAP_LE_IF_H */

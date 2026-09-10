@@ -342,6 +342,47 @@ void GapLePowerControlCallbackDeinit(void);
 int GapLeSubrateCallbackInit(void);
 void GapLeSubrateCallbackDeinit(void);
 
+// PAwR (periodic advertising with responses) advertiser buffer/callback
+// lifecycle, owned by gap_le_pawr_adv.c. The callback is a plain single-slot
+// group (GAP-task only) and the per-handle payload buffers are owned by the
+// GAP task as well; see the module file comment.
+int GapLePawrAdvInit(void);
+void GapLePawrAdvDeinit(void);
+
+// Bluetooth 5.4 (Vol 2, Part E, 7.7.65,36/37, 7.8.61 [v2]/7.8.125) PAwR
+// advertiser command completions and event handlers, owned by gap_le_pawr_adv.c.
+// Task targets of the gap_hci_receive.c wrappers; they run on the GAP task
+// and dispatch the registered GapPawrAdvCallback.
+void GapLeSetPeriodicAdvertisingParametersV2Complete(
+    const HciLeSetPeriodicAdvertisingParametersV2ReturnParam *param);
+void GapLeSetPeriodicAdvertisingSubeventDataComplete(
+    const HciLeSetPeriodicAdvertisingSubeventDataReturnParam *param);
+void GapOnLePeriodicAdvertisingSubeventDataRequestEvent(
+    const HciLePeriodicAdvertisingSubeventDataRequestEventParam *eventParam);
+void GapOnLePeriodicAdvertisingResponseReportEvent(
+    const HciLePeriodicAdvertisingResponseReportEventParam *eventParam);
+
+// PAwR (periodic advertising with responses) sync-side (scanner/observer)
+// callback lifecycle, owned by gap_le_pawr_sync.c. Same plain single-slot
+// group model as the advertiser side above; see the module file comment.
+int GapLePawrSyncInit(void);
+void GapLePawrSyncDeinit(void);
+
+// Bluetooth 5.4 (Vol 2, Part E, 7.7.65,14/15/24, 7.8.126/127) PAwR sync-side
+// command completions and event handlers, owned by gap_le_pawr_sync.c. Task
+// targets of the gap_hci_receive.c wrappers; they run on the GAP task and
+// dispatch the registered GapPawrSyncCallback. The event handlers receive
+// the full [v2] parameters; the [v1] prefixes of the same events keep being
+// consumed by the pre-5.4 handlers in gap_le_scan.c (double dispatch is done
+// by the gap_hci_receive.c wrappers).
+void GapLeSetPeriodicAdvertisingResponseDataComplete(
+    const HciLeSetPeriodicAdvertisingResponseDataReturnParam *param);
+void GapLeSetPeriodicSyncSubeventComplete(const HciLeSetPeriodicSyncSubeventReturnParam *param);
+void GapOnLePawrSyncEstablishedEvent(const HciLePeriodicAdvertisingSyncEstablishedV2EventParam *eventParam);
+void GapOnLePawrSyncReportEvent(const HciLePeriodicAdvertisingReportV2EventParam *eventParam);
+void GapOnLePawrSyncTransferReceivedEvent(
+    const HciLePeriodicAdvertisingSyncTransferReceivedV2EventParam *eventParam);
+
 // Validates a 5.1 antenna switching pattern: length 0 with NULL antennaIds, or
 // length 0x02-0x4B with a non-NULL antennaIds array. Defined in gap_le_adv.c.
 int GapLeCteAntennaIdsCheck(uint8_t lengthOfSwitchingPattern, const uint8_t *antennaIds);

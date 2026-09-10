@@ -95,6 +95,8 @@ typedef struct {
 #define BLUETOOTH_CORE_SPECIFICATION_5_0 9   // Bluetooth Core Specification 5.0
 #define BLUETOOTH_CORE_SPECIFICATION_5_1 10  // Bluetooth Core Specification 5.1
 #define BLUETOOTH_CORE_SPECIFICATION_5_2 11  // Bluetooth Core Specification 5.2
+#define BLUETOOTH_CORE_SPECIFICATION_5_3 12  // Bluetooth Core Specification 5.3
+#define BLUETOOTH_CORE_SPECIFICATION_5_4 13  // Bluetooth Core Specification 5.4
 
 // Modules
 #define MODULE_NAME_HCI "hci"

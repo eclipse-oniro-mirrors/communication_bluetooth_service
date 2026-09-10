@@ -668,6 +668,46 @@ int HCI_LeSetDataRelatedAddressChanges(const HciLeSetDataRelatedAddressChangesPa
 // 7.8.123-7.8.124 Connection Subrating Commands
 int HCI_LeSetDefaultSubrate(const HciLeSetDefaultSubrateParam *param);
 int HCI_LeSubrateRequest(const HciLeSubrateRequestParam *param);
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.53 LE Set Extended Advertising Parameters Command [v2]
+// Use only when BTM_IsControllerSupportLeAdvCodingSel() reports bit 40 set;
+// otherwise the [v1] command (HCI_LeSetExtendedAdvertisingParameters) keeps
+// the advertising working with options implicitly 0x00.
+int HCI_LeSetExtendedAdvertisingParametersV2(
+    const HciLeSetExtendedAdvertisingParametersV2Param *param);
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.125 LE Set Periodic Advertising Subevent Data Command
+// 5.4 PAwR: replies to each LE Periodic Advertising Subevent Data Request
+// event (0x27) with one data block per subevent; data is transmitted once.
+int HCI_LeSetPeriodicAdvertisingSubeventData(
+    const HciLeSetPeriodicAdvertisingSubeventDataParam *param);
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.126 LE Set Periodic Advertising Response Data Command
+// 5.4 PAwR sync side: schedules one response data block in a response slot of
+// a subevent; the block is transmitted once.
+int HCI_LeSetPeriodicAdvertisingResponseData(
+    const HciLeSetPeriodicAdvertisingResponseDataParam *param);
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.127 LE Set Periodic Sync Subevent Command
+// 5.4 PAwR sync side: restricts synchronization to a subset of the subevents
+// of the PAwR train; subevents outside the subset stop being synchronized.
+int HCI_LeSetPeriodicSyncSubevent(const HciLeSetPeriodicSyncSubeventParam *param);
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.66 LE Extended Create Connection Command [v2]
+// Create an ACL connection, either to a connectable advertiser (Advertising_
+// Handle and Subevent both 0xFF: identical behavior to the [v1] command
+// HCI_LeExtendedCreateConnection) or from a PAwR train (both valid). Gated by
+// the caller on the PAwR capabilities (btm_controller.c).
+int HCI_LeExtendedCreateConnectionV2(const HciLeExtendedCreateConnectionV2Param *param);
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.61 LE Set Periodic Advertising Parameters Command [v2]
+// Same command as OCF 0x003E plus the PAwR timing parameters; call when the
+// advertising set is to carry subevents/response slots. The [v1] command
+// (HCI_LeSetPeriodicAdvertisingParameters) is unchanged for plain periodic
+// advertising trains.
+int HCI_LeSetPeriodicAdvertisingParametersV2(
+    const HciLeSetPeriodicAdvertisingParametersV2Param *param);
 #ifdef __cplusplus
 }
 #endif

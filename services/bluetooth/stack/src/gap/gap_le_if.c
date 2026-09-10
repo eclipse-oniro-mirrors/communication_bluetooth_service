@@ -56,6 +56,11 @@ typedef struct {
 
 typedef struct {
     int result;
+    GapExAdvParamV2 param;
+} GapLeExAdvSetParamV2Info;
+
+typedef struct {
+    int result;
     uint8_t advHandle;
     uint8_t operation;
     uint8_t fragmentPreference;
@@ -475,6 +480,39 @@ int GAPIF_LeExAdvSetParam(uint8_t advHandle, uint8_t properties, int8_t txPower,
     ctx->advExParam = advExParam;
 
     int ret = GapRunTaskBlockProcess(GapLeExAdvSetParamTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapLeExAdvSetParamV2Task(void *ctx)
+{
+    GapLeExAdvSetParamV2Info *info = ctx;
+    info->result = GAP_LeExAdvSetParamV2(&info->param);
+}
+
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
+// 7.8.53 LE Set Extended Advertising Parameters Command [v2] (Advertising
+// Coding Selection): [v1] GAPIF_LeExAdvSetParam plus the coding options; the
+// [v1]/[v2] command selection and the capability gate live in gap_le_adv.c.
+int GAPIF_LeExAdvSetParamV2(const GapExAdvParamV2 *param)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    if (param == NULL) {
+        return BT_BAD_PARAM;
+    }
+    GapLeExAdvSetParamV2Info *ctx = MEM_MALLOC.alloc(sizeof(GapLeExAdvSetParamV2Info));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapLeExAdvSetParamV2Info), 0x00, sizeof(GapLeExAdvSetParamV2Info));
+    ctx->param = *param;
+
+    int ret = GapRunTaskBlockProcess(GapLeExAdvSetParamV2Task, ctx);
     if (ret == BT_SUCCESS) {
         ret = ctx->result;
     }

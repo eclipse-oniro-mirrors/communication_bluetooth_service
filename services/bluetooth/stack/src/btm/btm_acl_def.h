@@ -92,6 +92,15 @@ typedef struct {
     uint8_t remoteCod[COD_SIZE];
     BtAddr leLocalAddr;
     BtAddr lePeerAddr;
+    // PAwR association of the connection (Bluetooth 5.4): filled in by the
+    // LE Enhanced Connection Complete [v2] event (0x29) on a 5.4 controller.
+    // Advertising_Handle is valid when the local device is the Central of a
+    // connection established from periodic advertising with responses,
+    // Sync_Handle when it is the Peripheral and the connection was
+    // established from a train it synchronized to (7.7.65,10). Connections
+    // not established from PAwR keep the No values below.
+    uint8_t pawrAdvertisingHandle;  // 0xFF = No Advertising_Handle
+    uint16_t pawrSyncHandle;        // 0xFFFF = No Sync_Handle
 } BtmAclConnection;
 
 typedef enum {

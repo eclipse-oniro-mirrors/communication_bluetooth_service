@@ -187,6 +187,43 @@ static bool GapInitLeSubrateGroup(void)
     return true;
 }
 
+static bool GapInitLePawrAdvGroup(void)
+{
+    int ret = GapLePawrAdvInit();
+    if (ret != GAP_SUCCESS) {
+        LOG_ERROR("%{public}s: GapLePawrAdvInit failed: %{public}d.", __FUNCTION__, ret);
+        GapLePawrAdvDeinit();
+        GapLeSubrateCallbackDeinit();
+        GapLePowerControlCallbackDeinit();
+        GapLeCteCallbackDeinit();
+        GapLeCallbackDeinit();
+        GapLePeriodicAdvSyncDeinit();
+        MutexDelete(g_gapMng.le.exAdvBlock.lock);
+        GapInitCleanupBlocks();
+        return false;
+    }
+    return true;
+}
+
+static bool GapInitLePawrSyncGroup(void)
+{
+    int ret = GapLePawrSyncInit();
+    if (ret != GAP_SUCCESS) {
+        LOG_ERROR("%{public}s: GapLePawrSyncInit failed: %{public}d.", __FUNCTION__, ret);
+        GapLePawrSyncDeinit();
+        GapLePawrAdvDeinit();
+        GapLeSubrateCallbackDeinit();
+        GapLePowerControlCallbackDeinit();
+        GapLeCteCallbackDeinit();
+        GapLeCallbackDeinit();
+        GapLePeriodicAdvSyncDeinit();
+        MutexDelete(g_gapMng.le.exAdvBlock.lock);
+        GapInitCleanupBlocks();
+        return false;
+    }
+    return true;
+}
+
 static void GapInitializeTask(void *ctx)
 {
     LOG_DEBUG("%{public}s:", __FUNCTION__);
@@ -202,7 +239,8 @@ static void GapInitializeTask(void *ctx)
 
 #ifdef GAP_LE_SUPPORT
     if (!GapInitLeAdvSyncGroup() || !GapInitLeCallbackGroup() || !GapInitLeCteGroup() ||
-        !GapInitLePowerControlGroup() || !GapInitLeSubrateGroup()) {
+        !GapInitLePowerControlGroup() || !GapInitLeSubrateGroup() || !GapInitLePawrAdvGroup() ||
+        !GapInitLePawrSyncGroup()) {
         return;
     }
 #endif
@@ -384,6 +422,8 @@ static void GapFinalizeTask(void *ctx)
     GapLeCteCallbackDeinit();
     GapLePowerControlCallbackDeinit();
     GapLeSubrateCallbackDeinit();
+    GapLePawrAdvDeinit();
+    GapLePawrSyncDeinit();
 
     ListDelete(g_gapMng.le.connectionInfoBlock.deviceList);
     ListDelete(g_gapMng.le.signatureBlock.RequestList);
