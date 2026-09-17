@@ -49,40 +49,37 @@ void HciEventOnCommandCompleteEvent(Packet *packet)
         return;
     }
     HciSetNumberOfHciCmd(param->numHciCommandPackets);
-    // false when the Complete is the late answer of a timed-out command: it must not be
-    // dispatched, or it would complete a newer command with the same opcode
-    if (!HciCmdOnCommandComplete(param->commandOpcode)) {
+    uint8_t returnParametersLength = BufferGetSize(payloadBuffer) - sizeof(HciCommandCompleteEventParam);
+    // false when the Complete is the late answer of a timed-out command (it must not complete a
+    // newer command with the same opcode), matches no pending command, or has an empty body
+    if (!HciCmdOnCommandComplete(param->commandOpcode, returnParametersLength)) {
         return;
     }
 
-    uint8_t returnParametesLength = BufferGetSize(payloadBuffer) - sizeof(HciCommandCompleteEventParam);
-    if (returnParametesLength == 0) {
-        return;
-    }
-    const void *returnParametes = (uint8_t *)param + sizeof(HciCommandCompleteEventParam);
+    const void *returnParameters = (uint8_t *)param + sizeof(HciCommandCompleteEventParam);
 
     switch (GET_OGF(param->commandOpcode)) {
         case HCI_COMMAND_OGF_LINK_CONTROL:
-            HciEventOnLinkControlCommandComplete(param->commandOpcode, returnParametes, returnParametesLength);
+            HciEventOnLinkControlCommandComplete(param->commandOpcode, returnParameters, returnParametersLength);
             break;
         case HCI_COMMAND_OGF_LINK_POLICY:
-            HciEventOnLinkPolicyCommandComplete(param->commandOpcode, returnParametes, returnParametesLength);
+            HciEventOnLinkPolicyCommandComplete(param->commandOpcode, returnParameters, returnParametersLength);
             break;
         case HCI_COMMAND_OGF_CONTTOLLER_AND_BASEBAND:
-            HciEventOnControllerBasebandCommandComplete(param->commandOpcode, returnParametes, returnParametesLength);
+            HciEventOnControllerBasebandCommandComplete(param->commandOpcode, returnParameters, returnParametersLength);
             break;
         case HCI_COMMAND_OGF_INFORMATIONAL_PARAMETERS:
             HciEventOnInformationalParametersCommandComplete(
-                param->commandOpcode, returnParametes, returnParametesLength);
+                param->commandOpcode, returnParameters, returnParametersLength);
             break;
         case HCI_COMMAND_OGF_STATUS_PARAMETERS:
-            HciEventOnStatusParametersCommandComplete(param->commandOpcode, returnParametes, returnParametesLength);
+            HciEventOnStatusParametersCommandComplete(param->commandOpcode, returnParameters, returnParametersLength);
             break;
         case HCI_COMMAND_OGF_LE_CONTROLLER:
-            HciEventOnLeCommandComplete(param->commandOpcode, returnParametes, returnParametesLength);
+            HciEventOnLeCommandComplete(param->commandOpcode, returnParameters, returnParametersLength);
             break;
         case HCI_COMMAND_OGF_VENDOR_SPECIFIC:
-            HciEventOnVendorCommandComplete(param->commandOpcode, returnParametes, returnParametesLength);
+            HciEventOnVendorCommandComplete(param->commandOpcode, returnParameters, returnParametersLength);
             break;
         default:
             break;

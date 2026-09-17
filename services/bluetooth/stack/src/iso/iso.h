@@ -314,8 +314,18 @@ void IsoLeSetCigParametersComplete(const HciLeSetCigParametersReturnParam *param
 void IsoLeCreateCisComplete(const HciLeCreateCisReturnParam *param);
 void IsoLeRemoveCigComplete(const HciLeRemoveCigReturnParam *param);
 void IsoLeRejectCisRequestComplete(const HciLeRejectCisRequestReturnParam *param);
+// Framing request values shared by LE Set CIG Parameters / LE Create BIG (Vol 4
+// Part E 7.8.97 / 7.8.98 / 7.8.103 / 7.8.104): 0x02 (Unsegmented) is the BT6.0
+// addition (Vol 6 Part B 4.6.44).
+#define ISO_LE_FRAMING_UNFRAMED 0x00
+#define ISO_LE_FRAMING_SEGMENTABLE 0x01
+#define ISO_LE_FRAMING_UNSEGMENTED 0x02
+
+bool IsoIsFramingRequestAllowed(uint8_t framing);
+
 void IsoLeCisRequestEvent(const HciLeCisRequestEventParam *param);
 void IsoLeCisEstablishedEvent(const HciLeCisEstablishedEventParam *param);
+void IsoLeCisEstablishedEventV2(const HciLeCisEstablishedV2EventParam *param);
 void IsoLeDisconnectComplete(const HciDisconnectCompleteEventParam *param);
 
 void IsoLeCreateBigComplete(const HciLeCreateBigCompleteEventParam *param);

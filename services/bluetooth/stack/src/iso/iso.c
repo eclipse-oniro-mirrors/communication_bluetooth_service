@@ -258,6 +258,15 @@ IsoLeMng *IsoGetMng(void)
     return &g_isoMng;
 }
 
+bool IsoIsFramingRequestAllowed(uint8_t framing)
+{
+    // Framing is a request value: the Host may ask for Unsegmented (0x02) only when
+    // the local Controller advertises bit 45; whether the LL finally uses it is
+    // negotiated at establishment (Vol 6 Part G 2.2), so this is an admission gate.
+    return framing <= ISO_LE_FRAMING_SEGMENTABLE ||
+        (framing == ISO_LE_FRAMING_UNSEGMENTED && BTM_IsControllerSupportLeUnsegmentedFramedMode());
+}
+
 Module g_iso = {
     .name = MODULE_NAME_ISO,
     .init = IsoInitialize,

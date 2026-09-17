@@ -43,6 +43,7 @@ ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeRemoveCigComplete, HciLeRemoveCigReturnParam)
 ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeRejectCisRequestComplete, HciLeRejectCisRequestReturnParam)
 ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeCisRequestEvent, HciLeCisRequestEventParam)
 ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeCisEstablishedEvent, HciLeCisEstablishedEventParam)
+ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeCisEstablishedEventV2, HciLeCisEstablishedV2EventParam)
 ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeDisconnectComplete, HciDisconnectCompleteEventParam)
 ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeCreateBigComplete, HciLeCreateBigCompleteEventParam)
 ISO_DEFINE_HCI_EVENT_ADAPTER(IsoLeTerminateBigComplete, HciLeTerminateBigCompleteEventParam)
@@ -140,6 +141,15 @@ void IsoRecvLeCisEstablished(const HciLeCisEstablishedEventParam *param)
 {
     HILOGI("status: 0x%{public}02x, cisHandle: 0x%{public}04x", param->status, param->connectionHandle);
     int ret = IsoProcessHciEventInTask(IsoHciEventAdapter_IsoLeCisEstablishedEvent, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+void IsoRecvLeCisEstablishedV2(const HciLeCisEstablishedV2EventParam *param)
+{
+    HILOGI("status: 0x%{public}02x, cisHandle: 0x%{public}04x", param->status, param->connectionHandle);
+    int ret = IsoProcessHciEventInTask(IsoHciEventAdapter_IsoLeCisEstablishedEventV2, param, sizeof(*param), NULL);
     if (ret != BT_SUCCESS) {
         HILOGE("Task error: %{public}d.", ret);
     }
@@ -310,6 +320,7 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .leRejectCisRequestComplete = IsoRecvLeRejectCisRequestComplete,
     .leCisRequest = IsoRecvLeCisRequest,
     .leCisEstablished = IsoRecvLeCisEstablished,
+    .leCisEstablishedV2 = IsoRecvLeCisEstablishedV2,
     .disconnectComplete = IsoRecvLeDisconnectComplete,
     .leCreateBigComplete = IsoRecvLeCreateBigComplete,
     .leTerminateBigComplete = IsoRecvLeTerminateBigComplete,

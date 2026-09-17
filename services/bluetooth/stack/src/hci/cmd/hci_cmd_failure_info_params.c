@@ -24,6 +24,7 @@
 #include "hci/hci_def.h"
 
 #include "hci_cmd_failure.h"
+#include "log.h"
 
 static void HciCmdOnReadLocalVersionInformationFailed(uint8_t status, const void *param)
 {
@@ -71,8 +72,13 @@ static void HciCmdOnReadLocalExtendedFeaturesFailed(uint8_t status, const void *
 {
     HciReadLocalExtendedFeaturesReturnParam returnParam = {
         .status = status,
-        .pageNumber = ((HciReadLocalExtendedFeaturesParam *)param)->pageNumber,
     };
+
+    if (param != NULL) {
+        returnParam.pageNumber = ((HciReadLocalExtendedFeaturesParam *)param)->pageNumber;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using default value", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -153,17 +159,21 @@ static HciCmdOnFailedFunc g_funcMap[] = {
     HciCmdOnReadLocalSupportedCodecsFailed,     // 0x000B
 };
 
-#define INNFORMATIONALPARAMETERS_OCF_MAX 0x000B
+#define INFORMATIONALPARAMETERS_OCF_MAX 0x000B
 
 void HciOnInformationalParametersCmdFailed(uint16_t opCode, uint8_t status, const void *param)
 {
     uint16_t ocf = GET_OCF(opCode);
-    if (ocf > INNFORMATIONALPARAMETERS_OCF_MAX) {
+    if (ocf > INFORMATIONALPARAMETERS_OCF_MAX) {
         return;
     }
 
     HciCmdOnFailedFunc func = g_funcMap[ocf];
-    if (func != NULL) {
-        func(status, param);
+    if (func == NULL) {
+        // No failure row for this OCF: the command's failure has nowhere to be reported and would
+        // otherwise be dropped without a trace.
+        LOG_WARN("%{public}s: opCode 0x%04x has no failure row", __FUNCTION__, opCode);
+        return;
     }
+    func(status, param);
 }

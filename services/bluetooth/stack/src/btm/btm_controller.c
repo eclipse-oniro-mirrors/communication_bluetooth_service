@@ -21,6 +21,7 @@
 #include "btstack.h"
 #include "hci/hci.h"
 #include "hci/hci_le_controller_5_0.h"
+#include "hci/hci_le_controller_6_0.h"
 #include "hci/hci_def.h"
 #include "hci/hci_error.h"
 #include "log.h"
@@ -80,6 +81,9 @@ static HciWriteLeHostSupportReturnParam g_writeLeHostSupportedResult;
 
 static HciLeReadBufferSizeReturnParam g_leReadBufferSizeResult;
 static HciLeReadLocalSupportedFeaturesReturnParam g_leReadLocalSupportedFeaturesResult;
+// 0x0087 248-byte local feature cache; stays zeroed (pages 1..10 == 0) when
+// page 0 bit 63 is clear, so page-1 getters read false like the pre-BT6.0 baseline.
+static HciLeReadAllLocalSupportedFeaturesReturnParam g_leReadAllLocalSupportedFeaturesResult;
 static HciLeSetEventMaskReturnParam g_leSetEventMaskResult;
 static HciLeSetHostFeatureReturnParam g_leSetHostFeatureResult;
 // Local monotonic sequence number tagging the setup commands that share g_waitSetupController
@@ -328,6 +332,17 @@ static void BtmControllerOnLeReadLocalSupportedFeaturesComplete(
     EventSet(g_waitSetupController);
 }
 
+static void BtmControllerOnLeReadAllLocalSupportedFeaturesComplete(
+    const HciLeReadAllLocalSupportedFeaturesReturnParam *returnParam)
+{
+    // A failed or synthesized-malformed completion keeps pages 1..10 zero, matching
+    // the bring-up "degrades to zero" path; only a successful read populates the cache.
+    if (returnParam->status == HCI_SUCCESS) {
+        g_leReadAllLocalSupportedFeaturesResult = *returnParam;
+    }
+    EventSet(g_waitSetupController);
+}
+
 static void BtmControllerOnLeReadAntennaInformationComplete(
     const HciLeReadAntennaInformationReturnParam *returnParam)
 {
@@ -465,6 +480,7 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .leSetHostFeatureComplete = BtmControllerOnLeSetHostFeatureComplete,
     .leReadBufferSizeComplete = BtmControllerOnLeReadBufferSizeComplete,
     .leReadLocalSupportedFeaturesComplete = BtmControllerOnLeReadLocalSupportedFeaturesComplete,
+    .leReadAllLocalSupportedFeaturesComplete = BtmControllerOnLeReadAllLocalSupportedFeaturesComplete,
     .leReadMaximumDataLengthComplete = BtmControllerOnLeReadMaximumDataLengthComplete,
     .leReadWhiteListSizeComplete = BtmControllerOnLeReadWhiteListSizeComplete,
     .leReadResolvingListSizeComplete = BtmControllerOnLeReadResolvingListSizeComplete,
@@ -473,14 +489,18 @@ static HciEventCallbacks g_hciEventCallbacks = {
 
 static uint64_t BtmGetLe51EventMask(uint64_t leEventMask);
 static uint64_t BtmGetLe54EventMask(uint64_t leEventMask, uint8_t groups);
+static uint64_t BtmGetLe6EventMask(uint64_t leEventMask);
 
-// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.8.1 (Table 3.3, bits 35-40)
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.8.1 (bits 35-40)
 // LE_Event_Mask groups of the 5.4 [v2]/new subevents. Each [v2] group replaces
 // the [v1] bit of the same event type once enabled (pairs 9<->40, 13<->35,
-// 14<->36, 23<->37). Per Vol 4E 4.8 (Versioned Events) the Controller shall use
-// the latest version that is enabled when both bits of a [v1]/[v2] pair are
-// unmasked; BtmGetLe54EventMask additionally clears the [v1] bit so exactly one
-// version is unmasked. Group enablement is bound to the implementation stage:
+// 14<->36, 23<->37). Per Vol 4E 4.8 (Versioned Events, p1868) the Controller
+// uses the latest version enabled when both bits of a [v1]/[v2] pair are
+// unmasked. BtmGetLe54EventMask clears the [v1] bit of those four pairs so that
+// exactly one version is unmasked there; the CIS Established pair (24/41) keeps
+// both bits set on purpose and lets the Controller pick the latest, because
+// clearing 24 would drop that event on a v1-only Controller. Group enablement
+// is bound to the implementation stage:
 // the [v2] periodic events need the P1 subevent parsing in place (enabling them
 // switches every periodic advertising event - PAwR or not - to the [v2] layout),
 // the [v2] connection event needs the P5 connection path, and the PAwR data
@@ -570,8 +590,9 @@ static uint64_t BtmGetLeEventMask(uint8_t le54Groups)
         leEventMask |= LE_EVENT_MASK_LE_GENERATE_DHKEY_COMPLETE_EVENT;
     }
 
-    // 5.1-5.3 tail, then the 5.4 tail (the [v2] bits clear their [v1] counterparts).
-    return BtmGetLe54EventMask(BtmGetLe51EventMask(leEventMask), le54Groups);
+    // 5.1-5.3 tail, then the 5.4 tail (the [v2] bits clear their [v1] counterparts),
+    // then the BT6.0 tail.
+    return BtmGetLe6EventMask(BtmGetLe54EventMask(BtmGetLe51EventMask(leEventMask), le54Groups));
 }
 
 // BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E
@@ -594,15 +615,25 @@ static uint64_t BtmGetLe51EventMask(uint64_t leEventMask)
     }
 
     // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
-    // LE CIS Established / CIS Request events (bit24 / bit25, 7.8.1 Table 3.3)
+    // LE CIS Established / CIS Request events (bit24 / bit25, 7.8.1)
     // The controller ignores bits it does not support, so gating on LE support is sufficient.
     if (BTM_IsControllerSupportLe()) {
         leEventMask |= (LE_EVENT_MASK_LE_CIS_ESTABLISHED_EVENT | LE_EVENT_MASK_LE_CIS_REQUEST_EVENT);
     }
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.8.1 (p2484): subevent
+    // 0x2A (LE CIS Established [v2]) is mask bit 41. v2 is the same event as v1 with
+    // Sub_Interval/Max_SDU/SDU_Interval/Framing appended (7.7.65,25); the two
+    // versions have independent mask bits and a Controller implementing v2 sends it
+    // when bit 41 is set. Controllers that do not
+    // support the bit ignore it, so gating on LE support is sufficient and v1 events
+    // keep flowing on older controllers.
+    if (BTM_IsControllerSupportLe()) {
+        leEventMask |= LE_EVENT_MASK_LE_CIS_ESTABLISHED_V2_EVENT;
+    }
     // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
     // BIS events: Create BIG Complete / Terminate BIG Complete / BIG Sync Established /
     // BIG Sync Lost / Request Peer SCA Complete / BIGInfo Advertising Report
-    // (bit26-30, bit33, 7.8.1 Table 3.3)
+    // (bit26-30, bit33, 7.8.1)
     if (BTM_IsControllerSupportLe()) {
         leEventMask |= (LE_EVENT_MASK_LE_CREATE_BIG_COMPLETE_EVENT | LE_EVENT_MASK_LE_TERMINATE_BIG_COMPLETE_EVENT |
             LE_EVENT_MASK_LE_BIG_SYNC_ESTABLISHED_EVENT | LE_EVENT_MASK_LE_BIG_SYNC_LOST_EVENT |
@@ -610,13 +641,13 @@ static uint64_t BtmGetLe51EventMask(uint64_t leEventMask)
     }
     // BLUETOOTH SPECIFICATION Version 5.2 | Vol 2, Part E
     // LE Path Loss Threshold / LE Transmit Power Reporting events (bit31 / bit32,
-    // 7.8.1 Table 3.3). Without these bits the controller never generates the 0x20
+    // 7.8.1). Without these bits the controller never generates the 0x20
     // / 0x21 subevents the LE Power Control feature relies on (Vol 6, Part B, 4.5.6/4.5.7).
     if (BTM_IsControllerSupportLePowerControl()) {
         leEventMask |= (LE_EVENT_MASK_LE_PATH_LOSS_THRESHOLD_EVENT | LE_EVENT_MASK_LE_TRANSMIT_POWER_REPORTING_EVENT);
     }
 
-    // BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E, 7.8.1 Table 3.3
+    // BLUETOOTH SPECIFICATION Version 5.3 | Vol 4, Part E, 7.8.1
     // LE Subrate Change event (bit 34, subevent 0x23). Without Connection
     // Subrating (bit 37) the controller never generates this subevent; gate on
     // the feature bit the same way the 5.1/5.2 blocks above do.
@@ -627,7 +658,7 @@ static uint64_t BtmGetLe51EventMask(uint64_t leEventMask)
     return leEventMask;
 }
 
-// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.8.1 (Table 3.3, bits 35-40)
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.8.1 (bits 35-40)
 // Compose the 5.4 tail of the LE event mask from the enabled groups (see
 // BtmLe54EventGroup). Runs after the 5.0-5.3 composition so its [v2] bits can
 // clear the [v1] counterparts the earlier steps set.
@@ -678,6 +709,50 @@ static uint64_t BtmGetLe54EventMask(uint64_t leEventMask, uint8_t groups)
         (BTM_IsControllerSupportPawrAdvertiser() || BTM_IsControllerSupportPawrScanner())) {
         leEventMask |= LE_EVENT_MASK_LE_ENHANCED_CONNECTION_COMPLETE_V2_EVENT; // Bit 40, 0x29
         leEventMask &= ~LE_EVENT_MASK_LE_ENHANCED_CONNECTION_COMPLETE_EVENT;   // Clear [v1] bit 9
+    }
+
+    return leEventMask;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+// 7.8.1: subevent 0x2B (LE Read All Remote Features Complete) is
+// mask bit 42. Only meaningful when bit 63 (LE Extended Feature Set) makes
+// the 0x0088 command usable (7.8.129).
+static uint64_t BtmGetLe6EventMask(uint64_t leEventMask)
+{
+    if (BTM_IsControllerSupportLeExtendedFeatureSet()) {
+        leEventMask |= LE_EVENT_MASK_LE_READ_ALL_REMOTE_FEATURES_COMPLETE_EVENT;
+    }
+
+    // Vol 4, Part E, 7.8.1: subevent 0x34 (LE Monitored Advertisers
+    // Report) is mask bit 51. Feature bit 64 (page 1) gates the feature.
+    if (BTM_IsControllerSupportLeMonitoringAdvertisers()) {
+        leEventMask |= LE_EVENT_MASK_LE_MONITORED_ADVERTISERS_REPORT_EVENT;
+    }
+
+    // Vol 4, Part E, 7.8.1: subevent 0x35 (LE Frame Space Update Complete) is mask
+    // bit 52; set only when local bit 65 (page 1) makes the 0x009D command usable.
+    if (BTM_IsControllerSupportLeFrameSpaceUpdate()) {
+        leEventMask |= LE_EVENT_MASK_LE_FRAME_SPACE_UPDATE_COMPLETE_EVENT;
+    }
+
+    // Vol 4, Part E, 7.8.1: subevent 0x2C (LE CS Read Remote Supported
+    // Capabilities Complete) is mask bit 43, 0x2D (LE CS Read Remote FAE Table
+    // Complete) is mask bit 44 and its read-pair, 0x2E (LE CS Security Enable
+    // Complete) is mask bit 45, 0x2F (LE CS Config Complete) is mask bit 46, 0x30 (LE
+    // CS Procedure Enable Complete) is mask bit 47, 0x31/0x32 (LE CS Subevent Result /
+    // Continue) are mask bits 48/49 and 0x33 (LE CS Test End Complete) is mask bit 50.
+    // Set them all when local feature bit 46 (Channel Sounding) makes the
+    // 0x0089-0x0096 commands usable.
+    if (BTM_IsControllerSupportLeChannelSounding()) {
+        leEventMask |= LE_EVENT_MASK_LE_CS_READ_REMOTE_SUPPORTED_CAPABILITIES_COMPLETE_EVENT;
+        leEventMask |= LE_EVENT_MASK_LE_CS_READ_REMOTE_FAE_TABLE_COMPLETE_EVENT;
+        leEventMask |= LE_EVENT_MASK_LE_CS_SECURITY_ENABLE_COMPLETE_EVENT;
+        leEventMask |= LE_EVENT_MASK_LE_CS_CONFIG_COMPLETE_EVENT;
+        leEventMask |= LE_EVENT_MASK_LE_CS_PROCEDURE_ENABLE_COMPLETE_EVENT;
+        leEventMask |= LE_EVENT_MASK_LE_CS_SUBEVENT_RESULT_EVENT;
+        leEventMask |= LE_EVENT_MASK_LE_CS_SUBEVENT_RESULT_CONTINUE_EVENT;
+        leEventMask |= LE_EVENT_MASK_LE_CS_TEST_END_COMPLETE_EVENT;
     }
 
     return leEventMask;
@@ -959,6 +1034,8 @@ static int BtmSetMinEncryptionKeySize()
 // completion status and timeouts are tolerated. Returns BT_SUCCESS when the
 // step is done or skipped; a non-success only means the synchronous wait itself
 // failed.
+#define BTM_EVENT_MASK_ENCRYPTION_CHANGE_V2_BIT 25
+
 static int BtmSetEventMaskPage2()
 {
     if (!HciSupportSetMinEncryptionKeySize(g_readLocalSupportedCommandsResult.supportedCommands)) {
@@ -979,7 +1056,7 @@ static int BtmSetEventMaskPage2()
 
     HciSetEventMaskPage2Param setEventMaskPage2Param = {
         // 7.3.69 bit 25 -> event code 0x59 (0x40 + 25) Encryption Change [v2].
-        .eventMaskPage2 = (1ULL << 25),
+        .eventMaskPage2 = (1ULL << BTM_EVENT_MASK_ENCRYPTION_CHANGE_V2_BIT),
     };
     int result = HCI_SetEventMaskPage2(&setEventMaskPage2Param);
     if (result != BT_SUCCESS) {
@@ -1097,6 +1174,28 @@ static int BtmLeReadLocalSupportedFeatures()
         }
     } else {
         LOG_ERROR("HCI_LeReadLocalSupportedFeatures Timeout");
+        result = BT_OPERATION_FAILED;
+    }
+    return result;
+}
+
+static int BtmLeReadAllLocalSupportedFeatures()
+{
+    EventClear(g_waitSetupController);
+
+    int result = HCI_LeReadAllLocalSupportedFeatures();
+    if (result != BT_SUCCESS) {
+        LOG_ERROR("HCI_LeReadAllLocalSupportedFeatures failed: %{public}d", result);
+        return result;
+    }
+    if (EventWait(g_waitSetupController, WAIT_CMD_TIMEOUT) == 0) {
+        if (g_leReadAllLocalSupportedFeaturesResult.status != HCI_SUCCESS) {
+            LOG_ERROR("HCI_LeReadAllLocalSupportedFeatures status: 0x%02x",
+                g_leReadAllLocalSupportedFeaturesResult.status);
+            result = BT_OPERATION_FAILED;
+        }
+    } else {
+        LOG_ERROR("HCI_LeReadAllLocalSupportedFeatures Timeout");
         result = BT_OPERATION_FAILED;
     }
     return result;
@@ -1299,17 +1398,90 @@ static void BtmLogSetHostFeatureStatus(uint8_t status, uint8_t bit)
     }
 }
 
+// Send one LE Set Host Feature [v1] (0x0074) setting bitNumber (0-255) to 1 and wait
+// for its seq-tagged Command_Complete. Shared by the LE 5.x host-feature pass
+// (BtmLeSetHostFeature, bits 32/38/41) and the CS Host Support declaration (bit 47).
+// The wait tolerates stale wake-ups: a Command_Complete of a predecessor command that
+// timed out at the HCI layer can still arrive in flight (HCI dispatches complete events
+// by opcode without matching a pending command), so the event is cleared first and the
+// result is tagged with this send's seq - only a matching tag is accepted. The 0xFF
+// sentinel backstops a tag match with no status write; no HCI status code equals 0xFF.
+// Reports the Controller Status (0 = accepted) through *status.
+static int BtmSendLeSetHostFeatureAndWait(uint8_t bitNumber, uint8_t *status)
+{
+    EventClear(g_waitSetupController);
+    uint32_t mySeq = ++g_setupCmdSeq;
+    g_leSetHostFeatureResult.status = 0xFF;
+    g_leSetHostFeatureResultSeq = 0;
+
+    HciLeSetHostFeatureParam param = {
+        .bitNumber = bitNumber,
+        .bitValue = 0x01,
+    };
+    int result = HCI_LeSetHostFeature(&param);
+    if (result != BT_SUCCESS) {
+        LOG_ERROR("HCI_LeSetHostFeature(bit=%{public}d) failed: %{public}d", bitNumber, result);
+        return result;
+    }
+
+    while (g_leSetHostFeatureResultSeq != mySeq) {
+        if (EventWait(g_waitSetupController, WAIT_CMD_TIMEOUT) != 0) {
+            LOG_ERROR("HCI_LeSetHostFeature(bit=%{public}d) Timeout", bitNumber);
+            return BT_OPERATION_FAILED;
+        }
+        if (g_leSetHostFeatureResultSeq != mySeq) {
+            LOG_WARN("HCI_LeSetHostFeature(bit=%{public}d) woken by a stale complete of a "
+                     "predecessor command (seq %u != %u), keep waiting",
+                bitNumber, g_leSetHostFeatureResultSeq, mySeq);
+        }
+    }
+    *status = g_leSetHostFeatureResult.status;
+    return BT_SUCCESS;
+}
+
+// Declare CS Host Support (FeatureSet page-0 bit 47, Host Controlled, Vol 6 Part B
+// Table 4.10 p3137). The peer reads the bit during the Feature Exchange
+// (Vol 6 Part B 4.6.33,4 p3147) and the 0x0089-0x008C commands draw 0x0C until it
+// is set (7.8.130-133 pp2798/2805/2807/2815), so the declaration runs once at init,
+// right after bit 46 (Channel Sounding) is known. Bit 47 is sent in the [v1] form
+// (0x0074, 1-octet Bit_Number, 7.8.115 p2760) like the bitsToEnable[] pass above;
+// the optional [v2] 0x0097 form is intentionally not used (see the CS plan document
+// for the decision and the future >255 gate). A status decline only logs
+// (0x01/0x11/0x0C are tolerated); a send or timeout failure propagates, unlike the
+// best-effort bitsToEnable[] pass above - bit 47 is this unit's deliverable and
+// 0x0089-0x008C draw 0x0C without it. The init-time call (BtmInitLeFeature) has no
+// connection open, so the 7.8.115 "issued while the Controller has a connection"
+// 0x0C path never triggers here.
+static int BtmDeclareCsHostSupport()
+{
+    if (!BTM_IsControllerSupportLeChannelSounding() ||
+        !HciSupportLeSetHostFeature(g_readLocalSupportedCommandsResult.supportedCommands)) {
+        return BT_SUCCESS;
+    }
+
+    uint8_t status = 0xFF;
+    int result = BtmSendLeSetHostFeatureAndWait(LE_FEATURE_BIT_CHANNEL_SOUNDING_HOST_SUPPORT, &status);
+    if (result != BT_SUCCESS) {
+        return result;
+    }
+    if (status != HCI_SUCCESS) {
+        BtmLogSetHostFeatureStatus(status, LE_FEATURE_BIT_CHANNEL_SOUNDING_HOST_SUPPORT);
+    }
+    return BT_SUCCESS;
+}
+
 static int BtmLeSetHostFeature()
 {
     // Host-controlled FeatureSet bits (Vol 6, Part B, 4.6.33): bit 32 Connected
     // Isochronous Stream (Host Support, 5.2), bit 38 Connection Subrating (Host
     // Support, 5.3) and bit 41 Advertising Coding Selection (Host Support, 5.4).
-    // Each bit is sent and status-tolerated independently below, so a 5.2-only
-    // controller declining 0x26 with 0x11 does not affect the ISO bit or the
-    // rest of BTM_Enable.
+    // Each bit is a best-effort, independent declaration (4.6: such a bit "may be
+    // set by the Host" and defaults to zero), so a decline or an unanswered
+    // command for one bit leaves the others - and the rest of BTM_Enable -
+    // unaffected.
     static const uint8_t bitsToEnable[] = { 0x20, 0x26, 0x29 };
     for (size_t i = 0; i < sizeof(bitsToEnable) / sizeof(bitsToEnable[0]); i++) {
-        // BLUETOOTH SPECIFICATION Version 5.4 | Vol 6, Part B, 4.6.33.3
+        // BLUETOOTH SPECIFICATION Version 5.4 | Vol 6, Part B, 4.6.33,3
         // Bit 41 (0x29) is only set by the controller when it supports Advertising
         // Coding Selection (bit 40); skip the request entirely otherwise.
         if (bitsToEnable[i] == 0x29 && !BTM_IsControllerSupportLeAdvCodingSel()) {
@@ -1321,52 +1493,17 @@ static int BtmLeSetHostFeature()
             LOG_WARN("HCI_LeSetHostFeature(bit=%{public}d) unsupported, skipped", bitsToEnable[i]);
             continue;
         }
-        // Clear the event first: a stale signal from a timed-out predecessor
-        // command (or the previous loop iteration) would otherwise make
-        // EventWait return immediately and this command would consume a
-        // zero-initialized result.
-        EventClear(g_waitSetupController);
-        // Mark the result as unanswered before sending and capture the seq of this
-        // send: a Command_Complete of a predecessor command that timed out at the
-        // HCI layer may still arrive late while this command is in flight (HCI
-        // dispatches complete events by opcode without matching a pending command)
-        // and set the shared event. The seq comparison below accepts only a result
-        // tagged with this send's seq; the 0xFF sentinel is kept as a backstop in
-        // case a seq match ever arrives without a status write. No HCI status code
-        // equals 0xFF.
-        uint32_t mySeq = ++g_setupCmdSeq;
-        g_leSetHostFeatureResult.status = 0xFF;
-        g_leSetHostFeatureResultSeq = 0;
-
-        HciLeSetHostFeatureParam param = {
-            .bitNumber = bitsToEnable[i],
-            .bitValue = 0x01,
-        };
-
-        int result = HCI_LeSetHostFeature(&param);
+        // Judged here, not in the helper, so a bit that is declined or left
+        // unanswered only skips this iteration instead of aborting the pass.
+        uint8_t status = 0xFF;
+        int result = BtmSendLeSetHostFeatureAndWait(bitsToEnable[i], &status);
         if (result != BT_SUCCESS) {
-            LOG_ERROR("HCI_LeSetHostFeature(bit=%{public}d) failed: %{public}d", bitsToEnable[i], result);
-            return result;
+            // Optional hint (Vol 6 B 4.6: such a bit "may be set by the Host");
+            // the helper already logged. Skip this bit only, not the pass.
+            continue;
         }
-
-        // Keep waiting until a completion tagged with this send's seq arrives: a
-        // wake-up carrying a different seq (or still 0xFF) came from a stale
-        // predecessor signal, not from this command, and its status must not be
-        // attributed to the command in flight.
-        while (g_leSetHostFeatureResultSeq != mySeq) {
-            if (EventWait(g_waitSetupController, WAIT_CMD_TIMEOUT) != 0) {
-                LOG_ERROR("HCI_LeSetHostFeature(bit=%{public}d) Timeout", bitsToEnable[i]);
-                return BT_OPERATION_FAILED;
-            }
-            if (g_leSetHostFeatureResultSeq != mySeq) {
-                LOG_WARN("HCI_LeSetHostFeature(bit=%{public}d) woken by a stale complete of a "
-                         "predecessor command (seq %u != %u), keep waiting",
-                    bitsToEnable[i], g_leSetHostFeatureResultSeq, mySeq);
-            }
-        }
-
-        if (g_leSetHostFeatureResult.status != HCI_SUCCESS) {
-            BtmLogSetHostFeatureStatus(g_leSetHostFeatureResult.status, bitsToEnable[i]);
+        if (status != HCI_SUCCESS) {
+            BtmLogSetHostFeatureStatus(status, bitsToEnable[i]);
             continue;
         }
         if (bitsToEnable[i] == 0x29) {
@@ -1382,7 +1519,49 @@ static int BtmLeSetHostFeature()
                     (LE_FEATURE_BIT_ADVERTISING_CODING_SELECTION_HOST_SUPPORT % LE_FEATURE_BITS_PER_BYTE));
         }
     }
-    return BT_SUCCESS;
+
+    // Declare CS Host Support (bit 47) last, after the LE 5.x bits above.
+    return BtmDeclareCsHostSupport();
+}
+
+static void BtmInitLeBufferSize(void)
+{
+    HCI_SetLeBufferSize(g_leReadBufferSizeResult.hcLeAclDataPacketLength,
+        g_leReadBufferSizeResult.hcTotalNumLeDataPackets);
+}
+
+// Optional LE capability reads. Each read is gated by the corresponding feature
+// bit; a failure is logged and degraded so that controller bring-up continues.
+// This function returns void because none of the reads are fatal: the stack
+// works with default/zero values when a read fails, and the caller must not
+// treat this step as a break condition in the controller setup sequence.
+static void BtmInitOptionalLeFeatures(void)
+{
+    if (BTM_IsControllerSupportLeExtendedFeatureSet()) {
+        int result = BtmLeReadAllLocalSupportedFeatures();
+        if (result != BT_SUCCESS) {
+            LOG_WARN("BtmLeReadAllLocalSupportedFeatures failed, pages 1..10 treated as zero: %{public}d", result);
+        }
+    }
+
+    if (BTM_IsControllerSupportLeDataPacketLengthExtension()) {
+        int result = BtmLeReadMaximumDataLength();
+        if (result != BT_SUCCESS) {
+            LOG_WARN("BtmLeReadMaximumDataLength failed, using defaults: %{public}d", result);
+            MutexLock(g_leReadMaximumDataLengthMutex);
+            g_leReadMaximumDataLengthResult.status = HCI_HARDWARE_FAILURE;
+            g_leReadMaximumDataLengthValid = false;
+            MutexUnlock(g_leReadMaximumDataLengthMutex);
+        }
+    }
+
+    if (BTM_IsControllerSupportAntennaSwitchingDuringCteTransmissionAod() ||
+        BTM_IsControllerSupportAntennaSwitchingDuringCteReceptionAoa()) {
+        int result = BtmLeReadAntennaInformation();
+        if (result != BT_SUCCESS) {
+            LOG_WARN("BtmLeReadAntennaInformation failed, antenna info unavailable: %{public}d", result);
+        }
+    }
 }
 
 static int BtmInitLeFeature()
@@ -1396,8 +1575,7 @@ static int BtmInitLeFeature()
         result = BtmLeReadBufferSize();
         CHECK_RESULT_BREAK(result);
 
-        HCI_SetLeBufferSize(
-            g_leReadBufferSizeResult.hcLeAclDataPacketLength, g_leReadBufferSizeResult.hcTotalNumLeDataPackets);
+        BtmInitLeBufferSize();
 
         result = BtmLeReadWhiteListSize();
         CHECK_RESULT_BREAK(result);
@@ -1405,28 +1583,10 @@ static int BtmInitLeFeature()
         result = BtmLeReadLocalSupportedFeatures();
         CHECK_RESULT_BREAK(result);
 
-        if (BTM_IsControllerSupportLeDataPacketLengthExtension()) {
-            result = BtmLeReadMaximumDataLength();
-            if (result != BT_SUCCESS) {
-                LOG_WARN("BtmLeReadMaximumDataLength failed, using defaults: %{public}d", result);
-                MutexLock(g_leReadMaximumDataLengthMutex);
-                g_leReadMaximumDataLengthResult.status = HCI_HARDWARE_FAILURE;
-                g_leReadMaximumDataLengthValid = false;
-                MutexUnlock(g_leReadMaximumDataLengthMutex);
-                result = BT_SUCCESS;
-            }
-        }
-
-        if (BTM_IsControllerSupportAntennaSwitchingDuringCteTransmissionAod() ||
-            BTM_IsControllerSupportAntennaSwitchingDuringCteReceptionAoa()) {
-            // Antenna information is an optional capability (Bits 21/22): a read
-            // failure must not block controller bring-up.
-            result = BtmLeReadAntennaInformation();
-            if (result != BT_SUCCESS) {
-                LOG_WARN("BtmLeReadAntennaInformation failed, antenna info unavailable: %{public}d", result);
-                result = BT_SUCCESS;
-            }
-        }
+        // Optional feature reads are best-effort: failures are logged and degraded
+        // so that controller bring-up continues. The function returns void because
+        // a non-success has already been handled inside it.
+        BtmInitOptionalLeFeatures();
 
         if (BTM_IsControllerSupportLlPrivacy()) {
             result = BtmLeReadResolvingListSize();
@@ -1724,7 +1884,7 @@ bool BTM_IsControllerSupportLeChannelClassification()
     return HciSupportLeChannelClassification(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
-// BLUETOOTH SPECIFICATION Version 5.4 | Vol 6, Part B, 4.6.33.3 / 4.6.37-4.6.39
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 6, Part B, 4.6.33,3 / 4.6.37-4.6.39
 // Bit 40 Advertising Coding Selection / bit 41 Advertising Coding Selection (Host
 // Support) / bit 43 PAwR - Advertiser / bit 44 PAwR - Scanner. Same read-only
 // contract as the queries above: call after BTM_Setup() completed, never
@@ -1750,6 +1910,56 @@ bool BTM_IsControllerSupportPawrAdvertiser()
 bool BTM_IsControllerSupportPawrScanner()
 {
     return HciSupportPawrScanner(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 4.6 (Table 4.10)
+// Reads the local feature caches populated during BTM setup. Bit 63 (page 0) is
+// read from the legacy 8-byte 0x0003 result because the init gate for 0x0087
+// must not depend on the 248B cache that only 0x0087 fills (self-lock). Bits
+// 64/65 (page 1) have no page-1 data in the 8-byte cache and read the 248B
+// 0x0087 result; when bit 63 is clear that cache stays zeroed and they read
+// false, matching the pre-BT6.0 baseline.
+bool BTM_IsControllerSupportLeExtendedFeatureSet()
+{
+    return HciSupportLeExtendedFeatureSet(&g_leReadLocalSupportedFeaturesResult.leFeatures);
+}
+
+bool BTM_IsControllerSupportLeMonitoringAdvertisers()
+{
+    return HciSupportLeMonitoringAdvertisers(
+        &g_leReadAllLocalSupportedFeaturesResult.leFeatures);
+}
+
+bool BTM_IsControllerSupportLeFrameSpaceUpdate()
+{
+    return HciSupportLeFrameSpaceUpdate(
+        &g_leReadAllLocalSupportedFeaturesResult.leFeatures);
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 4.6 (Table 4.10)
+// Bit 42 (Decision-Based Advertising Filtering) lives on page 0, so it reads the
+// legacy 8-byte 0x0003 cache and does not depend on the 0x0087 full-page read.
+bool BTM_IsControllerSupportLeDecisionBasedAdvertisingFiltering()
+{
+    return HciSupportLeDecisionBasedAdvertisingFiltering(
+        g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 4.6 (Table 4.10)
+// Bit 45 (ISOAL Unsegmented Framed Mode) is a page-0 feature bit: it reads the
+// legacy 8-byte 0x0003 cache and does not depend on the 0x0087 full-page read.
+bool BTM_IsControllerSupportLeUnsegmentedFramedMode()
+{
+    return HciSupportLeUnsegmentedFramedMode(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 4.6 (Table 4.10)
+// Bit 46 (Channel Sounding) is a page-0 feature bit: it reads the legacy 8-byte
+// 0x0003 cache and does not depend on the 0x0087 full-page read. Gates whether the
+// local Controller supports CS at all; the Host Support bit (47) is declared later.
+bool BTM_IsControllerSupportLeChannelSounding()
+{
+    return HciSupportLeChannelSounding(g_leReadLocalSupportedFeaturesResult.leFeatures.raw);
 }
 
 bool BTM_IsControllerSupportLeReadRfPathCompensation()

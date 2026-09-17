@@ -777,6 +777,38 @@ typedef struct {
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.8.3 LE Read Local Supported Features Command
     void (*leReadLocalSupportedFeaturesComplete)(const HciLeReadLocalSupportedFeaturesReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.128 LE Read All Local Supported Features Command
+    void (*leReadAllLocalSupportedFeaturesComplete)(
+        const HciLeReadAllLocalSupportedFeaturesReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.144 LE Set Decision Data Command
+    void (*leSetDecisionDataComplete)(const HciLeSetDecisionDataReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.145 LE Set Decision Instructions Command
+    void (*leSetDecisionInstructionsComplete)(const HciLeSetDecisionInstructionsReturnParam *returnParam);
+    // Monitoring Advertisers command-complete members, in OCF order; note that
+    // 0x009B Read List Size is 7.8.150 while 0x009C Enable is 7.8.149.
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.146 LE Add Device To Monitored Advertisers List Command
+    void (*leAddDeviceToMonitoredAdvertisersListComplete)(
+        const HciLeAddDeviceToMonitoredAdvertisersListReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.147 LE Remove Device From Monitored Advertisers List Command
+    void (*leRemoveDeviceFromMonitoredAdvertisersListComplete)(
+        const HciLeRemoveDeviceFromMonitoredAdvertisersListReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.148 LE Clear Monitored Advertisers List Command
+    void (*leClearMonitoredAdvertisersListComplete)(
+        const HciLeClearMonitoredAdvertisersListReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.150 LE Read Monitored Advertisers List Size Command
+    void (*leReadMonitoredAdvertisersListSizeComplete)(
+        const HciLeReadMonitoredAdvertisersListSizeReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.149 LE Enable Monitoring Advertisers Command
+    void (*leEnableMonitoringAdvertisersComplete)(
+        const HciLeEnableMonitoringAdvertisersReturnParam *returnParam);
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.8.4 LE Set Random Address Command
     void (*leSetRandomAddressComplete)(const HciLeSetRandomAddressReturnParam *returnParam);
@@ -1102,6 +1134,13 @@ typedef struct {
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.7.65,4 LE Read Remote Features Complete Event
     void (*leReadRemoteFeaturesComplete)(const HciLeReadRemoteFeaturesCompleteEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.7.65,38 LE Read All Remote Features Complete Event
+    void (*leReadAllRemoteFeaturesComplete)(
+        const HciLeReadAllRemoteFeaturesCompleteEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.7.65,47 LE Monitored Advertisers Report Event
+    void (*leMonitoredAdvertisersReport)(const HciLeMonitoredAdvertisersReportEventParam *eventParam);
     // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
     // 7.7.65,5 LE Long Term Key Request Event
     void (*leLongTermKeyRequest)(const HciLeLongTermKeyRequestEventParam *eventParam);
@@ -1239,6 +1278,94 @@ typedef struct {
     // associate the connection with the PAwR train it was established from
     // (0xFF/0xFFFF and ignored otherwise).
     void (*leEnhancedConnectionCompleteV2)(const HciLeEnhancedConnectionCompleteV2EventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.7.65,48 LE Frame Space Update Complete Event
+    void (*leFrameSpaceUpdateComplete)(const HciLeFrameSpaceUpdateCompleteEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.7.65,25
+    // LE CIS Established [v2] Event (subevent 0x2A)
+    void (*leCisEstablishedV2)(const HciLeCisEstablishedV2EventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.130 LE Read Local Supported Capabilities Command Complete
+    void (*leCsReadLocalSupportedCapabilitiesComplete)(
+        const HciLeCsReadLocalSupportedCapabilitiesReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.7.65,39 LE CS Read Remote Supported Capabilities Complete Event
+    void (*leCsReadRemoteSupportedCapabilitiesComplete)(
+        const HciLeCsReadRemoteSupportedCapabilitiesCompleteEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.132 LE Write Cached Remote Supported Capabilities Command Complete
+    void (*leCsWriteCachedRemoteSupportedCapabilitiesComplete)(
+        const HciLeCsWriteCachedRemoteSupportedCapabilitiesReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.7.65,41 LE CS Security Enable Complete Event (subevent 0x2E)
+    void (*leCsSecurityEnableComplete)(
+        const HciLeCsSecurityEnableCompleteEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.134 LE CS Set Default Settings Command Complete
+    void (*leCsSetDefaultSettingsComplete)(
+        const HciLeCsSetDefaultSettingsReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.7.65,40 LE CS Read Remote FAE Table Complete Event (subevent 0x2D). Status
+    // 0x11 is the Controller's "the peer reports a zero FAE" answer, not a failure,
+    // and it arrives here exactly as a failure does: with the 72-B table all zero, so
+    // a consumer reads the table only under Status 0x00.
+    void (*leCsReadRemoteFaeTableComplete)(
+        const HciLeCsReadRemoteFaeTableCompleteEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.136 LE CS Write Cached Remote FAE Table Command Complete
+    void (*leCsWriteCachedRemoteFaeTableComplete)(
+        const HciLeCsWriteCachedRemoteFaeTableReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.7.65,42 LE CS Config Complete Event (subevent 0x2F). One event closes both
+    // 0x0090 and 0x0091 (and reports a locally answered peer request with no Host
+    // command outstanding); Action is the only field separating those cases, and it
+    // travels in the parameter body for the consumer to read - the HCI layer is
+    // transport-only and does not split the event per Action.
+    void (*leCsConfigComplete)(const HciLeCsConfigCompleteEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.139 LE CS Set Channel Classification Command Complete. The Controller may
+    // answer 0x0C when the command repeats within 1 second of the previous issue
+    // (pp2830-2831); the classification is Controller-wide, so the status is the
+    // only result and no Connection_Handle is carried.
+    void (*leCsSetChannelClassificationComplete)(
+        const HciLeCsSetChannelClassificationReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.140 LE CS Set Procedure Parameters Command Complete. The return carries
+    // Status + Connection_Handle only: it does not echo Config_ID, so the issuing
+    // side must remember which Config_ID was in flight when the command was sent.
+    void (*leCsSetProcedureParametersComplete)(
+        const HciLeCsSetProcedureParametersReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.7.65,43 LE CS Procedure Enable Complete Event (subevent 0x30). Closes a
+    // 0x0094 and also reports procedures the Controller started on its own; a
+    // rejected 0x0094 is funneled into this same callback by the command-failure
+    // path, so the consumer sees one shape whichever side refused.
+    void (*leCsProcedureEnableComplete)(
+        const HciLeCsProcedureEnableCompleteEventParam *eventParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.7.65,44 LE CS Subevent Result Event (subevent 0x31). Opens a subevent and
+    // carries the identity fields a continuation does not. The tail is a view into
+    // the event buffer (see HciLeCsSubeventResultEnvelope), so it is consumed inside
+    // the call; the report itself is assembled across this and every following 0x32
+    // by the CS engine, not here.
+    void (*leCsSubeventResult)(const HciLeCsSubeventResultEnvelope *envelope);
+    // 7.7.65,45 LE CS Subevent Result Continue Event (subevent 0x32): more steps of
+    // the subevent the last 0x31 opened. Also the shape a 0x31 too long for one event
+    // is continued in, which is why the step decode lives in one place.
+    void (*leCsSubeventResultContinue)(
+        const HciLeCsSubeventResultContinueEnvelope *envelope);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.8.142 LE CS Test Command_Complete (Status only, p2840). A CS test reports through
+    // the 0x31/0x32 stream under Connection_Handle 0x0FFF, so this completion says one
+    // thing only: whether the test was started. Refusals, including the 0x0C a repeated
+    // 0x0095 draws (p2843), arrive here like any other status; a timeout with no
+    // completion at all is funneled in by the command-failure path.
+    void (*leCsTestComplete)(const HciLeCsTestReturnParam *returnParam);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E
+    // 7.7.65,46 LE CS Test End Complete (subevent 0x33), the terminal event of a CS test:
+    // the Controller sends it after every pending test result event (p2463). Its status is
+    // the stop's outcome, so a non-zero one means the test was not stopped.
+    void (*leCsTestEndComplete)(const HciLeCsTestEndCompleteEventParam *eventParam);
 } HciEventCallbacks;
 
 int HCI_RegisterEventCallbacks(const HciEventCallbacks *callbacks);

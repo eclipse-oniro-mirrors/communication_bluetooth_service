@@ -17,9 +17,9 @@
  * responses (PAwR), Core Spec 5.4 Vol 4 Part E:
  *   - 7.8.126      LE Set Periodic Advertising Response Data
  *   - 7.8.127      LE Set Periodic Sync Subevent
- *   - 7.7.65.14    LE Periodic Advertising Sync Established event [v2] (0x24)
- *   - 7.7.65.15    LE Periodic Advertising Report event [v2] (0x25)
- *   - 7.7.65.24    LE Periodic Advertising Sync Transfer Received event [v2] (0x26)
+ *   - 7.7.65,14    LE Periodic Advertising Sync Established event [v2] (0x24)
+ *   - 7.7.65,15    LE Periodic Advertising Report event [v2] (0x25)
+ *   - 7.7.65,24    LE Periodic Advertising Sync Transfer Received event [v2] (0x26)
  *
  * The scanner side of PAwR consumes the [v2] periodic advertising events: a
  * 5.4 Controller reports every sync establishment / periodic advertising

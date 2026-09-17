@@ -31,11 +31,11 @@
 #include "hci_evt.h"
 #include "log.h"
 
-// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.7.65.2
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.7.65,2
 // A legacy LE Advertising Report data field may contain at most 31 octets.
 #define HCI_LE_ADV_REPORT_DATA_LEN_MAX 31
 
-// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E, 7.7.65.21/7.7.65.22
+// BLUETOOTH SPECIFICATION Version 5.1 | Vol 2, Part E, 7.7.65,21/7.7.65,22
 // Per-sample I/Q magnitude, in dB, 1 byte each. Maximum Sample_Count is 0x52;
 // 0x00 occurs only when Packet_Status = 0xFF (insufficient resources).
 #define HCI_LE_IQ_SAMPLE_COUNT_MAX 0x52
@@ -193,6 +193,268 @@ static void HciEventOnLeReadRemoteFeaturesCompleteEvent(const uint8_t *param, si
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
     if (callbacks->leReadRemoteFeaturesComplete != NULL) {
         callbacks->leReadRemoteFeaturesComplete(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeReadAllRemoteFeaturesCompleteEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLeReadAllRemoteFeaturesCompleteEventParam))) {
+        return;
+    }
+
+    HciLeReadAllRemoteFeaturesCompleteEventParam *eventParam = (HciLeReadAllRemoteFeaturesCompleteEventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReadAllRemoteFeaturesComplete != NULL) {
+        callbacks->leReadAllRemoteFeaturesComplete(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.7.65,47
+// LE Monitored Advertisers Report subevent (8 B payload, gated by event-mask
+// bit 51 set in BtmGetLe6EventMask). Delivery is direct-cast: the payload is
+// fixed-length; the Controller reports which condition (below-low past-timeout
+// vs RSSI >= high) matched, and the host relays the report up to GAP.
+static void HciEventOnLeMonitoredAdvertisersReportEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLeMonitoredAdvertisersReportEventParam))) {
+        return;
+    }
+
+    HciLeMonitoredAdvertisersReportEventParam *eventParam = (HciLeMonitoredAdvertisersReportEventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leMonitoredAdvertisersReport != NULL) {
+        callbacks->leMonitoredAdvertisersReport(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.7.65,48
+// LE Frame Space Update Complete subevent (9 B payload, gated by event-mask
+// bit 52 set in BtmGetLe6EventMask). Delivery is broadcast: the payload is
+// fixed-length; the completion of a host-issued 0x009D and autonomous Local
+// Controller / peer changes both arrive here, and GAP consumes the event.
+static void HciEventOnLeFrameSpaceUpdateCompleteEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLeFrameSpaceUpdateCompleteEventParam))) {
+        return;
+    }
+
+    HciLeFrameSpaceUpdateCompleteEventParam *eventParam = (HciLeFrameSpaceUpdateCompleteEventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leFrameSpaceUpdateComplete != NULL) {
+        callbacks->leFrameSpaceUpdateComplete(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.7.65,39
+// LE CS Read Remote Supported Capabilities Complete subevent (31 B payload,
+// gated by event-mask bit 43 set in BtmGetLe6EventMask). Delivery is broadcast:
+// the payload is fixed-length, and both a 0x008A Command_Status completion and
+// an unsupported-command HCI failure are synthesized into this same subevent.
+// The CS engine stores the remote capability body keyed by the peer address.
+static void HciEventOnLeCsReadRemoteSupportedCapabilitiesCompleteEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLeCsReadRemoteSupportedCapabilitiesCompleteEventParam))) {
+        return;
+    }
+
+    HciLeCsReadRemoteSupportedCapabilitiesCompleteEventParam *eventParam =
+        (HciLeCsReadRemoteSupportedCapabilitiesCompleteEventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsReadRemoteSupportedCapabilitiesComplete != NULL) {
+        callbacks->leCsReadRemoteSupportedCapabilitiesComplete(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.7.65,40
+// LE CS Read Remote FAE Table Complete subevent (75 B payload, gated by event-mask
+// bit 44 set in BtmGetLe6EventMask). Delivery is broadcast: the payload is
+// fixed-length, and a 0x008E Command_Status completion, a command-level rejection and
+// a command timeout are all synthesized into this same subevent. The CS engine caches
+// the 72-B table per peer address and only under Status 0x00 (7.8.135 p2819).
+static void HciEventOnLeCsReadRemoteFaeTableCompleteEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLeCsReadRemoteFaeTableCompleteEventParam))) {
+        return;
+    }
+
+    HciLeCsReadRemoteFaeTableCompleteEventParam *eventParam =
+        (HciLeCsReadRemoteFaeTableCompleteEventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsReadRemoteFaeTableComplete != NULL) {
+        callbacks->leCsReadRemoteFaeTableComplete(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.7.65,41
+// LE CS Security Enable Complete subevent (3 B payload, gated by event-mask
+// bit 45 set in BtmGetLe6EventMask). Delivery is broadcast: the 0x008C command is
+// Command_Status, so a real completion arrives as this subevent, while a
+// command-level rejection (e.g. 0x2F, 0x0C) is synthesized into this same
+// subevent-shaped callback by the command-failure path. The CS engine marks the
+// connection security done only on Status 0, so both pass through unmarked.
+static void HciEventOnLeCsSecurityEnableCompleteEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLeCsSecurityEnableCompleteEventParam))) {
+        return;
+    }
+
+    HciLeCsSecurityEnableCompleteEventParam *eventParam =
+        (HciLeCsSecurityEnableCompleteEventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsSecurityEnableComplete != NULL) {
+        callbacks->leCsSecurityEnableComplete(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.7.65,42
+// LE CS Config Complete subevent (33 B payload, gated by event-mask bit 46 set in
+// BtmGetLe6EventMask). One event closes both the create (0x0090) and the remove
+// (0x0091) command, and a peer-requested configuration answered locally produces
+// it with no Host command outstanding. Action is the only field separating those
+// cases, so it travels in the parameter body - the HCI layer stays transport-only
+// and hands the whole event to its consumer, which branches on it (the CS engine,
+// matching how the FSU initiator and the MA condition reach their consumers).
+// A reserved Action value is the consumer's to reject as erroneous per
+// Vol 1, Part E, 2.4.1 (p398); it is not filtered here.
+static void HciEventOnLeCsConfigCompleteEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLeCsConfigCompleteEventParam))) {
+        return;
+    }
+
+    HciLeCsConfigCompleteEventParam *eventParam = (HciLeCsConfigCompleteEventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsConfigComplete != NULL) {
+        callbacks->leCsConfigComplete(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.7.65,43
+// LE CS Procedure Enable Complete subevent (21 B payload, gated by event-mask bit 47
+// set in BtmGetLe6EventMask). One event closes a 0x0094 and reports procedures the
+// Controller ran on its own, so it can arrive with no Host command outstanding; a
+// rejected 0x0094 is synthesized into this same subevent-shaped callback by the
+// command-failure path. State 0x00 marks every remaining parameter ignored by the
+// spec (p2442), so the schedule tail travels as received and the consumer reads it
+// only when State is 0x01 - the HCI layer stays transport-only.
+static void HciEventOnLeCsProcedureEnableCompleteEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLeCsProcedureEnableCompleteEventParam))) {
+        return;
+    }
+
+    HciLeCsProcedureEnableCompleteEventParam *eventParam = (HciLeCsProcedureEnableCompleteEventParam *)param;
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsProcedureEnableComplete != NULL) {
+        callbacks->leCsProcedureEnableComplete(eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.7.65,44
+// LE CS Subevent Result subevent (gated by event-mask bit 48 set in
+// BtmGetLe6EventMask). Unlike its siblings this payload is not fixed length: the 15-B
+// head is followed by Num_Steps_Reported step records, each a three-octet step head
+// with that step's own data immediately behind it (p2451), and one subevent may span
+// several events. Only the head is copied here; the tail travels
+// as an envelope over the received buffer, because the shared callback shape carries
+// one struct pointer with no length and the step decode belongs to the CS engine, not
+// to the HCI layer.
+static void HciEventOnLeCsSubeventResultEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLeCsSubeventResultEventParam))) {
+        return;
+    }
+
+    const HciLeCsSubeventResultEventParam *head = (const HciLeCsSubeventResultEventParam *)param;
+    HciLeCsSubeventResultEnvelope envelope = {
+        .head = *head,
+        .stepBlob = param + sizeof(*head),
+        .stepBlobLen = (uint16_t)(length - sizeof(*head)),
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsSubeventResult != NULL) {
+        callbacks->leCsSubeventResult(&envelope);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.7.65,45
+// LE CS Subevent Result Continue subevent (event-mask bit 49): the same variable step
+// tail as 0x31 behind an 8-B head, with the four fields only the opening 0x31 carries
+// dropped. Built the same way and for the same reason.
+static void HciEventOnLeCsSubeventResultContinueEvent(const uint8_t *param, size_t length)
+{
+    if (param == NULL || (length < sizeof(HciLeCsSubeventResultContinueEventParam))) {
+        return;
+    }
+
+    const HciLeCsSubeventResultContinueEventParam *head =
+        (const HciLeCsSubeventResultContinueEventParam *)param;
+    HciLeCsSubeventResultContinueEnvelope envelope = {
+        .head = *head,
+        .stepBlob = param + sizeof(*head),
+        .stepBlobLen = (uint16_t)(length - sizeof(*head)),
+    };
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsSubeventResultContinue != NULL) {
+        callbacks->leCsSubeventResultContinue(&envelope);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.7.65,46
+// LE CS Test End Complete subevent (event-mask bit 50): 1 B Status closing a 0x0096. The
+// Controller sends it only after every result of the test it ended has been delivered as
+// 0x31/0x32, so it doubles as the "test is fully torn down" signal.
+// A frame too short to hold Status is not dropped but passed on as a malformed completion:
+// the engine recorded the 0x0096 when it was sent and only this subevent clears that record
+// (a 0x0096 whose Command_Status was accepted gets no second completion), so a dropped frame
+// would hold the record - and with it CsTestStart and CsTestEnd - until the module is
+// disabled. Same shape as the 0x0093/0x0095 Command_Complete handlers, whose records also
+// only their own completion clears.
+static void HciEventOnLeCsTestEndCompleteEvent(const uint8_t *param, size_t length)
+{
+    HciLeCsTestEndCompleteEventParam eventParam = {0};
+    // A truncated frame carries no Status, so the outcome cannot be read.
+    if (param == NULL || (length < sizeof(eventParam))) {
+        eventParam.status = HCI_MALFORMED_EVENT;
+    } else {
+        eventParam = *(const HciLeCsTestEndCompleteEventParam *)param;
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsTestEndComplete != NULL) {
+        callbacks->leCsTestEndComplete(&eventParam);
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
@@ -844,58 +1106,142 @@ static void HciEventOnLePeriodicAdvertisingSyncTransferReceivedEvent(const uint8
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// LE CIS Established [v1] (0x19) always carries the full 28-octet parameter set
+// (Vol 4 Part E 7.7.65,25, p2387): failure events keep the same fixed length
+// (Table 4.1), so a shorter event is non-conformant and is dropped.
 static void HciEventOnLeCisEstablishedEvent(const uint8_t *param, size_t length)
 {
-    // Success events carry the full parameter set (28 bytes). Failure events may
-    // carry only Status + Connection_Handle (Vol 2, Part E, 7.7.65,25); the
-    // remaining parameters are ignored when Status is non-zero.
-    if (param == NULL || length < (sizeof(uint8_t) + sizeof(uint16_t))) {
+    const size_t fixedLength = 28;
+    if (param == NULL || length < fixedLength) {
         return;
     }
 
     HciLeCisEstablishedEventParam eventParam = { 0 };
-    eventParam.status = param[0];
-    (void)memcpy_s(&eventParam.connectionHandle, sizeof(uint16_t), param + 1, sizeof(uint16_t));
-
-    if (length >= sizeof(HciLeCisEstablishedEventParam)) {
-        size_t offset = sizeof(uint8_t) + sizeof(uint16_t);
-        (void)memcpy_s(
-            eventParam.cigSyncDelay, sizeof(eventParam.cigSyncDelay), param + offset, sizeof(eventParam.cigSyncDelay));
-        offset += sizeof(eventParam.cigSyncDelay);
-        (void)memcpy_s(
-            eventParam.cisSyncDelay, sizeof(eventParam.cisSyncDelay), param + offset, sizeof(eventParam.cisSyncDelay));
-        offset += sizeof(eventParam.cisSyncDelay);
-        (void)memcpy_s(eventParam.transportLatencyMToS, sizeof(eventParam.transportLatencyMToS), param + offset,
-            sizeof(eventParam.transportLatencyMToS));
-        offset += sizeof(eventParam.transportLatencyMToS);
-        (void)memcpy_s(eventParam.transportLatencySToM, sizeof(eventParam.transportLatencySToM), param + offset,
-            sizeof(eventParam.transportLatencySToM));
-        offset += sizeof(eventParam.transportLatencySToM);
-        eventParam.phyMToS = param[offset];
-        offset += sizeof(uint8_t);
-        eventParam.phySToM = param[offset];
-        offset += sizeof(uint8_t);
-        eventParam.nse = param[offset];
-        offset += sizeof(uint8_t);
-        eventParam.bnMToS = param[offset];
-        offset += sizeof(uint8_t);
-        eventParam.bnSToM = param[offset];
-        offset += sizeof(uint8_t);
-        eventParam.ftMToS = param[offset];
-        offset += sizeof(uint8_t);
-        eventParam.ftSToM = param[offset];
-        offset += sizeof(uint8_t);
-        (void)memcpy_s(&eventParam.maxPduMToS, sizeof(uint16_t), param + offset, sizeof(uint16_t));
-        offset += sizeof(uint16_t);
-        (void)memcpy_s(&eventParam.maxPduSToM, sizeof(uint16_t), param + offset, sizeof(uint16_t));
-        offset += sizeof(uint16_t);
-        (void)memcpy_s(&eventParam.isoInterval, sizeof(uint16_t), param + offset, sizeof(uint16_t));
-    }
+    size_t offset = 0;
+    eventParam.status = param[offset];
+    offset += sizeof(uint8_t);
+    (void)memcpy_s(&eventParam.connectionHandle, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(
+        eventParam.cigSyncDelay, sizeof(eventParam.cigSyncDelay), param + offset, sizeof(eventParam.cigSyncDelay));
+    offset += sizeof(eventParam.cigSyncDelay);
+    (void)memcpy_s(
+        eventParam.cisSyncDelay, sizeof(eventParam.cisSyncDelay), param + offset, sizeof(eventParam.cisSyncDelay));
+    offset += sizeof(eventParam.cisSyncDelay);
+    (void)memcpy_s(eventParam.transportLatencyMToS, sizeof(eventParam.transportLatencyMToS), param + offset,
+        sizeof(eventParam.transportLatencyMToS));
+    offset += sizeof(eventParam.transportLatencyMToS);
+    (void)memcpy_s(eventParam.transportLatencySToM, sizeof(eventParam.transportLatencySToM), param + offset,
+        sizeof(eventParam.transportLatencySToM));
+    offset += sizeof(eventParam.transportLatencySToM);
+    eventParam.phyMToS = param[offset];
+    offset += sizeof(uint8_t);
+    eventParam.phySToM = param[offset];
+    offset += sizeof(uint8_t);
+    eventParam.nse = param[offset];
+    offset += sizeof(uint8_t);
+    eventParam.bnMToS = param[offset];
+    offset += sizeof(uint8_t);
+    eventParam.bnSToM = param[offset];
+    offset += sizeof(uint8_t);
+    eventParam.ftMToS = param[offset];
+    offset += sizeof(uint8_t);
+    eventParam.ftSToM = param[offset];
+    offset += sizeof(uint8_t);
+    (void)memcpy_s(&eventParam.maxPduMToS, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(&eventParam.maxPduSToM, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(&eventParam.isoInterval, sizeof(uint16_t), param + offset, sizeof(uint16_t));
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
     if (callbacks->leCisEstablished != NULL) {
         callbacks->leCisEstablished(&eventParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// LE CIS Established [v2] (0x2A) always carries the full 42-octet parameter set: the
+// 28-octet [v1] payload plus the 14-octet v2 tail (Vol 4 Part E 7.7.65,25, pp2387-2393).
+// LE CIS Established V2 (0x2A) carries a fixed payload (Vol 4 Part E 7.7.65,40,
+// pp2392-2393). Failure events keep the same layout, so a shorter event is
+// non-conformant; drop it so a truncated frame never surfaces to the iso layer.
+// Parse the shared prefix of LE CIS Established v2 (0x2A): the v1-shaped 28-octet
+// header through ISO_Interval. Returns the offset at which the 14-octet v2 tail begins.
+static size_t HciParseLeCisEstablishedV2Prefix(
+    const uint8_t *param, HciLeCisEstablishedV2EventParam *out)
+{
+    size_t offset = 0;
+    out->status = param[offset++];
+    (void)memcpy_s(&out->connectionHandle, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(out->cigSyncDelay, sizeof(out->cigSyncDelay), param + offset, sizeof(out->cigSyncDelay));
+    offset += sizeof(out->cigSyncDelay);
+    (void)memcpy_s(out->cisSyncDelay, sizeof(out->cisSyncDelay), param + offset, sizeof(out->cisSyncDelay));
+    offset += sizeof(out->cisSyncDelay);
+    (void)memcpy_s(out->transportLatencyMToS, sizeof(out->transportLatencyMToS), param + offset,
+        sizeof(out->transportLatencyMToS));
+    offset += sizeof(out->transportLatencyMToS);
+    (void)memcpy_s(out->transportLatencySToM, sizeof(out->transportLatencySToM), param + offset,
+        sizeof(out->transportLatencySToM));
+    offset += sizeof(out->transportLatencySToM);
+    out->phyMToS = param[offset++];
+    out->phySToM = param[offset++];
+    out->nse = param[offset++];
+    out->bnMToS = param[offset++];
+    out->bnSToM = param[offset++];
+    out->ftMToS = param[offset++];
+    out->ftSToM = param[offset++];
+    (void)memcpy_s(&out->maxPduMToS, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(&out->maxPduSToM, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(&out->isoInterval, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    return offset;
+}
+
+// LE CIS Established V2 (0x2A) carries a fixed payload (Vol 4 Part E 7.7.65,40,
+// pp2392-2393). Failure events keep the same layout, so a shorter event is
+// non-conformant; drop it so a truncated frame never surfaces to the iso layer.
+static bool HciParseLeCisEstablishedV2EventParam(
+    const uint8_t *param, size_t length, HciLeCisEstablishedV2EventParam *out)
+{
+    if (param == NULL || length < sizeof(HciLeCisEstablishedV2EventParam)) {
+        return false;
+    }
+
+    size_t offset = HciParseLeCisEstablishedV2Prefix(param, out);
+    // v2 tail: Sub_Interval, Max_SDU_C_To_P, Max_SDU_P_To_C, SDU_Interval_C_To_P,
+    // SDU_Interval_P_To_C, Framing.
+    (void)memcpy_s(out->subInterval, sizeof(out->subInterval), param + offset, sizeof(out->subInterval));
+    offset += sizeof(out->subInterval);
+    (void)memcpy_s(&out->maxSduMToS, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(&out->maxSduSToM, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(out->sduIntervalMToS, sizeof(out->sduIntervalMToS), param + offset,
+        sizeof(out->sduIntervalMToS));
+    offset += sizeof(out->sduIntervalMToS);
+    (void)memcpy_s(out->sduIntervalSToM, sizeof(out->sduIntervalSToM), param + offset,
+        sizeof(out->sduIntervalSToM));
+    offset += sizeof(out->sduIntervalSToM);
+    out->framing = param[offset];
+    return true;
+}
+
+static void HciEventOnLeCisEstablishedV2Event(const uint8_t *param, size_t length)
+{
+    HciLeCisEstablishedV2EventParam eventParam = { 0 };
+    if (!HciParseLeCisEstablishedV2EventParam(param, length, &eventParam)) {
+        return;
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCisEstablishedV2 != NULL) {
+        callbacks->leCisEstablishedV2(&eventParam);
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
@@ -924,69 +1270,65 @@ static void HciEventOnLeCisRequestEvent(const uint8_t *param, size_t length)
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
-// Vol 2, Part E, 7.7.65,27: fill the 18-byte fixed payload of the LE Create BIG Complete
-// event; failure events may carry only Status + BIG_Handle, the remaining parameters stay
-// zero-filled. The BIS handle list follows the fixed payload and is clamped by the caller.
-static void HciEventParseCreateBigPayload(HciLeCreateBigCompleteEventParam *eventParam, const uint8_t *param,
-    size_t offset)
+// LE Create BIG Complete (0x1B) carries a fixed 18-octet prefix followed by Num_BIS
+// two-octet connection handles (Vol 4 Part E 7.7.65,27, p2396). Failure events keep
+// the same layout (Table 4.1), so a shorter event is non-conformant and is dropped.
+static bool HciParseLeCreateBigCompleteEventParam(
+    const uint8_t *param, size_t length, HciLeCreateBigCompleteEventParam *out)
 {
-    (void)memcpy_s(
-        eventParam->bigSyncDelay, sizeof(eventParam->bigSyncDelay), param + offset, sizeof(eventParam->bigSyncDelay));
-    offset += sizeof(eventParam->bigSyncDelay);
-    (void)memcpy_s(eventParam->transportLatencyBig, sizeof(eventParam->transportLatencyBig), param + offset,
-        sizeof(eventParam->transportLatencyBig));
-    offset += sizeof(eventParam->transportLatencyBig);
-    eventParam->phy = param[offset];
+    const size_t fixedLength = 18;
+    if (param == NULL || length < fixedLength) {
+        return false;
+    }
+
+    size_t offset = 0;
+    out->status = param[offset];
     offset += sizeof(uint8_t);
-    eventParam->nse = param[offset];
+    out->bigHandle = param[offset];
     offset += sizeof(uint8_t);
-    eventParam->bn = param[offset];
+    (void)memcpy_s(out->bigSyncDelay, sizeof(out->bigSyncDelay), param + offset, sizeof(out->bigSyncDelay));
+    offset += sizeof(out->bigSyncDelay);
+    (void)memcpy_s(out->transportLatencyBig, sizeof(out->transportLatencyBig), param + offset,
+        sizeof(out->transportLatencyBig));
+    offset += sizeof(out->transportLatencyBig);
+    out->phy = param[offset];
     offset += sizeof(uint8_t);
-    eventParam->pto = param[offset];
+    out->nse = param[offset];
     offset += sizeof(uint8_t);
-    eventParam->irc = param[offset];
+    out->bn = param[offset];
     offset += sizeof(uint8_t);
-    (void)memcpy_s(&eventParam->maxPdu, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    out->pto = param[offset];
+    offset += sizeof(uint8_t);
+    out->irc = param[offset];
+    offset += sizeof(uint8_t);
+    (void)memcpy_s(&out->maxPdu, sizeof(uint16_t), param + offset, sizeof(uint16_t));
     offset += sizeof(uint16_t);
-    (void)memcpy_s(&eventParam->isoInterval, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    (void)memcpy_s(&out->isoInterval, sizeof(uint16_t), param + offset, sizeof(uint16_t));
     offset += sizeof(uint16_t);
-    eventParam->numBis = param[offset];
+    out->numBis = param[offset];
+    offset += sizeof(uint8_t);
+
+    // Guard the variable BIS handle tail against short frames and the array bound.
+    size_t bisCount = out->numBis;
+    size_t maxByLength = (length - fixedLength) / sizeof(uint16_t);
+    if (bisCount > HCI_LE_BIS_COUNT_MAX) {
+        bisCount = HCI_LE_BIS_COUNT_MAX;
+    }
+    if (bisCount > maxByLength) {
+        bisCount = maxByLength;
+    }
+    out->numBis = (uint8_t)bisCount;
+    if (bisCount > 0) {
+        (void)memcpy_s(out->bisHandles, sizeof(out->bisHandles), param + offset, sizeof(uint16_t) * bisCount);
+    }
+    return true;
 }
 
 static void HciEventOnLeCreateBigCompleteEvent(const uint8_t *param, size_t length)
 {
-    // Success events carry the full parameter set (18 bytes + BIS handles). Failure
-    // events may carry only Status + BIG_Handle (Vol 2, Part E, 7.7.65,27); the
-    // remaining parameters are ignored when Status is non-zero.
-    if (param == NULL || length < (sizeof(uint8_t) + sizeof(uint8_t))) {
-        return;
-    }
-
     HciLeCreateBigCompleteEventParam eventParam = { 0 };
-    size_t offset = 0;
-    eventParam.status = param[offset];
-    offset += sizeof(uint8_t);
-    eventParam.bigHandle = param[offset];
-    offset += sizeof(uint8_t);
-
-    const size_t fixedLength = 18;
-    if (length >= fixedLength) {
-        HciEventParseCreateBigPayload(&eventParam, param, offset);
-
-        size_t bisCount = eventParam.numBis;
-        size_t maxByLength = (length - fixedLength) / sizeof(uint16_t);
-        if (bisCount > HCI_LE_BIS_COUNT_MAX) {
-            bisCount = HCI_LE_BIS_COUNT_MAX;
-        }
-        if (bisCount > maxByLength) {
-            bisCount = maxByLength;
-        }
-        eventParam.numBis = (uint8_t)bisCount;
-        offset += sizeof(uint8_t);
-        if (bisCount > 0) {
-            (void)memcpy_s(
-                eventParam.bisHandles, sizeof(eventParam.bisHandles), param + offset, sizeof(uint16_t) * bisCount);
-        }
+    if (!HciParseLeCreateBigCompleteEventParam(param, length, &eventParam)) {
+        return;
     }
 
     HciEventCallbacks *callbacks = NULL;
@@ -1015,12 +1357,13 @@ static void HciEventOnLeTerminateBigCompleteEvent(const uint8_t *param, size_t l
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// LE BIG Sync Established (0x1D) carries a fixed 14-octet prefix followed by Num_BIS
+// two-octet connection handles (Vol 4 Part E 7.7.65,29, p2401). Failure events keep
+// the same layout (Table 4.1), so a shorter event is non-conformant and is dropped.
 static void HciEventOnLeBigSyncEstablishedEvent(const uint8_t *param, size_t length)
 {
-    // Success events carry the full parameter set (14 bytes + BIS handles). Failure
-    // events may carry only Status + BIG_Handle (Vol 2, Part E, 7.7.65,29); the
-    // remaining parameters are ignored when Status is non-zero.
-    if (param == NULL || length < (sizeof(uint8_t) + sizeof(uint8_t))) {
+    const size_t fixedLength = 14;
+    if (param == NULL || length < fixedLength) {
         return;
     }
 
@@ -1030,40 +1373,37 @@ static void HciEventOnLeBigSyncEstablishedEvent(const uint8_t *param, size_t len
     offset += sizeof(uint8_t);
     eventParam.bigHandle = param[offset];
     offset += sizeof(uint8_t);
+    (void)memcpy_s(eventParam.transportLatencyBig, sizeof(eventParam.transportLatencyBig), param + offset,
+        sizeof(eventParam.transportLatencyBig));
+    offset += sizeof(eventParam.transportLatencyBig);
+    eventParam.nse = param[offset];
+    offset += sizeof(uint8_t);
+    eventParam.bn = param[offset];
+    offset += sizeof(uint8_t);
+    eventParam.pto = param[offset];
+    offset += sizeof(uint8_t);
+    eventParam.irc = param[offset];
+    offset += sizeof(uint8_t);
+    (void)memcpy_s(&eventParam.maxPdu, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    (void)memcpy_s(&eventParam.isoInterval, sizeof(uint16_t), param + offset, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+    eventParam.numBis = param[offset];
+    offset += sizeof(uint8_t);
 
-    const size_t fixedLength = 14;
-    if (length >= fixedLength) {
-        (void)memcpy_s(eventParam.transportLatencyBig, sizeof(eventParam.transportLatencyBig), param + offset,
-            sizeof(eventParam.transportLatencyBig));
-        offset += sizeof(eventParam.transportLatencyBig);
-        eventParam.nse = param[offset];
-        offset += sizeof(uint8_t);
-        eventParam.bn = param[offset];
-        offset += sizeof(uint8_t);
-        eventParam.pto = param[offset];
-        offset += sizeof(uint8_t);
-        eventParam.irc = param[offset];
-        offset += sizeof(uint8_t);
-        (void)memcpy_s(&eventParam.maxPdu, sizeof(uint16_t), param + offset, sizeof(uint16_t));
-        offset += sizeof(uint16_t);
-        (void)memcpy_s(&eventParam.isoInterval, sizeof(uint16_t), param + offset, sizeof(uint16_t));
-        offset += sizeof(uint16_t);
-        eventParam.numBis = param[offset];
-
-        size_t bisCount = eventParam.numBis;
-        size_t maxByLength = (length - fixedLength) / sizeof(uint16_t);
-        if (bisCount > HCI_LE_BIS_COUNT_MAX) {
-            bisCount = HCI_LE_BIS_COUNT_MAX;
-        }
-        if (bisCount > maxByLength) {
-            bisCount = maxByLength;
-        }
-        eventParam.numBis = (uint8_t)bisCount;
-        offset += sizeof(uint8_t);
-        if (bisCount > 0) {
-            (void)memcpy_s(
-                eventParam.bisHandles, sizeof(eventParam.bisHandles), param + offset, sizeof(uint16_t) * bisCount);
-        }
+    // Guard the variable BIS handle tail against short frames and the array bound.
+    size_t bisCount = eventParam.numBis;
+    size_t maxByLength = (length - fixedLength) / sizeof(uint16_t);
+    if (bisCount > HCI_LE_BIS_COUNT_MAX) {
+        bisCount = HCI_LE_BIS_COUNT_MAX;
+    }
+    if (bisCount > maxByLength) {
+        bisCount = maxByLength;
+    }
+    eventParam.numBis = (uint8_t)bisCount;
+    if (bisCount > 0) {
+        (void)memcpy_s(
+            eventParam.bisHandles, sizeof(eventParam.bisHandles), param + offset, sizeof(uint16_t) * bisCount);
     }
 
     HciEventCallbacks *callbacks = NULL;
@@ -1092,12 +1432,13 @@ static void HciEventOnLeBigSyncLostEvent(const uint8_t *param, size_t length)
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// LE Request Peer SCA Complete (0x1F) always carries the full 4-octet parameter set
+// (Vol 4 Part E 7.7.65,31, p2406): a failed reception reports the peer clock accuracy
+// as unavailable, but the frame is still sent complete (Table 4.1), so a shorter
+// event is non-conformant and is dropped.
 static void HciEventOnLeRequestPeerScaCompleteEvent(const uint8_t *param, size_t length)
 {
-    // Success events carry Status + Connection_Handle + Peer_Clock_Accuracy. Failure
-    // events may carry only Status + Connection_Handle (Vol 2, Part E, 7.7.65,31);
-    // Peer_Clock_Accuracy is left zero when Status is non-zero.
-    if (param == NULL || length < (sizeof(uint8_t) + sizeof(uint16_t))) {
+    if (param == NULL || length < sizeof(HciLeRequestPeerScaCompleteEventParam)) {
         return;
     }
 
@@ -1107,9 +1448,7 @@ static void HciEventOnLeRequestPeerScaCompleteEvent(const uint8_t *param, size_t
     offset += sizeof(uint8_t);
     (void)memcpy_s(&eventParam.connectionHandle, sizeof(uint16_t), param + offset, sizeof(uint16_t));
     offset += sizeof(uint16_t);
-    if (length >= sizeof(HciLeRequestPeerScaCompleteEventParam)) {
-        eventParam.peerClockAccuracy = param[offset];
-    }
+    eventParam.peerClockAccuracy = param[offset];
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -1206,6 +1545,8 @@ static void HciEventOnLeBigInfoAdvertisingReportEvent(const uint8_t *param, size
     offset += sizeof(uint16_t);
     eventParam.phy = param[offset];
     offset += sizeof(uint8_t);
+    // Framing also carries 0x02 (Framed Unsegmented) since BT6.0; copied verbatim
+    // with no value-range gate here, Vol 4 Part E 7.7.65,34 p2415.
     eventParam.framing = param[offset];
     offset += sizeof(uint8_t);
     eventParam.encryption = param[offset];
@@ -1520,15 +1861,41 @@ static HciLeEventFunc g_leEventMap[] = {
     HciEventOnLeTransmitPowerReportingEvent,                  // 0x21
     HciEventOnLeBigInfoAdvertisingReportEvent,                // 0x22
     HciEventOnLeSubrateChangeEvent,                           // 0x23
+    // Rows 0x24-0x29 are 5.4 additions; 0x2A-0x35 are BT6.0 LE Meta
+    // subevents (per-row ownership noted beside the 0x2A block below).
     HciEventOnLEPeriodicAdvertisingSyncEstablishedV2Event,    // 0x24
     HciEventOnLEPeriodicAdvertisingReportV2Event,             // 0x25
     HciEventOnLePeriodicAdvertisingSyncTransferReceivedV2Event, // 0x26
     HciEventOnLePeriodicAdvertisingSubeventDataRequestEvent,  // 0x27
     HciEventOnLePeriodicAdvertisingResponseReportEvent,       // 0x28
     HciEventOnLeEnhancedConnectionCompleteV2Event,            // 0x29
+    // Rows 0x2A-0x35 are BT6.0 LE Meta subevents, each owned by the module that
+    // consumes it: 0x2A LE CIS Established [v2] (ISO), 0x2B LE Read All Remote
+    // Features Complete (remote features), and the Channel Sounding engine's
+    // 0x2C Read Remote Supported Capabilities Complete, 0x2E Security Enable
+    // Complete, 0x2F Config Complete (Action carried in the body), 0x30 Procedure
+    // Enable Complete (State carried in the body), 0x31/0x32 Subevent Result /
+    // Continue, whose variable step tail is handed over as an envelope, and 0x33 Test
+    // End Complete. 0x34 and 0x35 belong to Monitored Advertisers (MA) and Frame
+    // Space Update (FSU). Row 0x2D is the LE CS Read Remote FAE Table Complete
+    // subevent (7.7.65,40, event-mask bit 44), the read-pair of 0x2C: its whole-table
+    // payload is delivered to the consumer as received, and the CS engine caches it
+    // per peer address under Status 0x00.
+    HciEventOnLeCisEstablishedV2Event,                        // 0x2A
+    HciEventOnLeReadAllRemoteFeaturesCompleteEvent,           // 0x2B
+    HciEventOnLeCsReadRemoteSupportedCapabilitiesCompleteEvent, // 0x2C
+    HciEventOnLeCsReadRemoteFaeTableCompleteEvent,            // 0x2D
+    HciEventOnLeCsSecurityEnableCompleteEvent,                // 0x2E
+    HciEventOnLeCsConfigCompleteEvent,                        // 0x2F
+    HciEventOnLeCsProcedureEnableCompleteEvent,               // 0x30
+    HciEventOnLeCsSubeventResultEvent,                        // 0x31
+    HciEventOnLeCsSubeventResultContinueEvent,                // 0x32
+    HciEventOnLeCsTestEndCompleteEvent,                       // 0x33
+    HciEventOnLeMonitoredAdvertisersReportEvent,              // 0x34
+    HciEventOnLeFrameSpaceUpdateCompleteEvent,                // 0x35
 };
 
-#define LESUBEVENTCODE_MAX 0x29
+#define LESUBEVENTCODE_MAX 0x35
 
 void HciEventOnLeMetaEvent(Packet *packet)
 {

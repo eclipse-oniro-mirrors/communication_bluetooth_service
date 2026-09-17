@@ -24,6 +24,7 @@
 #include "hci_cmd_failure_link_ctrl.h"
 #include "hci_cmd_failure_link_policy.h"
 #include "hci_cmd_failure_status_params.h"
+#include "log.h"
 
 void HciOnCmdFailed(uint16_t opCode, uint8_t status, const void *param)
 {
@@ -59,6 +60,9 @@ void HciOnCmdFailed(uint16_t opCode, uint8_t status, const void *param)
             HciOnLeControllerCmdFailed(opCode, status, param);
             break;
         default:
+            // No failure table for this OGF (0x3F vendor-specific included): this log is the only
+            // trace the rejection leaves.
+            LOG_WARN("%{public}s: no failure table for opCode 0x%04x", __FUNCTION__, opCode);
             break;
     }
 }

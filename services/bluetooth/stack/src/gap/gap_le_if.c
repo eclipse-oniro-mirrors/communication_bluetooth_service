@@ -49,7 +49,7 @@ typedef struct {
 typedef struct {
     int result;
     uint8_t advHandle;
-    uint8_t properties;
+    uint16_t properties;
     int8_t txPower;
     GapLeExAdvParam advExParam;
 } GapLeExAdvSetParamInfo;
@@ -67,6 +67,14 @@ typedef struct {
     uint8_t advDataLength;
     uint8_t *advData;
 } GapLeExAdvSetDataInfo;
+
+typedef struct {
+    int result;
+    uint8_t advHandle;
+    uint8_t decisionTypeFlags;
+    uint8_t decisionDataLength;
+    const uint8_t *decisionData;
+} GapLeExAdvSetDecisionDataInfo;
 
 typedef struct {
     int result;
@@ -126,9 +134,33 @@ typedef struct {
 
 typedef struct {
     int result;
+    uint8_t numTests;
+    const HciLeDecisionTestParam *tests;
+} GapLeSetDecisionInstructionsInfo;
+
+typedef struct {
+    int result;
+    uint8_t initiatorFilterPolicy;
+} GapLeExtendedConnectByDecisionInfo;
+
+typedef struct {
+    int result;
+} GapLeExtendedConnectByDecisionCancelInfo;
+
+typedef struct {
+    int result;
     BtAddr *addr;
     const GapLeConnectionParameter *connParam;
 } GapLeConnParamUpdateInfo;
+
+typedef struct {
+    int result;
+    BtAddr *addr;
+    uint16_t frameSpaceMin;
+    uint16_t frameSpaceMax;
+    uint8_t phys;
+    uint16_t spacingTypes;
+} GapLeFrameSpaceUpdateReqInfo;
 
 typedef struct {
     int result;
@@ -464,9 +496,9 @@ static void GapLeExAdvSetParamTask(void *ctx)
     info->result = GAP_LeExAdvSetParam(info->advHandle, info->properties, info->txPower, info->advExParam);
 }
 
-int GAPIF_LeExAdvSetParam(uint8_t advHandle, uint8_t properties, int8_t txPower, GapLeExAdvParam advExParam)
+int GAPIF_LeExAdvSetParam(uint8_t advHandle, uint16_t properties, int8_t txPower, GapLeExAdvParam advExParam)
 {
-    LOG_INFO("%{public}s: advHandle:%hhu properties:0x%02x", __FUNCTION__, advHandle, properties);
+    LOG_INFO("%{public}s: advHandle:%hhu properties:0x%04x", __FUNCTION__, advHandle, properties);
     GapLeExAdvSetParamInfo *ctx = MEM_MALLOC.alloc(sizeof(GapLeExAdvSetParamInfo));
     if (ctx == NULL) {
         return BT_NO_MEMORY;
@@ -579,6 +611,38 @@ int GAPIF_LeExAdvSetScanRspData(uint8_t advHandle, uint8_t operation, uint8_t fr
     ctx->advData = (uint8_t *)scanResponseData;
 
     int ret = GapRunTaskBlockProcess(GapLeExAdvSetScanRspDataTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapLeExAdvSetDecisionDataTask(void *ctx)
+{
+    GapLeExAdvSetDecisionDataInfo *info = ctx;
+    info->result = GAP_LeExAdvSetDecisionData(
+        info->advHandle, info->decisionTypeFlags, info->decisionDataLength, info->decisionData);
+}
+
+int GAPIF_LeExAdvSetDecisionData(uint8_t advHandle, uint8_t decisionTypeFlags, uint8_t decisionDataLength,
+    const uint8_t *decisionData)
+{
+    LOG_INFO("%{public}s: advHandle:%hhu decisionDataLength:%hhu", __FUNCTION__, advHandle, decisionDataLength);
+    GapLeExAdvSetDecisionDataInfo *ctx = MEM_MALLOC.alloc(sizeof(GapLeExAdvSetDecisionDataInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapLeExAdvSetDecisionDataInfo), 0x00, sizeof(GapLeExAdvSetDecisionDataInfo));
+
+    ctx->advHandle = advHandle;
+    ctx->decisionTypeFlags = decisionTypeFlags;
+    ctx->decisionDataLength = decisionDataLength;
+    ctx->decisionData = decisionData;
+
+    int ret = GapRunTaskBlockProcess(GapLeExAdvSetDecisionDataTask, ctx);
     if (ret == BT_SUCCESS) {
         ret = ctx->result;
     }
@@ -1078,6 +1142,87 @@ int GAPIF_LeExScanSetEnable(uint8_t scanEnable, uint8_t filterDuplicates, uint16
     return ret;
 }
 
+static void GapLeSetDecisionInstructionsTask(void *ctx)
+{
+    GapLeSetDecisionInstructionsInfo *info = ctx;
+    info->result = GAP_LeSetDecisionInstructions(info->numTests, info->tests);
+}
+
+int GAPIF_LeSetDecisionInstructions(uint8_t numTests, const HciLeDecisionTestParam *tests)
+{
+    LOG_INFO("%{public}s: numTests:%hhu", __FUNCTION__, numTests);
+    GapLeSetDecisionInstructionsInfo *ctx = MEM_MALLOC.alloc(sizeof(GapLeSetDecisionInstructionsInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapLeSetDecisionInstructionsInfo), 0x00, sizeof(GapLeSetDecisionInstructionsInfo));
+
+    ctx->numTests = numTests;
+    ctx->tests = tests;
+
+    int ret = GapRunTaskBlockProcess(GapLeSetDecisionInstructionsTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapLeExtendedConnectByDecisionTask(void *ctx)
+{
+    GapLeExtendedConnectByDecisionInfo *info = ctx;
+    info->result = GAP_LeExtendedConnectByDecision(info->initiatorFilterPolicy);
+}
+
+int GAPIF_LeExtendedConnectByDecision(uint8_t initiatorFilterPolicy)
+{
+    LOG_INFO("%{public}s: initiatorFilterPolicy:%hhu", __FUNCTION__, initiatorFilterPolicy);
+    GapLeExtendedConnectByDecisionInfo *ctx = MEM_MALLOC.alloc(sizeof(GapLeExtendedConnectByDecisionInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapLeExtendedConnectByDecisionInfo), 0x00, sizeof(GapLeExtendedConnectByDecisionInfo));
+
+    ctx->initiatorFilterPolicy = initiatorFilterPolicy;
+
+    int ret = GapRunTaskBlockProcess(GapLeExtendedConnectByDecisionTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapLeExtendedConnectByDecisionCancelTask(void *ctx)
+{
+    GapLeExtendedConnectByDecisionCancelInfo *info = ctx;
+    info->result = GAP_LeExtendedConnectByDecisionCancel();
+}
+
+int GAPIF_LeExtendedConnectByDecisionCancel(void)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    GapLeExtendedConnectByDecisionCancelInfo *ctx = MEM_MALLOC.alloc(sizeof(GapLeExtendedConnectByDecisionCancelInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(
+        ctx, sizeof(GapLeExtendedConnectByDecisionCancelInfo), 0x00, sizeof(GapLeExtendedConnectByDecisionCancelInfo));
+
+    int ret = GapRunTaskBlockProcess(GapLeExtendedConnectByDecisionCancelTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
 static void GapRegisterLeConnCallbackTask(void *ctx)
 {
     GapGeneralCallbackInfo *info = ctx;
@@ -1151,6 +1296,43 @@ int GAPIF_LeConnParamUpdate(const BtAddr *addr, const GapLeConnectionParameter *
     ctx->connParam = connParam;
 
     int ret = GapRunTaskBlockProcess(GapLeConnParamUpdateTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapLeFrameSpaceUpdateTask(void *ctx)
+{
+    GapLeFrameSpaceUpdateReqInfo *info = ctx;
+    info->result = GAP_LeFrameSpaceUpdate(info->addr, info->frameSpaceMin, info->frameSpaceMax,
+        info->phys, info->spacingTypes);
+}
+
+int GAPIF_LeFrameSpaceUpdate(const BtAddr *addr, uint16_t frameSpaceMin, uint16_t frameSpaceMax,
+    uint8_t phys, uint16_t spacingTypes)
+{
+    if (addr == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    LOG_INFO("%{public}s: " BT_ADDR_FMT, __FUNCTION__, BT_ADDR_FMT_OUTPUT(addr->addr));
+    GapLeFrameSpaceUpdateReqInfo *ctx = MEM_MALLOC.alloc(sizeof(GapLeFrameSpaceUpdateReqInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapLeFrameSpaceUpdateReqInfo), 0x00, sizeof(GapLeFrameSpaceUpdateReqInfo));
+
+    ctx->addr = (BtAddr *)addr;
+    ctx->frameSpaceMin = frameSpaceMin;
+    ctx->frameSpaceMax = frameSpaceMax;
+    ctx->phys = phys;
+    ctx->spacingTypes = spacingTypes;
+
+    int ret = GapRunTaskBlockProcess(GapLeFrameSpaceUpdateTask, ctx);
     if (ret == BT_SUCCESS) {
         ret = ctx->result;
     }
@@ -1814,6 +1996,230 @@ int GAPIF_LeDataSignatureConfirmationAsync(const BtAddr *addr, GapSignatureData 
     ctx->dataInfo.data = data;
 
     return GapRunTaskUnBlockProcess(GapLeDataSignatureConfirmationTask, ctx, GapFreeLeDataSignatureConfirmation);
+}
+
+// Bluetooth 6.0 (Vol 4, Part E, 7.8.146-150) Monitoring Advertisers: public
+// GAPIF entries marshalling the module-level GAP_Le* commands onto the GAP
+// task. The list is Controller-private, so entries only relay the result.
+
+typedef struct {
+    int result;
+    uint8_t addrType;
+    const BtAddr *addr;
+    int8_t rssiThresholdLow;
+    int8_t rssiThresholdHigh;
+    uint8_t timeout;
+} GapAddDeviceToMonitoredAdvertisersListInfo;
+
+typedef struct {
+    int result;
+    uint8_t addrType;
+    const BtAddr *addr;
+} GapRemoveDeviceFromMonitoredAdvertisersListInfo;
+
+typedef struct {
+    int result;
+    uint8_t enable;
+} GapEnableMonitoringAdvertisersInfo;
+
+static void GapRegisterMonitoredAdvertisersCallbackTask(void *ctx)
+{
+    GapGeneralCallbackInfo *info = ctx;
+    info->result = GAP_LeRegisterMonitoredAdvertisersCallback(
+        (const GapMonitoredAdvertisersCallback *)info->callback, info->context);
+}
+
+int GAPIF_RegisterMonitoredAdvertisersCallback(const GapMonitoredAdvertisersCallback *callback, void *context)
+{
+    if (callback == NULL) {
+        return BT_BAD_PARAM;
+    }
+
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    GapGeneralCallbackInfo *ctx = MEM_MALLOC.alloc(sizeof(GapGeneralCallbackInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapGeneralCallbackInfo), 0x00, sizeof(GapGeneralCallbackInfo));
+
+    ctx->callback = (void *)callback;
+    ctx->context = context;
+
+    int ret = GapRunTaskBlockProcess(GapRegisterMonitoredAdvertisersCallbackTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapDeregisterMonitoredAdvertisersCallbackTask(void *ctx)
+{
+    GapGeneralVoidInfo *info = ctx;
+    info->result = GAP_LeDeregisterMonitoredAdvertisersCallback();
+}
+
+int GAPIF_DeregisterMonitoredAdvertisersCallback(void)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    GapGeneralVoidInfo *ctx = MEM_MALLOC.alloc(sizeof(GapGeneralVoidInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapGeneralVoidInfo), 0x00, sizeof(GapGeneralVoidInfo));
+
+    int ret = GapRunTaskBlockProcess(GapDeregisterMonitoredAdvertisersCallbackTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapAddDeviceToMonitoredAdvertisersListTask(void *ctx)
+{
+    GapAddDeviceToMonitoredAdvertisersListInfo *info = ctx;
+    info->result = GAP_LeAddDeviceToMonitoredAdvertisersList(
+        info->addrType, info->addr, info->rssiThresholdLow, info->rssiThresholdHigh, info->timeout);
+}
+
+int GAPIF_LeAddDeviceToMonitoredAdvertisersList(
+    uint8_t addrType, const BtAddr *addr, int8_t rssiThresholdLow, int8_t rssiThresholdHigh, uint8_t timeout)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    GapAddDeviceToMonitoredAdvertisersListInfo *ctx =
+        MEM_MALLOC.alloc(sizeof(GapAddDeviceToMonitoredAdvertisersListInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapAddDeviceToMonitoredAdvertisersListInfo), 0x00,
+        sizeof(GapAddDeviceToMonitoredAdvertisersListInfo));
+
+    ctx->addrType = addrType;
+    ctx->addr = addr;
+    ctx->rssiThresholdLow = rssiThresholdLow;
+    ctx->rssiThresholdHigh = rssiThresholdHigh;
+    ctx->timeout = timeout;
+
+    int ret = GapRunTaskBlockProcess(GapAddDeviceToMonitoredAdvertisersListTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapRemoveDeviceFromMonitoredAdvertisersListTask(void *ctx)
+{
+    GapRemoveDeviceFromMonitoredAdvertisersListInfo *info = ctx;
+    info->result = GAP_LeRemoveDeviceFromMonitoredAdvertisersList(info->addrType, info->addr);
+}
+
+int GAPIF_LeRemoveDeviceFromMonitoredAdvertisersList(uint8_t addrType, const BtAddr *addr)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    GapRemoveDeviceFromMonitoredAdvertisersListInfo *ctx =
+        MEM_MALLOC.alloc(sizeof(GapRemoveDeviceFromMonitoredAdvertisersListInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapRemoveDeviceFromMonitoredAdvertisersListInfo), 0x00,
+        sizeof(GapRemoveDeviceFromMonitoredAdvertisersListInfo));
+
+    ctx->addrType = addrType;
+    ctx->addr = addr;
+
+    int ret = GapRunTaskBlockProcess(GapRemoveDeviceFromMonitoredAdvertisersListTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapClearMonitoredAdvertisersListTask(void *ctx)
+{
+    GapGeneralVoidInfo *info = ctx;
+    info->result = GAP_LeClearMonitoredAdvertisersList();
+}
+
+int GAPIF_LeClearMonitoredAdvertisersList(void)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    GapGeneralVoidInfo *ctx = MEM_MALLOC.alloc(sizeof(GapGeneralVoidInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapGeneralVoidInfo), 0x00, sizeof(GapGeneralVoidInfo));
+
+    int ret = GapRunTaskBlockProcess(GapClearMonitoredAdvertisersListTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapReadMonitoredAdvertisersListSizeTask(void *ctx)
+{
+    GapGeneralVoidInfo *info = ctx;
+    info->result = GAP_LeReadMonitoredAdvertisersListSize();
+}
+
+int GAPIF_LeReadMonitoredAdvertisersListSize(void)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    GapGeneralVoidInfo *ctx = MEM_MALLOC.alloc(sizeof(GapGeneralVoidInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapGeneralVoidInfo), 0x00, sizeof(GapGeneralVoidInfo));
+
+    int ret = GapRunTaskBlockProcess(GapReadMonitoredAdvertisersListSizeTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
+}
+
+static void GapEnableMonitoringAdvertisersTask(void *ctx)
+{
+    GapEnableMonitoringAdvertisersInfo *info = ctx;
+    info->result = GAP_LeEnableMonitoringAdvertisers(info->enable);
+}
+
+int GAPIF_LeEnableMonitoringAdvertisers(uint8_t enable)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    GapEnableMonitoringAdvertisersInfo *ctx = MEM_MALLOC.alloc(sizeof(GapEnableMonitoringAdvertisersInfo));
+    if (ctx == NULL) {
+        return BT_NO_MEMORY;
+    }
+
+    (void)memset_s(ctx, sizeof(GapEnableMonitoringAdvertisersInfo), 0x00, sizeof(GapEnableMonitoringAdvertisersInfo));
+
+    ctx->enable = enable;
+
+    int ret = GapRunTaskBlockProcess(GapEnableMonitoringAdvertisersTask, ctx);
+    if (ret == BT_SUCCESS) {
+        ret = ctx->result;
+    }
+
+    MEM_MALLOC.free(ctx);
+    return ret;
 }
 
 #endif

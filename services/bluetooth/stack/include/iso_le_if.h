@@ -61,7 +61,7 @@ typedef struct {
     uint32_t sduIntervalSToM;         ///< SDU_Interval_S_To_M (24-bit, unit: us, max 0xFFFFFF)
     uint8_t slaveClockAccuracy;       ///< Slaves_Clock_Accuracy
     uint8_t packing;                  ///< Packing: 0x00 sequential, 0x01 interleaved
-    uint8_t framing;                  ///< Framing: 0x00 unframed, 0x01 framed
+    uint8_t framing;                  ///< Framing: 0x00 unframed, 0x01 framed, 0x02 unsegmented (BT6.0, bit 45)
     uint16_t maxTransportLatencyMToS; ///< Max_Transport_Latency_M_To_S (0xFFFF: no constraint)
     uint16_t maxTransportLatencySToM; ///< Max_Transport_Latency_S_To_M (0xFFFF: no constraint)
 } IsoLeCigParam;
@@ -87,8 +87,28 @@ typedef struct {
     uint16_t aclHandle; ///< ACL Connection Handle of the peer device
 } IsoLeCreateCisParam;
 
+// Extended CIS Established parameters, carried only by the LE CIS Established v2 event
+// (subevent 0x2A) (Vol 4 Part E 7.7.65,25, pp2392-2393). Reachable ONLY via
+// IsoLeCisEstablishedInfo.v2Ext, which is NULL on every other delivery - the 0x19 (v1)
+// event, a non-success 0x2A, or a locally synthesized callback. The six values never
+// live inline in the info struct, so a v1 delivery has no plausible-zero copy to
+// misread: a consumer that reads without a NULL check fails loudly instead of silently
+// misreporting (e.g. Framing misread as unframed). A field may legitimately be 0
+// (Sub_Interval when NSE == 1, Max_SDU of a silent direction, Framing 0x00), so
+// "present" means v2Ext != NULL, never zero/non-zero. v2Ext is valid only for the
+// duration of the callback: consumers that need the values later must copy the six
+// fields out (the pointer itself must not be retained past the callback).
+typedef struct {
+    uint32_t subInterval;       // 0x000000 when NSE == 1, else 0x000190..ISO_Interval * 1250 - 1 (us)
+    uint16_t maxSduMToS;        // Max_SDU_C_To_P, 0x0000..0x0FFF (0: no data this direction)
+    uint16_t maxSduSToM;        // Max_SDU_P_To_C, 0x0000..0x0FFF
+    uint32_t sduIntervalMToS;   // SDU_Interval_C_To_P, 0x0000FF..0x0FFFFF (24-bit, us)
+    uint32_t sduIntervalSToM;   // SDU_Interval_P_To_C, 0x0000FF..0x0FFFFF
+    uint8_t framing;            // 0x00 unframed / 0x01 framed (0x02 RFU in this event, D-5)
+} IsoLeCisEstablishedV2Ext;
+
 /**
- * @brief       Negotiated CIS parameters, delivered by the LE CIS Established event (subevent 0x19)
+ * @brief       Negotiated CIS parameters, delivered by the LE CIS Established event (subevent 0x19 / 0x2A)
  *
  * cisHandle is the CIS Connection Handle echoed from the Accept/Reject response.
  * cigSyncDelay / cisSyncDelay / transportLatency* are 24-bit on-the-air values,
@@ -110,6 +130,11 @@ typedef struct {
     uint16_t maxPduMToS;
     uint16_t maxPduSToM;
     uint16_t isoInterval;
+    // [v2] (subevent 0x2A) extended params: non-NULL only when this info was filled from
+    // a successful LE CIS Established v2 event; the six values live in the pointed
+    // sub-struct above, never inline. NULL on a 0x19 (v1) delivery, a non-success 0x2A,
+    // or a synthesized callback - consumers must check before reading (see contract).
+    const IsoLeCisEstablishedV2Ext *v2Ext;
 } IsoLeCisEstablishedInfo;
 
 /**
@@ -153,7 +178,7 @@ typedef struct {
     uint8_t rtn;                  ///< RTN: number of retransmission attempts
     uint8_t phy;                  ///< PHY used for transmission
     uint8_t packing;              ///< Packing: 0x00 sequential, 0x01 interleaved
-    uint8_t framing;              ///< Framing: 0x00 unframed, 0x01 framed
+    uint8_t framing;              ///< Framing: 0x00 unframed, 0x01 framed, 0x02 unsegmented (BT6.0, bit 45)
     uint8_t encryption;           ///< Encryption: 0x00 unencrypted, 0x01 encrypted
 } IsoLeBigParam;
 
@@ -173,7 +198,7 @@ typedef struct {
     uint16_t maxPdu;              ///< Max_PDU: maximum size of every BIS Data PDU
     uint8_t phy;                  ///< PHY used for transmission
     uint8_t packing;              ///< Packing: 0x00 sequential, 0x01 interleaved
-    uint8_t framing;              ///< Framing: 0x00 unframed, 0x01 framed
+    uint8_t framing;              ///< Framing: 0x00 unframed, 0x01 framed, 0x02 unsegmented (BT6.0, bit 45)
     uint8_t bn;                   ///< BN: number of new payloads per BIS event (0x01-0x07)
     uint8_t irc;                  ///< IRC: 1 to (NSE / BN)
     uint8_t pto;                  ///< PTO: pre-transmission offset (0x00-0x0F)

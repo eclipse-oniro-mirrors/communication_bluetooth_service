@@ -26,6 +26,7 @@
 
 #include "hci/hci.h"
 #include "hci/hci_error.h"
+#include "log.h"
 #include "platform/include/allocator.h"
 #include "platform/include/list.h"
 #include "platform/include/mutex.h"
@@ -92,7 +93,10 @@ void BtmOnLeReadRemoteFeaturesComplete(const HciLeReadRemoteFeaturesCompleteEven
 
         addr = connection->addr;
         leFeatures = connection->remoteFeatures.le.leFeatures;
-        BtmGetRemoteDeviceSupportRequests(eventParam->connectionHandle, REMOTE_LE_FEATURE_COMPLETE, requests);
+        // ListCreate failed: no sink, so leave the requests queued for a later event.
+        if (requests != NULL) {
+            BtmGetRemoteDeviceSupportRequests(eventParam->connectionHandle, REMOTE_LE_FEATURE_COMPLETE, requests);
+        }
     }
     MutexUnlock(g_aclListLock);
 
@@ -103,11 +107,77 @@ void BtmOnLeReadRemoteFeaturesComplete(const HciLeReadRemoteFeaturesCompleteEven
         HCI_ReadRemoteVersionInformation(&cmdParam);
     }
 
-    if (ListGetSize(requests)) {
+    if (requests != NULL && ListGetSize(requests)) {
         BtmOnLeRemoteFeatureComplete(&addr, requests, &leFeatures);
     }
 
     ListDelete(requests);
+}
+
+void BtmOnLeReadAllRemoteFeaturesComplete(const HciLeReadAllRemoteFeaturesCompleteEventParam *eventParam)
+{
+    BtAddr addr = {0};
+    HciLeFeatures leFeatures = {0};
+    bool found = false;
+    List *requests = ListCreate(MEM_MALLOC.free);
+
+    MutexLock(g_aclListLock);
+    BtmAclConnection *connection = BtmAclFindConnectionByHandle(eventParam->connectionHandle);
+    found = (connection != NULL);
+    if (connection != NULL) {
+        // Keep the legacy 0x04 status view coherent for shared consumers.
+        connection->remoteFeatures.le.featureStatus = eventParam->status;
+        if (eventParam->status == HCI_SUCCESS) {
+            // Page 0 (octets 0-7) is the byte-identical prefix of the 8-byte leFeatures.
+            if (memcpy_s(
+                connection->remoteFeatures.le.leFeatures.raw,
+                sizeof(connection->remoteFeatures.le.leFeatures.raw),
+                eventParam->leFeatures.raw,
+                sizeof(connection->remoteFeatures.le.leFeatures.raw)) != EOK) {
+                LOG_WARN("%{public}s: page-0 feature mirror copy failed", __FUNCTION__);
+            }
+        }
+
+        addr = connection->addr;
+        leFeatures = connection->remoteFeatures.le.leFeatures;
+        // ListCreate failed: no sink, so leave the requests queued for a later event.
+        if (requests != NULL) {
+            BtmGetRemoteDeviceSupportRequests(eventParam->connectionHandle, REMOTE_LE_FEATURE_COMPLETE, requests);
+        }
+    }
+    MutexUnlock(g_aclListLock);
+
+    // Send only while the link still has a row: with a stale Connection_Handle
+    // the controller would just reject 0x001D, and nothing would consume it.
+    if (found && eventParam->status == HCI_SUCCESS) {
+        HciReadRemoteVersionInformationParam cmdParam = {
+            .connectionHandle = eventParam->connectionHandle,
+        };
+        HCI_ReadRemoteVersionInformation(&cmdParam);
+    }
+
+    if (requests != NULL && ListGetSize(requests)) {
+        BtmOnLeRemoteFeatureComplete(&addr, requests, &leFeatures);
+    }
+
+    ListDelete(requests);
+}
+
+void BtmRemoveRemoteDeviceSupportRequestsByHandle(uint16_t connectionHandle)
+{
+    // Non-locking, like BtmAclFindConnectionByHandle: the caller holds
+    // g_aclListLock while dropping queued support requests.
+    ListNode *node = ListGetFirstNode(g_remoteSupportRequestList);
+    while (node != NULL) {
+        BtmRemoteDeviceSupportRequest *request = ListGetNodeData(node);
+        node = ListGetNextNode(node);
+
+        // Drop requests whose connection is gone: their completion events can no
+        // longer fire, and waking callbacks here would mis-drive GAP SSP etc.
+        if (request->connectionHandle == connectionHandle) {
+            ListRemoveNode(g_remoteSupportRequestList, request);
+        }
+    }
 }
 
 void BtmOnReadRemoteVersionInformationComplete(
@@ -178,7 +248,10 @@ void BtmOnReadRemoteSupportedFeaturesComplete(const HciReadRemoteSupportedFeatur
 
         addr = connection->addr;
         lmpFeatures = connection->remoteFeatures.bredr.lmpFeatures;
-        BtmGetRemoteDeviceSupportRequests(eventParam->connectionHandle, REMOTE_FEATURE_COMPLETE, requests);
+        // ListCreate failed: no sink, so leave the requests queued for a later event.
+        if (requests != NULL) {
+            BtmGetRemoteDeviceSupportRequests(eventParam->connectionHandle, REMOTE_FEATURE_COMPLETE, requests);
+        }
     }
     MutexUnlock(g_aclListLock);
 
@@ -188,7 +261,7 @@ void BtmOnReadRemoteSupportedFeaturesComplete(const HciReadRemoteSupportedFeatur
     };
     HCI_ReadRemoteExtendedFeatures(&cmdParam);
 
-    if (ListGetSize(requests)) {
+    if (requests != NULL && ListGetSize(requests)) {
         BtmOnRemoteFeatureComplete(&addr, requests, &lmpFeatures);
     }
 
@@ -254,7 +327,11 @@ void BtmOnReadRemoteExtendedFeaturesComplete(const HciReadRemoteExtendedFeatures
         }
 
         if (status != REQUEST_NOT_COMPLETED) {
-            BtmGetRemoteDeviceSupportRequests(eventParam->connectionHandle, REMOTE_EXTENDED_FEATURE_COMPLETE, requests);
+            // ListCreate failed: no sink, so leave the requests queued for a later event.
+            if (requests != NULL) {
+                BtmGetRemoteDeviceSupportRequests(
+                    eventParam->connectionHandle, REMOTE_EXTENDED_FEATURE_COMPLETE, requests);
+            }
 
             addr = connection->addr;
             extendedFeatures = connection->remoteFeatures.bredr.extendedLmpFeatures;
@@ -270,7 +347,7 @@ void BtmOnReadRemoteExtendedFeaturesComplete(const HciReadRemoteExtendedFeatures
         HCI_ReadRemoteExtendedFeatures(&cmdParam);
     }
 
-    if (ListGetSize(requests)) {
+    if (requests != NULL && ListGetSize(requests)) {
         BtmOnRemoteExtendedFeatureComplete(&addr, requests, &extendedFeatures);
     }
 

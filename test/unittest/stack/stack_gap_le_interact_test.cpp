@@ -23,12 +23,12 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <functional>
 #include <mutex>
 #include <thread>
 
 #include "btm.h"
 #include "btstack.h"
+#include "cs_le_if.h"
 #include "gap_if.h"
 #include "gap_le_if.h"
 #include "hci/hci.h"
@@ -47,6 +47,10 @@ namespace Bluetooth {
 // "server" mode serves the ISO / power-control / EATT two-device cases together.
 int InitEattPeerSetup();
 int InitAttPeerSetup();
+// Starts the SMP auto-answer responder thread, which is what answers the pairing an
+// encrypted ACL needs: the CS reflector peer is the peripheral of one (5.1.23 p3195 -
+// CS security starts only after the encryption start procedure has completed).
+void InitPairResponder();
 // Joins the pairing responder thread started by InitAttPeerSetup (server mode only:
 // the gtest DUT path joins it in StackAtt52Test::TearDownTestCase).
 void ShutdownPairResponder();
@@ -145,29 +149,19 @@ public:
     ExScanCallbackGuard() = default;
 };
 
+// RAII guard that deregisters the periodic advertising sync callback on destruction.
+// Matches PeriodicAdvSyncCallbackGuard in stack_gap_le_test.cpp.
 class PeriodicAdvSyncCallbackGuard {
 public:
-    // |cleanup| releases the callback context. It runs only after a
-    // successful deregister: deregister is synchronous (pending events in the
-    // GAP task run before it completes), so once it succeeds no callback can
-    // touch the context again. On a failed deregister the context is leaked
-    // instead of freed - a late event would otherwise write freed memory.
-    explicit PeriodicAdvSyncCallbackGuard(std::function<void()> cleanup = { }) : cleanup_(std::move(cleanup)) { }
+    PeriodicAdvSyncCallbackGuard() = default;
     ~PeriodicAdvSyncCallbackGuard()
     {
         if (GAPIF_DeregisterPeriodicAdvSyncCallback() != BT_SUCCESS) {
-            printf("PeriodicAdvSyncCallbackGuard: deregister failed, leaking callback context\n");
-            return;
-        }
-        if (cleanup_) {
-            cleanup_();
+            printf("PeriodicAdvSyncCallbackGuard: deregister failed; callback may remain registered\n");
         }
     }
     PeriodicAdvSyncCallbackGuard(const PeriodicAdvSyncCallbackGuard &) = delete;
     PeriodicAdvSyncCallbackGuard &operator=(const PeriodicAdvSyncCallbackGuard &) = delete;
-
-private:
-    std::function<void()> cleanup_;
 };
 
 constexpr uint32_t WAIT_CALLBACK_TIMEOUT_MS = 10000;
@@ -480,14 +474,27 @@ static void ClearAwaitingConn()
 // should be started.
 static bool CheckReusableConnection(bool &alreadyConnected)
 {
-    std::lock_guard<std::mutex> lock(g_stateMutex);
-    if (g_state.connected.load()) {
+    bool connected = false;
+    uint16_t handle = 0;
+    {
+        std::lock_guard<std::mutex> lock(g_stateMutex);
+        connected = g_state.connected.load();
+        if (connected) {
+            handle = g_state.connCtx.handle;
+        }
+    }
+    if (connected) {
         BtAddr localAddr = { };
         BtAddr peerAddr = { };
-        if (BTM_GetLeConnectionAddress(g_state.connCtx.handle, &localAddr, &peerAddr) == BT_SUCCESS) {
+        // The ACL read stays outside g_stateMutex: it enters another module, which must not
+        // be called while this test's state lock is held.
+        if (BTM_GetLeConnectionAddress(handle, &localAddr, &peerAddr) == BT_SUCCESS) {
             alreadyConnected = true;
             return false;
         }
+    }
+    std::lock_guard<std::mutex> lock(g_stateMutex);
+    if (connected) {
         // The cached connection flag is stale; fall through and reconnect.
         g_state.connected.store(false);
     }
@@ -813,6 +820,13 @@ static int RegisterPeerAdvCallbacks(PeerAdvContext *ctx, PeerModeState &state)
         auto *c = static_cast<PeerAdvContext *>(context);
         OnStatusOnlyResult(status, &c->op);
     };
+    // 0x0080 LE Set Decision Data completes through the advertising callback
+    // (gap_le_adv.c GapLeSetDecisionDataComplete), observed via |op| like the
+    // other advertising data commands.
+    callback.exAdvSetDecisionDataResult = [](uint8_t status, void *context) {
+        auto *c = static_cast<PeerAdvContext *>(context);
+        OnStatusOnlyResult(status, &c->op);
+    };
     callback.periodicAdvSetParamResult = [](uint8_t status, void *context) {
         auto *c = static_cast<PeerAdvContext *>(context);
         OnStatusOnlyResult(status, &c->op);
@@ -915,19 +929,30 @@ static int SetupPeerCompanions()
     return 0;
 }
 
+// Print this device's address as device A must type it. The address is printed in full on purpose:
+// the operator copies it onto device A's command line, and a masked address cannot be typed into
+// --peer-addr=. BTM_GetLocalAddr always reports BT_PUBLIC_DEVICE_ADDRESS, so the prefix is left to
+// the operator: it depends on what this device advertises with, not on what the getter returns.
+static void PrintLocalAddrHint(const char *label)
+{
+    BtAddr localAddr = { };
+    if (GAPIF_GetLocalAddr(&localAddr) != BT_SUCCESS) {
+        printf("%s: local address unavailable; read it from Bluetooth settings for --peer-addr=\n", label);
+        return;
+    }
+    printf("%s: run on device A: ./btfw_stack_unit_test --peer-addr=", label);
+    // Address bytes are stored LSB-first; print them MSB-first.
+    for (size_t i = 0; i < BT_ADDRESS_SIZE; ++i) {
+        printf("%02X%s", localAddr.addr[BT_ADDRESS_SIZE - 1 - i], i + 1 < BT_ADDRESS_SIZE ? ":" : "");
+    }
+    printf(" ([public:|random:] prefix)\n");
+}
+
 // Print the peer's local address and service re-advertise requests until Ctrl+C.
 static int ServePeerRequests(PeerAdvContext *ctx)
 {
-    BtAddr localAddr = { };
-    if (GAPIF_GetLocalAddr(&localAddr) == BT_SUCCESS) {
-        printf("peer: ready\n");
-        printf("peer: run on device A: ./btfw_stack_unit_test --peer-addr=");
-        // Address bytes are stored LSB-first; print them MSB-first.
-        for (size_t i = 0; i < BT_ADDRESS_SIZE; ++i) {
-            printf("%02X%s", localAddr.addr[BT_ADDRESS_SIZE - 1 - i], i + 1 < BT_ADDRESS_SIZE ? ":" : "");
-        }
-        printf("\n");
-    }
+    printf("peer: ready\n");
+    PrintLocalAddrHint("peer");
 
     auto previousSigint = std::signal(SIGINT, PeerModeSignalHandler);
     if (previousSigint == SIG_ERR) {
@@ -1001,6 +1026,355 @@ int RunPeerMode()
     // Server mode exits the process after main returns: join the pairing responder
     // thread started by InitAttPeerSetup, otherwise the joinable std::thread is
     // destroyed at global teardown and calls std::terminate.
+    ShutdownPairResponder();
+
+    return state.cleanupFailed_ ? 1 : 0;
+}
+
+// ---- BT 6.0 DBAF dual-board peer role (dbaf-server) ------------------------
+// Serves the two DBAF cases in stack_gap_le_6_0_interact_test.cpp: handle 0 keeps
+// the plain connectable set used by the capability probe and as the scan baseline
+// (SID 0, AdvData tail marker "BTPEER"); handle 2 carries a connectable decision set
+// (ADV_DECISION_IND, SID 2) stamped with the 2-octet decision data "bt". Both sets
+// advertise the same public address, so the scan-report classifier on device A tells
+// them apart by that marker: the extended report carries no decision-PDU indicator
+// bit and the plain set's data (unlike any decision payload) contains "BTPEER".
+// A connectable set stops on connect, so after each disconnection-complete both
+// sets are enabled again individually; enabling a still-running sibling is
+// tolerated as 0x0C Command Disallowed.
+constexpr uint8_t HCI_COMMAND_DISALLOWED = 0x0C;
+constexpr uint8_t EX_ADV_HANDLE_DBAF_DECISION = 0x02;
+constexpr uint8_t EX_ADV_SID_DBAF_DECISION = 0x02;
+// 0x0181 = connectable | decision-PDU | include-AdvA in the decision PDU (7.8.53).
+constexpr uint16_t PEER_DECISION_PROPERTIES =
+    GAP_ADVERTISING_PROPERTY_CONNECTABLE | LE_EXT_ADV_EVENT_PROP_DECISION_PDU |
+    LE_EXT_ADV_EVENT_PROP_DECISION_ADVA;
+constexpr uint8_t PEER_DBAF_DECISION_TYPE_FLAGS = 0x00;  // no resolvable-tag subfield
+constexpr uint8_t PEER_DBAF_DECISION_DATA[] = { 'b', 't' };  // arbitrary data, 2 octets
+constexpr uint8_t PEER_DBAF_CONN_ADV_DATA[] = { 0x02, 0x01, 0x06, 0x07, 0x09, 'B', 'T', 'P', 'E', 'E', 'R' };
+
+// Disables both dbaf advertising sets on scope exit. PeerModeState owns the BTM
+// teardown and only touches the {0,1} sets when advEnabled_ is true; this role
+// never sets advEnabled_, so the decision handle is disabled here instead.
+class DbafPeerAdvGuard {
+public:
+    DbafPeerAdvGuard() = default;
+    ~DbafPeerAdvGuard()
+    {
+        GapExAdvSet sets[] = {
+            { EX_ADV_HANDLE_CONN, 0, 0 },
+            { EX_ADV_HANDLE_DBAF_DECISION, 0, 0 }
+        };
+        constexpr uint8_t advSetCount = 2;
+        if (GAPIF_LeExAdvSetEnable(0x00, advSetCount, sets) != BT_SUCCESS) {
+            printf("peer: dbaf adv disable failed\n");
+        }
+    }
+    DbafPeerAdvGuard(const DbafPeerAdvGuard &) = delete;
+    DbafPeerAdvGuard &operator=(const DbafPeerAdvGuard &) = delete;
+};
+
+// Enable one advertising set, tolerating 0x0C when it is already enabled (only
+// the set that carried the connection stopped; its sibling keeps advertising).
+static void DbafReEnableAdvSet(PeerAdvContext &ctx, uint8_t handle)
+{
+    GapExAdvSet advSet = { handle, 0, 0 };
+    ctx.op.Reset();
+    if (GAPIF_LeExAdvSetEnable(0x01, 1, &advSet) != BT_SUCCESS) {
+        printf("peer: dbaf re-enable adv set %u send failed, will retry\n", handle);
+        g_peerReAdvRequested = true;
+        return;
+    }
+    if (!ctx.op.Wait()) {
+        printf("peer: dbaf re-enable adv set %u: no command-complete\n", handle);
+        g_peerReAdvRequested = true;
+        return;
+    }
+    if (ctx.op.status != HCI_STATUS_SUCCESS && ctx.op.status != HCI_COMMAND_DISALLOWED) {
+        printf("peer: dbaf re-enable adv set %u failed status=0x%02X, will retry\n", handle, ctx.op.status);
+        g_peerReAdvRequested = true;
+    }
+}
+
+// Configure and enable both dbaf advertising sets. Returns 0 on success.
+static int EnableDbafAdvertising(PeerAdvContext *ctx)
+{
+    if (PeerSetExAdvParam(*ctx, EX_ADV_HANDLE_CONN, GAP_ADVERTISING_PROPERTY_CONNECTABLE, PEER_ADV_SID) != BT_SUCCESS) {
+        printf("peer: dbaf connectable adv set param failed\n");
+        return 1;
+    }
+    // The "BTPEER" marker in the plain set's AdvData lets the scanner on device A
+    // separate the two peer sets; the decision set below carries no ordinary data.
+    ctx->op.Reset();
+    if (PeerWaitOp(*ctx,
+        GAPIF_LeExAdvSetData(EX_ADV_HANDLE_CONN, GAP_ADVERTISING_DATA_OPERATION_COMPLETE,
+            GAP_CONTROLLER_SHOULD_NOT_FRAGMENT, sizeof(PEER_DBAF_CONN_ADV_DATA),
+            PEER_DBAF_CONN_ADV_DATA),
+        "peer: dbaf adv set data") != BT_SUCCESS) {
+        return 1;
+    }
+    if (PeerSetExAdvParam(*ctx,
+        EX_ADV_HANDLE_DBAF_DECISION, PEER_DECISION_PROPERTIES,
+        EX_ADV_SID_DBAF_DECISION) != BT_SUCCESS) {
+        printf("peer: dbaf decision adv set param failed (controller needs LE feature bit 42)\n");
+        return 1;
+    }
+    ctx->op.Reset();
+    if (PeerWaitOp(*ctx,
+        GAPIF_LeExAdvSetDecisionData(EX_ADV_HANDLE_DBAF_DECISION, PEER_DBAF_DECISION_TYPE_FLAGS,
+            sizeof(PEER_DBAF_DECISION_DATA), PEER_DBAF_DECISION_DATA),
+        "peer: dbaf set decision data") != BT_SUCCESS) {
+        return 1;
+    }
+    GapExAdvSet connSet = { EX_ADV_HANDLE_CONN, 0, 0 };
+    ctx->op.Reset();
+    if (PeerWaitOp(*ctx,
+        GAPIF_LeExAdvSetEnable(0x01, 1, &connSet),
+        "peer: dbaf connectable adv enable") != BT_SUCCESS) {
+        return 1;
+    }
+    GapExAdvSet decisionSet = { EX_ADV_HANDLE_DBAF_DECISION, 0, 0 };
+    ctx->op.Reset();
+    if (PeerWaitOp(*ctx,
+        GAPIF_LeExAdvSetEnable(0x01, 1, &decisionSet),
+        "peer: dbaf decision adv enable") != BT_SUCCESS) {
+        return 1;
+    }
+    return 0;
+}
+
+// Print the dbaf re-enable requests after each connect (a connectable set stops on connect)
+// until Ctrl+C.
+static int ServeDbafPeers(PeerAdvContext *ctx)
+{
+    printf("peer: dbaf decision set ready\n");
+    PrintLocalAddrHint("peer");
+
+    auto previousSigint = std::signal(SIGINT, PeerModeSignalHandler);
+    if (previousSigint == SIG_ERR) {
+        printf("peer: failed to install SIGINT handler\n");
+        return 1;
+    }
+    printf("peer: press Ctrl+C to exit\n");
+    while (!g_peerModeExitRequested) {
+        std::this_thread::sleep_for(POLL_INTERVAL);
+        if (g_peerReAdvRequested.exchange(false)) {
+            DbafReEnableAdvSet(*ctx, EX_ADV_HANDLE_CONN);
+            DbafReEnableAdvSet(*ctx, EX_ADV_HANDLE_DBAF_DECISION);
+        }
+    }
+    std::signal(SIGINT, previousSigint);
+    return 0;
+}
+
+int RunDbafPeerMode()
+{
+    // Construct the callback context before PeerModeState: on scope exit the
+    // destructors run in reverse order, so PeerModeState's deregister (which
+    // drains pending GAP events) must run while |peerAdvCtx| is still alive.
+    auto peerAdvCtx = std::make_unique<PeerAdvContext>();
+    PeerAdvContext *ctx = peerAdvCtx.get();
+    PeerModeState state;
+    if (InitPeerStack(state) != 0) {
+        return 1;
+    }
+    if (BTM_RegisterAclCallbacks(&g_peerAclCallbacks, NULL) != BT_SUCCESS) {
+        printf("peer: register acl callbacks failed\n");
+        return 1;
+    }
+    if (RegisterPeerAdvCallbacks(ctx, state) != 0) {
+        return 1;
+    }
+    // DbafPeerAdvGuard disables the {0,2} sets before PeerModeState tears BTM down.
+    DbafPeerAdvGuard advGuard;
+    if (EnableDbafAdvertising(ctx) != 0) {
+        return 1;
+    }
+    if (ServeDbafPeers(ctx) != 0) {
+        return 1;
+    }
+    int deregRet = GAPIF_DeregisterExAdvCallback();
+    state.callbackRegistered_ = false;
+    if (deregRet != BT_SUCCESS) {
+        // A failed deregister can still deliver late events that write through
+        // |ctx|, so leak the context instead of freeing it.
+        printf("peer: deregister ex adv callback failed ret=%d, leaking context\n", deregRet);
+        (void)peerAdvCtx.release();
+    } else {
+        peerAdvCtx.reset();
+    }
+    return state.cleanupFailed_ ? 1 : 0;
+}
+
+// ---- BT 6.0 Channel Sounding dual-board peer role (cs-reflector) -----------------
+// A CS reflector's Host owes its Controller one command on the link and nothing else:
+// 0x008D with Role_Enable bit 1 set. 7.8.134 (p2816) states that the default settings
+// leave "all roles disabled in a Controller", and only bit 1 enables the reflector role
+// (p2817); without it the peer's Controller has no reflector role to take when the
+// initiator asks for a configuration with Create_Context = 0x01, because 5.1.25 (p3198)
+// puts the link layer that answers the LL_CS_CONFIG_REQ "in the other role for the
+// duration of that configuration" - that is this Controller, not this Host. Capabilities
+// (5.1.24 p3196), the configuration exchange, the CS_SYNC exchange and the subevent
+// reports are link layer work the initiator drives. The reference implementation does the
+// same: it connects, sets the default CS settings with reflector role enabled, and waits.
+//
+// The ACL is encrypted before any CS procedure (5.1.23 p3195: the CS Security Start
+// procedure requires the Encryption Start procedure to have completed) and this side is
+// the Peripheral, so the pair responder answers the initiator's pairing - the same
+// InitPairResponder() the "server" role reaches through InitAttPeerSetup().
+
+// 7.8.134 p2817 parameter values for that one 0x008D: bit 1 of Role_Enable is the
+// reflector role, 0xFF in CS_SYNC_Antenna_Selection is "Host does not have a
+// recommendation", and Max_TX_Power is dBm over -127..20.
+constexpr uint8_t CS_PEER_ROLE_ENABLE_REFLECTOR = 0x02;
+constexpr uint8_t CS_PEER_SYNC_ANTENNA_SELECTION_NONE = 0xFF;
+constexpr uint8_t CS_PEER_MAX_TX_POWER_DBM = 0x14;
+
+// The link the initiator brought up, and the link this side has already sent 0x008D for.
+// Role_Enable is per connection (7.8.134 p2816 takes a Connection_Handle), so both are
+// cleared together when the ACL goes away. 0xFFFF is the "no connection" sentinel:
+// 0x0000 is a valid LE ACL handle (0x0000-0x0EFF, see cs_le_if.h), so a controller
+// that assigns 0x0000 to its first connection must not be mistaken for "none".
+std::atomic<uint16_t> g_csPeerConnHandle = 0xFFFF;
+// "no default-handle served" sentinel, never a valid LE ACL handle.
+std::atomic<uint16_t> g_csPeerDefaultsSent = 0xFFFF;
+
+void OnCsPeerConnectionComplete(uint8_t status, uint16_t connectionHandle, const BtAddr *addr, uint8_t role,
+    void *context)
+{
+    (void)addr;
+    (void)role;
+    (void)context;
+    if (status == HCI_STATUS_SUCCESS) {
+        g_csPeerConnHandle = connectionHandle;
+    }
+}
+
+void OnCsPeerDisconnectionComplete(uint8_t status, uint16_t connectionHandle, uint8_t reason, void *context)
+{
+    if (g_csPeerConnHandle.load() == connectionHandle) {
+        g_csPeerConnHandle = 0xFFFF;
+        g_csPeerDefaultsSent = 0xFFFF;
+    }
+    OnPeerDisconnectionComplete(status, connectionHandle, reason, context);
+}
+
+BtmAclCallbacks g_csPeerAclCallbacks = {
+    .leConnectionComplete = OnCsPeerConnectionComplete,
+    .leDisconnectionComplete = OnCsPeerDisconnectionComplete,
+};
+
+// Send that 0x008D. Called from the serve loop, never from the ACL callback:
+// CSIF_LeCsSetDefaultSettings runs through CsRunTaskBlockProcess, which takes its inline
+// path only on the CS processing thread and otherwise posts to PROCESSING_QUEUE_ID_CS
+// and waits for it (cs_task_common.c:83), so sending from a stack callback would leave
+// the thread that has to run the task waiting on itself. The CS module is up on this
+// side too: InitPeerStack's BTM_Enable(LE_CONTROLLER) starts MODULE_NAME_CS, which is
+// what creates that queue.
+bool CsPeerEnableReflectorRole(uint16_t connectionHandle)
+{
+    CsLeSetDefaultSettingsParam param = { };
+    param.connectionHandle = connectionHandle;
+    param.roleEnable = CS_PEER_ROLE_ENABLE_REFLECTOR;
+    param.csSyncAntennaSelection = CS_PEER_SYNC_ANTENNA_SELECTION_NONE;
+    param.maxTxPower = CS_PEER_MAX_TX_POWER_DBM;
+    int ret = CSIF_LeCsSetDefaultSettings(&param);
+    if (ret != BT_SUCCESS) {
+        printf("cs-reflector: 0x008D dispatch failed ret = %d\n", ret);
+        return false;
+    }
+    return true;
+}
+
+// The connectable advertising set is already enabled by the caller; this loop only
+// watches for the ACL, enables the reflector role once per connection, and re-enables
+// advertising set 0 when a disconnect asks for it, until Ctrl+C.
+int ServeCsReflector(PeerAdvContext *ctx)
+{
+    printf("cs-reflector: ready\n");
+    PrintLocalAddrHint("cs-reflector");
+
+    auto previousSigint = std::signal(SIGINT, PeerModeSignalHandler);
+    if (previousSigint == SIG_ERR) {
+        printf("cs-reflector: failed to install SIGINT handler\n");
+        return 1;
+    }
+    printf("cs-reflector: press Ctrl+C to exit\n");
+
+    uint16_t reportedHandle = 0;
+    while (!g_peerModeExitRequested) {
+        std::this_thread::sleep_for(POLL_INTERVAL);
+        if (g_peerReAdvRequested.exchange(false)) {
+            GapExAdvSet advSet = { EX_ADV_HANDLE_CONN, 0, 0 };
+            ctx->op.Reset();
+            if (PeerWaitOp(*ctx, GAPIF_LeExAdvSetEnable(0x01, 1, &advSet),
+                "cs-reflector: re-enable adv set 0") != BT_SUCCESS) {
+                printf("cs-reflector: re-enable adv set 0 failed, will retry\n");
+                g_peerReAdvRequested = true;
+            }
+            continue;
+        }
+        uint16_t connHandle = g_csPeerConnHandle.load();
+        if (connHandle == 0xFFFF || g_csPeerDefaultsSent.load() == connHandle) {
+            continue;
+        }
+        if (!CsPeerEnableReflectorRole(connHandle)) {
+            // Not marked as served, so the next poll retries while the ACL lasts; a
+            // failure here shows up on the other board as a failing 0x0090.
+            if (reportedHandle != connHandle) {
+                printf("cs-reflector: reflector role not enabled, retrying\n");
+                reportedHandle = connHandle;
+            }
+            continue;
+        }
+        g_csPeerDefaultsSent = connHandle;
+        printf("cs-reflector: reflector role enabled on handle 0x%04X\n", connHandle);
+    }
+    std::signal(SIGINT, previousSigint);
+    return 0;
+}
+
+int RunCsReflectorPeerMode()
+{
+    // Same construction order as RunDbafPeerMode: PeerModeState's destructor deregisters
+    // and drains pending GAP events, so |peerAdvCtx| must outlive it.
+    auto peerAdvCtx = std::make_unique<PeerAdvContext>();
+    PeerAdvContext *ctx = peerAdvCtx.get();
+    PeerModeState state;
+    if (InitPeerStack(state) != 0) {
+        return 1;
+    }
+    if (BTM_RegisterAclCallbacks(&g_csPeerAclCallbacks, NULL) != BT_SUCCESS) {
+        printf("cs-reflector: register acl callbacks failed\n");
+        return 1;
+    }
+    if (RegisterPeerAdvCallbacks(ctx, state) != 0) {
+        return 1;
+    }
+    if (EnablePeerAdvertising(ctx, state) != 0) {
+        return 1;
+    }
+    // No EATT/ATT/ISO companion here: CS needs the pair responder only, and
+    // SetupPeerCompanions() would register services this role never serves.
+    InitPairResponder();
+    if (ServeCsReflector(ctx) != 0) {
+        ShutdownPairResponder();
+        return 1;
+    }
+
+    int deregRet = GAPIF_DeregisterExAdvCallback();
+    state.callbackRegistered_ = false;
+    if (deregRet != BT_SUCCESS) {
+        // A failed deregister can still deliver late events that write through
+        // |ctx|, so leak the context instead of freeing it.
+        printf("cs-reflector: deregister ex adv callback failed ret=%d, leaking context\n", deregRet);
+        (void)peerAdvCtx.release();
+    } else {
+        peerAdvCtx.reset();
+    }
+    // Peer mode exits the process after main returns: join the pair responder thread,
+    // otherwise the joinable std::thread is destroyed at global teardown and calls
+    // std::terminate (same reason as RunPeerMode).
     ShutdownPairResponder();
 
     return state.cleanupFailed_ ? 1 : 0;
@@ -1191,6 +1565,9 @@ static int RegisterDleCallbacks(const std::shared_ptr<SetDataLengthContext> &ctx
     };
     callback.leDataLengthChange = [](const BtAddr *addr, uint16_t maxTxOctets, uint16_t maxTxTime, uint16_t maxRxOctets,
                                       uint16_t maxRxTime, void *context) {
+        if (context == nullptr) {
+            return;
+        }
         auto *c = static_cast<SetDataLengthContext *>(context);
         auto *result = static_cast<DataLengthChangeResult *>(c->changeResult.get());
         if (result == nullptr) {
@@ -1269,35 +1646,27 @@ static bool WaitDleChange(const std::shared_ptr<DataLengthChangeResult> &changeR
     return changeReceived;
 }
 
-// The callback context must outlive any late event, so it is heap-allocated
-// and released by the caller's guard only after a successful deregister.
 struct PeriodicAdvSyncCtx {
     SyncEstablishedResult syncResult;
     StatusOnlyResult terminateResult;
     StatusOnlyResult cancelResult;
 };
 
-struct ScanProbe {
-    // Written by the GAP task thread (exAdvertisingReport callback) and read
-    // by the test thread; atomic to avoid a data race on non-atomic ints.
-    std::atomic<int> reportsFromPeer = 0;
-    std::atomic<int> reportsWithPeriodic = 0;
-};
-
-// Register the periodic advertising sync callbacks. Returns the heap-allocated
-// callback context, or nullptr when registration failed (the context is then
-// already released).
-static PeriodicAdvSyncCtx *RegisterSyncCallbacks()
+// Register the periodic advertising sync callbacks into the caller-supplied
+// context. The caller must keep |ctx| alive until after a successful deregister.
+static int RegisterSyncCallbacks(PeriodicAdvSyncCtx *ctx)
 {
-    auto *ctx = new PeriodicAdvSyncCtx();
-    GapPeriodicAdvSyncCallback callback = { };
+    if (ctx == nullptr) {
+        return BT_BAD_PARAM;
+    }
+    GapPeriodicAdvSyncCallback callback = {};
     callback.syncEstablished = [](uint8_t status, uint16_t syncHandle, uint8_t advSid, const BtAddr *advAddr,
                                    uint8_t advPhy, uint16_t periodicAdvInterval, void *context) {
-        auto *c = static_cast<PeriodicAdvSyncCtx *>(context);
-        auto *result = static_cast<SyncEstablishedResult *>(&c->syncResult);
-        if (result == nullptr) {
+        if (context == nullptr) {
             return;
         }
+        auto *c = static_cast<PeriodicAdvSyncCtx *>(context);
+        auto *result = &c->syncResult;
         result->status = status;
         result->syncHandle = syncHandle;
         result->advSid = advSid;
@@ -1306,21 +1675,28 @@ static PeriodicAdvSyncCtx *RegisterSyncCallbacks()
         result->Notify();
     };
     callback.terminateSyncResult = [](uint8_t status, void *context) {
+        if (context == nullptr) {
+            return;
+        }
         auto *c = static_cast<PeriodicAdvSyncCtx *>(context);
         OnStatusOnlyResult(status, &c->terminateResult);
     };
     callback.createSyncCancelResult = [](uint8_t status, void *context) {
+        if (context == nullptr) {
+            return;
+        }
         auto *c = static_cast<PeriodicAdvSyncCtx *>(context);
         OnStatusOnlyResult(status, &c->cancelResult);
     };
-    if (GAPIF_RegisterPeriodicAdvSyncCallback(&callback, ctx) != BT_SUCCESS) {
-        // No callback will ever touch ctx on this path: release it here instead
-        // of relying on the caller's guard, which is not constructed.
-        delete ctx;
-        return nullptr;
-    }
-    return ctx;
+    return GAPIF_RegisterPeriodicAdvSyncCallback(&callback, ctx);
 }
+
+struct ScanProbe {
+    // Written by the GAP task thread (exAdvertisingReport callback) and read
+    // by the test thread; atomic to avoid a data race on non-atomic ints.
+    std::atomic<int> reportsFromPeer = 0;
+    std::atomic<int> reportsWithPeriodic = 0;
+};
 
 // Scan for the peer's extended advertising reports for a few seconds and count
 // the reports that carry a periodic advertising interval.
@@ -1584,30 +1960,24 @@ HWTEST_F(StackGapLeInteractTest, StackGapLe_PeriodicAdvCreateSync_00100, TestSiz
         GTEST_SKIP() << "controller does not support periodic advertising";
     }
 
-    auto *ctx = RegisterSyncCallbacks();
-    if (ctx == nullptr) {
-        // Registration failed and the context was already released by the helper.
-        FAIL() << "failed to register periodic adv sync callback";
-        return;
-    }
-    PeriodicAdvSyncCallbackGuard syncGuard([ctx] {
-        delete ctx;
-    });
+    PeriodicAdvSyncCtx ctx;
+    ASSERT_EQ(RegisterSyncCallbacks(&ctx), BT_SUCCESS);
+    PeriodicAdvSyncCallbackGuard syncGuard;
 
     ScanProbe probe;
     RunScanProbe(probe);
 
-    bool received = WaitForSyncEstablished(ctx, peerAddr);
+    bool received = WaitForSyncEstablished(&ctx, peerAddr);
     if (!received) {
-        CancelPendingSync(ctx);
+        CancelPendingSync(&ctx);
     }
 
-    if (received && ctx->syncResult.status == HCI_STATUS_SUCCESS) {
-        EXPECT_EQ(GAPIF_LePeriodicAdvTerminateSync(ctx->syncResult.syncHandle), BT_SUCCESS);
-        EXPECT_TRUE(ctx->terminateResult.Wait());
+    if (received && ctx.syncResult.status == HCI_STATUS_SUCCESS) {
+        EXPECT_EQ(GAPIF_LePeriodicAdvTerminateSync(ctx.syncResult.syncHandle), BT_SUCCESS);
+        EXPECT_TRUE(ctx.terminateResult.Wait());
     }
 
-    if (!received || ctx->syncResult.status != HCI_STATUS_SUCCESS) {
+    if (!received || ctx.syncResult.status != HCI_STATUS_SUCCESS) {
         // A status of 0x3C (Connection Failed to be Established) is a
         // legitimate spec outcome: the peer stopped advertising or the sync
         // timed out. Both that and a controller that never reports the sync
@@ -1615,8 +1985,8 @@ HWTEST_F(StackGapLeInteractTest, StackGapLe_PeriodicAdvCreateSync_00100, TestSiz
         // not failure.
         return;
     }
-    EXPECT_EQ(ctx->syncResult.status, HCI_STATUS_SUCCESS);
-    EXPECT_EQ(ctx->syncResult.advSid, PEER_ADV_SID);
+    EXPECT_EQ(ctx.syncResult.status, HCI_STATUS_SUCCESS);
+    EXPECT_EQ(ctx.syncResult.advSid, PEER_ADV_SID);
 }
 
 // @tc.number: StackGapLe5_1_Inject_PastSyncTransferReceived_00100
@@ -1627,6 +1997,7 @@ HWTEST_F(StackGapLeInteractTest, StackGapLe5_1_Inject_PastSyncTransferReceived_0
 {
     HciEventCallbacks callbacks = { };
     callbacks.lePeriodicAdvertisingSyncTransferReceived = OnInjectedPastSyncTransferReceived;
+    // Guard only: always returns BT_SUCCESS (hci_evt.c:2044) - no verification power.
     ASSERT_EQ(HCI_RegisterEventCallbacks(&callbacks), BT_SUCCESS);
     HciEventCallbackGuard callbackGuard(&callbacks);
 
@@ -1669,9 +2040,15 @@ static bool ParsePeerAddrArg(int &argc, char **argv, BtAddr *addr)
 
         const char *value = argv[i] + prefixLen;
         if (!OHOS::Bluetooth::ParsePeerAddr(value, addr)) {
-            printf("invalid peer address: %s\n", value);
+            // The value is not echoed: it comes straight from the command line and would put
+            // a real peer address into the log. The accepted shape is spelled out instead.
+            printf("invalid --peer-addr= value: expected 11:22:33:44:55:66, optionally "
+                   "prefixed with public: or random:\n");
             return false;
         }
+        // The BT6.0 interact cases read the peer address from the environment (their
+        // state is TU-local), so publish --peer-addr= under that name too.
+        (void)setenv("BT60_PEER_ADDR", value, 1);
 
         for (int j = i; j < argc - 1; ++j) {
             argv[j] = argv[j + 1];
@@ -1697,6 +2074,16 @@ int main(int argc, char **argv)
     for (int i = 1; i < argc; i++) {
         if (std::strcmp(argv[i], "server") == 0) {
             int ret = OHOS::Bluetooth::RunPeerMode();
+            OHOS::Bluetooth::RestoreTestEnvironment();
+            return ret;
+        }
+        if (std::strcmp(argv[i], "dbaf-server") == 0) {
+            int ret = OHOS::Bluetooth::RunDbafPeerMode();
+            OHOS::Bluetooth::RestoreTestEnvironment();
+            return ret;
+        }
+        if (std::strcmp(argv[i], "cs-reflector") == 0) {
+            int ret = OHOS::Bluetooth::RunCsReflectorPeerMode();
             OHOS::Bluetooth::RestoreTestEnvironment();
             return ret;
         }

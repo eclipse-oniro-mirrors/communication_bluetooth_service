@@ -17,8 +17,8 @@
  * (PAwR), Core Spec 5.4 Vol 4 Part E:
  *   - 7.8.61 [v2]  LE Set Periodic Advertising Parameters [v2]
  *   - 7.8.125      LE Set Periodic Advertising Subevent Data
- *   - 7.7.65.36    LE Periodic Advertising Subevent Data Request event (0x27)
- *   - 7.7.65.37    LE Periodic Advertising Response Report event (0x28)
+ *   - 7.7.65,36    LE Periodic Advertising Subevent Data Request event (0x27)
+ *   - 7.7.65,37    LE Periodic Advertising Response Report event (0x28)
  *
  * PAwR turns one periodic advertising train into up to 0x80 subevents per
  * event, each carrying its own payload and a set of response slots that

@@ -21,8 +21,10 @@
 #include "platform/include/mutex.h"
 
 #include "hci/hci.h"
+#include "hci/hci_error.h"
 
 #include "hci_evt.h"
+#include "log.h"
 
 typedef void (*HciLeCmdCompleteFunc)(const void *param, uint8_t length);
 
@@ -81,6 +83,144 @@ static void HciEventOnLeReadLocalSupportedFeaturesComplete(const void *param, ui
 bool HciLeControllerSupportsCteType(void)
 {
     return g_hciLeControllerSupportsCteType;
+}
+
+// A short body may not be dropped here: BTM_Enable waits on this completion
+// (WAIT_CMD_TIMEOUT, btm_controller.c) to finish controller setup, so dropping it
+// stalls the bring-up for the whole timeout and then fails it, while a zeroed 248 B
+// feature body reads as "no 6.0 features supported". The body is therefore delivered
+// with the octets that did arrive kept. A short body is malformed only when it
+// reports success: a Status-only error return is legal and its Status is the
+// Controller's own error code, so a non-zero one is preserved (Vol 4, Part E, 4.5,
+// p1866). The same Status-preserving short-body rule is used by the CS Command_Complete
+// handlers for 0x0089/0x008B/0x008D/0x008F below.
+static void HciEventOnLeReadAllLocalSupportedFeaturesComplete(const void *param, uint8_t length)
+{
+    HciLeReadAllLocalSupportedFeaturesReturnParam returnParam = {0};
+    if (param != NULL) {
+        (void)memcpy_s(
+            &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+    }
+    if (param == NULL || (length < sizeof(returnParam) && returnParam.status == HCI_SUCCESS)) {
+        LOG_WARN("%{public}s: body of %{public}u B is short of the 250 B return, reported as a failure",
+            __FUNCTION__, (unsigned int)length);
+        returnParam.status = HCI_MALFORMED_EVENT;
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReadAllLocalSupportedFeaturesComplete != NULL) {
+        callbacks->leReadAllLocalSupportedFeaturesComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetDecisionDataComplete(const void *param, uint8_t length)
+{
+    HciLeSetDecisionDataReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetDecisionDataComplete != NULL) {
+        callbacks->leSetDecisionDataComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeSetDecisionInstructionsComplete(const void *param, uint8_t length)
+{
+    HciLeSetDecisionInstructionsReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leSetDecisionInstructionsComplete != NULL) {
+        callbacks->leSetDecisionInstructionsComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeAddDeviceToMonitoredAdvertisersListComplete(const void *param, uint8_t length)
+{
+    HciLeAddDeviceToMonitoredAdvertisersListReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leAddDeviceToMonitoredAdvertisersListComplete != NULL) {
+        callbacks->leAddDeviceToMonitoredAdvertisersListComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeRemoveDeviceFromMonitoredAdvertisersListComplete(const void *param, uint8_t length)
+{
+    HciLeRemoveDeviceFromMonitoredAdvertisersListReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leRemoveDeviceFromMonitoredAdvertisersListComplete != NULL) {
+        callbacks->leRemoveDeviceFromMonitoredAdvertisersListComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeClearMonitoredAdvertisersListComplete(const void *param, uint8_t length)
+{
+    HciLeClearMonitoredAdvertisersListReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leClearMonitoredAdvertisersListComplete != NULL) {
+        callbacks->leClearMonitoredAdvertisersListComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeReadMonitoredAdvertisersListSizeComplete(const void *param, uint8_t length)
+{
+    HciLeReadMonitoredAdvertisersListSizeReturnParam returnParam = {0};
+    if (param != NULL) {
+        (void)memcpy_s(
+            &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+    }
+
+    // A Status-only body is a legal error return (Vol 4, Part E, 4.5, p1866); only a short
+    // body reporting success contradicts itself, since success carries the whole 2 B return.
+    if (param == NULL || (length < sizeof(returnParam) && returnParam.status == HCI_SUCCESS)) {
+        LOG_WARN("%{public}s: %{public}u B body cannot carry the 2 B success return, reported as malformed",
+            __FUNCTION__, (unsigned int)length);
+        returnParam.status = HCI_MALFORMED_EVENT;
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leReadMonitoredAdvertisersListSizeComplete != NULL) {
+        callbacks->leReadMonitoredAdvertisersListSizeComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+static void HciEventOnLeEnableMonitoringAdvertisersComplete(const void *param, uint8_t length)
+{
+    HciLeEnableMonitoringAdvertisersReturnParam returnParam = {0};
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leEnableMonitoringAdvertisersComplete != NULL) {
+        callbacks->leEnableMonitoringAdvertisersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
 static void HciEventOnLeSetRandomAddressComplete(const void *param, uint8_t length)
@@ -1876,6 +2016,210 @@ static void HciEventOnLeSetPeriodicAdvertisingParametersV2Complete(const void *p
     HCI_FOREACH_EVT_CALLBACKS_END;
 }
 
+// 0x0089 completes with Command_Complete; the 29 B return (Status + 28 B
+// capability body) is broadcast to the CS engine, which caches it module-wide
+// (Vol 4, Part E, 7.8.130, p2798).
+// Same short-body rule as 0x0087: a Status-only error return is legal to deliver
+// (Vol 4, Part E, 4.5, p1866); only a short body that still claims success is
+// rewritten as HCI_MALFORMED_EVENT, so a zeroed capability body is never cached.
+static void HciEventOnLeCsReadLocalSupportedCapabilitiesComplete(const void *param, uint8_t length)
+{
+    HciLeCsReadLocalSupportedCapabilitiesReturnParam returnParam = {0};
+    if (param != NULL) {
+        (void)memcpy_s(
+            &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+    }
+    if (param == NULL || (length < sizeof(returnParam) && returnParam.status == HCI_SUCCESS)) {
+        LOG_WARN("%{public}s: body of %{public}u B is short of the 29 B return, reported as a failure",
+            __FUNCTION__, (unsigned int)length);
+        returnParam.status = HCI_MALFORMED_EVENT;
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsReadLocalSupportedCapabilitiesComplete != NULL) {
+        callbacks->leCsReadLocalSupportedCapabilitiesComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x008B completes with Command_Complete; the 3 B return (Status +
+// Connection_Handle) closes the write-back request. Only the CS engine consumes
+// it (Vol 4, Part E, 7.8.132).
+// Short-body rule matches 0x0087 for Status; a truncated return cannot name a
+// handle reliably (0x0000 is valid), so Connection_Handle is LE_CS_INVALID_HANDLE.
+static void HciEventOnLeCsWriteCachedRemoteSupportedCapabilitiesComplete(const void *param, uint8_t length)
+{
+    HciLeCsWriteCachedRemoteSupportedCapabilitiesReturnParam returnParam = {0};
+    if (param != NULL) {
+        (void)memcpy_s(
+            &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+    }
+    if (param == NULL || (length < sizeof(returnParam) && returnParam.status == HCI_SUCCESS)) {
+        LOG_WARN("%{public}s: body of %{public}u B is short of the 3 B return, reported as a failure",
+            __FUNCTION__, (unsigned int)length);
+        returnParam.status = HCI_MALFORMED_EVENT;
+    }
+    if (param == NULL || length < sizeof(returnParam)) {
+        returnParam.connectionHandle = LE_CS_INVALID_HANDLE;
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsWriteCachedRemoteSupportedCapabilitiesComplete != NULL) {
+        callbacks->leCsWriteCachedRemoteSupportedCapabilitiesComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x008D completes with Command_Complete; the 3 B return (Status +
+// Connection_Handle) reports only whether the Controller accepted the defaults.
+// The engine mirrors nothing from it - the defaults live in the Controller, are
+// connection-scoped, and no Host-side decision reads them (Vol 4, Part E, 7.8.134).
+// Same short-body Status / INVALID_HANDLE rule as 0x008B.
+static void HciEventOnLeCsSetDefaultSettingsComplete(const void *param, uint8_t length)
+{
+    HciLeCsSetDefaultSettingsReturnParam returnParam = {0};
+    if (param != NULL) {
+        (void)memcpy_s(
+            &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+    }
+    if (param == NULL || (length < sizeof(returnParam) && returnParam.status == HCI_SUCCESS)) {
+        LOG_WARN("%{public}s: body of %{public}u B is short of the 3 B return, reported as a failure",
+            __FUNCTION__, (unsigned int)length);
+        returnParam.status = HCI_MALFORMED_EVENT;
+    }
+    if (param == NULL || length < sizeof(returnParam)) {
+        returnParam.connectionHandle = LE_CS_INVALID_HANDLE;
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsSetDefaultSettingsComplete != NULL) {
+        callbacks->leCsSetDefaultSettingsComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x008F completes with Command_Complete; the 3 B return (Status +
+// Connection_Handle) closes the write-back request. Only the CS engine consumes it
+// (Vol 4, Part E, 7.8.136, pp2820-2821).
+// Same short-body Status / INVALID_HANDLE rule as 0x008B.
+static void HciEventOnLeCsWriteCachedRemoteFaeTableComplete(const void *param, uint8_t length)
+{
+    HciLeCsWriteCachedRemoteFaeTableReturnParam returnParam = {0};
+    if (param != NULL) {
+        (void)memcpy_s(
+            &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+    }
+    if (param == NULL || (length < sizeof(returnParam) && returnParam.status == HCI_SUCCESS)) {
+        LOG_WARN("%{public}s: body of %{public}u B is short of the 3 B return, reported as a failure",
+            __FUNCTION__, (unsigned int)length);
+        returnParam.status = HCI_MALFORMED_EVENT;
+    }
+    if (param == NULL || length < sizeof(returnParam)) {
+        returnParam.connectionHandle = LE_CS_INVALID_HANDLE;
+    }
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsWriteCachedRemoteFaeTableComplete != NULL) {
+        callbacks->leCsWriteCachedRemoteFaeTableComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x0092 completes with Command_Complete and a 1 B return holding only Status: the
+// classification is Controller-wide, so no Connection_Handle identifies the
+// affected link. 0x0C reports a re-issue inside the 1-second window and 0x12 an
+// invalid classification (Vol 4, Part E, 7.8.139, pp2830-2831).
+static void HciEventOnLeCsSetChannelClassificationComplete(const void *param, uint8_t length)
+{
+    HciLeCsSetChannelClassificationReturnParam returnParam = {0};
+    // The one shorter frame (empty) is turned away before dispatch, so this guard only
+    // keeps the CS handlers uniform.
+    if (param == NULL || length < sizeof(returnParam)) {
+        return;
+    }
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsSetChannelClassificationComplete != NULL) {
+        callbacks->leCsSetChannelClassificationComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x0093 Command_Complete returns Status + Connection_Handle only (Vol 4, Part E,
+// 7.8.140); Config_ID is tracked by the engine, not echoed by the Controller.
+// DESIGN NOTE: a truncated return carries no readable handle, but dropping it would
+// leave the engine's in-flight 0x0093 record wedged, blocking later requests on that
+// handle with BT_ALREADY. The frame is therefore passed on as LE_CS_INVALID_HANDLE
+// so the engine can conservatively clear every pending record. This is intentional.
+static void HciEventOnLeCsSetProcedureParametersComplete(const void *param, uint8_t length)
+{
+    HciLeCsSetProcedureParametersReturnParam returnParam = {0};
+    // Pass a no-handle completion to the engine so the in-flight record is cleared.
+    if (param == NULL || length < sizeof(returnParam)) {
+        HciLeCsSetProcedureParametersReturnParam unattributable = {
+            .status = HCI_MALFORMED_EVENT,
+            .connectionHandle = LE_CS_INVALID_HANDLE,
+        };
+
+        HciEventCallbacks *callbacks = NULL;
+        HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+        if (callbacks->leCsSetProcedureParametersComplete != NULL) {
+            callbacks->leCsSetProcedureParametersComplete(&unattributable);
+        }
+        HCI_FOREACH_EVT_CALLBACKS_END;
+        return;
+    }
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsSetProcedureParametersComplete != NULL) {
+        callbacks->leCsSetProcedureParametersComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
+// 0x0095 completes with Command_Complete and a Status-only return (Vol 4, Part E,
+// 7.8.142, p2840). A CS test reports through the 0x31/0x32 stream under the reserved
+// Connection_Handle 0x0FFF, so this completion says one thing only: whether the test was
+// started. Like the 0x0093 above, a truncated return is not dropped but passed on as a
+// malformed completion, because the engine holds a pending record for the outstanding
+// 0x0095 that only this completion clears.
+static void HciEventOnLeCsTestComplete(const void *param, uint8_t length)
+{
+    HciLeCsTestReturnParam returnParam = {0};
+    if (param == NULL || length < sizeof(returnParam)) {
+        HciLeCsTestReturnParam unattributable = {
+            .status = HCI_MALFORMED_EVENT,
+        };
+
+        HciEventCallbacks *callbacks = NULL;
+        HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+        if (callbacks->leCsTestComplete != NULL) {
+            callbacks->leCsTestComplete(&unattributable);
+        }
+        HCI_FOREACH_EVT_CALLBACKS_END;
+        return;
+    }
+    (void)memcpy_s(
+        &returnParam, sizeof(returnParam), param, (length > sizeof(returnParam)) ? sizeof(returnParam) : length);
+
+    HciEventCallbacks *callbacks = NULL;
+    HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
+    if (callbacks->leCsTestComplete != NULL) {
+        callbacks->leCsTestComplete(&returnParam);
+    }
+    HCI_FOREACH_EVT_CALLBACKS_END;
+}
+
 static HciLeCmdCompleteFunc g_leControllerCommandCompleteMap[] = {
     NULL,                                                                    // 0x0000
     HciEventOnLeSetEventMaskComplete,                                        // 0x0001
@@ -2000,18 +2344,56 @@ static HciLeCmdCompleteFunc g_leControllerCommandCompleteMap[] = {
     HciEventOnLeSetPathLossReportingParametersComplete,                      // 0x0078
     HciEventOnLeSetPathLossReportingEnableComplete,                          // 0x0079
     HciEventOnLeSetTransmitPowerReportingEnableComplete,                     // 0x007A
+    // Rows 0x007B-0x007E: 5.3 handlers kept; 0x007F-0x0086: 5.4 handlers.
     NULL,                                                                    // 0x007B
     HciEventOnLeSetDataRelatedAddressChangesComplete,                        // 0x007C
     HciEventOnLeSetDefaultSubrateComplete,                                   // 0x007D
     HciEventOnLeSubrateRequestComplete,                                      // 0x007E
     HciEventOnLeSetExtendedAdvertisingParametersV2Complete,                  // 0x007F
-    NULL,                                                                    // 0x0080
-    NULL,                                                                    // 0x0081
+    HciEventOnLeSetDecisionDataComplete,                                      // 0x0080
+    HciEventOnLeSetDecisionInstructionsComplete,                              // 0x0081
     HciEventOnLeSetPeriodicAdvertisingSubeventDataComplete,                  // 0x0082
     HciEventOnLeSetPeriodicAdvertisingResponseDataComplete,                  // 0x0083
     HciEventOnLeSetPeriodicSyncSubeventComplete,                             // 0x0084
     NULL,                                                                    // 0x0085
     HciEventOnLeSetPeriodicAdvertisingParametersV2Complete,                  // 0x0086
+    // Rows 0x0087-0x009D are BT6.0 LE Controller commands. 0x0087 is filled by
+    // the LL Extended Feature Set local read; 0x0088 stays NULL (Command_Status,
+    // result arrives as the 0x2B subevent). 0x0089/0x008B are the Channel Sounding
+    // capability Command_Complete handlers; 0x008A stays NULL as Command_Status, result 0x2C;
+    // 0x008C stays NULL as Command_Status, result 0x2E;
+    // 0x008D/0x008F are the CS Set Default Settings and Write Cached Remote FAE Table
+    // Command_Complete handlers; 0x0092/0x0093/0x0095 are the CS Set Channel Classification,
+    // Set Procedure Parameters and CS Test Command_Complete handlers; the remaining rows
+    // 0x008E, 0x0090/0x0091, 0x0094, 0x0096-0x0097 stay NULL until owned - those CS
+    // commands are Command_Status (their results arrive as the 0x2D/0x2F/0x30 subevents,
+    // and 0x0096's as the 0x33) and 0x0097 is the [v2] Set Host Feature, not sent; rows
+    // 0x0098-0x009C are the Monitoring Advertisers (MA) handlers, sections 7.8.146-7.8.150
+    // (pp2867-2875; the last two are not in OCF order - see hci_def_le_cmd_6_0.h); 0x009D
+    // stays NULL (Frame Space Update result arrives as the 0x35 subevent).
+    HciEventOnLeReadAllLocalSupportedFeaturesComplete,                     // 0x0087
+    NULL,                                                                    // 0x0088
+    HciEventOnLeCsReadLocalSupportedCapabilitiesComplete,                 // 0x0089
+    NULL,                                                                    // 0x008A
+    HciEventOnLeCsWriteCachedRemoteSupportedCapabilitiesComplete,         // 0x008B
+    NULL,                                                                    // 0x008C
+    HciEventOnLeCsSetDefaultSettingsComplete,                             // 0x008D
+    NULL,                                                                    // 0x008E
+    HciEventOnLeCsWriteCachedRemoteFaeTableComplete,                      // 0x008F
+    NULL,                                                                    // 0x0090
+    NULL,                                                                    // 0x0091
+    HciEventOnLeCsSetChannelClassificationComplete,                       // 0x0092
+    HciEventOnLeCsSetProcedureParametersComplete,                         // 0x0093
+    NULL,                                                                    // 0x0094
+    HciEventOnLeCsTestComplete,                                           // 0x0095
+    NULL,                                                                    // 0x0096
+    NULL,                                                                    // 0x0097
+    HciEventOnLeAddDeviceToMonitoredAdvertisersListComplete,                  // 0x0098
+    HciEventOnLeRemoveDeviceFromMonitoredAdvertisersListComplete,             // 0x0099
+    HciEventOnLeClearMonitoredAdvertisersListComplete,                        // 0x009A
+    HciEventOnLeReadMonitoredAdvertisersListSizeComplete,                     // 0x009B
+    HciEventOnLeEnableMonitoringAdvertisersComplete,                          // 0x009C
+    NULL,                                                                    // 0x009D
 };
 
 // 0x005E is 7.8.93 LE Generate DHKey [v2]: asynchronous command, completion is
@@ -2020,9 +2402,11 @@ static HciLeCmdCompleteFunc g_leControllerCommandCompleteMap[] = {
 // 0x0085 (7.8.66 [v2]) is asynchronous like its [v1] counterpart (0x0043): no
 // Command Complete, the outcome arrives as the LE Enhanced Connection Complete
 // [v2] event (0x29) or as a Command_Status error handled in
-// hci_cmd_failure_le_controller.c. OCFs 0x0080/0x0081 are unassigned in the
-// 5.4 LE Controller command space (verified against the 5.4 command tables).
-#define LECONTROLLER_OCF_MAX 0x0086
+// hci_cmd_failure_le_controller.c. OCFs 0x0080/0x0081 were unassigned in the
+// 5.4 LE Controller command space (verified against the 5.4 command tables); since
+// BT 6.0 they are the DBAF pair (0x0080 Set Decision Data, 0x0081 Set Decision
+// Instructions), which the rows above fill.
+#define LECONTROLLER_OCF_MAX 0x009D
 
 void HciEventOnLeCommandComplete(uint16_t opCode, const void *param, uint8_t length)
 {

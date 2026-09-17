@@ -185,7 +185,7 @@ int BTSTACK_API BTM_LeConnectFromPawr(const BtAddr *addr, uint8_t advertisingHan
  * Central of a connection established from periodic advertising with
  * responses) and Sync_Handle (valid when the local device is the Peripheral
  * and the connection was established from a train it synchronized to,
- * Vol 4, Part E 7.7.65.10). Connections not established from periodic
+ * Vol 4, Part E 7.7.65,10). Connections not established from periodic
  * advertising with responses report No Advertising_Handle (0xFF) and No
  * Sync_Handle (0xFFFF).
  *
@@ -205,6 +205,36 @@ int BTSTACK_API BTM_GetLeConnectionPawrAssociation(
  * @return Returns <b>BT_SUCCESS</b> if the operation is successful; returns others if the operation fails.
  */
 int BTSTACK_API BTM_LeCancelConnect(const BtAddr *addr);
+
+/**
+ * @brief Create a decision-based LE connection (BT6.0, Vol 4 Part E 7.8.66).
+ *
+ * @param initiatorFilterPolicy One of the decision values 0x02-0x04.
+ * @return Returns <b>BT_SUCCESS</b> if the command is submitted, or if policy 0x03
+ *         has an empty accept list and the call is skipped without submitting a
+ *         command (mirroring the whitelist auto-connect flow); <b>BT_BAD_PARAM</b>
+ *         for a non-decision policy; <b>BT_NOT_SUPPORT</b> if the controller lacks
+ *         LE Feature Bit 42; <b>BT_BAD_STATUS</b> if the stack is not initialized;
+ *         <b>BT_NO_MEMORY</b> if the connection parameter buffer cannot be allocated.
+ */
+int BTSTACK_API BtmLeExtendedConnectByDecision(uint8_t initiatorFilterPolicy);
+
+/**
+ * @brief Cancel a decision-based LE connection (BT6.0, Vol 4 Part E 7.8.13).
+ *
+ * LE_Create_Connection_Cancel serves both the legacy and the Extended Create
+ * Connection, so this stops the decision initiator started by
+ * BtmLeExtendedConnectByDecision. It issues 0x000E regardless of the accept list
+ * because a decision initiator has no BtAddr and no CONNECTING ACL record, so
+ * neither BTM_LeCancelConnect nor BtmStopAutoConnection can reach it.
+ * @return Returns <b>BT_SUCCESS</b> if 0x000E is submitted. If no initiator is
+ *         pending the Controller rejects the cancel with Command Disallowed
+ *         (0x0C); its completion event has no registrant here and is silently
+ *         dropped, so that case still yields <b>BT_SUCCESS</b>.
+ *         <b>BT_NOT_SUPPORT</b> if the controller lacks LE Feature Bit 42;
+ *         <b>BT_BAD_STATUS</b> if the stack is not initialized.
+ */
+int BTSTACK_API BtmLeExtendedConnectByDecisionCancel(void);
 
 /**
  * @brief Set LE connection mode to fast.
@@ -282,6 +312,15 @@ bool BTSTACK_API BTM_IsSecureConnection(const BtAddr *addr);
 
 typedef void (*BTMRemoteDeviceSupportCallback)(const BtAddr *addr, bool support);
 
+/**
+ * @brief Query whether a remote device supports a feature (asynchronous).
+ *
+ * The result is delivered exactly once through callback on the Stack thread. The
+ * callback fires only if the remote feature query completes: if the connection is
+ * disconnected before the query completes, the queued request is dropped with the
+ * link and the callback never fires. A caller that blocks its own thread waiting
+ * for the callback therefore hangs on such a disconnect.
+ */
 void BTSTACK_API BTM_IsRemoteDeviceSupportHostSecureSimplePairing(
     const BtAddr *addr, BTMRemoteDeviceSupportCallback callback);
 void BTSTACK_API BTM_IsRemoteDeviceSupportConnectionParametersRequest(
@@ -562,6 +601,68 @@ bool BTSTACK_API BTM_IsControllerSupportLeReadTransmitPower();
 bool BTSTACK_API BTM_IsControllerSupportLePowerControl();
 
 /**
+ * @brief Determine whether the local controller supports LL Extended Feature Set (LE Feature Bit 63, page 0).
+ *
+ * Bluetooth 6.0, Vol 6, Part B, 4.6. Read from the 8-byte 0x0003 result; gates the
+ * use of LE Read All Local/Remote Supported Features (7.8.128/7.8.129).
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeExtendedFeatureSet();
+
+/**
+ * @brief Determine whether the local controller supports Monitoring Advertisers (LE Feature Bit 64, page 1).
+ *
+ * Bluetooth 6.0, Vol 6, Part B, 4.6. Read from the 248-byte 0x0087 result.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeMonitoringAdvertisers();
+
+/**
+ * @brief Determine whether the local controller supports Frame Space Update (LE Feature Bit 65, page 1).
+ *
+ * Bluetooth 6.0, Vol 6, Part B, 4.6. Read from the 248-byte 0x0087 result.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeFrameSpaceUpdate();
+
+/**
+ * @brief Determine whether the local controller supports Decision-Based Advertising
+ *        Filtering (LE Feature Bit 42, page 0).
+ *
+ * Bluetooth 6.0, Vol 6, Part B, 4.6. Read from the 8-byte 0x0003 result (page 0,
+ * no 0x0087 dependency); gates LE Set Decision Data / Instructions (7.8.144/7.8.145).
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeDecisionBasedAdvertisingFiltering();
+
+/**
+ * @brief Determine whether the local controller supports ISOAL Unsegmented Framed
+ *        Mode (LE Feature Bit 45, page 0).
+ *
+ * Bluetooth 6.0, Vol 6, Part B, 4.6.44. Read from the 8-byte 0x0003 result (page 0,
+ * no 0x0087 dependency); gates the Host requesting Framing=0x02 at the iso-layer
+ * CIG/BIG assembly entry points (7.8.97/7.8.103/7.8.104). LE Set CIG Parameters
+ * Test (7.8.98) has no iso-layer caller yet and reuses the same check once exposed.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeUnsegmentedFramedMode();
+
+/**
+ * @brief Determine whether the local controller supports Channel Sounding
+ *        (LE Feature Bit 46, page 0).
+ *
+ * Bluetooth 6.0, Vol 6, Part B, 4.6. Read from the 8-byte 0x0003 result (page 0, no
+ * 0x0087 dependency). Host Controlled = N: it only reports the local Controller
+ * capability; the Host Support bit (47) that the Host writes back is a separate
+ * feature declared via LE Set Host Feature (see BtmLeSetHostFeature), not gated
+ * here. Gates LE event-mask bits 43-50 (the CS subevents 0x2C-0x33 of the 7.8.1
+ * mask list), the CS commands 0x0089-0x0096, and the bit-47 Host-Support
+ * declaration itself.
+ * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
+ */
+bool BTSTACK_API BTM_IsControllerSupportLeChannelSounding();
+
+/**
  * @brief Determine whether the local controller supports LE Read RF Path Compensation.
  *
  * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
@@ -630,7 +731,7 @@ bool BTSTACK_API BTM_IsControllerSupportAntennaSwitchingDuringCteReceptionAoa();
  *        (LE Feature Bit 23).
  *
  * Bluetooth 5.1, Vol 6, Part B, 4.6.22. Controllers without this feature omit the
- * CTE_Type byte in LE Periodic Advertising Report events (Vol 2, Part E, 7.7.65.15).
+ * CTE_Type byte in LE Periodic Advertising Report events (Vol 2, Part E, 7.7.65,15).
  * @return Returns <b>true</b> if supported; otherwise returns <b>false</b>.
  */
 bool BTSTACK_API BTM_IsControllerSupportReceivingConstantToneExtensions();
@@ -725,7 +826,7 @@ bool BTSTACK_API BTM_IsControllerSupportLeAdvCodingSel();
  * @brief Determine whether the local controller reports Advertising Coding Selection Host Support
  * (LE Feature Bit 41).
  *
- * Bluetooth 5.4, Vol 6, Part B, 4.6.33.3. The controller only sets this bit on
+ * Bluetooth 5.4, Vol 6, Part B, 4.6.33,3. The controller only sets this bit on
  * request from the Host via HCI_LE_Set_Host_Feature (bitNumber 0x29), and only
  * if it supports Advertising Coding Selection (bit 40). Informational only - the
  * features are read during setup before the Set Host Feature round trip, so

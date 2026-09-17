@@ -149,7 +149,7 @@ static void GapLeSetExAdvReportParam(GapExAdvReportParam *advParam, const HciLeE
         advParam->rssi = report->rssi;
         advParam->secondaryPhy = report->secondaryPHY;
         advParam->txPower = report->txPower;
-        // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.7.65.13: with
+        // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E, 7.7.65,13: with
         // the local Advertising Coding Selection Host Support (bit 41) declared
         // (it is mirrored into the cached features by BTM after the LE Set Host
         // Feature round trip, see BtmLeSetHostFeature), the Controller reports
@@ -676,6 +676,16 @@ static int GapLeSetExtendedScanParameters(
         return GAP_ERR_INVAL_PARAM;
     }
 
+    // BT6.0 (7.8.64): RFU decision-mode 0b10 (bytes 0x08-0x0B) is invalid on any
+    // controller; valid modes 0b01/0b11 additionally need the bit-42 capability.
+    if ((scanFilterPolity & LE_SCAN_DECISION_MODE_MASK) == LE_SCAN_DECISION_MODE_RFU) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+    if ((scanFilterPolity & LE_SCAN_DECISION_MODE_MASK) != LE_SCAN_DECISION_MODE_NONE &&
+        !BTM_IsControllerSupportLeDecisionBasedAdvertisingFiltering()) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+
     hciCmdParam.sets = MEM_MALLOC.alloc(EXTENDED_SCAN_PHY_MAX_NUM * sizeof(HciLeExtendedScanParametersSet));
 
     if (hciCmdParam.sets) {
@@ -757,6 +767,313 @@ int GAP_LeExScanSetEnable(uint8_t scanEnable, uint8_t filterDuplicates, uint16_t
     }
 
     return ret;
+}
+
+NO_SANITIZE("cfi") void GapLeSetDecisionInstructionsComplete(const HciLeSetDecisionInstructionsReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    if (g_leExScanCallback.callback.scanSetDecisionInstructionsResult) {
+        g_leExScanCallback.callback.scanSetDecisionInstructionsResult(param->status, g_leExScanCallback.context);
+    }
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.8.145
+// Decision instructions are a Controller-side, session-independent state: they may
+// be set while scanning or initiating is in progress and take effect before the
+// Command_Complete event. Fire-and-forget setter, no lock (same as the decision
+// data path in gap_le_adv.c); the Controller answers 0x12/0x43 asynchronously
+// through the scan result slot above.
+int GAP_LeSetDecisionInstructions(uint8_t numTests, const HciLeDecisionTestParam *tests)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    if (numTests == 0 || numTests > LE_DECISION_TESTS_HOST_MAX || tests == NULL) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if ((tests[0].flags & LE_DECISION_TEST_FLAG_NEW_GROUP) == 0) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if (!BTM_IsControllerSupportLeDecisionBasedAdvertisingFiltering()) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+
+    HciLeSetDecisionInstructionsParam hciCmdParam = {
+        .numTests = numTests,
+        .tests = tests,
+    };
+    return HCI_LeSetDecisionInstructions(&hciCmdParam);
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.8.66 (p2637): initiate
+// one decision-based connection with Initiator_Filter_Policy 0x02-0x04 (field
+// meanings in the 7.8.66 value table; backing Link-Layer initiator modes are
+// Vol 6 Part B 4.3.4, p3035-3036). The Controller selects the peer from decision
+// PDUs / the accept list, so no peer address is passed. The policy
+// range check, the LE Feature Bit 42 gate and the empty-accept-list skip for
+// policy 0x03 (returns success without submitting a command) live in the btm
+// layer; BT_* and GAP_ERR_* share numeric values, so the btm return value is
+// passed through unchanged.
+int GAP_LeExtendedConnectByDecision(uint8_t initiatorFilterPolicy)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    return BtmLeExtendedConnectByDecision(initiatorFilterPolicy);
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.8.13 (p2514): mirrors
+// GAP_LeExtendedConnectByDecision; sends LE_Create_Connection_Cancel to stop a
+// pending decision initiator. Cancelling with nothing pending is answered by the
+// Controller with Command Disallowed (0x0C) whose completion is silently dropped
+// in this stack, so the caller cannot be left waiting. Pass-through like the
+// connect above: the btm layer owns the init/feature checks and BT_* equals
+// GAP_ERR_* numerically.
+int GAP_LeExtendedConnectByDecisionCancel(void)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    return BtmLeExtendedConnectByDecisionCancel();
+}
+
+// Bluetooth 6.0, Vol 4, Part E, 7.8.146-150: Monitoring Advertisers list
+// management, and Vol 6, Part B, 4.4.3,8: report consumption (subevent 0x34).
+// The list lives in the Controller only, so GAP keeps no copy; the single-slot
+// callback below relays Command_Complete status and the report. Feature bit 64
+// (page 1, Vol 6, Part B, 4.6.45) gates every command entry.
+
+typedef struct {
+    GapMonitoredAdvertisersCallback callback;
+    void *context;
+} LeMonitoredAdvCallback;
+
+static LeMonitoredAdvCallback g_leMonitoredAdvCallback;
+
+// Single-slot: registering again replaces the previous callback and context; a
+// NULL callback clears the slot (GAP_LeDeregisterMonitoredAdvertisersCallback
+// is the explicit public deregistration, mirroring the periodic family).
+int GAP_LeRegisterMonitoredAdvertisersCallback(const GapMonitoredAdvertisersCallback *callback, void *context)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+    if (callback == NULL) {
+        (void)memset_s(
+            &g_leMonitoredAdvCallback, sizeof(g_leMonitoredAdvCallback), 0x00, sizeof(g_leMonitoredAdvCallback));
+        return GAP_SUCCESS;
+    }
+
+    g_leMonitoredAdvCallback.callback = *callback;
+    g_leMonitoredAdvCallback.context = context;
+    return GAP_SUCCESS;
+}
+
+int GAP_LeDeregisterMonitoredAdvertisersCallback(void)
+{
+    (void)memset_s(&g_leMonitoredAdvCallback, sizeof(g_leMonitoredAdvCallback), 0x00, sizeof(g_leMonitoredAdvCallback));
+    return GAP_SUCCESS;
+}
+
+// Gate shared by the five commands: LE enabled, then role, then the local
+// bit 64 feature. Precedence mirrors the periodic advertiser list family, with
+// the Monitoring Advertisers feature gate (Vol 6, Part B, 4.6.45) added last.
+static int GapLeMonitoredAdvCommandGate(void)
+{
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+    if (GapLeRolesCheck(GAP_LE_ROLE_OBSERVER | GAP_LE_ROLE_CENTRAL) == false) {
+        return GAP_ERR_INVAL_STATE;
+    }
+    if (BTM_IsControllerSupportLeMonitoringAdvertisers() == false) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+    return GAP_SUCCESS;
+}
+
+int GAP_LeAddDeviceToMonitoredAdvertisersList(
+    uint8_t addrType, const BtAddr *addr, int8_t rssiThresholdLow, int8_t rssiThresholdHigh, uint8_t timeout)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+
+    int ret = GapLeMonitoredAdvCommandGate();
+    if (ret != GAP_SUCCESS) {
+        return ret;
+    }
+    if (addr == NULL ||
+        (addrType != BT_PUBLIC_DEVICE_ADDRESS && addrType != BT_RANDOM_DEVICE_ADDRESS) || addrType != addr->type) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+    // Controller-side 0x12 (High < Low, reserved Timeout 0x00, Vol 4, Part E,
+    // 7.8.146) is caught here as an interpretative fast check.
+    if (rssiThresholdHigh < rssiThresholdLow || timeout == 0x00) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    HciLeAddDeviceToMonitoredAdvertisersListParam hciCmdParam = {
+        .advertiserAddressType = addrType,
+        .rssiThresholdLow = rssiThresholdLow,
+        .rssiThresholdHigh = rssiThresholdHigh,
+        .timeout = timeout,
+    };
+    if (memcpy_s(hciCmdParam.advertiserAddress, BT_ADDRESS_SIZE, addr->addr, BT_ADDRESS_SIZE) != EOK) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+    return HCI_LeAddDeviceToMonitoredAdvertisersList(&hciCmdParam);
+}
+
+int GAP_LeRemoveDeviceFromMonitoredAdvertisersList(uint8_t addrType, const BtAddr *addr)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+
+    int ret = GapLeMonitoredAdvCommandGate();
+    if (ret != GAP_SUCCESS) {
+        return ret;
+    }
+    if (addr == NULL ||
+        (addrType != BT_PUBLIC_DEVICE_ADDRESS && addrType != BT_RANDOM_DEVICE_ADDRESS) || addrType != addr->type) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    HciLeRemoveDeviceFromMonitoredAdvertisersListParam hciCmdParam = {
+        .advertiserAddressType = addrType,
+    };
+    if (memcpy_s(hciCmdParam.advertiserAddress, BT_ADDRESS_SIZE, addr->addr, BT_ADDRESS_SIZE) != EOK) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+    return HCI_LeRemoveDeviceFromMonitoredAdvertisersList(&hciCmdParam);
+}
+
+int GAP_LeClearMonitoredAdvertisersList(void)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+
+    int ret = GapLeMonitoredAdvCommandGate();
+    if (ret != GAP_SUCCESS) {
+        return ret;
+    }
+    return HCI_LeClearMonitoredAdvertisersList();
+}
+
+int GAP_LeReadMonitoredAdvertisersListSize(void)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+
+    int ret = GapLeMonitoredAdvCommandGate();
+    if (ret != GAP_SUCCESS) {
+        return ret;
+    }
+    return HCI_LeReadMonitoredAdvertisersListSize();
+}
+
+int GAP_LeEnableMonitoringAdvertisers(uint8_t enable)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+
+    int ret = GapLeMonitoredAdvCommandGate();
+    if (ret != GAP_SUCCESS) {
+        return ret;
+    }
+    // Enable is 0x00/0x01 only; the rest is RFU (Vol 4, Part E, 7.8.149).
+    if (enable > GAP_MONITORED_ADV_ENABLE_TRUE) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    HciLeEnableMonitoringAdvertisersParam hciCmdParam = {
+        .enable = enable,
+    };
+    return HCI_LeEnableMonitoringAdvertisers(&hciCmdParam);
+}
+
+NO_SANITIZE("cfi")
+void GapLeAddDeviceToMonitoredAdvertisersListComplete(const HciLeAddDeviceToMonitoredAdvertisersListReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+    if (g_leMonitoredAdvCallback.callback.addDeviceToMonitoredAdvertisersListResult != NULL) {
+        g_leMonitoredAdvCallback.callback.addDeviceToMonitoredAdvertisersListResult(
+            param->status, g_leMonitoredAdvCallback.context);
+    }
+}
+
+NO_SANITIZE("cfi")
+void GapLeRemoveDeviceFromMonitoredAdvertisersListComplete(
+    const HciLeRemoveDeviceFromMonitoredAdvertisersListReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+    if (g_leMonitoredAdvCallback.callback.removeDeviceFromMonitoredAdvertisersListResult != NULL) {
+        g_leMonitoredAdvCallback.callback.removeDeviceFromMonitoredAdvertisersListResult(
+            param->status, g_leMonitoredAdvCallback.context);
+    }
+}
+
+NO_SANITIZE("cfi")
+void GapLeClearMonitoredAdvertisersListComplete(const HciLeClearMonitoredAdvertisersListReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+    if (g_leMonitoredAdvCallback.callback.clearMonitoredAdvertisersListResult != NULL) {
+        g_leMonitoredAdvCallback.callback.clearMonitoredAdvertisersListResult(
+            param->status, g_leMonitoredAdvCallback.context);
+    }
+}
+
+NO_SANITIZE("cfi")
+void GapLeReadMonitoredAdvertisersListSizeComplete(const HciLeReadMonitoredAdvertisersListSizeReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+    if (g_leMonitoredAdvCallback.callback.readMonitoredAdvertisersListSizeResult != NULL) {
+        // The Number field is the list capacity, not the entry count (Vol 4,
+        // Part E, 7.8.150).
+        g_leMonitoredAdvCallback.callback.readMonitoredAdvertisersListSizeResult(
+            param->status, param->number, g_leMonitoredAdvCallback.context);
+    }
+}
+
+NO_SANITIZE("cfi")
+void GapLeEnableMonitoringAdvertisersComplete(const HciLeEnableMonitoringAdvertisersReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+    if (g_leMonitoredAdvCallback.callback.enableMonitoringAdvertisersResult != NULL) {
+        g_leMonitoredAdvCallback.callback.enableMonitoringAdvertisersResult(
+            param->status, g_leMonitoredAdvCallback.context);
+    }
+}
+
+void GapOnLeMonitoredAdvertisersReportEvent(const HciLeMonitoredAdvertisersReportEventParam *eventParam)
+{
+    if (eventParam == NULL) {
+        return;
+    }
+
+    if (g_leMonitoredAdvCallback.callback.monitoredAdvertisersReport != NULL) {
+        BtAddr addr = {0};
+        // Address_Type 0x02/0x03 (identity address of a resolved RPA) passes
+        // through unchanged; match with GapAddrCompare (Vol 4, Part E, 7.7.65,47).
+        GapChangeHCIAddr(&addr, &eventParam->advertiserAddress, eventParam->advertiserAddressType);
+        g_leMonitoredAdvCallback.callback.monitoredAdvertisersReport(
+            eventParam->advertiserAddressType, &addr, eventParam->condition, g_leMonitoredAdvCallback.context);
+    }
 }
 
 // Timeout for waiting on the periodic-adv-sync callback release event, in ms.

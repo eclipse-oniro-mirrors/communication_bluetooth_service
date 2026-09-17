@@ -823,7 +823,7 @@ void BTSTACK_API ATT_ReadMultipleResponseCid(uint16_t connectHandle, uint16_t ci
 
 /**
  * @brief Send a read multiple variable response on the bearer pinned by cid.
- *        (BLUETOOTH SPECIFICATION Version 5.1 | Vol 3, Part F 3.4.4.10)
+ *        (BLUETOOTH SPECIFICATION Version 5.1 | Vol 3, Part F 3.4.4,10)
  *
  * @param1 connectHandle Indicates the connect handle.
  * @param2 cid Indicates the bearer cid (0 selects the connection's legacy bearer).

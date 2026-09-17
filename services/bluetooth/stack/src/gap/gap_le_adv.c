@@ -228,8 +228,12 @@ int GAP_LeExAdvSetRandAddr(uint8_t advHandle, const uint8_t addr[BT_ADDRESS_SIZE
     return ret;
 }
 
+#define GAP_LE_EXT_ADV_PROP_CONNECTABLE     0x01
+#define GAP_LE_EXT_ADV_PROP_SCANNABLE       0x02
 #define GAP_LE_EXT_ADV_PROP_DIRECTED        0x04
 #define GAP_LE_EXT_ADV_PROP_HIGH_DUTY_DIR   0x08
+#define GAP_LE_EXT_ADV_PROP_LEGACY          0x10
+#define GAP_LE_EXT_ADV_PROP_ANONYMOUS       0x20
 
 #define GAP_LE_EXT_ADV_CHANNEL_MAP_MIN      0x01
 #define GAP_LE_EXT_ADV_CHANNEL_MAP_MAX      0x07
@@ -240,16 +244,72 @@ int GAP_LeExAdvSetRandAddr(uint8_t advHandle, const uint8_t addr[BT_ADDRESS_SIZE
 #define GAP_LE_EXT_ADV_FRAGMENT_PREF_MAX    0x01
 #define GAP_LE_EXT_ADV_ENABLE_MAX           0x01
 
-static int GapLeSetExtendedAdvertisingParameters(
-    uint8_t advHandle, uint8_t properties, int8_t txPower, GapLeExAdvParam advExParam)
+// 7.8.53 p2591: with extended advertising PDUs (bit 4 = 0) the advertisement may not
+// be both connectable and scannable (bits 0 and 1 must not both be set), and high duty
+// cycle directed connectable advertising (bit 3) is a legacy PDU type only. Both
+// clauses hold for every extended advertising set, decision bits or not; the Controller
+// rejects an invalid combination with 0x12 as well, so this is the Host-side copy.
+static int GapLeCheckExtendedAdvPropCombinations(uint16_t properties)
+{
+    if ((properties & GAP_LE_EXT_ADV_PROP_LEGACY) != 0) {
+        return GAP_SUCCESS;
+    }
+    if ((properties & (GAP_LE_EXT_ADV_PROP_CONNECTABLE | GAP_LE_EXT_ADV_PROP_SCANNABLE)) ==
+        (GAP_LE_EXT_ADV_PROP_CONNECTABLE | GAP_LE_EXT_ADV_PROP_SCANNABLE)) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+    if ((properties & GAP_LE_EXT_ADV_PROP_HIGH_DUTY_DIR) != 0) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+    return GAP_SUCCESS;
+}
+
+// BT6.0 (7.8.53): any decision bit (7/8/9) gates on the DBAF capability (Vol 6
+// Part B §4.6 Table 4.10 bit 42, feature §4.6.43), incl. spec-silent bit 8/9.
+// Decision PDUs ride extended, non-directed events only (Vol 6 Part B 2.3.1,11
+// Table 2.10), and anonymous advertising strips AdvA, so bit 5 x bit 8 clashes.
+// 7.8.53 carries this one field in both command forms (0x0036 [v1] and 0x007F
+// [v2]), so both entry points below call it and cannot drift apart.
+static int GapLeCheckExtendedAdvDecisionProperties(uint16_t properties)
+{
+    if ((properties & (LE_EXT_ADV_EVENT_PROP_DECISION_PDU | LE_EXT_ADV_EVENT_PROP_DECISION_ADVA |
+        LE_EXT_ADV_EVENT_PROP_DECISION_ADI)) == 0) {
+        return GAP_SUCCESS;
+    }
+
+    if (!BTM_IsControllerSupportLeDecisionBasedAdvertisingFiltering()) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+
+    bool hasDirectedOrLegacy = (properties & (GAP_LE_EXT_ADV_PROP_DIRECTED | GAP_LE_EXT_ADV_PROP_LEGACY)) != 0;
+    bool hasAnonymousAndDecisionAdva =
+        (properties & (GAP_LE_EXT_ADV_PROP_ANONYMOUS | LE_EXT_ADV_EVENT_PROP_DECISION_ADVA)) ==
+        (GAP_LE_EXT_ADV_PROP_ANONYMOUS | LE_EXT_ADV_EVENT_PROP_DECISION_ADVA);
+    if (hasDirectedOrLegacy || hasAnonymousAndDecisionAdva) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+    return GAP_SUCCESS;
+}
+
+static int GapLeValidateExtendedAdvertisingParameters(
+    uint8_t advHandle, uint16_t properties, GapLeExAdvParam advExParam)
 {
     if (advHandle > GAP_LE_ADV_HANDLE_MAX) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if (GapLeCheckExtendedAdvPropCombinations(properties) != GAP_SUCCESS) {
         return GAP_ERR_INVAL_PARAM;
     }
 
     if ((properties & (GAP_LE_EXT_ADV_PROP_DIRECTED | GAP_LE_EXT_ADV_PROP_HIGH_DUTY_DIR)) &&
         advExParam.peerAddr == NULL) {
         return GAP_ERR_INVAL_PARAM;
+    }
+
+    int ret = GapLeCheckExtendedAdvDecisionProperties(properties);
+    if (ret != GAP_SUCCESS) {
+        return ret;
     }
 
     if (advExParam.advIntervalMin > advExParam.advIntervalMax ||
@@ -265,6 +325,12 @@ static int GapLeSetExtendedAdvertisingParameters(
         return GAP_ERR_INVAL_PARAM;
     }
 
+    return GAP_SUCCESS;
+}
+
+static int GapLeBuildAndSendExtendedAdvertisingParameters(
+    uint8_t advHandle, uint16_t properties, int8_t txPower, GapLeExAdvParam advExParam)
+{
     HciLeSetExtendedAdvertisingParametersParam hciCmdParam;
     hciCmdParam.advertisingHandle = advHandle;
     hciCmdParam.advertisingEventProperties = properties;
@@ -295,18 +361,38 @@ static int GapLeSetExtendedAdvertisingParameters(
     return HCI_LeSetExtendedAdvertisingParameters(&hciCmdParam);
 }
 
-// Validation of the [v2] parameters (7.8.53): the [v1] range checks of
-// GapLeSetExtendedAdvertisingParameters plus the two option octets (option
-// values 0x05-0xFF are reserved).
+static int GapLeSetExtendedAdvertisingParameters(
+    uint8_t advHandle, uint16_t properties, int8_t txPower, GapLeExAdvParam advExParam)
+{
+    int ret = GapLeValidateExtendedAdvertisingParameters(advHandle, properties, advExParam);
+    if (ret != GAP_SUCCESS) {
+        return ret;
+    }
+    return GapLeBuildAndSendExtendedAdvertisingParameters(advHandle, properties, txPower, advExParam);
+}
+
+// Validation of the [v2] parameters (7.8.53): the shared event-property checks of
+// GapLeSetExtendedAdvertisingParameters plus the [v1] range checks plus the two
+// option octets (option values 0x05-0xFF are reserved). Ordering mirrors the [v1]
+// function so that an input valid for neither reports the same error code.
 static int GapLeCheckExtendedAdvertisingParamsV2(const GapExAdvParamV2 *param)
 {
     if (param->advHandle > GAP_LE_ADV_HANDLE_MAX) {
         return GAP_ERR_INVAL_PARAM;
     }
 
+    if (GapLeCheckExtendedAdvPropCombinations(param->properties) != GAP_SUCCESS) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
     if ((param->properties & (GAP_LE_EXT_ADV_PROP_DIRECTED | GAP_LE_EXT_ADV_PROP_HIGH_DUTY_DIR)) &&
         param->advExParam.peerAddr == NULL) {
         return GAP_ERR_INVAL_PARAM;
+    }
+
+    int ret = GapLeCheckExtendedAdvDecisionProperties(param->properties);
+    if (ret != GAP_SUCCESS) {
+        return ret;
     }
 
     if (param->advExParam.advIntervalMin > param->advExParam.advIntervalMax ||
@@ -408,7 +494,7 @@ void GapLeSetExtendedAdvertisingParametersComplete(const HciLeSetExtendedAdverti
     }
 }
 
-int GAP_LeExAdvSetParam(uint8_t advHandle, uint8_t properties, int8_t txPower, GapLeExAdvParam advExParam)
+int GAP_LeExAdvSetParam(uint8_t advHandle, uint16_t properties, int8_t txPower, GapLeExAdvParam advExParam)
 {
     int ret;
     LOG_INFO("%{public}s:", __FUNCTION__);
@@ -549,6 +635,73 @@ int GAP_LeExAdvSetScanRspData(uint8_t advHandle, uint8_t operation, uint8_t frag
     } else {
         ret = GapLeSetExtendedScanResponseData(
             advHandle, operation, fragmentPreference, scanResponseDataLen, scanResponseData);
+    }
+    return ret;
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 4, Part E, 7.8.144
+// LE Set Decision Data is a fire-and-forget setter: the command may be issued
+// whether advertising on the set is enabled or not, and it touches no local
+// advertising-set state, so it follows the lock-free set-data precedent of
+// GapLeSetExtendedAdvertisingData (the controller resolves set existence and
+// answers 0x42 asynchronously through the ex-adv result slot).
+static int GapLeSetDecisionData(uint8_t advHandle, uint8_t decisionTypeFlags,
+    uint8_t decisionDataLength, const uint8_t *decisionData)
+{
+    if ((decisionTypeFlags & ~LE_DECISION_TYPE_FLAG_RESOLVABLE_TAG) != 0 ||
+        decisionDataLength > LE_DECISION_DATA_LEN_MAX ||
+        (decisionDataLength > 0 && decisionData == NULL)) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    // A Resolvable Tag is a fixed 6-octet leading subfield (Vol 6 Part B 2.3.1,11).
+    if ((decisionTypeFlags & LE_DECISION_TYPE_FLAG_RESOLVABLE_TAG) &&
+        decisionDataLength < LE_DECISION_RESOLVABLE_TAG_LEN) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    HciLeSetDecisionDataParam hciCmdParam = {
+        .advertisingHandle = advHandle,
+        .decisionTypeFlags = decisionTypeFlags,
+        .decisionDataLength = decisionDataLength,
+        .decisionData = decisionData,
+    };
+    return HCI_LeSetDecisionData(&hciCmdParam);
+}
+
+NO_SANITIZE("cfi")
+void GapLeSetDecisionDataComplete(const HciLeSetDecisionDataReturnParam *param)
+{
+    if (param == NULL) {
+        return;
+    }
+
+    if (g_leExAdvCallback.callback.exAdvSetDecisionDataResult) {
+        g_leExAdvCallback.callback.exAdvSetDecisionDataResult(param->status, g_leExAdvCallback.context);
+    }
+}
+
+int GAP_LeExAdvSetDecisionData(uint8_t advHandle, uint8_t decisionTypeFlags,
+    uint8_t decisionDataLength, const uint8_t *decisionData)
+{
+    int ret;
+    LOG_INFO("%{public}s: advHandle:%hhu", __FUNCTION__, advHandle);
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    if (advHandle > GAP_LE_ADV_HANDLE_MAX) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if (!BTM_IsControllerSupportLeDecisionBasedAdvertisingFiltering()) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+
+    if (GapLeRolesCheck(GAP_LE_ROLE_BROADCASTER | GAP_LE_ROLE_PERIPHERAL) == false) {
+        ret = GAP_ERR_INVAL_STATE;
+    } else {
+        ret = GapLeSetDecisionData(advHandle, decisionTypeFlags, decisionDataLength, decisionData);
     }
     return ret;
 }

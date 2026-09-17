@@ -27,7 +27,7 @@ extern "C" {
 #pragma pack(1)
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.1 LE Connection Complete Event
+// 7.7.65,1 LE Connection Complete Event
 #define HCI_LE_CONNECTION_COMPLETE_EVENT 0x01
 
 #define HCI_PEER_ADDR_TYPE_PUBLIC 0x00
@@ -46,7 +46,7 @@ typedef struct {
 } HciLeConnectionCompleteEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.2 LE Advertising Report Event
+// 7.7.65,2 LE Advertising Report Event
 #define HCI_LE_ADVERTISING_REPORT_EVENT 0x02
 
 typedef struct {
@@ -64,7 +64,7 @@ typedef struct {
 } HciLeAdvertisingReportEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.3 LE Connection Update Complete Event
+// 7.7.65,3 LE Connection Update Complete Event
 #define HCI_LE_CONNECTION_UPDATE_COMPLETE_EVENT 0x03
 
 typedef struct {
@@ -76,7 +76,7 @@ typedef struct {
 } HciLeConnectionUpdateCompleteEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.4 LE Read Remote Features Complete Event
+// 7.7.65,4 LE Read Remote Features Complete Event
 #define HCI_LE_READ_REMOTE_FEATURES_COMPLETE_EVENT 0x04
 
 typedef struct {
@@ -86,7 +86,7 @@ typedef struct {
 } HciLeReadRemoteFeaturesCompleteEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.5 LE Long Term Key Request Event
+// 7.7.65,5 LE Long Term Key Request Event
 #define HCI_LE_LONG_TERM_KEYREQUEST_EVENT 0x05
 
 typedef struct {
@@ -96,7 +96,7 @@ typedef struct {
 } HciLeLongTermKeyRequestEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.6 LE Remote Connection Parameter Request Event
+// 7.7.65,6 LE Remote Connection Parameter Request Event
 #define HCI_LE_REMOTE_CONNECTION_PARAMETER_REQUEST_EVENT 0x06
 
 typedef struct {
@@ -108,7 +108,7 @@ typedef struct {
 } HciLeRemoteConnectionParameterRequestEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.7 LE Data Length Change Event
+// 7.7.65,7 LE Data Length Change Event
 #define HCI_LE_DATA_LENGTH_CHANGE_EVENT 0x07
 
 typedef struct {
@@ -120,7 +120,7 @@ typedef struct {
 } HciLeDataLengthChangeEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.8 LE Read Local P-256 Public Key Complete Event
+// 7.7.65,8 LE Read Local P-256 Public Key Complete Event
 #define HCI_LE_READ_LOCAL_P256_PUBLIC_KEY_COMPLETE_EVENT 0x08
 
 typedef struct {
@@ -129,7 +129,7 @@ typedef struct {
 } HciLeReadLocalP256PublicKeyCompleteEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.9 LE Generate DHKey Complete Event
+// 7.7.65,9 LE Generate DHKey Complete Event
 #define HCI_LE_GENERATE_DHKEY_COMPLETE_EVENT 0x09
 
 typedef struct {
@@ -138,7 +138,7 @@ typedef struct {
 } HciLeGenerateDHKeyCompleteEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.10 LE Enhanced Connection Complete Event
+// 7.7.65,10 LE Enhanced Connection Complete Event
 #define HCI_LE_ENHANCED_CONNECTION_COMPLETE_EVENT 0x0A
 
 typedef struct {
@@ -156,7 +156,7 @@ typedef struct {
 } HciLeEnhancedConnectionCompleteEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.11 LE Directed Advertising Report Event
+// 7.7.65,11 LE Directed Advertising Report Event
 #define HCI_LE_DIRECTED_ADVERTISING_REPORT_EVENT 0x0B
 
 typedef struct {
@@ -174,7 +174,7 @@ typedef struct {
 } HciLeDirectedAdvertisingReportEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.12 LE PHY Update Complete Event
+// 7.7.65,12 LE PHY Update Complete Event
 #define HCI_LE_PHY_UPDATE_COMPLETE_EVENT 0x0C
 
 typedef struct {
@@ -185,7 +185,7 @@ typedef struct {
 } HciLePhyUpdateCompleteEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.13 LE Extended Advertising Report Event
+// 7.7.65,13 LE Extended Advertising Report Event
 #define HCI_LE_EXTENDED_ADVERTISING_REPORT_EVENT 0x0D
 
 #define HCI_PDU_TYPE_ADV_IND 4105
@@ -217,7 +217,7 @@ typedef struct {
 } HciLeExtendedAdvertisingReportEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.14 LE Periodic Advertising Sync Established Event
+// 7.7.65,14 LE Periodic Advertising Sync Established Event
 #define HCI_LE_PERIODIC_ADVERTISING_SYNC_ESTABLISHED_EVENT 0x0E
 
 typedef struct {
@@ -232,7 +232,7 @@ typedef struct {
 } HciLePeriodicAdvertisingSyncEstablishedEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.15 LE Periodic Advertising Report Event
+// 7.7.65,15 LE Periodic Advertising Report Event
 #define HCI_LE_PERIODIC_ADVERTISING_REPORT_EVENT 0x0F
 
 typedef struct {
@@ -251,7 +251,7 @@ typedef struct {
 } HciLePeriodicAdvertisingReportEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.16 LE Periodic Advertising Sync Lost Event
+// 7.7.65,16 LE Periodic Advertising Sync Lost Event
 #define HCI_LE_PERIODIC_ADVERTISING_SYNC_LOST_EVENT 0x10
 
 typedef struct {
@@ -259,11 +259,11 @@ typedef struct {
 } HciLePeriodicAdvertisingSyncLostEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.17 LE Scan Timeout Event
+// 7.7.65,17 LE Scan Timeout Event
 #define HCI_LE_SCAN_TIMEOUT_EVENT 0x11
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.18 LE Advertising Set Terminated Event
+// 7.7.65,18 LE Advertising Set Terminated Event
 #define HCI_LE_ADVERTISING_SET_TERMINATED_EVENT 0x12
 
 typedef struct {
@@ -274,7 +274,7 @@ typedef struct {
 } HciLeAdvertisingSetTerminatedEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.19 LE Scan Request Received Event
+// 7.7.65,19 LE Scan Request Received Event
 #define HCI_LE_SCAN_REQUEST_RECEIVED_EVENT 0x13
 
 typedef struct {
@@ -284,7 +284,7 @@ typedef struct {
 } HciLeScanRequestReceivedEventParam;
 
 // BLUETOOTH SPECIFICATION Version 5.0 | Vol 2, Part E
-// 7.7.65.20 LE Channel Selection Algorithm Event
+// 7.7.65,20 LE Channel Selection Algorithm Event
 #define HCI_LE_CHANNEL_SELECTION_ALGORITHM_EVENT 0x14
 
 typedef struct {
@@ -713,5 +713,8 @@ typedef struct {
 #ifdef __cplusplus
 }
 #endif
+
+// Bluetooth 6.0 LE Meta subevent additions; self-contained pack(1) section.
+#include "hci_def_le_evt_6_0.h"
 
 #endif

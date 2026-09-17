@@ -22,6 +22,7 @@
 #include "btm.h"
 #include "hci/hci.h"
 #include "hci/hci_le_controller_5_0.h"
+#include "hci/hci_le_controller_6_0.h"
 #include "hci/hci_error.h"
 #include "l2cap_le_if.h"
 #include "smp/smp.h"
@@ -46,6 +47,9 @@
 // (Vol 4, Part E, 7.8.63): bit 1 includes the ADI field in AUX_SYNC_IND PDUs.
 #define GAP_PERIODIC_ADV_ENABLE_INCLUDE_ADI 0x02
 #define GAP_PERIODIC_ADV_ENABLE_TRUE_ADI (GAP_PERIODIC_ADV_ENABLE_TRUE | GAP_PERIODIC_ADV_ENABLE_INCLUDE_ADI)
+// Bluetooth 6.0 (Vol 4, Part E, 7.8.149) LE Enable Monitoring Advertisers:
+// Enable is 0x00 disable or 0x01 enable/restart; all other values are RFU.
+#define GAP_MONITORED_ADV_ENABLE_TRUE 0x01
 #define GAP_LE_RF_PATH_COMPENSATION_MIN (-1280)
 #define GAP_LE_RF_PATH_COMPENSATION_MAX (1280)
 #define GAP_LE_TEST_DATA_LENGTH_MAX 0xFF
@@ -197,6 +201,7 @@ void GapLeSetAdvertisingSetRandomAddressComplete(const HciLeSetAdvertisingSetRan
 void GapLeSetExtendedAdvertisingParametersComplete(const HciLeSetExtendedAdvertisingParametersReturnParam *param);
 void GapLeSetExtendedAdvertisingDataComplete(const HciLeSetExtendedAdvertisingDataReturnParam *param);
 void GapLeSetExtendedScanResponseDataComplete(const HciLeSetExtendedScanResponseDataReturnParam *param);
+void GapLeSetDecisionDataComplete(const HciLeSetDecisionDataReturnParam *param);
 void GapLeSetExtendedAdvertisingEnableComplete(const HciLeSetExtendedAdvertisingEnableReturnParam *param);
 void GapOnLeScanRequestReceivedEvent(const HciLeScanRequestReceivedEventParam *eventParam);
 void GapLeRemoveAdvertisingSetComplete(const HciLeRemoveAdvertisingSetReturnParam *param);
@@ -216,6 +221,7 @@ void GapOnLeDirectedAdvertisingReport(const HciLeDirectedAdvertisingReportEventP
 void GapOnLeScanTimeoutEvent(const void *eventParam);
 void GapLeSetExtendedScanParametersComplete(const HciLeSetExtendedScanParametersReturnParam *param);
 void GapLeSetExtendedScanEnableComplete(const HciLeSetExtendedScanEnableReturnParam *param);
+void GapLeSetDecisionInstructionsComplete(const HciLeSetDecisionInstructionsReturnParam *param);
 void GapGenerateRPAResult(uint8_t status, const uint8_t *addr);
 void GapResolveRPAResult(uint8_t status, bool result, const uint8_t *addr, const uint8_t *irk);
 
@@ -261,6 +267,7 @@ void GapLeSetPhyComplete(const HciLeSetPhyReturnParam *param);
 void GapOnLePhyUpdateCompleteEvent(const HciLePhyUpdateCompleteEventParam *eventParam);
 void GapLeSetDataLengthComplete(const HciLeSetDataLengthReturnParam *param);
 void GapOnLeDataLengthChangeEvent(const HciLeDataLengthChangeEventParam *eventParam);
+void GapOnLeFrameSpaceUpdateCompleteEvent(const HciLeFrameSpaceUpdateCompleteEventParam *eventParam);
 void GapLeSetPeriodicAdvertisingParametersComplete(
     const HciLeSetPeriodicAdvertisingParametersReturnParam *param);
 void GapLeSetPeriodicAdvertisingDataComplete(const HciLeSetPeriodicAdvertisingDataReturnParam *param);
@@ -278,6 +285,16 @@ void GapLeRemoveDeviceFromPeriodicAdvertiserListComplete(
     const HciLeRemoveDeviceFromPeriodicAdvertiserListReturnParam *param);
 void GapLeClearPeriodicAdvertiserListComplete(const HciLeClearPeriodicAdvertiserListReturnParam *param);
 void GapLeReadPeriodicAdvertiserListSizeComplete(const HciLeReadPeriodicAdvertiserListSizeReturnParam *param);
+// Bluetooth 6.0 (Vol 4, Part E, 7.8.146-150 / 7.7.65,47) Monitoring Advertisers
+// task targets, owned by gap_le_scan.c and dispatched from gap_hci_receive.c.
+void GapLeAddDeviceToMonitoredAdvertisersListComplete(
+    const HciLeAddDeviceToMonitoredAdvertisersListReturnParam *param);
+void GapLeRemoveDeviceFromMonitoredAdvertisersListComplete(
+    const HciLeRemoveDeviceFromMonitoredAdvertisersListReturnParam *param);
+void GapLeClearMonitoredAdvertisersListComplete(const HciLeClearMonitoredAdvertisersListReturnParam *param);
+void GapLeReadMonitoredAdvertisersListSizeComplete(const HciLeReadMonitoredAdvertisersListSizeReturnParam *param);
+void GapLeEnableMonitoringAdvertisersComplete(const HciLeEnableMonitoringAdvertisersReturnParam *param);
+void GapOnLeMonitoredAdvertisersReportEvent(const HciLeMonitoredAdvertisersReportEventParam *eventParam);
 void GapLeReadTransmitPowerComplete(const HciLeReadTransmitPowerReturnParam *param);
 void GapLeReadRfPathCompensationComplete(const HciLeReadRfPathCompensationReturnParam *param);
 void GapLeWriteRfPathCompensationComplete(const HciLeWriteRfPathCompensationReturnParam *param);

@@ -1241,7 +1241,7 @@ HWTEST_F(StackGapLe54EventParseTest, StackGapLe54_EventParse_SyncEstablishedV2_0
 
 /**
  * @tc.number: StackGapLe54_EventParse_SyncEstablishedV2Plain_00200
- * @tc.name:  0x24 无子事件：尾四值全 0（7.7.65.14 空参数规则）
+ * @tc.name:  0x24 无子事件：尾四值全 0（7.7.65,14 空参数规则）
  * @tc.desc:  Num_Subevents=0 时 Controller 把其余三个尾值也置 0，解析如实上报
  */
 HWTEST_F(StackGapLe54EventParseTest, StackGapLe54_EventParse_SyncEstablishedV2Plain_00200, TestSize.Level1)
@@ -1309,7 +1309,7 @@ HWTEST_F(StackGapLe54EventParseTest, StackGapLe54_EventParse_ReportV2_00500, Tes
 
 /**
  * @tc.number: StackGapLe54_EventParse_ReportV2Plain_00600
- * @tc.name:  0x25 无子事件：Subevent=0xFF、空 Data（7.7.65.15 空参数规则）
+ * @tc.name:  0x25 无子事件：Subevent=0xFF、空 Data（7.7.65,15 空参数规则）
  */
 HWTEST_F(StackGapLe54EventParseTest, StackGapLe54_EventParse_ReportV2Plain_00600, TestSize.Level1)
 {
@@ -1370,7 +1370,7 @@ HWTEST_F(StackGapLe54EventParseTest, StackGapLe54_EventParse_SyncTransferReceive
 /**
  * @tc.number: StackGapLe54_EventParse_SyncTransferReceivedV2NoSubevent_00900
  * @tc.name:  0x26 无子事件：仅 Num_Subevents=0，其余三个尾值原样透传
- * @tc.desc:  与 0x24 不同，0x26 对无子事件训练的其余尾值规范未指定（7.7.65.24
+ * @tc.desc:  与 0x24 不同，0x26 对无子事件训练的其余尾值规范未指定（7.7.65,24
  *            "Host shall ignore"）——解析不得假定 0x00。0x77/0x88/0x99 三个
  *            非零值即为"未清零改写"的回归探针
  */
@@ -1608,7 +1608,7 @@ HWTEST_F(StackGapLe54EventParseTest, StackGapLe54_EventParse_UnknownSubevent_017
 /**
  * @tc.number: StackGapLe54_EventParse_ExtAdvReportPhyPassThrough_01800
  * @tc.name:  A3：0x0D Ext Adv Report 的 PHY 原样透传（0x04/0x03 与 0x01/0x00）
- * @tc.desc:  7.7.65.13 的 0x04 = LE Coded S=2 值扩展由 Controller 在 bit 41
+ * @tc.desc:  7.7.65,13 的 0x04 = LE Coded S=2 值扩展由 Controller 在 bit 41
  *            （ACS Host Support）置位时上报，HCI 层只透传不改写；两个 24 字节
  *            报告步长内的字段逐一断言，任何偏移错误都会在第二份报告上显形
  */
@@ -2310,7 +2310,7 @@ HWTEST_F(StackGapLe54Test, StackGapLe54_SyncTransferReceivedV2E2E_01800, TestSiz
 /**
  * @tc.number: StackGapLe54_SyncTransferReceivedV2NoSubeventE2E_01900
  * @tc.name:  P4 活栈注入 0x26 无子事件 → 非零尾原样透传（不得假定 0）
- * @tc.desc:  与 0x24 的空参数规则不同（7.7.65.24）：无子事件时仅
+ * @tc.desc:  与 0x24 的空参数规则不同（7.7.65,24）：无子事件时仅
  *            Num_Subevents=0 有定义，其余三个尾值透传（0x77/0x88/0x99），
  *            消费层必须忽略而非清零
  */

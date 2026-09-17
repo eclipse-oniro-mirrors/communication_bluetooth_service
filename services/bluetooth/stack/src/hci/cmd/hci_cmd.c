@@ -160,6 +160,13 @@ static int HciCmdPushToTxQueue(HciCmd *cmd)
     return result;
 }
 
+// Timeout path for one sent command. The failure dispatch below is deliberately outside the
+// param guard: HciAllocCmd stores param == NULL for a command sent without one, so guarding
+// the dispatch silently dropped the failure row of every parameterless Command_Complete
+// command (32 of the 37 such commands predate the guard, so this was a long-standing hole
+// rather than a new one). The row contract already requires tolerating a NULL param, and the
+// dispatch must run before param is freed, so the guard now covers the free alone. The global
+// fan-out below is unconditional and does not consume param.
 static void HciCmdTimeoutTask(void *context)
 {
     HciCmd *pCmd = NULL;
@@ -195,9 +202,8 @@ static void HciCmdTimeoutTask(void *context)
             pCmd->param = NULL;
             AlarmCancel(pCmd->alarm);
             ListRemoveNode(g_processingCmds, pCmd);
-            // A bogus 0x0000 opcode must neither pollute the absorb list nor skip the
-            // dispatch below while leaking the stolen param: record the timeout only for a
-            // real opcode, and the early return below frees the param on the guard path.
+            // A bogus 0x0000 opcode must not pollute the absorb list or reach the dispatch
+            // below: record it only for a real opcode; the early return releases the param.
             if (opCode != 0) {
                 HciAddTimedOutCmd(opCode);
             }
@@ -216,8 +222,11 @@ static void HciCmdTimeoutTask(void *context)
         return;
     }
 
+    // A timed-out command reaches its failure row with or without a param (rows tolerate
+    // NULL, see the HciCmdOnFailedFunc contract); dispatch must precede the free below.
+    HciOnCmdFailed(opCode, HCI_TIMEOUT, param);
+
     if (param != NULL) {
-        HciOnCmdFailed(opCode, HCI_TIMEOUT, param);
         MEM_MALLOC.free(param);
     }
 
@@ -238,29 +247,62 @@ static void HciCmdOnCmdTimeout(void *parameter)
     }
 }
 
-// Pushes one cached command into the TX queue and tracks it in the processing list;
-// frees @p cmd on any failure. The outstanding-command count is only consumed once the
-// command is tracked: a tracking failure restores it, a push failure leaves it untouched
-// (the caller's loop condition then consumes it again, same as the original flow).
+// Track before transmit: this is the one ordering the command layer rests on. Answers are
+// dispatched by opcode against g_processingCmds (HciCmdOnCommandComplete / HciCmdOnCommandStatus)
+// and the timeout alarm is the only failure escape for a Controller that never answers, so a
+// command that reaches the wire without both has its answer dropped and its caller is never told
+// it failed. Taking both first makes "transmitted implies tracked" a property of the code order
+// instead of something a failure path has to restore afterwards.
+// Returns the failure and leaves @p cmd untracked and owned by the caller when the alarm cannot be
+// armed or the entry cannot be added. A missing alarm is refused rather than tolerated: sending
+// without the escape is exactly what leaves a lost answer hanging its caller forever.
+static int HciCmdTrack(HciCmd *cmd)
+{
+    int result = BT_SUCCESS;
+
+    MutexLock(g_lockProcessingCmds);
+    // The alarm goes first on purpose: if it cannot be armed, nothing has been added yet and the
+    // refusal needs no rollback.
+    if (cmd->alarm == NULL || AlarmSet(cmd->alarm, CMD_TIMEOUT, HciCmdOnCmdTimeout,
+            (void *)(uintptr_t)cmd->generation) != 0) {
+        // AlarmCreate may already have failed in HciAllocCmd, so the handle is checked too.
+        LOG_WARN("HciCmdTrack: no timeout alarm, opCode:0x%04x not sent", cmd->opCode);
+        result = BT_OPERATION_FAILED;
+    } else if (!ListAddLast(g_processingCmds, cmd)) {
+        // Without the entry the answer would find no pending match and be dropped.
+        AlarmCancel(cmd->alarm);
+        result = BT_NO_MEMORY;
+    }
+    MutexUnlock(g_lockProcessingCmds);
+
+    return result;
+}
+
+// Undo HciCmdTrack on a path where the packet never left the host. The removal runs the list's
+// data destructor (HciFreeCmd), so @p cmd is freed here and must not be touched afterwards - which
+// is what keeps the ownership contract of HciSendCmd intact on its failure path too.
+static void HciCmdUntrack(HciCmd *cmd)
+{
+    MutexLock(g_lockProcessingCmds);
+    ListRemoveNode(g_processingCmds, cmd);
+    MutexUnlock(g_lockProcessingCmds);
+}
+
+// Sends one cached command: HciCmdTrack first, then the push, and only a command that came through
+// both consumes an outstanding-command credit. On any failure @p cmd is freed and no credit is
+// consumed, so the caller's loop re-reads the same count and moves on to the next cached command -
+// the same accounting a push failure always had.
 static void HciCmdStartCachedCmd(HciCmd *cmd)
 {
-    if (HciCmdPushToTxQueue(cmd) != BT_SUCCESS) {
+    if (HciCmdTrack(cmd) != BT_SUCCESS) {
         HciFreeCmd(cmd);
         return;
     }
-    g_numberOfHciCmd--;
-
-    MutexLock(g_lockProcessingCmds);
-    AlarmSet(cmd->alarm, CMD_TIMEOUT, HciCmdOnCmdTimeout, (void *)(uintptr_t)cmd->generation);
-    if (!ListAddLast(g_processingCmds, cmd)) {
-        // OOM: the command is in the TX queue but untracked - its answer would find no
-        // pending match (dropped with a warning) and the caller would hang without a
-        // failure dispatch. Roll back like the push failure (free the command, restore
-        // the outstanding-command count).
-        g_numberOfHciCmd++;
-        HciFreeCmd(cmd);
+    if (HciCmdPushToTxQueue(cmd) != BT_SUCCESS) {
+        HciCmdUntrack(cmd);
+        return;
     }
-    MutexUnlock(g_lockProcessingCmds);
+    g_numberOfHciCmd--;
 }
 
 void HciSetNumberOfHciCmd(uint8_t numberOfHciCmd)
@@ -390,41 +432,49 @@ static void HciAddTimedOutCmd(uint16_t opCode)
 // Ownership contract: HciSendCmd takes ownership of @p cmd regardless of whether
 // it returns BT_SUCCESS or an error. The caller must not access or free @p cmd
 // after this call.
+// The command is tracked before the packet can leave the host (HciCmdTrack), so an error returned
+// here means the command was never transmitted: no error is ever reported for a command that the
+// Controller received and will answer. A command the cache takes returns BT_SUCCESS, as it always
+// did - it is sent later by HciCmdStartCachedCmd, which tracks it the same way.
+// A command the cache cannot take returns BT_NO_MEMORY. The cache is not a side door around the
+// "an error means it never went out" rule: a command it dropped would sit in no queue, hold no
+// timeout and never reach a completion handler, so nothing would ever report it - while the caller
+// was told BT_SUCCESS. The blocking form is not an option either, because this runs under
+// g_lockNumberOfHciCmd, the same lock HciSetNumberOfHciCmd needs to drain the cache.
 int HciSendCmd(HciCmd *cmd)
 {
     int result = BT_SUCCESS;
-    bool push_failed = false;
 
     MutexLock(g_lockNumberOfHciCmd);
 
-    if (g_numberOfHciCmd > 0) {
-        result = HciCmdPushToTxQueue(cmd);
-        if (result == BT_SUCCESS) {
-            g_numberOfHciCmd--;
-
-            MutexLock(g_lockProcessingCmds);
-            AlarmSet(cmd->alarm, CMD_TIMEOUT, HciCmdOnCmdTimeout, (void *)(uintptr_t)cmd->generation);
-            if (!ListAddLast(g_processingCmds, cmd)) {
-                // OOM: the command is in the TX queue but untracked - its answer would find
-                // no pending match (dropped with a warning) and the caller would hang without
-                // a failure dispatch. Roll back like the push failure below (free the command,
-                // the packet is owned by the TX queue, and restore the slot count).
-                g_numberOfHciCmd++;
-                push_failed = true;
-            }
-            MutexUnlock(g_lockProcessingCmds);
-        } else {
-            push_failed = true;
+    if (g_numberOfHciCmd == 0) {
+        // The reporting form, not the void one: a command the cache cannot take would
+        // vanish untracked and untimed-out, with the caller told BT_SUCCESS.
+        bool cached = QueueTryEnqueue(g_cmdCache, cmd);
+        MutexUnlock(g_lockNumberOfHciCmd);
+        if (!cached) {
+            HciFreeCmd(cmd);
+            return BT_NO_MEMORY;
         }
+        return BT_SUCCESS;
+    }
+
+    result = HciCmdTrack(cmd);
+    if (result != BT_SUCCESS) {
+        // Never tracked, never transmitted: @p cmd is still ours to free.
+        HciFreeCmd(cmd);
     } else {
-        QueueEnqueue(g_cmdCache, cmd);
+        result = HciCmdPushToTxQueue(cmd);
+        if (result != BT_SUCCESS) {
+            // The packet never left: drop the tracking (which frees @p cmd) and give the
+            // outstanding-command slot back, because nothing went out to consume it.
+            HciCmdUntrack(cmd);
+        } else {
+            g_numberOfHciCmd--;
+        }
     }
 
     MutexUnlock(g_lockNumberOfHciCmd);
-
-    if (push_failed) {
-        HciFreeCmd(cmd);
-    }
 
     return result;
 }
@@ -549,9 +599,17 @@ bool HciCmdOnCommandStatus(uint16_t opCode, uint8_t status)
     return true;
 }
 
-bool HciCmdOnCommandComplete(uint16_t opCode)
+// False when the Complete must not be dispatched to the upper layers: it was absorbed as the late
+// answer of a timed-out command of the same opcode, no pending command of that opcode is tracked,
+// or the return body is empty. An empty body is a Controller violation (Vol 4 Part E 4.5: the
+// Status shall always be returned) with no Status to dispatch, so the failure row of opCode is
+// invoked with the original parameter block instead of dispatching - the same shape the timeout
+// path and HciCmdOnCommandStatus use, and the reason the block is taken off the command before the
+// removal below frees it.
+bool HciCmdOnCommandComplete(uint16_t opCode, uint8_t returnParametersLength)
 {
     HciCmd *cmd = NULL;
+    bool malformed = (returnParametersLength == 0);
 
     MutexLock(g_lockProcessingCmds);
 
@@ -573,8 +631,16 @@ bool HciCmdOnCommandComplete(uint16_t opCode)
         node = ListGetNextNode(node);
     }
 
+    void *param = NULL;
+
     if (cmd != NULL) {
         AlarmCancel(cmd->alarm);
+        if (malformed) {
+            // The removal below runs HciFreeCmd, which would free the block the empty-body
+            // row needs: take it off first, exactly as the timeout path does.
+            param = cmd->param;
+            cmd->param = NULL;
+        }
         ListRemoveNode(g_processingCmds, cmd);
     }
 
@@ -586,6 +652,15 @@ bool HciCmdOnCommandComplete(uint16_t opCode)
         // answer from reaching the upper layers; every command sent through HciSendCmd is
         // tracked in g_processingCmds, so a legitimate answer always has a pending match.
         LOG_WARN("HCI Command_Complete opcode: 0x%04x has no pending command, dropped", opCode);
+        return false;
+    }
+    if (malformed) {
+        // No Status was returned to dispatch, so report the malformed Complete through the
+        // failure row; param is NULL only when the command was sent without one.
+        HciOnCmdFailed(opCode, HCI_MALFORMED_EVENT, param);
+        if (param != NULL) {
+            MEM_MALLOC.free(param);
+        }
         return false;
     }
     return true;
