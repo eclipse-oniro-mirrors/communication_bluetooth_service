@@ -1978,7 +1978,7 @@ int32_t BluetoothHostServer::GetBrAddressByBleAddress(const std::string &bleAddr
     return BT_ERR_API_NOT_SUPPORT;
 }
 
-int32_t BluetoothHostServer::GetBleMacByBrMac(const std::string &brMac, std::string &bleMac) 
+int32_t BluetoothHostServer::GetBleMacByBrMac(const std::string &brMac, std::string &bleMac)
 {
     return BT_ERR_API_NOT_SUPPORT;
 }
