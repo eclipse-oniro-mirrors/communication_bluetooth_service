@@ -181,6 +181,8 @@ const std::map<uint32_t, BluetoothHostStub::BluetoothHostStubFuncPerm> Bluetooth
         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
     {STUB_FUNC(GET_BR_ADDRESS_BY_BLE_ADDRESS, GetBrAddressByBleAddressInner,
         CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
+    {STUB_FUNC(GET_BLE_MAC_BY_BR_MAC, GetBleMacByBrMacInner,
+        CHECK_PERM(false, {}, MULTI_PERM(ACCESS_BLUETOOTH, MANAGE_BLUETOOTH)))},
 };
 
 BluetoothHostStub::BluetoothHostStub(){};
@@ -1466,6 +1468,12 @@ int32_t BluetoothHostStub::SetBtChannelScanInner(MessageParcel &data, MessagePar
 }
 
 int32_t BluetoothHostStub::GetBrAddressByBleAddressInner(MessageParcel &data, MessageParcel &reply)
+{
+    reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
+    return NO_ERROR;
+}
+
+int32_t BluetoothHostStub::GetBleMacByBrMacInner(MessageParcel &data, MessageParcel &reply)
 {
     reply.WriteInt32(BT_ERR_API_NOT_SUPPORT);
     return NO_ERROR;
