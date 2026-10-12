@@ -1875,7 +1875,7 @@ int32_t BluetoothHostServer::SetFastScanLevel(int level)
     return BT_ERR_API_NOT_SUPPORT;
 }
 
-int32_t BluetoothHostServer::EnableBluetoothToRestrictMode(const std::string &callingName)
+int32_t BluetoothHostServer::EnableBluetoothToRestrictMode(const std::string &callingName, bool isBleOwnerMode)
 {
     (void)(callingName);
     return BT_ERR_API_NOT_SUPPORT;
