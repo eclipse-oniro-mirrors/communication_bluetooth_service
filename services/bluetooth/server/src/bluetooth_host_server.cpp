@@ -297,7 +297,7 @@ public:
             if (!CheckDiscoverOrAccessPermission(tokenId)) {
                 return;
             }
-            observer->OnDiscoveryResult(device, rssi, deviceName, deviceClass);
+            observer->OnDiscoveryResult(device, rssi, deviceName, deviceClass, TRANSPORT_BR_EDR);
         });
     }
 
@@ -496,7 +496,7 @@ public:
             if (!CheckDiscoverOrAccessPermission(tokenId)) {
                 return;
             }
-            observer->OnDiscoveryResult(device, rssi, deviceName, deviceClass);
+            observer->OnDiscoveryResult(device, rssi, deviceName, deviceClass, TRANSPORT_LE);
         });
     }
 

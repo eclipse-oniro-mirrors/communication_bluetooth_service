@@ -72,8 +72,8 @@ void BluetoothHostObserverProxy::OnDiscoveryStateChanged(int32_t status)
     }
 }
 
-void BluetoothHostObserverProxy::OnDiscoveryResult(
-    const BluetoothRawAddress &device, int rssi, const std::string deviceName, int deviceClass)
+void BluetoothHostObserverProxy::OnDiscoveryResult(const BluetoothRawAddress &device, int rssi,
+    const std::string deviceName, int deviceClass, int transport)
 {
     MessageParcel data;
 
@@ -98,6 +98,11 @@ void BluetoothHostObserverProxy::OnDiscoveryResult(
     }
 
     if (!data.WriteInt32(deviceClass)) {
+        HILOGE("BluetoothHostObserverProxy::OnDiscoveryResult deviceClass error");
+        return;
+    }
+
+    if (!data.WriteInt32(transport)) {
         HILOGE("BluetoothHostObserverProxy::OnDiscoveryResult deviceClass error");
         return;
     }
