@@ -1251,7 +1251,14 @@ void AttWriteRequest(AttConnectInfo *connect, const Buffer *buffer)
     }
     data = (uint8_t *)BufferPtr(buffer);
     attWriteObj.writeRequest.attHandle = ((uint16_t *)data)[0];
-    bufferNew = BufferSliceMalloc(buffer, STEP_TWO, buffSize - STEP_TWO);
+    if (buffSize > STEP_TWO) {
+        bufferNew = BufferSliceMalloc(buffer, STEP_TWO, buffSize - STEP_TWO);
+        if (bufferNew == NULL) {
+            LOG_ERROR("%{public}s: failed to slice the attribute value, size(%{public}zu)", __FUNCTION__, buffSize);
+            AttReplyInvalidPdu(connect, WRITE_REQUEST);
+            return;
+        }
+    }
     LOG_INFO("%{public}s connectHandle = %hu, callback para : attHandle = %{public}d",
         __FUNCTION__,
         connect->retGattConnectHandle,
