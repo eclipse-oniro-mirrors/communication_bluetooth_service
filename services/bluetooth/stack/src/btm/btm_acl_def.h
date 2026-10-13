@@ -52,8 +52,8 @@ extern "C" {
 
 #define REQUEST_NOT_COMPLETED 0xff
 
-// Shared between btm_acl.c and btm_acl_features.c (see the file split of the
-// remote-feature support requests and their HCI event callbacks).
+// Shared between btm_acl.c, btm_acl_features.c and btm_acl_dbaf.c
+// (file splits of remote-feature support requests and DBAF decision connect).
 
 typedef enum {
     CONNECTING,
@@ -135,16 +135,27 @@ typedef struct {
 } BtmRemoteDeviceSupportRequest;
 
 extern Mutex *g_aclListLock;
+// Protects the auto-connect/DBAF initiator state and serializes HCI LE Create
+// Connection / LE Create Connection Cancel commands. Any code path that starts,
+// stops, or cancels an auto-connect or DBAF initiator (including whitelist and
+// decision-based filtering paths) must hold this lock around the state
+// read-modify-write and the HCI command submission. Shared by btm_acl.c and
+// btm_acl_dbaf.c.
+extern Mutex *g_autoConnectLock;
 extern List *g_remoteSupportRequestList;
 
 extern BtmAclConnection *BtmAclFindConnectionByHandle(uint16_t handle);
+extern bool BtmAclIsInitialized(void);
+extern int BtmLeExtendedCreateConnection(uint8_t initiatorFilterPolicy);
 
 extern void BtmOnLeReadRemoteFeaturesComplete(const HciLeReadRemoteFeaturesCompleteEventParam *eventParam);
+extern void BtmOnLeReadAllRemoteFeaturesComplete(const HciLeReadAllRemoteFeaturesCompleteEventParam *eventParam);
 extern void BtmOnReadRemoteVersionInformationComplete(
     const HciReadRemoteVersionInformationCompleteEventParam *eventParam);
 extern void BtmOnReadRemoteSupportedFeaturesComplete(
     const HciReadRemoteSupportedFeaturesCompleteEventParam *eventParam);
 extern void BtmOnReadRemoteExtendedFeaturesComplete(const HciReadRemoteExtendedFeaturesCompleteEventParam *eventParam);
+extern void BtmRemoveRemoteDeviceSupportRequestsByHandle(uint16_t connectionHandle);
 
 #ifdef __cplusplus
 }

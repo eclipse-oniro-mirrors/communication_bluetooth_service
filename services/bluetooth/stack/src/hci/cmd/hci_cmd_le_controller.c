@@ -79,14 +79,14 @@
 #define LE_OPERATION_MAX 0x03
 #define LE_PERIODIC_ADV_OPERATION_MAX 0x04
 #define LE_PERIODIC_ADV_OPERATION_UNCHANGED_DATA 0x04
-// Extended scan (7.8.64) and extended create connection (7.8.66) accept
-// Filter_Policy 0x00-0x02; periodic advertising create sync (7.8.67)
-// accepts only 0x00-0x01 (use-periodic-advertiser-list).
-#define LE_FILTER_POLICY_MAX 0x02
+// Periodic advertising create sync (7.8.67) accepts only Filter_Policy
+// 0x00-0x01 (use-periodic-advertiser-list). BT6.0 widened the scan (7.8.64)
+// and extended create connection (7.8.66) policy ranges; those checks use the
+// LE_SCAN_DECISION_MODE_* / LE_INITIATOR_FILTER_POLICY_* macros from
+// hci_def_le_cmd_6_0.h instead of a shared local max.
 #define LE_FILTER_POLICY_MAX_CREATE_SYNC 0x01
 
 // LE Set Extended Advertising Parameters (7.8.53) field limits.
-#define LE_EXT_ADV_EVENT_PROPERTIES_RESERVED_MASK 0xFF00 // bits 8-15 are RFU
 #define LE_EXT_ADV_CHANNEL_MAP_MASK 0x07 // Primary_Advertising_Channel_Map is 3 bits
 #define LE_EXT_ADV_PEER_ADDRESS_TYPE_MAX 0x01 // identity types (0x02/0x03) are not valid here
 #define LE_EXT_ADV_FILTER_POLICY_MAX 0x03
@@ -951,8 +951,11 @@ static int HciLeSetExtendedScanParametersCheck(
         }
     }
 
+    // Scanning_Filter_Policy valid set is {0x00..0x0F} minus the decision-mode
+    // RFU bytes {0x08..0x0B}: bits 4-7 are RFU and bits 2-3 must not be 0b10.
     if (param->ownAddressType > LE_OWN_ADDRESS_TYPE_MAX ||
-        param->scanningFilterPolicy > LE_FILTER_POLICY_MAX) {
+        (param->scanningFilterPolicy & ~0x0F) != 0 ||
+        (param->scanningFilterPolicy & LE_SCAN_DECISION_MODE_MASK) == LE_SCAN_DECISION_MODE_RFU) {
         return BT_BAD_PARAM;
     }
 
@@ -1057,7 +1060,9 @@ static int HciLeExtendedCreateConnectionCheck(
         numSets++;
     }
 
-    if (param->initiatingFilterPolicy > LE_FILTER_POLICY_MAX ||
+    // Initiator_Filter_Policy range is 0x00-0x04 (7.8.66 p2637). The decision
+    // values 0x02-0x04 need Controller bit 42, checked on the GAP set path.
+    if (param->initiatingFilterPolicy > LE_INITIATOR_FILTER_POLICY_MAX ||
         param->ownAddressType > LE_OWN_ADDRESS_TYPE_MAX ||
         param->peerAddressType > LE_PEER_ADDRESS_TYPE_MAX) {
         return BT_BAD_PARAM;

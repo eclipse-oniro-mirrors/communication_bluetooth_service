@@ -427,12 +427,12 @@ static HciEventCommandCompleteFunc g_linkControlCommandCompleteMap[] = {
 
 void HciEventOnLinkControlCommandComplete(uint16_t opCode, const void *param, uint8_t length)
 {
-    uint16_t ogf = GET_OCF(opCode);
-    if (ogf > LINKCONTROL_OCF_MAX) {
+    uint16_t ocf = GET_OCF(opCode);
+    if (ocf > LINKCONTROL_OCF_MAX) {
         return;
     }
 
-    HciEventCommandCompleteFunc func = g_linkControlCommandCompleteMap[ogf];
+    HciEventCommandCompleteFunc func = g_linkControlCommandCompleteMap[ocf];
     if (func != NULL) {
         func(param, length);
     }

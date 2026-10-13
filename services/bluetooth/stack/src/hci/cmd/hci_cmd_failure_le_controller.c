@@ -26,8 +26,7 @@
 
 #include "hci_cmd_failure.h"
 #include "log.h"
-
-#define INVALID_CONNECTION_HANDLE 0xFFFF
+#include "hci_cmd_failure_le_controller_6_0.h"
 
 static void HciCmdOnLeSetEventMaskFailed(uint8_t status, const void *param)
 {
@@ -188,7 +187,7 @@ static void HciCmdOnLeCreateConnectionFailed(uint8_t status, const void *param)
     HciLeConnectionCompleteEventParam eventParam = {
         .status = status,
         .peerAddress = {0},
-        .peerAddressType = 0xFF,
+        .peerAddressType = INVALID_ADDRESS_TYPE,
     };
 
     if (param != NULL) {
@@ -1039,7 +1038,7 @@ static void HciCmdOnLeExtendedCreateConnectionFailed(uint8_t status, const void 
 {
     HciLeEnhancedConnectionCompleteEventParam eventParam = {
         .status = status,
-        .peerAddressType = 0xFF,
+        .peerAddressType = INVALID_ADDRESS_TYPE,
         .peerAddress = {0},
     };
 
@@ -1077,9 +1076,9 @@ static void HciCmdOnLePeriodicAdvertisingCreateSyncFailed(uint8_t status, const 
 {
     HciLePeriodicAdvertisingSyncEstablishedEventParam eventParam = {
         .status = status,
-        .syncHandle = 0xFFFF,
+        .syncHandle = INVALID_CONNECTION_HANDLE,
         .advertisingSid = 0xFF,
-        .advertiserAddressType = 0xFF,
+        .advertiserAddressType = INVALID_ADDRESS_TYPE,
         .advertiserAddress = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
         .advertiserPhy = 0x00,
         .periodicAdvertisingInterval = 0xFFFF,
@@ -1529,7 +1528,8 @@ static void HciCmdOnLeReadIsoTxSyncFailed(uint8_t status, const void *param)
     // from the wire payload explicitly instead.
     HciLeReadIsoTxSyncReturnParam returnParam = {
         .status = status,
-        .connectionHandle = (param != NULL) ? ((const HciLeReadIsoTxSyncParam *)param)->connectionHandle : 0,
+        .connectionHandle = (param != NULL) ? ((const HciLeReadIsoTxSyncParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1626,7 +1626,7 @@ static void HciCmdOnLeRemoveCigFailed(uint8_t status, const void *param)
         // echo the command's CIG_ID so the receiver can match it against the
         // pending remove; a synthesized failure must behave like the real
         // Command Complete of the same command
-        .cigId = (param != NULL) ? ((const HciLeRemoveCigParam *)param)->cigId : 0,
+        .cigId = (param != NULL) ? ((const HciLeRemoveCigParam *)param)->cigId : INVALID_HANDLE_8BIT,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1643,7 +1643,8 @@ static void HciCmdOnLeAcceptCisRequestFailed(uint8_t status, const void *param)
 {
     HciLeCisEstablishedEventParam eventParam = {
         .status = status,
-        .connectionHandle = (param != NULL) ? ((const HciLeAcceptCisRequestParam *)param)->cisHandle : 0,
+        .connectionHandle = (param != NULL) ? ((const HciLeAcceptCisRequestParam *)param)->cisHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1658,7 +1659,8 @@ static void HciCmdOnLeRejectCisRequestFailed(uint8_t status, const void *param)
 {
     HciLeRejectCisRequestReturnParam returnParam = {
         .status = status,
-        .cisHandle = (param != NULL) ? ((const HciLeRejectCisRequestParam *)param)->cisHandle : 0,
+        .cisHandle = (param != NULL) ? ((const HciLeRejectCisRequestParam *)param)->cisHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1750,7 +1752,8 @@ static void HciCmdOnLeReadIsoLinkQualityFailed(uint8_t status, const void *param
 {
     HciLeReadIsoLinkQualityReturnParam returnParam = {
         .status = status,
-        .connectionHandle = (param != NULL) ? ((const HciLeReadIsoLinkQualityParam *)param)->connectionHandle : 0,
+        .connectionHandle = (param != NULL) ? ((const HciLeReadIsoLinkQualityParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1766,7 +1769,8 @@ static void HciCmdOnLeEnhancedReadTransmitPowerLevelFailed(uint8_t status, const
     HciLeEnhancedReadTransmitPowerLevelReturnParam returnParam = {
         .status = status,
         .connectionHandle =
-            (param != NULL) ? ((const HciLeEnhancedReadTransmitPowerLevelParam *)param)->connectionHandle : 0,
+            (param != NULL) ? ((const HciLeEnhancedReadTransmitPowerLevelParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1785,7 +1789,8 @@ static void HciCmdOnLeReadRemoteTransmitPowerLevelFailed(uint8_t status, const v
     HciLeTransmitPowerReportingEventParam eventParam = {
         .status = status,
         .connectionHandle =
-            (param != NULL) ? ((const HciLeReadRemoteTransmitPowerLevelParam *)param)->connectionHandle : 0,
+            (param != NULL) ? ((const HciLeReadRemoteTransmitPowerLevelParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
         .reason = 0x02,
     };
 
@@ -1802,7 +1807,8 @@ static void HciCmdOnLeSetPathLossReportingParametersFailed(uint8_t status, const
     HciLeSetPathLossReportingParametersReturnParam returnParam = {
         .status = status,
         .connectionHandle =
-            (param != NULL) ? ((const HciLeSetPathLossReportingParametersParam *)param)->connectionHandle : 0,
+            (param != NULL) ? ((const HciLeSetPathLossReportingParametersParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1818,7 +1824,8 @@ static void HciCmdOnLeSetPathLossReportingEnableFailed(uint8_t status, const voi
     HciLeSetPathLossReportingEnableReturnParam returnParam = {
         .status = status,
         .connectionHandle =
-            (param != NULL) ? ((const HciLeSetPathLossReportingEnableParam *)param)->connectionHandle : 0,
+            (param != NULL) ? ((const HciLeSetPathLossReportingEnableParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1834,7 +1841,8 @@ static void HciCmdOnLeSetTransmitPowerReportingEnableFailed(uint8_t status, cons
     HciLeSetTransmitPowerReportingEnableReturnParam returnParam = {
         .status = status,
         .connectionHandle =
-            (param != NULL) ? ((const HciLeSetTransmitPowerReportingEnableParam *)param)->connectionHandle : 0,
+            (param != NULL) ? ((const HciLeSetTransmitPowerReportingEnableParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1851,7 +1859,7 @@ static void HciCmdOnLeCreateBigFailed(uint8_t status, const void *param)
 {
     HciLeCreateBigCompleteEventParam eventParam = {
         .status = status,
-        .bigHandle = (param != NULL) ? ((const HciLeCreateBigParam *)param)->bigHandle : 0,
+        .bigHandle = (param != NULL) ? ((const HciLeCreateBigParam *)param)->bigHandle : INVALID_HANDLE_8BIT,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1866,7 +1874,7 @@ static void HciCmdOnLeCreateBigTestFailed(uint8_t status, const void *param)
 {
     HciLeCreateBigCompleteEventParam eventParam = {
         .status = status,
-        .bigHandle = (param != NULL) ? ((const HciLeCreateBigTestParam *)param)->bigHandle : 0,
+        .bigHandle = (param != NULL) ? ((const HciLeCreateBigTestParam *)param)->bigHandle : INVALID_HANDLE_8BIT,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1882,7 +1890,7 @@ static void HciCmdOnLeCreateBigTestFailed(uint8_t status, const void *param)
 static void HciCmdOnLeTerminateBigFailed(uint8_t status, const void *param)
 {
     HciLeTerminateBigCompleteEventParam eventParam = {
-        .bigHandle = (param != NULL) ? ((const HciLeTerminateBigParam *)param)->bigHandle : 0,
+        .bigHandle = (param != NULL) ? ((const HciLeTerminateBigParam *)param)->bigHandle : INVALID_HANDLE_8BIT,
         .status = status,
     };
 
@@ -1900,7 +1908,8 @@ static void HciCmdOnLeRequestPeerScaFailed(uint8_t status, const void *param)
 {
     HciLeRequestPeerScaCompleteEventParam eventParam = {
         .status = status,
-        .connectionHandle = (param != NULL) ? ((const HciLeRequestPeerScaParam *)param)->connectionHandle : 0,
+        .connectionHandle = (param != NULL) ? ((const HciLeRequestPeerScaParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1917,7 +1926,7 @@ static void HciCmdOnLeBigCreateSyncFailed(uint8_t status, const void *param)
 {
     HciLeBigSyncEstablishedEventParam eventParam = {
         .status = status,
-        .bigHandle = (param != NULL) ? ((const HciLeBigCreateSyncParam *)param)->bigHandle : 0,
+        .bigHandle = (param != NULL) ? ((const HciLeBigCreateSyncParam *)param)->bigHandle : INVALID_HANDLE_8BIT,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1932,7 +1941,7 @@ static void HciCmdOnLeBigTerminateSyncFailed(uint8_t status, const void *param)
 {
     HciLeBigTerminateSyncReturnParam returnParam = {
         .status = status,
-        .bigHandle = (param != NULL) ? ((const HciLeBigTerminateSyncParam *)param)->bigHandle : 0,
+        .bigHandle = (param != NULL) ? ((const HciLeBigTerminateSyncParam *)param)->bigHandle : INVALID_HANDLE_8BIT,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1947,7 +1956,8 @@ static void HciCmdOnLeSetupIsoDataPathFailed(uint8_t status, const void *param)
 {
     HciLeSetupIsoDataPathReturnParam returnParam = {
         .status = status,
-        .connectionHandle = (param != NULL) ? ((const HciLeSetupIsoDataPathParam *)param)->connectionHandle : 0,
+        .connectionHandle = (param != NULL) ? ((const HciLeSetupIsoDataPathParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1962,7 +1972,8 @@ static void HciCmdOnLeRemoveIsoDataPathFailed(uint8_t status, const void *param)
 {
     HciLeRemoveIsoDataPathReturnParam returnParam = {
         .status = status,
-        .connectionHandle = (param != NULL) ? ((const HciLeRemoveIsoDataPathParam *)param)->connectionHandle : 0,
+        .connectionHandle = (param != NULL) ? ((const HciLeRemoveIsoDataPathParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1977,7 +1988,8 @@ static void HciCmdOnLeIsoTransmitTestFailed(uint8_t status, const void *param)
 {
     HciLeIsoTransmitTestReturnParam returnParam = {
         .status = status,
-        .connectionHandle = (param != NULL) ? ((const HciLeIsoTransmitTestParam *)param)->connectionHandle : 0,
+        .connectionHandle = (param != NULL) ? ((const HciLeIsoTransmitTestParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -1992,7 +2004,8 @@ static void HciCmdOnLeIsoReceiveTestFailed(uint8_t status, const void *param)
 {
     HciLeIsoReceiveTestReturnParam returnParam = {
         .status = status,
-        .connectionHandle = (param != NULL) ? ((const HciLeIsoReceiveTestParam *)param)->connectionHandle : 0,
+        .connectionHandle = (param != NULL) ? ((const HciLeIsoReceiveTestParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -2007,7 +2020,8 @@ static void HciCmdOnLeIsoReadTestCountersFailed(uint8_t status, const void *para
 {
     HciLeIsoReadTestCountersReturnParam returnParam = {
         .status = status,
-        .connectionHandle = (param != NULL) ? ((const HciLeIsoReadTestCountersParam *)param)->connectionHandle : 0,
+        .connectionHandle = (param != NULL) ? ((const HciLeIsoReadTestCountersParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -2022,7 +2036,8 @@ static void HciCmdOnLeIsoTestEndFailed(uint8_t status, const void *param)
 {
     HciLeIsoTestEndReturnParam returnParam = {
         .status = status,
-        .connectionHandle = (param != NULL) ? ((const HciLeIsoTestEndParam *)param)->connectionHandle : 0,
+        .connectionHandle = (param != NULL) ? ((const HciLeIsoTestEndParam *)param)->connectionHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -2044,12 +2059,14 @@ static void HciCmdOnLeIsoTestEndFailed(uint8_t status, const void *param)
 // members of the host structs (the subevent-data pointer of 7.8.125/7.8.126,
 // the subevent array of 7.8.127, the sets array of 7.8.61 [v2]) are never
 // dereferenced here: the serialized region does not contain them.
+
 static void HciCmdOnLeSetPeriodicAdvertisingSubeventDataFailed(uint8_t status, const void *param)
 {
     HciLeSetPeriodicAdvertisingSubeventDataReturnParam returnParam = {
         .status = status,
         .advertisingHandle =
-            (param != NULL) ? ((const HciLeSetPeriodicAdvertisingSubeventDataParam *)param)->advertisingHandle : 0xFF,
+            (param != NULL) ? ((const HciLeSetPeriodicAdvertisingSubeventDataParam *)param)->advertisingHandle
+            : INVALID_HANDLE_8BIT,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -2067,7 +2084,8 @@ static void HciCmdOnLeSetPeriodicAdvertisingResponseDataFailed(uint8_t status, c
     HciLeSetPeriodicAdvertisingResponseDataReturnParam returnParam = {
         .status = status,
         .syncHandle =
-            (param != NULL) ? ((const HciLeSetPeriodicAdvertisingResponseDataParam *)param)->syncHandle : 0xFFFF,
+            (param != NULL) ? ((const HciLeSetPeriodicAdvertisingResponseDataParam *)param)->syncHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -2085,7 +2103,8 @@ static void HciCmdOnLeSetPeriodicSyncSubeventFailed(uint8_t status, const void *
     HciLeSetPeriodicSyncSubeventReturnParam returnParam = {
         .status = status,
         .syncHandle =
-            (param != NULL) ? ((const HciLeSetPeriodicSyncSubeventParam *)param)->syncHandle : 0xFFFF,
+            (param != NULL) ? ((const HciLeSetPeriodicSyncSubeventParam *)param)->syncHandle
+            : INVALID_CONNECTION_HANDLE,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -2105,7 +2124,8 @@ static void HciCmdOnLeSetPeriodicAdvertisingParametersV2Failed(uint8_t status, c
     HciLeSetPeriodicAdvertisingParametersV2ReturnParam returnParam = {
         .status = status,
         .advertisingHandle =
-            (param != NULL) ? ((const HciLeSetPeriodicAdvertisingParametersV2Param *)param)->advertisingHandle : 0xFF,
+            (param != NULL) ? ((const HciLeSetPeriodicAdvertisingParametersV2Param *)param)->advertisingHandle
+            : INVALID_HANDLE_8BIT,
     };
 
     HciEventCallbacks *callbacks = NULL;
@@ -2133,10 +2153,10 @@ static void HciCmdOnLeExtendedCreateConnectionV2Failed(uint8_t status, const voi
 {
     HciLeEnhancedConnectionCompleteV2EventParam eventParam = {
         .status = status,
-        .peerAddressType = 0xFF,
+        .peerAddressType = INVALID_ADDRESS_TYPE,
         .peerAddress = {0},
-        .advertisingHandle = 0xFF,
-        .syncHandle = 0xFFFF,
+        .advertisingHandle = INVALID_HANDLE_8BIT,
+        .syncHandle = INVALID_CONNECTION_HANDLE,
     };
 
     if (param != NULL) {
@@ -2280,24 +2300,72 @@ static HciCmdOnFailedFunc g_funcMap[] = {
     HciCmdOnLeSetPathLossReportingParametersFailed,                      // 0x0078
     HciCmdOnLeSetPathLossReportingEnableFailed,                          // 0x0079
     HciCmdOnLeSetTransmitPowerReportingEnableFailed,                     // 0x007A
+    // Rows 0x007B-0x007E: 5.3 handlers kept; 0x007F-0x0086: 5.4 handlers.
     NULL,                                                                // 0x007B
     HciCmdOnLeSetDataRelatedAddressChangesFailed,                        // 0x007C
     HciCmdOnLeSetDefaultSubrateFailed,                                   // 0x007D
     HciCmdOnLeSubrateRequestFailed,                                      // 0x007E
     HciCmdOnLeSetExtendedAdvertisingParametersV2Failed,                  // 0x007F
-    NULL,                                                                // 0x0080
-    NULL,                                                                // 0x0081
+    HciCmdOnLeSetDecisionDataFailed,                                      // 0x0080
+    HciCmdOnLeSetDecisionInstructionsFailed,                              // 0x0081
     HciCmdOnLeSetPeriodicAdvertisingSubeventDataFailed,                  // 0x0082
     HciCmdOnLeSetPeriodicAdvertisingResponseDataFailed,                  // 0x0083
     HciCmdOnLeSetPeriodicSyncSubeventFailed,                             // 0x0084
     HciCmdOnLeExtendedCreateConnectionV2Failed,                          // 0x0085
     HciCmdOnLeSetPeriodicAdvertisingParametersV2Failed,                  // 0x0086
+    // Rows 0x0087-0x009D are BT6.0 LE Controller commands. 0x0087 is a
+    // Command_Complete local read (CC twin); 0x0088 is a Command_Status remote
+    // read, so a command-level rejection or a timeout synthesizes the 0x2B
+    // subevent. 0x0089/0x008B are the Channel Sounding Command_Complete twins
+    // (local read / write-back); 0x008A is a Command_Status remote read, so a
+    // rejection or a timeout synthesizes the 0x2C subevent; 0x008C synthesizes
+    // the 0x2E subevent; 0x008D is the Channel Sounding Command_Complete default
+    // settings (failed at timeout or on an empty-body Command_Complete - a controller rejection is a CC status);
+    // 0x008E is a Command_Status remote read, so a rejection or a timeout
+    // synthesizes the 0x2D subevent with a zeroed table; 0x008F is the Channel
+    // Sounding Command_Complete FAE write-back (failed at timeout or on an empty-body Command_Complete);
+    // 0x0090/0x0091 synthesize the 0x2F subevent with Action forced from the
+    // command (C-4); 0x0092/0x0093 are the Channel Sounding Command_Complete twins
+    // (channel classification / procedure parameters, failed at timeout or on an empty-body Command_Complete);
+    // 0x0094 synthesizes the 0x30 subevent with Connection_Handle, Config_ID and
+    // State forced from the command; 0x0095 is the Channel Sounding test
+    // Command_Complete twin (failed at timeout or on an empty-body Command_Complete); 0x0096 synthesizes the 0x33
+    // subevent with the failed Status forwarded; row 0x0097 stays NULL until owned
+    // (the [v2] Set Host Feature, not sent); rows
+    // 0x0098-0x009C are the MA handlers (7.8.146-7.8.150, pp2867-2875; the last two are
+    // not in OCF order - see hci_def_le_cmd_6_0.h); 0x009D is the Frame Space Update
+    // (7.8.151, synth 0x35).
+    HciCmdOnLeReadAllLocalSupportedFeaturesFailed,                        // 0x0087
+    HciCmdOnLeReadAllRemoteFeaturesFailed,                                // 0x0088
+    HciCmdOnLeCsReadLocalSupportedCapabilitiesFailed,                     // 0x0089
+    HciCmdOnLeCsReadRemoteSupportedCapabilitiesFailed,                    // 0x008A
+    HciCmdOnLeCsWriteCachedRemoteSupportedCapabilitiesFailed,             // 0x008B
+    HciCmdOnLeCsSecurityEnableFailed,                                     // 0x008C (synth 0x2E)
+    HciCmdOnLeCsSetDefaultSettingsFailed,                                // 0x008D
+    HciCmdOnLeCsReadRemoteFaeTableFailed,                                // 0x008E (synth 0x2D)
+    HciCmdOnLeCsWriteCachedRemoteFaeTableFailed,                         // 0x008F
+    HciCmdOnLeCsCreateConfigFailed,                                      // 0x0090 (synth 0x2F, Action 0x01)
+    HciCmdOnLeCsRemoveConfigFailed,                                      // 0x0091 (synth 0x2F, Action 0x00)
+    HciCmdOnLeCsSetChannelClassificationFailed,                          // 0x0092
+    HciCmdOnLeCsSetProcedureParametersFailed,                            // 0x0093
+    HciCmdOnLeCsProcedureEnableFailed,                                   // 0x0094 (synth 0x30)
+    HciCmdOnLeCsTestFailed,                                              // 0x0095
+    HciCmdOnLeCsTestEndFailed,                                           // 0x0096 (synth 0x33)
+    NULL,                                                                // 0x0097
+    HciCmdOnLeAddDeviceToMonitoredAdvertisersListFailed,                 // 0x0098
+    HciCmdOnLeRemoveDeviceFromMonitoredAdvertisersListFailed,            // 0x0099
+    HciCmdOnLeClearMonitoredAdvertisersListFailed,                       // 0x009A
+    HciCmdOnLeReadMonitoredAdvertisersListSizeFailed,                    // 0x009B
+    HciCmdOnLeEnableMonitoringAdvertisersFailed,                         // 0x009C
+    HciCmdOnLeFrameSpaceUpdateFailed,                                    // 0x009D (7.8.151, synth 0x35)
 };
 
 // 0x005E is 7.8.93 LE Generate DHKey [v2] (Key_Type variant): the failure path
 // dispatches the same leGenerateDHKeyComplete callback as v1 (0x0026).
-// OCFs 0x0080/0x0081 are unassigned in the 5.4 LE Controller command space.
-#define LECONTROLLER_OCF_MAX 0x0086
+// OCFs 0x0080/0x0081 were unassigned in the 5.4 LE Controller command space; since
+// BT 6.0 they are the DBAF pair (0x0080 Set Decision Data, 0x0081 Set Decision
+// Instructions), which the rows above fill.
+#define LECONTROLLER_OCF_MAX 0x009D
 
 void HciOnLeControllerCmdFailed(uint16_t opCode, uint8_t status, const void *param)
 {
@@ -2307,7 +2375,11 @@ void HciOnLeControllerCmdFailed(uint16_t opCode, uint8_t status, const void *par
     }
 
     HciCmdOnFailedFunc func = g_funcMap[ocf];
-    if (func != NULL) {
-        func(status, param);
+    if (func == NULL) {
+        // No failure row for this OCF: the command's failure has nowhere to be reported and would
+        // otherwise be dropped without a trace.
+        LOG_WARN("%{public}s: opCode 0x%04x has no failure row", __FUNCTION__, opCode);
+        return;
     }
+    func(status, param);
 }

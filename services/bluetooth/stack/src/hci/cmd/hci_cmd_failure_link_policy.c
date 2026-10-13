@@ -23,13 +23,20 @@
 #include "hci/hci_def.h"
 
 #include "hci_cmd_failure.h"
+#include "log.h"
 
 static void HciCmdOnSniffModeFailed(uint8_t status, const void *param)
 {
     HciModeChangeEventParam eventParam = {
         .status = status,
-        .connectionHandle = ((HciSniffModeParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        eventParam.connectionHandle = ((HciSniffModeParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -43,8 +50,14 @@ static void HciCmdOnExitSnifModeFailed(uint8_t status, const void *param)
 {
     HciModeChangeEventParam eventParam = {
         .status = status,
-        .connectionHandle = ((HciExitSniffModeParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        eventParam.connectionHandle = ((HciExitSniffModeParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -58,8 +71,14 @@ static void HciCmdOnSniffSubratingFailed(uint8_t status, const void *param)
 {
     HciSniffSubratingReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciSniffSubratingParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((HciSniffSubratingParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -73,8 +92,14 @@ static void HciCmdOnWriteLinkPolicySettingsFailed(uint8_t status, const void *pa
 {
     HciWriteLinkPolicySettingsReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciWriteLinkPolicySettingsReturnParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((HciWriteLinkPolicySettingsParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -129,7 +154,11 @@ void HciOnLinkPolicyCmdFailed(uint16_t opCode, uint8_t status, const void *param
     }
 
     HciCmdOnFailedFunc func = g_funcMap[ocf];
-    if (func != NULL) {
-        func(status, param);
+    if (func == NULL) {
+        // No failure row for this OCF: the command's failure has nowhere to be reported and would
+        // otherwise be dropped without a trace.
+        LOG_WARN("%{public}s: opCode 0x%04x has no failure row", __FUNCTION__, opCode);
+        return;
     }
+    func(status, param);
 }

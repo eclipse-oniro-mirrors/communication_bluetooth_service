@@ -15,11 +15,11 @@
 
 /* Bluetooth 5.4 PAwR (periodic advertising with responses) LE event and
  * command-complete receivers, Core Spec 5.4 Vol 4 Part E:
- *   - 7.7.65.14   LE Periodic Advertising Sync Established event (0x24, [v2])
- *   - 7.7.65.15   LE Periodic Advertising Report event (0x25, [v2])
- *   - 7.7.65.36   LE Periodic Advertising Subevent Data Request event (0x27)
- *   - 7.7.65.37   LE Periodic Advertising Response Report event (0x28)
- *   - 7.7.65.24   LE Periodic Advertising Sync Transfer Received event (0x26, [v2])
+ *   - 7.7.65,14   LE Periodic Advertising Sync Established event (0x24, [v2])
+ *   - 7.7.65,15   LE Periodic Advertising Report event (0x25, [v2])
+ *   - 7.7.65,36   LE Periodic Advertising Subevent Data Request event (0x27)
+ *   - 7.7.65,37   LE Periodic Advertising Response Report event (0x28)
+ *   - 7.7.65,24   LE Periodic Advertising Sync Transfer Received event (0x26, [v2])
  *   - 7.8.61 [v2] LE Set Periodic Advertising Parameters [v2] complete (OCF 0x0086)
  *   - 7.8.118     LE Set Periodic Advertising Subevent Data complete (OCF 0x0082)
  *   - 7.8.119     LE Set Periodic Advertising Response Data complete (OCF 0x0083)
@@ -53,7 +53,7 @@ int GapProcessHciEventInTask(TaskFunc run, const void *ctx, uint32_t ctxLen, Tas
 void GapFreeLePeriodicAdvertisingReportEvent(void *ctx);
 
 #ifdef GAP_LE_SUPPORT
-// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65.14: subevent
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65,14: subevent
 // code 0x24 carries the [v1] parameters (0x0E) first, followed by
 // Num_Subevents, Subevent_Interval, Response_Slot_Delay and
 // Response_Slot_Spacing. A 5.4 Controller with the [v2] periodic event bits
@@ -106,7 +106,7 @@ static void GapFreeLePeriodicAdvertisingReportV2Event(void *ctx)
     MEM_MALLOC.free(hciParam);
 }
 
-// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65.15: subevent
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65,15: subevent
 // code 0x25 inserts Periodic_Event_Counter and Subevent between CTE_Type and
 // Data_Status of the [v1] report (0x0F). A 5.4 Controller with the [v2]
 // periodic event bits enabled reports every periodic advertising event as
@@ -294,7 +294,7 @@ void GapRecvLeSetPeriodicSyncSubeventComplete(const HciLeSetPeriodicSyncSubevent
     }
 }
 
-// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65.36: the flat
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65,36: the flat
 // LE Periodic Advertising Subevent Data Request event (0x27), forwarded to
 // the advertiser-side PAwR handling (gap_le_pawr_adv.c).
 void GapRecvLePeriodicAdvertisingSubeventDataRequestEvent(
@@ -341,7 +341,7 @@ static void GapFreeLePeriodicAdvertisingResponseReportEvent(void *ctx)
     MEM_MALLOC.free(hciParam);
 }
 
-// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65.37: LE
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65,37: LE
 // Periodic Advertising Response Report event (0x28). The event carries up to
 // 0x19 records whose payload pointers reference the received event bytes, so
 // the records are deep-copied (one heap slice per payload) before the event
@@ -404,7 +404,7 @@ void GapRecvLePeriodicAdvertisingResponseReportEvent(
     }
 }
 
-// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65.24: subevent
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65,24: subevent
 // code 0x26 carries the [v1] parameters (0x18) first, followed by the same
 // four subevent/response-slot parameters as the 0x24 event. The legacy sync
 // state machine consumes the [v1] prefix via the shared task handler; the

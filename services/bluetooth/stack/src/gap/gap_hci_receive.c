@@ -705,6 +705,91 @@ static void GapRecvLeSetExtendedScanResponseDataComplete(const HciLeSetExtendedS
     }
 }
 
+static void GapRecvLeSetDecisionDataComplete(const HciLeSetDecisionDataReturnParam *param)
+{
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeSetDecisionDataComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeSetDecisionInstructionsComplete(const HciLeSetDecisionInstructionsReturnParam *param)
+{
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask((TaskFunc)GapLeSetDecisionInstructionsComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeAddDeviceToMonitoredAdvertisersListComplete(
+    const HciLeAddDeviceToMonitoredAdvertisersListReturnParam *param)
+{
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLeAddDeviceToMonitoredAdvertisersListComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeRemoveDeviceFromMonitoredAdvertisersListComplete(
+    const HciLeRemoveDeviceFromMonitoredAdvertisersListReturnParam *param)
+{
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLeRemoveDeviceFromMonitoredAdvertisersListComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeClearMonitoredAdvertisersListComplete(
+    const HciLeClearMonitoredAdvertisersListReturnParam *param)
+{
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLeClearMonitoredAdvertisersListComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeReadMonitoredAdvertisersListSizeComplete(
+    const HciLeReadMonitoredAdvertisersListSizeReturnParam *param)
+{
+    HILOGI("status: 0x%{public}02x, listSize: %{public}hhu", param->status, param->number);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLeReadMonitoredAdvertisersListSizeComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+static void GapRecvLeEnableMonitoringAdvertisersComplete(const HciLeEnableMonitoringAdvertisersReturnParam *param)
+{
+    HILOGI("status: 0x%{public}02x", param->status);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapLeEnableMonitoringAdvertisersComplete, param, sizeof(*param), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
+// Bluetooth 6.0, Vol 4, Part E, 7.7.65,47 (LE Meta subevent 0x34): fixed 8-byte
+// payload with no data pointer, so the event is forwarded without a freeFunc.
+static void GapRecvLeMonitoredAdvertisersReportEvent(const HciLeMonitoredAdvertisersReportEventParam *eventParam)
+{
+    HILOGI("addrType: 0x%{public}02x, condition: 0x%{public}02x",
+        eventParam->advertiserAddressType, eventParam->condition);
+    int ret = GapProcessHciEventInTask(
+        (TaskFunc)GapOnLeMonitoredAdvertisersReportEvent, eventParam, sizeof(*eventParam), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
 static void GapRecvLeSetExtendedAdvertisingEnableComplete(const HciLeSetExtendedAdvertisingEnableReturnParam *param)
 {
     HILOGI("status: 0x%{public}02x", param->status);
@@ -1195,6 +1280,23 @@ static void GapRecvLeDataLengthChangeEvent(const HciLeDataLengthChangeEventParam
     }
 }
 
+static void GapRecvLeFrameSpaceUpdateCompleteEvent(const HciLeFrameSpaceUpdateCompleteEventParam *eventParam)
+{
+    if (eventParam == NULL) {
+        return;
+    }
+
+    HILOGI("status: 0x%{public}02x, handle: 0x%{public}04x, initiator: %{public}hhu, frameSpace: %{public}hu, "
+        "phys: 0x%{public}02x, spacingTypes: 0x%{public}04x",
+        eventParam->status, eventParam->connectionHandle, eventParam->initiator,
+        eventParam->frameSpace, eventParam->phys, eventParam->spacingTypes);
+    int ret =
+        GapProcessHciEventInTask((TaskFunc)GapOnLeFrameSpaceUpdateCompleteEvent, eventParam, sizeof(*eventParam), NULL);
+    if (ret != BT_SUCCESS) {
+        HILOGE("Task error: %{public}d.", ret);
+    }
+}
+
 static void GapRecvLeSetPeriodicAdvertisingParametersComplete(
     const HciLeSetPeriodicAdvertisingParametersReturnParam *param)
 {
@@ -1659,6 +1761,13 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .leSetExtendedAdvertisingParametersV2Complete = GapRecvLeSetExtendedAdvertisingParametersComplete,
     .leSetExtendedAdvertisingDataComplete = GapRecvLeSetExtendedAdvertisingDataComplete,
     .leSetExtendedScanResponseDataComplete = GapRecvLeSetExtendedScanResponseDataComplete,
+    .leSetDecisionDataComplete = GapRecvLeSetDecisionDataComplete,
+    .leSetDecisionInstructionsComplete = GapRecvLeSetDecisionInstructionsComplete,
+    .leAddDeviceToMonitoredAdvertisersListComplete = GapRecvLeAddDeviceToMonitoredAdvertisersListComplete,
+    .leRemoveDeviceFromMonitoredAdvertisersListComplete = GapRecvLeRemoveDeviceFromMonitoredAdvertisersListComplete,
+    .leClearMonitoredAdvertisersListComplete = GapRecvLeClearMonitoredAdvertisersListComplete,
+    .leReadMonitoredAdvertisersListSizeComplete = GapRecvLeReadMonitoredAdvertisersListSizeComplete,
+    .leEnableMonitoringAdvertisersComplete = GapRecvLeEnableMonitoringAdvertisersComplete,
     .leSetExtendedAdvertisingEnableComplete = GapRecvLeSetExtendedAdvertisingEnableComplete,
     .leReadMaximumAdvertisingDataLengthComplete = GapRecvLeReadMaximumAdvertisingDataLengthComplete,
     .leReadNumberofSupportedAdvertisingSetsComplete = GapRecvLeReadNumberofSupportedAdvertisingSetsComplete,
@@ -1741,6 +1850,8 @@ static HciEventCallbacks g_hciEventCallbacks = {
     .leCteRequestFailed = GapRecvLeCteRequestFailedEvent,
     .lePeriodicAdvertisingSyncTransferReceived = GapRecvLePeriodicAdvertisingSyncTransferReceivedEvent,
     .lePeriodicAdvertisingSyncTransferReceivedV2 = GapRecvLePeriodicAdvertisingSyncTransferReceivedV2Event,
+    .leMonitoredAdvertisersReport = GapRecvLeMonitoredAdvertisersReportEvent,
+    .leFrameSpaceUpdateComplete = GapRecvLeFrameSpaceUpdateCompleteEvent,
 #endif
 };
 

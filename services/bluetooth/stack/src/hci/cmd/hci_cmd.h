@@ -41,10 +41,14 @@ void HciCloseCmd();
 
 void HciSetNumberOfHciCmd(uint8_t numberOfHciCmd);
 
-// Returns false when the Complete was absorbed as the late answer of a timed-out command of the
-// same opcode, or when no pending command of this opcode is tracked (in both cases the caller
-// must not dispatch it to the upper layers); returns true when a pending command matched.
-bool HciCmdOnCommandComplete(uint16_t opCode);
+// returnParametersLength is the Complete event's return parameter length. Returns false when the
+// caller must not dispatch the Complete to the upper layers: it was absorbed as the late answer of
+// a timed-out command of the same opcode, no pending command of this opcode is tracked, or
+// returnParametersLength is 0. An empty return body is a Controller violation (Vol 4 Part E 4.5:
+// the Status shall always be returned) carrying no Status to dispatch, so the failure row of
+// opCode is invoked here instead with the original parameter block; the caller has no separate
+// empty-body branch. Returns true when a pending command matched and the body is non-empty.
+bool HciCmdOnCommandComplete(uint16_t opCode, uint8_t returnParametersLength);
 bool HciCmdOnCommandStatus(uint16_t opCode, uint8_t status);
 
 HciCmd *HciAllocCmd(uint16_t opCode, const void *param, size_t paramLength);

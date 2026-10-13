@@ -1125,6 +1125,57 @@ void GapOnLePhyUpdateCompleteEvent(const HciLePhyUpdateCompleteEventParam *event
     }
 }
 
+int GAP_LeFrameSpaceUpdate(const BtAddr *addr, uint16_t frameSpaceMin, uint16_t frameSpaceMax,
+    uint8_t phys, uint16_t spacingTypes)
+{
+    LOG_INFO("%{public}s:", __FUNCTION__);
+
+    if (addr == NULL) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    if (GapIsLeEnable() == false) {
+        return GAP_ERR_NOT_ENABLE;
+    }
+
+    if (GapLeRolesCheck(GAP_LE_ROLE_CENTRAL | GAP_LE_ROLE_PERIPHERAL) == false) {
+        return GAP_ERR_INVAL_STATE;
+    }
+
+    // Supported Commands C.79: only a local bit-65 (page 1) controller can take the
+    // 0x009D command; the peer side is left to the LL negotiation (Vol 6 Part B 5.1.30).
+    if (!BTM_IsControllerSupportLeFrameSpaceUpdate()) {
+        return GAP_ERR_NOT_SUPPORT;
+    }
+
+    // Same boundary check as the HCI sender (5.3): zero PHYS / Spacing_Types or
+    // reserved bits set would draw an Invalid HCI Command Parameters (0x12) reply.
+    if (frameSpaceMin > frameSpaceMax || frameSpaceMax > LE_FRAME_SPACE_MAX_US ||
+        phys == 0 || (phys & ~LE_FRAME_SPACE_PHYS_MASK) != 0 ||
+        spacingTypes == 0 || (spacingTypes & ~LE_FRAME_SPACE_SPACING_TYPES_MASK) != 0) {
+        return GAP_ERR_INVAL_PARAM;
+    }
+
+    LeConnectionInfoBlock *connectionInfoBlock = GapGetLeConnectionInfoBlock();
+    if (connectionInfoBlock == NULL) {
+        return GAP_ERR_INVAL_STATE;
+    }
+    LeDeviceInfo *deviceInfo =
+        ListForEachData(connectionInfoBlock->deviceList, GapFindLeConnectionDeviceByAddr, (void *)addr);
+    if (deviceInfo == NULL) {
+        return GAP_ERR_INVAL_STATE;
+    }
+
+    HciLeFrameSpaceUpdateParam hciCmdParam = {
+        .connectionHandle = deviceInfo->handle,
+        .frameSpaceMin = frameSpaceMin,
+        .frameSpaceMax = frameSpaceMax,
+        .phys = phys,
+        .spacingTypes = spacingTypes,
+    };
+    return HCI_LeFrameSpaceUpdate(&hciCmdParam);
+}
+
 int GAP_LeSetDataLength(const BtAddr *addr, uint16_t txOctets, uint16_t txTime)
 {
     LOG_INFO("%{public}s:", __FUNCTION__);
@@ -1251,6 +1302,48 @@ void GapOnLeDataLengthChangeEvent(const HciLeDataLengthChangeEventParam *eventPa
             callback.leDataLengthChange(&addr, eventParam->maxTxOctets, eventParam->maxTxTime,
                 eventParam->maxRxOctets, eventParam->maxRxTime,
                 context);
+        }
+        GapLeConnUpdateCallbackRelease();
+    }
+}
+
+void GapOnLeFrameSpaceUpdateCompleteEvent(const HciLeFrameSpaceUpdateCompleteEventParam *eventParam)
+{
+    if (eventParam == NULL) {
+        LOG_WARN("%{public}s: invalid param", __FUNCTION__);
+        return;
+    }
+
+    LeConnectionInfoBlock *connectionInfoBlock = GapGetLeConnectionInfoBlock();
+    if (connectionInfoBlock == NULL) {
+        LOG_WARN("%{public}s: connection info block not initialized", __FUNCTION__);
+        return;
+    }
+    LeDeviceInfo *deviceInfo = ListForEachData(connectionInfoBlock->deviceList, GapFindLeConnectionDeviceByHandle,
+                                               (void *)&eventParam->connectionHandle);
+    if (deviceInfo == NULL) {
+        LOG_WARN("%{public}s: device not found, handle:0x%04x", __FUNCTION__, eventParam->connectionHandle);
+        return;
+    }
+
+    GapLeFrameSpaceUpdateInfo info = {0};
+    (void)memcpy_s(&info.addr, sizeof(BtAddr), &deviceInfo->addr, sizeof(BtAddr));
+    info.status = eventParam->status;
+
+    // A non-zero status (reject / CS error / unsolicited failure) leaves the frame
+    // space fields set to 0 and invalid; they are meaningful only on success.
+    if (eventParam->status == HCI_SUCCESS) {
+        info.initiator = eventParam->initiator;
+        info.frameSpace = eventParam->frameSpace;
+        info.phys = eventParam->phys;
+        info.spacingTypes = eventParam->spacingTypes;
+    }
+
+    GapLeConnCallback callback;
+    void *context = NULL;
+    if (GapLeConnUpdateCallbackGet(&callback, &context)) {
+        if (callback.leFrameSpaceUpdateComplete) {
+            callback.leFrameSpaceUpdateComplete(&info, context);
         }
         GapLeConnUpdateCallbackRelease();
     }

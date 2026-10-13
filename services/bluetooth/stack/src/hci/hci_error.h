@@ -96,8 +96,16 @@ extern "C" {
 #define HCI_TOO_LATE 0x46
 #define HCI_TOO_EARLY 0x47
 
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 2, Part D
+// 1.3 LIST OF ERROR CODES / 2.69 Insufficient Channels (0x48)
+#define HCI_INSUFFICIENT_CHANNELS 0x48
+
 // Stack definition
 #define HCI_TIMEOUT 0xE1
+// The Controller completed the command, or sent the subevent that answers it, but the
+// returned octets do not hold the whole structure: the missing octets cannot be read, so
+// the Host cannot synthesize the result it stands for.
+#define HCI_MALFORMED_EVENT 0xE2
 
 #ifdef __cplusplus
 }

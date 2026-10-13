@@ -48,7 +48,13 @@ extern "C" {
 /// parameter set plus the two Advertising Coding Selection (ACS) options.
 typedef struct {
     uint8_t advHandle;   /// Used to identify an advertising set (0x00-0xEF)
-    uint8_t properties;  /// Extended advertising event properties
+    /// Extended advertising event properties. Advertising_Event_Properties is a
+    /// 2-octet field in both command forms of 7.8.53 (Core Spec 5.4 Vol 4 Part E
+    /// p2450: "Size: 2 octets"), and BT 6.0 assigns the DBAF decision
+    /// bits 7-9 inside it, so the type is the full 16 bits here - the same width
+    /// as the [v1] entry parameter (GAPIF_LeExAdvSetParam) and as the [v1]/[v2]
+    /// HCI parameters. A narrower type cannot carry bit 8/9 at all.
+    uint16_t properties;
     int8_t txPower;      /// Advertising TX power
     GapLeExAdvParam advExParam;  /// [v1] extended advertising parameters
     /// Primary_Advertising_PHY_Options (7.8.53): 0x00 no preference/requirement,
@@ -79,7 +85,7 @@ typedef struct {
  *                  pre-5.4 Controllers).
  * Bit 41 (ACS Host Support) is intentionally NOT a command-selection condition:
  * it only governs the receive path (the Controller then reports the exact
- * coding used on Coded-PHY advertisements, 7.7.65.13 - see the report params
+ * coding used on Coded-PHY advertisements, 7.7.65,13 - see the report params
  * of the extended scan callback).
  *
  * Options naming a non-LE-Coded PHY are ignored by the Controller (7.8.53) -
@@ -181,7 +187,7 @@ typedef struct {
 /**
  * @brief Callback group of the advertiser-side PAwR (periodic advertising
  *        with responses) feature, Core Spec 5.4 Vol 4 Part E 7.8.125 /
- *        7.7.65.36-37.
+ *        7.7.65,36-37.
  *
  * Register through GAPIF_RegisterPawrAdvCallback. All members are optional;
  * initialize the struct with zeroes or {0} and set only the members needed.
@@ -325,7 +331,7 @@ BTSTACK_API int GAPIF_LePawrSetSubeventParams(uint8_t advHandle, const GapPawrSu
  *
  * The entries are buffered on the advertising handle and are transmitted by
  * the GAP layer when the Controller requests the subevents (LE Periodic
- * Advertising Subevent Data Request, 7.7.65.36); the data of a subevent is
+ * Advertising Subevent Data Request, 7.7.65,36); the data of a subevent is
  * transmitted once and then discarded. A later call replaces the buffered
  * data of the subevents it covers. The completion status of each reply is
  * delivered through @c GapPawrAdvCallback.subeventDataResult.
@@ -496,7 +502,7 @@ typedef struct {
 /**
  * @brief Callback group of the sync-side PAwR (periodic advertising with
  *        responses) feature, Core Spec 5.4 Vol 4 Part E 7.8.126-127 /
- *        7.7.65.14-15 / 7.7.65.24: the scanner or observer of a PAwR train.
+ *        7.7.65,14-15 / 7.7.65,24: the scanner or observer of a PAwR train.
  *
  * Register through GAPIF_RegisterPawrSyncCallback. All members are optional;
  * initialize the struct with zeroes or {0} and set only the members needed.
@@ -692,7 +698,7 @@ BTSTACK_API int GAPIF_DeregisterPawrSyncCallback(void);
  * Reason 0x3E after six connection events through the ordinary
  * disconnect flow. Once the connection is established its association with
  * the train (Advertising_Handle on the Central side, Sync_Handle on the
- * Peripheral side of a connection created from PAwR, 7.7.65.10) can be
+ * Peripheral side of a connection created from PAwR, 7.7.65,10) can be
  * queried through BTM_GetLeConnectionPawrAssociation.
  *
  * @param advHandle  Advertising handle of the local PAwR train the

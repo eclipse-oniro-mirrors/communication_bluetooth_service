@@ -69,9 +69,10 @@ int IsoDeregisterCigCallback(void)
     return BT_SUCCESS;
 }
 
-// Validate the LE Set CIG Parameters payload per BLUETOOTH SPECIFICATION Version 5.2
-// Vol 4, Part E 7.8.97: CIG_ID 0x00-0xEF, Slave_Clock_Accuracy 0x00-0x07, Packing/Framing
-// 0x00-0x01, SDUs up to 0xFFFFFF, per-CIS PHY 0x00-0x02 and RTN 0x00-0x1F.
+// Validate the LE Set CIG Parameters payload per BLUETOOTH SPECIFICATION Version 6.0
+// Vol 4, Part E 7.8.97: CIG_ID 0x00-0xEF, Slave_Clock_Accuracy 0x00-0x07, Packing
+// 0x00-0x01; Framing 0x00-0x02, 0x02 (Unsegmented) gated by bit 45 (Vol 6 Part B
+// 4.6.44); SDUs up to 0xFFFFFF, per-CIS PHY 0x00-0x02 and RTN 0x00-0x1F.
 static bool IsoLeCreateCigParamValid(uint8_t cigId, const IsoLeCigParam *cigParam, uint8_t cisCount,
     const IsoLeCisParam *cisParams)
 {
@@ -81,8 +82,10 @@ static bool IsoLeCreateCigParamValid(uint8_t cigId, const IsoLeCigParam *cigPara
     if (cigParam->sduIntervalMToS > 0xFFFFFF || cigParam->sduIntervalSToM > 0xFFFFFF) {
         return false;
     }
-    if (cigId > 0xEF || cigParam->slaveClockAccuracy > 0x07 || cigParam->packing > 0x01 ||
-        cigParam->framing > 0x01) {
+    if (cigId > 0xEF || cigParam->slaveClockAccuracy > 0x07 || cigParam->packing > 0x01) {
+        return false;
+    }
+    if (!IsoIsFramingRequestAllowed(cigParam->framing)) {
         return false;
     }
     for (uint8_t i = 0; i < cisCount; i++) {
@@ -540,7 +543,6 @@ void IsoLeRemoveCigComplete(const HciLeRemoveCigReturnParam *param)
     // answer of a previous remove (e.g. it timed out and a new remove started):
     // it must not clear the pending slot, cancel the new watchdog, or touch the
     // new CIG's table entries. The result callback is still delivered below.
-    //
     // The Command Complete payload carries no generation, so a stale answer of a
     // previous remove with the SAME CIG_ID (issued after a timeout) cannot be told
     // apart from the current remove's own answer here. In the FIFO model that
@@ -616,41 +618,85 @@ static void IsoCisEstablishedMarkAccepted(IsoLeMng *mng, uint16_t connectionHand
     }
 }
 
-// Track every established CIS (the master and the slave both receive the 0x19 event),
-// so the Disconnection Complete (0x05) can be filtered and the upper layer notified.
-// Vol 6 Part B, 4.5.12 requires the notification irrespective of who initiated the
-// termination. Returns false for a duplicate success of an already established handle:
-// the caller then drops the event instead of delivering a second cisEstablished
-// success to the upper layer.
-static bool IsoCisEstablishedTrack(IsoLeMng *mng, const HciLeCisEstablishedEventParam *param)
+// Outcome of inserting a CIS into the Host tracking list. Begin uses this to
+// decide whether to drop a duplicate, abort an untracked Controller CIS, or
+// register the ISO data-path handle.
+typedef enum {
+    ISO_CIS_TRACK_OK = 0,
+    ISO_CIS_TRACK_DUP,
+    ISO_CIS_TRACK_FAIL,
+} IsoCisTrackResult;
+
+// Track every established CIS (the master and the slave both receive the LE CIS
+// Established event, reported as subevent 0x19 or 0x2A), so the Disconnection
+// Complete (0x05) can be filtered and the upper layer notified. Vol 6 Part B, 4.5.12
+// requires the notification irrespective of who initiated the termination.
+// ISO_CIS_TRACK_DUP: entry already exists - Begin drops the event only.
+// ISO_CIS_TRACK_FAIL: alloc / list insert failed - Begin tears down the Controller
+// CIS (no RegisterHandle) and still delivers cisEstablished with a Host failure status.
+static IsoCisTrackResult IsoCisEstablishedTrack(IsoLeMng *mng, uint16_t connectionHandle)
 {
-    IsoCisInfo *cisInfo = IsoFindCis(mng, param->connectionHandle);
+    IsoCisInfo *cisInfo = IsoFindCis(mng, connectionHandle);
     if (cisInfo != NULL) {
         // A second LE CIS Established success for an already-established handle is a
         // duplicate (a retransmitted event, or a late one after the Create CIS command
         // timed out at the HCI layer, i5): the tracking entry already exists (only a
         // Disconnection Complete removes it), so drop the duplicate.
-        HILOGW("%{public}s: duplicate CIS Established, drop, cisHandle:0x%04x", __FUNCTION__,
-            param->connectionHandle);
-        return false;
+        HILOGW("%{public}s: duplicate CIS Established, drop, cisHandle:0x%04x", __FUNCTION__, connectionHandle);
+        return ISO_CIS_TRACK_DUP;
     }
     cisInfo = MEM_MALLOC.alloc(sizeof(IsoCisInfo));
     if (cisInfo == NULL) {
-        // Not tracked: the Disconnection Complete (0x05) of this CIS is neither
-        // filtered nor reported to the upper layer.
-        HILOGE("%{public}s: alloc IsoCisInfo failed, cisHandle:0x%04x not tracked", __FUNCTION__,
-            param->connectionHandle);
-        return true;
+        HILOGE("%{public}s: alloc IsoCisInfo failed, cisHandle:0x%04x", __FUNCTION__, connectionHandle);
+        return ISO_CIS_TRACK_FAIL;
     }
     (void)memset_s(cisInfo, sizeof(IsoCisInfo), 0x00, sizeof(IsoCisInfo));
-    cisInfo->cisHandle = param->connectionHandle;
+    cisInfo->cisHandle = connectionHandle;
     if (!ListAddLast(mng->cisList, cisInfo)) {
-        // Not tracked: the Disconnection Complete (0x05) of this CIS is neither
-        // filtered nor reported to the upper layer.
-        HILOGE("%{public}s: tracking insert failed, cisHandle:0x%04x not tracked", __FUNCTION__,
-            param->connectionHandle);
+        HILOGE("%{public}s: tracking insert failed, cisHandle:0x%04x", __FUNCTION__, connectionHandle);
         MEM_MALLOC.free(cisInfo);
+        return ISO_CIS_TRACK_FAIL;
     }
+    return ISO_CIS_TRACK_OK;
+}
+
+// Common side effects of a CIS Established delivery (either subevent): clear the
+// Accept-CIS watchdog mark, dedupe on the tracking list, register the handle for
+// the ISO data path. Returns false only for a duplicate (caller drops entirely).
+// On tracking failure, Disconnects the Controller CIS, writes a Host failure into
+// *notifyStatus, and returns true so the caller still invokes cisEstablished.
+static bool IsoCisEstablishedBegin(IsoLeMng *mng, uint8_t status, uint16_t connectionHandle,
+    uint8_t *notifyStatus)
+{
+    IsoCisEstablishedMarkAccepted(mng, connectionHandle);
+    if (status != HCI_SUCCESS) {
+        *notifyStatus = status;
+        return true;
+    }
+
+    IsoCisTrackResult trackResult = IsoCisEstablishedTrack(mng, connectionHandle);
+    if (trackResult == ISO_CIS_TRACK_DUP) {
+        return false;
+    }
+    if (trackResult == ISO_CIS_TRACK_FAIL) {
+        // Host cannot own the later Disconnection Complete without a cisList entry:
+        // tear down the Controller CIS. Command Reason must be from the 7.1.6
+        // allow-list (0x13); the local Disconnection Complete will carry 0x16.
+        // Still notify the upper with a Host-side failure so Create/Accept waiters
+        // are not left pending (Accept watchdog already saw received=true).
+        HciDisconnectParam param = {
+            .connectionHandle = connectionHandle,
+            .reason = HCI_REMOTE_USER_TERMINATED_CONNECTION,
+        };
+        (void)HCI_Disconnect(&param);
+        *notifyStatus = HCI_MEMORY_CAPACITY_EXCEEDED;
+        return true;
+    }
+
+    // Established CIS: register the handle for the HCI ISO data path
+    // (Number of Completed Packets filtering / credit recovery).
+    HciIsoRegisterHandle(connectionHandle);
+    *notifyStatus = HCI_SUCCESS;
     return true;
 }
 
@@ -659,14 +705,9 @@ void IsoLeCisEstablishedEvent(const HciLeCisEstablishedEventParam *param)
     LOG_INFO("%{public}s: status:0x%02x, cisHandle:0x%04x", __FUNCTION__, param->status, param->connectionHandle);
     IsoLeMng *mng = IsoGetMng();
 
-    IsoCisEstablishedMarkAccepted(mng, param->connectionHandle);
-    if (param->status == HCI_SUCCESS && !IsoCisEstablishedTrack(mng, param)) {
-        return;
-    }
-    if (param->status == HCI_SUCCESS) {
-        // Established CIS: register the handle for the HCI ISO data path
-        // (Number of Completed Packets filtering / credit recovery).
-        HciIsoRegisterHandle(param->connectionHandle);
+    uint8_t notifyStatus = param->status;
+    if (!IsoCisEstablishedBegin(mng, param->status, param->connectionHandle, &notifyStatus)) {
+        return;  // duplicate: no upper notify
     }
 
     IsoLeCisEstablishedInfo info = {
@@ -688,7 +729,60 @@ void IsoLeCisEstablishedEvent(const HciLeCisEstablishedEventParam *param)
     };
 
     if (mng->callback != NULL && mng->callback->cisEstablished != NULL) {
-        mng->callback->cisEstablished(param->status, &info, mng->callbackContext);
+        mng->callback->cisEstablished(notifyStatus, &info, mng->callbackContext);
+    }
+}
+
+// Same dedup/registration side effects as 0x19 (via IsoCisEstablishedBegin), plus the
+// v2 tail (Sub_Interval/Max_SDU/SDU_Interval/Framing, Vol 4 Part E 7.7.65,25 pp2392-2393)
+// whose 24-bit fields are unpacked with IsoReadUint24 like the shared-prefix delays.
+// The tail is only meaningful on a successful establishment: v2Ext is attached only then
+// and stays NULL otherwise, so consumers can tell a real v2 success from a v1/failure/
+// synthesized delivery (the pointer is valid only during this synchronous callback).
+void IsoLeCisEstablishedEventV2(const HciLeCisEstablishedV2EventParam *param)
+{
+    LOG_INFO("%{public}s: status:0x%02x, cisHandle:0x%04x", __FUNCTION__, param->status, param->connectionHandle);
+    IsoLeMng *mng = IsoGetMng();
+
+    uint8_t notifyStatus = param->status;
+    if (!IsoCisEstablishedBegin(mng, param->status, param->connectionHandle, &notifyStatus)) {
+        return;  // duplicate: no upper notify
+    }
+
+    // ext lives at function scope: info.v2Ext aliases it and the callback below runs
+    // after this point, so a block-scoped ext would be dangling by then.
+    IsoLeCisEstablishedV2Ext ext = { 0 };
+    IsoLeCisEstablishedInfo info = {
+        .cisHandle = param->connectionHandle,
+        .cigSyncDelay = IsoReadUint24(param->cigSyncDelay),
+        .cisSyncDelay = IsoReadUint24(param->cisSyncDelay),
+        .transportLatencyMToS = IsoReadUint24(param->transportLatencyMToS),
+        .transportLatencySToM = IsoReadUint24(param->transportLatencySToM),
+        .phyMToS = param->phyMToS,
+        .phySToM = param->phySToM,
+        .nse = param->nse,
+        .bnMToS = param->bnMToS,
+        .bnSToM = param->bnSToM,
+        .ftMToS = param->ftMToS,
+        .ftSToM = param->ftSToM,
+        .maxPduMToS = param->maxPduMToS,
+        .maxPduSToM = param->maxPduSToM,
+        .isoInterval = param->isoInterval,
+    };
+    // Attach the v2 tail only when the Host is delivering a real success (not a
+    // tracking-failure rewrite of notifyStatus).
+    if (notifyStatus == HCI_SUCCESS) {
+        ext.subInterval = IsoReadUint24(param->subInterval);
+        ext.maxSduMToS = param->maxSduMToS;
+        ext.maxSduSToM = param->maxSduSToM;
+        ext.sduIntervalMToS = IsoReadUint24(param->sduIntervalMToS);
+        ext.sduIntervalSToM = IsoReadUint24(param->sduIntervalSToM);
+        ext.framing = param->framing;
+        info.v2Ext = &ext;  // valid for the synchronous callback below
+    }
+
+    if (mng->callback != NULL && mng->callback->cisEstablished != NULL) {
+        mng->callback->cisEstablished(notifyStatus, &info, mng->callbackContext);
     }
 }
 

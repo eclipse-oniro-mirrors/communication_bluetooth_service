@@ -70,6 +70,7 @@ StackAvdtpSrc = [
 
 StackBtmSrc = [
   "src/btm/btm_acl.c",
+  "src/btm/btm_acl_dbaf.c",
   "src/btm/btm_acl_features.c",
   "src/btm/btm_controller.c",
   "src/btm/btm_inq_db.c",
@@ -130,6 +131,14 @@ StackIsoSrc = [
   "src/iso/iso_status_query.c",
 ]
 
+StackCsSrc = [
+  "src/cs/cs.c",
+  "src/cs/cs_if.c",
+  "src/cs/cs_result.c",
+  "src/cs/cs_task_common.c",
+  "src/cs/cs_test.c",
+]
+
 StackHciSrc = [
   "src/hci/hdi_wrapper.c",
   "src/hci/acl/hci_acl.c",
@@ -141,6 +150,7 @@ StackHciSrc = [
   "src/hci/cmd/hci_cmd_failure_controller_baseband.c",
   "src/hci/cmd/hci_cmd_failure_info_params.c",
   "src/hci/cmd/hci_cmd_failure_le_controller.c",
+  "src/hci/cmd/hci_cmd_failure_le_controller_6_0.c",
   "src/hci/cmd/hci_cmd_failure_link_ctrl.c",
   "src/hci/cmd/hci_cmd_failure_link_policy.c",
   "src/hci/cmd/hci_cmd_failure_status_params.c",
@@ -149,6 +159,7 @@ StackHciSrc = [
   "src/hci/cmd/hci_cmd_le_controller_5_2.c",
   "src/hci/cmd/hci_cmd_le_controller_5_3.c",
   "src/hci/cmd/hci_cmd_le_controller_5_4.c",
+  "src/hci/cmd/hci_cmd_le_controller_6_0.c",
   "src/hci/cmd/hci_cmd_link_ctrl.c",
   "src/hci/cmd/hci_cmd_link_policy.c",
   "src/hci/cmd/hci_cmd_status_params.c",
@@ -262,7 +273,7 @@ ohos_shared_library("btstack") {
 
   sources = PlatformSrc + StackAttSrc + StackAvctpSrc + StackAvdtpSrc +
             StackBtmSrc + StackGapSrc + StackHciSrc + StackL2capSrc +
-            StackRfcommSrc + StackSdpSrc + StackSmpSrc + StackIsoSrc
+            StackRfcommSrc + StackSdpSrc + StackSmpSrc + StackIsoSrc + StackCsSrc
 
   deps = [
     "$PART_DIR/external:btdummy",

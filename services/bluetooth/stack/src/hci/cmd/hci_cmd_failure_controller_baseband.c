@@ -23,6 +23,7 @@
 #include "hci/hci_def.h"
 
 #include "hci_cmd_failure.h"
+#include "log.h"
 
 static void HciCmdOnSetEventMaskFailed(uint8_t status, const void *param)
 {
@@ -406,8 +407,14 @@ static void HciCmdOnReadAutomaticFlushTimeoutFailed(uint8_t status, const void *
 {
     HciReadAutomaticFlushTimeoutReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciReadAutomaticFlushTimeoutReturnParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((HciReadAutomaticFlushTimeoutParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -421,8 +428,14 @@ static void HciCmdOnWriteAutomaticFlushTimeoutFailed(uint8_t status, const void 
 {
     HciWriteAutomaticFlushTimeoutReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciWriteAutomaticFlushTimeoutReturnParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((HciWriteAutomaticFlushTimeoutParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -562,8 +575,14 @@ static void HciCmdOnReadLinkSupervisionTimeoutFailed(uint8_t status, const void 
 {
     HciReadLinkSupervisionTimeoutReturnParam returnParam = {
         .status = status,
-        .handle = ((HciReadLinkSupervisionTimeoutReturnParam *)param)->handle,
+        .handle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.handle = ((HciReadLinkSupervisionTimeoutParam *)param)->handle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -577,8 +596,14 @@ static void HciCmdOnWriteLinkSupervisionTimeoutFailed(uint8_t status, const void
 {
     HciWriteLinkSupervisionTimeoutReturnParam returnParam = {
         .status = status,
-        .handle = ((HciWriteLinkSupervisionTimeoutReturnParam *)param)->handle,
+        .handle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.handle = ((HciWriteLinkSupervisionTimeoutParam *)param)->handle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -858,8 +883,13 @@ static void HciCmdOnSendKeypressNotificationFailed(uint8_t status, const void *p
 {
     HciSendKeypressNotificationReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciSendKeypressNotificationParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciSendKeypressNotificationParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -999,8 +1029,14 @@ static void HciCmdOnReadEnhancedTransmitPowerLevelFailed(uint8_t status, const v
 {
     HciReadEnhancedTransmitPowerLevelReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciReadEnhancedTransmitPowerLevelReturnParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((HciReadEnhancedTransmitPowerLevelParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -1196,8 +1232,14 @@ static void HciCmdOnReadAuthenticatedPayloadTimeoutFailed(uint8_t status, const 
 {
     HciReadAuthenticatedPayloadTimeoutReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciReadAuthenticatedPayloadTimeoutReturnParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((HciReadAuthenticatedPayloadTimeoutParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -1211,8 +1253,14 @@ static void HciCmdOnWriteAuthenticatedPayloadTimeoutFailed(uint8_t status, const
 {
     HciWriteAuthenticatedPayloadTimeoutReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciWriteAuthenticatedPayloadTimeoutParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((HciWriteAuthenticatedPayloadTimeoutParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -1452,7 +1500,11 @@ void HciOnControllerBasebandCmdFailed(uint16_t opCode, uint8_t status, const voi
     }
 
     HciCmdOnFailedFunc func = g_funcMap[ocf];
-    if (func != NULL) {
-        func(status, param);
+    if (func == NULL) {
+        // No failure row for this OCF: the command's failure has nowhere to be reported and would
+        // otherwise be dropped without a trace.
+        LOG_WARN("%{public}s: opCode 0x%04x has no failure row", __FUNCTION__, opCode);
+        return;
     }
+    func(status, param);
 }

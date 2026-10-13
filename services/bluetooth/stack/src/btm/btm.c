@@ -57,7 +57,7 @@ static Mutex *g_modeLock = NULL;
 
 static HciFailureCallbacks g_hciFailureCallbacks;
 
-static const int G_COUNT_OF_ALL_MODULES = 9;
+static const int G_COUNT_OF_ALL_MODULES = 10;
 static const char *g_allModules[] = {
     MODULE_NAME_L2CAP,
     MODULE_NAME_GAP,
@@ -68,6 +68,7 @@ static const char *g_allModules[] = {
     MODULE_NAME_ATT,
     MODULE_NAME_SMP,
     MODULE_NAME_ISO,
+    MODULE_NAME_CS,
 };
 
 static const int G_COUNTOF_BREDR_AND_SHARED_MODULES = 8;
@@ -90,19 +91,21 @@ static const char *g_bredrModules[] = {
     MODULE_NAME_RFCOMM,
 };
 
-static const int G_COUNT_OF_LE_AND_SHARED_MODULES = 5;
+static const int G_COUNT_OF_LE_AND_SHARED_MODULES = 6;
 static const char *g_leAndSharedModules[] = {
     MODULE_NAME_L2CAP,
     MODULE_NAME_SMP,
     MODULE_NAME_GAP,
     MODULE_NAME_ATT,
     MODULE_NAME_ISO,
+    MODULE_NAME_CS,
 };
 
-static const int G_COUNT_OF_LE_MODULES = 1;
+static const int G_COUNT_OF_LE_MODULES = 2;
 static const char *g_leModules[] = {
-    // ISO also listed in g_leAndSharedModules; this table covers the BR/EDR-first enable order
+    // ISO/CS also listed in g_leAndSharedModules; this table covers the BR/EDR-first enable order
     MODULE_NAME_ISO,
+    MODULE_NAME_CS,
 };
 
 static List *g_btmCallbackList = NULL;

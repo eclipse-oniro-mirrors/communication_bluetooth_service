@@ -19,6 +19,7 @@
 
 #include "hci/hci.h"
 #include "hci/hci_le_controller_5_0.h"
+#include "hci/hci_le_controller_6_0.h"
 #include "hci/hci_error.h"
 #include "log.h"
 #include "platform/include/alarm.h"
@@ -80,7 +81,7 @@ static List *g_leConnectionCancelList = NULL;
 
 static Queue *g_leWhiteListPendingActionQueue;
 
-static Mutex *g_autoConnectLock = NULL;
+Mutex *g_autoConnectLock = NULL;  // shared with btm_acl_dbaf.c
 
 static BtmAclConnection *AllocAclConnection()
 {
@@ -163,6 +164,11 @@ void BtmInitAcl()
     g_status = STATUS_INITIALIZED;
 
     LOG_DEBUG("%{public}s end", __FUNCTION__);
+}
+
+bool BtmAclIsInitialized(void)
+{
+    return g_status == STATUS_INITIALIZED;
 }
 
 static void BtmAclFreeRes()
@@ -573,7 +579,7 @@ static void BtmConvertAddressForConnection(BtAddr *addr)
     }
 }
 
-static int BtmLeExtendedCreateConnection()
+int BtmLeExtendedCreateConnection(uint8_t initiatorFilterPolicy)
 {
     uint8_t ownAddressType = LOCAL_ADDR_TYPE_PUBLIC;
     if (BTM_GetOwnAddressType() == OWN_ADDRESS_TYPE_RANDOM) {
@@ -611,7 +617,7 @@ static int BtmLeExtendedCreateConnection()
     }
 
     HciLeExtendedCreateConnectionParam param = {
-        .initiatingFilterPolicy = INITIATOR_FILTER_USE_WHITE_LIST,
+        .initiatingFilterPolicy = initiatorFilterPolicy,
         .peerAddressType = 0,
         .peerAddress = {.raw = {0}},
         .ownAddressType = ownAddressType,
@@ -629,7 +635,7 @@ static int BtmLeExtendedCreateConnection()
 static int BtmStartAutoConnectionInternal()
 {
     if (BTM_IsControllerSupportLeExtendedAdvertising()) {
-        return BtmLeExtendedCreateConnection();
+        return BtmLeExtendedCreateConnection(INITIATOR_FILTER_USE_WHITE_LIST);
     } else {
         uint8_t ownAddressType = LOCAL_ADDR_TYPE_PUBLIC;
         if (BTM_GetOwnAddressType() == OWN_ADDRESS_TYPE_RANDOM) {
@@ -1077,6 +1083,24 @@ NO_SANITIZE("cfi") static void BtmLeCancelConnectCallback(uint8_t status)
 
 static void BtmLeReadRemoteFeatures(uint16_t connectionHandle)
 {
+    if (BTM_IsControllerSupportLeExtendedFeatureSet()) {
+        // Bluetooth 6.0 (7.8.129): one read fetches every page the remote has,
+        // completing via subevent 0x2B instead of the legacy 0x04 event.
+        HciLeReadAllRemoteFeaturesParam allParam = {
+            .connectionHandle = connectionHandle,
+            .pagesRequested = LE_MAX_FEATURE_PAGE_NUMBER,   // 0x0A: all 11 pages
+        };
+        int ret = HCI_LeReadAllRemoteFeatures(&allParam);
+        if (ret == BT_SUCCESS) {
+            return;
+        }
+
+        // 0x0088 was not sent, so no 0x2B event will arrive; fall through to
+        // the legacy page-0 read below so features still resolve via 0x04.
+        LOG_WARN("%{public}s: 0x0088 send failed, fall back to 0x0016: %{public}d", __FUNCTION__, ret);
+    }
+
+    // Bit 63 clear, or the 0x0088 send failed above: send the legacy read.
     HciLeReadRemoteFeaturesParam cmdParam = {
         .connectionHandle = connectionHandle,
     };
@@ -1457,7 +1481,7 @@ static void BtmOnLeEnhancedConnectionComplete(const HciLeEnhancedConnectionCompl
     }
 }
 
-// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65.10: the [v2]
+// BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E 7.7.65,10: the [v2]
 // Enhanced Connection Complete event (0x29) carries the [v1] parameters (0x0A)
 // followed by Advertising_Handle and Sync_Handle, which associate the
 // connection with the PAwR train it was established from. For connections not
@@ -1572,6 +1596,9 @@ NO_SANITIZE("cfi") static void BtmOnDisconnectComplete(const HciDisconnectComple
             connection->state = DISCONNECTED;
             ListRemoveNode(g_aclList, connection);
             connection = NULL;
+            // The connection is gone, so its pending feature/SSP completion events
+            // can no longer fire; drop queued support requests under the same lock.
+            BtmRemoveRemoteDeviceSupportRequestsByHandle(eventParam->connectionHandle);
         }
     }
     MutexUnlock(g_aclListLock);
@@ -1599,7 +1626,11 @@ NO_SANITIZE("cfi") static void BtmOnDisconnectComplete(const HciDisconnectComple
 
 static void BtmOnReadRssiComplete(const HciReadRssiReturnParam *returnParam)
 {
-    BtAddr addr;
+    // Zeroed fallback: the callbacks below run whether or not the lookup found the connection.
+    BtAddr addr = {
+        .addr = {0},
+        .type = BT_PUBLIC_DEVICE_ADDRESS,
+    };
     MutexLock(g_aclListLock);
     BtmAclConnection *connection = BtmAclFindConnectionByHandle(returnParam->handle);
     if (connection != NULL) {
@@ -2403,6 +2434,7 @@ static HciEventCallbacks g_hciEventCallbacks = {
 
     .leConnectionComplete = BtmOnLeConnectionComplete,
     .leReadRemoteFeaturesComplete = BtmOnLeReadRemoteFeaturesComplete,
+    .leReadAllRemoteFeaturesComplete = BtmOnLeReadAllRemoteFeaturesComplete,
     .leEnhancedConnectionComplete = BtmOnLeEnhancedConnectionComplete,
     .leEnhancedConnectionCompleteV2 = BtmOnLeEnhancedConnectionCompleteV2,
 };

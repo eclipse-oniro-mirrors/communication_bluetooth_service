@@ -33,7 +33,9 @@
 // mirroring the file-local limits of the [v1] sender in
 // hci_cmd_le_controller.c; keep the two in sync.
 #define LE_EXTENDED_ADV_HANDLE_MAX 0xEF
-#define LE_EXT_ADV_EVENT_PROPERTIES_RESERVED_MASK 0xFF00 // bits 8-15 are RFU
+// LE_EXT_ADV_EVENT_PROPERTIES_RESERVED_MASK comes from hci_def_le_cmd_6_0.h: the
+// field is shared by the [v1] and [v2] forms of 7.8.53, so the RFU set has one
+// definition (bits 10-15) rather than a per-file copy.
 #define LE_EXT_ADV_CHANNEL_MAP_MASK 0x07 // Primary_Advertising_Channel_Map is 3 bits
 #define LE_EXT_ADV_PEER_ADDRESS_TYPE_MAX 0x01 // identity types (0x02/0x03) are not valid here
 #define LE_EXT_ADV_FILTER_POLICY_MAX 0x03
@@ -110,7 +112,6 @@ int HCI_LeSetExtendedAdvertisingParametersV2(const HciLeSetExtendedAdvertisingPa
 #define LE_PAWR_SYNC_HANDLE_MAX 0x0EFF // PERIODIC_ADV_SYNC_HANDLE_MAX in the [v1] file
 // Initiating_PHYs (7.8.66): LE 1M bit0 / LE 2M bit1 / LE Coded bit2.
 #define LE_INITIATING_PHYS_MASK (LE_1M_PHY | LE_2M_PHY | LE_CODED_PHY)
-#define LE_FILTER_POLICY_MAX 0x02
 // LE_OWN_ADDRESS_TYPE_MAX is already defined in the 7.8.53 limits block above
 #define LE_PEER_ADDRESS_TYPE_MAX 0x03
 #define LE_SCAN_INTERVAL_MIN 0x0004
@@ -373,7 +374,9 @@ static int HciLeExtendedCreateConnectionV2CheckSets(
     if (param->initiatingPhys & LE_CODED_PHY) {
         numSets++;
     }
-    if (param->initiatingFilterPolicy > LE_FILTER_POLICY_MAX ||
+    // Initiator_Filter_Policy range is 0x00-0x04 (7.8.66 p2637). The decision
+    // values 0x02-0x04 need Controller bit 42, checked on the GAP set path.
+    if (param->initiatingFilterPolicy > LE_INITIATOR_FILTER_POLICY_MAX ||
         param->ownAddressType > LE_OWN_ADDRESS_TYPE_MAX ||
         param->peerAddressType > LE_PEER_ADDRESS_TYPE_MAX) {
         return BT_BAD_PARAM;

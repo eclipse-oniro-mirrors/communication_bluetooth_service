@@ -19,6 +19,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "hci_def_common.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -283,6 +285,80 @@ static inline int HciSupportPawrScanner(const uint8_t *features)
 {
     return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_PERIODIC_ADVERTISING_WITH_RESPONSES_SCANNER);
 }
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 4.6 (Table 4.10)
+// LE FeatureSet is extended to pages 1..10; bit 63 (page 0) gates the ability to
+// read the extended pages, while bits 64/65 live on page 1 (octets 8-31). The
+// typed helper signatures make the buffer-size contract explicit: bit 63 is read
+// from the 8-byte page-0 container, bits 64/65 from the 248-byte container.
+#define LE_FEATURE_BIT_LL_EXTENDED_FEATURE_SET 63  // page 0
+#define LE_FEATURE_BIT_MONITORING_ADVERTISERS 64   // page 1
+#define LE_FEATURE_BIT_FRAME_SPACE_UPDATE 65       // page 1
+
+static inline int HciSupportLeExtendedFeatureSet(const HciLeFeatures *features)
+{
+    return GetLinkLayerFeatureFlag(features->raw, LE_FEATURE_BIT_LL_EXTENDED_FEATURE_SET);
+}
+
+static inline int HciSupportLeMonitoringAdvertisers(const HciLeFeaturesAll *features)
+{
+    return GetLinkLayerFeatureFlag(features->raw, LE_FEATURE_BIT_MONITORING_ADVERTISERS);
+}
+
+static inline int HciSupportLeFrameSpaceUpdate(const HciLeFeaturesAll *features)
+{
+    return GetLinkLayerFeatureFlag(features->raw, LE_FEATURE_BIT_FRAME_SPACE_UPDATE);
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 4.6 (Table 4.10)
+// bit 42 = Decision-Based Advertising Filtering (page 0, octet 5 bit 2). Read
+// from the 8-byte 0x0003 cache; bitIndex is uint8_t so bit 42 needs no change
+// to GetLinkLayerFeatureFlag.
+#define LE_FEATURE_BIT_DECISION_BASED_ADVERTISING_FILTERING 42
+
+static inline int HciSupportLeDecisionBasedAdvertisingFiltering(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_DECISION_BASED_ADVERTISING_FILTERING);
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 4.6 (Table 4.10, p3137)
+// bit 45 = ISOAL Unsegmented Framed Mode (page 0, octet 5 bit 5). Host Controlled
+// = N: the Host only requests Framing=0x02 in CIG/BIG creation (Vol 4 Part E
+// 7.8.97/7.8.98/7.8.103/7.8.104); whether the LL uses unsegmented mode is decided
+// below the Host (Vol 6 Part G 2.2). Read from the 8-byte 0x0003 cache exactly
+// like bit 42 (DBAF).
+#define LE_FEATURE_BIT_UNSEGMENTED_FRAMED_MODE 45
+
+static inline int HciSupportLeUnsegmentedFramedMode(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_UNSEGMENTED_FRAMED_MODE);
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 4.6 (Table 4.10, p3137)
+// bit 46 = Channel Sounding (page 0). Host Controlled = N: it gates whether the
+// local Controller supports CS at all; the Host only declares bit 47 (Host
+// Support, C-3) when bit 46 is set and never writes bit 46 itself. Read from the
+// 8-byte 0x0003 cache like bit 45 (ISOAL unsegmented framed mode).
+#define LE_FEATURE_BIT_CHANNEL_SOUNDING 46
+
+static inline int HciSupportLeChannelSounding(const uint8_t *features)
+{
+    return GetLinkLayerFeatureFlag(features, LE_FEATURE_BIT_CHANNEL_SOUNDING);
+}
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 4.6 (Table 4.10, p3137)
+// bit 47 = CS Host Support (page 0). Host Controlled = Y: the Host declares it via
+// the Set Host Feature command (C-3), so unlike bits 45/46 it is never read from
+// the 8-byte 0x0003 cache and has no HciSupport* helper here.
+#define LE_FEATURE_BIT_CHANNEL_SOUNDING_HOST_SUPPORT 47
+
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 4.6.42 (Table 4.10, p3138)
+// bit 48 = Channel Sounding Tone Quality Indication (page 0). Sent to peer = N,
+// Host Controlled = N: the Controller needs CS plus the phase measurement of
+// [Vol 6] Part H 4.6, and the Host never writes it, so like bit 46 it has no
+// HciSupport* helper here. It gates Tone_Quality_Indicator[k], parsed into
+// CsStepMode2.toneQuality (Vol 4, Part E, 7.7.65,44, p2458).
+#define LE_FEATURE_BIT_CHANNEL_SOUNDING_TONE_QUALITY_INDICATION 48
 
 #ifdef __cplusplus
 }

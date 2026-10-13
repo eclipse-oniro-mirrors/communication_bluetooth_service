@@ -40,6 +40,7 @@ Thread *BTM_GetProcessingThread();
 #define PROCESSING_QUEUE_ID_SDP 8
 #define PROCESSING_QUEUE_ID_SMP 9
 #define PROCESSING_QUEUE_ID_ISO 10
+#define PROCESSING_QUEUE_ID_CS 11
 
 int BTM_CreateProcessingQueue(uint8_t queueId, uint16_t size);
 

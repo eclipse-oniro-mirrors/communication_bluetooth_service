@@ -124,13 +124,14 @@ int GAP_LeExAdvSetRandAddr(uint8_t advHandle, const uint8_t addr[BT_ADDRESS_SIZE
 /**
  * @brief       Set the advertising parameter used by advertising.
  * @param[in]   advHandle           used to identify an advertising set (0x00-0xEF)
- * @param[in]   properties          extended Advertising property
+ * @param[in]   properties          extended Advertising property (16-bit; BT6.0 DBAF
+ *                                  decision-PDU bits 7/8/9 defined in hci_def_le_cmd_6_0.h)
  * @param[in]   txPower            advertising TX power
  * @param[in]   advExParam          advertising parameter
  * @return      @c GAP_SUCCESS      : The function is executed successfully.
  *              @c GAP_ERR_*        : The function is not executed successfully.
  */
-int GAP_LeExAdvSetParam(uint8_t advHandle, uint8_t properties, int8_t txPower, GapLeExAdvParam advExParam);
+int GAP_LeExAdvSetParam(uint8_t advHandle, uint16_t properties, int8_t txPower, GapLeExAdvParam advExParam);
 
 // BLUETOOTH SPECIFICATION Version 5.4 | Vol 4, Part E
 // 7.8.53 LE Set Extended Advertising Parameters [v2]: like GAP_LeExAdvSetParam
@@ -166,6 +167,21 @@ int GAP_LeExAdvSetData(
  */
 int GAP_LeExAdvSetScanRspData(uint8_t advHandle, uint8_t operation, uint8_t fragmentPreference,
     uint8_t scanResponseDataLen, const uint8_t *scanResponseData);
+
+/**
+ * @brief       Set the decision data used by an advertising set.
+ * @details     Bluetooth 6.0, Vol 4, Part E, 7.8.144 (Decision-Based Advertising
+ *              Filtering). May be issued whether advertising on the set is enabled
+ *              or disabled. Requires the Controller to support LE Feature Bit 42.
+ * @param[in]   advHandle           used to identify an advertising set (0x00-0xEF)
+ * @param[in]   decisionTypeFlags   bit 0: a 6-byte Resolvable Tag leads the decision data
+ * @param[in]   decisionDataLength  decision data length (0..8)
+ * @param[in]   decisionData        decision data octets (see Vol 6, Part B, 2.3.1,11)
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeExAdvSetDecisionData(uint8_t advHandle, uint8_t decisionTypeFlags,
+    uint8_t decisionDataLength, const uint8_t *decisionData);
 
 /**
  * @brief       Set the advertising enable used by advertising.
@@ -357,6 +373,19 @@ int GAP_LeSetDefaultPhy(uint8_t allPhys, uint8_t txPhys, uint8_t rxPhys);
  *              @c GAP_ERR_*        : The function is not executed successfully.
  */
 int GAP_LeSetDataLength(const BtAddr *addr, uint16_t txOctets, uint16_t txTime);
+
+/**
+ * @brief       Negotiate new frame space values for an LE connection (BLE 6.0).
+ * @param[in]   addr                peer device address
+ * @param[in]   frameSpaceMin       minimum requested frame space value (0x0000-0x2710 us)
+ * @param[in]   frameSpaceMax       maximum requested frame space value (0x0000-0x2710 us)
+ * @param[in]   phys                PHYS bit mask (bit0 LE 1M, bit1 LE 2M, bit2 LE Coded)
+ * @param[in]   spacingTypes        Spacing_Types bit mask (bits 0-4)
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeFrameSpaceUpdate(const BtAddr *addr, uint16_t frameSpaceMin, uint16_t frameSpaceMax,
+    uint8_t phys, uint16_t spacingTypes);
 
 /**
  * @brief       Read the transmit power level of the local controller on the specified PHY.
@@ -752,6 +781,119 @@ int GAP_LeExScanSetParam(uint8_t scanFilterPolity, uint8_t scanPhys, const GapLe
  *              @c GAP_ERR_*        : The function is not executed successfully.
  */
 int GAP_LeExScanSetEnable(uint8_t scanEnable, uint8_t filterDuplicates, uint16_t duration, uint16_t period);
+
+/**
+ * @brief       Set the decision instructions used when scanning or initiating.
+ * @details     Bluetooth 6.0, Vol 4, Part E, 7.8.145 (Decision-Based Advertising
+ *              Filtering). The instructions are Controller-side, session-independent
+ *              state: they may be set while scanning or initiating is in progress and
+ *              take effect before the Command_Complete event. The Controller must
+ *              support at least 8 tests. Requires LE Feature Bit 42.
+ * @param[in]   numTests            number of tests (1..14)
+ * @param[in]   tests               caller-owned array of numTests test records (18 B each)
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeSetDecisionInstructions(uint8_t numTests, const HciLeDecisionTestParam *tests);
+
+/**
+ * @brief       Initiate a decision-based LE connection.
+ * @details     Bluetooth 6.0, Vol 4, Part E, 7.8.66 (Decision-Based Advertising
+ *              Filtering). Initiator_Filter_Policy must be one of the decision
+ *              values 0x02-0x04; the Controller selects the peer from decision
+ *              PDUs / the accept list. Requires LE Feature Bit 42.
+ * @param[in]   initiatorFilterPolicy    one of 0x02-0x04
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ * @note        With policy 0x03 and an empty accept list the call is skipped (no
+ *              HCI command is submitted) yet still returns @c GAP_SUCCESS, like
+ *              the whitelist auto-connect; upper layers must not read that return
+ *              as "command accepted by the Controller". GAP returns the btm result
+ *              unchanged, so @c GAP_ERR_* shares numeric values with @c BT_*.
+ */
+int GAP_LeExtendedConnectByDecision(uint8_t initiatorFilterPolicy);
+
+/**
+ * @brief       Cancel a decision-based LE connection.
+ * @details     Bluetooth 6.0, Vol 4, Part E, 7.8.13 (Decision-Based Advertising
+ *              Filtering). LE_Create_Connection_Cancel serves both the legacy
+ *              and the Extended Create Connection, so this stops the decision
+ *              initiator started by GAP_LeExtendedConnectByDecision. Requires
+ *              LE Feature Bit 42. GAP returns the btm result unchanged, so
+ *              @c GAP_ERR_* shares numeric values with @c BT_*.
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeExtendedConnectByDecisionCancel(void);
+
+// Bluetooth 6.0, Vol 6, Part B, 4.6.45: Monitoring Advertisers. The Monitored
+// Advertisers List is Controller-private state; GAP keeps no local copy and only
+// relays the Command_Complete status and the LE Monitored Advertisers Report
+// (Vol 4, Part E, 7.7.65,47). Every command entry requires LE Feature Bit 64
+// (page 1); the Controller answers 0x43 when it supports fewer.
+/**
+ * @brief       Register the LE Monitored Advertisers callback.
+ * @param[in]   callback            callback structure, or @c NULL to clear the slot
+ * @param[in]   context             callback context parameter
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeRegisterMonitoredAdvertisersCallback(const GapMonitoredAdvertisersCallback *callback, void *context);
+
+/**
+ * @brief       Deregister the LE Monitored Advertisers callback.
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeDeregisterMonitoredAdvertisersCallback(void);
+
+/**
+ * @brief       Add a device to the Monitored Advertisers List.
+ * @details     The Controller monitors the device while scanning and reports via
+ *              the report callback (Condition below-low past timeout / RSSI >= high).
+ * @param[in]   addrType            address type (0x00 public / 0x01 random only)
+ * @param[in]   addr                advertiser address; @c addr->type must equal @c addrType
+ * @param[in]   rssiThresholdLow    low RSSI threshold (-127..+20 dBm)
+ * @param[in]   rssiThresholdHigh   high RSSI threshold (-127..+20 dBm)
+ * @param[in]   timeout             loss timeout in seconds (0x01..0xFF; 0x00 reserved)
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_INVAL_PARAM  : @c rssiThresholdHigh < @c rssiThresholdLow or
+ *                                  @c timeout is 0x00
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeAddDeviceToMonitoredAdvertisersList(
+    uint8_t addrType, const BtAddr *addr, int8_t rssiThresholdLow, int8_t rssiThresholdHigh, uint8_t timeout);
+
+/**
+ * @brief       Remove a device from the Monitored Advertisers List.
+ * @param[in]   addrType            address type (0x00 public / 0x01 random only)
+ * @param[in]   addr                advertiser address; @c addr->type must equal @c addrType
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeRemoveDeviceFromMonitoredAdvertisersList(uint8_t addrType, const BtAddr *addr);
+
+/**
+ * @brief       Clear the Monitored Advertisers List.
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeClearMonitoredAdvertisersList(void);
+
+/**
+ * @brief       Read the size of the Monitored Advertisers List.
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeReadMonitoredAdvertisersListSize(void);
+
+/**
+ * @brief       Enable or disable Monitoring Advertisers.
+ * @param[in]   enable              0x00 disable, 0x01 enable/restart monitoring
+ * @return      @c GAP_SUCCESS      : The function is executed successfully.
+ *              @c GAP_ERR_*        : The function is not executed successfully.
+ */
+int GAP_LeEnableMonitoringAdvertisers(uint8_t enable);
 
 /**
  * @brief       Register link layer control callback

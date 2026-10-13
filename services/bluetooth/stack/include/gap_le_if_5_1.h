@@ -83,8 +83,8 @@ typedef struct HciLePeriodicAdvertisingSyncTransferReceivedEventParamTag
  * Covers the commands and events introduced by Bluetooth 5.1 direction finding
  * (AoA/AoD) and Periodic Advertising Sync Transfer (PAST):
  *   - command result callbacks: one per HCI command 7.8.78-7.8.92 (except 7.8.93/94)
- *   - event callbacks: 7.7.65.21 Connectionless IQ Report, 7.7.65.22 Connection IQ
- *     Report, 7.7.65.23 CTE Request Failed, 7.7.65.24 PA Sync Transfer Received
+ *   - event callbacks: 7.7.65,21 Connectionless IQ Report, 7.7.65,22 Connection IQ
+ *     Report, 7.7.65,23 CTE Request Failed, 7.7.65,24 PA Sync Transfer Received
  *
  * New fields may be added to the end of this structure in future releases.
  * Callers should use C99 designated initializers or explicit per-member assignment.
@@ -95,7 +95,7 @@ typedef struct HciLePeriodicAdvertisingSyncTransferReceivedEventParamTag
  *
  * For @a connectionlessIqReport and @a connectionIqReport, the I/Q samples are
  * exposed as a single interleaved (I, Q) pair array (@a iqSamples, 2 * sampleCount
- * entries: I0, Q0, I1, Q1, ...), matching the 7.7.65.21/7.7.65.22 wire format.
+ * entries: I0, Q0, I1, Q1, ...), matching the 7.7.65,21/7.7.65,22 wire format.
  * The array is only valid during the callback. Copy it if needed later.
  */
 typedef struct {

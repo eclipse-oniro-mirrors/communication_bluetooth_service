@@ -26,6 +26,7 @@
 #include "hci/hci_def.h"
 
 #include "hci_cmd_failure.h"
+#include "log.h"
 
 static void HciCmdOnInquiryFailed(uint8_t status, const void *param)
 {
@@ -87,11 +88,16 @@ static void HciCmdOnCreateConnectionFailed(uint8_t status, const void *param)
 {
     HciConnectionCompleteEventParam returnParam = {
         .status = status,
-        .connectionHandle = 0xffff,
-        .bdAddr = ((HciCreateConnectionParam *)param)->bdAddr,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
         .linkType = HCI_LINK_TYPE_ACL,
         .encryptionEnabled = 0,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciCreateConnectionParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -105,9 +111,15 @@ static void HciCmdOnDisconnectFailed(uint8_t status, const void *param)
 {
     HciDisconnectCompleteEventParam eventParam = {
         .status = status,
-        .connectionHandle = ((HciDisconnectParam *)param)->connectionHandle,
-        .reason = ((HciDisconnectParam *)param)->reason,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        eventParam.connectionHandle = ((HciDisconnectParam *)param)->connectionHandle;
+        eventParam.reason = ((HciDisconnectParam *)param)->reason;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -121,8 +133,13 @@ static void HciCmdOnCreateConnectionCancelFailed(uint8_t status, const void *par
 {
     HciCreateConnectionCancelReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciCreateConnectionCancelParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciCreateConnectionCancelParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -136,8 +153,13 @@ static void HciCmdOnAcceptConnectionRequestFailed(uint8_t status, const void *pa
 {
     HciConnectionCompleteEventParam returnParam = {
         .status = status,
-        .bdAddr = ((HciAcceptConnectionReqestParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciAcceptConnectionReqestParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -151,8 +173,13 @@ static void HciCmdOnRejectConnectionRequestFailed(uint8_t status, const void *pa
 {
     HciConnectionCompleteEventParam returnParam = {
         .status = status,
-        .bdAddr = ((HciRejectConnectionRequestParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciRejectConnectionRequestParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -166,8 +193,13 @@ static void HciCmdOnLinkKeyRequestReplyFailed(uint8_t status, const void *param)
 {
     HciLinkKeyRequestReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciLinkKeyRequestReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciLinkKeyRequestReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -181,8 +213,13 @@ static void HciCmdOnLinkKeyRequestNegativeReplyFailed(uint8_t status, const void
 {
     HciLinkKeyRequestNegativeReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciLinkKeyRequestNegativeReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciLinkKeyRequestNegativeReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -196,8 +233,13 @@ static void HciCmdOnPinCodeRequestReplyFailed(uint8_t status, const void *param)
 {
     HciPinCodeRequestReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciPinCodeRequestReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciPinCodeRequestReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -211,8 +253,13 @@ static void HciCmdOnPinCodeRequestNegativeReplyFailed(uint8_t status, const void
 {
     HciPinCodeRequestNegativeReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciPinCodeRequestNegativeReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciPinCodeRequestNegativeReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -226,8 +273,14 @@ static void HciCmdOnAuthenticationRequestedFailed(uint8_t status, const void *pa
 {
     HciAuthenticationCompleteEventParam eventParam = {
         .status = status,
-        .connectionHandle = ((HciAuthenticationRequestedParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        eventParam.connectionHandle = ((HciAuthenticationRequestedParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -241,8 +294,14 @@ static void HciCmdOnSetConnectionEncryptionFailed(uint8_t status, const void *pa
 {
     HciEncryptionChangeEventParam eventParam = {
         .status = status,
-        .connectionHandle = ((HciSetConnectionEncryptionParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        eventParam.connectionHandle = ((HciSetConnectionEncryptionParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -256,8 +315,13 @@ static void HciCmdOnRemoteNameRequestFailed(uint8_t status, const void *param)
 {
     HciRemoteNameRequestCompleteEventParam eventParam = {
         .status = status,
-        .bdAddr = ((HciRemoteNameRequestParam *)param)->addr,
     };
+
+    if (param != NULL) {
+        eventParam.bdAddr = ((HciRemoteNameRequestParam *)param)->addr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -271,8 +335,13 @@ static void HciCmdOnRemoteNameRequestCancelFailed(uint8_t status, const void *pa
 {
     HciRemoteNameRequestCancelReturnParam returnParam = {
         .status = status,
-        .addr = ((HciRemoteNameRequestCancelParam *)param)->addr,
     };
+
+    if (param != NULL) {
+        returnParam.addr = ((HciRemoteNameRequestCancelParam *)param)->addr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -286,8 +355,14 @@ static void HciCmdOnReadRemoteSupportedFeaturesFailed(uint8_t status, const void
 {
     HciReadRemoteSupportedFeaturesCompleteEventParam eventParam = {
         .status = status,
-        .connectionHandle = ((HciReadRemoteSupportedFeaturesParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        eventParam.connectionHandle = ((HciReadRemoteSupportedFeaturesParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -301,9 +376,15 @@ static void HciCmdOnReadRemoteExtendedFeaturesFailed(uint8_t status, const void 
 {
     HciReadRemoteExtendedFeaturesCompleteEventParam eventParam = {
         .status = status,
-        .connectionHandle = ((HciReadRemoteExtendedFeaturesParam *)param)->connectionHandle,
-        .pageNumber = ((HciReadRemoteExtendedFeaturesParam *)param)->pageNumber,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        eventParam.connectionHandle = ((HciReadRemoteExtendedFeaturesParam *)param)->connectionHandle;
+        eventParam.pageNumber = ((HciReadRemoteExtendedFeaturesParam *)param)->pageNumber;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -317,8 +398,14 @@ static void HciCmdOnReadRemoteVersionInformationFailed(uint8_t status, const voi
 {
     HciReadRemoteVersionInformationCompleteEventParam eventParam = {
         .status = status,
-        .connectionHandle = ((HciReadRemoteVersionInformationParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        eventParam.connectionHandle = ((HciReadRemoteVersionInformationParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -332,8 +419,14 @@ static void HciCmdOnReadLmpHandleFailed(uint8_t status, const void *param)
 {
     HciReadLmpHandleReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciReadLmpHandleReturnParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((HciReadLmpHandleParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -346,7 +439,11 @@ static void HciCmdOnReadLmpHandleFailed(uint8_t status, const void *param)
 static void HciCmdOnSetupSynchronousConnectionFailed(uint8_t status, const void *param)
 {
     BtAddr addr = {0};
-    BtmGetAclAddressByHandle(((HciSetupSynchronousConnectionParam *)param)->connectionHandle, &addr);
+    if (param != NULL) {
+        BtmGetAclAddressByHandle(((HciSetupSynchronousConnectionParam *)param)->connectionHandle, &addr);
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciSynchronousConnectionCompleteEventParam eventParam = {
         .status = status,
@@ -366,8 +463,13 @@ static void HciCmdOnAcceptSynchronousConnectionRequestFailed(uint8_t status, con
 {
     HciSynchronousConnectionCompleteEventParam returnParam = {
         .status = status,
-        .bdAddr = ((HciAcceptSynchronousConnectionRequestParam *)param)->addr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciAcceptSynchronousConnectionRequestParam *)param)->addr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -381,8 +483,13 @@ static void HciCmdOnRejectSynchronousConnectionRequestFailed(uint8_t status, con
 {
     HciSynchronousConnectionCompleteEventParam eventParam = {
         .status = status,
-        .bdAddr = ((HciRejectSynchronousConnectionRequestParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        eventParam.bdAddr = ((HciRejectSynchronousConnectionRequestParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -396,8 +503,13 @@ static void HciCmdOnIoCapabilityRequestReplyFailed(uint8_t status, const void *p
 {
     HciIOCapabilityRequestReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciIOCapabilityRequestReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciIOCapabilityRequestReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -411,8 +523,13 @@ static void HciCmdOnUserConfirmationRequestReplyFailed(uint8_t status, const voi
 {
     HciUserConfirmationRequestReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciUserConfirmationRequestReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciUserConfirmationRequestReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -426,8 +543,13 @@ static void HciCmdOnUserPasskeyRequestReplyFailed(uint8_t status, const void *pa
 {
     HciUserPasskeyRequestReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciUserPasskeyRequestReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciUserPasskeyRequestReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -441,8 +563,13 @@ static void HciCmdOnUserPasskeyRequestNegativeReplyFailed(uint8_t status, const 
 {
     HciUserPasskeyRequestNegativeReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciUserPasskeyRequestNegativeReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciUserPasskeyRequestNegativeReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -456,8 +583,13 @@ static void HciCmdOnRemoteOobDataRequestReplyFailed(uint8_t status, const void *
 {
     HciRemoteOobDataRequestReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciRemoteOobDataRequestReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciRemoteOobDataRequestReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -471,8 +603,13 @@ static void HciCmdOnRemoteOobDataRequestNegativeReplyFailed(uint8_t status, cons
 {
     HciRemoteOobDataRequestNegativeReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciRemoteOobDataRequestNegativeReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciRemoteOobDataRequestNegativeReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -486,8 +623,13 @@ static void HciCmdOnIoCapabilityRequestNegativeReplyFailed(uint8_t status, const
 {
     HciIoCapabilityRequestNegativeReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciIoCapabilityRequestNegativeReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciIoCapabilityRequestNegativeReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -515,8 +657,13 @@ static void HciCmdOnUserConfirmationRequestNegativeReplyFailed(uint8_t status, c
 {
     HciUserConfirmationRequestNegativeReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciUserConfirmationRequestNegativeReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciUserConfirmationRequestNegativeReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -529,7 +676,11 @@ static void HciCmdOnUserConfirmationRequestNegativeReplyFailed(uint8_t status, c
 static void HciCmdOnEnhancedSetupSynchronousConnectionFailed(uint8_t status, const void *param)
 {
     BtAddr addr = {0};
-    BtmGetAclAddressByHandle(((HciEnhancedSetupSynchronousConnectionParam *)param)->connectionHandle, &addr);
+    if (param != NULL) {
+        BtmGetAclAddressByHandle(((HciEnhancedSetupSynchronousConnectionParam *)param)->connectionHandle, &addr);
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciSynchronousConnectionCompleteEventParam eventParam = {
         .status = status,
@@ -549,8 +700,13 @@ static void HciCmdOnEnhancedAcceptSynchronousConnectionRequestFailed(uint8_t sta
 {
     HciSynchronousConnectionCompleteEventParam eventParam = {
         .status = status,
-        .bdAddr = ((HciEnhancedAcceptSynchronousConnectionRequestParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        eventParam.bdAddr = ((HciEnhancedAcceptSynchronousConnectionRequestParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -564,8 +720,13 @@ static void HciCmdOnRemoteOobExtendedDataRequestReplyFailed(uint8_t status, cons
 {
     HciRemoteOobExtendedDataRequestReplyReturnParam returnParam = {
         .status = status,
-        .bdAddr = ((HciRemoteOobExtendedDataRequestReplyParam *)param)->bdAddr,
     };
+
+    if (param != NULL) {
+        returnParam.bdAddr = ((HciRemoteOobExtendedDataRequestReplyParam *)param)->bdAddr;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid address", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -658,7 +819,11 @@ void HciOnLinkControlCmdFailed(uint16_t opCode, uint8_t status, const void *para
     }
 
     HciCmdOnFailedFunc func = g_funcMap[ocf];
-    if (func != NULL) {
-        func(status, param);
+    if (func == NULL) {
+        // No failure row for this OCF: the command's failure has nowhere to be reported and would
+        // otherwise be dropped without a trace.
+        LOG_WARN("%{public}s: opCode 0x%04x has no failure row", __FUNCTION__, opCode);
+        return;
     }
+    func(status, param);
 }

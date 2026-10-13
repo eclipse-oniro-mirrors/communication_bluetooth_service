@@ -1545,7 +1545,7 @@ HWTEST_F(StackAtt52Test, StackAtt52_EattPreferIndMultiEatt_01200, TestSize.Level
  * @tc.desc: with the peer in BT52_EATT_NO_CONF mode (EATT channels never confirm),
  *           three send-allowed indications land on the two EATT bearers then UATT;
  *           each send keeps serverSendFlag set on its bearer (no 0x0E on EATT)
- *           (Vol 3 Part F 3.3.2 indication order protocol / 3.4.7.2)
+ *           (Vol 3 Part F 3.3.2 indication order protocol / 3.4.7,2)
  */
 // Scenario of StackAtt52_EattPreferIndRealSend_01210: three real cid=0 indication sends
 // with the peer in BT52_EATT_NO_CONF mode land on the two EATT bearers then UATT; each
@@ -1637,7 +1637,6 @@ HWTEST_F(StackAtt52Test, StackAtt52_EattPreferIndRealSend_01210, TestSize.Level1
     int result = 0;
     EattPreferIndRealSendScenario(g_attConnectCtx.connectHandle, eatt1, eatt2, result);
 }
-
 } // namespace Bluetooth
 } // namespace OHOS
 

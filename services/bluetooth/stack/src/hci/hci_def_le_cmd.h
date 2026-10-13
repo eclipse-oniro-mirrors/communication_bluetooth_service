@@ -1238,5 +1238,6 @@ typedef struct {
 #include "hci_def_le_cmd_5_0.h"
 #include "hci_def_le_cmd_5_1.h"
 #include "hci_def_le_cmd_5_4.h"
+#include "hci_def_le_cmd_6_0.h"
 
 #endif

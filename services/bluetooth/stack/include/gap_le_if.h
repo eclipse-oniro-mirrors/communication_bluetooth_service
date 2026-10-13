@@ -34,77 +34,11 @@
 #include "gap_comm.h"
 #include "gap_le_if_5_1.h"
 #include "gap_le_if_5_3.h"
+#include "gap_le_if_constants.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/// BLE Roles
-#define GAP_LE_ROLE_BROADCASTER (1 << 0)
-#define GAP_LE_ROLE_OBSERVER (1 << 1)
-#define GAP_LE_ROLE_PERIPHERAL (1 << 2)
-#define GAP_LE_ROLE_CENTRAL (1 << 3)
-// Deprecated: legacy misspelling kept for source compatibility with earlier releases.
-#define GAP_LE_ROLE_PREIPHERAL GAP_LE_ROLE_PERIPHERAL
-
-#define GAP_IRK_SIZE 0x10
-#define GAP_CSRK_SIZE 0x10
-#define GAP_SIGNATURE_SIZE 12
-
-typedef void (*GenResPriAddrResult)(uint8_t result, const uint8_t addr[BT_ADDRESS_SIZE], void *context);
-
-#define GAP_ADVERTISING_DATA_LENGTH_MAX 31
-
-/// Advertising channel
-#define GAP_ADVERTISING_CHANNEL_37 (1 << 0)
-#define GAP_ADVERTISING_CHANNEL_38 (1 << 1)
-#define GAP_ADVERTISING_CHANNEL_39 (1 << 2)
-
-/// Advertising filter policy
-#define GAP_ADVERTISING_NOT_USE_WL (0x00)
-#define GAP_ADVERTISING_USE_WL_FOR_SCAN (0x01)
-#define GAP_ADVERTISING_USE_WL_FOR_CONNECTION (0x02)
-#define GAP_ADVERTISING_USE_WL_FOR_BOTH (0x03)
-
-/// Intended Advertising property
-#define GAP_ADVERTISING_PROPERTY_CONNECTABLE (1 << 0)
-#define GAP_ADVERTISING_PROPERTY_SCANABLE (1 << 1)
-#define GAP_ADVERTISING_PROPERTY_DIRECTED (1 << 2)
-#define GAP_ADVERTISING_PROPERTY_HIGH_DUTY_CYCLE_DIRECTED (1 << 3)
-#define GAP_ADVERTISING_PROPERTY_USE_LEGACY_PDUS (1 << 4)
-#define GAP_ADVERTISING_PROPERTY_ANONYMOUS (1 << 5)
-#define GAP_ADVERTISING_PROPERTY_INCLUDE_TXPOWER (1 << 6)
-
-/// Intended Advertising data operation
-#define GAP_ADVERTISING_DATA_OPERATION_INTERMEDIATE (0x00)
-#define GAP_ADVERTISING_DATA_OPERATION_FIRST (0x01)
-#define GAP_ADVERTISING_DATA_OPERATION_LAST (0x02)
-#define GAP_ADVERTISING_DATA_OPERATION_COMPLETE (0x03)
-#define GAP_ADVERTISING_DATA_OPERATION_UNCHANGED (0x04)
-
-/// Intended Periodic Advertising data operation
-#define GAP_PERIODIC_ADV_DATA_OPERATION_INTERMEDIATE (0x00)
-#define GAP_PERIODIC_ADV_DATA_OPERATION_FIRST (0x01)
-#define GAP_PERIODIC_ADV_DATA_OPERATION_LAST (0x02)
-#define GAP_PERIODIC_ADV_DATA_OPERATION_COMPLETE (0x03)
-#define GAP_PERIODIC_ADV_DATA_OPERATION_UNCHANGED (0x04)
-
-/// Intended Advertising PHY
-#define GAP_ADVERTISEMENT_PHY_NONE (0x00)
-#define GAP_ADVERTISEMENT_PHY_1M (0x01)
-#define GAP_ADVERTISEMENT_PHY_2M (0x02)
-#define GAP_ADVERTISEMENT_PHY_CODED (0x03)
-
-/// LE PHY bit mask used by GAPIF_LeSetPhy/GAPIF_LeSetDefaultPhy
-#define GAP_LE_PHY_BIT_1M (1 << 0)
-#define GAP_LE_PHY_BIT_2M (1 << 1)
-#define GAP_LE_PHY_BIT_CODED (1 << 2)
-#define GAP_LE_PHY_BIT_ALL (GAP_LE_PHY_BIT_1M | GAP_LE_PHY_BIT_2M | GAP_LE_PHY_BIT_CODED)
-
-/// allPhys parameter used by GAPIF_LeSetPhy/GAPIF_LeSetDefaultPhy
-#define GAP_LE_ALL_PHY_TX_NO_PREFERENCE (1 << 0)
-#define GAP_LE_ALL_PHY_RX_NO_PREFERENCE (1 << 1)
-#define GAP_LE_ALL_PHY_VALID_MASK (GAP_LE_ALL_PHY_TX_NO_PREFERENCE | GAP_LE_ALL_PHY_RX_NO_PREFERENCE)
 
 /// phyOptions parameter used by GAPIF_LeSetPhy when Coded PHY is preferred
 #define GAP_LE_PHY_OPTIONS_CODED_NO_PREFERENCE (0x0000)
@@ -194,6 +128,7 @@ typedef struct {
     void (*periodicAdvSetParamResult)(uint8_t status, void *context);
     void (*periodicAdvSetDataResult)(uint8_t status, void *context);
     void (*periodicAdvSetEnableResult)(uint8_t status, void *context);
+    void (*exAdvSetDecisionDataResult)(uint8_t status, void *context);
 } GapExAdvCallback;
 
 /**
@@ -300,7 +235,7 @@ typedef struct {
     uint8_t dataLen;               /// Advertising data len
     uint8_t *data;                 /// Advertising data
     /// LE Coded PHY coding knowledge of primaryPhy/secondaryPhy (BLUETOOTH
-    /// SPECIFICATION Version 5.4 | Vol 4, Part E, 7.7.65.13): 0x01 when the
+    /// SPECIFICATION Version 5.4 | Vol 4, Part E, 7.7.65,13): 0x01 when the
     /// local Host has declared the Advertising Coding Selection Host Support
     /// LL feature (bit 41) - the Controller then reports the coding actually
     /// used by value-extension of the PHY fields: primaryPhy/secondaryPhy
@@ -330,6 +265,9 @@ typedef struct {
     void (*scanExSetParamResult)(uint8_t status, void *context);
     void (*scanExSetEnableResult)(uint8_t status, void *context);
     void (*scanTimeoutEvent)(void *context);
+    // Set Decision Instructions result (7.8.145). Optional: CC status is reported
+    // here (0x12/0x43, or 0xE1 on a send timeout); unregistered slots are skipped.
+    void (*scanSetDecisionInstructionsResult)(uint8_t status, void *context);
 } GapExScanCallback;
 
 /**
@@ -347,6 +285,26 @@ typedef struct {
  * Deprecated aliases are available as the UPPER_CASE macros GAPLE_SET_HOST_CHANNEL_CLASSIFICATION_RESULT
  * and GAPLE_READ_CHANNEL_MAP_RESULT below.
  */
+// BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 5.1.30 / Vol 4 Part E 7.7.65,48
+// Payload of the LE Frame Space Update Complete callback. status is the event status;
+// the remaining fields are meaningful only when status is HCI_SUCCESS. On any non-success
+// status they are set to 0 and must be ignored by the callback implementation. addr is the
+// identity of the ACL whose frame space changed, initiator marks host/local vs peer
+// initiated updates, frameSpace is the value now in use, and phys/spacingTypes are the
+// non-zero masks describing which PHY/interval pairs the update applies to.
+typedef struct {
+    uint8_t status;
+    BtAddr addr;
+    uint8_t initiator;
+    uint16_t frameSpace;
+    uint8_t phys;
+    uint16_t spacingTypes;
+} GapLeFrameSpaceUpdateInfo;
+
+// Extended connection callback type added in Bluetooth 6.0 for Frame Space Updates.
+// The full event payload is passed in a single @p info structure so the callback
+// signature stays small; @p context is the pointer supplied at registration.
+typedef void (*GapLeFrameSpaceUpdateComplete)(const GapLeFrameSpaceUpdateInfo *info, void *context);
 typedef struct {
     void (*leConnectionParameterReq)(const BtAddr *addr, uint16_t connIntervalMin, uint16_t connIntervalMax,
         uint16_t connLatency, uint16_t timeout, void *context);
@@ -362,7 +320,14 @@ typedef struct {
     void (*leDataLengthChange)(const BtAddr *addr, uint16_t maxTxOctets, uint16_t maxTxTime, uint16_t maxRxOctets,
         uint16_t maxRxTime, void *context);
     void (*leSetDataLengthResult)(uint8_t status, const BtAddr *addr, void *context);
+    // BLUETOOTH SPECIFICATION Version 6.0 | Vol 6, Part B, 5.1.30 / Vol 4 Part E 7.7.65,48
+    // Delivered on each LE Frame Space Update Complete event for the ACL: host-issued
+    // results and autonomous Local Controller / peer changes. A peer or autonomous
+    // negotiation that changes no value produces no event. The new frame space value
+    // in use is info->frameSpace; read it only when info->status is HCI_SUCCESS.
+    GapLeFrameSpaceUpdateComplete leFrameSpaceUpdateComplete;
 } GapLeConnCallback;
+
 
 typedef struct {
     uint16_t connectionHandle;
@@ -449,6 +414,34 @@ typedef struct {
     void (*clearPeriodicAdvertiserListResult)(uint8_t status, void *context);
     void (*readPeriodicAdvertiserListSizeResult)(uint8_t status, uint8_t listSize, void *context);
 } GapPeriodicAdvSyncCallback;
+
+/**
+ * @brief       LE Monitored Advertisers callback function structure
+ *
+ * Bluetooth 6.0, Vol 6, Part B, 4.6.45 (Monitoring Advertisers). Single-slot:
+ * registering again replaces the previous callback and context. All members are
+ * optional and each is checked before invocation. @a addressType is passed
+ * through unchanged from the LE Monitored Advertisers Report (Vol 4, Part E,
+ * 7.7.65,47) and may be an identity address type 0x02/0x03 when the Resolving
+ * List resolved the RPA. @a addr is a stack-local copy whose @c type carries
+ * the same value as @a addressType; match addresses with GapAddrCompare, which
+ * treats public/random and their identity forms as equal. It is valid only
+ * during the callback, do not retain. C++11/14/17 callers must assign members
+ * explicitly (designated initializers are only available from C++20 onward).
+ */
+typedef struct {
+    void (*addDeviceToMonitoredAdvertisersListResult)(uint8_t status, void *context);
+    void (*removeDeviceFromMonitoredAdvertisersListResult)(uint8_t status, void *context);
+    void (*clearMonitoredAdvertisersListResult)(uint8_t status, void *context);
+    void (*readMonitoredAdvertisersListSizeResult)(uint8_t status, uint8_t listSize, void *context);
+    void (*enableMonitoringAdvertisersResult)(uint8_t status, void *context);
+    void (*monitoredAdvertisersReport)(
+        uint8_t addressType, const BtAddr *addr, uint8_t condition, void *context);
+} GapMonitoredAdvertisersCallback;
+
+// Condition values of the LE Monitored Advertisers Report (Vol 6, Part B, 4.4.3,8).
+#define GAP_MONITORED_ADV_CONDITION_LOSS (0x00)      // below low RSSI past the timeout
+#define GAP_MONITORED_ADV_CONDITION_RECOVERED (0x01) // RSSI >= high RSSI threshold
 
 /**
  * @brief       LE controller information callback function structure
@@ -749,14 +742,15 @@ BTSTACK_API int GAPIF_LeExAdvSetRandAddr(uint8_t advHandle, const uint8_t addr[B
 /**
  * @brief       Set the advertising parameter used by advertising.
  * @param[in]   advHandle           used to identify an advertising set (0x00-0xEF)
- * @param[in]   properties          intended Advertising property
+ * @param[in]   properties          intended Advertising property (16-bit; BT6.0 DBAF
+ *                                  decision-PDU bits 7/8/9 defined in hci_def_le_cmd_6_0.h)
  * @param[in]   txPower            advertising TX power
  * @param[in]   advExParam          advertising parameter
  * @return      @c BT_SUCCESS      : The function is executed successfully.
  *              @c otherwise        : The function is not executed successfully.
  */
 BTSTACK_API int GAPIF_LeExAdvSetParam(
-    uint8_t advHandle, uint8_t properties, int8_t txPower, GapLeExAdvParam advExParam);
+    uint8_t advHandle, uint16_t properties, int8_t txPower, GapLeExAdvParam advExParam);
 
 /**
  * @brief       Set the advertising data used by advertising.
@@ -783,6 +777,18 @@ BTSTACK_API int GAPIF_LeExAdvSetData(
  */
 BTSTACK_API int GAPIF_LeExAdvSetScanRspData(uint8_t advHandle, uint8_t operation, uint8_t fragmentPreference,
     uint8_t scanResponseDataLen, const uint8_t *scanResponseData);
+
+/**
+ * @brief       Set the decision data for Decision-Based Advertising Filtering.
+ * @param[in]   advHandle           advertising handle that receives the decision data (0x00-0xEF)
+ * @param[in]   decisionTypeFlags   Decision_Type_Flags (bit 0: Resolvable Tag present)
+ * @param[in]   decisionDataLength  length of decisionData (<= 8, >= 6 when Resolvable Tag present)
+ * @param[in]   decisionData        decision data (Decision_Type specific content)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeExAdvSetDecisionData(uint8_t advHandle, uint8_t decisionTypeFlags, uint8_t decisionDataLength,
+    const uint8_t *decisionData);
 
 /**
  * @brief       Set the advertising enable used by advertising.
@@ -936,6 +942,69 @@ BTSTACK_API int GAPIF_LeClearPeriodicAdvertiserList(void);
  *              @c otherwise        : The function is not executed successfully.
  */
 BTSTACK_API int GAPIF_LeReadPeriodicAdvertiserListSize(void);
+
+/**
+ * @brief       Register LE Monitored Advertisers callback function
+ * @param[in]   callback            LE Monitored Advertisers callback structure
+ * @param[in]   context             LE Monitored Advertisers callback context parameter
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c BT_BAD_PARAM    : @a callback is @c NULL; deregister through
+ *                                   GAPIF_DeregisterMonitoredAdvertisersCallback.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_RegisterMonitoredAdvertisersCallback(
+    const GapMonitoredAdvertisersCallback *callback, void *context);
+
+/**
+ * @brief       Deregister LE Monitored Advertisers callback function
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_DeregisterMonitoredAdvertisersCallback(void);
+
+/**
+ * @brief       Add a device to the Monitored Advertisers List
+ * @param[in]   addrType            advertiser address type (0x00 public / 0x01 random only)
+ * @param[in]   addr                advertiser address; @c addr->type must equal @c addrType
+ * @param[in]   rssiThresholdLow    low RSSI threshold (-127..+20 dBm)
+ * @param[in]   rssiThresholdHigh   high RSSI threshold (-127..+20 dBm), >= rssiThresholdLow
+ * @param[in]   timeout             loss timeout in seconds (0x01..0xFF)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeAddDeviceToMonitoredAdvertisersList(
+    uint8_t addrType, const BtAddr *addr, int8_t rssiThresholdLow, int8_t rssiThresholdHigh, uint8_t timeout);
+
+/**
+ * @brief       Remove a device from the Monitored Advertisers List
+ * @param[in]   addrType            advertiser address type (0x00 public / 0x01 random only)
+ * @param[in]   addr                advertiser address; @c addr->type must equal @c addrType
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeRemoveDeviceFromMonitoredAdvertisersList(uint8_t addrType, const BtAddr *addr);
+
+/**
+ * @brief       Clear the Monitored Advertisers List
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeClearMonitoredAdvertisersList(void);
+
+/**
+ * @brief       Read the size (capacity) of the Monitored Advertisers List
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeReadMonitoredAdvertisersListSize(void);
+
+/**
+ * @brief       Enable or disable Monitoring Advertisers
+ * @param[in]   enable              0x00 disable, 0x01 enable/restart monitoring
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeEnableMonitoringAdvertisers(uint8_t enable);
 
 /**
  * @brief       Register LE controller information callback function
@@ -1152,6 +1221,56 @@ BTSTACK_API int GAPIF_LeExScanSetParam(uint8_t scanFilterPolity, uint8_t scanPhy
 BTSTACK_API int GAPIF_LeExScanSetEnable(
     uint8_t scanEnable, uint8_t filterDuplicates, uint16_t duration, uint16_t period);
 
+// Forward declaration of the DBAF decision-test record (7.8.145). The full
+// definition lives in src/hci/hci_def_le_cmd_6_0.h (stack internal); only a
+// pointer to this type crosses the GAPIF boundary, so a tagged forward declaration
+// keeps the name visible here without exposing the HCI def header (same pattern as
+// the BLE 5.1 event records in gap_le_if_5_1.h).
+typedef struct HciLeDecisionTestParamTag HciLeDecisionTestParam;
+
+/**
+ * @brief       Set the decision instructions used when scanning or initiating.
+ * @details     Bluetooth 6.0, Vol 4, Part E, 7.8.145 (Decision-Based Advertising
+ *              Filtering). The instructions are Controller-side, session-independent
+ *              state: they may be set while scanning or initiating is in progress and
+ *              take effect before the Command_Complete event. The Controller must
+ *              support at least 8 tests; a test count above the Controller's actual
+ *              support limit is reported asynchronously through scanSetDecisionInstructionsResult.
+ * @param[in]   numTests            number of tests (1..14)
+ * @param[in]   tests               caller-owned array of numTests test records (18 B each)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeSetDecisionInstructions(uint8_t numTests, const HciLeDecisionTestParam *tests);
+
+/**
+ * @brief       Initiate a decision-based LE connection.
+ * @details     Bluetooth 6.0, Vol 4, Part E, 7.8.66 (Decision-Based Advertising
+ *              Filtering). Initiator_Filter_Policy must be one of the decision
+ *              values 0x02-0x04; the Controller selects the peer from decision
+ *              PDUs / the accept list. Requires LE Feature Bit 42.
+ * @param[in]   initiatorFilterPolicy    one of 0x02-0x04
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ * @note        With policy 0x03 and an empty accept list the call is skipped (no
+ *              HCI command is submitted) yet still returns @c BT_SUCCESS, like the
+ *              whitelist auto-connect; upper layers must not read that return as
+ *              "command accepted by the Controller".
+ */
+BTSTACK_API int GAPIF_LeExtendedConnectByDecision(uint8_t initiatorFilterPolicy);
+
+/**
+ * @brief       Cancel a decision-based LE connection.
+ * @details     Bluetooth 6.0, Vol 4, Part E, 7.8.13 (Decision-Based Advertising
+ *              Filtering). LE_Create_Connection_Cancel serves both the legacy
+ *              and the Extended Create Connection, so this stops the decision
+ *              initiator started by GAPIF_LeExtendedConnectByDecision. Requires
+ *              LE Feature Bit 42.
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeExtendedConnectByDecisionCancel(void);
+
 /**
  * @brief       Register link layer control callback
  * @param[in]   callback            link layer control callback
@@ -1315,6 +1434,20 @@ BTSTACK_API int GAPIF_LeSetDefaultPhy(uint8_t allPhys, uint8_t txPhys, uint8_t r
  *              @c otherwise        : The function is not executed successfully.
  */
 BTSTACK_API int GAPIF_LeSetDataLength(const BtAddr *addr, uint16_t txOctets, uint16_t txTime);
+
+/**
+ * @brief       Request new frame space values for an LE connection (BLE 6.0).
+ * @param[in]   addr                peer device address (must not be NULL)
+ * @param[in]   frameSpaceMin       minimum requested frame space value (0x0000-0x2710 us)
+ * @param[in]   frameSpaceMax       maximum requested frame space value (0x0000-0x2710 us)
+ * @param[in]   phys                PHYS bit mask (bit0 LE 1M, bit1 LE 2M, bit2 LE Coded)
+ * @param[in]   spacingTypes        Spacing_Types bit mask (bits 0-4)
+ * @return      @c BT_SUCCESS      : The function is executed successfully.
+ *              @c BT_BAD_PARAM    : @a addr is @c NULL.
+ *              @c otherwise        : The function is not executed successfully.
+ */
+BTSTACK_API int GAPIF_LeFrameSpaceUpdate(const BtAddr *addr, uint16_t frameSpaceMin,
+    uint16_t frameSpaceMax, uint8_t phys, uint16_t spacingTypes);
 
 /**
  * @brief       Register BLE security callback

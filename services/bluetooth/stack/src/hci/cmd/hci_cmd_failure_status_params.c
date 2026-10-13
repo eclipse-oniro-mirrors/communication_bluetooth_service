@@ -23,13 +23,20 @@
 #include "hci/hci_def.h"
 
 #include "hci_cmd_failure.h"
+#include "log.h"
 
 static void HciCmdOnReadFailedContactCounterFailed(uint8_t status, const void *param)
 {
     HciReadFailedContactCounterReturnParam returnParam = {
         .status = status,
-        .handle = ((HciReadFailedContactCounterReturnParam *)param)->handle,
+        .handle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.handle = ((HciReadFailedContactCounterParam *)param)->handle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -43,8 +50,14 @@ static void HciCmdOnResetFailedContactCounterFailed(uint8_t status, const void *
 {
     HciResetFailedContactCounterReturnParam returnParam = {
         .status = status,
-        .handle = ((HciResetFailedContactCounterReturnParam *)param)->handle,
+        .handle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.handle = ((HciResetFailedContactCounterParam *)param)->handle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -58,8 +71,14 @@ static void HciCmdOnReadLinkQualityFailed(uint8_t status, const void *param)
 {
     HciReadLinkQualityReturnParam returnParam = {
         .status = status,
-        .handle = ((HciReadLinkQualityReturnParam *)param)->handle,
+        .handle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.handle = ((HciReadLinkQualityParam *)param)->handle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -73,8 +92,14 @@ static void HciCmdOnReadRssiFailed(uint8_t status, const void *param)
 {
     HciReadRssiReturnParam returnParam = {
         .status = status,
-        .handle = ((HciReadRssiParam *)param)->handle,
+        .handle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.handle = ((HciReadRssiParam *)param)->handle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -88,8 +113,14 @@ static void HciCmdOnReadAfhChannelMapFailed(uint8_t status, const void *param)
 {
     HciReadAfhChannelMapReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciReadAfhChannelMapReturnParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((HciReadAfhChannelMapParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -103,8 +134,14 @@ static void HciCmdOnReadClockFailed(uint8_t status, const void *param)
 {
     HciReadClockReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciReadClockReturnParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((HciReadClockParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -118,8 +155,14 @@ static void HciCmdOnReadEncryptionKeySizeFailed(uint8_t status, const void *para
 {
     HciReadEncryptionKeySizeReturnParam returnParam = {
         .status = status,
-        .connectionHandle = ((HciReadEncryptionKeySizeReturnParam *)param)->connectionHandle,
+        .connectionHandle = INVALID_CONNECTION_HANDLE,
     };
+
+    if (param != NULL) {
+        returnParam.connectionHandle = ((HciReadEncryptionKeySizeParam *)param)->connectionHandle;
+    } else {
+        LOG_WARN("%{public}s: original command param unavailable, using invalid handle", __FUNCTION__);
+    }
 
     HciEventCallbacks *callbacks = NULL;
     HCI_FOREACH_EVT_CALLBACKS_START(callbacks);
@@ -212,7 +255,11 @@ void HciOnStatusParametersCmdFailed(uint16_t opCode, uint8_t status, const void 
     }
 
     HciCmdOnFailedFunc func = g_funcMap[ocf];
-    if (func != NULL) {
-        func(status, param);
+    if (func == NULL) {
+        // No failure row for this OCF: the command's failure has nowhere to be reported and would
+        // otherwise be dropped without a trace.
+        LOG_WARN("%{public}s: opCode 0x%04x has no failure row", __FUNCTION__, opCode);
+        return;
     }
+    func(status, param);
 }

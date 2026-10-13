@@ -119,7 +119,7 @@ void AttEattReconfigured(uint16_t lcid, uint16_t newMtu, uint16_t result, void *
  *
  * Ref'd on the L2CAP call stack (L2CAP does not own the packet), then dispatched on
  * the ATT processing queue: resolve the bearer by lcid, apply the bearer-level constraint
- * interception (0xD2 dropped per Vol 3 Part F §3.4.5.4, 0x02 answered with 0x01
+ * interception (0xD2 dropped per Vol 3 Part F §3.4.5,4, 0x02 answered with 0x01
  * ERROR_RSP / 0x06 per §3.2.8 + §3.3), then dispatch the remaining PDUs through the
  * shared FunctionList indexed by opcode.
  *
