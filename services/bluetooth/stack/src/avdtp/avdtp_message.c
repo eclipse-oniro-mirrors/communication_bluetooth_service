@@ -1605,6 +1605,11 @@ void AvdtParseDiscoverRsp(AvdtSigCtrl *sigCtrl, AvdtCtrlData *data, const Packet
         return;
     }
     do {
+        if (index >= AVDT_NUM_SEPS) {
+            LOG_WARN("[AVDT]%{public}s: the peer reports more SEPs than AVDT_NUM_SEPS(%d), "
+                "the extra SEPs are dropped", __func__, AVDT_NUM_SEPS);
+            break;
+        }
         (void)memset_s(&data->discoverCfm.seps[index], sizeof(AvdtSepInfo), 0, sizeof(AvdtSepInfo));
         PacketPayloadRead(pkt, &context, Offset, AVDT_1BYTE);
         Offset++;

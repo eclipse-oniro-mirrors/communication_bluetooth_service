@@ -1200,6 +1200,18 @@ static void L2capProcessErfcOption(const uint8_t *data, uint16_t offset, L2capCo
     return;
 }
 
+static int L2capCheckQosOption(const uint8_t *data, uint16_t length, uint16_t offset, uint8_t optLength)
+{
+    if ((optLength < L2CAP_SIZE_1) || (length < (offset + L2CAP_OFFSET_3 + L2CAP_SIZE_1))) {
+        return BT_BAD_PARAM;
+    }
+    if ((data[offset + L2CAP_OFFSET_3] != L2CAP_QOS_SERVICE_TYPE_BEST_EFFORT) &&
+        (data[offset + L2CAP_OFFSET_3] != L2CAP_QOS_SERVICE_TYPE_GUARANTEED)) {
+        return BT_BAD_PARAM;
+    }
+    return BT_SUCCESS;
+}
+
 static int L2capParseConfiguration(const uint8_t *data, uint16_t length, L2capConfigInfo *cfg, L2capOptions *unknown)
 {
     uint16_t offset = 0;
@@ -1230,8 +1242,7 @@ static int L2capParseConfiguration(const uint8_t *data, uint16_t length, L2capCo
                 cfg->fcs = data[offset + L2CAP_OFFSET_2];
                 break;
             case L2CAP_OPTION_QUALITY_OF_SERVICE:
-                if ((data[offset + L2CAP_OFFSET_3] != L2CAP_QOS_SERVICE_TYPE_BEST_EFFORT) &&
-                    (data[offset + L2CAP_OFFSET_3] != L2CAP_QOS_SERVICE_TYPE_GUARANTEED)) {
+                if (L2capCheckQosOption(data, length, offset, optLength) != BT_SUCCESS) {
                     return BT_BAD_PARAM;
                 }
                 break;
