@@ -47,6 +47,27 @@ namespace bluetooth {
 const int TRANSPORT_MAX = 2;
 const std::string PERMISSIONS = "ohos.permission.USE_BLUETOOTH";
 
+constexpr std::chrono::milliseconds REQUEST_WAIT_TIMEOUT {30000};
+// One wait for the in-flight factory reset plus one retry of the registration, keeps Stop() bounded at
+// two wait periods (60s) instead of an unbounded wait.
+constexpr int REQUEST_MAX_RETRY = 2;
+
+PendingRequest::PendingRequest() : future_(promise_.get_future().share())
+{}
+
+void PendingRequest::Complete()
+{
+    if (completed_.exchange(true)) {
+        return;
+    }
+    promise_.set_value();
+}
+
+bool PendingRequest::Wait(std::chrono::milliseconds timeout) const
+{
+    return future_.wait_for(timeout) == std::future_status::ready;
+}
+
 // T is BleAdapter or ClassicAdapter
 template <typename T>
 struct AdapterInfo {
@@ -78,8 +99,8 @@ struct AdapterManager::impl {
     ~impl();
 
     std::recursive_mutex syncMutex_ = {};
-    std::promise<void> stopPromise_ = {};
-    std::promise<void> resetPromise_ = {};
+    std::shared_ptr<PendingRequest> stopRequest_ = nullptr;
+    std::shared_ptr<PendingRequest> resetRequest_ = nullptr;
     std::unique_ptr<utility::Dispatcher> dispatcher_ = nullptr;
     std::unique_ptr<AdapterInfo<ClassicAdapter>> classicAdapter_ = nullptr;
     std::unique_ptr<AdapterInfo<BleAdapter>> bleAdapter_ = nullptr;
@@ -301,24 +322,69 @@ void AdapterManager::Stop() const
 {
     LOG_DEBUG("%{public}s start", __PRETTY_FUNCTION__);
 
-    if (GetSysState() == SYS_STATE_STOPPED) {
-        LOG_DEBUG("AdapterManager is stoped");
-    } else if (GetSysState() == SYS_STATE_STOPPING) {
-        LOG_DEBUG("AdapterManager is stoping...");
-    } else {
-        std::promise<void> stopPromise;
-        std::future<void> stopFuture = stopPromise.get_future();
+    auto request = std::make_shared<PendingRequest>();
+    if (!PrepareStopRequest(request)) {
+        return;
+    }
 
+    utility::Message msg(SysStateMachine::MSG_SYS_STOP_REQ);
+    pimpl->dispatcher_->PostTask(
+        std::bind(&utility::StateMachine::ProcessMessage, &(pimpl->sysStateMachine_), msg));
+
+    if (!WaitForRequest(request, pimpl->stopRequest_)) {
+        return;
+    }
+}
+
+bool AdapterManager::PrepareStopRequest(const std::shared_ptr<PendingRequest> &request) const
+{
+    for (int retry = 0; retry < REQUEST_MAX_RETRY; ++retry) {
+        std::shared_ptr<PendingRequest> pendingReset = nullptr;
         {
             std::lock_guard<std::recursive_mutex> lock(pimpl->syncMutex_);
-            pimpl->stopPromise_ = std::move(stopPromise);
+            const std::string &state = pimpl->sysState_;
+            if (state == SYS_STATE_STOPPED) {
+                LOG_DEBUG("AdapterManager is stoped");
+                return false;
+            }
+            if (state == SYS_STATE_STOPPING) {
+                LOG_DEBUG("AdapterManager is stoping...");
+                return false;
+            }
+            if (pimpl->stopRequest_ != nullptr) {
+                LOG_ERROR("%{public}s another stop request is in flight, ignore this one", __PRETTY_FUNCTION__);
+                return false;
+            }
+            if (pimpl->resetRequest_ != nullptr) {
+                pendingReset = pimpl->resetRequest_;
+            } else {
+                pimpl->stopRequest_ = request;
+                return true;
+            }
         }
 
-        utility::Message msg(SysStateMachine::MSG_SYS_STOP_REQ);
-        pimpl->dispatcher_->PostTask(
-            std::bind(&utility::StateMachine::ProcessMessage, &(pimpl->sysStateMachine_), msg));
-        stopFuture.wait();
+        if (!pendingReset->Wait(REQUEST_WAIT_TIMEOUT)) {
+            LOG_ERROR("%{public}s wait for the in-flight factory reset timeout", __PRETTY_FUNCTION__);
+            return false;
+        }
     }
+    LOG_ERROR("%{public}s factory reset keeps in flight, give up this stop request", __PRETTY_FUNCTION__);
+    return false;
+}
+
+bool AdapterManager::WaitForRequest(const std::shared_ptr<PendingRequest> &request,
+    std::shared_ptr<PendingRequest> &slot) const
+{
+    if (request->Wait(REQUEST_WAIT_TIMEOUT)) {
+        return true;
+    }
+    LOG_ERROR("%{public}s request timeout", __PRETTY_FUNCTION__);
+    // Unregister the request so that a late completion does not target an abandoned request.
+    std::lock_guard<std::recursive_mutex> lock(pimpl->syncMutex_);
+    if (slot == request) {
+        slot = nullptr;
+    }
+    return false;
 }
 
 bool AdapterManager::AdapterStop() const
@@ -417,24 +483,32 @@ bool AdapterManager::FactoryReset() const
 {
     LOG_DEBUG("%{public}s start", __PRETTY_FUNCTION__);
 
-    if (GetSysState() == SYS_STATE_STARTED) {
-        std::promise<void> resetPromise;
-        std::future<void> resetFuture = resetPromise.get_future();
-
-        {
-            std::lock_guard<std::recursive_mutex> lock(pimpl->syncMutex_);
-            pimpl->resetPromise_ = std::move(resetPromise);
+    auto request = std::make_shared<PendingRequest>();
+    {
+        std::lock_guard<std::recursive_mutex> lock(pimpl->syncMutex_);
+        if (pimpl->sysState_ != SYS_STATE_STARTED) {
+            LOG_INFO("System state is not started");
+            return false;
         }
+        if (pimpl->resetRequest_ != nullptr) {
+            LOG_ERROR("%{public}s another factory reset request is in flight, reject this one", __PRETTY_FUNCTION__);
+            return false;
+        }
+        if (pimpl->stopRequest_ != nullptr) {
+            LOG_ERROR("%{public}s a stop request is in flight, reject the factory reset request", __PRETTY_FUNCTION__);
+            return false;
+        }
+        pimpl->resetRequest_ = request;
+    }
 
-        utility::Message msg(SysStateMachine::MSG_SYS_FACTORY_RESET_REQ);
-        pimpl->dispatcher_->PostTask(
-            std::bind(&utility::StateMachine::ProcessMessage, &(pimpl->sysStateMachine_), msg));
-        resetFuture.wait();
-        return true;
-    } else {
-        LOG_INFO("System state is not started");
+    utility::Message msg(SysStateMachine::MSG_SYS_FACTORY_RESET_REQ);
+    pimpl->dispatcher_->PostTask(
+        std::bind(&utility::StateMachine::ProcessMessage, &(pimpl->sysStateMachine_), msg));
+
+    if (!WaitForRequest(request, pimpl->resetRequest_)) {
         return false;
     }
+    return true;
 }
 
 void AdapterManager::HciFailedReset(void *context)
@@ -571,12 +645,19 @@ void AdapterManager::OnSysStateExit(const std::string &state) const
 {
     LOG_DEBUG("%{public}s state is %{public}s", __PRETTY_FUNCTION__, state.c_str());
 
-    if (state == SYS_STATE_FRESETTING) {
-        pimpl->resetPromise_.set_value();
-    } else if (state == SYS_STATE_STOPPING) {
-        pimpl->stopPromise_.set_value();
-    } else {
-        // Nothing to do.
+    std::shared_ptr<PendingRequest> request = nullptr;
+    {
+        std::lock_guard<std::recursive_mutex> lock(pimpl->syncMutex_);
+        if (state == SYS_STATE_FRESETTING) {
+            request = std::move(pimpl->resetRequest_);
+        } else if (state == SYS_STATE_STOPPING) {
+            request = std::move(pimpl->stopRequest_);
+        } else {
+            // Nothing to do.
+        }
+    }
+    if (request != nullptr) {
+        request->Complete();
     }
 }
 void AdapterManager::PublishBluetoothStateChangeEvent(const BTTransport transport, const BTStateID state) const
