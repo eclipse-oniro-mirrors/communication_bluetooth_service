@@ -1016,6 +1016,13 @@ static int SdpGetCommonProtocolDescriptorEachList(SdpProtocolDescriptor *descrip
     int pos;
 
     while (currentLength) {
+        if (parameterNumber >= SDP_PROTOCOL_PARAMETER_MAX_COUNT) {
+            LOG_ERROR("[%{public}s][%{public}d] parameterNumber exceeds max.", __FUNCTION__, __LINE__);
+            /// skip the remaining bytes of this list to keep the outer parser aligned
+            offset += (int)currentLength;
+            currentLength = 0;
+            break;
+        }
         if (bufferInfo->buffer[offset] == 0x35) {
             uint8_t type = 0x35;
             SdpGetLengthFromType(bufferInfo->buffer + offset + 1, type, &length);
@@ -1058,7 +1065,7 @@ static int SdpGetCommonProtocolDescriptorList(
 
     offset++;
     pos = SdpGetLengthFromType(bufferInfo->buffer + offset, type, &totalLength);
-    if (bufferInfo->length < totalLength) {
+    if (((uint32_t)offset + pos + totalLength) > bufferInfo->length) {
         LOG_ERROR("[%{public}s][%{public}d] Wrong length.", __FUNCTION__, __LINE__);
         return BT_BAD_PARAM;
     }
@@ -1221,7 +1228,7 @@ static int SdpGetLanguageBaseAttributeIdList(BufferInfo *bufferInfo, SdpService 
 
     offset++;
     uint16_t pos = SdpGetLengthFromType(bufferInfo->buffer + offset, type, &length);
-    if (bufferInfo->length < length) {
+    if (((uint32_t)offset + pos + length) > bufferInfo->length) {
         LOG_ERROR("[%{public}s][%{public}d] Wrong length.", __FUNCTION__, __LINE__);
         return BT_BAD_PARAM;
     }
@@ -1242,6 +1249,13 @@ static int SdpGetLanguageBaseAttributeIdList(BufferInfo *bufferInfo, SdpService 
     (void)memset_s(service->baseAttributeId, setLength, 0, setLength);
 
     while (length) {
+        if (baseAttributeIdNumber >= SDP_LANGUAGE_ATTRIBUTE_MAX) {
+            LOG_ERROR("[%{public}s][%{public}d] baseAttributeIdNumber exceeds max.", __FUNCTION__, __LINE__);
+            /// skip the remaining bytes of this list to keep the caller aligned
+            offset += (uint16_t)length;
+            length = 0;
+            break;
+        }
         /// Language Code
         type = bufferInfo->buffer[offset];
         offset++;
@@ -1314,7 +1328,7 @@ static int SdpGetBluetoothProfileDescriptorList(BufferInfo *bufferInfo, SdpServi
 
     offset++;
     uint16_t pos = SdpGetLengthFromType(bufferInfo->buffer + offset, type, &length);
-    if (bufferInfo->length < length) {
+    if (((uint32_t)offset + pos + length) > bufferInfo->length) {
         LOG_ERROR("[%{public}s][%{public}d] Wrong length.", __FUNCTION__, __LINE__);
         return BT_BAD_PARAM;
     }
@@ -1334,6 +1348,13 @@ static int SdpGetBluetoothProfileDescriptorList(BufferInfo *bufferInfo, SdpServi
         sizeof(SdpProfileDescriptor) * SDP_PROTOCOL_PARAMETER_MAX_COUNT);
 
     while (length) {
+        if (profileDescriptorNumber >= SDP_PROTOCOL_PARAMETER_MAX_COUNT) {
+            LOG_ERROR("[%{public}s][%{public}d] profileDescriptorNumber exceeds max.", __FUNCTION__, __LINE__);
+            /// skip the remaining bytes of this list to keep the caller aligned
+            offset += (uint16_t)length;
+            length = 0;
+            break;
+        }
         /// UUID
         type = *(bufferInfo->buffer + offset);
         length--;
