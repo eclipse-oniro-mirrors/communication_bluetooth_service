@@ -1355,6 +1355,13 @@ bool BluetoothHostServer::SetMessagePermission(const std::string &address, int32
 int32_t BluetoothHostServer::GetPowerMode(const std::string &address)
 {
     HILOGI("address: %{public}s", GetEncryptAddr(address).c_str());
+    /// Gate on the adapter state so that a query issued while bluetooth is turning off does not
+    /// reach the power manager singleton. 0x00 equals BTPowerMode::MODE_INVALID, which is declared
+    /// in the service layer and is not visible to the server layer.
+    if (!IsBtEnabled()) {
+        HILOGE("bluetooth is not enabled, return MODE_INVALID");
+        return 0;
+    }
     return IAdapterManager::GetInstance()->GetPowerMode(address);
 }
 
