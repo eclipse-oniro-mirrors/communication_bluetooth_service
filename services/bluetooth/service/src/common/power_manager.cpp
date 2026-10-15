@@ -44,6 +44,11 @@ void IPowerManager::Uninitialize()
     g_powerManager->Uninitialize();
 }
 
+bool IPowerManager::IsInitialized()
+{
+    return g_powerManager != nullptr;
+}
+
 PowerManager &PowerManager::GetInstance()
 {
     return *(g_powerManager.get());

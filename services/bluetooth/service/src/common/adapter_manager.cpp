@@ -326,7 +326,12 @@ bool AdapterManager::AdapterStop() const
 {
     LOG_DEBUG("%{public}s start", __PRETTY_FUNCTION__);
     ProfileServiceManager::Uninitialize();
-    IPowerManager::Uninitialize();
+    {
+        /// Serialize with AdapterManager::GetPowerMode(), which holds syncMutex_ while dereferencing
+        /// the power manager singleton, so that the nullptr window is not observable by a query.
+        std::lock_guard<std::recursive_mutex> lock(pimpl->syncMutex_);
+        IPowerManager::Uninitialize();
+    }
 
     DeregisterHciResetCallback();
 
@@ -813,6 +818,11 @@ int AdapterManager::GetPowerMode(const std::string &address) const
 {
     LOG_DEBUG("%{public}s start", __PRETTY_FUNCTION__);
     std::lock_guard<std::recursive_mutex> lock(pimpl->syncMutex_);
+
+    if (!IPowerManager::IsInitialized()) {
+        LOG_ERROR("%{public}s power manager is not initialized, return MODE_INVALID", __PRETTY_FUNCTION__);
+        return static_cast<int>(BTPowerMode::MODE_INVALID);
+    }
 
     RawAddress addr = RawAddress(address);
     return static_cast<int>(IPowerManager::GetInstance().GetPowerMode(addr));

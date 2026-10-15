@@ -75,6 +75,16 @@ public:
     static void Uninitialize();
 
     /**
+     * @brief Check whether the power manager singleton is available(created and not uninitialized yet).
+     *
+     *
+     * @return Returns true if the singleton is available, false if it is not initialized or
+     *     already uninitialized(usually during adapter stop/reset).
+     * @since 6
+     */
+    static bool IsInitialized();
+
+    /**
      * @brief enable power manager.
      *
      * @param dispatcher dispatcher.
