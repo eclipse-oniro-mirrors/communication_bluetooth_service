@@ -32,6 +32,7 @@ enum AvrcCtBrowse {
     AVRC_CT_BROWSE_UID = 0x0000000000000000,         // The default value of the "UID".
     AVRC_CT_BROWSE_UID_COUNTER = 0x0000,             // The default value of the "UID Counter".
     AVRC_CT_BROWSE_FOLDER_UID = 0xFFFFFFFFFFFFFFFF,  // The default value of the "Folder UID".
+    AVRC_CT_BROWSE_LENGTH_FIELD_SIZE = 0x02,         // The size of the length field of a variable length parameter.
 };
 
 /**
@@ -236,9 +237,10 @@ private:
     /**
      * @brief  Disassembles the folder name of the packet of the frame.
      * @param[in] buffer The frame packet.
+     * @param[in] parameterEnd The end offset of the parameter area.
      * @param[in] offset The offset of the disassemble packet.
      */
-    void DisassemblePacketName(uint8_t *buffer, uint16_t offset);
+    void DisassemblePacketName(uint8_t *buffer, size_t parameterEnd, uint16_t offset);
 };
 
 /******************************************************************
@@ -608,6 +610,8 @@ enum AvrcCtGia {
     AVRC_CT_GIA_FIXED_CMD_PARAMETER_LENGTH = 0x000C,  // The fixed "Parameter Length" of the command frame.
     AVRC_CT_GIA_NUMBER_OF_ATTRIBUTES = 0x00,          // The default value of the "Number of Attributes".
     AVRC_CT_GIA_ATTRIBUTE_ID_SIZE = 0x04,             // The size of the "Attribute ID".
+    AVRC_CT_GIA_CHARACTER_SET_ID_SIZE = 0x02,         // The size of the "Character Set ID".
+    AVRC_CT_GIA_VALUE_LENGTH_SIZE = 0x02,             // The size of the "Value Length".
     AVRC_CT_GIA_MIN_CMD_FRAME_SIZE = 0x0F,            // The fixed size of the command frame.
     AVRC_CT_GIA_MIN_RSP_FRAME_SIZE = 0x05,  // The minimum size of the response frame.(exclude operand behind "Status")
 };
@@ -718,11 +722,26 @@ private:
     std::vector<std::string> values_ {};                          // The value of the "Attribute Value".
 
     /**
-     * @brief  Disassembles the folder name of the packet of the frame.
+     * @brief  Disassembles the attribute list of the packet of the frame.
      * @param[in] buffer The frame packet.
-     * @param[in] offset The offset of the disassemble packet.
+     * @param[in] parameterEnd The end offset of the parameter area.
+     * @param[in,out] offset The offset of the disassemble packet.
+     * @return The result of the method execution.
+     * @retval true  The attribute list is disassembled successfully.
+     * @retval false The attribute list is malformed or exceeds the parameter area.
      */
-    void DisassemblePacketName(uint8_t *buffer, uint16_t &offset);
+    bool DisassembleAttributes(uint8_t *buffer, size_t parameterEnd, uint16_t &offset);
+
+    /**
+     * @brief  Disassembles the attribute value of the packet of the frame.
+     * @param[in] buffer The frame packet.
+     * @param[in] parameterEnd The end offset of the parameter area.
+     * @param[in,out] offset The offset of the disassemble packet.
+     * @return The result of the method execution.
+     * @retval true  The attribute value is disassembled successfully.
+     * @retval false The attribute value exceeds the parameter area.
+     */
+    bool DisassemblePacketName(uint8_t *buffer, size_t parameterEnd, uint16_t &offset);
 };
 
 /******************************************************************
