@@ -13,7 +13,10 @@
  * limitations under the License.
  */
 
+#include <functional>
 #include <thread>
+#include <utility>
+#include <vector>
 
 #include "bluetooth_a2dp_sink_server.h"
 #include "bluetooth_a2dp_source_server.h"
@@ -250,12 +253,7 @@ public:
     void OnDiscoveryStateChanged(const int32_t status) override
     {
         HILOGI("status: %{public}d", status);
-        impl_->observers_.ForEach([this, status](sptr<IBluetoothHostObserver> observer) {
-            int32_t pid = this->impl_->observersPid_.ReadVal(observer->AsObject());
-            if (BluetoothBleCentralManagerServer::IsResourceScheduleControlApp(pid)) {
-                HILOGI("pid:%{public}d is proxy pid, not callback.", pid);
-                return;
-            }
+        DispatchToPermittedObservers(true, [status](const sptr<IBluetoothHostObserver> &observer) {
             observer->OnDiscoveryStateChanged(static_cast<int32_t>(status));
         });
         if (status == DISCOVERY_STARTED || status == DISCOVERY_STOPED) {
@@ -271,26 +269,18 @@ public:
     {
         HILOGI("device: %{public}s, rssi: %{public}d, deviceName: %{pubiic}s, deviceClass: %{public}d",
             GET_ENCRYPT_ADDR(device), rssi, deviceName.c_str(), deviceClass);
-        impl_->observers_.ForEach([this, device, rssi, deviceName, deviceClass](IBluetoothHostObserver *observer) {
-            int32_t pid = this->impl_->observersPid_.ReadVal(observer->AsObject());
-            if (BluetoothBleCentralManagerServer::IsResourceScheduleControlApp(pid)) {
-                HILOGI("pid:%{public}d is proxy pid, not callback.", pid);
-                return;
-            }
-            uint32_t tokenId = this->impl_->observersToken_.ReadVal(observer->AsObject());
-            if (PermissionUtils::VerifyDiscoverBluetoothPermission(tokenId) == PERMISSION_DENIED) {
-                HILOGE("OnDiscoveryResult() false, check permission failed");
-            } else {
+        DispatchToPermittedObservers(
+            true, [device, rssi, deviceName, deviceClass](const sptr<IBluetoothHostObserver> &observer) {
                 observer->OnDiscoveryResult(device, rssi, deviceName, deviceClass);
-            }
-        });
+            });
     }
 
     void OnPairRequested(const BTTransport transport, const RawAddress &device) override
     {
         HILOGI("device: %{public}s", GET_ENCRYPT_ADDR(device));
-        impl_->observers_.ForEach(
-            [transport, device](IBluetoothHostObserver *observer) { observer->OnPairRequested(transport, device); });
+        DispatchToPermittedObservers(false, [transport, device](const sptr<IBluetoothHostObserver> &observer) {
+            observer->OnPairRequested(transport, device);
+        });
     }
 
     void OnPairConfirmed(
@@ -298,37 +288,80 @@ public:
     {
         HILOGI("device: %{public}s, reqType: %{public}d, number: %{public}d",
             GET_ENCRYPT_ADDR(device), reqType, number);
-        impl_->observers_.ForEach([this, transport, device, reqType, number](IBluetoothHostObserver *observer) {
-            uint32_t tokenId = this->impl_->observersToken_.ReadVal(observer->AsObject());
-            if (PermissionUtils::VerifyUseBluetoothPermission(tokenId) == PERMISSION_DENIED) {
-                HILOGE("false, check permission failed");
-            } else {
+        DispatchToPermittedObservers(
+            false, [transport, device, reqType, number](const sptr<IBluetoothHostObserver> &observer) {
                 observer->OnPairConfirmed(transport, device, reqType, number);
-            }
-        });
+            });
     }
 
     void OnScanModeChanged(int32_t mode) override
     {
         HILOGI("mode: %{public}d", mode);
-        impl_->observers_.ForEach([mode](IBluetoothHostObserver *observer) { observer->OnScanModeChanged(mode); });
+        DispatchToPermittedObservers(false, [mode](const sptr<IBluetoothHostObserver> &observer) {
+            observer->OnScanModeChanged(mode);
+        });
     }
 
     void OnDeviceNameChanged(const std::string &deviceName) override
     {
         HILOGI("deviceName: %{public}s", deviceName.c_str());
-        impl_->observers_.ForEach(
-            [deviceName](IBluetoothHostObserver *observer) { observer->OnDeviceNameChanged(deviceName); });
+        DispatchToPermittedObservers(false, [deviceName](const sptr<IBluetoothHostObserver> &observer) {
+            observer->OnDeviceNameChanged(deviceName);
+        });
     }
 
     void OnDeviceAddrChanged(const std::string &address) override
     {
         HILOGI("address: %{public}s", GetEncryptAddr(address).c_str());
-        impl_->observers_.ForEach(
-            [address](IBluetoothHostObserver *observer) { observer->OnDeviceAddrChanged(address); });
+        DispatchToPermittedObservers(false, [address](const sptr<IBluetoothHostObserver> &observer) {
+            observer->OnDeviceAddrChanged(address);
+        });
     }
 
 private:
+    using ObserverTarget = std::pair<sptr<IBluetoothHostObserver>, uint32_t>;
+
+    // 6.1 has no PermissionManager::IsNativeCaller/GetApiVersion, so accept either the legacy
+    // DISCOVER_BLUETOOTH or the current USE_BLUETOOTH permission.
+    bool CheckDiscoverOrAccessPermission(uint64_t tokenId)
+    {
+        if (PermissionUtils::VerifyDiscoverBluetoothPermission(static_cast<uint32_t>(tokenId)) == PERMISSION_DENIED &&
+            PermissionUtils::VerifyUseBluetoothPermission(static_cast<uint32_t>(tokenId)) == PERMISSION_DENIED) {
+            HILOGE("check DISCOVER_BLUETOOTH or USE_BLUETOOTH permission failed");
+            return false;
+        }
+        return true;
+    }
+
+    // Collect observers (and filter proxy pids) under the observer list lock, then check permission and
+    // invoke the callback outside it, so burst notifications do not block register/deregister.
+    // Callbacks of the same side therefore run concurrently: they are only serialized by the notification
+    // source, not by this lock, so the delivery order of same-side notifications is not guaranteed here.
+    std::vector<ObserverTarget> CollectObserverTargets(bool filterProxyPid)
+    {
+        std::vector<ObserverTarget> targets;
+        impl_->observers_.ForEach([this, filterProxyPid, &targets](sptr<IBluetoothHostObserver> observer) {
+            int32_t pid = impl_->observersPid_.ReadVal(observer->AsObject());
+            if (filterProxyPid && BluetoothBleCentralManagerServer::IsResourceScheduleControlApp(pid)) {
+                HILOGI("pid:%{public}d is proxy pid, not callback.", pid);
+                return;
+            }
+            targets.emplace_back(observer, impl_->observersToken_.ReadVal(observer->AsObject()));
+        });
+        return targets;
+    }
+
+    void DispatchToPermittedObservers(
+        bool filterProxyPid, const std::function<void(const sptr<IBluetoothHostObserver> &)> &action)
+    {
+        for (const auto &target : CollectObserverTargets(filterProxyPid)) {
+            if (!CheckDiscoverOrAccessPermission(target.second)) {
+                continue;
+            }
+            action(target.first);
+        }
+    }
+
     BluetoothHostServer::impl *impl_ = nullptr;
     BLUETOOTH_DISALLOW_COPY_AND_ASSIGN(AdapterClassicObserver);
 };
@@ -424,12 +457,7 @@ public:
     void OnDiscoveryStateChanged(const int32_t status) override
     {
         HILOGI("status: %{public}d", status);
-        impl_->bleObservers_.ForEach([this, status](sptr<IBluetoothHostObserver> observer) {
-            int32_t pid = this->impl_->bleObserversPid_.ReadVal(observer->AsObject());
-            if (BluetoothBleCentralManagerServer::IsResourceScheduleControlApp(pid)) {
-                HILOGI("pid:%{public}d is proxy pid, not callback.", pid);
-                return;
-            }
+        DispatchToPermittedObservers(true, [status](const sptr<IBluetoothHostObserver> &observer) {
             observer->OnDiscoveryStateChanged(static_cast<int32_t>(status));
         });
     }
@@ -439,26 +467,18 @@ public:
     {
         HILOGI("device: %{public}s, rssi: %{public}d, deviceName: %{pubiic}s, deviceClass: %{public}d",
             GET_ENCRYPT_ADDR(device), rssi, deviceName.c_str(), deviceClass);
-        impl_->bleObservers_.ForEach([this, device, rssi, deviceName, deviceClass](IBluetoothHostObserver *observer) {
-            int32_t pid = this->impl_->bleObserversPid_.ReadVal(observer->AsObject());
-            if (BluetoothBleCentralManagerServer::IsResourceScheduleControlApp(pid)) {
-                HILOGI("pid:%{public}d is proxy pid, not callback.", pid);
-                return;
-            }
-            uint32_t tokenId = this->impl_->bleObserversToken_.ReadVal(observer->AsObject());
-            if (PermissionUtils::VerifyDiscoverBluetoothPermission(tokenId) == PERMISSION_DENIED) {
-                HILOGE("false, check permission failed");
-            } else {
+        DispatchToPermittedObservers(
+            true, [device, rssi, deviceName, deviceClass](const sptr<IBluetoothHostObserver> &observer) {
                 observer->OnDiscoveryResult(device, rssi, deviceName, deviceClass);
-            }
-        });
+            });
     }
 
     void OnPairRequested(const BTTransport transport, const RawAddress &device) override
     {
         HILOGI("device: %{public}s", GET_ENCRYPT_ADDR(device));
-        impl_->bleObservers_.ForEach(
-            [transport, device](IBluetoothHostObserver *observer) { observer->OnPairRequested(transport, device); });
+        DispatchToPermittedObservers(false, [transport, device](const sptr<IBluetoothHostObserver> &observer) {
+            observer->OnPairRequested(transport, device);
+        });
     }
 
     void OnPairConfirmed(
@@ -466,45 +486,83 @@ public:
     {
         HILOGI("device: %{public}s, reqType: %{public}d, number: %{public}d",
             GET_ENCRYPT_ADDR(device), reqType, number);
-        impl_->bleObservers_.ForEach([this, transport, device, reqType, number](IBluetoothHostObserver *observer) {
-            int32_t pid = this->impl_->bleObserversPid_.ReadVal(observer->AsObject());
-            if (BluetoothBleCentralManagerServer::IsResourceScheduleControlApp(pid)) {
-                HILOGI("pid:%{public}d is proxy pid, not callback.", pid);
-                return;
-            }
-            uint32_t tokenId = this->impl_->bleObserversToken_.ReadVal(observer->AsObject());
-            if (PermissionUtils::VerifyUseBluetoothPermission(tokenId) == PERMISSION_DENIED) {
-                HILOGE("OnPairConfirmed() false, check permission failed");
-            } else {
+        DispatchToPermittedObservers(
+            true, [transport, device, reqType, number](const sptr<IBluetoothHostObserver> &observer) {
                 observer->OnPairConfirmed(transport, device, reqType, number);
-            }
-        });
+            });
     }
 
     void OnScanModeChanged(const int32_t mode) override
     {
         HILOGI("mode: %{public}d", mode);
-        impl_->bleObservers_.ForEach([mode](IBluetoothHostObserver *observer) { observer->OnScanModeChanged(mode); });
+        DispatchToPermittedObservers(false, [mode](const sptr<IBluetoothHostObserver> &observer) {
+            observer->OnScanModeChanged(mode);
+        });
     }
 
     void OnDeviceNameChanged(const std::string deviceName) override
     {
         HILOGI("deviceName: %{public}s", deviceName.c_str());
-        impl_->bleObservers_.ForEach(
-            [deviceName](IBluetoothHostObserver *observer) { observer->OnDeviceNameChanged(deviceName); });
+        DispatchToPermittedObservers(false, [deviceName](const sptr<IBluetoothHostObserver> &observer) {
+            observer->OnDeviceNameChanged(deviceName);
+        });
     }
 
     void OnDeviceAddrChanged(const std::string address) override
     {
         HILOGI("address: %{public}s", GetEncryptAddr(address).c_str());
-        impl_->bleObservers_.ForEach(
-            [address](IBluetoothHostObserver *observer) { observer->OnDeviceAddrChanged(address); });
+        DispatchToPermittedObservers(false, [address](const sptr<IBluetoothHostObserver> &observer) {
+            observer->OnDeviceAddrChanged(address);
+        });
     }
 
     void OnAdvertisingStateChanged(const int32_t state) override
     {}
 
 private:
+    using ObserverTarget = std::pair<sptr<IBluetoothHostObserver>, uint32_t>;
+
+    // 6.1 has no PermissionManager::IsNativeCaller/GetApiVersion, so accept either the legacy
+    // DISCOVER_BLUETOOTH or the current USE_BLUETOOTH permission.
+    bool CheckDiscoverOrAccessPermission(uint64_t tokenId)
+    {
+        if (PermissionUtils::VerifyDiscoverBluetoothPermission(static_cast<uint32_t>(tokenId)) == PERMISSION_DENIED &&
+            PermissionUtils::VerifyUseBluetoothPermission(static_cast<uint32_t>(tokenId)) == PERMISSION_DENIED) {
+            HILOGE("check DISCOVER_BLUETOOTH or USE_BLUETOOTH permission failed");
+            return false;
+        }
+        return true;
+    }
+
+    // Collect observers (and filter proxy pids) under the observer list lock, then check permission and
+    // invoke the callback outside it, so burst notifications do not block register/deregister.
+    // Callbacks of the same side therefore run concurrently: they are only serialized by the notification
+    // source, not by this lock, so the delivery order of same-side notifications is not guaranteed here.
+    std::vector<ObserverTarget> CollectObserverTargets(bool filterProxyPid)
+    {
+        std::vector<ObserverTarget> targets;
+        impl_->bleObservers_.ForEach([this, filterProxyPid, &targets](sptr<IBluetoothHostObserver> observer) {
+            int32_t pid = impl_->bleObserversPid_.ReadVal(observer->AsObject());
+            if (filterProxyPid && BluetoothBleCentralManagerServer::IsResourceScheduleControlApp(pid)) {
+                HILOGI("pid:%{public}d is proxy pid, not callback.", pid);
+                return;
+            }
+            targets.emplace_back(observer, impl_->bleObserversToken_.ReadVal(observer->AsObject()));
+        });
+        return targets;
+    }
+
+    void DispatchToPermittedObservers(
+        bool filterProxyPid, const std::function<void(const sptr<IBluetoothHostObserver> &)> &action)
+    {
+        for (const auto &target : CollectObserverTargets(filterProxyPid)) {
+            if (!CheckDiscoverOrAccessPermission(target.second)) {
+                continue;
+            }
+            action(target.first);
+        }
+    }
+
     BluetoothHostServer::impl *impl_ = nullptr;
     BLUETOOTH_DISALLOW_COPY_AND_ASSIGN(AdapterBleObserver);
 };
@@ -771,6 +829,9 @@ void BluetoothHostServer::DeregisterObserver(const sptr<IBluetoothHostObserver> 
         HILOGE("DeregisterObserver observer is null");
         return;
     }
+    // Notifications are dispatched outside the observer list lock (see CollectObserverTargets), so a
+    // dispatch already in flight may still invoke this observer once after this function returns.
+    // Waiting for in-flight dispatches would deadlock when an application deregisters inside a callback.
     {
         std::lock_guard<std::mutex> lock(pimpl->hostObserversMutex);
         for (auto iter = pimpl->hostObservers_.begin(); iter != pimpl->hostObservers_.end(); ++iter) {
