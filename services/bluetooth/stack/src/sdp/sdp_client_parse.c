@@ -327,6 +327,12 @@ void SdpParseServerResponse(const BtAddr *addr, uint16_t lcid, const Packet *dat
     /// Transaction ID
     transactionId = BE2H_16(*(uint16_t *)(header + offset));
     offset += SDP_UINT16_LENGTH;
+    SdpClientRequest *request = SdpFindRequestByTransactionId(transactionId);
+    if ((request != NULL) && (memcmp(&request->addr.addr, addr->addr, SDP_BLUETOOTH_ADDRESS_LENGTH) != 0)) {
+        LOG_ERROR("Response addr does not match request [0x%04x]", transactionId);
+        PacketFree(packet);
+        return;
+    }
     /// ParameterLength
     parameterLength = BE2H_16(*(uint16_t *)(header + offset));
     if (parameterLength != PacketSize(packet)) {
@@ -1242,6 +1248,10 @@ static int SdpGetLanguageBaseAttributeIdList(BufferInfo *bufferInfo, SdpService 
     (void)memset_s(service->baseAttributeId, setLength, 0, setLength);
 
     while (length) {
+        if (baseAttributeIdNumber >= SDP_LANGUAGE_ATTRIBUTE_MAX) {
+            LOG_ERROR("[%{public}s][%{public}d] Too many language base attributes", __FUNCTION__, __LINE__);
+            return BT_BAD_PARAM;
+        }
         /// Language Code
         type = bufferInfo->buffer[offset];
         offset++;
@@ -1334,6 +1344,10 @@ static int SdpGetBluetoothProfileDescriptorList(BufferInfo *bufferInfo, SdpServi
         sizeof(SdpProfileDescriptor) * SDP_PROTOCOL_PARAMETER_MAX_COUNT);
 
     while (length) {
+        if (profileDescriptorNumber >= SDP_PROTOCOL_PARAMETER_MAX_COUNT) {
+            LOG_ERROR("[%{public}s][%{public}d] Too many profile descriptors", __FUNCTION__, __LINE__);
+            return BT_BAD_PARAM;
+        }
         /// UUID
         type = *(bufferInfo->buffer + offset);
         length--;
