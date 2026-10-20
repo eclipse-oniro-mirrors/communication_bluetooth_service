@@ -180,6 +180,7 @@ static void GapDoSecurityAction(RequestSecInfo *reqInfo, DeviceInfo *devInfo)
                 reqInfo->status = GAP_SEC_REQ_STATUS_FAILED;
                 devInfo->status = GAP_DEV_SEC_STATUS_IDLE;
                 devInfo->authenticationStatus = GAP_AUTH_STATUS_IDLE;
+                devInfo->actionReq = NULL;
                 GapDoAuthenticationCallback(reqInfo);
                 GapTrySecurityCallback(reqInfo);
             }
@@ -200,6 +201,7 @@ static void GapDoSecurityAction(RequestSecInfo *reqInfo, DeviceInfo *devInfo)
             reqInfo->status = GAP_SEC_REQ_STATUS_FAILED;
             devInfo->status = GAP_DEV_SEC_STATUS_IDLE;
             devInfo->encryptionStatus = GAP_ENC_STATUS_IDLE;
+            devInfo->actionReq = NULL;
             GapTrySecurityCallback(reqInfo);
         }
     } else {

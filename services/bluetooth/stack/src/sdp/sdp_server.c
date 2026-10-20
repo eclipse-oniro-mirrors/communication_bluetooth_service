@@ -1270,12 +1270,34 @@ static int BuildAttributeListByIdRange(uint32_t handle, uint8_t *buffer, uint8_t
     return offset;
 }
 
+static int AppendAttributeById(const ServiceRecordItem *item, uint16_t attributeId,
+                               uint8_t *attributeList, uint16_t offset)
+{
+    for (int i = 0; i < item->attributeNumber; i++) {
+        if (item->attributeItem[i].attributeId != attributeId) {
+            continue;
+        }
+        if ((item->attributeItem[i].attributeLength + offset) >=
+            (SDP_MAX_LIST_BYTE_COUNT - SDP_RESERVE_LENGTH)) {
+            return BT_BAD_PARAM;
+        }
+        (void)memcpy_s(attributeList + offset,
+            item->attributeItem[i].attributeLength,
+            item->attributeItem[i].attributeValue,
+            item->attributeItem[i].attributeLength);
+        return offset + item->attributeItem[i].attributeLength;
+    }
+
+    return offset;
+}
+
 static int BuildAttributeListByIdList(uint32_t handle, uint16_t length, uint8_t *buffer, uint8_t *attributeList)
 {
     ServiceRecordItem *item = NULL;
     uint16_t offset = 0;
     uint16_t pos = 0;
     uint16_t number;
+    int result;
 
     item = FindServiceRecordItem(handle);
     if (item == NULL) {
@@ -1294,25 +1316,11 @@ static int BuildAttributeListByIdList(uint32_t handle, uint16_t length, uint8_t 
         attributeId = BE2H_16(*(uint16_t *)(buffer + pos));
         pos += SDP_UINT16_LENGTH;
 
-        for (int j = 0; j < item->attributeNumber; j++) {
-            if (item->attributeItem[j].attributeId != attributeId) {
-                continue;
-            }
-            if ((item->attributeItem[j].attributeLength + offset) >=
-                (SDP_MAX_LIST_BYTE_COUNT - SDP_RESERVE_LENGTH)) {
-                LOG_ERROR("[%{public}s][%{public}d] Attribute list exceeds the limit.", __FUNCTION__, __LINE__);
-                return BT_BAD_PARAM;
-            }
-            if (memcpy_s(attributeList + offset,
-                SDP_MAX_LIST_BYTE_COUNT - offset,
-                item->attributeItem[j].attributeValue,
-                item->attributeItem[j].attributeLength) != EOK) {
-                LOG_ERROR("[%{public}s][%{public}d] memcpy_s fail.", __FUNCTION__, __LINE__);
-                return BT_NO_MEMORY;
-            }
-            offset += item->attributeItem[j].attributeLength;
-            break;
+        result = AppendAttributeById(item, attributeId, attributeList, offset);
+        if (result < 0) {
+            return result;
         }
+        offset = (uint16_t)result;
     }
 
     return offset;
