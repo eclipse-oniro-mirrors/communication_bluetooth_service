@@ -122,6 +122,16 @@ bool AvrcCtSbpPacket::DisassemblePacket(Packet *pkt)
         parameterLength_ = static_cast<uint16_t>(payload);
         HILOGI("parameterLength_: %{public}d", parameterLength_);
 
+        if (static_cast<size_t>(parameterLength_) + AVRC_CT_BROWSE_MIN_SIZE > size) {
+            HILOGE("The parameter length %{public}d is larger than the received packet!", parameterLength_);
+            return isValid_;
+        }
+
+        if (parameterLength_ < AVRC_CT_SBP_FIXED_RSP_PARAMETER_LENGTH) {
+            HILOGE("The parameter length %{public}d is smaller than the fixed parameter length!", parameterLength_);
+            return isValid_;
+        }
+
         offset += PopOctets1((buffer + offset), payload);
         status_ = static_cast<uint8_t>(payload);
         HILOGI("status_: %{public}x", status_);
@@ -138,15 +148,16 @@ bool AvrcCtSbpPacket::DisassemblePacket(Packet *pkt)
         auto characterSetId = static_cast<uint16_t>(payload);
         HILOGI("characterSetId: %{public}x", characterSetId);
         if (characterSetId != AVRC_MEDIA_CHARACTER_SET_UTF8) {
-            isValid_ = false;
-            HILOGE("The character set id is not UTF-8!");
+            HILOGE("The character set id %{public}x is not UTF-8!", characterSetId);
+            return isValid_;
         }
 
         offset += PopOctets1((buffer + offset), payload);
         folderDepth_ = static_cast<uint8_t>(payload);
         HILOGI("folderDepth_: %{public}d", folderDepth_);
 
-        DisassemblePacketName(buffer, offset);
+        const size_t parameterEnd = static_cast<size_t>(AVRC_CT_BROWSE_MIN_SIZE) + parameterLength_;
+        DisassemblePacketName(buffer, parameterEnd, offset);
     } else {
         HILOGI("The size of the packet is invalid!");
     }
@@ -154,7 +165,7 @@ bool AvrcCtSbpPacket::DisassemblePacket(Packet *pkt)
     return isValid_;
 }
 
-void AvrcCtSbpPacket::DisassemblePacketName(uint8_t *buffer, uint16_t offset)
+void AvrcCtSbpPacket::DisassemblePacketName(uint8_t *buffer, size_t parameterEnd, uint16_t offset)
 {
     HILOGI("buffer: %{public}s, offset: %{public}d", buffer, offset);
 
@@ -162,11 +173,23 @@ void AvrcCtSbpPacket::DisassemblePacketName(uint8_t *buffer, uint16_t offset)
 
     isValid_ = false;
 
+    constexpr size_t nameLengthFieldSize = AVRC_CT_BROWSE_LENGTH_FIELD_SIZE;
+
     char *tempName = nullptr;
     for (int i = 0; i < folderDepth_; i++) {
+        if (static_cast<size_t>(offset) + nameLengthFieldSize > parameterEnd) {
+            HILOGE("The folder name length field is out of the parameter area, offset: %{public}d", offset);
+            return;
+        }
         offset += PopOctets2((buffer + offset), payload);
         uint16_t nameLength = static_cast<uint16_t>(payload);
-        HILOGI("[AVRCP TG] nameLength: %{public}d", nameLength);
+        HILOGI("nameLength: %{public}d", nameLength);
+
+        if (static_cast<size_t>(offset) + nameLength > parameterEnd) {
+            HILOGE("The folder name exceeds the parameter area, nameLength: %{public}d, offset: %{public}d",
+                nameLength, offset);
+            return;
+        }
 
         tempName = new char[nameLength + 1];
         for (int j = 0; j < nameLength; j++) {
@@ -706,61 +729,107 @@ bool AvrcCtGiaPacket::DisassemblePacket(Packet *pkt)
 
     isValid_ = false;
     size_t size = PacketPayloadSize(pkt);
-    if (size >= AVRC_CT_GIA_MIN_RSP_FRAME_SIZE) {
-        auto buffer = static_cast<uint8_t *>(BufferPtr(PacketContinuousPayload(pkt)));
-
-        uint16_t offset = 0x0000;
-        uint64_t payload = 0x00;
-        offset += PopOctets1((buffer + offset), payload);
-        pduId_ = static_cast<uint8_t>(payload);
-        HILOGI("pduId_: %{public}x", pduId_);
-
-        offset += PopOctets2((buffer + offset), payload);
-        parameterLength_ = static_cast<uint16_t>(payload);
-        HILOGI("parameterLength_: %{public}d", parameterLength_);
-
-        offset += PopOctets1((buffer + offset), payload);
-        status_ = static_cast<uint8_t>(payload);
-        HILOGI("status_: %{public}x", status_);
-
-        offset += PopOctets1((buffer + offset), payload);
-        numOfAttributes_ = static_cast<uint8_t>(payload);
-        HILOGI("numOfAttributes_: %{public}d", numOfAttributes_);
-
-        uint16_t characterSetId = AVRC_MEDIA_CHARACTER_SET_UTF8;
-        for (int i = 0; i < numOfAttributes_; i++) {
-            offset += PopOctets4((buffer + offset), payload);
-            attributes_.push_back(static_cast<uint32_t>(payload));
-            HILOGI("attribute: %{public}x", attributes_.back());
-
-            offset += PopOctets2((buffer + offset), payload);
-            characterSetId = static_cast<uint16_t>(payload);
-            HILOGI("characterSetId: %{public}x", characterSetId);
-            if (characterSetId != AVRC_MEDIA_CHARACTER_SET_UTF8) {
-                isValid_ = false;
-                HILOGE("The character set id is not UTF-8!");
-            }
-
-            DisassemblePacketName(buffer, offset);
-        }
-    } else {
-        HILOGI("The packet is invalid!");
+    if (size < AVRC_CT_GIA_MIN_RSP_FRAME_SIZE) {
+        HILOGI("The size of the packet is invalid!");
+        return isValid_;
     }
+
+    auto buffer = static_cast<uint8_t *>(BufferPtr(PacketContinuousPayload(pkt)));
+    uint16_t offset = 0x0000;
+    uint64_t payload = 0x00;
+    offset += PopOctets1((buffer + offset), payload);
+    pduId_ = static_cast<uint8_t>(payload);
+    HILOGI("pduId_: %{public}x", pduId_);
+
+    offset += PopOctets2((buffer + offset), payload);
+    parameterLength_ = static_cast<uint16_t>(payload);
+    HILOGI("parameterLength_: %{public}d", parameterLength_);
+
+    if (static_cast<size_t>(parameterLength_) + AVRC_CT_BROWSE_MIN_SIZE > size) {
+        HILOGE("The parameter length %{public}d is larger than the received packet!", parameterLength_);
+        return isValid_;
+    }
+
+    offset += PopOctets1((buffer + offset), payload);
+    status_ = static_cast<uint8_t>(payload);
+    HILOGI("status_: %{public}x", status_);
+
+    offset += PopOctets1((buffer + offset), payload);
+    numOfAttributes_ = static_cast<uint8_t>(payload);
+    HILOGI("numOfAttributes_: %{public}d", numOfAttributes_);
+
+    const size_t parameterEnd = static_cast<size_t>(AVRC_CT_BROWSE_MIN_SIZE) + parameterLength_;
+    if (!DisassembleAttributes(buffer, parameterEnd, offset)) {
+        HILOGE("The attribute list is invalid, offset: %{public}d", offset);
+        return isValid_;
+    }
+
+    isValid_ = true;
 
     return isValid_;
 }
 
-void AvrcCtGiaPacket::DisassemblePacketName(uint8_t *buffer, uint16_t &offset)
+bool AvrcCtGiaPacket::DisassembleAttributes(uint8_t *buffer, size_t parameterEnd, uint16_t &offset)
+{
+    constexpr size_t giaAttributeMinSize = AVRC_CT_GIA_ATTRIBUTE_ID_SIZE +
+        AVRC_CT_GIA_CHARACTER_SET_ID_SIZE + AVRC_CT_GIA_VALUE_LENGTH_SIZE;
+
+    if (static_cast<size_t>(offset) + static_cast<size_t>(numOfAttributes_) * giaAttributeMinSize > parameterEnd) {
+        HILOGE("numOfAttributes_ %{public}d exceeds the parameter area, offset: %{public}d",
+            numOfAttributes_, offset);
+        return false;
+    }
+
+    for (int i = 0; i < numOfAttributes_; i++) {
+        if (static_cast<size_t>(offset) + giaAttributeMinSize > parameterEnd) {
+            HILOGE("attribute %{public}d exceeds the parameter area, offset: %{public}d", i, offset);
+            return false;
+        }
+
+        uint64_t payload = 0x00;
+        offset += PopOctets4((buffer + offset), payload);
+        attributes_.push_back(static_cast<uint32_t>(payload));
+        HILOGI("attribute: %{public}x", attributes_.back());
+
+        offset += PopOctets2((buffer + offset), payload);
+        auto characterSetId = static_cast<uint16_t>(payload);
+        HILOGI("characterSetId: %{public}x", characterSetId);
+        if (characterSetId != AVRC_MEDIA_CHARACTER_SET_UTF8) {
+            HILOGE("The character set id %{public}x is not UTF-8!", characterSetId);
+            attributes_.pop_back();
+            return false;
+        }
+
+        if (!DisassemblePacketName(buffer, parameterEnd, offset)) {
+            // The "Attribute ID" and the "Attribute Value" are pushed in pairs, roll the ID back on failure.
+            attributes_.pop_back();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool AvrcCtGiaPacket::DisassemblePacketName(uint8_t *buffer, size_t parameterEnd, uint16_t &offset)
 {
     HILOGI("buffer: %{public}s, offset: %{public}d", buffer, offset);
 
-    isValid_ = false;
-
     uint64_t payload = 0x00;
+    constexpr size_t valueLengthFieldSize = AVRC_CT_GIA_VALUE_LENGTH_SIZE;
 
+    if (static_cast<size_t>(offset) + valueLengthFieldSize > parameterEnd) {
+        HILOGE("The value length field is out of the parameter area, offset: %{public}d", offset);
+        return false;
+    }
     offset += PopOctets2((buffer + offset), payload);
     auto valueLength = static_cast<uint16_t>(payload);
     HILOGI("valueLength: %{public}d", valueLength);
+
+    if (static_cast<size_t>(offset) + valueLength > parameterEnd) {
+        HILOGE("The value exceeds the parameter area, valueLength: %{public}d, offset: %{public}d",
+            valueLength, offset);
+        return false;
+    }
 
     char *tempName = nullptr;
     tempName = new char[valueLength + 1];
@@ -774,7 +843,7 @@ void AvrcCtGiaPacket::DisassemblePacketName(uint8_t *buffer, uint16_t &offset)
     AvrcpCtSafeDeleteArray(tempName, valueLength + 1);
     HILOGI("value: %{public}s", values_.back().c_str());
 
-    isValid_ = true;
+    return true;
 }
 
 /******************************************************************
