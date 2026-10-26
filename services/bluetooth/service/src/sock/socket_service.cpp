@@ -14,6 +14,7 @@
  */
 
 #include "socket_service.h"
+#include <unistd.h>
 #include "class_creator.h"
 #include "log.h"
 #include "socket_listener.h"
@@ -103,11 +104,22 @@ int SocketService::Connect(const std::string &addr, const Uuid &uuid, int securi
     int socketFd = SOCK_INVALID_FD;
     auto socket = std::make_unique<Socket>();
     if (socket->Connect(addr, uuid, securityFlag, socketFd) < 0) {
-        socketFd = SOCK_INVALID_FD;
+        // Socket::Connect() registers the object in the socket thread before it can fail, and the
+        // object dies with the local pointer: drop the registration and the transport fd first,
+        // otherwise the poll loop keeps a freed address.
+        SocketThread::GetInstance().DeleteSocket(*socket);
+        socket->CloseSocketFd();
+        // The handed over fd has no other owner, and keeping the failure object would leave it in
+        // the list until the next unload.
+        if (socketFd != SOCK_INVALID_FD) {
+            close(socketFd);
+            socketFd = SOCK_INVALID_FD;
+        }
+        return socketFd;
     }
 
     {
-        std::lock_guard<std::mutex> lock(mutex_);
+        std::lock_guard<std::recursive_mutex> lock(mutex_);
         clientSockets_.push_back(std::move(socket));
         isClientPush_ = true;
     }
@@ -122,11 +134,20 @@ int SocketService::Listen(const std::string &name, const Uuid &uuid, int securit
     int socketFd = SOCK_INVALID_FD;
     auto socket = std::make_unique<Socket>();
     if (socket->Listen(name, uuid, securityFlag, socketFd) < 0) {
-        socketFd = SOCK_INVALID_FD;
+        // Same as the connect path: remove the socket thread registration and the transport fd
+        // before the object is destroyed. The handed over fd has no other owner, and the object
+        // must not enter the list (a failure object keeps a null transport).
+        SocketThread::GetInstance().DeleteSocket(*socket);
+        socket->CloseSocketFd();
+        if (socketFd != SOCK_INVALID_FD) {
+            close(socketFd);
+            socketFd = SOCK_INVALID_FD;
+        }
+        return socketFd;
     }
 
     {
-        std::lock_guard<std::mutex> lock(mutex_);
+        std::lock_guard<std::recursive_mutex> lock(mutex_);
         serverSockets_.push_back(std::move(socket));
     }
 
@@ -137,6 +158,9 @@ void SocketService::ShutDownInternal()
 {
     LOG_INFO("[SocketService]%{public}s", __func__);
 
+    // Teardown must exclude the ipc side container writes (Listen/Connect push_back);
+    // mutex_ is recursive because CloseSocket may reenter ProcessMessage on this thread.
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
     isShutdown_ = true;
     if (clientSockets_.empty() && acceptSockets_.empty()) {
         if (!serverSockets_.empty()) {
@@ -178,7 +202,7 @@ void SocketService::ShutDownInternal()
 void SocketService::ProcessMessage(const utility::Message &msg)
 {
     Socket *socket = static_cast<Socket *>(msg.arg2_);
-    std::lock_guard<std::mutex> lock(mutex_);
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
     switch (msg.what_) {
         case SOCKET_SDP_DISCOVERY_RESULT:
             if (clientSockets_.empty() && isClientPush_) {
