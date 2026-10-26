@@ -159,7 +159,11 @@ private:
     std::vector<std::unique_ptr<Socket>> clientSockets_ {};
     std::vector<std::unique_ptr<Socket>> serverSockets_ {};
     std::vector<Socket *> acceptSockets_ {};
-    std::mutex mutex_ {};
+    // recursive: the teardown path (ShutDownInternal) calls CloseSocket which may reenter
+    // ProcessMessage/CleanupClientSocket on the same thread.
+    // NOTE: acquired on the ipc thread and this service's own dispatcher thread only. Do not move
+    // this path onto an FFRT queue without switching to the FFRT recursive mutex.
+    std::recursive_mutex mutex_ {};
 
     /**
      * @brief Enables the Socket service.
