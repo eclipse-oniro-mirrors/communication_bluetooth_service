@@ -37,6 +37,8 @@ struct BluetoothBleCentralManagerServer::impl {
     impl();
     ~impl();
 
+    SafeMap<int32_t, std::pair<int32_t, int32_t>> scannerOwnerInfo_;
+
     /// sys state observer
     class SystemStateObserver;
     std::unique_ptr<SystemStateObserver> systemStateObserver_ = nullptr;
@@ -274,6 +276,10 @@ public:
                     bleService->RegisterBleCentralManagerCallback(*pimpl_->observerImp_.get());
                 }
                 break;
+            case BTSystemState::OFF:
+                // The scannerId pool is cleared by the service on bluetooth off, drop the owner entries too.
+                pimpl_->scannerOwnerInfo_.Clear();
+                break;
             default:
                 break;
         }
@@ -377,6 +383,20 @@ bool CheckBleScanPermission()
     return true;
 }
 
+int BluetoothBleCentralManagerServer::CheckScannerIdOwner(int32_t scannerId)
+{
+    std::pair<int32_t, int32_t> ownerInfo {};
+    if (!pimpl->scannerOwnerInfo_.Find(scannerId, ownerInfo)) {
+        HILOGE("scannerId: %{public}d is not registered.", scannerId);
+        return BT_ERR_INVALID_PARAM;
+    }
+    if (ownerInfo.first != IPCSkeleton::GetCallingPid() || ownerInfo.second != IPCSkeleton::GetCallingUid()) {
+        HILOGE("scannerId: %{public}d is not registered by the caller.", scannerId);
+        return BT_ERR_PERMISSION_FAILED;
+    }
+    return NO_ERROR;
+}
+
 int BluetoothBleCentralManagerServer::StartScan(int32_t scannerId, const BluetoothBleScanSettings &settings,
     const std::vector<BluetoothBleScanFilter> &filters, bool isNewApi)
 {
@@ -387,6 +407,12 @@ int BluetoothBleCentralManagerServer::StartScan(int32_t scannerId, const Bluetoo
         return BT_ERR_PERMISSION_FAILED;
     }
 
+    int checkScannerRet = CheckScannerIdOwner(scannerId);
+    if (checkScannerRet != NO_ERROR) {
+        HILOGE("check scannerId owner failed, scannerId: %{public}d", scannerId);
+        return checkScannerRet;
+    }
+
     if (isNewApi) {
         HILOGE("This api is not supported.");
         return BT_ERR_API_NOT_SUPPORT;
@@ -394,43 +420,56 @@ int BluetoothBleCentralManagerServer::StartScan(int32_t scannerId, const Bluetoo
 
     ConfigScanFilterInner(scannerId, filters);
 
-    pimpl->eventHandler_->PostSyncTask([&]() {
-        auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
-        if (bleService == nullptr) {
-            HILOGE("bleService is nullptr.");
+    pimpl->eventHandler_->PostSyncTask([this, scannerId, pid, uid, &settings]() {
+        // Re-check here: the scannerId may be deregistered between the check above and this task. Use the
+        // identity captured on the calling thread, IPCSkeleton would report this thread instead.
+        std::pair<int32_t, int32_t> ownerInfo {};
+        if (!pimpl->scannerOwnerInfo_.Find(scannerId, ownerInfo) ||
+            ownerInfo.first != pid || ownerInfo.second != uid) {
+            HILOGE("scannerId owner is gone before start scan, scannerId: %{public}d", scannerId);
             return;
         }
-
-        for (auto iter = pimpl->scanCallbackInfo_.begin(); iter != pimpl->scanCallbackInfo_.end(); ++iter) {
-            if (iter->pid == pid && iter->uid == uid) {
-                iter->isStart = true;
-                SetWindowAndInterval(settings.GetScanMode(), iter->param.scanWindow, iter->param.scanInterval);
-                iter->param.reportDelayMillis = settings.GetReportDelayMillisValue();
-                iter->param.scanMode = settings.GetScanMode();
-                iter->param.legacy = settings.GetLegacy();
-                iter->param.phy = settings.GetPhy();
-                break;
-            }
-        }
-
-        if (!pimpl->isScanning) {
-            HILOGI("start ble scan.");
-            SetScanParams(settings);
-            bleService->StartScan(pimpl->scanSettingImpl_);
-            pimpl->isScanning = true;
-            HiSysEventWrite(OHOS::HiviewDFX::HiSysEvent::Domain::BT_SERVICE, "BLE_SCAN_START",
-                OHOS::HiviewDFX::HiSysEvent::EventType::STATISTIC, "PID", pid, "UID", uid,
-                "TYPE", (settings.GetReportDelayMillisValue() > 0) ? 1 : 0);
-        } else if (IsNewScanParams()) {
-            // Stop an ongoing ble scan, update parameters and restart the ble scan in OnStartOrStopScanEvent().
-            HILOGI("restart ble scan.");
-            bleService->StopScan();
-            pimpl->isScanning = false;
-        } else {
-            HILOGI("scan is already started and has the same params.");
-        }
+        DoStartScan(pid, uid, settings);
     });
     return NO_ERROR;
+}
+
+void BluetoothBleCentralManagerServer::DoStartScan(int32_t pid, int32_t uid, const BluetoothBleScanSettings &settings)
+{
+    auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
+    if (bleService == nullptr) {
+        HILOGE("bleService is nullptr.");
+        return;
+    }
+
+    for (auto iter = pimpl->scanCallbackInfo_.begin(); iter != pimpl->scanCallbackInfo_.end(); ++iter) {
+        if (iter->pid == pid && iter->uid == uid) {
+            iter->isStart = true;
+            SetWindowAndInterval(settings.GetScanMode(), iter->param.scanWindow, iter->param.scanInterval);
+            iter->param.reportDelayMillis = settings.GetReportDelayMillisValue();
+            iter->param.scanMode = settings.GetScanMode();
+            iter->param.legacy = settings.GetLegacy();
+            iter->param.phy = settings.GetPhy();
+            break;
+        }
+    }
+
+    if (!pimpl->isScanning) {
+        HILOGI("start ble scan.");
+        SetScanParams(settings);
+        bleService->StartScan(pimpl->scanSettingImpl_);
+        pimpl->isScanning = true;
+        HiSysEventWrite(OHOS::HiviewDFX::HiSysEvent::Domain::BT_SERVICE, "BLE_SCAN_START",
+            OHOS::HiviewDFX::HiSysEvent::EventType::STATISTIC, "PID", pid, "UID", uid,
+            "TYPE", (settings.GetReportDelayMillisValue() > 0) ? 1 : 0);
+    } else if (IsNewScanParams()) {
+        // Stop an ongoing ble scan, update parameters and restart the ble scan in OnStartOrStopScanEvent().
+        HILOGI("restart ble scan.");
+        bleService->StopScan();
+        pimpl->isScanning = false;
+    } else {
+        HILOGI("scan is already started and has the same params.");
+    }
 }
 
 int BluetoothBleCentralManagerServer::StopScan(int32_t scannerId)
@@ -438,6 +477,11 @@ int BluetoothBleCentralManagerServer::StopScan(int32_t scannerId)
     int32_t pid = IPCSkeleton::GetCallingPid();
     int32_t uid = IPCSkeleton::GetCallingUid();
     HILOGI("pid: %{public}d, uid: %{public}d", pid, uid);
+    int checkScannerRet = CheckScannerIdOwner(scannerId);
+    if (checkScannerRet != NO_ERROR) {
+        HILOGE("check scannerId owner failed, scannerId: %{public}d", scannerId);
+        return checkScannerRet;
+    }
     pimpl->eventHandler_->PostSyncTask([&]() {
         if (!pimpl->isScanning) {
             HILOGE("scan is not started.");
@@ -495,6 +539,7 @@ int BluetoothBleCentralManagerServer::ConfigScanFilterInner(
 {
     HILOGI("enter, scannerId: %{public}d", scannerId);
 
+    // The only caller StartScan() has already verified the owner with the same scannerId on this thread.
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     if (bleService != nullptr) {
         std::vector<BleScanFilterImpl> filterImpls {};
@@ -533,6 +578,12 @@ void BluetoothBleCentralManagerServer::RemoveScanFilter(int32_t scannerId)
 {
     HILOGI("enter, scannerId: %{public}d", scannerId);
 
+    int checkScannerRet = CheckScannerIdOwner(scannerId);
+    if (checkScannerRet != NO_ERROR) {
+        HILOGE("check scannerId owner failed, scannerId: %{public}d", scannerId);
+        return;
+    }
+
     auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
     if (bleService != nullptr) {
         bleService->RemoveScanFilter(scannerId);
@@ -566,6 +617,7 @@ void BluetoothBleCentralManagerServer::RegisterBleCentralManagerCallback(int32_t
 
     pimpl->eventHandler_->PostSyncTask([&]() {
         if (pimpl != nullptr) {
+            pimpl->scannerOwnerInfo_.EnsureInsert(scannerId, std::make_pair(pid, uid));
             pimpl->observersToken_.EnsureInsert(callback->AsObject(), IPCSkeleton::GetCallingTokenID());
             pimpl->observersPid_[callback->AsObject()] = pid;
             pimpl->observersScannerId_[callback->AsObject()] = scannerId;
@@ -582,10 +634,11 @@ void BluetoothBleCentralManagerServer::RegisterBleCentralManagerCallback(int32_t
     });
 }
 
+// Death notification path only: the caller identity is already gone, so the owner check is skipped by design.
 void BluetoothBleCentralManagerServer::DeregisterBleCentralManagerCallbackInner(
     const sptr<IBluetoothBleCentralManagerCallback> &callback, int32_t scannerId)
 {
-    return DeregisterBleCentralManagerCallback(scannerId, callback);
+    return RemoveBleCentralManagerCallback(scannerId, callback);
 }
 
 int BluetoothBleCentralManagerServer::ChangeScanParams(int32_t scannerId, const BluetoothBleScanSettings &settings,
@@ -602,23 +655,39 @@ int BluetoothBleCentralManagerServer::IsValidScannerId(int32_t scannerId, bool &
 {
     if (!CheckBleScanPermission()) {
         HILOGE("check permission failed.");
+        isValid = false;
         return BT_ERR_PERMISSION_FAILED;
     }
-    isValid = true;
+    isValid = (CheckScannerIdOwner(scannerId) == NO_ERROR);
     return NO_ERROR;
 }
 
 void BluetoothBleCentralManagerServer::DeregisterBleCentralManagerCallback(int32_t scannerId,
     const sptr<IBluetoothBleCentralManagerCallback> &callback)
 {
+    int checkScannerRet = CheckScannerIdOwner(scannerId);
+    if (checkScannerRet != NO_ERROR) {
+        HILOGE("check scannerId owner failed, scannerId: %{public}d", scannerId);
+        return;
+    }
+    RemoveBleCentralManagerCallback(scannerId, callback);
+}
+
+void BluetoothBleCentralManagerServer::RemoveBleCentralManagerCallback(int32_t scannerId,
+    const sptr<IBluetoothBleCentralManagerCallback> &callback)
+{
     HILOGI("enter, scannerId: %{public}d", scannerId);
-    pimpl->eventHandler_->PostSyncTask([&]() {
+    pimpl->eventHandler_->PostSyncTask([this, scannerId, &callback]() {
         if (callback == nullptr || pimpl == nullptr) {
             HILOGE("DeregisterBleCentralManagerCallback(): callback is null, or pimpl is null");
             return;
         }
+        int32_t matchedScannerId = -1;
         for (auto iter = pimpl->scanCallbackInfo_.begin(); iter != pimpl->scanCallbackInfo_.end(); ++iter) {
             if (iter->callback->AsObject() == callback->AsObject()) {
+                auto scannerIdIter = pimpl->observersScannerId_.find(iter->callback->AsObject());
+                matchedScannerId = (scannerIdIter != pimpl->observersScannerId_.end()) ?
+                    scannerIdIter->second : matchedScannerId;
                 pimpl->observers_.Deregister(iter->callback);
                 pimpl->scanCallbackInfo_.erase(iter);
                 break;
@@ -638,14 +707,20 @@ void BluetoothBleCentralManagerServer::DeregisterBleCentralManagerCallback(int32
                 break;
             }
         }
+        if (matchedScannerId == -1) {
+            // Not matched: the passed scannerId may belong to another registration, keep it untouched.
+            HILOGE("callback is not registered, scannerId: %{public}d", scannerId);
+            return;
+        }
+        // Erase the owner entry and return the number of the removed registration, not the passed one.
+        pimpl->scannerOwnerInfo_.Erase(matchedScannerId);
+        auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
+        if (bleService == nullptr) {
+            HILOGE("bleService is null");
+            return;
+        }
+        bleService->RemoveScannerId(matchedScannerId);
     });
-
-    auto bleService = IAdapterManager::GetInstance()->GetBleAdapterInterface();
-    if (bleService == nullptr) {
-        HILOGE("bleService is null");
-        return;
-    }
-    bleService->RemoveScannerId(scannerId);
 }
 
 void BluetoothBleCentralManagerServer::SetScanParams(const BluetoothBleScanSettings &settings)
