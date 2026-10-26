@@ -1074,7 +1074,7 @@ bool BluetoothHostServer::SetLocalDeviceClass(const int32_t &deviceClass)
     HILOGI("Enter!");
     int api12 = 12;
     int32_t apiVersion = PermissionUtils::GetApiVersion();
-    if (!PermissionUtils::CheckSystemHapApp() && (apiVersion == API_VERSION_INVALID || apiVersion >= api12)) {
+    if (!PermissionUtils::CheckSystemHapApp() && (apiVersion < 0 || apiVersion >= api12)) {
         HILOGE("SetLocalDeviceClass: the caller is not a system hap, reject!");
         return false;
     }
@@ -1113,7 +1113,7 @@ int32_t BluetoothHostServer::SetLocalName(const std::string &name)
     HILOGI("name: %{public}s", name.c_str());
     int api12 = 12;
     int32_t apiVersion = PermissionUtils::GetApiVersion();
-    if (!PermissionUtils::CheckSystemHapApp() && (apiVersion == API_VERSION_INVALID || apiVersion >= api12)) {
+    if (!PermissionUtils::CheckSystemHapApp() && (apiVersion < 0 || apiVersion >= api12)) {
         return BT_ERR_API_NOT_SUPPORT;
     }
     if (PermissionUtils::VerifyDiscoverBluetoothPermission() == PERMISSION_DENIED) {
