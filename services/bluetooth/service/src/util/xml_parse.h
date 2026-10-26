@@ -302,6 +302,14 @@ public:
     bool RemoveProperty(const std::string &section, const std::string &property);
 
 private:
+    /**
+     * @brief Parse XML document without the document lock, the caller must hold the document lock.
+     *
+     * @return Success parse XML document return true, else return false.
+     * @since 6
+     */
+    bool ParseInner();
+
     std::string filePath_ {""};
 
     DECLARE_IMPL();
