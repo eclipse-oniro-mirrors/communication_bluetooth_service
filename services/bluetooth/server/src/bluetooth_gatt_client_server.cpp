@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+#include <algorithm>
 #include <list>
 #include <mutex>
 #include <thread>
@@ -58,6 +59,16 @@ struct BluetoothGattClientServer::impl {
         return static_cast<IProfileGattClient *>(
             IProfileManager::GetInstance()->GetProfileService(PROFILE_NAME_GATT_CLIENT));
     }
+
+    /**
+     * @brief Check whether the caller owns the registration of the given appId.
+     *        Callers must hold registerMutex_.
+     *
+     * @return NO_ERROR when the appId is registered and owned by the caller,
+     *     INVALID_PARAMETER when the appId is unknown,
+     *     BT_ERR_PERMISSION_FAILED when the appId belongs to another caller.
+     */
+    int CheckCallbackOwner(int32_t appId);
 };
 
 class BluetoothGattClientServer::impl::SystemStateObserver : public ISystemStateObserver {
@@ -181,6 +192,11 @@ public:
     int GetAppId()
     {
         return applicationId_;
+    }
+
+    bool IsOwner(uint32_t tokenId)
+    {
+        return tokenId_ == tokenId;
     }
 
     GattClientCallbackImpl(const sptr<IBluetoothGattClientCallback> &callback, BluetoothGattClientServer &owner);
@@ -310,6 +326,21 @@ int BluetoothGattClientServer::RegisterApplication(
     return NO_ERROR;
 }
 
+int BluetoothGattClientServer::impl::CheckCallbackOwner(int32_t appId)
+{
+    auto it = std::find_if(callbacks_.begin(), callbacks_.end(),
+        [appId](const std::unique_ptr<GattClientCallbackImpl> &p) { return p->GetAppId() == appId; });
+    if (it == callbacks_.end()) {
+        HILOGE("Unknown appId: %{public}d", appId);
+        return INVALID_PARAMETER;
+    }
+    if (!(*it)->IsOwner(IPCSkeleton::GetCallingTokenID())) {
+        HILOGE("appId %{public}d is not owned by the caller, reject!", appId);
+        return BT_ERR_PERMISSION_FAILED;
+    }
+    return NO_ERROR;
+}
+
 int BluetoothGattClientServer::DeregisterApplication(int32_t appId)
 {
     HILOGI("appId: %{public}d", appId);
@@ -327,15 +358,14 @@ int BluetoothGattClientServer::DeregisterApplication(int32_t appId)
         "SIDE", "client", "ADDRESS", "empty", "PID", OHOS::IPCSkeleton::GetCallingPid(),
         "UID", OHOS::IPCSkeleton::GetCallingUid(), "APPID", appId);
 
-    auto it = std::find_if(pimpl->callbacks_.begin(), pimpl->callbacks_.end(),
-        [appId](const std::unique_ptr<impl::GattClientCallbackImpl> &p) { return p->GetAppId() == appId; });
-    if (it == pimpl->callbacks_.end()) {
-        HILOGE("Unknown appId: %{public}d", appId);
-        return INVALID_PARAMETER;
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
     }
 
     int ret = pimpl->clientService_->DeregisterApplication(appId);
-    pimpl->callbacks_.erase(it);
+    pimpl->callbacks_.remove_if(
+        [appId](const std::unique_ptr<impl::GattClientCallbackImpl> &p) { return p->GetAppId() == appId; });
     return ret;
 }
 
@@ -350,6 +380,10 @@ int BluetoothGattClientServer::Connect(int32_t appId, bool autoConnect)
     if (pimpl->clientService_ == nullptr) {
         HILOGE("request not support.");
         return BT_ERR_INTERNAL_ERROR;
+    }
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
     }
     OHOS::Bluetooth::BluetoothHiTrace::BluetoothStartAsyncTrace("GATT_CLIENT_CONNECT", 1);
     int result = pimpl->clientService_->Connect(appId, autoConnect);
@@ -369,6 +403,10 @@ int BluetoothGattClientServer::Disconnect(int32_t appId)
         HILOGE("request not support.");
         return BT_ERR_INTERNAL_ERROR;
     }
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
+    }
     return pimpl->clientService_->Disconnect(appId);
 }
 
@@ -379,6 +417,10 @@ int BluetoothGattClientServer::DiscoveryServices(int32_t appId)
     if (pimpl->clientService_ == nullptr) {
         HILOGE("request not support.");
         return BT_ERR_INTERNAL_ERROR;
+    }
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
     }
     return pimpl->clientService_->DiscoveryServices(appId);
 }
@@ -394,6 +436,10 @@ int BluetoothGattClientServer::ReadCharacteristic(int32_t appId, const Bluetooth
     if (pimpl->clientService_ == nullptr) {
         HILOGE("request not support.");
         return BT_ERR_INTERNAL_ERROR;
+    }
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
     }
     return pimpl->clientService_->ReadCharacteristic(appId, (Characteristic)characteristic);
 }
@@ -419,6 +465,10 @@ int BluetoothGattClientServer::WriteCharacteristic(
         HILOGE("request not support.");
         return BT_ERR_INTERNAL_ERROR;
     }
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
+    }
     return pimpl->clientService_->WriteCharacteristic(appId, character, withoutRespond);
 }
 int BluetoothGattClientServer::SignedWriteCharacteristic(int32_t appId, BluetoothGattCharacteristic *characteristic)
@@ -432,6 +482,10 @@ int BluetoothGattClientServer::SignedWriteCharacteristic(int32_t appId, Bluetoot
     if (pimpl->clientService_ == nullptr) {
         HILOGE("request not support.");
         return bluetooth::GattStatus::REQUEST_NOT_SUPPORT;
+    }
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
     }
     return pimpl->clientService_->SignedWriteCharacteristic(appId, character);
 }
@@ -447,6 +501,10 @@ int BluetoothGattClientServer::ReadDescriptor(int32_t appId, const BluetoothGatt
     if (pimpl->clientService_ == nullptr) {
         HILOGE("request not support.");
         return BT_ERR_INTERNAL_ERROR;
+    }
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
     }
     return pimpl->clientService_->ReadDescriptor(appId, (Descriptor)descriptor);
 }
@@ -467,6 +525,10 @@ int BluetoothGattClientServer::WriteDescriptor(int32_t appId, BluetoothGattDescr
         HILOGE("request not support.");
         return BT_ERR_INTERNAL_ERROR;
     }
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
+    }
     return pimpl->clientService_->WriteDescriptor(appId, desc);
 }
 
@@ -481,6 +543,10 @@ int BluetoothGattClientServer::RequestExchangeMtu(int32_t appId, int32_t mtu)
     if (pimpl->clientService_ == nullptr) {
         HILOGE("request not support.");
         return BT_ERR_INTERNAL_ERROR;
+    }
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
     }
     return pimpl->clientService_->RequestExchangeMtu(appId, mtu);
 }
@@ -506,6 +572,10 @@ int BluetoothGattClientServer::RequestConnectionPriority(int32_t appId, int32_t 
         HILOGE("request not support.");
         return 0;
     }
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
+    }
     return pimpl->clientService_->RequestConnectionPriority(appId, connPriority);
 }
 
@@ -520,6 +590,10 @@ int BluetoothGattClientServer::GetServices(int32_t appId, ::std::vector<Bluetoot
     if (pimpl->clientService_ == nullptr) {
         HILOGE("request not support.");
         return BT_ERR_INTERNAL_ERROR;
+    }
+    int checkRet = pimpl->CheckCallbackOwner(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
     }
     for (auto &svc : pimpl->clientService_->GetServices(appId)) {
         service.push_back(svc);

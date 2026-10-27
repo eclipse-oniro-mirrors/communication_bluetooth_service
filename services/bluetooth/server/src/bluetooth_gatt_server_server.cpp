@@ -46,6 +46,8 @@ struct BluetoothGattServerServer::impl {
     std::list<std::shared_ptr<GattServerCallbackImpl>> callbacks_;
     std::mutex registerMutex_;
 
+    int32_t CheckAppIdOwnership(int32_t appId);
+
     impl();
     ~impl();
 
@@ -193,6 +195,11 @@ public:
         return appId_;
     }
 
+    uint32_t GetTokenId()
+    {
+        return tokenId_;
+    }
+
     GattServerCallbackImpl(const sptr<IBluetoothGattServerCallback> &callback, BluetoothGattServerServer &owner);
     ~GattServerCallbackImpl()
     {
@@ -269,6 +276,27 @@ void BluetoothGattServerServer::impl::GattServerCallbackImpl::GattServerCallback
         }
     }
 }
+int32_t BluetoothGattServerServer::impl::CheckAppIdOwnership(int32_t appId)
+{
+    uint32_t callerTokenId = IPCSkeleton::GetCallingTokenID();
+    for (auto it = callbacks_.begin(); it != callbacks_.end(); ++it) {
+        if ((*it) != nullptr && (*it)->GetAppId() == appId) {
+            if ((*it)->GetTokenId() != callerTokenId) {
+                HILOGE("appId: %{public}d is not owned by the caller", appId);
+                /// cross-app appId spoofing attempt, report it so it can be audited
+                HiSysEventWrite(OHOS::HiviewDFX::HiSysEvent::Domain::BT_SERVICE, "GATT_APP_REGISTER",
+                    OHOS::HiviewDFX::HiSysEvent::EventType::STATISTIC, "ACTION", "ownership_reject",
+                    "SIDE", "server", "ADDRESS", "empty", "PID", OHOS::IPCSkeleton::GetCallingPid(),
+                    "UID", OHOS::IPCSkeleton::GetCallingUid(), "APPID", appId);
+                return BT_ERR_PERMISSION_FAILED;
+            }
+            return NO_ERROR;
+        }
+    }
+    HILOGE("appId: %{public}d is not registered", appId);
+    return BT_ERR_INTERNAL_ERROR;
+}
+
 BluetoothGattServerServer::impl::impl() : serverService_(nullptr), systemStateObserver_(new SystemStateObserver(this))
 {
     bluetooth::IAdapterManager::GetInstance()->RegisterSystemStateObserver(*systemStateObserver_);
@@ -316,6 +344,10 @@ int BluetoothGattServerServer::AddService(int32_t appId, BluetoothGattService *s
         HILOGE("serverService_ is null");
         return BT_ERR_INTERNAL_ERROR;
     }
+    int32_t checkRet = pimpl->CheckAppIdOwnership(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
+    }
     bluetooth::Service svc = (bluetooth::Service)*services;
     ConvertCharacterPermission(svc);
 
@@ -329,6 +361,10 @@ void BluetoothGattServerServer::ClearServices(int appId)
     std::lock_guard<std::mutex> lck(pimpl->registerMutex_);
     if (!pimpl->serverService_) {
         HILOGE("serverService_ is null");
+        return;
+    }
+    int32_t checkRet = pimpl->CheckAppIdOwnership(appId);
+    if (checkRet != NO_ERROR) {
         return;
     }
     pimpl->serverService_->ClearServices(appId);
@@ -381,6 +417,10 @@ int BluetoothGattServerServer::RemoveService(int32_t appId, const BluetoothGattS
         return BT_ERR_INTERNAL_ERROR;
     }
 
+    int32_t checkRet = pimpl->CheckAppIdOwnership(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
+    }
     int ret = pimpl->serverService_->RemoveService(appId, (bluetooth::Service)services);
     return (ret == GattStatus::GATT_SUCCESS ? NO_ERROR : BT_ERR_INTERNAL_ERROR);
 }
@@ -505,6 +545,10 @@ int BluetoothGattServerServer::DeregisterApplication(int32_t appId)
     if (!pimpl->serverService_) {
         HILOGE("serverService_ is null");
         return BT_ERR_INTERNAL_ERROR;
+    }
+    int32_t checkRet = pimpl->CheckAppIdOwnership(appId);
+    if (checkRet != NO_ERROR) {
+        return checkRet;
     }
     int ret = pimpl->serverService_->DeregisterApplication(appId);
     HILOGI("list size: %{public}lu", (unsigned long)pimpl->callbacks_.size());

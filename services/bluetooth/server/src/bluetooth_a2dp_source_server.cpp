@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 #include <cinttypes>
+#include <mutex>
 #include "bluetooth_def.h"
 #include "bluetooth_errorcode.h"
 #include "bluetooth_hitrace.h"
@@ -112,6 +113,18 @@ struct BluetoothA2dpSourceServer::impl {
 
     RemoteObserverList<IBluetoothA2dpSourceObserver> observers_;
     std::unique_ptr<A2dpSourceObserver> observerImp_{std::make_unique<A2dpSourceObserver>()};
+    // Guards a2dpSrcService_ against the BT on/off switch: it is set when BT turns ON, and cleared by
+    // the state observer when BT turns OFF, ahead of ProfileServiceManager::Stop() deleting the profile
+    // objects. Every entry takes this lock and keeps it for the whole service call, so an OFF
+    // transition cannot clear the pointer while a call is in flight, and since the observer runs on
+    // the state-machine thread before AdapterStop(), the object is deleted only after that call
+    // returns. Keeping the lock only around the pointer read would leave a stale copy that the OFF
+    // path can invalidate. Lock order is one-way: this mutex before the profile-service / adapter
+    // locks, never after. Recursive because OnSystemStateChange() and the destructor call
+    // RegisterObserver / DeregisterObserver on the same thread while holding it, and that call can
+    // re-enter this class. Cost: entries are serialized while a call runs (e.g. SetConnectStrategy
+    // writes the xml config).
+    std::recursive_mutex a2dpSrcServiceMutex_ {};
     IProfileA2dpSrc *a2dpSrcService_ = nullptr;
 };
 
@@ -129,18 +142,28 @@ public:
         }
 
         switch (state) {
-            case BTSystemState::ON:
+            case BTSystemState::ON: {
+                IProfileA2dpSrc *service = nullptr;
                 if (serviceMgr != nullptr) {
-                    pimpl_->a2dpSrcService_ =
-                        (IProfileA2dpSrc *)serviceMgr->GetProfileService(PROFILE_NAME_A2DP_SRC);
-                    if (pimpl_->a2dpSrcService_ != nullptr) {
-                        pimpl_->a2dpSrcService_->RegisterObserver(pimpl_->observerImp_.get());
+                    service = (IProfileA2dpSrc *)serviceMgr->GetProfileService(PROFILE_NAME_A2DP_SRC);
+                }
+                {
+                    std::lock_guard<std::recursive_mutex> lock(pimpl_->a2dpSrcServiceMutex_);
+                    pimpl_->a2dpSrcService_ = service;
+                    if (service != nullptr) {
+                        service->RegisterObserver(pimpl_->observerImp_.get());
                     }
                 }
                 break;
-            case BTSystemState::OFF:
+            }
+            case BTSystemState::OFF: {
+                std::lock_guard<std::recursive_mutex> lock(pimpl_->a2dpSrcServiceMutex_);
+                if (pimpl_->a2dpSrcService_ != nullptr) {
+                    pimpl_->a2dpSrcService_->DeregisterObserver(pimpl_->observerImp_.get());
+                }
                 pimpl_->a2dpSrcService_ = nullptr;
                 break;
+            }
             default:
                 break;
         }
@@ -170,9 +193,13 @@ BluetoothA2dpSourceServer::BluetoothA2dpSourceServer()
 
     IProfileManager *serviceMgr = IProfileManager::GetInstance();
     if (serviceMgr != nullptr) {
-        pimpl->a2dpSrcService_ = (IProfileA2dpSrc *)serviceMgr->GetProfileService(PROFILE_NAME_A2DP_SRC);
-        if (pimpl->a2dpSrcService_ != nullptr) {
-            pimpl->a2dpSrcService_->RegisterObserver(pimpl->observerImp_.get());
+        IProfileA2dpSrc *service = (IProfileA2dpSrc *)serviceMgr->GetProfileService(PROFILE_NAME_A2DP_SRC);
+        {
+            std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+            pimpl->a2dpSrcService_ = service;
+            if (service != nullptr) {
+                service->RegisterObserver(pimpl->observerImp_.get());
+            }
         }
     }
 }
@@ -181,8 +208,10 @@ BluetoothA2dpSourceServer::~BluetoothA2dpSourceServer()
 {
     HILOGI("starts");
     IAdapterManager::GetInstance()->DeregisterSystemStateObserver(*(pimpl->systemStateObserver_));
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
     if (pimpl->a2dpSrcService_ != nullptr) {
         pimpl->a2dpSrcService_->DeregisterObserver(pimpl->observerImp_.get());
+        pimpl->a2dpSrcService_ = nullptr;
     }
 }
 
@@ -195,9 +224,6 @@ void BluetoothA2dpSourceServer::RegisterObserver(const sptr<IBluetoothA2dpSource
     }
     auto func = std::bind(&BluetoothA2dpSourceServer::DeregisterObserver, this, std::placeholders::_1);
     pimpl->observers_.Register(observer, func);
-    if (pimpl->a2dpSrcService_ == nullptr) {
-        return;
-    }
     // During A2DP HDF Registration, check the current status and callback
     RawAddress device = GetActiveSinkDevice();
     int state = static_cast<int>(BTConnectState::DISCONNECTED);
@@ -233,8 +259,14 @@ int32_t BluetoothA2dpSourceServer::Connect(const RawAddress &device)
         HILOGE("Connect error, check permission failed");
         return BT_ERR_SYSTEM_PERMISSION_FAILED;
     }
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
     OHOS::Bluetooth::BluetoothHiTrace::BluetoothStartAsyncTrace("A2DP_SRC_CONNECT", 1);
-    int32_t result = pimpl->a2dpSrcService_->Connect(device);
+    int32_t result = service->Connect(device);
     OHOS::Bluetooth::BluetoothHiTrace::BluetoothFinishAsyncTrace("A2DP_SRC_CONNECT", 1);
     return result;
 }
@@ -250,7 +282,13 @@ int32_t BluetoothA2dpSourceServer::Disconnect(const RawAddress &device)
         HILOGE("Disconnect error, check permission failed");
         return BT_ERR_SYSTEM_PERMISSION_FAILED;
     }
-    return pimpl->a2dpSrcService_->Disconnect(device);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    return service->Disconnect(device);
 }
 
 int BluetoothA2dpSourceServer::GetDeviceState(const RawAddress &device, int &state)
@@ -260,7 +298,13 @@ int BluetoothA2dpSourceServer::GetDeviceState(const RawAddress &device, int &sta
         HILOGE("false, check permission failed");
         return RET_NO_SUPPORT;
     }
-    state = pimpl->a2dpSrcService_->GetDeviceState(device);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    state = service->GetDeviceState(device);
     return NO_ERROR;
 }
 
@@ -277,7 +321,13 @@ int BluetoothA2dpSourceServer::GetDevicesByStates(const std::vector<int32_t> &st
         tmpStates.push_back((int)state);
     }
 
-    rawAddrs = pimpl->a2dpSrcService_->GetDevicesByStates(tmpStates);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    rawAddrs = service->GetDevicesByStates(tmpStates);
     return NO_ERROR;
 }
 
@@ -288,7 +338,13 @@ int32_t BluetoothA2dpSourceServer::GetPlayingState(const RawAddress &device, int
         HILOGE("false, check permission failed");
         return BT_ERR_SYSTEM_PERMISSION_FAILED;
     }
-    int ret = pimpl->a2dpSrcService_->GetPlayingState(device, state);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    int ret = service->GetPlayingState(device, state);
     if (ret != NO_ERROR) {
         return BT_ERR_INTERNAL_ERROR;
     }
@@ -302,26 +358,50 @@ int BluetoothA2dpSourceServer::SetConnectStrategy(const RawAddress &device, int 
         return BT_ERR_SYSTEM_PERMISSION_FAILED;
     }
     HILOGI("addr: %{public}s, strategy: %{public}d", GET_ENCRYPT_ADDR(device), strategy);
-    return pimpl->a2dpSrcService_->SetConnectStrategy(device, strategy);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    return service->SetConnectStrategy(device, strategy);
 }
 
 int BluetoothA2dpSourceServer::GetConnectStrategy(const RawAddress &device, int &strategy)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    strategy = pimpl->a2dpSrcService_->GetConnectStrategy(device);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    strategy = service->GetConnectStrategy(device);
     return NO_ERROR;
 }
 
 int BluetoothA2dpSourceServer::SetActiveSinkDevice(const RawAddress &device)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    return pimpl->a2dpSrcService_->SetActiveSinkDevice(device);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    return service->SetActiveSinkDevice(device);
 }
 
 RawAddress BluetoothA2dpSourceServer::GetActiveSinkDevice()
 {
     HILOGI("starts");
-    return pimpl->a2dpSrcService_->GetActiveSinkDevice();
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return RawAddress();
+    }
+    return service->GetActiveSinkDevice();
 }
 
 BluetoothA2dpCodecStatus BluetoothA2dpSourceServer::GetCodecStatus(const RawAddress &device)
@@ -331,7 +411,13 @@ BluetoothA2dpCodecStatus BluetoothA2dpSourceServer::GetCodecStatus(const RawAddr
     bluetooth::A2dpSrcCodecStatus ret;
     BluetoothA2dpCodecStatus codeStatus;
     BluetoothA2dpCodecInfo serviceInfo;
-    ret = pimpl->a2dpSrcService_->GetCodecStatus(addr);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BluetoothA2dpCodecStatus();
+    }
+    ret = service->GetCodecStatus(addr);
 
     codeStatus.codecInfo.codecPriority = ret.codecInfo.codecPriority;
     codeStatus.codecInfo.codecType = ret.codecInfo.codecType;
@@ -398,50 +484,101 @@ int BluetoothA2dpSourceServer::SetCodecPreference(const RawAddress &device, cons
     setInfo.codecSpecific3 = info.codecSpecific3;
     setInfo.codecSpecific4 = info.codecSpecific4;
 
-    return pimpl->a2dpSrcService_->SetCodecPreference(device, setInfo);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    return service->SetCodecPreference(device, setInfo);
 }
 
 void BluetoothA2dpSourceServer::SwitchOptionalCodecs(const RawAddress &device, bool isEnable)
 {
     HILOGI("addr: %{public}s, isEnable = %{public}d", GET_ENCRYPT_ADDR(device), isEnable);
-    pimpl->a2dpSrcService_->SwitchOptionalCodecs(device, isEnable);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return;
+    }
+    service->SwitchOptionalCodecs(device, isEnable);
 }
 
 int BluetoothA2dpSourceServer::GetOptionalCodecsSupportState(const RawAddress &device)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    return pimpl->a2dpSrcService_->GetOptionalCodecsSupportState(device);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return static_cast<int>(A2DP_OPTIONAL_SUPPORT_UNKNOWN);
+    }
+    return service->GetOptionalCodecsSupportState(device);
 }
 
 int BluetoothA2dpSourceServer::StartPlaying(const RawAddress &device)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    return pimpl->a2dpSrcService_->StartPlaying(device);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    return service->StartPlaying(device);
 }
 
 int BluetoothA2dpSourceServer::SuspendPlaying(const RawAddress &device)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    return pimpl->a2dpSrcService_->SuspendPlaying(device);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    return service->SuspendPlaying(device);
 }
 
 int BluetoothA2dpSourceServer::StopPlaying(const RawAddress &device)
 {
     HILOGI("addr: %{public}s", GET_ENCRYPT_ADDR(device));
-    return pimpl->a2dpSrcService_->StopPlaying(device);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    return service->StopPlaying(device);
 }
 
 int BluetoothA2dpSourceServer::WriteFrame(const uint8_t *data, uint32_t size)
 {
     HILOGI("size = %{public}u", size);
-    return pimpl->a2dpSrcService_->WriteFrame(data, size);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        return BT_ERR_INVALID_STATE;
+    }
+    return service->WriteFrame(data, size);
 }
 
 int BluetoothA2dpSourceServer::GetRenderPosition(const RawAddress &device, uint32_t &delayValue, uint64_t &sendDataSize,
                                                  uint32_t &timeStamp)
 {
     HILOGI("starts");
-    int ret = pimpl->a2dpSrcService_->GetRenderPosition(device, delayValue, sendDataSize, timeStamp);
+    std::lock_guard<std::recursive_mutex> lock(pimpl->a2dpSrcServiceMutex_);
+    IProfileA2dpSrc *service = pimpl->a2dpSrcService_;
+    if (service == nullptr) {
+        HILOGE("%{public}s: a2dpSrcService_ is nullptr", __func__);
+        delayValue = 0;
+        sendDataSize = 0;
+        timeStamp = 0;
+        return BT_ERR_INVALID_STATE;
+    }
+    int ret = service->GetRenderPosition(device, delayValue, sendDataSize, timeStamp);
     HILOGI("delayValue = %{public}u, sendDataSize = %{public}" PRIu64 ", timeStamp = %{public}u", delayValue,
         sendDataSize, timeStamp);
     return ret;

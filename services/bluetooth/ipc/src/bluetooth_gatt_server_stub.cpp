@@ -21,6 +21,19 @@
 
 namespace OHOS {
 namespace Bluetooth {
+namespace {
+// appId is reported by the caller, so a negative value is invalid input. Write the error code back to the
+// reply, otherwise callers that only read the result code would treat it as success.
+int32_t ReplyInvalidAppId(int32_t appId, MessageParcel &reply)
+{
+    HILOGE("BluetoothGattServerStub: invalid appId: %{public}d", appId);
+    if (!reply.WriteInt32(BT_ERR_INVALID_PARAM)) {
+        HILOGE("BluetoothGattServerStub: reply writing failed in: %{public}s.", __func__);
+        return TRANSACTION_ERR;
+    }
+    return NO_ERROR;
+}
+}  // namespace
 BluetoothGattServerStub::BluetoothGattServerStub()
 {
     HILOGD("%{public}s start.", __func__);
@@ -85,6 +98,9 @@ int BluetoothGattServerStub::OnRemoteRequest(
 ErrCode BluetoothGattServerStub::AddServiceInner(MessageParcel &data, MessageParcel &reply)
 {
     int32_t appID = data.ReadInt32();
+    if (appID < 0) {
+        return ReplyInvalidAppId(appID, reply);
+    }
     std::shared_ptr<BluetoothGattService> service(data.ReadParcelable<BluetoothGattService>());
     if (!service) {
         return TRANSACTION_ERR;
@@ -100,6 +116,9 @@ ErrCode BluetoothGattServerStub::AddServiceInner(MessageParcel &data, MessagePar
 ErrCode BluetoothGattServerStub::ClearServicesInner(MessageParcel &data, MessageParcel &reply)
 {
     int appId = data.ReadInt32();
+    if (appId < 0) {
+        return ReplyInvalidAppId(appId, reply);
+    }
     ClearServices(appId);
     return NO_ERROR;
 }
@@ -107,6 +126,9 @@ ErrCode BluetoothGattServerStub::ClearServicesInner(MessageParcel &data, Message
 ErrCode BluetoothGattServerStub::ConnectInner(MessageParcel &data, MessageParcel &reply)
 {
     int appId = data.ReadInt32();
+    if (appId < 0) {
+        return ReplyInvalidAppId(appId, reply);
+    }
     std::shared_ptr<BluetoothGattDevice> device(data.ReadParcelable<BluetoothGattDevice>());
     CHECK_AND_RETURN_LOG_RET(device != nullptr, TRANSACTION_ERR, "Read parcelable BluetoothGattDevice failed");
     bool isDirect = data.ReadBool();
@@ -116,6 +138,9 @@ ErrCode BluetoothGattServerStub::ConnectInner(MessageParcel &data, MessageParcel
 ErrCode BluetoothGattServerStub::CancelConnectionInner(MessageParcel &data, MessageParcel &reply)
 {
     int appId = data.ReadInt32();
+    if (appId < 0) {
+        return ReplyInvalidAppId(appId, reply);
+    }
     std::shared_ptr<BluetoothGattDevice> device(data.ReadParcelable<BluetoothGattDevice>());
     CHECK_AND_RETURN_LOG_RET(device != nullptr, TRANSACTION_ERR, "Read parcelable BluetoothGattDevice failed");
     return CancelConnection(appId, *device);
@@ -135,6 +160,9 @@ ErrCode BluetoothGattServerStub::RegisterApplicationInner(MessageParcel &data, M
 ErrCode BluetoothGattServerStub::DeregisterApplicationInner(MessageParcel &data, MessageParcel &reply)
 {
     int appId = data.ReadInt32();
+    if (appId < 0) {
+        return ReplyInvalidAppId(appId, reply);
+    }
     int result = DeregisterApplication(appId);
     bool ret = reply.WriteInt32(result);
     if (!ret) {
@@ -165,6 +193,9 @@ ErrCode BluetoothGattServerStub::NotifyClientInner(MessageParcel &data, MessageP
 ErrCode BluetoothGattServerStub::RemoveServiceInner(MessageParcel &data, MessageParcel &reply)
 {
     int appId = data.ReadInt32();
+    if (appId < 0) {
+        return ReplyInvalidAppId(appId, reply);
+    }
     std::shared_ptr<BluetoothGattService> service(data.ReadParcelable<BluetoothGattService>());
     if (!service) {
         return TRANSACTION_ERR;

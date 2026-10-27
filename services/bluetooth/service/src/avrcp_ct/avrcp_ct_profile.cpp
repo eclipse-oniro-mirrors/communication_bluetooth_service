@@ -1749,10 +1749,12 @@ void AvrcCtProfile::ReceiveSetBrowsedPlayerRsp(const RawAddress &rawAddr, Packet
     AvrcCtSbpPacket packet(pkt);
 
     AvrcCtConnectManager *cnManager = AvrcCtConnectManager::GetInstance();
-    cnManager->SetUidCounter(rawAddr, packet.GetUidCounter());
+    if (packet.IsValid()) {
+        cnManager->SetUidCounter(rawAddr, packet.GetUidCounter());
+    }
 
     int result = RET_BAD_STATUS;
-    if (packet.GetStatus() == AVRC_ES_CODE_NO_ERROR) {
+    if (packet.IsValid() && packet.GetStatus() == AVRC_ES_CODE_NO_ERROR) {
         result = BT_SUCCESS;
     }
 
@@ -1838,7 +1840,7 @@ void AvrcCtProfile::ReceiveGetItemAttributesRsp(const RawAddress &rawAddr, Packe
     AvrcCtGiaPacket packet(pkt);
 
     int result = RET_BAD_STATUS;
-    if (packet.GetStatus() == AVRC_ES_CODE_NO_ERROR) {
+    if (packet.IsValid() && packet.GetStatus() == AVRC_ES_CODE_NO_ERROR) {
         result = BT_SUCCESS;
     }
 
@@ -1862,10 +1864,12 @@ void AvrcCtProfile::ReceiveGetTotalNumberOfItemsRsp(const RawAddress &rawAddr, P
     AvrcCtGtnoiPacket packet(pkt);
 
     AvrcCtConnectManager *cnManager = AvrcCtConnectManager::GetInstance();
-    cnManager->SetUidCounter(rawAddr, packet.GetUidCounter());
+    if (packet.IsValid()) {
+        cnManager->SetUidCounter(rawAddr, packet.GetUidCounter());
+    }
 
     int result = RET_BAD_STATUS;
-    if (packet.GetStatus() == AVRC_ES_CODE_NO_ERROR) {
+    if (packet.IsValid() && packet.GetStatus() == AVRC_ES_CODE_NO_ERROR) {
         result = BT_SUCCESS;
     }
 

@@ -1752,8 +1752,8 @@ uint8_t AvdtParseCategoryCodec(AvdtSepConfig *sepConfig, const Packet *pkt, uint
     PacketPayloadRead(pkt, &data, offset, AVDT_1BYTE);
 
     /* now only surport sbc/aac */
-    if (data > AVDT_CODEC_SIZE) {
-        data = AVDT_CODEC_SIZE;
+    if (data > (AVDT_CODEC_SIZE - 1)) {
+        data = (AVDT_CODEC_SIZE - 1);
     }
     offset++;
     length++;
