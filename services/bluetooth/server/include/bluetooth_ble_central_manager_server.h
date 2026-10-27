@@ -71,6 +71,10 @@ private:
     bool IsAllStop();
     void NotifyStopScanSuccessToClient(int32_t pid);
     int ConfigScanFilterInner(int32_t scannerId, const std::vector<BluetoothBleScanFilter> &filters);
+    int CheckScannerIdOwner(int32_t scannerId);
+    void RemoveBleCentralManagerCallback(int32_t scannerId,
+        const sptr<IBluetoothBleCentralManagerCallback> &callback);
+    void DoStartScan(int32_t pid, int32_t uid, const BluetoothBleScanSettings &settings);
 };
 }  // namespace Bluetooth
 }  // namespace OHOS

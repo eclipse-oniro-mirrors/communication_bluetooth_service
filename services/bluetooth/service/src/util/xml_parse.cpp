@@ -15,13 +15,18 @@
 
 #include "xml_parse.h"
 #include <algorithm>
+#include <shared_mutex>
 #include <sstream>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
 namespace utility {
 struct XmlParse::impl {
-    xmlDocPtr doc_;
+    xmlDocPtr doc_ = {nullptr};
+    // Lock model: guards one XmlParse instance. Writers: Load()/Parse()/Save(), SetValue(), Remove*(), dtor;
+    // readers: GetValue()/Has*()/GetSubSections(). Non-recursive; lock order = caller lock -> this lock only.
+    // Parse()/Save() hold the write lock across file I/O, so a reader may block for one parse or save.
+    std::shared_mutex docMutex_ {};
     xmlNodePtr IntHasSection(const std::string &section, const std::string &subSection);
     xmlNodePtr IntHasProperty(const std::string &section, const std::string &subSection, const std::string &property);
     void ConstructPropertyNode(xmlNodePtr &sectionNode, xmlNodePtr &propertyNode, const std::string &property);
@@ -255,21 +260,29 @@ bool XmlParse::impl::RemoveProperty(xmlNodePtr node, const std::string &property
 XmlParse::XmlParse() : pimpl()
 {
     pimpl = std::make_unique<impl>();
-    pimpl->doc_ = NULL;
 }
 
 XmlParse::~XmlParse()
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     xmlFreeDoc(pimpl->doc_);
+    pimpl->doc_ = nullptr;
 }
 
 bool XmlParse::Load(const std::string &path)
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     this->filePath_ = path;
-    return Parse();
+    return ParseInner();
 }
 
 bool XmlParse::Parse()
+{
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
+    return ParseInner();
+}
+
+bool XmlParse::ParseInner()
 {
     if (pimpl->doc_ != NULL) {
         xmlFreeDoc(pimpl->doc_);
@@ -281,8 +294,10 @@ bool XmlParse::Parse()
     return true;
 }
 
+
 bool XmlParse::Save()
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     int result = xmlSaveFormatFileEnc(this->filePath_.c_str(), pimpl->doc_, "UTF-8", 1);
     if (result == -1) {
         return false;
@@ -293,6 +308,7 @@ bool XmlParse::Save()
 bool XmlParse::GetValue(
     const std::string &section, const std::string &subSection, const std::string &property, int &value)
 {
+    std::shared_lock<std::shared_mutex> readLock(pimpl->docMutex_);
     xmlNodePtr getPropertyNode = pimpl->IntHasProperty(section, subSection, property);
     return pimpl->GetValue(getPropertyNode, value);
 }
@@ -300,6 +316,7 @@ bool XmlParse::GetValue(
 bool XmlParse::GetValue(
     const std::string &section, const std::string &subSection, const std::string &property, std::string &value)
 {
+    std::shared_lock<std::shared_mutex> readLock(pimpl->docMutex_);
     xmlNodePtr getPropertyNode = pimpl->IntHasProperty(section, subSection, property);
     return pimpl->GetValue(getPropertyNode, value);
 }
@@ -307,6 +324,7 @@ bool XmlParse::GetValue(
 bool XmlParse::GetValue(
     const std::string &section, const std::string &subSection, const std::string &property, bool &value)
 {
+    std::shared_lock<std::shared_mutex> readLock(pimpl->docMutex_);
     xmlNodePtr getPropertyNode = pimpl->IntHasProperty(section, subSection, property);
     return pimpl->GetValue(getPropertyNode, value);
 }
@@ -314,6 +332,7 @@ bool XmlParse::GetValue(
 bool XmlParse::SetValue(
     const std::string &section, const std::string &subSection, const std::string &property, const int &value)
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     xmlNodePtr propertyNode = pimpl->FindOrCreatePropertyNode(section, subSection, property);
     std::string storeVal = "0x";
     std::stringstream ss;
@@ -328,6 +347,7 @@ bool XmlParse::SetValue(
 bool XmlParse::SetValue(
     const std::string &section, const std::string &subSection, const std::string &property, const std::string &value)
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     xmlNodePtr propertyNode = pimpl->FindOrCreatePropertyNode(section, subSection, property);
     xmlNodeSetContent(propertyNode, (xmlChar *)value.c_str());
     return true;
@@ -336,6 +356,7 @@ bool XmlParse::SetValue(
 bool XmlParse::SetValue(
     const std::string &section, const std::string &subSection, const std::string &property, const bool &value)
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     xmlNodePtr propertyNode = pimpl->FindOrCreatePropertyNode(section, subSection, property);
     if (propertyNode == NULL) {
         return false;
@@ -350,12 +371,14 @@ bool XmlParse::SetValue(
 
 bool XmlParse::HasProperty(const std::string &section, const std::string &subSection, const std::string &property)
 {
+    std::shared_lock<std::shared_mutex> readLock(pimpl->docMutex_);
     xmlNodePtr sectionNode = pimpl->IntHasSection(section, subSection);
     return pimpl->HasProperty(sectionNode, property);
 }
 
 bool XmlParse::HasSection(const std::string &section, const std::string &subSection)
 {
+    std::shared_lock<std::shared_mutex> readLock(pimpl->docMutex_);
     xmlNodePtr rootNode = xmlDocGetRootElement(pimpl->doc_);
     if (rootNode == NULL) {
         return false;
@@ -386,6 +409,7 @@ bool XmlParse::HasSection(const std::string &section, const std::string &subSect
 
 bool XmlParse::GetSubSections(const std::string &section, std::vector<std::string> &subSections)
 {
+    std::shared_lock<std::shared_mutex> readLock(pimpl->docMutex_);
     std::string btSubSectionNodePropStr;
     xmlNodePtr rootNode = xmlDocGetRootElement(pimpl->doc_);
     if (rootNode == NULL) {
@@ -418,6 +442,7 @@ bool XmlParse::GetSubSections(const std::string &section, std::vector<std::strin
 
 bool XmlParse::RemoveSection(const std::string &section, const std::string &subSection)
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     xmlNodePtr rootNode = xmlDocGetRootElement(pimpl->doc_);
     xmlNodePtr sectionNode = NULL;
 
@@ -457,30 +482,35 @@ bool XmlParse::RemoveSection(const std::string &section, const std::string &subS
 
 bool XmlParse::RemoveProperty(const std::string &section, const std::string &subSection, const std::string &property)
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     xmlNodePtr sectionNode = pimpl->IntHasSection(section, subSection);
     return pimpl->RemoveProperty(sectionNode, property);
 }
 
 bool XmlParse::GetValue(const std::string &section, const std::string &property, int &value)
 {
+    std::shared_lock<std::shared_mutex> readLock(pimpl->docMutex_);
     xmlNodePtr getPropertyNode = pimpl->IntHasProperty(section, "", property);
     return pimpl->GetValue(getPropertyNode, value);
 }
 
 bool XmlParse::GetValue(const std::string &section, const std::string &property, std::string &value)
 {
+    std::shared_lock<std::shared_mutex> readLock(pimpl->docMutex_);
     xmlNodePtr getPropertyNode = pimpl->IntHasProperty(section, "", property);
     return pimpl->GetValue(getPropertyNode, value);
 }
 
 bool XmlParse::GetValue(const std::string &section, const std::string &property, bool &value)
 {
+    std::shared_lock<std::shared_mutex> readLock(pimpl->docMutex_);
     xmlNodePtr getPropertyNode = pimpl->IntHasProperty(section, "", property);
     return pimpl->GetValue(getPropertyNode, value);
 }
 
 bool XmlParse::SetValue(const std::string &section, const std::string &property, const int &value)
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     xmlNodePtr propertyNode = pimpl->FindOrCreatePropertyNode(section, "", property);
     std::string storeVal = "0x";
     std::stringstream ss;
@@ -494,6 +524,7 @@ bool XmlParse::SetValue(const std::string &section, const std::string &property,
 
 bool XmlParse::SetValue(const std::string &section, const std::string &property, const std::string &value)
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     xmlNodePtr propertyNode = pimpl->FindOrCreatePropertyNode(section, "", property);
     xmlNodeSetContent(propertyNode, (xmlChar *)value.c_str());
     return true;
@@ -501,6 +532,7 @@ bool XmlParse::SetValue(const std::string &section, const std::string &property,
 
 bool XmlParse::SetValue(const std::string &section, const std::string &property, const bool &value)
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     xmlNodePtr propertyNode = pimpl->FindOrCreatePropertyNode(section, "", property);
     if (propertyNode == NULL) {
         return false;
@@ -515,12 +547,14 @@ bool XmlParse::SetValue(const std::string &section, const std::string &property,
 
 bool XmlParse::HasProperty(const std::string &section, const std::string &property)
 {
+    std::shared_lock<std::shared_mutex> readLock(pimpl->docMutex_);
     xmlNodePtr sectionNode = pimpl->IntHasSection(section, "");
     return pimpl->HasProperty(sectionNode, property);
 }
 
 bool XmlParse::HasSection(const std::string &section)
 {
+    std::shared_lock<std::shared_mutex> readLock(pimpl->docMutex_);
     xmlNodePtr rootNode = xmlDocGetRootElement(pimpl->doc_);
     if (rootNode == NULL) {
         return false;
@@ -539,6 +573,7 @@ bool XmlParse::HasSection(const std::string &section)
 
 bool XmlParse::RemoveSection(const std::string &section)
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     xmlNodePtr rootNode = xmlDocGetRootElement(pimpl->doc_);
     xmlNodePtr sectionNode = NULL;
 
@@ -563,6 +598,7 @@ bool XmlParse::RemoveSection(const std::string &section)
 
 bool XmlParse::RemoveProperty(const std::string &section, const std::string &property)
 {
+    std::unique_lock<std::shared_mutex> writeLock(pimpl->docMutex_);
     xmlNodePtr sectionNode = pimpl->IntHasSection(section, "");
     return pimpl->RemoveProperty(sectionNode, property);
 }

@@ -450,18 +450,48 @@ int Socket::Listen(const std::string &name, const Uuid &uuid, int securityFlag, 
     socketGapServer_ = std::make_unique<SocketGapServer>();
     socketGapServer_->RegisterServiceSecurity(scn_, securityFlag_, serviceId_);
 
+    // The SPP profile service may be unloaded between the server side check and here, so the
+    // dispatcher is fetched once and checked right before being used.
+    utility::Dispatcher *dispatcher = GetDispatchter();
+    if (dispatcher == nullptr) {
+        SocketThread::GetInstance().DeleteSocket(*this);
+        CloseSocketFd();
+        RFCOMM_FreeServerNum(scn_);
+        sdpServer_->UnregisterSdpService();
+        socketGapServer_->UnregisterSecurity(remoteAddr_, scn_, serviceId_);
+        FreeServiceId(serviceId_);
+        state_ = CLOSED;
+        return -1;
+    }
+
     sockTransport_ = std::move(transportFactory_->CreateRfcommTransport(
-        nullptr, scn_, SOCK_DEF_RFC_MTU, *this->pimpl->transportObserver_.get(), *GetDispatchter()));
+        nullptr, scn_, SOCK_DEF_RFC_MTU, *this->pimpl->transportObserver_.get(), *dispatcher));
     sockTransport_->RegisterServer();
 
     std::lock_guard<std::recursive_mutex> lk(Socket::g_socketMutex);
     g_allServerSockets.push_back(this);
-    return ret;
+    // The listener is fully wired at this point (fds, socket thread entry, RFCOMM channel, GAP
+    // security, transport and registry entry); only the SDP advertisement may have failed, which
+    // is already logged above. Reporting that failure would make the caller destroy a registered
+    // object and leave g_allServerSockets with a dangling pointer.
+    return BT_SUCCESS;
 }
 
 int Socket::ReceiveSdpResult(uint8_t scn)
 {
     LOG_INFO("[sock]%{public}s", __func__);
+
+    // Same check-then-use window as Listen: the profile service may be gone when the
+    // sdp result comes back, in which case there is no dispatcher to build the transport.
+    utility::Dispatcher *dispatcher = GetDispatchter();
+    if (dispatcher == nullptr) {
+        // Same cleanup as the other failure exits below: the socket thread registration and the
+        // fds are released here, otherwise the object stays registered until the next unload.
+        LOG_ERROR("[sock]%{public}s dispatcher is null", __func__);
+        SocketThread::GetInstance().DeleteSocket(*this);
+        CloseSocketFd();
+        return -1;
+    }
 
     serviceId_ = AssignServiceId();
     scn_ = scn;
@@ -476,7 +506,7 @@ int Socket::ReceiveSdpResult(uint8_t scn)
     socketGapClient_->RegisterServiceSecurity(remoteAddr_, scn_, securityFlag_, serviceId_);
     RawAddress rawAddr = RawAddress::ConvertToString(remoteAddr_.addr);
     sockTransport_ = std::move(transportFactory_->CreateRfcommTransport(
-        &rawAddr, scn_, SOCK_DEF_RFC_MTU, *this->pimpl->transportObserver_.get(), *GetDispatchter()));
+        &rawAddr, scn_, SOCK_DEF_RFC_MTU, *this->pimpl->transportObserver_.get(), *dispatcher));
 
     if (!SendAppConnectScn(transportFd_, scn_)) {
         LOG_ERROR("send scn failed");
@@ -999,7 +1029,9 @@ void Socket::RemoveServerSocket()
 
     CloseSocketFd();
     EraseSocket(*this);
-    sockTransport_->RemoveServer(true);
+    if (sockTransport_ != nullptr) {
+        sockTransport_->RemoveServer(true);
+    }
 }
 
 void Socket::CloseSocketFd()

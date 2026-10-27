@@ -34,6 +34,42 @@ namespace bluetooth {
  * @since 6
  */
 const static int CLASSIC_ENABLE_STATE_BIT = 0x04;
+
+/**
+ * @brief One-shot request completion primitive.
+ *
+ * The requester holds the object and waits on it, the completer completes it. The completion takes
+ * effect exactly once: a repeated completion is ignored instead of throwing
+ * std::future_error(promise_already_satisfied), which would terminate the process.
+ *
+ * @since 6
+ */
+class PendingRequest {
+public:
+    PendingRequest();
+    ~PendingRequest() = default;
+
+    /**
+     * @brief Complete the request. Only the first call takes effect, the others are ignored.
+     *        It is safe to call it concurrently from several threads.
+     */
+    void Complete();
+
+    /**
+     * @brief Wait for the request to be completed.
+     * @param timeout Maximum waiting time.
+     * @return Returns <b>true</b> if the request has been completed, <b>false</b> on timeout.
+     */
+    bool Wait(std::chrono::milliseconds timeout) const;
+
+private:
+    std::promise<void> promise_ {};
+    std::shared_future<void> future_ {};
+    std::atomic<bool> completed_ {false};
+
+    BT_DISALLOW_COPY_AND_ASSIGN(PendingRequest);
+};
+
 class AdapterManager : public IAdapterManager {
 public:
     /**
@@ -306,6 +342,9 @@ public:
 private:
     AdapterManager();
     ~AdapterManager();
+    bool PrepareStopRequest(const std::shared_ptr<PendingRequest> &request) const;
+    bool WaitForRequest(const std::shared_ptr<PendingRequest> &request,
+        std::shared_ptr<PendingRequest> &slot) const;
     void CreateAdapters() const;
     std::string GetSysState() const;
     bool OutputSetting() const;

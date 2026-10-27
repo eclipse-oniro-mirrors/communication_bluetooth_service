@@ -1605,6 +1605,11 @@ void AvdtParseDiscoverRsp(AvdtSigCtrl *sigCtrl, AvdtCtrlData *data, const Packet
         return;
     }
     do {
+        if (index >= AVDT_NUM_SEPS) {
+            LOG_WARN("[AVDT]%{public}s: the peer reports more SEPs than AVDT_NUM_SEPS(%d), "
+                "the extra SEPs are dropped", __func__, AVDT_NUM_SEPS);
+            break;
+        }
         (void)memset_s(&data->discoverCfm.seps[index], sizeof(AvdtSepInfo), 0, sizeof(AvdtSepInfo));
         PacketPayloadRead(pkt, &context, Offset, AVDT_1BYTE);
         Offset++;
@@ -1747,8 +1752,8 @@ uint8_t AvdtParseCategoryCodec(AvdtSepConfig *sepConfig, const Packet *pkt, uint
     PacketPayloadRead(pkt, &data, offset, AVDT_1BYTE);
 
     /* now only surport sbc/aac */
-    if (data > AVDT_CODEC_SIZE) {
-        data = AVDT_CODEC_SIZE;
+    if (data > (AVDT_CODEC_SIZE - 1)) {
+        data = (AVDT_CODEC_SIZE - 1);
     }
     offset++;
     length++;

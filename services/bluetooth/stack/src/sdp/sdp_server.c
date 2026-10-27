@@ -1254,10 +1254,11 @@ static int BuildAttributeListByIdRange(uint32_t handle, uint8_t *buffer, uint8_t
     for (int i = 0; i < item->attributeNumber; i++) {
         if ((item->attributeItem[i].attributeId >= start) && (item->attributeItem[i].attributeId <= end)) {
             if ((item->attributeItem[i].attributeLength + offset) >= (SDP_MAX_LIST_BYTE_COUNT - SDP_RESERVE_LENGTH)) {
+                LOG_ERROR("[%{public}s][%{public}d] Attribute list exceeds the limit.", __FUNCTION__, __LINE__);
                 return BT_BAD_PARAM;
             }
             if (memcpy_s(attributeList + offset,
-                item->attributeItem[i].attributeLength,
+                SDP_MAX_LIST_BYTE_COUNT - offset,
                 item->attributeItem[i].attributeValue,
                 item->attributeItem[i].attributeLength) != EOK) {
                     LOG_ERROR("[%{public}s][%{public}d] memcpy_s fail.", __FUNCTION__, __LINE__);
@@ -1315,9 +1316,24 @@ static int BuildAttributeListByIdList(uint32_t handle, uint16_t length, uint8_t 
         attributeId = BE2H_16(*(uint16_t *)(buffer + pos));
         pos += SDP_UINT16_LENGTH;
 
-        result = AppendAttributeById(item, attributeId, attributeList, offset);
-        if (result < 0) {
-            return result;
+        for (int j = 0; j < item->attributeNumber; j++) {
+            if (item->attributeItem[j].attributeId != attributeId) {
+                continue;
+            }
+            if ((item->attributeItem[j].attributeLength + offset) >=
+                (SDP_MAX_LIST_BYTE_COUNT - SDP_RESERVE_LENGTH)) {
+                LOG_ERROR("[%{public}s][%{public}d] Attribute list exceeds the limit.", __FUNCTION__, __LINE__);
+                return BT_BAD_PARAM;
+            }
+            if (memcpy_s(attributeList + offset,
+                SDP_MAX_LIST_BYTE_COUNT - offset,
+                item->attributeItem[j].attributeValue,
+                item->attributeItem[j].attributeLength) != EOK) {
+                LOG_ERROR("[%{public}s][%{public}d] memcpy_s fail.", __FUNCTION__, __LINE__);
+                return BT_NO_MEMORY;
+            }
+            offset += item->attributeItem[j].attributeLength;
+            break;
         }
         offset = (uint16_t)result;
     }

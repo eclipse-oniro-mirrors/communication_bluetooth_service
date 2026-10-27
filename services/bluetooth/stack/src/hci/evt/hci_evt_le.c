@@ -69,6 +69,12 @@ static void HciEventOnLeConnectionCompleteEvent(const uint8_t *param, size_t len
 static bool HciParseLeAdvertisingReport(
     HciLeAdvertisingReport *report, const uint8_t *param, size_t length, size_t *offset)
 {
+    if (*offset + sizeof(uint8_t) * 2 + BT_ADDRESS_SIZE > length) {
+        LOG_ERROR("%{public}s: truncated address field, offset(%{public}zu), length(%{public}zu)",
+            __FUNCTION__, *offset, length);
+        return false;
+    }
+
     report->eventType = param[*offset];
     *offset += sizeof(uint8_t);
 
@@ -79,6 +85,12 @@ static bool HciParseLeAdvertisingReport(
         return false;
     }
     *offset += BT_ADDRESS_SIZE;
+
+    if (*offset + sizeof(uint8_t) > length) {
+        LOG_ERROR("%{public}s: truncated data length field, offset(%{public}zu), length(%{public}zu)",
+            __FUNCTION__, *offset, length);
+        return false;
+    }
 
     report->lengthData = param[*offset];
     *offset += sizeof(uint8_t);
