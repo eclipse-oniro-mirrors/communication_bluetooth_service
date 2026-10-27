@@ -63,6 +63,7 @@ static void FindInformationResponseErrorAssign(AttError *attErrorObjPtr, const A
 static void FindByTypeValueResponseErrorAssign(AttError *attErrorObjPtr, const AttConnectInfo *connect);
 static void ReadByGroupTypeResponseErrorAssign(AttError *attErrorObjPtr, const AttConnectInfo *connect);
 static void AttSignedWriteCommandGapRetErrorAssign(AttWrite *attWriteObjPtr, const uint8_t *data);
+static void AttReplyInvalidPdu(AttConnectInfo *connect, uint8_t opcode);
 
 /**
  * @brief gap security confirmation result async.
@@ -323,6 +324,26 @@ static void AttReadAttrAssign(const AttRead *attReadPtr, uint8_t len, const uint
         data += len;
     }
     return;
+}
+
+/**
+ * @brief reply ATT_ERROR_RSP with Invalid PDU for a malformed request (Vol 3 Part F 3.3).
+ *
+ * @param1 connect Indicates the pointer to AttConnectInfo.
+ * @param2 opcode Indicates the opcode of the received request.
+ */
+static void AttReplyInvalidPdu(AttConnectInfo *connect, uint8_t opcode)
+{
+    if (connect == NULL) {
+        LOG_WARN("%{public}s:connect == NULL, return.", __FUNCTION__);
+        return;
+    }
+
+    AttError attError = {0};
+    attError.reqOpcode = opcode;
+    attError.attHandleInError = 0x0000;
+    attError.errorCode = ATT_INVALID_PDU;
+    ATT_ErrorResponse(connect->retGattConnectHandle, &attError);
 }
 
 /**
@@ -1327,7 +1348,14 @@ void AttWriteRequest(AttConnectInfo *connect, const Buffer *buffer)
     buffSize = BufferGetSize(buffer);
     data = (uint8_t *)BufferPtr(buffer);
     attWriteObj.writeRequest.attHandle = ((uint16_t *)data)[0];
-    bufferNew = BufferSliceMalloc(buffer, STEP_TWO, buffSize - STEP_TWO);
+    if (buffSize > STEP_TWO) {
+        bufferNew = BufferSliceMalloc(buffer, STEP_TWO, buffSize - STEP_TWO);
+        if (bufferNew == NULL) {
+            LOG_ERROR("%{public}s: failed to slice the attribute value, size(%{public}zu)", __FUNCTION__, buffSize);
+            AttReplyInvalidPdu(connect, WRITE_REQUEST);
+            return;
+        }
+    }
     LOG_INFO("%{public}s connectHandle = %hu, callback para : attHandle = %{public}d",
         __FUNCTION__,
         connect->retGattConnectHandle,

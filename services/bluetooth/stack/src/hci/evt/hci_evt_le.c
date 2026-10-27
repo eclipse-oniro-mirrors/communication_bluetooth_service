@@ -32,6 +32,9 @@
 
 typedef void (*HciLeEventFunc)(const uint8_t *param, size_t length);
 
+// The maximum length of the data carried by a legacy LE advertising report.
+#define HCI_LE_ADV_REPORT_DATA_LEN_MAX 31
+
 static void HciEventOnLeConnectionCompleteEvent(const uint8_t *param, size_t length)
 {
     if (param == NULL || (length != sizeof(HciLeConnectionCompleteEventParam))) {
@@ -69,9 +72,24 @@ static void HciEventOnLeAdvertisingReportEvent(const uint8_t *param, size_t leng
         return;
     }
 
+    // Minimum report size: eventType(1) + addressType(1) + address(6) + lengthData(1) + rssi(1).
+    const size_t minReportSize = sizeof(uint8_t) + sizeof(uint8_t) + BT_ADDRESS_SIZE + sizeof(uint8_t) +
+                                 sizeof(uint8_t);
+    if (length < (size_t)offset + eventParam.numReports * minReportSize) {
+        LOG_ERROR("%{public}s: truncated event, length(%{public}zu)", __FUNCTION__, length);
+        return;
+    }
+
     HciLeAdvertisingReport *reports = MEM_MALLOC.alloc(sizeof(HciLeAdvertisingReport) * eventParam.numReports);
     if (reports != NULL) {
         for (uint8_t i = 0; i < eventParam.numReports; i++) {
+            if ((size_t)offset + sizeof(uint8_t) * 2 + BT_ADDRESS_SIZE > length) {
+                LOG_ERROR("%{public}s: truncated address field, offset(%{public}d), length(%{public}zu)",
+                    __FUNCTION__, offset, length);
+                MEM_MALLOC.free(reports);
+                return;
+            }
+
             reports[i].eventType = param[offset];
             offset += sizeof(uint8_t);
 
@@ -81,8 +99,38 @@ static void HciEventOnLeAdvertisingReportEvent(const uint8_t *param, size_t leng
             (void)memcpy_s(reports[i].address.raw, BT_ADDRESS_SIZE, param + offset, BT_ADDRESS_SIZE);
             offset += BT_ADDRESS_SIZE;
 
+            if ((size_t)offset + sizeof(uint8_t) > length) {
+                LOG_ERROR("%{public}s: truncated data length field, offset(%{public}d), length(%{public}zu)",
+                    __FUNCTION__, offset, length);
+                MEM_MALLOC.free(reports);
+                return;
+            }
+
             reports[i].lengthData = param[offset];
             offset += sizeof(uint8_t);
+
+            // Legacy advertising reports cannot carry more than 31 bytes of data.
+            if (reports[i].lengthData > HCI_LE_ADV_REPORT_DATA_LEN_MAX) {
+                LOG_ERROR("%{public}s: invalid data length, offset(%{public}d), lengthData(%{public}u), "
+                    "max(%{public}u)",
+                    __FUNCTION__,
+                    offset,
+                    reports[i].lengthData,
+                    HCI_LE_ADV_REPORT_DATA_LEN_MAX);
+                MEM_MALLOC.free(reports);
+                return;
+            }
+
+            if ((size_t)offset + reports[i].lengthData + sizeof(uint8_t) > length) {
+                LOG_ERROR("%{public}s: truncated data field, offset(%{public}d), lengthData(%{public}u), "
+                    "length(%{public}zu)",
+                    __FUNCTION__,
+                    offset,
+                    reports[i].lengthData,
+                    length);
+                MEM_MALLOC.free(reports);
+                return;
+            }
 
             reports[i].data = (uint8_t *)(param + offset);
             offset += reports[i].lengthData;
