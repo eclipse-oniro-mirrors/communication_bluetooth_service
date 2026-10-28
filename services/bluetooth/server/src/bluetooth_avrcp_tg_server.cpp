@@ -63,10 +63,12 @@ public:
         HILOGI("start.");
 
         auto svManager = IProfileManager::GetInstance();
-        service_ = static_cast<IProfileAvrcpTg *>(svManager->GetProfileService(PROFILE_NAME_AVRCP_TG));
-        if (service_ != nullptr) {
-            observer_ = std::make_unique<ObserverImpl>(this);
-            service_->RegisterObserver(observer_.get());
+        if (svManager != nullptr) {
+            service_ = static_cast<IProfileAvrcpTg *>(svManager->GetProfileService(PROFILE_NAME_AVRCP_TG));
+            if (service_ != nullptr) {
+                observer_ = std::make_unique<ObserverImpl>(this);
+                service_->RegisterObserver(observer_.get());
+            }
         }
 
         sysObserver_ = std::make_unique<SysStsObserverImpl>(this);
@@ -78,7 +80,8 @@ public:
         HILOGI("start.");
 
         auto svManager = IProfileManager::GetInstance();
-        service_ = static_cast<IProfileAvrcpTg *>(svManager->GetProfileService(PROFILE_NAME_AVRCP_TG));
+        service_ = (svManager == nullptr) ? nullptr :
+            static_cast<IProfileAvrcpTg *>(svManager->GetProfileService(PROFILE_NAME_AVRCP_TG));
         if (service_ != nullptr) {
             service_->UnregisterObserver();
             observer_ = nullptr;
@@ -94,7 +97,8 @@ public:
         HILOGI("start.");
 
         auto servManager = IProfileManager::GetInstance();
-        service_ = static_cast<IProfileAvrcpTg *>(servManager->GetProfileService(PROFILE_NAME_AVRCP_TG));
+        service_ = (servManager == nullptr) ? nullptr :
+            static_cast<IProfileAvrcpTg *>(servManager->GetProfileService(PROFILE_NAME_AVRCP_TG));
 
         return (service_ != nullptr && service_->IsEnabled());
     }
@@ -108,7 +112,8 @@ public:
         switch (state) {
             case BTSystemState::ON: {
                 auto svManager = IProfileManager::GetInstance();
-                service_ = static_cast<IProfileAvrcpTg *>(svManager->GetProfileService(PROFILE_NAME_AVRCP_TG));
+                service_ = (svManager == nullptr) ? nullptr :
+                    static_cast<IProfileAvrcpTg *>(svManager->GetProfileService(PROFILE_NAME_AVRCP_TG));
                 if (service_ != nullptr) {
                     observer_ = std::make_unique<ObserverImpl>(this);
                     service_->RegisterObserver(observer_.get());
@@ -139,7 +144,7 @@ public:
     }
 
     std::mutex serviceMutex_;
-    IProfileAvrcpTg *service_;
+    IProfileAvrcpTg *service_ { nullptr };
 
     std::mutex observerMutex_;
     RemoteObserverList<IBluetoothAvrcpTgObserver> observers_;

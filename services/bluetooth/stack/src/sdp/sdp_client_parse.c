@@ -327,6 +327,12 @@ void SdpParseServerResponse(const BtAddr *addr, uint16_t lcid, const Packet *dat
     /// Transaction ID
     transactionId = BE2H_16(*(uint16_t *)(header + offset));
     offset += SDP_UINT16_LENGTH;
+    SdpClientRequest *request = SdpFindRequestByTransactionId(transactionId);
+    if ((request != NULL) && (memcmp(&request->addr.addr, addr->addr, SDP_BLUETOOTH_ADDRESS_LENGTH) != 0)) {
+        LOG_ERROR("Response addr does not match request [0x%04x]", transactionId);
+        PacketFree(packet);
+        return;
+    }
     /// ParameterLength
     parameterLength = BE2H_16(*(uint16_t *)(header + offset));
     if (parameterLength != PacketSize(packet)) {
@@ -1250,11 +1256,8 @@ static int SdpGetLanguageBaseAttributeIdList(BufferInfo *bufferInfo, SdpService 
 
     while (length) {
         if (baseAttributeIdNumber >= SDP_LANGUAGE_ATTRIBUTE_MAX) {
-            LOG_ERROR("[%{public}s][%{public}d] baseAttributeIdNumber exceeds max.", __FUNCTION__, __LINE__);
-            /// skip the remaining bytes of this list to keep the caller aligned
-            offset += (uint16_t)length;
-            length = 0;
-            break;
+            LOG_ERROR("[%{public}s][%{public}d] Too many language base attributes", __FUNCTION__, __LINE__);
+            return BT_BAD_PARAM;
         }
         /// Language Code
         type = bufferInfo->buffer[offset];
@@ -1349,11 +1352,8 @@ static int SdpGetBluetoothProfileDescriptorList(BufferInfo *bufferInfo, SdpServi
 
     while (length) {
         if (profileDescriptorNumber >= SDP_PROTOCOL_PARAMETER_MAX_COUNT) {
-            LOG_ERROR("[%{public}s][%{public}d] profileDescriptorNumber exceeds max.", __FUNCTION__, __LINE__);
-            /// skip the remaining bytes of this list to keep the caller aligned
-            offset += (uint16_t)length;
-            length = 0;
-            break;
+            LOG_ERROR("[%{public}s][%{public}d] Too many profile descriptors", __FUNCTION__, __LINE__);
+            return BT_BAD_PARAM;
         }
         /// UUID
         type = *(bufferInfo->buffer + offset);
