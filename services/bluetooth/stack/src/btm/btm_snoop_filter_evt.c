@@ -84,7 +84,6 @@ static void HciLeExtendedAdvertisingReportEventFilter(uint8_t *param)
         HciLeExtendedAdvertisingReport *report = (HciLeExtendedAdvertisingReport *)(param + offset);
         offset += offsetof(HciLeExtendedAdvertisingReport, data);
         offset += report->dataLength;
-        offset += report->rssi;
         BtmFilterAddress((uint8_t *)&report->address, BT_ADDRESS_SIZE);
         BtmFilterAddress((uint8_t *)&report->directAddress, BT_ADDRESS_SIZE);
     }
@@ -265,6 +264,9 @@ void HciEvtFilter(const uint8_t **data, uint16_t originalLength, uint16_t *inclu
 
     if (filterFuncInfo != NULL && filterFuncInfo->evtFunc != NULL) {
         uint8_t *copyData = BtmCreateFilterBuffer(includedLength, *data);
+        if (copyData == NULL) {
+            return;
+        }
         filterFuncInfo->evtFunc(copyData + offset + filterFuncInfo->EvtDataOffset);
         *data = copyData;
     }

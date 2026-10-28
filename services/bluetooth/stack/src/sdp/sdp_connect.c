@@ -999,7 +999,7 @@ static void SdpReceiveDisconnectResponseTask(uint16_t lcid, void *context)
         return;
     }
     if (!connect->wait) {
-        SdpRemoveRequestByAddress(&connect->addr);
+        SdpRemoveAllRequestByAddress(&connect->addr);
     }
     ListRemoveNode(g_connectList, connect);
 
