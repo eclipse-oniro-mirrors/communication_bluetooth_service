@@ -227,6 +227,46 @@ StackSmpSrc = [
   "src/smp/smp.c",
 ]
 
+# bluedroid-shaped frontend consumed by the open bluetooth service layer.
+# It exports get_bt_interface()/get_profile_interface() and the dlsym contract
+# symbols required by bluetooth/services/bluetooth/stack_interface.
+StackBtifSrc = [
+  "src/btif/entry/btif_entry.cpp",
+  "src/btif/entry/btif_callbacks.cpp",
+  "src/btif/entry/btif_dispatch.cpp",
+  "src/btif/common/btif_task_scheduler.cpp",
+  "src/btif/core/core_adapter_controller.cpp",
+  "src/btif/core/core_device_store.cpp",
+  "src/btif/core/core_discovery_manager.cpp",
+  "src/btif/core/core_discovery_state_machine.cpp",
+  "src/btif/core/core_pairing_manager.cpp",
+  "src/btif/core/core_sdp_discovery.cpp",
+  "src/btif/core/core_callbacks.cpp",
+  "src/btif/core/core_runtime.cpp",
+  "src/btif/profiles/gatt/gatt_common.cpp",
+  "src/btif/profiles/gatt/gatt_client.cpp",
+  "src/btif/profiles/gatt/gatt_server.cpp",
+  "src/btif/profiles/a2dp/a2dp_source.cpp",
+  "src/btif/profiles/a2dp/a2dp_sink.cpp",
+  "src/btif/profiles/avrcp/avrcp_tg.cpp",
+  "src/btif/profiles/avrcp/avrcp_ct.cpp",
+  "src/btif/profiles/hid/hid_host.cpp",
+  "src/btif/profiles/hid/hid_device.cpp",
+  "src/btif/core/core_ble_scan_policy.cpp",
+  "src/btif/core/core_ble_scanner.cpp",
+  "src/btif/profiles/ble/ble_advertiser.cpp",
+  "src/btif/profiles/pan/pan.cpp",
+  "src/btif/profiles/sdp/sdp.cpp",
+  "src/btif/profiles/socket/socket.cpp",
+  "src/btif/profiles/hearing_aid/hearing_aid.cpp",
+  "src/btif/profiles/hfp/hfp_ag.cpp",
+  "src/btif/profiles/vendor/vendor.cpp",
+]
+
+group("bt_vendor") {
+  deps = [ "vendor:bt_vendor_service" ]
+}
+
 config("btstack_public_config") {
   include_dirs = [ "include" ]
 }
@@ -235,6 +275,7 @@ config("btstack_config") {
   include_dirs = [
     "./",
     "src",
+    "include",
     "platform",
     "platform/include",
     "$PART_DIR/common",
@@ -248,9 +289,13 @@ config("btstack_config") {
     "-Wmissing-field-initializers",
     "-Wno-missing-braces",  #wait-for-fix
     "-Wno-pragma-pack",
+    "-Wno-non-c-typedef-for-linkage",
   ]
 
-  defines = [ "OPENSSL_SUPPRESS_DEPRECATED" ]
+  defines = [
+    "OPENSSL_SUPPRESS_DEPRECATED",
+    "BLUETOOTH_EXPORT",
+  ]
 
   ldflags = []
   cflags_cc = []
@@ -268,12 +313,28 @@ ohos_shared_library("btstack") {
   #   blocklist = "./btstack_blocklist.txt"
   # }
   stack_protector_ret = true
+  # hal_util.cpp dlopen's this exact name (lib + base + .z.so).
+  output_name = "bt_bluetooth"
   configs = [ ":btstack_config" ]
   public_configs = [ ":btstack_public_config" ]
 
   sources = PlatformSrc + StackAttSrc + StackAvctpSrc + StackAvdtpSrc +
             StackBtmSrc + StackGapSrc + StackHciSrc + StackL2capSrc +
-            StackRfcommSrc + StackSdpSrc + StackSmpSrc + StackIsoSrc + StackCsSrc
+            StackRfcommSrc + StackSdpSrc + StackSmpSrc + StackIsoSrc + StackCsSrc +
+            StackBtifSrc
+
+  # These entry points are only referenced by dlsym() at runtime. Keep them
+  # reachable so --gc-sections cannot drop the exported vtable/tables.
+  ldflags = [
+    "-Wl,-u,get_bt_interface",
+    "-Wl,-u,btgattClientInterface",
+    "-Wl,-u,btgattServerInterface",
+    "-Wl,-u,get_ble_advertiser_instance",
+    "-Wl,-u,get_ble_scanner_instance",
+    "-Wl,-u,btif_get_address_type",
+    "-Wl,-u,btif_storage_get_remote_addr_type",
+    "-Wl,-u,btif_sock_cleanup",
+  ]
 
   deps = [
     "$PART_DIR/external:btdummy",
@@ -282,6 +343,7 @@ ohos_shared_library("btstack") {
 
   external_deps = [
     "bluetooth:btcommon",
+    "bluetooth:stack_interface",
     "hilog:libhilog",
     "bounds_checking_function:libsec_shared",
     "openssl:libcrypto_shared",

@@ -14,6 +14,7 @@
  */
 
 #include "hci.h"
+#include "hci/hci_tx_gate.h"
 
 #include "btm/btm_thread.h"
 #include "btstack.h"
@@ -48,11 +49,16 @@
 
 static BtHciCallbacks g_hdiCallacks;
 
-static Queue *g_hciTxQueue = NULL;
+static Queue *g_hciCmdTxQueue = NULL;
+static Queue *g_hciDataTxQueue = NULL;
 static Queue *g_hciRxQueue = NULL;
 
-static ReactorItem *g_hciTxReactorItem = NULL;
+static ReactorItem *g_hciCmdTxReactorItem = NULL;
+static ReactorItem *g_hciDataTxReactorItem = NULL;
 static ReactorItem *g_hciRxReactorItem = NULL;
+
+static Mutex *g_hciTxLock = NULL;
+static HciTxGate g_hciTxGate = { false, false };
 
 static Semaphore *g_waitHdiInit;
 static BtInitStatus g_hdiInitStatus = UNKNOWN;
@@ -95,20 +101,27 @@ static int HciInitQueue()
     int result = BT_SUCCESS;
 
     do {
-        g_hciTxQueue = QueueCreate(HCI_TX_QUEUE_SIZE);
-        if (g_hciTxQueue != NULL) {
-            Reactor *reactor = ThreadGetReactor(g_hciTxThread);
-            g_hciTxReactorItem =
-                ReactorRegister(reactor, QueueGetDequeueFd(g_hciTxQueue), NULL, HciSendPacketCallback, NULL);
-        } else {
+        g_hciTxLock = MutexCreate();
+        g_hciCmdTxQueue = QueueCreate(HCI_TX_QUEUE_SIZE);
+        g_hciDataTxQueue = QueueCreate(HCI_TX_QUEUE_SIZE);
+        if (g_hciTxLock == NULL || g_hciCmdTxQueue == NULL || g_hciDataTxQueue == NULL) {
+            result = BT_OPERATION_FAILED;
+            break;
+        }
+        Reactor *reactor = ThreadGetReactor(g_hciTxThread);
+        g_hciCmdTxReactorItem =
+            ReactorRegister(reactor, QueueGetDequeueFd(g_hciCmdTxQueue), NULL, HciSendPacketCallback, NULL);
+        g_hciDataTxReactorItem =
+            ReactorRegister(reactor, QueueGetDequeueFd(g_hciDataTxQueue), NULL, HciSendPacketCallback, NULL);
+        if (g_hciCmdTxReactorItem == NULL || g_hciDataTxReactorItem == NULL) {
             result = BT_OPERATION_FAILED;
             break;
         }
         g_hciRxQueue = QueueCreate(HCI_RX_QUEUE_SIZE);
         if (g_hciRxQueue != NULL) {
-            Reactor *reactor = ThreadGetReactor(BTM_GetProcessingThread());
+            Reactor *rxReactor = ThreadGetReactor(BTM_GetProcessingThread());
             g_hciRxReactorItem =
-                ReactorRegister(reactor, QueueGetDequeueFd(g_hciRxQueue), NULL, HciRecvPacketCallback, NULL);
+                ReactorRegister(rxReactor, QueueGetDequeueFd(g_hciRxQueue), NULL, HciRecvPacketCallback, NULL);
         } else {
             result = BT_OPERATION_FAILED;
             break;
@@ -148,9 +161,13 @@ NO_SANITIZE("cfi") static int HciInitHal()
 
 static void HciCloseQueue()
 {
-    if (g_hciTxReactorItem != NULL) {
-        ReactorUnregister(g_hciTxReactorItem);
-        g_hciTxReactorItem = NULL;
+    if (g_hciCmdTxReactorItem != NULL) {
+        ReactorUnregister(g_hciCmdTxReactorItem);
+        g_hciCmdTxReactorItem = NULL;
+    }
+    if (g_hciDataTxReactorItem != NULL) {
+        ReactorUnregister(g_hciDataTxReactorItem);
+        g_hciDataTxReactorItem = NULL;
     }
 
     if (g_hciRxReactorItem != NULL) {
@@ -158,14 +175,24 @@ static void HciCloseQueue()
         g_hciRxReactorItem = NULL;
     }
 
-    if (g_hciTxQueue != NULL) {
-        QueueDelete(g_hciTxQueue, HciFreePacket);
-        g_hciTxQueue = NULL;
+    if (g_hciCmdTxQueue != NULL) {
+        QueueDelete(g_hciCmdTxQueue, HciFreePacket);
+        g_hciCmdTxQueue = NULL;
+    }
+
+    if (g_hciDataTxQueue != NULL) {
+        QueueDelete(g_hciDataTxQueue, HciFreePacket);
+        g_hciDataTxQueue = NULL;
     }
 
     if (g_hciRxQueue != NULL) {
         QueueDelete(g_hciRxQueue, HciFreePacket);
         g_hciRxQueue = NULL;
+    }
+
+    if (g_hciTxLock != NULL) {
+        MutexDelete(g_hciTxLock);
+        g_hciTxLock = NULL;
     }
 }
 
@@ -173,6 +200,7 @@ int HCI_Initialize()
 {
     LOG_DEBUG("%{public}s start", __FUNCTION__);
     int result;
+    HciTxGateReset(&g_hciTxGate);
 
     do {
         g_hdiLib = LoadHdiLib();
@@ -224,11 +252,18 @@ int HCI_Initialize()
 
 static void CleanTxPacket()
 {
-    if (g_hciTxQueue != NULL) {
-        HciPacket *packet = QueueTryDequeue(g_hciTxQueue);
+    if (g_hciCmdTxQueue != NULL) {
+        HciPacket *packet = QueueTryDequeue(g_hciCmdTxQueue);
         while (packet != NULL) {
             HciFreePacket(packet);
-            packet = QueueTryDequeue(g_hciTxQueue);
+            packet = QueueTryDequeue(g_hciCmdTxQueue);
+        }
+    }
+    if (g_hciDataTxQueue != NULL) {
+        HciPacket *packet = QueueTryDequeue(g_hciDataTxQueue);
+        while (packet != NULL) {
+            HciFreePacket(packet);
+            packet = QueueTryDequeue(g_hciDataTxQueue);
         }
     }
 }
@@ -239,7 +274,7 @@ static void CleanRxPacket()
         HciPacket *packet = QueueTryDequeue(g_hciRxQueue);
         while (packet != NULL) {
             HciFreePacket(packet);
-            packet = QueueTryDequeue(g_hciTxQueue);
+            packet = QueueTryDequeue(g_hciRxQueue);
         }
     }
 }
@@ -268,6 +303,7 @@ NO_SANITIZE("cfi") void HCI_Close()
 {
     LOG_DEBUG("%{public}s start", __FUNCTION__);
 
+    HciTxGateStop(&g_hciTxGate);
     CleanTxPacket();
 
     if (g_waitHdiInitAlarm != NULL) {
@@ -276,9 +312,13 @@ NO_SANITIZE("cfi") void HCI_Close()
         g_waitHdiInitAlarm = NULL;
     }
 
-    if (g_hciTxReactorItem != NULL) {
-        ReactorUnregister(g_hciTxReactorItem);
-        g_hciTxReactorItem = NULL;
+    if (g_hciCmdTxReactorItem != NULL) {
+        ReactorUnregister(g_hciCmdTxReactorItem);
+        g_hciCmdTxReactorItem = NULL;
+    }
+    if (g_hciDataTxReactorItem != NULL) {
+        ReactorUnregister(g_hciDataTxReactorItem);
+        g_hciDataTxReactorItem = NULL;
     }
 
     if (g_hciTxThread != NULL) {
@@ -299,9 +339,17 @@ NO_SANITIZE("cfi") void HCI_Close()
 
     WaitRxTaskComplete();
 
-    if (g_hciTxQueue != NULL) {
-        QueueDelete(g_hciTxQueue, HciFreePacket);
-        g_hciTxQueue = NULL;
+    if (g_hciCmdTxQueue != NULL) {
+        QueueDelete(g_hciCmdTxQueue, HciFreePacket);
+        g_hciCmdTxQueue = NULL;
+    }
+    if (g_hciDataTxQueue != NULL) {
+        QueueDelete(g_hciDataTxQueue, HciFreePacket);
+        g_hciDataTxQueue = NULL;
+    }
+    if (g_hciTxLock != NULL) {
+        MutexDelete(g_hciTxLock);
+        g_hciTxLock = NULL;
     }
 
     if (g_hciRxQueue != NULL) {
@@ -368,52 +416,96 @@ static void HciOnReceivedHciPacket(BtPacketType type, const BtPacket *btPacket)
     }
 }
 
-NO_SANITIZE("cfi") static void HciSendPacketCallback(void *param)
+static void HciTxSendPacket(HciPacket *packet)
 {
-    HciPacket *packet = QueueTryDequeue(g_hciTxQueue);
-    if (packet != NULL) {
-        BtPacket btPacket;
-        btPacket.size = PacketSize(packet->packet);
-        btPacket.data = MEM_MALLOC.alloc(btPacket.size);
-        PacketRead(packet->packet, btPacket.data, 0, btPacket.size);
+    if (packet == NULL) {
+        return;
+    }
+    if (g_hdiLib == NULL) {
+        LOG_ERROR("HDI is invalid.");
+        HciFreePacket(packet);
+        return;
+    }
 
-        int result;
+    BtPacket btPacket;
+    btPacket.size = PacketSize(packet->packet);
+    btPacket.data = MEM_MALLOC.alloc(btPacket.size);
+    if (btPacket.data == NULL) {
+        LOG_ERROR("Send packet alloc failed, size:%{public}d", btPacket.size);
+        HciFreePacket(packet);
+        return;
+    }
+    PacketRead(packet->packet, btPacket.data, 0, btPacket.size);
 
-        if (g_hdiLib == NULL) {
-            LOG_ERROR("HDI is invalid.");
+    int result;
+    switch (packet->type) {
+        case H2C_CMD:
+            result = g_hdiLib->hdiSendHciPacket(PACKET_TYPE_CMD, &btPacket);
+            break;
+        case H2C_ACLDATA:
+            result = g_hdiLib->hdiSendHciPacket(PACKET_TYPE_ACL, &btPacket);
+            break;
+        case H2C_SCODATA:
+            result = g_hdiLib->hdiSendHciPacket(PACKET_TYPE_SCO, &btPacket);
+            break;
+        case H2C_ISODATA:
+            result = g_hdiLib->hdiSendHciPacket(PACKET_TYPE_ISO, &btPacket);
+            break;
+        default:
+            result = UNKNOWN;
+            break;
+    }
+
+    if (result != SUCCESS) {
+        LOG_ERROR("Send packet to HDI failed: %{public}d", result);
+    } else if (g_transmissionCapture && g_transmissionCallback != NULL) {
+        uint8_t type = (packet->type == H2C_CMD) ? TRANSMISSON_TYPE_H2C_CMD : TRANSMISSON_TYPE_H2C_DATA;
+        g_transmissionCallback(type, btPacket.data, btPacket.size);
+    }
+
+    MEM_MALLOC.free(btPacket.data);
+    HciFreePacket(packet);
+}
+
+// Single in-flight gate: exactly one HCI packet is sent through HDI at a time.
+// Commands are drained before data so a burst of ACL/ISO traffic cannot delay
+// control commands indefinitely.
+static void HciTxTrySendNext()
+{
+    for (;;) {
+        if (g_hciTxLock == NULL) {
             return;
         }
 
-        switch (packet->type) {
-            case H2C_CMD:
-                result = g_hdiLib->hdiSendHciPacket(PACKET_TYPE_CMD, &btPacket);
-                break;
-            case H2C_ACLDATA:
-                result = g_hdiLib->hdiSendHciPacket(PACKET_TYPE_ACL, &btPacket);
-                break;
-            case H2C_SCODATA:
-                result = g_hdiLib->hdiSendHciPacket(PACKET_TYPE_SCO, &btPacket);
-                break;
-            case H2C_ISODATA:
-                result = g_hdiLib->hdiSendHciPacket(PACKET_TYPE_ISO, &btPacket);
-                break;
-            default:
-                result = UNKNOWN;
-                break;
+        HciPacket *packet = NULL;
+        MutexLock(g_hciTxLock);
+        if (!HciTxGateCanSend(&g_hciTxGate)) {
+            MutexUnlock(g_hciTxLock);
+            return;
         }
-
-        if (result != SUCCESS) {
-            LOG_ERROR("Send packet to HDI failed: %{public}d", result);
-        } else {
-            if (g_transmissionCapture && g_transmissionCallback != NULL) {
-                uint8_t type = (packet->type == H2C_CMD) ? TRANSMISSON_TYPE_H2C_CMD : TRANSMISSON_TYPE_H2C_DATA;
-                g_transmissionCallback(type, btPacket.data, btPacket.size);
-            }
+        packet = QueueTryDequeue(g_hciCmdTxQueue);
+        if (packet == NULL) {
+            packet = QueueTryDequeue(g_hciDataTxQueue);
         }
+        if (packet == NULL) {
+            MutexUnlock(g_hciTxLock);
+            return;
+        }
+        (void)HciTxGateTryBegin(&g_hciTxGate);
+        MutexUnlock(g_hciTxLock);
 
-        MEM_MALLOC.free(btPacket.data);
-        HciFreePacket(packet);
+        HciTxSendPacket(packet);
+
+        MutexLock(g_hciTxLock);
+        HciTxGateComplete(&g_hciTxGate);
+        MutexUnlock(g_hciTxLock);
     }
+}
+
+NO_SANITIZE("cfi") static void HciSendPacketCallback(void *param)
+{
+    (void)param;
+    HciTxTrySendNext();
 }
 
 static void HciRecvPacketCallback(void *param)
@@ -442,7 +534,21 @@ static void HciRecvPacketCallback(void *param)
 
 void HciPushToTxQueue(HciPacket *packet)
 {
-    QueueEnqueue(g_hciTxQueue, packet);
+    if (packet == NULL || g_hciTxLock == NULL || HciTxGateIsStopped(&g_hciTxGate)) {
+        HciFreePacket(packet);
+        return;
+    }
+
+    MutexLock(g_hciTxLock);
+    Queue *queue = (packet->type == H2C_CMD) ? g_hciCmdTxQueue : g_hciDataTxQueue;
+    bool enqueued = QueueTryEnqueue(queue, packet);
+    MutexUnlock(g_hciTxLock);
+
+    if (!enqueued) {
+        HciPacketType type = packet->type;
+        LOG_ERROR("HCI tx queue full, drop packet type:%{public}d", type);
+        HciFreePacket(packet);
+    }
 }
 
 int HCI_SetTransmissionCaptureCallback(void (*onTransmission)(uint8_t type, const uint8_t *data, uint16_t length))
