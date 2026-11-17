@@ -94,6 +94,12 @@ static bool g_hciCmdClosing = false;
 static void HciFreeCmd(void *cmd);
 static void HciFreeTimedOutCmd(void *data);
 static void HciAddTimedOutCmd(uint16_t opCode);
+static uint64_t HciGetMonotonicMs(void);
+
+static int HciPendingCountLocked()
+{
+    return (g_processingCmds == NULL) ? 0 : (int)ListGetSize(g_processingCmds);
+}
 
 void HciInitCmd()
 {
@@ -172,6 +178,8 @@ static void HciCmdTimeoutTask(void *context)
     HciCmd *pCmd = NULL;
     uint16_t opCode = 0;
     void *param = NULL;
+    uint64_t elapsedMs = 0;
+    int pendingAfter = 0;
 
     // The alarm carries the numeric generation of the command that timed out, never the
     // HciCmd pointer: a command freed by a late answer may be reallocated at the same
@@ -200,8 +208,10 @@ static void HciCmdTimeoutTask(void *context)
             // absorbed instead of completing a newer command with the same opcode
             param = pCmd->param;
             pCmd->param = NULL;
+            elapsedMs = HciGetMonotonicMs() - pCmd->sentMs;
             AlarmCancel(pCmd->alarm);
             ListRemoveNode(g_processingCmds, pCmd);
+            pendingAfter = HciPendingCountLocked();
             // A bogus 0x0000 opcode must not pollute the absorb list or reach the dispatch
             // below: record it only for a real opcode; the early return releases the param.
             if (opCode != 0) {
@@ -222,6 +232,9 @@ static void HciCmdTimeoutTask(void *context)
         return;
     }
 
+    LOG_WARN("HCI CMD timeout opcode=0x%{public}04x gen=%{public}u elapsedMs=%{public}u pending=%{public}d",
+        opCode, generation, (unsigned int)elapsedMs, pendingAfter);
+
     // A timed-out command reaches its failure row with or without a param (rows tolerate
     // NULL, see the HciCmdOnFailedFunc contract); dispatch must precede the free below.
     HciOnCmdFailed(opCode, HCI_TIMEOUT, param);
@@ -231,6 +244,8 @@ static void HciCmdTimeoutTask(void *context)
     }
 
     HciOnCmdTimeout();
+    // The timed-out command no longer occupies the single HCI command slot.
+    HciSetNumberOfHciCmd(1);
 }
 
 static void HciCmdOnCmdTimeout(void *parameter)
@@ -261,17 +276,24 @@ static int HciCmdTrack(HciCmd *cmd)
     int result = BT_SUCCESS;
 
     MutexLock(g_lockProcessingCmds);
+    cmd->sentMs = HciGetMonotonicMs();
     // The alarm goes first on purpose: if it cannot be armed, nothing has been added yet and the
     // refusal needs no rollback.
     if (cmd->alarm == NULL || AlarmSet(cmd->alarm, CMD_TIMEOUT, HciCmdOnCmdTimeout,
             (void *)(uintptr_t)cmd->generation) != 0) {
         // AlarmCreate may already have failed in HciAllocCmd, so the handle is checked too.
-        LOG_WARN("HciCmdTrack: no timeout alarm, opCode:0x%04x not sent", cmd->opCode);
+        LOG_WARN("HCI CMD track failed opcode=0x%{public}04x gen=%{public}u reason=alarm pending=%{public}d",
+            cmd->opCode, cmd->generation, HciPendingCountLocked());
         result = BT_OPERATION_FAILED;
     } else if (!ListAddLast(g_processingCmds, cmd)) {
         // Without the entry the answer would find no pending match and be dropped.
         AlarmCancel(cmd->alarm);
+        LOG_WARN("HCI CMD track failed opcode=0x%{public}04x gen=%{public}u reason=list pending=%{public}d",
+            cmd->opCode, cmd->generation, HciPendingCountLocked());
         result = BT_NO_MEMORY;
+    } else {
+        LOG_INFO("HCI CMD tracked opcode=0x%{public}04x gen=%{public}u pending=%{public}d timeoutMs=%{public}d",
+            cmd->opCode, cmd->generation, HciPendingCountLocked(), CMD_TIMEOUT);
     }
     MutexUnlock(g_lockProcessingCmds);
 
@@ -303,23 +325,24 @@ static void HciCmdStartCachedCmd(HciCmd *cmd)
         return;
     }
     g_numberOfHciCmd--;
+    LOG_INFO("HCI CMD tx cached opcode=0x%{public}04x gen=%{public}u credit=%{public}u",
+        cmd->opCode, cmd->generation, g_numberOfHciCmd);
 }
 
 void HciSetNumberOfHciCmd(uint8_t numberOfHciCmd)
 {
+    (void)numberOfHciCmd;
     MutexLock(g_lockNumberOfHciCmd);
 
-    g_numberOfHciCmd = numberOfHciCmd;
-
-    HciCmd *cmd = NULL;
-
-    while (g_numberOfHciCmd > 0) {
-        cmd = QueueTryDequeue(g_cmdCache);
-        if (cmd == NULL) {
-            // No more cmd
-            break;
+    // Commands are strictly one-at-a-time: the Controller's advertised credits
+    // are intentionally ignored. A response releases exactly one slot, which
+    // sends at most one cached command.
+    if (g_numberOfHciCmd == 0) {
+        g_numberOfHciCmd = 1;
+        HciCmd *cmd = QueueTryDequeue(g_cmdCache);
+        if (cmd != NULL) {
+            HciCmdStartCachedCmd(cmd);
         }
-        HciCmdStartCachedCmd(cmd);
     }
 
     MutexUnlock(g_lockNumberOfHciCmd);
@@ -471,6 +494,8 @@ int HciSendCmd(HciCmd *cmd)
             HciCmdUntrack(cmd);
         } else {
             g_numberOfHciCmd--;
+            LOG_INFO("HCI CMD tx opcode=0x%{public}04x gen=%{public}u credit=%{public}u",
+                cmd->opCode, cmd->generation, g_numberOfHciCmd);
         }
     }
 
@@ -541,10 +566,16 @@ static bool HciAbsorbTimedOutResponse(uint16_t opCode)
 bool HciCmdOnCommandStatus(uint16_t opCode, uint8_t status)
 {
     HciCmd *cmd = NULL;
+    uint64_t elapsedMs = 0;
+    uint32_t cmdGeneration = 0;
+    int pendingBefore = 0;
 
     MutexLock(g_lockProcessingCmds);
+    pendingBefore = HciPendingCountLocked();
 
     if (HciAbsorbTimedOutResponse(opCode)) {
+        LOG_WARN("HCI Command_Status stale absorbed opcode=0x%{public}04x status=0x%{public}02x pending=%{public}d",
+            opCode, status, pendingBefore);
         MutexUnlock(g_lockProcessingCmds);
         return false;
     }
@@ -565,6 +596,8 @@ bool HciCmdOnCommandStatus(uint16_t opCode, uint8_t status)
     void *param = NULL;
 
     if (cmd != NULL) {
+        elapsedMs = HciGetMonotonicMs() - cmd->sentMs;
+        cmdGeneration = cmd->generation;
         AlarmCancel(cmd->alarm);
 
         param = cmd->param;
@@ -579,9 +612,15 @@ bool HciCmdOnCommandStatus(uint16_t opCode, uint8_t status)
         // No pending command of this opcode and nothing absorbed: the Status does not belong
         // to any tracked command (e.g. the late answer of a timed-out command whose entry was
         // already aged out). Drop it from the fan-out like the Command_Complete path does.
-        LOG_WARN("HCI Command_Status opcode: 0x%04x has no pending command, dropped", opCode);
+        LOG_WARN("HCI Command_Status opcode: 0x%{public}04x has no pending command, dropped pending=%{public}d",
+            opCode, pendingBefore);
         return false;
     }
+
+    LOG_INFO("HCI Command_Status opcode=0x%{public}04x status=0x%{public}02x gen=%{public}u elapsedMs=%{public}u pending=%{public}d",
+        opCode, status, cmdGeneration, (unsigned int)elapsedMs, pendingBefore - 1);
+
+    HciSetNumberOfHciCmd(1);
 
     if (opCode == HCI_DISCONNECT && status == HCI_SUCCESS) {
         HciDisconnectParam *discParam = (HciDisconnectParam *)param;
@@ -610,10 +649,16 @@ bool HciCmdOnCommandComplete(uint16_t opCode, uint8_t returnParametersLength)
 {
     HciCmd *cmd = NULL;
     bool malformed = (returnParametersLength == 0);
+    uint64_t elapsedMs = 0;
+    uint32_t cmdGeneration = 0;
+    int pendingBefore = 0;
 
     MutexLock(g_lockProcessingCmds);
+    pendingBefore = HciPendingCountLocked();
 
     if (HciAbsorbTimedOutResponse(opCode)) {
+        LOG_WARN("HCI Command_Complete stale absorbed opcode=0x%{public}04x pending=%{public}d",
+            opCode, pendingBefore);
         MutexUnlock(g_lockProcessingCmds);
         return false;
     }
@@ -634,6 +679,8 @@ bool HciCmdOnCommandComplete(uint16_t opCode, uint8_t returnParametersLength)
     void *param = NULL;
 
     if (cmd != NULL) {
+        elapsedMs = HciGetMonotonicMs() - cmd->sentMs;
+        cmdGeneration = cmd->generation;
         AlarmCancel(cmd->alarm);
         if (malformed) {
             // The removal below runs HciFreeCmd, which would free the block the empty-body
@@ -651,9 +698,15 @@ bool HciCmdOnCommandComplete(uint16_t opCode, uint8_t returnParametersLength)
         // entry was already aged out, or an unexpected event). Dropping it keeps a stale
         // answer from reaching the upper layers; every command sent through HciSendCmd is
         // tracked in g_processingCmds, so a legitimate answer always has a pending match.
-        LOG_WARN("HCI Command_Complete opcode: 0x%04x has no pending command, dropped", opCode);
+        LOG_WARN("HCI Command_Complete opcode: 0x%{public}04x has no pending command, dropped pending=%{public}d",
+            opCode, pendingBefore);
         return false;
     }
+
+    LOG_INFO("HCI Command_Complete opcode=0x%{public}04x gen=%{public}u elapsedMs=%{public}u pending=%{public}d malformed=%{public}d",
+        opCode, cmdGeneration, (unsigned int)elapsedMs, pendingBefore - 1, malformed ? 1 : 0);
+
+    HciSetNumberOfHciCmd(1);
     if (malformed) {
         // No Status was returned to dispatch, so report the malformed Complete through the
         // failure row; param is NULL only when the command was sent without one.

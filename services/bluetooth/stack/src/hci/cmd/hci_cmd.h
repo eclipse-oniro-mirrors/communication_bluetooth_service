@@ -34,6 +34,9 @@ typedef struct {
     // (never the HciCmd pointer), so a stale timeout task cannot collide with a newer
     // command reallocated at the same address (malloc reuse, ABA).
     uint32_t generation;
+    // Monotonic timestamp set when the command enters the pending table. Used for latency
+    // and timeout diagnostics; zero means the command has not been tracked yet.
+    uint64_t sentMs;
 } HciCmd;
 
 void HciInitCmd();

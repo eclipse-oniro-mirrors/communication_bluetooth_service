@@ -1290,14 +1290,21 @@ int GAP_SetLocalName(const char *name, int length)
 {
     HciWriteLocalNameParam param = {0};
 
-    LOG_INFO("%{public}s: name:%{public}s", __FUNCTION__, name);
+    LOG_INFO("%{public}s: name:%{public}s length:%{public}d", __FUNCTION__, name, length);
 
-    if (GapIsBredrEnable() == false) {
-        return GAP_ERR_NOT_ENABLE;
+    if (name == NULL || length <= 0 || length > (int)sizeof(param.localName)) {
+        return GAP_ERR_INVAL_PARAM;
     }
 
+    /*
+     * The local name is an HCI controller property and can be written after
+     * HCI reset, before BR/EDR is marked enabled. Gate it only by HCI state,
+     * otherwise the boot-time Settings name is silently dropped.
+     */
     (void)memcpy_s(param.localName, sizeof(param.localName), name, length);
-    return HCI_WriteLocalName(&param);
+    int ret = HCI_WriteLocalName(&param);
+    LOG_INFO("%{public}s: HCI_WriteLocalName ret:%{public}d", __FUNCTION__, ret);
+    return ret;
 }
 
 int GAP_SetClassOfDevice(uint32_t cod)

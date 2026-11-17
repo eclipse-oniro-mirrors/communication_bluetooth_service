@@ -200,6 +200,9 @@ static bool BtmIsFileExists(const char *path)
 
 static void BtmPrepareSnoopFile(void)
 {
+    if (g_outputFile != NULL) {
+        return;
+    }
     if (g_hciLogOuput) {
         bool exists = BtmIsFileExists(HCI_LOG_PATH);
         if (exists) {
@@ -258,6 +261,10 @@ static void BtmCloseSnoopFile(void)
 
 int BTM_SetSnoopFilePath(const char *path, uint16_t length)
 {
+    if (g_outputPath != NULL) {
+        MEM_MALLOC.free(g_outputPath);
+        g_outputPath = NULL;
+    }
     g_outputPath = (char *)MEM_MALLOC.alloc(length + 1);
     if (g_outputPath == NULL) {
         return BT_NO_MEMORY;

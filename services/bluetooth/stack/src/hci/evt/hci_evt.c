@@ -27,6 +27,7 @@
 #include "hci/hci.h"
 #include "hci/hci_error.h"
 #include "hci/iso/hci_iso.h"
+#include "log.h"
 
 #include "hci_evt_cmd_complete.h"
 #include "hci_evt_le.h"
@@ -161,7 +162,6 @@ static void HciEventOnCommandStatusEvent(Packet *packet)
         return;
     }
 
-    HciSetNumberOfHciCmd(param->numHciCommandPackets);
     // false when the Status is the late answer of a timed-out command (or matches no pending
     // command): it must not be dispatched, or it would complete a newer command with the same
     // opcode - mirror of the Command_Complete interception
@@ -225,6 +225,19 @@ static void HciEventOnConnectionIndicationEvent(Packet *packet)
         callbacks->connectionIndication(param);
     }
     HCI_FOREACH_EVT_CALLBACKS_END;
+
+    // The controller reports an incoming ACL connection with 0x04 and waits
+    // for the host to accept it. Without this command the connection is
+    // aborted after the accept timeout (0x10) and pairing never starts.
+    if (param->linkType == HCI_LINK_TYPE_ACL) {
+        HciAcceptConnectionReqestParam acceptParam = {};
+        acceptParam.bdAddr = param->bdAddr;
+        acceptParam.role = HCI_ROLE_SLAVE;
+        int ret = HCI_AcceptConnectionRequest(&acceptParam);
+        HILOGI("accept incoming ACL connection addr=%{public}02x:%{public}02x:%{public}02x:%{public}02x:%{public}02x:%{public}02x ret=%{public}d",
+            param->bdAddr.raw[5], param->bdAddr.raw[4], param->bdAddr.raw[3],
+            param->bdAddr.raw[2], param->bdAddr.raw[1], param->bdAddr.raw[0], ret);
+    }
 }
 
 static void HciEventOnRemoteNameRequestCompleteEvent(Packet *packet)
@@ -494,8 +507,17 @@ static void HciEventOnLinkKeyNotificationEvent(Packet *packet)
         return;
     }
     size_t length = BufferGetSize(payloadBuffer);
-    if (length != sizeof(HciLinkKeyNotificationEventParam)) {
+    if (length < sizeof(HciLinkKeyNotificationEventParam)) {
+        HILOGW("LinkKeyNotification malformed length=%{public}zu expected=%{public}zu",
+            length, sizeof(HciLinkKeyNotificationEventParam));
         return;
+    }
+    if (length != sizeof(HciLinkKeyNotificationEventParam)) {
+        // Some controllers append trailing vendor bytes. The fixed fields are
+        // still valid at the start of the payload, so accept the event instead
+        // of silently dropping the link key.
+        HILOGW("LinkKeyNotification trailing bytes length=%{public}zu expected=%{public}zu",
+            length, sizeof(HciLinkKeyNotificationEventParam));
     }
 
     HciEventCallbacks *callbacks = NULL;

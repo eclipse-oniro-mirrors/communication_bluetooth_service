@@ -1,0 +1,85 @@
+# Copyright (c) 2026 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/test.gni")
+
+module_output_path = "bluetooth_service/bluetooth_service"
+
+STACK_DIR = "//foundation/communication/bluetooth_service/services/bluetooth/stack"
+
+config("btif_test_config") {
+  visibility = [ ":*" ]
+  cflags = [
+    "-Wno-pragma-pack",
+    "-Wno-non-c-typedef-for-linkage",
+  ]
+  include_dirs = [
+    "$STACK_DIR",
+    "$STACK_DIR/include",
+    "$STACK_DIR/src",
+    "$STACK_DIR/../common",
+    "$STACK_DIR/../hardware/include",
+  ]
+}
+
+ohos_unittest("btif_unit_test") {
+  module_out_path = module_output_path
+
+  sources = [
+    "core_ble_scan_policy_test.cpp",
+    "btif_task_scheduler_test.cpp",
+    "core_callback_registry_test.cpp",
+    "core_device_store_test.cpp",
+    "core_discovery_state_machine_test.cpp",
+    "core_pairing_manager_test.cpp",
+    "core_sdp_discovery_test.cpp",
+    "core_util_test.cpp",
+    "hci_tx_gate_test.cpp",
+  ]
+
+  configs = [ ":btif_test_config" ]
+
+  deps = [ "$STACK_DIR:btstack" ]
+
+  external_deps = [
+    "bluetooth:stack_interface",
+    "googletest:gtest",
+    "googletest:gtest_main",
+    "hilog:libhilog",
+  ]
+}
+
+ohos_unittest("btif_task_scheduler_lifecycle_test") {
+  module_out_path = module_output_path
+
+  sources = [ "btif_task_scheduler_lifecycle_test.cpp" ]
+
+  configs = [ ":btif_test_config" ]
+
+  deps = [ "$STACK_DIR:btstack" ]
+
+  external_deps = [
+    "bluetooth:stack_interface",
+    "googletest:gtest",
+    "googletest:gtest_main",
+    "hilog:libhilog",
+  ]
+}
+
+group("unittest") {
+  testonly = true
+  deps = [
+    ":btif_task_scheduler_lifecycle_test",
+    ":btif_unit_test",
+  ]
+}
